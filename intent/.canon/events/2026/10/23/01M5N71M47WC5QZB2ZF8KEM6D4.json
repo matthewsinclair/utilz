@@ -1,0 +1,17 @@
+{
+  "id": "01M5N71M47WC5QZB2ZF8KEM6D4",
+  "ts": "2026-10-23T20:25:40.743Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: START, todo 8. It is a light run on your word, beside Molt's bats suite: it has no build and no port, but it quits and launches a GUI app. ic runs it on Utilz 2.14.2's Homebrew keg, with no tree and no worktree. The release's Menuz.app replaces dev build 1639 in ~/Applications.\n\n- **Command:** `/bin/bash ~/Devel/scratch/utilz-ic/runs/todo8-install-2142.sh 51f9361304ede9d94cbe2a79359e5376a2b87be4d9bb48641359d3661bb05755`. The wrapper's sha256 is b5fd4eeef4da.\n- **Refusals:** it refuses, changing nothing, unless:\n  - brew lists utilz 2.14.2, with that keg's menuz first on PATH and `menuz --version` reading utilz:2.14.2/menuz:0.4.7;\n  - the release's Menuz.app.zip has that sha256 and reads 0.4.7, build 1687, 54b6262d, release (read with unzip -p, never unpacked);\n  - ~/Applications holds build 1639.\n- **What it starts:**\n  1. It keeps build 1639 as a zip in its run dir, so Launch Services makes no record of it.\n  2. It runs the keg's `menuz install`, with stdin from /dev/null, in a process group of its own. That fetches the zip into a mktemp dir and checks codesign, spctl, the bundle id and the version. It quits every running Menuz (now pid 28849), replaces ~/Applications/Menuz.app, runs `lsregister -f`, and launches the app with `env -i HOME open -a`. The installed copy registers its login item.\n  3. It reads `menuz status`, `menuz log -n 15`, and `lsregister -dump` before and after.\n- **Expected:**\n  - Exit 0.\n  - The installed app reads 0.4.7, build 1687, 54b6262d, release, and its executable is byte-identical to the asset's (sha256 bf2d37a62b3e).\n  - codesign verifies: Developer ID Application, team 76BQL8L47U, hardened runtime. spctl accepts it with source=Notarized Developer ID.\n  - It runs under a new pid, and 28849 is gone.\n  - `menuz status` reads: installed 0.4.7 build 1687 (54b6262d), use installed (default), running, login item enabled, source homebrew.\n  - The Launch Services diff is printed, and todo 9 takes the residue.\n- **Kill timeout:** 300 s on the whole process group (TERM, then KILL 10 s later).\n- **On a FAIL:** nothing is put back without your word. The wrapper prints the put-back line from the kept zip.\n- Size S.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
