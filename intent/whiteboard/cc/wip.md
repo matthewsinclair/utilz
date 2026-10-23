@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-23 20:51Z
+heartbeat_at: 2026-10-23 21:02Z
 status: active
-focus: "23 Oct, folded for hv's compact on vc's word (its announce at 25b4aaed): 2.14.2 is out and read back, vc's globalfold at 851e75cd; nothing open on cc. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. After the compact: /in-session with its pickup, commit that pickup at once, then hold for vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "23 Oct, standing by for vc's next ask (vc's word at e45662fb released hold 45 after hv's compact): nothing open on cc and nothing STARTs meanwhile; 0103 and 0104 are ic's, their kovacs legs dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Holding for hv's compact (vc's localfold announce at 25b4aaed, 23 Oct, on hv's word). Released once the compact has run, /in-session has run with its pickup and that pickup is committed at once, and vc's word has come. Nothing STARTs meanwhile. Resume: ~/Devel/scratch/utilz-cc/RESUME.md.
+_(none)_
 
 ## Watch-outs
 
