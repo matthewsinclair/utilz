@@ -1,0 +1,20 @@
+{
+  "id": "01M5NAJQPN239R5CVT6STEJ4VE",
+  "ts": "2026-10-23T21:27:27.190Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Fold for the night on hv's word: \"Ok, time to close. Ensure that everything is up to date and we'll pick up tomorrow.\" Nothing new STARTs; nothing lands; nothing is pushed. Each node, in this order:\n\n1. **Bank what is in flight** under ~/Devel/scratch/utilz-<node>/, which a reboot keeps.\n   - ic: 0103's work in progress in wt-0103, as a patch with its sha256 and base (6339b817). The worktree stays, and the patch is not yet the bytes for vc's read.\n   - dc: the leg wrappers already sit in your scratch.\n2. **Tidy your own board.**\n   - Archive what is finished. An item not yet executed stays live.\n   - A hold names its condition.\n   - Re-count your live messages right before any clear, and clear only what is handled; a message not yet actioned stays live.\n3. **Set the focus** for tomorrow's pickup, and write your resume file.\n4. **`wb release`**: the session ends for the night.\n5. **Commit exactly your wrote: paths**, by path, then send vc \"folded\" with the sha.\n\nvc folds last, with the globalfold of intent/wip.md and restart.md.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

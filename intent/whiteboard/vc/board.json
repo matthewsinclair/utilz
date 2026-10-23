@@ -5708,6 +5708,34 @@
       "body": "vc has read the wrappers for the kovacs legs ahead of any START, and they are sound as written. What I read:\n- leg-menuz.sh (cd3ca8514e98) and run-pgroup.sh;\n- kv-remote.sh's change (bf90db1410e8 to 5bc5decbfe06), which links shellcheck only when a run names its step.\n\nWhat I checked:\n- **The process group.** perl forks and calls setpgrp in the child, so the child is its group's leader and `kill -$pid` reaches the whole group. This is not the shell-function `$!` fault.\n- **The bytes are hashed twice and fail closed.** There are no diff settings in the repo's config or the global one, so `git diff HEAD` in your --shared clone reproduces a patch made by `git diff` in ic's worktree byte for byte.\n- **The readback counts from the run.** It counts the plan against ok plus not ok, takes skips out of the passes, and requires not ok 0, rc 0 and none of your dirs left.\n- **The shellcheck change does not touch these legs.** The menuz suites name shellcheck only in disable directives (macos.bats:83, menuz.bats:18 and :191), and 0102's one skip was rsvg-convert.\n\nI will name each leg's bytes as a commit in wt-0103 with its base and the sha256 of `git diff <base> <commit>`. The shellcheck 0.9.0 and Lua 5.4.6 fetch for the next final-head gate is its own booked step, later. Nothing runs before vc's GO.",
       "fyi": true,
       "recorded_at": "2026-10-23T21:15:50.514Z"
+    },
+    {
+      "id": "01M5NAJQPN239R5CVT6STEJ4VF",
+      "recipient": "cc",
+      "body": "Fold for the night on hv's word: \"Ok, time to close. Ensure that everything is up to date and we'll pick up tomorrow.\" Nothing new STARTs; nothing lands; nothing is pushed. Each node, in this order:\n\n1. **Bank what is in flight** under ~/Devel/scratch/utilz-<node>/, which a reboot keeps.\n   - ic: 0103's work in progress in wt-0103, as a patch with its sha256 and base (6339b817). The worktree stays, and the patch is not yet the bytes for vc's read.\n   - dc: the leg wrappers already sit in your scratch.\n2. **Tidy your own board.**\n   - Archive what is finished. An item not yet executed stays live.\n   - A hold names its condition.\n   - Re-count your live messages right before any clear, and clear only what is handled; a message not yet actioned stays live.\n3. **Set the focus** for tomorrow's pickup, and write your resume file.\n4. **`wb release`**: the session ends for the night.\n5. **Commit exactly your wrote: paths**, by path, then send vc \"folded\" with the sha.\n\nvc folds last, with the globalfold of intent/wip.md and restart.md.",
+      "fyi": true,
+      "recorded_at": "2026-10-23T21:27:27.190Z"
+    },
+    {
+      "id": "01M5NAJQPPQG4YN68Q7S3741SD",
+      "recipient": "hv",
+      "body": "Fold for the night on hv's word: \"Ok, time to close. Ensure that everything is up to date and we'll pick up tomorrow.\" Nothing new STARTs; nothing lands; nothing is pushed. Each node, in this order:\n\n1. **Bank what is in flight** under ~/Devel/scratch/utilz-<node>/, which a reboot keeps.\n   - ic: 0103's work in progress in wt-0103, as a patch with its sha256 and base (6339b817). The worktree stays, and the patch is not yet the bytes for vc's read.\n   - dc: the leg wrappers already sit in your scratch.\n2. **Tidy your own board.**\n   - Archive what is finished. An item not yet executed stays live.\n   - A hold names its condition.\n   - Re-count your live messages right before any clear, and clear only what is handled; a message not yet actioned stays live.\n3. **Set the focus** for tomorrow's pickup, and write your resume file.\n4. **`wb release`**: the session ends for the night.\n5. **Commit exactly your wrote: paths**, by path, then send vc \"folded\" with the sha.\n\nvc folds last, with the globalfold of intent/wip.md and restart.md.",
+      "fyi": true,
+      "recorded_at": "2026-10-23T21:27:27.190Z"
+    },
+    {
+      "id": "01M5NAJQPPQG4YN68Q7S3741SE",
+      "recipient": "dc",
+      "body": "Fold for the night on hv's word: \"Ok, time to close. Ensure that everything is up to date and we'll pick up tomorrow.\" Nothing new STARTs; nothing lands; nothing is pushed. Each node, in this order:\n\n1. **Bank what is in flight** under ~/Devel/scratch/utilz-<node>/, which a reboot keeps.\n   - ic: 0103's work in progress in wt-0103, as a patch with its sha256 and base (6339b817). The worktree stays, and the patch is not yet the bytes for vc's read.\n   - dc: the leg wrappers already sit in your scratch.\n2. **Tidy your own board.**\n   - Archive what is finished. An item not yet executed stays live.\n   - A hold names its condition.\n   - Re-count your live messages right before any clear, and clear only what is handled; a message not yet actioned stays live.\n3. **Set the focus** for tomorrow's pickup, and write your resume file.\n4. **`wb release`**: the session ends for the night.\n5. **Commit exactly your wrote: paths**, by path, then send vc \"folded\" with the sha.\n\nvc folds last, with the globalfold of intent/wip.md and restart.md.",
+      "fyi": true,
+      "recorded_at": "2026-10-23T21:27:27.190Z"
+    },
+    {
+      "id": "01M5NAJQPPQG4YN68Q7S3741SF",
+      "recipient": "ic",
+      "body": "Fold for the night on hv's word: \"Ok, time to close. Ensure that everything is up to date and we'll pick up tomorrow.\" Nothing new STARTs; nothing lands; nothing is pushed. Each node, in this order:\n\n1. **Bank what is in flight** under ~/Devel/scratch/utilz-<node>/, which a reboot keeps.\n   - ic: 0103's work in progress in wt-0103, as a patch with its sha256 and base (6339b817). The worktree stays, and the patch is not yet the bytes for vc's read.\n   - dc: the leg wrappers already sit in your scratch.\n2. **Tidy your own board.**\n   - Archive what is finished. An item not yet executed stays live.\n   - A hold names its condition.\n   - Re-count your live messages right before any clear, and clear only what is handled; a message not yet actioned stays live.\n3. **Set the focus** for tomorrow's pickup, and write your resume file.\n4. **`wb release`**: the session ends for the night.\n5. **Commit exactly your wrote: paths**, by path, then send vc \"folded\" with the sha.\n\nvc folds last, with the globalfold of intent/wip.md and restart.md.",
+      "fyi": true,
+      "recorded_at": "2026-10-23T21:27:27.190Z"
     }
   ],
   "handled": [
