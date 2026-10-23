@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 20:51Z
-status: active
-focus: "23 Oct, picked up after hv's compact: 0104's design to vc for its read, then 0103's bytes from ic's worktree off main (shellcheck 0.9.0 and critic-shell, then the bytes to vc before any slot), then 0104's on top as its own commit; both ride the next release. Build 1639's zip goes at tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+heartbeat_at: 2026-10-23 21:29Z
+status: paused
+focus: "23 Oct, closed for the night on hv's word: 0103's work in progress banked from wt-0103 (runs/0103-bytes-wip-20261023T212746Z.patch, sha256 dae819dc, base 6339b817), not yet the bytes for vc's read; tomorrow: remove build 1639's zip, answer critic-shell (a guard test pinning the bare release tag, a 7-character floor), send vc the bytes and ask hv's CHANGELOG number, then clear vc's four live messages; 0104's code after, on its amendments (d76d9828, b5ec69db). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0103, ISSUE:0104]
 ---
 
