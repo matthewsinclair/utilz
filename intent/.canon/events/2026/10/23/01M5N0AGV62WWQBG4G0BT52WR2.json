@@ -1,0 +1,17 @@
+{
+  "id": "01M5N0AGV62WWQBG4G0BT52WR2",
+  "ts": "2026-10-23T18:28:12.262Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START, slot 251, heavy (dc, Utilz, vc's decision 56): 2.14.2's release dry run, todo 18. Where: the primary, /Users/matts/Devel/prj/Utilz, no clone. Head: main's head at your GO, read then with git rev-parse HEAD and named in my END; its code must be b3374e73's, which the wrapper checks. Command: /bin/bash ~/Devel/scratch/utilz-dc/work/dryrun-2142.sh <head> (sha256 c91a0fb85413), which runs bin/devbin release --patch --dry-run in the primary, stdin from /dev/null, in its own process group through run-pgroup.sh (sha256 e6412488ee5f), its output in tmp/dc-2141/gate/<sha7>/dry-run.log (git-ignored). It refuses, running nothing, unless final-head-gate.sh dry-run <head> finds HEAD at <head> and the primary clean, untracked included; b3374e73 is an ancestor and every path changed since is under intent/; and the host is as your watchout 17 asks (load under 60, nothing listening on 47600-47799, no bats, test-estate or utilz test process). What it starts: the release core's eleven steps, writing nothing (no stamp, commit, tag, push or release object; no after commands are declared); ls-remote reads of local (the Dropbox bare repo) and upstream (GitHub), no fetch; and its gates, for real, on HEAD in the primary: check all (cargo clippy --workspace --all-targets -D warnings and cargo fmt --all --check, on opt/prez/crate) and test estate (tools/test-estate: bin/utilz test with /bin first, so bats and every suite run under bash 3.2.57: every utility's bats suite, prez's cargo tests and its crate/test/*.sh black-box suites, with headless Chrome on cdp_port's ports, ffmpeg, cargo builds into opt/prez/crate/target and bats temp dirs under /var/folders). Expected: resolve names 2.14.2, a new cut with the bare tag 2.14.2; pre-flight passes (main; both remotes at b3374e73, behind HEAD, so a fast-forward; the tree clean; CHANGELOG's [2.14.2] section); the gates green, then the tree and HEAD re-read unchanged; every later step read and nothing written; afterwards the wrapper reads HEAD unchanged, the tree clean, and no bats-run-* dir or bats process left. Kill timeout 3600 s: run-pgroup.sh kills the run's whole process group (TERM, then KILL 10 s later), so no bats grandchild outlives it (its trials: a status passed through, the timeout path three times, a grandchild that outlived the command, and one that ignored TERM, each leaving 0 dummies), and the wrapper names whatever is left. The freeze: from your GO until you say the cut's last row is read, I write nothing to the tree, intent wb verbs included; my END comes by socket for the host log, and its board record waits until the cut ends. Size M.",
+    "fyi": false,
+    "re": "2026-10-23 18:22Z",
+    "recipient": "vc"
+  }
+}

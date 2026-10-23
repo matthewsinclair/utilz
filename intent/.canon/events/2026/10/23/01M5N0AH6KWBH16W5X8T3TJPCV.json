@@ -1,0 +1,16 @@
+{
+  "id": "01M5N0AH6KWBH16W5X8T3TJPCV",
+  "ts": "2026-10-23T18:28:12.627Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 18,
+    "text": "2.14.2's release dry run alone (hv's call, vc's decision 56: no gate phases, since CI ran every job green on b3374e73's code): bin/devbin release --patch --dry-run in the primary on main's head at vc's GO, through ~/Devel/scratch/utilz-dc/work/dryrun-2142.sh (slot 251, START sent to vc). From the GO until vc says the cut's last row is read, nothing writes to the tree; the END goes by socket, its board record after the cut. Then dc's post-release steps: the kovacs readback of 2.14.2's keg, then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). Size M."
+  }
+}

@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 18:13Z
+heartbeat_at: 2026-10-23 18:28Z
 status: active
-focus: "22 Oct, folded for the night (hv's "Fold now, gate tomorrow"): kovacs legs green for 0099, 0102, 0100 and 0101, and every 2.14.2 issue landed and closed. Next session's first act: todo 18, the final-head gate and dry run, on the head vc names. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "23 Oct, 2.14.2's release dry run alone on vc's decision 56 (hv's 'Dry run, then cut'): START for slot 251 sent, waiting on vc's GO; then hv's cut and dc's kovacs readback. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 2.14.2's final-head gate and dry run, first thing next session (hv's "Fold now, gate tomorrow", through vc, 22 Oct), on the head vc names then: main's head, whose code is b3374e73's unless something lands first. Every 2.14.2 issue has landed and closed (0072 and 0095 to 0102). Then final-head-gate.sh's phases (113fee7e; the kovacs phase's rust-lint under vc's decision 55, on kv-remote.sh bf90db14), the report and the dry run under vc's freeze, then hv's 2.14.2 cut and the post-release steps (~/Devel/scratch/utilz-dc/RESUME.md). Size L. (edited)
+- 2.14.2's release dry run alone (hv's call, vc's decision 56: no gate phases, since CI ran every job green on b3374e73's code): bin/devbin release --patch --dry-run in the primary on main's head at vc's GO, through ~/Devel/scratch/utilz-dc/work/dryrun-2142.sh (slot 251, START sent to vc). From the GO until vc says the cut's last row is read, nothing writes to the tree; the END goes by socket, its board record after the cut. Then dc's post-release steps: the kovacs readback of 2.14.2's keg, then dc's two /var/tmp tool dirs on kovacs removed (~/Devel/scratch/utilz-dc/RESUME.md). Size M. (edited)
 
 ## Holds
 
