@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df390759-f856-41e2-9092-fcba65d2016a",
-    "heartbeat_at": "2026-10-23T20:47:53.766Z",
+    "heartbeat_at": "2026-10-23T20:51:37.215Z",
     "status": "active",
-    "focus": "23 Oct, localfolded for hv's compact on vc's word (25b4aaed): 2.14.2 out and todos 8 and 9 done; holding for the compact; after it, commit the pickup at once, then 0104's design to vc (drafted, vc's four notes in), then 0103's bytes from ic's worktree off main, then 0104's; both ride the next release. Build 1639's zip goes at tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
+    "focus": "23 Oct, picked up after hv's compact: 0104's design to vc for its read, then 0103's bytes from ic's worktree off main (shellcheck 0.9.0 and critic-shell, then the bytes to vc before any slot), then 0104's on top as its own commit; both ride the next release. Build 1639's zip goes at tomorrow's pickup. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
     "claims": [
       "ISSUE:0103",
       "ISSUE:0104"
@@ -362,7 +362,8 @@
       "kind": "hold",
       "seq": 16,
       "text": "All of ic's work, for hv's compact (vc's localfold at 25b4aaed, on hv's word): released once the compact has run and /in-session's pickup is committed; then 0104's design to vc (drafted in ~/Devel/scratch/utilz-ic/issue-0104-design.md), then 0103's bytes, each before any code or slot.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-23T20:51:40.664Z",
       "recorded_at": "2026-10-23T20:47:53.296Z"
     }
   ],
