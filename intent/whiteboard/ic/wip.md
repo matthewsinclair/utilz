@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 20:02Z
+heartbeat_at: 2026-10-23 20:14Z
 status: active
-focus: "23 Oct, after 2.14.2's cut (tag at 54b6262d; the release published with no assets yet): the freeze lifted and hold 15 released on vc's word; todo 8 waits for hv's publish of Menuz.app.zip, which vc reports, then is booked with vc as a START; todo 9 after it. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
-claims: []
+focus: "23 Oct, after 2.14.2's cut: todo 8 waits for hv's publish (built in vc's worktree at the tag), the tap push and brew at 2.14.2 here, then a START with vc; todo 9 after it. 0103 filed and owned (publish refuses an off-tag Menuz.app); its design next, for vc's read; rides the next release. Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+claims: [ISSUE:0103]
 ---
 
 # Interface Claude (ic)
@@ -19,6 +19,7 @@ _(none)_
 
 - After 2.14.2's cut, once Menuz.app.zip is attached to the release (hv's app-sign, app-notarize and publish) and brew has 2.14.2 here, booked with vc: the keg's menuz install replaces dev build 1639 (0.4.7, 16f33d49) in ~/Applications with the release asset, read back running (vc's word, 23 Oct). Size S.
 - Once the release asset is read back running in place of build 1639: remove ~/Devel/scratch/utilz-ic/kept-menuz-1425/ (put-back-0072.sh's source) and unregister it from Launch Services, which lists it under the installed copy's bundle id; drop the two stale records dc found for paths that no longer exist (state-0102/M3/.../Debug/Menuz.app and /var/folders/.../tmp.GYPqg7Uhtf/unpacked/Menuz.app); an lsregister read before and after (dc's fold FYI, 22 Oct). Size XS.
+- 0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag; docs/releasing.md and macos.bats with it. Design for vc's read before any code, then booked runs and vc's check before the landing; rides the next release. Size S.
 
 ## Holds
 

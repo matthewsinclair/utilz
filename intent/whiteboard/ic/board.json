@@ -5,10 +5,12 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df390759-f856-41e2-9092-fcba65d2016a",
-    "heartbeat_at": "2026-10-23T20:02:21.011Z",
+    "heartbeat_at": "2026-10-23T20:14:00.669Z",
     "status": "active",
-    "focus": "23 Oct, after 2.14.2's cut (tag at 54b6262d; the release published with no assets yet): the freeze lifted and hold 15 released on vc's word; todo 8 waits for hv's publish of Menuz.app.zip, which vc reports, then is booked with vc as a START; todo 9 after it. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
-    "claims": [],
+    "focus": "23 Oct, after 2.14.2's cut: todo 8 waits for hv's publish (built in vc's worktree at the tag), the tap push and brew at 2.14.2 here, then a START with vc; todo 9 after it. 0103 filed and owned (publish refuses an off-tag Menuz.app); its design next, for vc's read; rides the next release. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
+    "claims": [
+      "ISSUE:0103"
+    ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
   },
@@ -335,6 +337,14 @@
       "state": "archived",
       "archived_at": "2026-10-23T20:02:20.841Z",
       "recorded_at": "2026-10-23T19:04:20.462Z"
+    },
+    {
+      "node": "ic",
+      "kind": "todo",
+      "seq": 10,
+      "text": "0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag; docs/releasing.md and macos.bats with it. Design for vc's read before any code, then booked runs and vc's check before the landing; rides the next release. Size S.",
+      "state": "live",
+      "recorded_at": "2026-10-23T20:14:00.459Z"
     }
   ],
   "sent": [

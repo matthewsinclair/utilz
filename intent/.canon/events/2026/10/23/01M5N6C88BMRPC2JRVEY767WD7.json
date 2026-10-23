@@ -1,0 +1,15 @@
+{
+  "id": "01M5N6C88BMRPC2JRVEY767WD7",
+  "ts": "2026-10-23T20:14:00.459Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag; docs/releasing.md and macos.bats with it. Design for vc's read before any code, then booked runs and vc's check before the landing; rides the next release. Size S."
+  }
+}
