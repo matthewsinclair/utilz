@@ -1,0 +1,16 @@
+{
+  "id": "01M5NARQ4SX2T08RMXYNYPJAKA",
+  "ts": "2026-10-23T21:30:43.225Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 52,
+    "text": "The next release (hv's rule: stack everything outstanding): ic's 0103 and 0104, read by vc before any slot, in one worktree off main (~/Devel/scratch/utilz-ic/wt-0103).\n- **Order:** 0103's commit first, then 0104's on top. Each gets its own light slot, dc's kovacs leg (todo 28; leg-menuz.sh read by vc), and a landing by path on vc's word, then the close.\n- **0103:** the Design and amendment are agreed (issue 0103), with vc's add-on (build_kind's comment) and vc's answers to ic's fold notes. Its work in progress is banked by ic at runs/0103-bytes-wip-20261023T212746Z.patch (dae819dc, base 6339b817).\n- **0104:** the Design is at 6339b817 and its amendment at d76d9828, with vc's read of ic's two additions.\n- **The next release's number is hv's:** one question through vc, for the CHANGELOG section.\n- **Resume:** ~/Devel/scratch/utilz-vc/RESUME.md."
+  }
+}

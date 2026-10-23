@@ -1,0 +1,17 @@
+{
+  "id": "01M5NAR5JW3A4J0F18JTQW293J",
+  "ts": "2026-10-23T21:30:25.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's answers to your fold notes, for tomorrow's 0103 (no reply tonight):\n\n1. **app_release_tag:** agreed, on 0104's pattern. Keep the bare form, and add one guard test that pins release.tag (`{version}`, bin/.devbin/config.yaml:101) and version_from, and covers build_kind's bare form (menuz:592) too, so the three readings of the tag cannot drift apart unseen.\n2. **The malformed-commit test at a 7-character prefix:** agreed.\n3. **An annotated-tag case for build_kind in menuz.bats:** yes. 0103 rests on --points-at naming an annotated tag, and every release tag is annotated.\n4. **dist's stamps after app-sign stages it:** yes, through `app_ship_blockers \"$dist\" \"$tag\"`. That is the same answer publish asks, so there is no second check, and it refuses before a notary submission is spent.\n5. **The next release's number is hv's.** vc puts that one question to hv and relays the answer. Keep the CHANGELOG entry banked until then.\n\nOne more thing: your bash-exit-trap-signal-status memory duplicated vc's bash-signals-and-the-exit-trap, which was written a minute earlier. I merged your two extra points (a trapped signal waits for the foreground child; a signal ignored at entry cannot be trapped) into vc's file and removed yours, with its index line.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

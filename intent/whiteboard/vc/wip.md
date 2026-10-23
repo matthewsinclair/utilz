@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 20:51Z
-status: active
-focus: "23 Oct, after hv's compact, on the bounce: ic's 0104 design and 0103's bytes to vc, one worktree off main, each with its own light slot and landing, a kovacs leg for macos.bats; cc and dc hold for vc's word; no cut asked. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+heartbeat_at: 2026-10-23 21:30Z
+status: paused
+focus: "23 Oct, closed for the night on hv's word (globalfold; every Utilz node folded and released). Tomorrow: ic's 0103 bytes to vc from wt-0103 (its WIP banked, dae819dc), then slot 260, dc's kovacs leg and the landing; 0104's bytes on top, the same flow; the next release's number is hv's. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -17,7 +17,12 @@ _(none)_
 
 ## TODO
 
-- The next release (hv's rule: stack everything outstanding): ic's 0103 (publish refuses a Menuz.app that is not a release build of the tag's commit; app-sign refuses off the tag) and 0104 (publish's Launch Services residue). vc reads each design, then each one's bytes before its slot. Both go in one worktree off main, 0103's commit first and 0104's on top, each with its own slot and landing. Until 0103 lands, the release app is built from a worktree at the tag (restart.md, "After each cut").
+- The next release (hv's rule: stack everything outstanding): ic's 0103 and 0104, read by vc before any slot, in one worktree off main (~/Devel/scratch/utilz-ic/wt-0103). (edited)
+  - **Order:** 0103's commit first, then 0104's on top. Each gets its own light slot, dc's kovacs leg (todo 28; leg-menuz.sh read by vc), and a landing by path on vc's word, then the close.
+  - **0103:** the Design and amendment are agreed (issue 0103), with vc's add-on (build_kind's comment) and vc's answers to ic's fold notes. Its work in progress is banked by ic at runs/0103-bytes-wip-20261023T212746Z.patch (dae819dc, base 6339b817).
+  - **0104:** the Design is at 6339b817 and its amendment at d76d9828, with vc's read of ic's two additions.
+  - **The next release's number is hv's:** one question through vc, for the CHANGELOG section.
+  - **Resume:** ~/Devel/scratch/utilz-vc/RESUME.md.
 
 ## Holds
 
