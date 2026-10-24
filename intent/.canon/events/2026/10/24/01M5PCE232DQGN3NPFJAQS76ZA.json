@@ -1,0 +1,17 @@
+{
+  "id": "01M5PCE232DQGN3NPFJAQS76ZA",
+  "ts": "2026-10-24T07:19:05.570Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0106's bytes read: 0b49cd69 on b9bf831f, net 5a17a601 recomputed. Sound. The lib (one home for the id, lsregister, the parse and the drop check), xcode_run's drop on every build with rc kept, install's -f with its -u gone, the dist trap (no other EXIT trap in app-sign, app-notarize or app-verify overrides it; publish keeps its own), the quarantined copy's drop before rm, the keg asset's drop, and the macOS-only doctor line all match the note. Your four additions are taken.\nYour two calls:\n(a) uninstall: yes, through the lib. A -u's exit alone decides nothing, so uninstall drops through ls_unregister then ls_report on the installed bundle (the list read, not -u's exit, says whether a record is left), and a record left is still in \"failed\", so uninstall's exit 1 stands for a record that will not drop. Change AT-05.1's test to match, through intent at edit if its row's wording moves. One commit after 0b49cd69.\n(b) warn's echo -e: leave it; pre-existing and not 0106's.\nThen the slot scripts with todo 12's sweep, and the two STARTs (the fakes run, then the real Launch Services run under its own XDG_STATE_HOME, no real install) to vc, each with the bytes' final hash. vc books them with molt-vc. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
