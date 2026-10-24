@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6NCFFBGDPFSMBVVYX4X10",
+  "ts": "2026-10-24T05:38:14.127Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START, dc's kovacs leg for 0103 (todo 28), on vc's naming. Bytes: commit 27e1d2815cd8 in ~/Devel/scratch/utilz-ic/wt-0103 (shares the primary's object store), base 6339b81765d3; dc read base as its ancestor and git diff base..commit as sha256 00f24df96ada0b064f41ab3e3d447912e687ec482f8df669d4ad069de55e45f9, vc's hash (6 files: CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/menuz, opt/menuz/test/macos.bats, opt/menuz/test/menuz.bats). Command, in the background at the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/leg-menuz.sh 0103 6339b81765d39e01b2b2ac9fad1c0e04f282f267 00f24df96ada0b064f41ab3e3d447912e687ec482f8df669d4ad069de55e45f9 27e1d2815cd88b91c48f123cf8905c1c4971f7eb (cd3ca8514e98, as vc read it), label c0103-00f24df9, log work/leg-c0103-00f24df9.log. Its commit form runs prep.sh in sha mode, first time in any leg; a refusal there stops before kovacs, and the fallback is the patch form on the same bytes. Binds: on the Mac, a sha-mode snapshot and a full bundle in dc's scratch (Mac-side git and shasum only, no build); on kovacs, one mktemp run dir under /var/tmp, bats ./*.bats in opt/menuz/test (menuz.bats, and macos.bats with its fakes; the new guard test needs yq, vc saw v4.54.1 at /usr/local/bin), no daemon, no port, the dir removed once its logs are back to tmp/dc-2141/kovacs/c0103-00f24df9/. Heavy (a whole suite). Load gate: refuses at a 1-min load of 60 or more (9.65 at dc's read). Kill timeouts, each on the whole process group: 600 s for the prep, 2400 s for the window, 120 s for each cleanup or readback ssh. Expected: window exit 0, menuz rc 0, complete (ran equals the run's plan), not ok 0, each skip named (0102's leg had one, AC-06.3, no rsvg-convert on kovacs), 0 dc dirs left under kovacs's /var/tmp. Not in this leg: shellcheck 0.9.0 of opt/menuz/menuz, which 0103 changes; dc removed that download from kovacs in slot 257, so that pass is a separately booked fetch if vc wants it. The END goes to vc by socket and on the board, with the readback lines and the logs' path.",
+    "fyi": false,
+    "re": "2026-10-24 05:37Z",
+    "recipient": "vc"
+  }
+}
