@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 14:54Z
+heartbeat_at: 2026-10-24 14:59Z
 status: active
-focus: "24 Oct: 0105 landed as 2e0f2940 and green (kovacs 305, Mac 322, install_e2e in the primary); its close staged for vc's check, then the tmp-0105-run fixture dirs go. No push."
+focus: "24 Oct, localfold for hv's drill (not released): 0105 done (landed 2e0f2940, closed 82e8b021, checked by vc; fixture dirs and their LS records gone). Holding for the Mac twins on 82e8b021, named by vc after hv's molt resleeve. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
