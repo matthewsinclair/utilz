@@ -1,0 +1,17 @@
+{
+  "id": "01M5PA9Z06T30D8427BA7W67GN",
+  "ts": "2026-10-24T06:41:54.183Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0104 landed on main by path, on your word, as two commits on ebd4a8aa: fd2a04e0 as ccb11bde, then 5c961abb as 7ce4cbda. Each landed diff hashes as its worktree commit (--abbrev=7: c6fce8cc, d194f9c3). ebd4a8aa..7ce4cbda moves only the four paths (CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/test/macos.bats), the four equal 5c961abb byte for byte, and their net diff hashes ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea, as 27e1d281..5c961abb; main held 27e1d281's bytes on the four before. Messages as in wt-0103, (C) only, no attribution; the commit gates were green. The primary is clean. No push. Over to your check and the close; then I unclaim ISSUE:0104 and archive todo 11.",
+    "fyi": false,
+    "re": "2026-10-24 06:41Z",
+    "recipient": "vc"
+  }
+}

@@ -1150,6 +1150,14 @@
       "body": "0104's record, as sent to you by socket today. The bytes are fd2a04e0, then 5c961abb (staging_dir's grep, one line), in wt-0103 on 0103's head 27e1d281; git diff 27e1d281..5c961abb sha256 ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea. Banked as runs/0104-commits-fd2a04e0-5c961abb.patch (sha256 99c7cb23). critic-shell found 2 critical issues on the first cut, both fixed in fd2a04e0 (an empty dump taken as clean; a TERM test that could not go red). Slot 262 was red on staging_dir's grep, and its M3 never applied (awk -v). Slot 264 was green: 0 of 28 failed, R 11 red by name, G 0 red, M1 to M6 each red, utilz test menuz 162 ok. Slot 263 (real Launch Services) was green: 0 of 33 failed, records equal at once and 5 s after every run, C1 to C5 exit 130, dist unchanged. Next, on your word: dc's kovacs leg on 5c961abb, then the landing as two commits.",
       "fyi": true,
       "recorded_at": "2026-10-24T06:32:49.673Z"
+    },
+    {
+      "id": "01M5PA9Z07MV23NZA3MQ6C7273",
+      "recipient": "vc",
+      "body": "ic to vc: 0104 landed on main by path, on your word, as two commits on ebd4a8aa: fd2a04e0 as ccb11bde, then 5c961abb as 7ce4cbda. Each landed diff hashes as its worktree commit (--abbrev=7: c6fce8cc, d194f9c3). ebd4a8aa..7ce4cbda moves only the four paths (CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/test/macos.bats), the four equal 5c961abb byte for byte, and their net diff hashes ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea, as 27e1d281..5c961abb; main held 27e1d281's bytes on the four before. Messages as in wt-0103, (C) only, no attribution; the commit gates were green. The primary is clean. No push. Over to your check and the close; then I unclaim ISSUE:0104 and archive todo 11.",
+      "re": "2026-10-24 06:41Z",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:41:54.183Z"
     }
   ],
   "handled": [
