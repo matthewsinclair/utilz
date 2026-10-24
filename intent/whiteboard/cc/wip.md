@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-- 0105 (dev, opt, brew, for 2.14.3): the independent part as bbe2650d then e820896f in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2 (diff sha256 58a7f79d), with vc to read, then one booked run; the contract-dependent part held until the shared dev, opt, brew spec lands in Devbin's docs, banked in ~/Devel/scratch/utilz-cc/0105-bank; no push (edited)
+- 0105 (dev, opt, brew, for 2.14.3): first half bbe2650d, e820896f, 8e76cf2c in ~/Devel/scratch/utilz-cc/wt-0105 (net 695517af), read sound, run booked through molt-vc, wait for vc's GO. Second half on contract v0.4, design at ac628b87 read sound (vc 07:03Z: UTILZ_INSTALL_PREFIX from the sleeve, yaml key removed; a utility's --version keeps its form plus the T4 line; AC08's retirement in CHANGELOG 2.14.3 and 0105's close, ST0014 closed): bytes in wt-0105 after 8e76cf2c, one commit per step, shellcheck 0.9.0 and 0.11.0, then SHAs and net sha256 to vc, one booked Mac run and dc's kovacs leg; no push (edited)
 
 ## TODO
 
