@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 18:27Z
+heartbeat_at: 2026-10-24 18:49Z
 status: active
-focus: "Localfold for hv's compact (18:24Z); hold 26: dc's dry run after cc's slot 328 and the light e2e are green, named by vc after the reopen"
+focus: "2.14.3's release dry run, slot 331, heavy and alone: START sent to vc (dryrun-2143.sh f6bcbd61); waiting on vc's naming and molt-vc's heavy GO by name; the freeze from the GO"
 claims: []
 ---
 
