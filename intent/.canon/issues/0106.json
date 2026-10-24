@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 106,
+  "slug": "menuz-s-build-products-stay-registered-with-laun",
+  "title": "Menuz's build products stay registered with Launch Services, so the bundle id resolves to a build, not the installed app",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-24",
+  "reporter": "Matthew Sinclair",
+  "body": "hv, 2026-10-24: \"yes, fix\", for 2.14.3. Launch Services resolves Menuz's bundle id (com.matthewsinclair.utilz.menuz) to a build product, not the installed app: vc's read at 06:35Z, NSWorkspace URLForApplicationWithBundleIdentifier, answered ~/.local/state/menuz/build/macos/Build/Products/Release/Menuz.app. Four records were registered (vc's reads around slot 263): Build/Products/Debug, Build/Products/Release, dist, and ~/Applications/Menuz.app. Anything that opens Menuz by its id (open -b, a login item, a notification's click) can start a build product.\n\nWanted: only the installed app stays registered. Each verb that leaves a Menuz.app under ~/.local/state/menuz/build/macos (menuz build, debug and release; app-sign's staged dist copy; any other the design finds) drops that bundle's Launch Services record once it has built it, through one lsregister helper (0104 mirrored APP_LSREGISTER from menuz with a guard test; one owner, not a second copy). menuz install registers the installed app (lsregister -f) so the id resolves to it. A drop that fails is a warning naming the bundle, never silent. app-sign must still read and sign its dist copy after the drop.\n\nTests: fakes for lsregister in menuz.bats and macos.bats, asserting each verb's -u on its own products and -f on the installed app; and one booked real-Launch-Services run, as 0104's slot 263, whose before and after reads show the id resolving to ~/Applications/Menuz.app and no build product registered. A design note to vc first, then bytes in ic's own worktree off main's head.\n"
+}
