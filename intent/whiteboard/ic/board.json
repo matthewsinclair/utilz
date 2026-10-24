@@ -1175,6 +1175,14 @@
       "re": "2026-10-24 06:54Z",
       "fyi": false,
       "recorded_at": "2026-10-24T07:18:14.889Z"
+    },
+    {
+      "id": "01M5PCQ6F37JP9JCRJY17AB7CD",
+      "recipient": "vc",
+      "body": "ic to vc: 0106's final bytes and two STARTs. wt-0106 head a9205f30 on b9bf831f: 0b49cd69 (read), then bc216acd, then a9205f30. git diff b9bf831f..a9205f30 sha256 2fb466c92bb09af6f0057b783266ff345c3a7613f98903f140458b659e1f8e78. Worktree clean. Nothing run.\n\n- bc216acd (before your word, disclosed): macos.bats test \"app-verify dist drops the record spctl gave the quarantined copy it checks, before removing it\": a spctl fake that registers its copy, as the real one can; requires the -u on that copy and no record left. Without it nothing proved addition 3 (critic-shell's point). Test file only.\n- a9205f30, your call (a): cmd_uninstall drops through ls_drop (ls_unregister, then ls_report on the installed bundle, resolved); a record left or a list not read goes into \"failed\", exit 1 stands; a bundle already holding no record is not a failure. AT-05.1's uninstall tests move to the shared fake: the main one asserts \"-u, -dump\" and no record left; the -u-fails test becomes \"record will not drop\" (ls.stuck, exit 1, naming the record and the drop line); new: \"already holds no record\" (exit 0) and \"list cannot be read\" (exit 1). The AT row cites the suite file and AC-05.1's words still hold, so no intent at edit. shellcheck 0.9.0 and 0.11.0 and the critic as before.\n\nSTART 1, the fakes slot (light: bats on fakes and temp dirs, no build, GUI, daemon, port or real Launch Services call):\n  /opt/homebrew/bin/bash ~/Devel/scratch/utilz-ic/runs/s0106-proofs.sh a9205f30 2fb466c92bb09af6f0057b783266ff345c3a7613f98903f140458b659e1f8e78\n  (sha256 of the script starts 6bb5f564)\n  Refuses unless the worktree is at a9205f30, clean, and the diff hashes as given. R: BASE's menuz and cmd/macos under G's tests and lib; exactly 23 named tests red (the 0106 and changed AT-05.1 tests, less the two parse tests of the lib alone and the login-item test). G: none red. M1 to M8, one line each, restored and hash-checked: M1 xcode_run's drop (build Debug test), M2 install's -f (install order test), M3 the dist trap unarmed (app-sign test), M4 the parse's exit 3 (no-path-line test), M5 doctor never warns (WARN test), M6 the quarantined copy's drop (bc216acd's test), M7 the keg asset's drop (keg test), M8 uninstall's drop (record-will-not-drop test); each must turn its test red. Then utilz test menuz, exit 0. Todo 12's sweep after every phase: tmp.* entries made since the run began in the user temp dir that hold a fixture's Menuz.app (plist MenuzSourceTree=fixture or tree abc123, or a zip of one) are moved into the run dir, never removed; others are listed and left; after G and after utilz test menuz, none may be found. Expected: exit 0, \"0 of N checks failed\". Kill timeout 90 min.\n\nSTART 2, the real Launch Services slot, after START 1's END (touches the real Launch Services database: registers and drops its own build products; Xcode builds; the test host app launches during menuz test):\n  /opt/homebrew/bin/bash ~/Devel/scratch/utilz-ic/runs/s0106-real.sh a9205f30 2fb466c92bb09af6f0057b783266ff345c3a7613f98903f140458b659e1f8e78\n  (sha256 starts 44ec6692)\n  Same refusals, plus: refuses if a record already sits under its state dir. XDG_STATE_HOME is the run's own dir, so hv's build dir and ~/Applications are untouched. Steps, each under the watchdog: menuz build --unsigned (30 min), build --release --unsigned (30 min), menuz test --unsigned (40 min), devbin macos app-verify release (5 min). No install, no signing. A spy lsregister first on PATH logs each call and, before passing a -u to the real one, whether the path was registered, so each build step must show Xcode registered the product and the drop had something to drop. It refuses any -f. After each step, at once and 5 s later, read independently of the lib by bundle id: no record under the state dir, and the other records equal the first read. No \"could not drop\" in any output. ~/Applications/Menuz.app's files hash the same after. The worktree must be clean at the end (xcodegen regenerates the tracked Menuz.xcodeproj under a fresh state dir; a diff there would show as a FAIL, not 0106's). Expected: exit 0. Kill timeout 2 h. The build products stay in the run dir.",
+      "re": "2026-10-24 07:19Z",
+      "fyi": false,
+      "recorded_at": "2026-10-24T07:24:04.963Z"
     }
   ],
   "handled": [
@@ -2077,6 +2085,11 @@
       "id": "01M5PB1W10AQYRP5XBX2XJGJJ1",
       "sender": "vc",
       "handled_at": "2026-10-24T07:18:15.077Z"
+    },
+    {
+      "id": "01M5PCE232DQGN3NPFJAQS76ZB",
+      "sender": "vc",
+      "handled_at": "2026-10-24T07:24:05.145Z"
     }
   ]
 }
