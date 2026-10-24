@@ -761,7 +761,7 @@ dist_stamp() { # $1 key, $2 value
 # The staging dir publish zipped into, from the fake ditto's calls.
 staging_dir() {
   local line
-  line="$(grep ' Menuz.app.zip$' "$FAKES/ditto.calls" | grep '^-c ' | tail -1)"
+  line="$(grep '^-c .*/Menuz\.app\.zip$' "$FAKES/ditto.calls" | tail -1)"
   [ -n "$line" ] || return 1
   dirname "${line##* }"
 }
