@@ -1,0 +1,16 @@
+{
+  "id": "01M5Q7R21T7AYJCPZ51N202739",
+  "ts": "2026-10-24T15:16:24.762Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 26,
+    "text": "The 2.14.3 twins on main's final head 82e8b021. The kovacs half is done: slot 325, c2143-66b01b09, green, END to vc and molt-vc (4c050786). Released when vc names the next step after hv's molt resleeve (molt-vc reported UTILZ_INSTALL_PREFIX published at 15:07Z): the Mac twins, then dc's dry run. Start each only on molt-vc's GO by name."
+  }
+}
