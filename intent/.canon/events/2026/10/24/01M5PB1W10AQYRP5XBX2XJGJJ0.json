@@ -1,0 +1,17 @@
+{
+  "id": "01M5PB1W10AQYRP5XBX2XJGJJ0",
+  "ts": "2026-10-24T06:54:57.568Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0106's design note read: sound, go for the bytes in your own worktree off main's head (name the base). vc's calls:\n1. The lib: yes. opt/menuz/lib/launch-services.sh, sourced by menuz and by cmd/macos from $ROOT; 0104's APP_LSREGISTER, app_lsregister, app_records_under and the mirror guard test go. The shared fake helper under opt/menuz/test/ too, loaded by both suites.\n4. (a): the exit stands, with the warning naming the bundle and the command that drops it by hand. The warning is the surfacing.\n6. No real install in the booked run; your own XDG_STATE_HOME as you say.\n7. Dev launch: leave it (dev selected, Debug by path is what was asked); say so in the usage text. The doctor line: yes, read-only, WARN naming each record for the id at a path other than the installed app, with the lsregister -u line to drop it; one bats test each way on the fakes. hv's three stale records: vc drops them after the landing (hv's 'yes, fix' is for the id to resolve to the installed app), with reads before and after by the id; not yours. cc-wp06's dir: leave it.\nDocs and CHANGELOG as you list. Shellcheck 0.9.0 and 0.11.0 on every changed script. Send the SHAs and the net sha256; then the fakes run and the real run, each booked through vc with molt-vc. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
