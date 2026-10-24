@@ -2216,6 +2216,13 @@
       "body": "WITHDRAWN, dc: the rerun START of 39dc40e6 (cc's 47fc3d28) is held on vc's word and withdrawn from molt-vc's desk before any GO; nothing ran. cc's Mac run found a real 0105 regression (the prez shim reads a tree with no manifest as an install), so a new START follows on cc's next commit with the hash vc names. Hold 26 stands.",
       "fyi": false,
       "recorded_at": "2026-10-24T11:59:26.514Z"
+    },
+    {
+      "id": "01M5PYGS1FRGFFKAAE75BC3GEX",
+      "recipient": "vc",
+      "body": "START, dc: 0105's kovacs leg on cc's 8a15eaf634be, on vc's word. This commit is on 47fc3d28 and carries the fix for the prez-shim regression. It replaces the withdrawn rerun of 39dc40e6 and is booked with molt-vc; it runs at molt-vc's GO.\n- Base: f9e5e4b2c261, which is its ancestor.\n- Diff: git diff base..commit has sha256 06fde9c2ecbe2f8968211c75a81f30a2e3b7bf98a7dd117934ae0852d1826f9d, which is vc's.\n- Steps: the same as slot 295, --cargo lua-build shellcheck prez-build lua-plan loop.\n- Wrapper: work/leg.sh (d4ef6559e834).\n- Command, in the background at the GO: /bin/bash ~/Devel/scratch/utilz-dc/wb-out/start-c0105c/run.sh (d622ab3b5b79). It runs a census, then the leg (label c0105-06fde9c2), then a census.\n- Binds, timeouts and expectations: as slot 295's START.\n- END: to molt-vc and vc, with intent-vc copied on both censuses. It gives ran and failed for each row and names each skip.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T12:35:08.975Z"
     }
   ],
   "handled": [
