@@ -1,0 +1,16 @@
+{
+  "id": "01M5Q7RS24PBDSM84GB5V8BVGV",
+  "ts": "2026-10-24T15:16:48.324Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 26,
+    "text": "dc's 2.14.3 dry run. The kovacs twins are done: slot 325, c2143-66b01b09, green, re-tallied by vc. Released when vc names the dry run after cc's Mac twins (1) and (2) END green. Start only on molt-vc's GO by name."
+  }
+}

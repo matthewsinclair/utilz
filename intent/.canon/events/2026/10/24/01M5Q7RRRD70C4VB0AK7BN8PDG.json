@@ -1,0 +1,15 @@
+{
+  "id": "01M5Q7RRRD70C4VB0AK7BN8PDG",
+  "ts": "2026-10-24T15:16:48.013Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After 2.14.3 (vc, slot 325): leg.sh's commit form passes no base to prep.sh. prep.sh's sha mode measures from merge-base(main, sha), so for a head already on main its Mac-side changed-file listing is empty (slot 325: base = candidate, 0 paths). Make the listing use leg.sh's own base. Doc before code. Not before the cut."
+  }
+}

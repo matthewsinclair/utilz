@@ -5,7 +5,7 @@ role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
 heartbeat_at: 2026-10-24 15:16Z
 status: active
-focus: "Hold 26: the kovacs twins are green (slot 325); the Mac twins and the dry run wait on vc's word after hv's resleeve"
+focus: "Hold 26: dc's dry run, named by vc after cc's Mac twins (1) and (2) END green"
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- After 2.14.3 (vc, slot 325): leg.sh's commit form passes no base to prep.sh. prep.sh's sha mode measures from merge-base(main, sha), so for a head already on main its Mac-side changed-file listing is empty (slot 325: base = candidate, 0 paths). Make the listing use leg.sh's own base. Doc before code. Not before the cut.
 
 ## Holds
 
-- The 2.14.3 twins on main's final head 82e8b021. The kovacs half is done: slot 325, c2143-66b01b09, green, END to vc and molt-vc (4c050786). Released when vc names the next step after hv's molt resleeve (molt-vc reported UTILZ_INSTALL_PREFIX published at 15:07Z): the Mac twins, then dc's dry run. Start each only on molt-vc's GO by name. (edited)
+- dc's 2.14.3 dry run. The kovacs twins are done: slot 325, c2143-66b01b09, green, re-tallied by vc. Released when vc names the dry run after cc's Mac twins (1) and (2) END green. Start only on molt-vc's GO by name. (edited)
 
 ## Watch-outs
 
