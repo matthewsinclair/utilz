@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- The 2.14.3 Mac twins on 82e8b021: START sent to vc (run-twins-2143-mac.sh 2a68776c, then run-twins-2143-e2e.sh 0522fc06 in the primary). Book with molt-vc once vc clears it; molt-vc places it after dc's slot 325 ENDs; start only on its GO by name; END with TAP counts and the run dir to molt-vc and vc. No push.
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- The Mac twins on 82e8b021 for 2.14.3: released when vc names their START, after hv's molt resleeve is in. Then book with molt-vc, START on its GO by name, END with TAP counts and the run dir. No push.
+_(none)_
 
 ## Watch-outs
 

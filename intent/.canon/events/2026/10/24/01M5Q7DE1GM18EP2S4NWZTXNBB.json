@@ -1,0 +1,15 @@
+{
+  "id": "01M5Q7DE1GM18EP2S4NWZTXNBB",
+  "ts": "2026-10-24T15:10:36.592Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The 2.14.3 Mac twins on 82e8b021: START sent to vc (run-twins-2143-mac.sh 2a68776c, then run-twins-2143-e2e.sh 0522fc06 in the primary). Book with molt-vc once vc clears it; molt-vc places it after dc's slot 325 ENDs; start only on its GO by name; END with TAP counts and the run dir to molt-vc and vc. No push."
+  }
+}
