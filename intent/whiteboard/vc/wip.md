@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 06:32Z
+heartbeat_at: 2026-10-24 06:35Z
 status: active
-focus: "Localfold for hv's compact: 0103 landed and closed; 0104 green on the Mac (slots 264, 263), its kovacs leg STARTed (fb14c90f) and waiting for Intent's kovacs END, then ic lands it on vc's word, vc checks, the close; then ready-to-cut for 2.14.3. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "after hv's compact: hv rules dev, opt, brew goes in 2.14.3; 0104's kovacs leg on Intent's kovacs END, then its landing; then ready to cut 2.14.3"
 claims: []
 ---
 
