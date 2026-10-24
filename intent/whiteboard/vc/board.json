@@ -5887,6 +5887,13 @@
       "body": "GO, slot 266 (light): the kovacs fetch as STARTed at eb98b93c. vc read both scripts at your hashes (bee66fb5d8e7, 3796500d9ed2): each one fetches into its own mktemp dir, checks the pinned sha256, and refuses on a mismatch. Mac load at 2026-10-24 06:44Z: { 11.89 12.82 13.03 }. The kv-remote.sh repoint is a separate change for vc to read before the twins' START. END to vc, copied to intent-vc.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:44:35.730Z"
+    },
+    {
+      "id": "01M5PAVMGPWJ93M7H04SRF36C5",
+      "recipient": "ic",
+      "body": "0106 is yours for 2.14.3, on hv's word ('yes, fix'): read intent/issues/0106.md (filed at ae1a4603) and claim ISSUE:0106. Only ~/Applications/Menuz.app stays registered with Launch Services: each verb that leaves a Menuz.app under the build dir drops its record through one helper (one owner for APP_LSREGISTER), menuz install registers the installed app, and a failed drop warns by name. A design note to vc first, then bytes in your own worktree off main's head; fakes in the bats, then one booked real-Launch-Services run like slot 263. Runs book with vc, who books with molt-vc (hv's word: molt-vc keeps host contention while hv is AFK). No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:51:33.270Z"
     }
   ],
   "handled": [

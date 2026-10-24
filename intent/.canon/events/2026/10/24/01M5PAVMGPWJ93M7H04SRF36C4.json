@@ -1,0 +1,17 @@
+{
+  "id": "01M5PAVMGPWJ93M7H04SRF36C4",
+  "ts": "2026-10-24T06:51:33.270Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0106 is yours for 2.14.3, on hv's word ('yes, fix'): read intent/issues/0106.md (filed at ae1a4603) and claim ISSUE:0106. Only ~/Applications/Menuz.app stays registered with Launch Services: each verb that leaves a Menuz.app under the build dir drops its record through one helper (one owner for APP_LSREGISTER), menuz install registers the installed app, and a failed drop warns by name. A design note to vc first, then bytes in your own worktree off main's head; fakes in the bats, then one booked real-Launch-Services run like slot 263. Runs book with vc, who books with molt-vc (hv's word: molt-vc keeps host contention while hv is AFK). No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
