@@ -1,0 +1,17 @@
+{
+  "id": "01M5PAE3Q5EGGNDQKMFED6W90M",
+  "ts": "2026-10-24T06:44:10.085Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START, light, dc's kovacs fetch of shellcheck 0.9.0 and Lua 5.4.6 for 2.14.3's ready-to-cut (twins later, after 0105 lands), on vc's ask by socket (06:43Z). Scripts as run in the 2.14.2 cycle, unchanged: tmp/dc-2141/sc090/kovacs-fetch.sh (sha256 bee66fb5d8e7...) and kovacs-lua-fetch.sh (3796500d9ed2...), each piped to kovacs as `ssh kovacs bash -s < script`, one after the other, each under a 120 s kill timeout on its process group (run-pgroup.sh e6412488ee5f).\n- shellcheck: https://github.com/koalaman/shellcheck/releases/download/v0.9.0/shellcheck-v0.9.0.linux.aarch64.tar.xz, checked against sha256 179c579ef3481317d130adebede74a34dbbc2df961a70916dd4039ebf0735fae (shellcheck-py v0.9.0.6's pin for linux aarch64; GitHub publishes no digest), then unpacked beside the download. The binary is not run.\n- Lua: https://www.lua.org/ftp/lua-5.4.6.tar.gz, checked against sha256 7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88 (published at https://www.lua.org/ftp/, 363329 bytes). Not built; each twin run builds it in its own run dir.\nBinds on kovacs: two new mktemp dirs, /var/tmp/dc-2141-sc090.XXXXXX and /var/tmp/dc-2141-lua.XXXXXX, and nothing else. No brew change, no sudo, nothing on any PATH, no daemon, no port. A sha256 mismatch refuses and leaves its dir for removal in the END. On the Mac: ssh only, no build, nothing in the tree. Kovacs at 06:43Z: load 0.12, 0 dc dirs under /var/tmp. For the twins, later and separately: kv-remote.sh:43-44 names the old dirs (qyz5IL, dXTRHg), so it needs repointing at the new ones as its own change, which vc reads before the twins START. The END gives both dirs' names, sizes and the two sha256 lines.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
