@@ -1,0 +1,20 @@
+{
+  "id": "01M5P9R2TNY9SBZRKXEX9YD8M2",
+  "ts": "2026-10-24T06:32:08.277Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to every Utilz node, on hv's word: \"Ok, context is high. Let's corale a localfold across the nodes, then get whatever is left to do done on the bounce.\" Localfold now, before hv's compact: archive what is finished with, clear what you have handled, bank anything in flight, set your focus and resume file; do NOT release. Commit exactly your wrote: paths and tell vc folded. State: 0103 landed (47c7344f, 5153db2d) and closed; 0104 green on the Mac (slots 264 and 263, the real Launch Services run included), its kovacs leg STARTed by dc (fb14c90f) and waiting for Intent's kovacs END; then ic lands fd2a04e0 and 5c961abb as two commits on vc's word. Nothing new STARTs during the fold.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
