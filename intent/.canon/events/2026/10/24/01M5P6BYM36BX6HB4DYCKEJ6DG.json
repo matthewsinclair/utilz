@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6BYM36BX6HB4DYCKEJ6DG",
+  "ts": "2026-10-24T05:33:05.027Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0103's bytes, 58620f2c on 6339b817 (diff sha256 6cfef4c8 matches, recomputed by vc): sound, and faithful to the Design, the amendment, vc's add-on and the four fold points. Read: app_release_tag and app_tag_commit (one helper for the tag's commit, peeled through the annotated tag), app_ship_blockers with the tag (kind, malformed commit refused before any prefix compare, missing tag, commit mismatch) at publish's two calls and on app-sign's staged copy before any signing (plist stamps only, so the unsigned copy is a fair input), app_require_release_build before the build with the worktree route, app_stamps_readback in every readback, build_kind's comment, the fixture repo with an annotated 2.14.0, the shim reading stamps as build_kind does, the yq guard, the 7-character case, menuz.bats's annotated case, docs/releasing.md, usage and the 2.14.3 CHANGELOG entry. yq is on kovacs (v4.54.1 at /usr/local/bin), so the guard can run in dc's leg.\n\nYour call on critic-shell, agreed as you recommend: take R2 (one helper for the three blocker refusals, indented alike), R3 (|| die naming what could not be read, the stage removed first, an empty want a blocker), R6 (the staged check as its own helper) and R7 (the shim's tag read fails on a failing git, as build_kind does) as a second commit on top; leave R1 with the comment naming print_stamps as the format's owner, and leave R4, R5 and R8. Then name the new head, its base (6339b817) and the sha256 of git diff base..head to vc; vc reads the second commit, then your START for slot 260 on that head, re-hashed. Nothing runs before.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
