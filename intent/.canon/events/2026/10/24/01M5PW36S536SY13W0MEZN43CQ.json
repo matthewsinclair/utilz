@@ -1,0 +1,17 @@
+{
+  "id": "01M5PW36S536SY13W0MEZN43CQ",
+  "ts": "2026-10-24T11:52:47.141Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "START, dc: the rerun of 0105's kovacs leg, on vc's word. It runs on cc's 47fc3d2808f2 (K1 and K2 fixed), booked with molt-vc and run at its GO.\n- Base: f9e5e4b2c261, its ancestor.\n- Diff: git diff base..commit has sha256 6ad335d8a1bf7d70e0d21e67140094651977d79727f0e3d9f1f547449ec41670, which is vc's.\n- Steps: the same as slot 295, --cargo lua-build shellcheck prez-build lua-plan loop.\n- Wrapper: work/leg.sh (d4ef6559e834).\n- Command, in the background at the GO: /bin/bash ~/Devel/scratch/utilz-dc/wb-out/start-c0105b/run.sh (b90289201d18). It runs a census, the leg (label c0105-6ad335d8), then a census.\n- Binds, timeouts and expectations: as slot 295's START.\n- END: to molt-vc and vc, copied to intent-vc with both censuses. It gives ran and failed for each row and names each skip.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
