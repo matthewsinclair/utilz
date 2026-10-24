@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 08:59Z
+heartbeat_at: 2026-10-24 09:51Z
 status: active
-focus: "after hv's compact: hv rules dev, opt, brew goes in 2.14.3; 0104's kovacs leg on Intent's kovacs END, then its landing; then ready to cut 2.14.3"
+focus: "localfold for hv's compact (not released): 2.14.3 = 0105 (cc, fixes for vc's and critic-shell's findings banked on 106412bc) and 0106 (ic, slot 285's diagnostic decides the real run); then stale records, ready-to-cut; molt-vc keeps the slot desk; resume ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -17,12 +17,13 @@ _(none)_
 
 ## TODO
 
-- The next release, 2.14.3 (hv's number, 24 Oct; hv's rule: stack everything outstanding): ic's 0103 and 0104. (edited)
-  - **0103:** landed (47c7344f, 5153db2d on 5dea00a2), checked by change by vc, closed.
-  - **0104:** bytes fd2a04e0 then 5c961abb (a one-line test fix) in ~/Devel/scratch/utilz-ic/wt-0103 on 27e1d281, diff sha256 ddb62c74; read by vc; Mac slots 264 (proofs, 0 of 28 failed) and 263 (real Launch Services, 0 of 33 failed; vc's control reads before and after equal) green. Left: dc's kovacs leg (STARTed at fb14c90f, dc's message live) at vc's GO once intent-vc sends Intent's kovacs END; then ic lands the two commits by path on vc's word, vc checks by change, the close; then ask hv the Launch Services question (todo on intent/wip.md).
-  - **Then:** ready-to-cut per watchout 22 (shellcheck 0.9.0 and Lua 5.4.6 fetched to kovacs first), dc's dry run, hv's cut.
-  - **Open with hv:** devbin-vc relayed hv's dev, opt, brew ruling (Devbin directive 15); vc asked hv whether Utilz's audit against it is in 2.14.3 or after (vc suggests after, filed as an issue).
-  - **Resume:** ~/Devel/scratch/utilz-vc/RESUME.md.
+- The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md. (edited)
+  - **0103, 0104:** landed and closed (0104: ccb11bde, 7ce4cbda; closed 48a6dcea).
+  - **0105** (cc, dev/opt/brew, hv: in 2.14.3; one approach across Molt, Utilz, devbin, Intent; contract devbin docs/dev-opt-brew.md at aeed31e4, plus the T3 amendment, devbin 0213): wt-0105, f9e5e4b2..d3dbb766 (net 6de27936), read by vc; critic-shell plus vc found 1 critical (tools/formula bash 3.2 quoted replacement, reproduced) and 8 warnings, sent to cc (board, 2026-10-24); cc fixing, plus the brew update step. Then one booked Mac run (fresh wt-0105-run, prez built with CARGO_TARGET_DIR unset, fixtures in system temp), dc's kovacs leg, the landing, install_e2e in the primary, the close.
+  - **0106** (ic, Launch Services, hv: yes, fix): wt-0106 at 40b50e0d (net 7316c4a0), read by vc. Slot 276 (fakes) green. Slot 282 (real) red: the Release product re-registered after menuz's checked drop, with its original dates. Slot 285, a diagnostic (hidden ~/.local/state arm, then indexed scratch arm), running at the fold; its verdict decides (B): hidden clean, so (B) runs hidden and 0106 stands; hidden back too, so a wait-and-recheck in 0106.
+  - **After the landings:** vc drops the stale Menuz records (hv's Debug, Release, dist; cc's fixture bundles under ~/Devel/scratch/utilz-cc/tmp-0105-run; the diagnostic's leftovers), reading the id before and after; ic's hidden arm dir goes.
+  - **Then:** ready-to-cut per watchout 22 (kovacs has shellcheck 0.9.0 at vbubq3 and Lua 5.4.6 at UHvvGX; dc's kv-remote.sh 1bb5c1d3); tell molt-vc first (Molt's UTILZ_INSTALL_PREFIX, ST0008 WP05, live before the cut); dc's dry run; hv's cut, then tools/formula publish and brew upgrade on rhadamanth and kovacs.
+  - **Host:** molt-vc keeps the slot desk while hv is AFK; every Utilz run books through vc with molt-vc.
 
 ## Holds
 

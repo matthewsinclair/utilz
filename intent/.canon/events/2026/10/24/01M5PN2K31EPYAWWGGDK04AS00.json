@@ -1,0 +1,16 @@
+{
+  "id": "01M5PN2K31EPYAWWGGDK04AS00",
+  "ts": "2026-10-24T09:50:06.945Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 52,
+    "text": "The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md.\n- **0103, 0104:** landed and closed (0104: ccb11bde, 7ce4cbda; closed 48a6dcea).\n- **0105** (cc, dev/opt/brew, hv: in 2.14.3; one approach across Molt, Utilz, devbin, Intent; contract devbin docs/dev-opt-brew.md at aeed31e4, plus the T3 amendment, devbin 0213): wt-0105, f9e5e4b2..d3dbb766 (net 6de27936), read by vc; critic-shell plus vc found 1 critical (tools/formula bash 3.2 quoted replacement, reproduced) and 8 warnings, sent to cc (board, 2026-10-24); cc fixing, plus the brew update step. Then one booked Mac run (fresh wt-0105-run, prez built with CARGO_TARGET_DIR unset, fixtures in system temp), dc's kovacs leg, the landing, install_e2e in the primary, the close.\n- **0106** (ic, Launch Services, hv: yes, fix): wt-0106 at 40b50e0d (net 7316c4a0), read by vc. Slot 276 (fakes) green. Slot 282 (real) red: the Release product re-registered after menuz's checked drop, with its original dates. Slot 285, a diagnostic (hidden ~/.local/state arm, then indexed scratch arm), running at the fold; its verdict decides (B): hidden clean, so (B) runs hidden and 0106 stands; hidden back too, so a wait-and-recheck in 0106.\n- **After the landings:** vc drops the stale Menuz records (hv's Debug, Release, dist; cc's fixture bundles under ~/Devel/scratch/utilz-cc/tmp-0105-run; the diagnostic's leftovers), reading the id before and after; ic's hidden arm dir goes.\n- **Then:** ready-to-cut per watchout 22 (kovacs has shellcheck 0.9.0 at vbubq3 and Lua 5.4.6 at UHvvGX; dc's kv-remote.sh 1bb5c1d3); tell molt-vc first (Molt's UTILZ_INSTALL_PREFIX, ST0008 WP05, live before the cut); dc's dry run; hv's cut, then tools/formula publish and brew upgrade on rhadamanth and kovacs.\n- **Host:** molt-vc keeps the slot desk while hv is AFK; every Utilz run books through vc with molt-vc."
+  }
+}

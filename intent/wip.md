@@ -4,9 +4,9 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- utilz-ic: 0106, only the installed Menuz.app stays registered with Launch Services (hv: yes, fix, in 2.14.3); design note to vc, then bytes, a booked run, the landing and the close.
+- utilz-ic: 0106, only the installed Menuz.app stays registered with Launch Services (hv: yes, fix, in 2.14.3); bytes 40b50e0d; the fakes run green; the real run red on a re-registration; slot 285's diagnostic decides whether the real run goes under a hidden state dir or 0106 waits and re-checks; then the landing and the close.
 - vc: after 0106 lands, drop the stale Menuz records (hv's Debug, Release and dist, and cc's 0105 fixture bundles under ~/Devel/scratch/utilz-cc/tmp-0105-run, which the system registered), reading the id before and after; then cc's fixture dirs go.
-- utilz-cc: 0105, Utilz's docs and install messages read against dev, opt, brew (hv: in 2.14.3), in wt-0105; the parts independent of the shared spec now, the rest (install, use, version, doctor's PATH remedy, the formula, README's Installation) once devbin-vc's shared dev, opt, brew spec lands (hv: one approach across Molt, Utilz, devbin and Intent; PATH is your links first).
+- utilz-cc: 0105, Utilz on the shared dev, opt, brew contract (devbin docs/dev-opt-brew.md at aeed31e4; hv: in 2.14.3): fix vc's and critic-shell's findings on d3dbb766 in wt-0105, then one booked Mac run, dc's kovacs leg, the landing, install_e2e in the primary and the close.
 
 ## TODO
 
