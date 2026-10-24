@@ -27,6 +27,7 @@
 # on every machine.
 
 load "../../utilz/test/test_helper.bash"
+load "launch_services_fake.bash"
 
 setup_file() {
   local b
@@ -72,8 +73,10 @@ setup() {
   KC="$FAKES/keychain"
   mkdir -p "$KC"
   printf '0.1.0\n' >"$PROJ/opt-menuz-VERSION"
-  mkdir -p "$PROJ/opt/menuz"
+  mkdir -p "$PROJ/opt/menuz/lib"
   mv "$PROJ/opt-menuz-VERSION" "$PROJ/opt/menuz/VERSION"
+  # The Launch Services lib cmd/macos sources from the project (issue 0106).
+  cp "$UTILZ_HOME/opt/menuz/lib/launch-services.sh" "$PROJ/opt/menuz/lib/"
   printf '2.14.0\n' >"$PROJ/VERSION"
   printf '<plist/>\n' >"$PROJ/native/macos/Menuz/Menuz/Menuz.entitlements"
   PRODUCT="$XDG_STATE_HOME/menuz/build/macos/Build/Products/Release/Menuz.app"
@@ -122,17 +125,21 @@ case "$1" in
     while [ $# -gt 0 ]; do case "$1" in -s) svc="$2" ;; -w) val="$2" ;; esac; shift; done
     printf "%s" "$val" >"'"$KC"'/$svc" ;;
 esac'
-  # codesign: -d prints $FAKES/codesign.desc; --verify exits $FAKES/verify.rc.
+  # codesign: -d prints $FAKES/codesign.desc; --verify exits $FAKES/verify.rc;
+  # the bundle's own signing (the call with --entitlements) fails when
+  # $FAKES/sign.fail is set (issue 0106).
   printf 'Identifier=com.matthewsinclair.utilz.menuz\nTeamIdentifier=TEAM123\nCodeDirectory v=20500 size=1 flags=0x10000(runtime) hashes=1\n' >"$FAKES/codesign.desc"
   write_fake codesign '
 case " $* " in
   *" -d "*) cat "'"$FAKES"'/codesign.desc" >&2 ;;
   *" --verify "*) exit "$(cat "'"$FAKES"'/verify.rc" 2>/dev/null || echo 0)" ;;
+  *" --entitlements "*"/dist/Menuz.app "*) [ ! -f "'"$FAKES"'/sign.fail" ] || { echo "codesign: signing failed" >&2; exit 1; } ;;
 esac'
   # xcrun: notarytool submit prints $FAKES/notary.out; stapler staple marks
   # the bundle stapled, and validate reads the mark. validate registers the
   # bundle with the fake lsregister, by its resolved path, as the real one
-  # does (issue 0104's slot 259), then fails when $FAKES/staple.fail is set.
+  # does (issue 0104's slot 259), says "registered <path>" in
+  # $FAKES/order.log (issue 0106), then fails when $FAKES/staple.fail is set.
   printf 'Conducting pre-submission checks\n  id: 0b9c7f4e-1111-2222-3333-444455556666\n  status: Accepted\n' >"$FAKES/notary.out"
   write_fake xcrun '
 case "$1 $2" in
@@ -140,7 +147,8 @@ case "$1 $2" in
   "notarytool log") echo "the notary log" ;;
   "stapler staple") touch "'"$FAKES"'/stapled" ;;
   "stapler validate")
-    p="$(cd "$3" 2>/dev/null && pwd -P)" && printf "%s\n" "$p" >>"'"$FAKES"'/ls.records"
+    p="$(cd "$3" 2>/dev/null && pwd -P)" && printf "%s\n" "$p" >>"'"$FAKES"'/ls.records" &&
+      echo "registered $p" >>"'"$FAKES"'/order.log"
     [ ! -f "'"$FAKES"'/staple.fail" ] && [ -f "'"$FAKES"'/stapled" ] ;;
 esac'
   write_fake spctl '
@@ -191,35 +199,9 @@ case "$1 $2" in
     fi
     cp "$4" "'"$FAKES"'/uploaded.zip" ;;
 esac'
-  # lsregister: Launch Services' records are the paths in $FAKES/ls.records,
-  # one per line. -u drops the path's record, or exits 1 as the real one
-  # does when it holds none; with $FAKES/ls.stuck set it exits 0 and keeps
-  # it. -dump prints each record in the real dump's shape, fails when
-  # $FAKES/dump.fail is set, and lists nothing, exiting 0, when
-  # $FAKES/dump.empty is set. Each call is also said in $FAKES/order.log.
-  write_fake lsregister '
-records="'"$FAKES"'/ls.records"
-touch "$records"
-echo "lsregister $1" >>"'"$FAKES"'/order.log"
-case "$1" in
-  -u)
-    if ! grep -qxF -- "$2" "$records"; then
-      echo "failed to scan $2: -10814 from spotlight" >&2
-      exit 1
-    fi
-    [ ! -f "'"$FAKES"'/ls.stuck" ] || exit 0
-    # grep exits 1 when the record dropped was the last one; that is a drop.
-    grep -vxF -- "$2" "$records" >"$records.new" || true
-    mv "$records.new" "$records" ;;
-  -dump)
-    [ ! -f "'"$FAKES"'/dump.fail" ] || { echo "lsregister: dump failed" >&2; exit 1; }
-    [ ! -f "'"$FAKES"'/dump.empty" ] || exit 0
-    n=0
-    while IFS= read -r p; do
-      n=$((n + 1))
-      printf "path:                       %s (0x%x)\nidentifier:                 com.matthewsinclair.utilz.menuz\n--------------------------------------------------------------------------------\n" "$p" "$((0x4ed00 + n))"
-    done <"$records" ;;
-esac'
+  # lsregister: the shared fake (launch_services_fake.bash, issue 0106), its
+  # records in $FAKES/ls.records, each call also said in $FAKES/order.log.
+  write_lsregister_fake "$FAKES"
 }
 
 write_fake() { # $1 name, $2 body
@@ -768,14 +750,16 @@ staging_dir() {
 
 # The fake Launch Services' records at or under $1, one per line, read
 # through its -dump as publish reads the real one.
-# Fails when the dump fails or lists no record at all: after notarised_dist
-# the dist bundle is always listed, so an empty list was not read. The dump's
-# own failure knobs are lifted first, so the test reads what is there.
+# Fails when the dump fails or does not list the system app the shared fake
+# always lists (issue 0106), so a list that was not read is never taken as
+# empty. The dump's own failure knobs are lifted first, so the test reads
+# what is there. Assign its output, so that failure stops the test.
 records_under() {
   local dump
   rm -f "$FAKES/dump.empty" "$FAKES/dump.fail"
   dump="$("$FAKES/lsregister" -dump)" || fail "the fake lsregister -dump failed"
-  printf '%s\n' "$dump" | grep -q '^path:' || fail "the fake lsregister -dump listed no record"
+  printf '%s\n' "$dump" | grep -q '^path: */System/Applications/Calculator\.app ' ||
+    fail "the fake lsregister -dump did not list the system app it always lists"
   printf '%s\n' "$dump" | sed -n 's/^path: *\(.*\) (0x[0-9a-f]*)$/\1/p' |
     while IFS= read -r p; do
       case "$p" in "$1" | "$1"/*) printf '%s\n' "$p" ;; esac
@@ -828,16 +812,15 @@ publish_in_background() {
   fail "the fake upload never started: $(cat "$PUB_OUT")"
 }
 
-@test "issue 0104: cmd/macos's bundle id and lsregister path are menuz's" {
-  local menuz="$UTILZ_HOME/opt/menuz/menuz" macos="$UTILZ_HOME/bin/.devbin/cmd/macos" a b
-  a="$(sed -n 's/^APP_LSREGISTER="\(.*\)"$/\1/p' "$macos")"
-  b="$(sed -n 's/^LSREGISTER="\(.*\)"$/\1/p' "$menuz")"
-  [ -n "$a" ] && [ -n "$b" ] || fail "a literal is missing: APP_LSREGISTER '$a', LSREGISTER '$b'"
-  [ "$a" = "$b" ] || fail "APP_LSREGISTER is $a and menuz's LSREGISTER is $b"
-  a="$(sed -n 's/^APP_BUNDLE_ID="\(.*\)"$/\1/p' "$macos")"
-  b="$(sed -n 's/^BUNDLE_ID="\(.*\)"$/\1/p' "$menuz")"
-  [ -n "$a" ] && [ -n "$b" ] || fail "a literal is missing: APP_BUNDLE_ID '$a', BUNDLE_ID '$b'"
-  [ "$a" = "$b" ] || fail "APP_BUNDLE_ID is $a and menuz's BUNDLE_ID is $b"
+@test "issue 0106: lsregister's path and the bundle id have one home, the lib menuz and cmd/macos source" {
+  local lib="$UTILZ_HOME/opt/menuz/lib/launch-services.sh" f
+  [ "$(grep -c 'LaunchServices.framework/Support/lsregister' "$lib")" -eq 1 ] || fail "the lib does not hold lsregister's path once"
+  [ "$(grep -c '"com\.matthewsinclair\.utilz\.menuz"' "$lib")" -eq 1 ] || fail "the lib does not hold the bundle id once"
+  for f in "$UTILZ_HOME/opt/menuz/menuz" "$UTILZ_HOME/bin/.devbin/cmd/macos"; do
+    ! grep -n 'LaunchServices.framework/Support/lsregister\|"com\.matthewsinclair\.utilz\.menuz"' "$f" ||
+      fail "$f holds a literal the lib owns"
+    grep -q 'opt/menuz/lib/launch-services\.sh' "$f" || fail "$f does not source the lib"
+  done
 }
 
 @test "issue 0104: publish drops the proof copy's record and its dir after an upload that worked" {
@@ -949,7 +932,10 @@ publish_in_background() {
     grep -qx "upload ended" "$FAKES/order.log" && break
     sleep 0.05
   done
-  [ "$(grep -xE 'upload ended|lsregister -u' "$FAKES/order.log" | head -1)" = "upload ended" ] ||
+  # The proof copy's own -u, by its path: the fixture's app-sign and
+  # app-notarize, and publish's check of the quarantined copy, make -u calls
+  # of their own first (issue 0106).
+  [ "$(grep -xF -e "upload ended" -e "lsregister -u $(staging_dir)/unpacked/Menuz.app" "$FAKES/order.log" | head -1)" = "upload ended" ] ||
     fail "the record was dropped before the upload ended: $(cat "$FAKES/order.log")"
   [[ "$(cat "$PUB_OUT")" != *"published:"* ]] || fail "$(cat "$PUB_OUT")"
   proof_copy_was_registered
@@ -967,4 +953,91 @@ publish_in_background() {
   [[ "$(cat "$PUB_OUT")" != *"published:"* ]] || fail "$(cat "$PUB_OUT")"
   proof_copy_was_registered
   proof_copy_gone
+}
+
+# --- issue 0106: the staged copy keeps no Launch Services record -------------
+#
+# codesign, stapler and spctl can register the staged copy, as the fake
+# stapler validate does, so app-sign, app-notarize and app-verify dist each
+# drop its record on every way out, and the exit stands when it will not
+# drop.
+
+# The staged copy as Launch Services lists it: resolved.
+resolved_dist() {
+  ls_resolved "$DIST"
+}
+
+@test "issue 0106: app-sign drops the staged copy's record on its way out, after signing it" {
+  store_creds_fixture
+  mkdir -p "$DIST"
+  ls_fake_register "$FAKES" "$DIST"
+  run_macos app-sign
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  grep -- '--entitlements' "$FAKES/codesign.calls" | grep -qF -- " $DIST" || fail "the copy was not signed: $(cat "$FAKES/codesign.calls")"
+  grep -qx -- "-u $(resolved_dist)" "$FAKES/lsregister.calls" || fail "$(cat "$FAKES/lsregister.calls")"
+  left="$(records_under "$(resolved_dist)")"
+  [ -z "$left" ] || fail "a record is left for the staged copy: $left"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+}
+
+@test "issue 0106: app-sign drops the staged copy's record when the signing fails" {
+  store_creds_fixture
+  mkdir -p "$DIST"
+  ls_fake_register "$FAKES" "$DIST"
+  touch "$FAKES/sign.fail"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"codesign could not sign $DIST"* ]] || fail "$output"
+  left="$(records_under "$(resolved_dist)")"
+  [ -z "$left" ] || fail "a record is left for the staged copy: $left"
+}
+
+@test "issue 0106: app-notarize drops the record stapler validate gave the staged copy, after stapling and checking it" {
+  store_creds_fixture
+  (cd "$PROJ" && bin/devbin macos app-sign >/dev/null 2>&1) || fail "app-sign failed in the fixture"
+  : >"$FAKES/lsregister.calls"
+  run_macos app-notarize
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  [ -f "$FAKES/stapled" ] || fail "nothing was stapled"
+  grep -qx -- "stapler validate $DIST" "$FAKES/xcrun.calls" || fail "$(cat "$FAKES/xcrun.calls")"
+  grep -qx -- "registered $(resolved_dist)" "$FAKES/order.log" || fail "stapler validate registered no record: $(cat "$FAKES/order.log")"
+  grep -qx -- "-u $(resolved_dist)" "$FAKES/lsregister.calls" || fail "$(cat "$FAKES/lsregister.calls")"
+  left="$(records_under "$(resolved_dist)")"
+  [ -z "$left" ] || fail "a record is left for the staged copy: $left"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+}
+
+@test "issue 0106: app-verify dist drops the record its check gave the staged copy" {
+  notarised_dist
+  : >"$FAKES/xcrun.calls"
+  : >"$FAKES/order.log"
+  : >"$FAKES/lsregister.calls"
+  run_macos app-verify
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  grep -qx -- "stapler validate $DIST" "$FAKES/xcrun.calls" || fail "$(cat "$FAKES/xcrun.calls")"
+  grep -qx -- "registered $(resolved_dist)" "$FAKES/order.log" || fail "stapler validate registered no record: $(cat "$FAKES/order.log")"
+  grep -qx -- "-u $(resolved_dist)" "$FAKES/lsregister.calls" || fail "$(cat "$FAKES/lsregister.calls")"
+  left="$(records_under "$(resolved_dist)")"
+  [ -z "$left" ] || fail "a record is left for the staged copy: $left"
+}
+
+@test "issue 0106: a staged copy's record that will not drop is a warning naming it, and app-verify's exit stands" {
+  notarised_dist
+  touch "$FAKES/ls.stuck"
+  run_macos app-verify
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  local d
+  d="$(resolved_dist)"
+  [[ "$output" == *"could not drop the Launch Services record for $d: lsregister -u exited 0 and the record is still listed; drop it with: $FAKES/lsregister -u $d"* ]] || fail "$output"
+}
+
+@test "issue 0106: a record list that lists nothing is a warning that it was not read, and app-notarize's exit stands" {
+  store_creds_fixture
+  (cd "$PROJ" && bin/devbin macos app-sign >/dev/null 2>&1) || fail "app-sign failed in the fixture"
+  touch "$FAKES/dump.empty"
+  run_macos app-notarize
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  local d
+  d="$(resolved_dist)"
+  [[ "$output" == *"could not drop the Launch Services record for $d: lsregister -dump listed no record at all, so the list was not read, so whether it is gone is unknown; drop it with: $FAKES/lsregister -u $d"* ]] || fail "$output"
 }

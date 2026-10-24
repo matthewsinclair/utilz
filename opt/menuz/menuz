@@ -27,6 +27,16 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
   fi
 fi
 
+# Launch Services' records, shared with bin/devbin macos (issue 0106):
+# LSREGISTER, ls_cmd, ls_records and ls_drop.
+if [[ -f "$UTILZ_HOME/opt/menuz/lib/launch-services.sh" ]]; then
+  # shellcheck source=SCRIPTDIR/lib/launch-services.sh
+  source "$UTILZ_HOME/opt/menuz/lib/launch-services.sh"
+else
+  echo "ERROR: Cannot find $UTILZ_HOME/opt/menuz/lib/launch-services.sh" >&2
+  exit 1
+fi
+
 # ============================================================================
 # USAGE
 # ============================================================================
@@ -51,9 +61,13 @@ VERBS:
   build [--release] [--unsigned]
                              xcodegen when the project is stale, then
                              xcodebuild Debug, or Release with --release;
-                             --unsigned builds with no signing identity
+                             --unsigned builds with no signing identity.
+                             The product's Launch Services record is
+                             dropped, so the bundle id opens only the
+                             installed app
   test [--unsigned]          xcodebuild test of the scheme: MenuzTests and
-                             MenuzKitTests
+                             MenuzKitTests; the Debug product's record is
+                             dropped, as build's is
   stamps                     what the next build stamps, NAME=value a line
   install                    build Release (a source clone) or fetch the
                              release's Menuz.app.zip (an install), then quit,
@@ -62,8 +76,13 @@ VERBS:
                              render act on; with no word, the choice and why
   uninstall                  quit, unregister the login item and the bundle,
                              remove ~/Applications/Menuz.app
-  start | stop | restart     open the chosen build; quit every copy; both
-  doctor                     one line per precondition, exit 1 if any fails
+  start | stop | restart     open the chosen build; quit every copy; both.
+                             Opening the dev build registers it with Launch
+                             Services again, as use dev asks; the next build
+                             drops it
+  doctor                     one line per precondition, exit 1 if any fails;
+                             a WARN for each Launch Services record of the
+                             bundle id but the installed app's
 
 The config directory is \${MENUZ_HOME:-\${XDG_CONFIG_HOME:-\$HOME/.config}/menuz}.
 The log is \${XDG_STATE_HOME:-\$HOME/.local/state}/menuz/menuz.log.
@@ -155,9 +174,8 @@ project_yml() {
   printf '%s/project.yml\n' "$(source_dir)"
 }
 
-BUNDLE_ID="com.matthewsinclair.utilz.menuz"
+BUNDLE_ID="$MENUZ_BUNDLE_ID"
 RELEASE_DOWNLOADS="https://github.com/matthewsinclair/utilz/releases/download"
-LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 
 # The path of an executable NAME on PATH (common.sh's check_command, which
 # refuses a non-executable match), or 1 when there is none.
@@ -166,10 +184,19 @@ command_path() {
   command -v "$1"
 }
 
-# lsregister is not on PATH on macOS; one on PATH (a test's fake) is taken
-# first.
-lsregister_cmd() {
-  command_path lsregister || printf '%s\n' "$LSREGISTER"
+# Drops BUNDLE's Launch Services record, so the bundle id never resolves
+# to a build product (issue 0106); a bundle no longer there is still checked,
+# so a record left for its path is said. A record that will not
+# drop, or a list that cannot be read, is a warning naming the bundle and
+# the command that drops it; the verb's exit stands, since the build is
+# whole and right.
+drop_record() {
+  local said line
+  if ! said="$(ls_drop "$1")"; then
+    while IFS= read -r line; do
+      warn "menuz: $line"
+    done <<<"$said"
+  fi
 }
 
 # ============================================================================
@@ -672,9 +699,11 @@ print_build_errors() {
 # xcodebuild ACTION (build or test) of the scheme in CONFIG, every product
 # and intermediate under build_root, the stamps as build settings, and with
 # UNSIGNED (1) no signing. Its output goes to a log; a failure prints the
-# log's error lines and its last 40 lines, and is exit 1.
+# log's error lines and its last 40 lines, and is exit 1. Xcode registers
+# the app it builds with Launch Services, so the product's record is dropped
+# after the run, a failed one included (issue 0106).
 xcode_run() {
-  local config="$1" unsigned="$2" action="$3" root stamps line log
+  local config="$1" unsigned="$2" action="$3" root stamps line log rc=0
   root="$(build_root)"
   if ! stamps="$(build_stamps)"; then
     refuse "$action: the stamps could not be read (menuz stamps says why)"
@@ -695,7 +724,9 @@ xcode_run() {
   log="$(state_dir)/build/xcodebuild-$action.log"
   mkdir -p "$(dirname "$log")"
   printf 'menuz: xcodebuild %s, %s (log: %s)\n' "$action" "$config" "$log"
-  if ! xcodebuild "${args[@]}" >"$log" 2>&1; then
+  xcodebuild "${args[@]}" >"$log" 2>&1 || rc=$?
+  drop_record "$(product_bundle "$config")"
+  if [[ $rc -ne 0 ]]; then
     print_build_errors "$log"
     tail -n 40 "$log"
     fail_step "xcodebuild $action ($config)" "its error lines and last 40 lines are above; the whole log is $log"
@@ -864,31 +895,33 @@ fetch_asset() {
   fi
 }
 
+# The fetched asset's record is dropped first, should the checks of it have
+# registered it (issue 0106).
 remove_asset_tmp() {
-  if [[ -n "$ASSET_TMP" ]]; then rm -rf "${ASSET_TMP:?}"; fi
+  if [[ -n "$ASSET_TMP" ]]; then
+    drop_record "$ASSET_TMP/app/Menuz.app"
+    rm -rf "${ASSET_TMP:?}"
+  fi
 }
 
 cmd_install() {
   no_args install "$@"
-  local bundle unclaim="" out
+  local bundle out
   if is_install; then
     trap remove_asset_tmp EXIT
     fetch_asset
     bundle="$ASSET_BUNDLE"
   else
+    # xcode_run drops the Release product's record (issue 0106).
     require_build_tools install
     xcode_run Release 0 build
     bundle="$(product_bundle Release)"
     [[ -d "$bundle" ]] || fail_step build "xcodebuild succeeded and left no $bundle"
-    unclaim="$bundle"
   fi
   quit_all
   replace_installed "$bundle"
-  # So Launch Services never opens the build product for the bundle id.
-  if [[ -n "$unclaim" ]] && ! out="$("$(lsregister_cmd)" -u "$unclaim" 2>&1)"; then
-    fail_step unclaim "lsregister -u $unclaim: $out"
-  fi
-  if ! out="$("$(lsregister_cmd)" -f "$(installed_bundle)" 2>&1)"; then
+  # So the bundle id resolves to the installed app.
+  if ! out="$("$(ls_cmd)" -f "$(installed_bundle)" 2>&1)"; then
     fail_step register "lsregister -f $(installed_bundle): $out"
   fi
   launch_bundle "$(installed_bundle)"
@@ -914,7 +947,7 @@ cmd_uninstall() {
   else
     failed="the login item: $out"
   fi
-  if ! out="$("$(lsregister_cmd)" -u "$bundle" 2>&1)"; then
+  if ! out="$("$(ls_cmd)" -u "$bundle" 2>&1)"; then
     failed="${failed:+$failed; }lsregister -u $bundle: $out"
   fi
   rm -rf "${bundle:?}" || fail_step remove "$bundle could not be removed${failed:+; and $failed}"
@@ -1054,6 +1087,30 @@ doctor_build_lines() {
   fi
 }
 
+# Launch Services' records for the bundle id (issue 0106): ok when none
+# names a path but the installed app's; otherwise a WARN for each, with the
+# command that drops it. Read-only, and a WARN does not fail doctor: the id
+# resolving to a build is a nuisance, not a broken install.
+doctor_records_line() {
+  local installed paths rc=0 path others=0 ls
+  installed="$(installed_bundle)"
+  installed="$(cd "$installed" 2>/dev/null && pwd -P)" || installed="$(installed_bundle)"
+  paths="$(ls_records id "$BUNDLE_ID")" || rc=$?
+  if [[ $rc -ne 0 ]]; then
+    doctor_line records WARN "unknown: $paths"
+    return 0
+  fi
+  ls="$(ls_cmd)"
+  while IFS= read -r path; do
+    [[ -n "$path" && "$path" != "$installed" ]] || continue
+    doctor_line records WARN "$path is registered for $BUNDLE_ID; drop it with: $ls -u $path"
+    others=1
+  done <<<"$paths"
+  if [[ $others -eq 0 ]]; then
+    doctor_line records ok "no Menuz.app but the installed one is registered for $BUNDLE_ID"
+  fi
+}
+
 # doctor's config line, on every platform: the menu file is there, or init
 # makes it.
 doctor_config_line() {
@@ -1103,6 +1160,7 @@ cmd_doctor() {
   else
     doctor_line installed FAIL "not installed at $installed (menuz install)"
   fi
+  doctor_records_line
 
   if ! pids="$(running_pids)"; then
     doctor_line running FAIL "unknown: $pids"

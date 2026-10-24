@@ -31,6 +31,13 @@ set -euo pipefail
 . "$DEVBIN_LIB/helpers"
 
 ROOT="${PROJECT_ROOT:?}"
+# Launch Services' records, menuz's and this command's one home (issue 0106):
+# MENUZ_BUNDLE_ID, LSREGISTER, ls_cmd, ls_records, ls_unregister, ls_report
+# and ls_drop. A lib, not menuz: a devbin command does not source menuz.
+LS_LIB="$ROOT/opt/menuz/lib/launch-services.sh"
+[ -f "$LS_LIB" ] || die "no $LS_LIB, which menuz and this command share"
+# shellcheck source=SCRIPTDIR/../../../opt/menuz/lib/launch-services.sh
+. "$LS_LIB"
 APP_DIR="$ROOT/native/macos/Menuz"
 APP_ASSETS="$APP_DIR/Menuz/Assets.xcassets"
 ICON_SVG="$APP_DIR/design/menuz.svg"
@@ -41,18 +48,12 @@ MARK_SVG="$APP_DIR/design/menuz-mark.svg"
 # the build product, which any build on this machine can replace mid-
 # notarisation.
 KC_PREFIX="utilz.apple"
-# menuz's BUNDLE_ID (opt/menuz/menuz), mirrored: a devbin command does not
-# source menuz. macos.bats requires the two equal (issue 0104).
-APP_BUNDLE_ID="com.matthewsinclair.utilz.menuz"
+# menuz's bundle id, from the lib menuz sources (issue 0106).
+APP_BUNDLE_ID="$MENUZ_BUNDLE_ID"
 APP_ENTITLEMENTS="$APP_DIR/Menuz/Menuz.entitlements"
 APP_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos"
 APP_DIST_DIR="$APP_STATE_DIR/dist"
 APP_ASSET="Menuz.app.zip"
-# Launch Services' registrar, not on PATH on macOS: menuz's LSREGISTER
-# (opt/menuz/menuz), mirrored as APP_BUNDLE_ID is, and found as menuz's
-# lsregister_cmd finds it (app_lsregister). macos.bats requires the two equal
-# (issue 0104).
-APP_LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 
 # One PNG of <svg> at <px> square. A non-zero rsvg-convert, or one that wrote
 # nothing, stops the run naming the size and the source.
@@ -323,7 +324,8 @@ app_signature_readback() {
 # download meets it: a quarantined copy, the quarantine asserted before any
 # verdict is read, and spctl's source. The app is not launched. 0 when it
 # passes. The copy is made under <dir> when it is given (publish's staging
-# dir, which its EXIT trap removes), else under a dir of its own.
+# dir, which its EXIT trap removes), else under a dir of its own; its Launch
+# Services record is dropped before it is removed.
 app_verify_notarised() {
   local bundle="$1" t verdict rc=0
   if xcrun stapler validate "$bundle" >/dev/null 2>&1; then
@@ -352,6 +354,12 @@ app_verify_notarised() {
   else
     printf '  %-21s FAILED, source=%s (expected: Notarized Developer ID)\n' "Gatekeeper" "${verdict:-<none>}"
     rc=1
+  fi
+  # spctl can register the copy with Launch Services: its record goes before
+  # the copy does, and one that will not is said (issue 0106).
+  local said
+  if ! said="$(ls_drop "$t/Menuz.app")"; then
+    app_warn_lines "$said"
   fi
   rm -rf "$t"
   return $rc
@@ -514,6 +522,7 @@ cmd_app_sign() {
   dist="$(app_dist)"
   [ -d "$src" ] || die "the build left no bundle at $src"
   step "staging a copy out of the build products"
+  app_arm_dist_drop
   rm -rf "$APP_DIST_DIR"
   mkdir -p "$APP_DIST_DIR"
   ditto "$src" "$dist" || die "could not stage $src -> $dist"
@@ -541,6 +550,7 @@ cmd_app_notarize() {
   local dist staging zip out status id
   dist="$(app_dist)"
   [ -d "$dist" ] || die "no signed bundle at $dist -- run: $DEVBIN_INVOKE macos app-sign"
+  app_arm_dist_drop
   step "checking the bundle is the signed one"
   app_signature_readback "$dist"
   staging="$(mktemp -d)"
@@ -568,7 +578,8 @@ cmd_app_notarize() {
   printf '\nnotarised and stapled: %s\nnext: %s macos publish\n' "$dist" "$DEVBIN_INVOKE"
 }
 
-# app-verify [debug|release|dist]: read-only. A build product's executable,
+# app-verify [debug|release|dist]: it changes no bundle; for dist it drops the
+# staged copy's Launch Services record (issue 0106). A build product's executable,
 # LSUIElement and build stamps; for dist (the default) also its signature and
 # its ticket. Exit 1 on any failure.
 cmd_app_verify() {
@@ -582,6 +593,7 @@ cmd_app_verify() {
   if [ "$config" = dist ]; then
     bundle="$(app_dist)"
     [ -d "$bundle" ] || die "no signed bundle at $bundle -- run: $DEVBIN_INVOKE macos app-sign"
+    app_arm_dist_drop
   else
     bundle="$(app_product "$config")"
     local flag=""
@@ -604,15 +616,38 @@ cmd_app_verify() {
   app_verify_notarised "$bundle" || die "the signed bundle is not notarised and stapled"
 }
 
-# lsregister as menuz finds it: an executable one on PATH first (a test's
-# fake), then the system's.
-app_lsregister() {
-  local found
-  if found="$(command -v lsregister)" && [ -x "$found" ]; then
-    printf '%s\n' "$found"
-  else
-    printf '%s\n' "$APP_LSREGISTER"
+# Each line ls_drop or ls_report printed, said as a warning (issue 0106).
+app_warn_lines() { # $1 the lines
+  local line
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    warn "$line"
+  done <<<"$1"
+}
+
+# The dist bundle whose record app-sign, app-notarize and app-verify dist drop
+# on their way out; empty when there is none. A global, as publish's staging
+# dir is.
+_APP_DIST_TO_DROP=""
+
+# The EXIT trap of app-sign, app-notarize and app-verify dist (issue 0106).
+# codesign, stapler and spctl can register the dist bundle with Launch
+# Services, so its record is dropped on every path out, after the verb's last
+# read of it; the drop touches no file. A record that will not drop, or a
+# list that cannot be read, is a warning after whatever the verb said, naming
+# the bundle and the command that drops it; the exit stands.
+app_drop_dist_record() {
+  local rc=$? said
+  if [ -n "$_APP_DIST_TO_DROP" ] && ! said="$(ls_drop "$_APP_DIST_TO_DROP")"; then
+    app_warn_lines "$said"
   fi
+  exit "$rc"
+}
+
+# Arms app_drop_dist_record for the dist bundle.
+app_arm_dist_drop() {
+  _APP_DIST_TO_DROP="$(app_dist)"
+  trap app_drop_dist_record EXIT
 }
 
 # The staging dir publish proves its zip in, resolved as Launch Services lists
@@ -620,67 +655,31 @@ app_lsregister() {
 # trap with the function's locals already unwound.
 _APP_PUBLISH_STAGING=""
 
-# The paths of the Launch Services records at or under dir $1, one per line,
-# from lsregister -dump's text on stdin: each `path:` line without its
-# ` (0x...)` id. Exit 2 when the text holds no `path:` line at all: the real
-# list always holds the system's own apps, so none means it was not read.
-app_records_under() { # $1 dir; the dump's text on stdin
-  DIR="$1" awk '
-    /^path:/ {
-      seen = 1
-      sub(/^path:[ \t]+/, ""); sub(/ \(0x[0-9a-fA-F]+\)$/, "")
-      if ($0 == ENVIRON["DIR"] || index($0, ENVIRON["DIR"] "/") == 1) print
-    }
-    END { if (!seen) exit 2 }'
-}
-
 # publish's EXIT trap (issue 0104). `stapler validate` registers the unpacked
 # proof copy with Launch Services, so on every path out its record is dropped
 # with lsregister -u, then the staging dir removed. Then the record list is
-# read whole and must hold no record at or under the dir. A record left, a
-# list not read or a dir not removed is said on stderr, after whatever the run
-# said first, and makes a run that would exit 0 exit 1; any other status
-# stands. INT, TERM and HUP are ignored through -u and the removal only, so
-# a second signal cannot cut them short, and are back at their defaults for
-# the list, which an ignored signal would make uninterruptible. Every command
-# answers its own failure: this runs under errexit.
+# read whole and must hold no record at or under the dir (ls_report). A
+# record left, a list not read or a dir not removed is said on stderr, after
+# whatever the run said first, and makes a run that would exit 0 exit 1; any
+# other status stands. INT, TERM and HUP are ignored through -u and the
+# removal only, so a second signal cannot cut them short, and are back at
+# their defaults for the list, which an ignored signal would make
+# uninterruptible. Every command answers its own failure: this runs under
+# errexit.
 app_drop_proof_copy() {
-  local rc=$? dir="$_APP_PUBLISH_STAGING" ls bundle answer urc=0 dump drc=0 left="" lrc=0 unknown="" path why failed=no
+  local rc=$? dir="$_APP_PUBLISH_STAGING" bundle said failed=no
   [ -n "$dir" ] || exit "$rc"
-  ls="$(app_lsregister)"
   bundle="$dir/unpacked/Menuz.app"
   trap '' INT TERM HUP
-  answer="$("$ls" -u "$bundle" 2>&1)" || urc=$?
+  ls_unregister "$bundle"
   if ! rm -rf "$dir"; then
     warn "could not remove the staging dir $dir; remove it with: rm -rf $dir"
     failed=yes
   fi
   trap - INT TERM HUP
-  dump="$("$ls" -dump 2>&1)" || drc=$?
-  if [ "$drc" -eq 0 ]; then
-    left="$(printf '%s\n' "$dump" | app_records_under "$dir")" || lrc=$?
-  fi
-  if [ "$drc" -ne 0 ]; then
-    unknown="lsregister -dump failed (exit $drc)"
-  elif [ "$lrc" -eq 2 ]; then
-    unknown="lsregister -dump listed no record at all, so the list was not read"
-  elif [ "$lrc" -ne 0 ]; then
-    unknown="the record list could not be searched (exit $lrc)"
-  fi
-  if [ -n "$unknown" ]; then
-    warn "could not drop the Launch Services record for $bundle: $unknown, so whether it is gone is unknown; drop it with: $ls -u $bundle"
+  if ! said="$(ls_report "$bundle" "$dir")"; then
+    app_warn_lines "$said"
     failed=yes
-  else
-    if [ "$urc" -ne 0 ]; then
-      why="lsregister -u said: ${answer:-nothing} (exit $urc)"
-    else
-      why="lsregister -u exited 0 and the record is still listed"
-    fi
-    while IFS= read -r path; do
-      [ -n "$path" ] || continue
-      warn "could not drop the Launch Services record for $path: $why; drop it with: $ls -u $path"
-      failed=yes
-    done <<<"$left"
   fi
   if [ "$failed" = yes ] && [ "$rc" -eq 0 ]; then
     exit 1
@@ -777,9 +776,13 @@ bin/devbin macos <subcommand>
                release, and one that already holds the asset. Drops the proof
                copy's Launch Services record, and says so if it cannot
 
+  app-sign, app-notarize and app-verify dist drop the staged copy's Launch
+  Services record on their way out, and say so if they cannot, so the bundle
+  id opens only the installed app.
+
   app-verify [debug|release|dist]
-               Read-only: a bundle's executable, LSUIElement and build stamps,
-               and for dist (the default) its signature and ticket
+               A bundle's executable, LSUIElement and build stamps, and for
+               dist (the default) its signature and ticket; changes no bundle
   store-creds  Store the notary credentials in the login keychain under
                utilz.apple.*; interactive, in a terminal only
 USAGE

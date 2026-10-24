@@ -17,6 +17,7 @@
 # fake runs, so their single quotes are deliberate.
 # shellcheck disable=SC2016
 load "../../utilz/test/test_helper.bash"
+load "launch_services_fake.bash"
 
 EXAMPLE="$UTILZ_HOME/opt/menuz/lib/example.yaml"
 
@@ -39,6 +40,9 @@ setup() {
   # exists, never from a missing one.
   : >"$FAKES/calls"
   export PATH="$FAKES:$PATH"
+  # Launch Services is the shared fake (issue 0106), so no verb reaches the
+  # real database; a test may replace it with a plainer one.
+  write_lsregister_fake "$FAKES"
   # pgrep finds no Menuz unless a test says otherwise.
   fake pgrep 'exit 1'
   stub_platform Darwin
@@ -122,7 +126,7 @@ source_home() {
   cp "$UTILZ_HOME/opt/utilz/lib/common.sh" "$SRC/opt/utilz/lib/"
   cp "$UTILZ_HOME/opt/menuz/menuz" "$UTILZ_HOME/opt/menuz/VERSION" "$SRC/opt/menuz/"
   cp "$UTILZ_HOME/VERSION" "$SRC/"
-  cp "$EXAMPLE" "$SRC/opt/menuz/lib/"
+  cp "$EXAMPLE" "$UTILZ_HOME/opt/menuz/lib/launch-services.sh" "$SRC/opt/menuz/lib/"
   if [[ "${1:-}" != --no-source ]]; then
     mkdir -p "$SRC/native/macos/Menuz/Menuz" "$SRC/native/macos/Menuz/MenuzTests"
     # The Xcode floor, as project.yml carries it: doctor reads it (issue 0073).
@@ -543,9 +547,11 @@ BUILD_ROOT_REL="menuz/build/macos"
 
 # Xcode and xcodegen present. xcodebuild -version answers; any other call
 # makes the product under SYMROOT/<configuration> from a template bundle of
-# version 0.1.0, prints FAKE_XCODEBUILD_ERRORS compiler error lines (default
-# none) and a fatal one when there are any, then 100 numbered lines, and exits
-# FAKE_XCODEBUILD_RC (default 0). xcodegen makes Menuz.xcodeproj where it runs.
+# version 0.1.0 and registers it with the fake Launch Services, by its
+# resolved path, as Xcode does (issue 0106), prints FAKE_XCODEBUILD_ERRORS
+# compiler error lines (default none) and a fatal one when there are any,
+# then 100 numbered lines, and exits FAKE_XCODEBUILD_RC (default 0).
+# xcodegen makes Menuz.xcodeproj where it runs.
 xcode_fakes() {
   make_app "$FAKES/template.app" 0.1.0
   fake xcodegen 'mkdir -p Menuz.xcodeproj'
@@ -569,6 +575,7 @@ fi
 mkdir -p "${sym:?}/${cfg:?}"
 rm -rf "${sym:?}/${cfg:?}/Menuz.app"
 cp -R "'"$FAKES"'/template.app" "$sym/$cfg/Menuz.app"
+(cd "$sym/$cfg/Menuz.app" && pwd -P) >>"'"$FAKES"'/ls.records"
 seq 1 100 | sed "s/^/line /"
 exit "${FAKE_XCODEBUILD_RC:-0}"'
   fake xcode-select 'echo /Applications/Xcode.app/Contents/Developer'
@@ -588,9 +595,9 @@ running_app() {
   fake osascript "rm -f '$FAKES/running'"
 }
 
-# Launch Services, open and ditto, recording; ditto copies as ditto does.
+# open and ditto, recording; ditto copies as ditto does. Launch Services is
+# setup's shared fake.
 launch_fakes() {
-  fake lsregister 'exit 0'
   fake open 'env >"'"$FAKES"'/open.env"'
   fake ditto 'cp -R "$1" "$2"'
 }
@@ -629,7 +636,6 @@ else
 fi'
   fake codesign 'exit "${FAKE_CODESIGN_RC:-0}"'
   fake spctl 'echo "${*: -1}: accepted"; echo "source=${FAKE_SPCTL_SOURCE:-Notarized Developer ID}"'
-  fake lsregister 'exit 0'
   fake open 'exit 0'
 }
 
@@ -938,7 +944,7 @@ app_count() {
 
 # --- install, from a source clone ---------------------------------------------
 
-@test "AT-05.1: install builds Release, quits, replaces, unclaims, registers and launches, in that order" {
+@test "AT-05.1: install builds Release, drops its record, quits, replaces, registers and launches, in that order" {
   source_home
   xcode_fakes
   launch_fakes
@@ -948,9 +954,12 @@ app_count() {
   assert_success
   local release="$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app"
   [[ "$(xcodebuild_call)" == *" -configuration Release "* ]] || false
-  [[ "$(calls_of osascript ditto lsregister open | tr '\n' '|')" == "osascript -l|ditto $release|lsregister -u|lsregister -f|open -a|" ]] || false
-  grep -qx "lsregister -u $release" "$FAKES/calls"
+  [[ "$(calls_of osascript ditto lsregister open | tr '\n' '|')" == "lsregister -u|lsregister -dump|osascript -l|ditto $release|lsregister -f|open -a|" ]] || false
+  grep -qx "lsregister -u $(cd "$release" && pwd -P)" "$FAKES/calls"
   grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
+  # Only the installed app is registered (issue 0106).
+  [[ "$(ls_fake_records "$FAKES")" == "$(cd "$INSTALLED" && pwd -P)" ]] || false
+  refute_output_contains "could not drop"
   grep -qx "open -a $INSTALLED" "$FAKES/calls"
   grep -q "com.matthewsinclair.utilz.menuz" "$FAKES/osascript.args"
   # Replaced: the new bundle, and no sibling left behind.
@@ -1044,11 +1053,13 @@ app_count() {
   assert_success
   grep -qx 'https://github.com/matthewsinclair/utilz/releases/download/2.14.0/Menuz.app.zip' "$FAKES/curl.args"
   grep -qx -- '-fsSL' "$FAKES/curl.args"
-  [[ "$(calls_of curl ditto codesign spctl osascript lsregister open | awk '{ print $1 }' | tr '\n' ' ')" == "curl ditto codesign spctl osascript ditto lsregister open " ]] || false
+  # The asset's record is dropped on the way out, after the launch (issue 0106).
+  [[ "$(calls_of curl ditto codesign spctl osascript lsregister open | awk '{ print $1 }' | tr '\n' ' ')" == "curl ditto codesign spctl osascript ditto lsregister open lsregister lsregister " ]] || false
   grep -q '^codesign --verify --deep --strict ' "$FAKES/calls"
   grep -q '^spctl -a -t exec -vv ' "$FAKES/calls"
   grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
-  [[ "$(count_calls 'lsregister -u')" -eq 0 ]] || false
+  [[ "$(count_calls 'lsregister -u')" -eq 1 ]] || false
+  grep -q '^lsregister -u .*/app/Menuz\.app$' "$FAKES/calls"
   [[ -x "$INSTALLED/Contents/MacOS/Menuz" ]] || false
   [[ -z "$(xcodebuild_call)" ]] || false
 }
@@ -1664,4 +1675,128 @@ config      FAIL no $CONFIG/menuz.yaml (menuz init creates it)"
   run source_home
   [[ ! -e "$rec" ]] || fail "the fixture's commit asked gpg to sign: $(cat "$rec")"
   assert_success
+}
+
+# --- issue 0106: only the installed app keeps a Launch Services record ---------
+#
+# Xcode registers each app it builds, as the fake xcodebuild does, so each
+# verb that builds drops the product's record after xcodebuild. The records
+# are setup's shared fake's.
+
+@test "issue 0106: build drops the Debug product's Launch Services record after xcodebuild" {
+  source_home
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  local debug
+  debug="$(ls_resolved "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Debug/Menuz.app")"
+  grep -qx "lsregister -u $debug" "$FAKES/calls"
+  [[ "$(grep -E '^(xcodebuild -project|lsregister -u)' "$FAKES/calls" | awk '{ print $1 }' | tr '\n' ' ')" == "xcodebuild lsregister " ]] || false
+  [[ -z "$(ls_fake_records "$FAKES")" ]] || false
+  refute_output_contains "could not drop"
+}
+
+@test "issue 0106: build --release drops the Release product's record" {
+  source_home
+  xcode_fakes
+  run_src_menuz build --release
+  assert_success
+  grep -qx "lsregister -u $(ls_resolved "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app")" "$FAKES/calls"
+  [[ -z "$(ls_fake_records "$FAKES")" ]] || false
+}
+
+@test "issue 0106: test drops the Debug product's record" {
+  source_home
+  xcode_fakes
+  run_src_menuz test
+  assert_success
+  grep -qx "lsregister -u $(ls_resolved "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Debug/Menuz.app")" "$FAKES/calls"
+  [[ -z "$(ls_fake_records "$FAKES")" ]] || false
+}
+
+@test "issue 0106: a failed build still drops the record of the product it left, and is exit 1" {
+  source_home
+  xcode_fakes
+  FAKE_XCODEBUILD_RC=65 run_src_menuz build
+  assert_exit_code 1
+  grep -q '^lsregister -u ' "$FAKES/calls"
+  [[ -z "$(ls_fake_records "$FAKES")" ]] || false
+}
+
+@test "issue 0106: a record that will not drop is a warning naming it and the command that drops it, and build's exit stands" {
+  source_home
+  xcode_fakes
+  touch "$FAKES/ls.stuck"
+  run_src_menuz build
+  assert_success
+  local debug
+  debug="$(ls_resolved "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Debug/Menuz.app")"
+  assert_output_contains "menuz: could not drop the Launch Services record for $debug: lsregister -u exited 0 and the record is still listed; drop it with: $FAKES/lsregister -u $debug"
+  [[ "$(ls_fake_records "$FAKES")" == "$debug" ]] || false
+}
+
+@test "issue 0106: a record list that lists nothing is a warning that it was not read, and build's exit stands" {
+  source_home
+  xcode_fakes
+  touch "$FAKES/dump.empty"
+  run_src_menuz build
+  assert_success
+  local debug
+  debug="$(ls_resolved "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Debug/Menuz.app")"
+  assert_output_contains "menuz: could not drop the Launch Services record for $debug: lsregister -dump listed no record at all, so the list was not read, so whether it is gone is unknown; drop it with: $FAKES/lsregister -u $debug"
+}
+
+@test "issue 0106: a keg install drops the record its checks gave the fetched asset, leaving only the installed app's" {
+  keg_home
+  asset_fakes
+  fake spctl '(cd "${*: -1}" && pwd -P) >>"'"$FAKES"'/ls.records"; echo "source=Notarized Developer ID"'
+  run_src_menuz install
+  assert_success
+  [[ "$(ls_fake_records "$FAKES")" == "$(ls_resolved "$INSTALLED")" ]] || false
+  refute_output_contains "could not drop"
+}
+
+@test "issue 0106: doctor's records line is ok when only the installed app is registered" {
+  doctor_fixture
+  ls_fake_register "$FAKES" "$INSTALLED"
+  run_src_menuz doctor
+  assert_success
+  printf '%s\n' "$output" | grep -Eq "^records +ok +no Menuz.app but the installed one is registered for com.matthewsinclair.utilz.menuz$"
+}
+
+@test "issue 0106: doctor says WARN for each other record of the bundle id, with the command that drops it, and fails nothing" {
+  doctor_fixture
+  make_app "$DEV"
+  ls_fake_register "$FAKES" "$INSTALLED"
+  ls_fake_register "$FAKES" "$DEV"
+  run_src_menuz doctor
+  assert_success
+  local dev
+  dev="$(ls_resolved "$DEV")"
+  [[ "$(printf '%s\n' "$output" | grep -Ec '^records +WARN ')" -eq 1 ]] || false
+  printf '%s\n' "$output" | grep -qxF "records     WARN $dev is registered for com.matthewsinclair.utilz.menuz; drop it with: $FAKES/lsregister -u $dev"
+}
+
+# lsregister-dump.txt is a few records in the real dump's layout: the
+# Calculator and the two Menuz records follow lines the real lsregister
+# -dump printed on 24 Oct 2026, the home path replaced; the claim and the
+# plug-in record are shaped like them.
+@test "issue 0106: the record list's parse finds records by identifier and by dir in the real dump's layout" {
+  source "$UTILZ_HOME/opt/menuz/lib/launch-services.sh"
+  local dump="$BATS_TEST_DIRNAME/lsregister-dump.txt" release="/Users/fixture/.local/state/menuz/build/macos/Build/Products/Release/Menuz.app"
+  run ls_records_parse id com.matthewsinclair.utilz.menuz <"$dump"
+  assert_success
+  [[ "$output" == "/Users/fixture/Applications/Menuz.app"$'\n'"$release" ]] || false
+  run ls_records_parse under "$release" <"$dump"
+  assert_success
+  [[ "$output" == "$release"$'\n'"$release/Contents/PlugIns/Helper.appex" ]] || false
+  run ls_records_parse under "${release%.app}" <"$dump"
+  assert_success
+  [[ -z "$output" ]] || false
+}
+
+@test "issue 0106: a record list with no path line parses as not read, exit 3" {
+  source "$UTILZ_HOME/opt/menuz/lib/launch-services.sh"
+  run ls_records_parse id com.matthewsinclair.utilz.menuz <<<"Checking data integrity......done."
+  assert_exit_code 3
 }

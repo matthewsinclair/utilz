@@ -1,0 +1,40 @@
+Checking data integrity......done.
+Status: Database is seeded.
+Status: Preferences are loaded.
+--------------------------------------------------------------------------------
+bundle id:                  4404 (0x1134)
+path:                       /System/Applications/Calculator.app (0x1134)
+directory:                  /System/Applications
+name:                       Calculator
+identifier:                 com.apple.calculator
+codeInfoID:                 com.apple.calculator
+class:                      kLSBundleClassApplication (0x2)
+--------------------------------------------------------------------------------
+path:                       /Users/fixture/Applications/Menuz.app (0x58958)
+directory:                  ~/Applications
+name:                       Menuz
+localizedShortNames:        "LSDefaultLocalizedValue" = "Menuz"
+teamID:                     76BQL8L47U
+identifier:                 com.matthewsinclair.utilz.menuz
+version:                    1687.0 ({length = 32, bytes = 0x97060000 00000000 00000000 00000000 ... 00000000 00000000 })
+codeInfoID:                 com.matthewsinclair.utilz.menuz
+infoDictionary:             11 values (487556 (0x77084))
+                            {
+                                CFBundleIdentifier = "com.matthewsinclair.utilz.menuz";
+                            }
+activityTypes:              NOTIFICATION#76BQL8L47U:com.matthewsinclair.utilz.menuz, pv-e5f270e80002f3
+--------------------------------------------------------------------------------
+path:                       /Users/fixture/.local/state/menuz/build/macos/Build/Products/Release/Menuz.app (0x58948)
+directory:                  ~/.local/state/menuz/build/macos/Build/Products/Release
+name:                       Menuz
+identifier:                 com.matthewsinclair.utilz.menuz
+codeInfoID:                 com.matthewsinclair.utilz.menuz
+--------------------------------------------------------------------------------
+claim id:                   Menuz Document (0x2b3c)
+localizedNames:             "LSDefaultLocalizedValue" = "Menuz Document"
+identifier:                 com.matthewsinclair.utilz.menuz
+rank:                       Default
+--------------------------------------------------------------------------------
+path:                       /Users/fixture/.local/state/menuz/build/macos/Build/Products/Release/Menuz.app/Contents/PlugIns/Helper.appex (0x58950)
+identifier:                 com.matthewsinclair.utilz.menuz.helper
+--------------------------------------------------------------------------------
