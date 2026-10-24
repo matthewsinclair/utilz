@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6R3NZZRV5VX3V62S989DD",
+  "ts": "2026-10-24T05:39:43.423Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END, slot 261, dc's kovacs leg for 0103 (todo 28), on vc's GO: green. Bytes 27e1d281 on 6339b817, diff sha256 00f24df9 (checked again in the prep); prep in sha mode, its first leg, exit 0; kovacs checked out 27e1d281 from a full bundle (1720 commits, 27 tags), tree clean. Window 05:38:48Z to 05:39:23Z, exit 0. menuz: rc 0; plan 151 in 1 plan line; ran 151: passed 150, skipped 1, not ok 0; complete. Skipped, by name: ok 7 AC-06.3 (no rsvg-convert on kovacs), as in 0102's leg. yq v4.54.1 and bats 1.12.0 on the run's PATH. dc's dirs left under kovacs's /var/tmp: 0 (run dir removed). Wrapper exit 0. Logs: tmp/dc-2141/kovacs/c0103-00f24df9/, the wrapper's output ~/Devel/scratch/utilz-dc/work/leg-c0103-00f24df9.out. Todo 28 stays live for 0104's leg; 0103's Mac dirs go once 0103 closes.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
