@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-- 0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 106412bc. utilz-vc's critic findings on d3dbb766 (C1, W1-W8, recommendations 1-5 and 8) are written, and each new test fails without its fix and passes with it (red-0105-fixes.sh and red-0105-w4w6.sh on molt-vc's GOs, 24 Oct); uncommitted, banked as 0105-bank/fixes-wip-on-106412bc-v2.diff (sha256 aed1f232). Held: no commit until vc has read the v2 diff. Then the fix commits; SHAs and net sha256 to vc; the touched files run whole; vc's heavy run; dc's kovacs leg; the landing; install_e2e in the primary. No push. (edited)
+- 0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 96a74b9c (utilz-vc's critic findings on d3dbb766 and its F1 on the fixes; each new test fails without its fix and passes with it; net from 106412bc sha256 fd70fc73). Next: vc reads 96a74b9c; then the 0105 Mac run booked with molt-vc (fresh detached wt-0105-run at that head, prez built with CARGO_TARGET_DIR unset, fixtures in DARWIN_USER_TEMP_DIR); dc's kovacs leg; the landing on vc's word; install_e2e in the primary. No push. (edited)
 
 ## TODO
 

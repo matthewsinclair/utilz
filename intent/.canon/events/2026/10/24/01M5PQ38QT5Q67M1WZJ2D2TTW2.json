@@ -1,0 +1,16 @@
+{
+  "id": "01M5PQ38QT5Q67M1WZJ2D2TTW2",
+  "ts": "2026-10-24T10:25:26.266Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 96a74b9c (utilz-vc's critic findings on d3dbb766 and its F1 on the fixes; each new test fails without its fix and passes with it; net from 106412bc sha256 fd70fc73). Next: vc reads 96a74b9c; then the 0105 Mac run booked with molt-vc (fresh detached wt-0105-run at that head, prez built with CARGO_TARGET_DIR unset, fixtures in DARWIN_USER_TEMP_DIR); dc's kovacs leg; the landing on vc's word; install_e2e in the primary. No push."
+  }
+}
