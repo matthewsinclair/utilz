@@ -1622,10 +1622,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 62,
-      "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 96a74b9c (utilz-vc's critic findings on d3dbb766 and its F1 on the fixes; each new test fails without its fix and passes with it; net from 106412bc sha256 fd70fc73). Next: vc reads 96a74b9c; then the 0105 Mac run booked with molt-vc (fresh detached wt-0105-run at that head, prez built with CARGO_TARGET_DIR unset, fixtures in DARWIN_USER_TEMP_DIR); dc's kovacs leg; the landing on vc's word; install_e2e in the primary. No push.",
+      "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 8a15eaf6 (96a74b9c the critic findings and F1; 47fc3d28 dc's kovacs K1 and K2; 8a15eaf6 an unknown tree is source, slot 301's prez red). Slot 301 on 96a74b9c: utilz 330 run 1 not ok (install_e2e's worktree refusal), menuz 162 ok, prez 32 run 2 not ok (fixed in 8a15eaf6, proved red then green). Next on vc's word: the full Mac run on 8a15eaf6 (fresh wt-0105-run, all three suites); dc's kovacs leg on the new head; the landing; install_e2e in the primary. No push.",
       "state": "live",
       "recorded_at": "2026-10-24T06:41:01.854Z",
-      "edited_at": "2026-10-24T10:25:26.266Z"
+      "edited_at": "2026-10-24T12:34:49.228Z"
     }
   ],
   "sent": [
@@ -4515,6 +4515,11 @@
       "id": "01M5PPY8MEJYBAR97HTFZKWNBT",
       "sender": "vc",
       "handled_at": "2026-10-24T10:25:26.522Z"
+    },
+    {
+      "id": "01M5PV0XJNS9A29N973NZ1VBTV",
+      "sender": "vc",
+      "handled_at": "2026-10-24T12:34:49.476Z"
     }
   ]
 }
