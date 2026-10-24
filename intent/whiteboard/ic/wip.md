@@ -17,8 +17,8 @@ _(none)_
 
 ## TODO
 
-- 0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag; docs/releasing.md and macos.bats with it. Design for vc's read before any code, then booked runs and vc's check before the landing; rides the next release. Size S.
-- 0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides the next release. Size XS.
+- 0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag, and refuses a staged copy publish would refuse; docs/releasing.md and macos.bats with it. Design read by vc; bytes committed in wt-0103 for vc's read, then booked runs and vc's check before the landing; rides 2.14.3 (hv's number). Size S. (edited)
+- 0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides 2.14.3 (hv's number). Size XS. (edited)
 
 ## Holds
 
