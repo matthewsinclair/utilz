@@ -1,0 +1,17 @@
+{
+  "id": "01M5PAWF06FCA76ZDM2BYTTF2Q",
+  "ts": "2026-10-24T06:52:00.390Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0105's independent part, for your read. In ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: bbe2650d (docs) then e820896f (doctor and menuz). git diff f9e5e4b2..e820896f sha256 58a7f79d6e2cc85450be18b288a210340817b362b96ee229fe99b5d35abf0c5f, banked as ~/Devel/scratch/utilz-cc/0105-bank/candidate-v1.diff.\nIn it: doctor's and emacs doctor's [n/total] headers become each check's name, and the messages that cited a check by number cite it by name (eg \"yq counted by the external dependencies check\"); every test asserting the numbered form changes in the same commit (common_lib.bats, bridge.bats, dispatcher.bats; one test renamed: \"run_doctor() prints the dependency verdict before the install integrity check begins (issue 0026)\", and the two 0081/0087 tests now say \"run_doctor's installed utilities check\"); menuz build and test's refusal in an install names menuz install first, with an assertion beside AT-05.1's; help/utilz.md's doctor checks by name and UTILZ_HOME no longer required; architecture's false explicit-UTILZ_HOME scenario gone; design-principles' team example and Public Distribution wording; mdagg's two docs; developer-guide's doctor sample; README's emacs \"Every check\".\nHeld, per your word, and banked whole in ~/Devel/scratch/utilz-cc/0105-bank (docs-c76f27cb.diff, code-uncommitted.diff, all-vs-base.diff): README's Installation and maintainer section, help/utilz.md's Location, Quick Start, dev-checkout grouping and Troubleshooting, docs/index.md's Getting Started and Portability line (it is the install, so I held it whole), design-principles' Portability and Problem 4 lines, architecture's Portable benefit, doctor's PATH remedy (both callers), the emacs symlink target and bin/utilz's command-list grouping (use brew may make use a user verb). Molt's ST0008 design read.\nshellcheck on the two changed scripts: the same findings as the base (SC1091 info only). Not run: any suite. Booking request: one light run in wt-0105 of utilz test utilz and utilz test menuz (bridge.bats is in utilz's suite), with its own CARGO_TARGET_DIR, at your GO. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

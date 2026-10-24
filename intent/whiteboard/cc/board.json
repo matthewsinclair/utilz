@@ -1622,9 +1622,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 62,
-      "text": "0105 (dev, opt, brew in the docs and messages, for 2.14.3): design note in the issue body at 6c9e4bf4, with vc to read; then the bytes in ~/Devel/scratch/utilz-cc/wt-0105 off main's head, docs first, any run booked with vc, no push",
+      "text": "0105 (dev, opt, brew, for 2.14.3): the independent part as bbe2650d then e820896f in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2 (diff sha256 58a7f79d), with vc to read, then one booked run; the contract-dependent part held until the shared dev, opt, brew spec lands in Devbin's docs, banked in ~/Devel/scratch/utilz-cc/0105-bank; no push",
       "state": "live",
-      "recorded_at": "2026-10-24T06:41:01.854Z"
+      "recorded_at": "2026-10-24T06:41:01.854Z",
+      "edited_at": "2026-10-24T06:51:59.106Z"
     }
   ],
   "sent": [
@@ -3326,6 +3327,13 @@
       "body": "0105's design note is in its issue body at 6c9e4bf4, for your read before any bytes. In short: README.md `## Installation` becomes the one home of the user's way in (brew tap matthewsinclair/utilz; brew trust --formula matthewsinclair/utilz/utilz; brew install matthewsinclair/utilz/utilz; utilz doctor; brew upgrade utilz after), since the keg ships help/ but not README.md or docs/. Two trees, Install Commands, Creating a New Utility and Testing move into one closing README section for the maintainer, framed as dev, opt, brew. help/utilz.md, docs/index.md, docs/design-principles.md, docs/architecture.md, opt/mdagg/README.md and help/mdagg.md lose their clone and PATH (and false UTILZ_HOME) install lines; doctor's \"Seven checks\" count goes. Code: doctor's PATH remedy and emacs doctor's, from one function, name brew link and brew's bin from a keg and drop the ignored UTILZ_HOME export; menuz build's refusal adds menuz install. Your word wanted on: grouping install, upgrade, relink and use in bin/utilz's unknown-command list as dev-checkout verbs; and the two separate findings (emacs install --symlink from a keg links the versioned Cellar path that brew cleanup removes; doctor's [n/total] step numbers), as new issues or folded into 0105. I put the globs in your To do line in backticks (prettier read them as emphasis); the words are unchanged. Nothing written in a worktree yet; no push.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:41:02.040Z"
+    },
+    {
+      "id": "01M5PAWF06FCA76ZDM2BYTTF2R",
+      "recipient": "vc",
+      "body": "0105's independent part, for your read. In ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: bbe2650d (docs) then e820896f (doctor and menuz). git diff f9e5e4b2..e820896f sha256 58a7f79d6e2cc85450be18b288a210340817b362b96ee229fe99b5d35abf0c5f, banked as ~/Devel/scratch/utilz-cc/0105-bank/candidate-v1.diff.\nIn it: doctor's and emacs doctor's [n/total] headers become each check's name, and the messages that cited a check by number cite it by name (eg \"yq counted by the external dependencies check\"); every test asserting the numbered form changes in the same commit (common_lib.bats, bridge.bats, dispatcher.bats; one test renamed: \"run_doctor() prints the dependency verdict before the install integrity check begins (issue 0026)\", and the two 0081/0087 tests now say \"run_doctor's installed utilities check\"); menuz build and test's refusal in an install names menuz install first, with an assertion beside AT-05.1's; help/utilz.md's doctor checks by name and UTILZ_HOME no longer required; architecture's false explicit-UTILZ_HOME scenario gone; design-principles' team example and Public Distribution wording; mdagg's two docs; developer-guide's doctor sample; README's emacs \"Every check\".\nHeld, per your word, and banked whole in ~/Devel/scratch/utilz-cc/0105-bank (docs-c76f27cb.diff, code-uncommitted.diff, all-vs-base.diff): README's Installation and maintainer section, help/utilz.md's Location, Quick Start, dev-checkout grouping and Troubleshooting, docs/index.md's Getting Started and Portability line (it is the install, so I held it whole), design-principles' Portability and Problem 4 lines, architecture's Portable benefit, doctor's PATH remedy (both callers), the emacs symlink target and bin/utilz's command-list grouping (use brew may make use a user verb). Molt's ST0008 design read.\nshellcheck on the two changed scripts: the same findings as the base (SC1091 info only). Not run: any suite. Booking request: one light run in wt-0105 of utilz test utilz and utilz test menuz (bridge.bats is in utilz's suite), with its own CARGO_TARGET_DIR, at your GO. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:52:00.390Z"
     }
   ],
   "handled": [
@@ -4463,6 +4471,11 @@
       "id": "01M5P9ZZQ3AFVNZ5PSJM8X06P5",
       "sender": "vc",
       "handled_at": "2026-10-24T06:41:02.254Z"
+    },
+    {
+      "id": "01M5PA9CWVCHKQHRB13GF3AC3M",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:52:10.743Z"
     }
   ]
 }

@@ -1,0 +1,16 @@
+{
+  "id": "01M5PAWDR2VNDHT8RJF9WXJRN9",
+  "ts": "2026-10-24T06:51:59.106Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3): the independent part as bbe2650d then e820896f in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2 (diff sha256 58a7f79d), with vc to read, then one booked run; the contract-dependent part held until the shared dev, opt, brew spec lands in Devbin's docs, banked in ~/Devel/scratch/utilz-cc/0105-bank; no push"
+  }
+}

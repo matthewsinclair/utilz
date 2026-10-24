@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-- 0105 (dev, opt, brew in the docs and messages, for 2.14.3): design note in the issue body at 6c9e4bf4, with vc to read; then the bytes in ~/Devel/scratch/utilz-cc/wt-0105 off main's head, docs first, any run booked with vc, no push
+- 0105 (dev, opt, brew, for 2.14.3): the independent part as bbe2650d then e820896f in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2 (diff sha256 58a7f79d), with vc to read, then one booked run; the contract-dependent part held until the shared dev, opt, brew spec lands in Devbin's docs, banked in ~/Devel/scratch/utilz-cc/0105-bank; no push (edited)
 
 ## TODO
 
