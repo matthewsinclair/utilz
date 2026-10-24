@@ -33,7 +33,19 @@
 #                                                step 9's postcondition, per D42
 #   release_read_object_content <repo> <tag> <title> <body-file>
 #                                                an existing object: this release's title and notes?
-#   release_seconds <duration>                   a declared wait (ci.wait, object_wait), in seconds
+#   release_assets_pick <commit>                 which run at the tag ships, from gh run list's rows on stdin
+#   release_read_assets_run <repo> <workflow> <tag> <commit>
+#                                                the attach's run: the earliest successful run at the tag
+#   release_object_assets <repo> <tag>           the release object's assets, `<name><TAB><state><TAB><digest>`
+#   release_asset_digest <assets> <name>         one asset's digest from that listing; 1 when it has none of that name
+#   release_run_artifacts <repo> <id>            a run's artifacts as GitHub lists them, `<name><TAB><expired>`
+#   release_name_problem <name>                  why a file cannot be uploaded as a release asset, if it cannot
+#   release_pattern_problem <name>               why an asset cannot be selected by gh release download, if it cannot
+#   release_sums_text                            SHA256SUMS from `<name><TAB><sha256>` lines on stdin
+#   release_sums_agree <assets> <sums>           SHA256SUMS against the object's other assets and their digests
+#   release_read_assets <repo> <tag>             row 9's assets half: what the attach's last write says
+#   release_workflow_writers <file>              every release-writing step one workflow carries
+#   release_seconds <duration>                   a declared wait (ci.wait, object_wait, assets.wait), in seconds
 #   release_run_bounded <seconds> <out> <err> <cmd>...
 #                                                a call killed at a deadline, 124 when it was
 #   release_bound <name> <value>                 a bound's override; the default unless a whole number
@@ -865,13 +877,16 @@ release_repo() {
 
 # release_gh <repo> <group> <verb> [args...] -- every gh call the release core
 # makes goes through here, as every remote git call goes through
-# release_git_remote. `--repo` is always passed, after the verb so an argument
-# list holding `--` cannot swallow it; GH_PROMPT_DISABLED=1 and stdin from
-# /dev/null, so a human at a terminal takes the path agents and CI take (0088's
-# rule): a missing answer fails loudly, never waits.
+# release_git_remote. `--repo` is passed whenever <repo> is given, after the
+# verb so an argument list holding `--` cannot swallow it; GH_PROMPT_DISABLED=1
+# and stdin from /dev/null, so a human at a terminal takes the path agents and
+# CI take (0088's rule): a missing answer fails loudly, never waits.
 #
-# An EMPTY <repo> passes no `--repo`, for the one verb that names no
-# repository: pre-flight's `auth status`, which gh refuses `--repo` on.
+# An EMPTY <repo> passes no `--repo`, for the two calls that take none:
+# pre-flight's `auth status`, which gh refuses `--repo` on and which names the
+# host by --hostname instead; and `api` (release_run_artifacts), whose <verb> is
+# the endpoint's path, which names the repository, a host other than
+# github.com named by --hostname.
 release_gh() {
   local repo="$1" group="$2" verb="$3"
   shift 3
@@ -939,8 +954,343 @@ release_read_object_content() {
   fi
 }
 
-# release_seconds <duration> -- a declared wait (`ci.wait`, `object_wait`) in
-# seconds. The config validator admits a whole number of s, m or h and nothing
+# ---------------------------------------------------------------------------
+# THE ATTACH'S READERS (ST0008 WP-08, D55)
+#
+# A project's CI builds assets its release object carries, and the core
+# attaches them, so the cut stays the one writer of the object. The run that
+# built them is the EARLIEST SUCCESSFUL run of release.assets.workflow at the
+# tag, because builds of one commit are not byte-identical: two runs of one
+# workflow at one commit built different tarballs (measured 2026-10-23), so
+# which run ships has to be a rule that a later run cannot change. The
+# coordinator is lib/cmd/release's attach_assets; what it reads is here.
+#
+# A FIELD THAT CAN BE EMPTY GOES LAST in every line gh is asked for: a tab is
+# whitespace to `read`, so an empty field between two tabs would shift every
+# field after it.
+# ---------------------------------------------------------------------------
+
+# release_assets_pick <commit> -- which run ships, from `gh run list` rows on
+# stdin, `<id><TAB><head-sha><TAB><status><TAB><created><TAB><conclusion>` a
+# line. Only runs AT <commit> count, oldest first. A run still going holds the
+# answer, `pending<TAB><id><TAB><status>`, since it may yet succeed and be the
+# earliest; the first that succeeded is the one, `success<TAB><id><TAB><created>`;
+# a run that failed is passed over. With none succeeded and none going,
+# `failed<TAB><id><TAB><conclusion><TAB><n>` names the newest failure and how
+# many there were, and `none` says no run at <commit> is listed. Pure.
+release_assets_pick() {
+  local commit="$1" rows id sha status created conclusion failed="" fconc="" nfailed=0
+  rows="$(LC_ALL=C sort -t $'\t' -k4,4 -k1,1n)" || return 1
+  while IFS=$'\t' read -r id sha status created conclusion; do
+    [ -n "$id" ] && [ "$sha" = "$commit" ] || continue
+    if [ "$status" != completed ]; then
+      printf 'pending\t%s\t%s\n' "$id" "$status"
+      return 0
+    fi
+    if [ "$conclusion" = success ]; then
+      printf 'success\t%s\t%s\n' "$id" "$created"
+      return 0
+    fi
+    failed="$id" fconc="${conclusion:-none}" nfailed=$((nfailed + 1))
+  done <<<"$rows"
+  if [ -n "$failed" ]; then
+    printf 'failed\t%s\t%s\t%s\n' "$failed" "$fconc" "$nfailed"
+  else
+    printf 'none\n'
+  fi
+}
+
+# release_read_assets_run <repo> <workflow> <tag> <commit> -- the attach's run as
+# a reader, one line: `already<TAB><id><TAB><detail>` for the run that ships
+# (release_assets_pick); `pending<TAB><detail>` while none has succeeded and
+# one may, or none is listed yet; `failed<TAB><id><TAB><detail>` when every run
+# at <commit> failed, the cause read from the newest one's JOBS, never from its
+# conclusion alone, since a refusal before any job ran (billing, permissions)
+# concludes `failure` exactly as a failed build does; or UNREADABLE.
+#
+# THE KEY IS `--branch <tag>`, FILTERED TO <commit>. A run on the tag's ref,
+# pushed or dispatched, carries the tag's name as its head branch, while a
+# lookup by commit alone matched main's run too where main and the tag were
+# pushed at one sha. A list as long as the limit gh is given may lack the
+# oldest run, so it is `refused`, never
+# UNREADABLE: asking again cannot shorten it, so a wait must not spend its bound
+# on it.
+release_read_assets_run() {
+  local repo="$1" wf="$2" tag="$3" commit="$4" limit=200 rows n pick state id info count jobs cause
+  if ! rows="$(release_gh "$repo" run list --workflow "$wf" --branch "$tag" --limit "$limit" \
+    --json databaseId,headSha,status,createdAt,conclusion \
+    --jq '.[] | [.databaseId, .headSha, .status, .createdAt, .conclusion] | @tsv' 2>&1)"; then
+    printf 'UNREADABLE\tgh run list --workflow %s --branch %s failed: %s\n' "$wf" "$tag" "${rows//$'\n'/ }"
+    return 0
+  fi
+  n="$(grep -c . <<<"$rows")" || n=0
+  if [ "$n" -ge "$limit" ]; then
+    printf 'refused\tgh lists %s runs of %s at %s, as many as it was asked for, so the earliest cannot be told\n' "$n" "$wf" "$tag"
+    return 0
+  fi
+  if ! pick="$(release_assets_pick "$commit" <<<"$rows")"; then
+    printf 'UNREADABLE\tthe runs of %s at %s could not be sorted\n' "$wf" "$tag"
+    return 0
+  fi
+  IFS=$'\t' read -r state id info count <<<"$pick"
+  case "$state" in
+    success)
+      printf 'already\t%s\trun %s, the earliest successful %s run at %s (%s), created %s\n' \
+        "$id" "$id" "$wf" "$tag" "${commit:0:12}" "$info"
+      ;;
+    pending)
+      printf 'pending\trun %s of %s at %s is %s, and may yet be the earliest to succeed\n' "$id" "$wf" "$tag" "$info"
+      ;;
+    failed)
+      if jobs="$(release_gh "$repo" run view "$id" --json jobs \
+        --jq '.jobs[] | select(.conclusion != "success" and .conclusion != "skipped") | [.name, .conclusion] | @tsv' 2>&1)"; then
+        cause="$(awk -F'\t' 'NF { printf "%sjob %s %s", sep, $1, ($2 == "" ? "unfinished" : $2); sep = ", " }' <<<"$jobs")"
+        [ -n "$cause" ] || cause="no job of it failed, so nothing says why it concluded $info: a refusal before any job ran, such as billing"
+      else
+        cause="its jobs could not be read: ${jobs//$'\n'/ }"
+      fi
+      printf 'failed\t%s\tno run of %s at %s (%s) succeeded: the newest, run %s, %s%s\n' "$id" "$wf" "$tag" "${commit:0:12}" "$id" "$cause" \
+        "$([ "$count" -le 1 ] || printf '; %s runs failed' "$count")"
+      ;;
+    *)
+      printf 'pending\tno run of %s at %s (%s) is listed yet\n' "$wf" "$tag" "${commit:0:12}"
+      ;;
+  esac
+}
+
+# release_object_assets <repo> <tag> -- the release object's assets, one a line,
+# `<name><TAB><state><TAB><digest>`: the digest is GitHub's `sha256:<hex>`, and
+# empty for an asset GitHub lists none for. gh's status, its words on stderr.
+release_object_assets() {
+  release_gh "$1" release view "$2" --json assets --jq '.assets[] | [.name, .state, (.digest // "")] | @tsv'
+}
+
+# release_asset_digest <assets> <name> -- the digest <assets>, a listing
+# release_object_assets printed, gives the asset <name>: `sha256:<hex>`, or
+# nothing for one GitHub lists no digest for; 1 when the listing has no asset of
+# that name. THE ONE READER OF THAT LISTING'S FIELDS by name, its presence test
+# too. Pure.
+release_asset_digest() {
+  local name state digest
+  while IFS=$'\t' read -r name state digest; do
+    [ "$name" = "$2" ] || continue
+    printf '%s\n' "$digest"
+    return 0
+  done <<<"$1"
+  return 1
+}
+
+# release_run_artifacts <repo> <id> -- run <id>'s artifacts as GitHub lists them,
+# `<name><TAB><expired>` a line, expired `true` or `false`, every page. gh's
+# status, its words on stderr. gh run download passes over an expired artifact
+# and succeeds while any other downloads, so the attach holds what it wrote to
+# this list. `gh api` takes no --repo: a HOST/OWNER/NAME repository names its
+# host with --hostname.
+release_run_artifacts() {
+  local path="$1" host=""
+  local -a where=()
+  case "$path" in
+    */*/*)
+      host="${path%%/*}"
+      path="${path#*/}"
+      where=(--hostname "$host")
+      ;;
+  esac
+  release_gh "" api "repos/$path/actions/runs/$2/artifacts" ${where[@]+"${where[@]}"} --paginate \
+    --jq '.artifacts[] | [.name, (.expired | tostring)] | @tsv'
+}
+
+# release_name_problem <name> -- print why a file named <name> cannot be uploaded
+# as a release asset, and succeed; fail when it can. Only letters, digits, `.`,
+# `-` and `_`, and no `.` first or last: GitHub renames an uploaded name that
+# holds other characters or begins or ends with a period, so the asset would
+# never read back under its name and no re-run could finish; and gh reads a `#`
+# in an upload's path as the start of a label. SHA256SUMS is a name the attach
+# writes, so it is the download stage that refuses it as one of the run's files.
+release_name_problem() {
+  case "$1" in
+    "") printf 'it is empty' ;;
+    .* | *.) printf 'it begins or ends with a period, which GitHub renames' ;;
+    *[!A-Za-z0-9._-]*) printf 'it holds a character other than a letter, a digit, a period, a hyphen or an underscore, and GitHub renames an asset whose name holds one' ;;
+    *) return 1 ;;
+  esac
+  return 0
+}
+
+# release_pattern_problem <name> -- print why `gh release download --pattern`
+# cannot select the asset <name> alone, and succeed; fail when it can. It selects
+# by glob, so `*`, `?`, `[` and a backslash would make the name a pattern; a tab
+# or a newline would split the lines the listing is read by.
+release_pattern_problem() {
+  case "$1" in
+    *[$'\t\n']*) printf 'its name holds a tab or a newline' ;;
+    *[*?[\\]*) printf 'its name holds *, ?, [ or a backslash, which gh release download reads as a pattern' ;;
+    *) return 1 ;;
+  esac
+  return 0
+}
+
+# release_sums_text -- SHA256SUMS from `<name><TAB><sha256>` lines on stdin:
+# `<sha256>  <name>` a line, as `sha256sum -c` reads it, sorted by name in the C
+# locale so its bytes cannot follow the reader's. Pure.
+release_sums_text() {
+  local pairs name sha
+  pairs="$(LC_ALL=C sort -t $'\t' -k1,1)" || return 1
+  while IFS=$'\t' read -r name sha; do
+    [ -n "$name" ] || continue
+    printf '%s  %s\n' "$sha" "$name"
+  done <<<"$pairs"
+}
+
+# release_sums_agree <assets> <sums> -- whether <sums>, SHA256SUMS's text, names
+# exactly the release object's OTHER assets, each at the digest GitHub lists for
+# it. <assets> is release_object_assets'. `already<TAB><detail>`, or
+# `pending<TAB>` naming every disagreement: a name it lacks, one the object does
+# not carry, one twice, a line in another shape, an asset not `uploaded`, or one
+# with no GitHub digest to compare. An object with no other asset is pending
+# too, since the attach never leaves one so. Pure.
+release_sums_agree() {
+  local line name state digest i at bad="" n=0
+  local -a sn=() ss=() seen=()
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    if [[ ! "$line" =~ ^([0-9a-f]{64})\ \ (.+)$ ]]; then
+      bad+="; a line of it is not '<sha256>  <name>': $line"
+      continue
+    fi
+    for i in "${!sn[@]}"; do
+      [ "${sn[$i]}" != "${BASH_REMATCH[2]}" ] || bad+="; it names ${BASH_REMATCH[2]} twice"
+    done
+    sn+=("${BASH_REMATCH[2]}")
+    ss+=("${BASH_REMATCH[1]}")
+    seen+=(no)
+  done <<<"$2"
+  while IFS=$'\t' read -r name state digest; do
+    [ -n "$name" ] && [ "$name" != SHA256SUMS ] || continue
+    n=$((n + 1))
+    at=""
+    for i in "${!sn[@]}"; do
+      if [ "${sn[$i]}" = "$name" ]; then
+        at="$i"
+        break
+      fi
+    done
+    if [ -z "$at" ]; then
+      bad+="; it does not name $name"
+      continue
+    fi
+    seen[at]=yes
+    if [ "$state" != uploaded ]; then
+      bad+="; $name is $state on the object, not uploaded"
+    elif [ -z "$digest" ]; then
+      bad+="; $name has no GitHub digest to compare with"
+    elif [ "$digest" != "sha256:${ss[$at]}" ]; then
+      bad+="; $name's GitHub digest is ${digest#sha256:}, and SHA256SUMS says ${ss[$at]}"
+    fi
+  done <<<"$1"
+  for i in "${!sn[@]}"; do
+    [ "${seen[$i]}" = yes ] || bad+="; it names ${sn[$i]}, which the object does not carry"
+  done
+  if [ -n "$bad" ]; then
+    printf 'pending\tSHA256SUMS disagrees with the release object: %s\n' "${bad#; }"
+  elif [ "$n" -eq 0 ]; then
+    printf 'pending\tthe release object carries SHA256SUMS and no other asset, which the attach never leaves\n'
+  else
+    printf 'already\tSHA256SUMS names the object'"'"'s %s other asset(s), each at its GitHub digest\n' "$n"
+  fi
+}
+
+# release_read_assets <repo> <tag> -- row 9's assets half, under object: local
+# with release.assets.workflow declared, for an object that exists: what the
+# attach's LAST WRITE says. `already` when SHA256SUMS is there and agrees with
+# every other asset's GitHub digest (release_sums_agree), `pending` naming why
+# not, UNREADABLE when a read fails. It reads SHA256SUMS's text from the
+# release, a small read, into the wait's scratch (RELEASE_WAIT_DIR), and writes
+# nothing else; it never downloads the run's artifacts.
+#
+# THE LIMIT, STATED: this proves CONSISTENCY, NOT COMPLETENESS AGAINST THE RUN.
+# Only a download of the run's artifacts lists the files the run built, and
+# status and a cut's step 6 read this without one. It holds because the attach
+# writes SHA256SUMS LAST, once every upload has read back at its sha256, so an
+# attach that stopped part way leaves SHA256SUMS absent or disagreeing; an
+# asset someone removed or added by hand since is named, while a run's file
+# that never reached the object and is named nowhere is not.
+release_read_assets() {
+  local repo="$1" tag="$2" dir="${RELEASE_WAIT_DIR:-}" own=no list rc=0
+  if [ -z "$dir" ]; then
+    dir="$(mktemp -d "${TMPDIR:-/tmp}/devbin-assets.XXXXXX")" || {
+      printf 'UNREADABLE\tno scratch directory to read SHA256SUMS into\n'
+      return 0
+    }
+    own=yes
+  fi
+  if ! list="$(release_object_assets "$repo" "$tag" 2>"$dir/assets.err")"; then
+    printf 'UNREADABLE\tthe assets of %s'"'"'s release object could not be read: %s\n' "$tag" "$(tr '\n' ' ' <"$dir/assets.err")"
+  elif ! release_asset_digest "$list" SHA256SUMS >/dev/null; then
+    printf 'pending\tthe release object for %s carries no SHA256SUMS\n' "$tag"
+  elif ! release_gh "$repo" release download "$tag" --pattern SHA256SUMS --output "$dir/SHA256SUMS" 2>"$dir/sums.err"; then
+    printf 'UNREADABLE\tSHA256SUMS on the release object for %s could not be read: %s\n' "$tag" "$(tr '\n' ' ' <"$dir/sums.err")"
+  else
+    release_sums_agree "$list" "$(cat "$dir/SHA256SUMS")" || rc=$?
+  fi
+  rm -f "$dir/assets.err" "$dir/sums.err" "$dir/SHA256SUMS"
+  [ "$own" = no ] || rm -rf "$dir"
+  return "$rc"
+}
+
+# release_workflow_writers <file> -- every step of one workflow file that writes
+# a release object, whatever starts the workflow (D42, ST0008 WP-08), one a line
+# as `<line><TAB><what>`: `gh release create`, `upload`, `edit`, `delete` or
+# `delete-asset`, and `hub release create` or `edit`; `gh api` on a line naming
+# `releases`; a call of the releases API by its method name (createRelease,
+# updateRelease, deleteRelease, uploadReleaseAsset, deleteReleaseAsset), as an
+# actions/github-script step makes one; and in a `uses:`, the release actions
+# softprops/action-gh-release, ncipollo/release-action, actions/create-release,
+# actions/upload-release-asset, svenstaro/upload-release-action,
+# goreleaser/goreleaser-action, googleapis/release-please-action and
+# marvinpinto/action-automatic-releases. A command continued onto the next line
+# by a backslash is read whole, at its first line, and a comment line is
+# skipped. awk's status: a file it could not read fails the caller.
+#
+# WHAT IT CANNOT SEE: a writer reached through a script the step runs, a local
+# or composite action, an action not named here, or a variable holding the
+# command; and `gh api` whose path is built elsewhere. A read of a releases
+# endpoint through `gh api` is named too, since the method is not read, and so
+# is goreleaser-action run only to build: warnings the project can answer.
+release_workflow_writers() {
+  awk '
+    function check(s, n,   m, tool) {
+      if (match(s, /(^|[^A-Za-z0-9_.-])(gh|hub)[ \t]+release[ \t]+(create|upload|edit|delete-asset|delete)([^A-Za-z0-9_-]|$)/)) {
+        m = substr(s, RSTART, RLENGTH)
+        sub(/^[^a-z]*/, "", m)
+        tool = m
+        sub(/[ \t].*$/, "", tool)
+        sub(/^.*release[ \t]+/, "", m)
+        sub(/[^a-z-].*$/, "", m)
+        print n "\truns " tool " release " m
+      } else if (s ~ /(^|[^A-Za-z0-9_.-])gh[ \t]+api([ \t]|$)/ && s ~ /releases/) {
+        print n "\tcalls gh api on a releases endpoint"
+      } else if (match(s, /(createRelease|updateRelease|deleteRelease|uploadReleaseAsset|deleteReleaseAsset)[ \t]*\(/)) {
+        m = substr(s, RSTART, RLENGTH)
+        sub(/[ \t]*\($/, "", m)
+        print n "\tcalls the releases API (" m ")"
+      }
+      if (s ~ /uses:/ && match(s, /(softprops\/action-gh-release|ncipollo\/release-action|actions\/create-release|actions\/upload-release-asset|svenstaro\/upload-release-action|goreleaser\/goreleaser-action|googleapis\/release-please-action|marvinpinto\/action-automatic-releases)/))
+        print n "\tuses " substr(s, RSTART, RLENGTH)
+    }
+    /^[ \t]*#/ && !cont { next }
+    {
+      if (cont) buf = buf " " $0; else { buf = $0; start = FNR }
+      if ($0 ~ /\\[ \t]*$/) { sub(/\\[ \t]*$/, "", buf); cont = 1; next }
+      cont = 0
+      check(buf, start)
+    }
+    END { if (cont) check(buf, start) }
+  ' "$1"
+}
+
+# release_seconds <duration> -- a declared wait (`ci.wait`, `object_wait`,
+# `assets.wait`) in seconds. The config validator admits a whole number of s, m or h and nothing
 # else, so anything else here is a caller's mistake, refused naming it.
 release_seconds() {
   local n

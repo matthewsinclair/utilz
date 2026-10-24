@@ -2545,8 +2545,16 @@ platform_identity() {
 # went to /dev/null, so a directory find could not read left its files out, and
 # a file cat could not read, the launcher's error discarded too, went in as its
 # path alone: either way the value named a different runtime, and nothing said
-# why. find's own error names a directory, and a file is named here. The sort
-# is left as it was, since a new order would change every install's digest.
+# why. find's own error names a directory, and a file is named here.
+#
+# THE ORDER IS C COLLATION'S, WHATEVER THE READER'S LOCALE (issue 0204). Each
+# path goes into the stream, so the order is part of the identity, and a bare
+# sort ordered by the reader's collation (LC_ALL, else LC_COLLATE, else LANG):
+# C puts LICENSE.md ahead of the lowercase names and an en_* UTF-8 locale puts
+# it among the l's, so one runtime read as one digest to a C reader and another
+# to a reader whose locale collates otherwise. Pinned, every reader gets the
+# order a C reader always had: a C reader's digest does not move, and any
+# other reader's moves once, to the C reader's.
 #
 # -H FOLLOWS A LIB DIRECTORY THAT IS A SYMLINK, AT THE START POINT ONLY
 # (critic-shell on 0139). find's default -P read such a libdir as the link
@@ -2587,7 +2595,7 @@ runtime_digest() {
     set -o pipefail
     {
       cat "$launcher" || exit 1
-      printf '%s\n' "$files" | sort | while IFS= read -r f; do
+      printf '%s\n' "$files" | LC_ALL=C sort | while IFS= read -r f; do
         [ -n "$f" ] || continue
         printf '%s\n' "${f#"$libdir"/}"
         cat "$f" || exit 1

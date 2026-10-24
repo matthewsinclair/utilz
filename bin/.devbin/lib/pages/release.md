@@ -2,8 +2,11 @@
     bin/devbin release status <vX.Y.Z>
     bin/devbin release notes
     bin/devbin release check
+    bin/devbin release attach <vX.Y.Z>
 
 Cut a release: stamp, commit, gate, confirm, tag, push, make the release object, then run `after:` and read the CI verdict. `release` is opt-in: a project enables it with `commands.release.enabled: true` and declares how it releases in the `release:` block of `bin/.devbin/config.yaml`, where every key has a default. Every `release:` key is annotated in devbin's reference config, and `bin/devbin devbin` names where that file and devbin's releasing guide are.
+
+`release.verbs` says which of these a project offers, every one by default: a project whose own command cuts its releases offers `check` and `attach` with the cut off. A verb it leaves out is refused, exit 2, and `release --help` shows only the verbs offered.
 
 ## The eleven steps
 
@@ -22,7 +25,9 @@ Cut a release: stamp, commit, gate, confirm, tag, push, make the release object,
                      or to every remote git lists when none is declared, each
                      read back after its push
      9  object       the release object -- made here (object: local, the
-                     default), by the project's CI (object: ci), or none
+                     default), by the project's CI (object: ci), or none;
+                     under object: local, then the assets assets.workflow's
+                     run built, as release attach attaches them
     10  after        the declared after: commands
     11  ci           ask ci.query for the release tag's CI verdict, if it is
                      declared
@@ -49,8 +54,15 @@ Step 6 asks a person. `--yes` answers it. With neither a terminal nor `--yes`, t
                  CHANGELOG.md and RELEASES.md for releases, none for
                  changelog, and whatever notes.run writes for command
     check        print the release: declaration, each key marked declared or
-                 default, then check that every generated view is current and
-                 that the project's version has a note
+                 default, name every workflow step that writes a release
+                 object under object: local, then check that every generated
+                 view is current and that the project's version has a note
+    attach <v>   attach the files the earliest successful run of
+                 release.assets.workflow at the tag built to its release
+                 object, and write one SHA256SUMS over every asset on it;
+                 never makes the object, never dispatches a run, reads no run
+                 once SHA256SUMS agrees with the object, and a re-run
+                 continues where it stopped
 
 ## Exit codes
 
@@ -60,6 +72,8 @@ Step 6 asks a person. `--yes` answers it. With neither a terminal nor `--yes`, t
          refused; a failed step is named, and a re-run continues from it.
          Step 6 fails this way when nobody is there to ask, as when a
          person declines, and its row says which
+    2    the verb is one this project's release.verbs leaves out, refused
+         before anything was read
 
 A real cut is itself a sealed gate: its full log goes to a file under `tmp/release/` rather than being left to scroll past. A dry run makes no release, so it seals no log of its own; the gates it runs still seal theirs.
 

@@ -531,17 +531,20 @@ commands:
 # and declares no block releases with all of them, and a block names only what
 # differs: every key has a default, and every default can be overridden. A
 # COMMENTED line is one of two things. For `remotes`, `derived`,
-# `ci.query`, `after`, `notes.run` and `repo` the default is empty or derived, and the line shows an
-# example value, not the default. `ci.wait` and `object_wait` are commented out
+# `ci.query`, `after`, `notes.run`, `repo` and `assets.workflow` the default is empty or derived, and the line shows an
+# example value, not the default. `ci.wait`, `object_wait` and `assets.wait` are commented out
 # because declaring them where the default mode never reads them is refused, not
-# ignored -- `ci.wait` without `ci.query`, `object_wait` outside object: ci --
+# ignored -- `ci.wait` without `ci.query`, `object_wait` outside object: ci,
+# `assets.wait` without `assets.workflow` --
 # and their lines show the default for the mode that does read them. The same
-# rule refuses `title` outside object: local and `notes.run` outside
-# notes.kind: command.
+# rule refuses `title` and `assets.workflow` outside object: local and `notes.run` outside
+# notes.kind: command, and a key no verb `verbs` offers reads: with `cut` and
+# `status` off, the gates, for one, are config nothing acts on.
 #
 # A list is declared EMPTY as the single item "-": the grammar has no `[]`.
-# `remotes` is the exception and refuses "-": undeclared already means every
-# remote, so an empty list could only mean pushing nowhere.
+# `remotes` and `verbs` are the exceptions and refuse "-": undeclared remotes
+# already means every remote, so an empty list could only mean pushing nowhere,
+# and a release that offers no verb is `commands.release.enabled: false`.
 release:
   tag: "v{version}"          # must contain {version}; a bare "{version}" is legal
   # remotes:                 # undeclared: every remote `git remote` lists, in that order
@@ -564,3 +567,12 @@ release:
   # object_wait: 20m         # object: ci only -- how long to wait for the workflow's release object
   # after:                   # commands run after the release object, reported, outside the core's guarantees
   #   - bin/announce
+  verbs:                     # the verbs of release this project offers; one left out is refused, exit 2
+    - cut                    # a cut: release <--patch|--minor|--major|vX.Y.Z>
+    - status
+    - notes
+    - check
+    - attach
+  # assets:                  # object: local only -- what release attach, and a cut's step 9, attach to the release object
+  #   workflow: assets.yml   # the workflow in .github/workflows whose earliest successful run at the tag built them; declaring it turns the attach on
+  #   wait: 30m              # how long the attach waits for that run to be listed and to finish
