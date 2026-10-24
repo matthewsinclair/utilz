@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 15:16Z
+heartbeat_at: 2026-10-24 18:25Z
 status: active
-focus: "Hold 26: dc's dry run, named by vc after cc's Mac twins (1) and (2) END green"
+focus: "Localfold for hv's compact (18:24Z); hold 26: dc's dry run after cc's slot 328 and the light e2e are green, named by vc after the reopen"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- dc's 2.14.3 dry run. The kovacs twins are done: slot 325, c2143-66b01b09, green, re-tallied by vc. Released when vc names the dry run after cc's Mac twins (1) and (2) END green. Start only on molt-vc's GO by name. (edited)
+- dc's 2.14.3 dry run. The kovacs twins are done: slot 325, c2143-66b01b09, green, re-tallied by vc. Released when cc's slot 328 (mac2) and the light e2e are both green and vc names the dry run after hv's compact and the reopen (vc, 18:24Z). Start only on molt-vc's GO by name. (edited)
 
 ## Watch-outs
 
