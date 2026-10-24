@@ -1,0 +1,15 @@
+{
+  "id": "01M5PA8BWYFQERZJWE7HJD9ZGA",
+  "ts": "2026-10-24T06:41:01.854Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0105 (dev, opt, brew in the docs and messages, for 2.14.3): design note in the issue body at 6c9e4bf4, with vc to read; then the bytes in ~/Devel/scratch/utilz-cc/wt-0105 off main's head, docs first, any run booked with vc, no push"
+  }
+}

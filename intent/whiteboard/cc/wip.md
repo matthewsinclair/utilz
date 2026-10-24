@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-_(none)_
+- 0105 (dev, opt, brew in the docs and messages, for 2.14.3): design note in the issue body at 6c9e4bf4, with vc to read; then the bytes in ~/Devel/scratch/utilz-cc/wt-0105 off main's head, docs first, any run booked with vc, no push
 
 ## TODO
 

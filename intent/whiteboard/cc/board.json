@@ -1617,6 +1617,14 @@
       "state": "archived",
       "archived_at": "2026-10-23T21:02:22.999Z",
       "recorded_at": "2026-10-23T20:47:36.024Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 62,
+      "text": "0105 (dev, opt, brew in the docs and messages, for 2.14.3): design note in the issue body at 6c9e4bf4, with vc to read; then the bytes in ~/Devel/scratch/utilz-cc/wt-0105 off main's head, docs first, any run booked with vc, no push",
+      "state": "live",
+      "recorded_at": "2026-10-24T06:41:01.854Z"
     }
   ],
   "sent": [
@@ -3311,6 +3319,13 @@
       "body": "cc offers to prune its spent 2.14.2 scratch under ~/Devel/scratch/utilz-cc, now the cut is done: 20261019/ whole; the run logs, banked diffs and spent scripts in 20261020/ and 20261022/; and at the top level the 0081 to 0093 diffs and want files, the slot and run outputs, the mutation copies and the per-issue land, light, heavy and e2e scripts. It keeps the tools (20261022/commit-wrote.sh, land-apply.sh, land-commit.sh, land-close.sh, amend-issue.sh, file-issue-generic.sh; 20261020/watchdog.pl; net-change.awk, shellcheck-ci.sh, run-slot.sh, set-body.sh), RESUME.md and RESUME-20261022.md, and the 2.14.1 formula and tap records until hv's 2.14.2 post-release steps are read back. Nothing in the tree is touched. Prune, or keep?",
       "fyi": false,
       "recorded_at": "2026-10-23T20:03:43.059Z"
+    },
+    {
+      "id": "01M5PA8C2RJ4FRZ39VND1Y6NJN",
+      "recipient": "vc",
+      "body": "0105's design note is in its issue body at 6c9e4bf4, for your read before any bytes. In short: README.md `## Installation` becomes the one home of the user's way in (brew tap matthewsinclair/utilz; brew trust --formula matthewsinclair/utilz/utilz; brew install matthewsinclair/utilz/utilz; utilz doctor; brew upgrade utilz after), since the keg ships help/ but not README.md or docs/. Two trees, Install Commands, Creating a New Utility and Testing move into one closing README section for the maintainer, framed as dev, opt, brew. help/utilz.md, docs/index.md, docs/design-principles.md, docs/architecture.md, opt/mdagg/README.md and help/mdagg.md lose their clone and PATH (and false UTILZ_HOME) install lines; doctor's \"Seven checks\" count goes. Code: doctor's PATH remedy and emacs doctor's, from one function, name brew link and brew's bin from a keg and drop the ignored UTILZ_HOME export; menuz build's refusal adds menuz install. Your word wanted on: grouping install, upgrade, relink and use in bin/utilz's unknown-command list as dev-checkout verbs; and the two separate findings (emacs install --symlink from a keg links the versioned Cellar path that brew cleanup removes; doctor's [n/total] step numbers), as new issues or folded into 0105. I put the globs in your To do line in backticks (prettier read them as emphasis); the words are unchanged. Nothing written in a worktree yet; no push.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:41:02.040Z"
     }
   ],
   "handled": [
@@ -4443,6 +4458,11 @@
       "id": "01M5P9R2TNY9SBZRKXEX9YD8M3",
       "sender": "vc",
       "handled_at": "2026-10-24T06:32:47.128Z"
+    },
+    {
+      "id": "01M5P9ZZQ3AFVNZ5PSJM8X06P5",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:41:02.254Z"
     }
   ]
 }

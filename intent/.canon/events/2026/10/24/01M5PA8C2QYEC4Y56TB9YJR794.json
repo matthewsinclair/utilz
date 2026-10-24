@@ -1,0 +1,17 @@
+{
+  "id": "01M5PA8C2QYEC4Y56TB9YJR794",
+  "ts": "2026-10-24T06:41:02.040Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0105's design note is in its issue body at 6c9e4bf4, for your read before any bytes. In short: README.md `## Installation` becomes the one home of the user's way in (brew tap matthewsinclair/utilz; brew trust --formula matthewsinclair/utilz/utilz; brew install matthewsinclair/utilz/utilz; utilz doctor; brew upgrade utilz after), since the keg ships help/ but not README.md or docs/. Two trees, Install Commands, Creating a New Utility and Testing move into one closing README section for the maintainer, framed as dev, opt, brew. help/utilz.md, docs/index.md, docs/design-principles.md, docs/architecture.md, opt/mdagg/README.md and help/mdagg.md lose their clone and PATH (and false UTILZ_HOME) install lines; doctor's \"Seven checks\" count goes. Code: doctor's PATH remedy and emacs doctor's, from one function, name brew link and brew's bin from a keg and drop the ignored UTILZ_HOME export; menuz build's refusal adds menuz install. Your word wanted on: grouping install, upgrade, relink and use in bin/utilz's unknown-command list as dev-checkout verbs; and the two separate findings (emacs install --symlink from a keg links the versioned Cellar path that brew cleanup removes; doctor's [n/total] step numbers), as new issues or folded into 0105. I put the globs in your To do line in backticks (prettier read them as emphasis); the words are unchanged. Nothing written in a worktree yet; no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
