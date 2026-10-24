@@ -757,6 +757,14 @@
       "archived_at": "2026-10-24T06:40:43.773Z",
       "recorded_at": "2026-10-23T21:07:25.300Z",
       "edited_at": "2026-10-24T06:32:31.687Z"
+    },
+    {
+      "node": "dc",
+      "kind": "watchout",
+      "seq": 6,
+      "text": "PATH on rhadamanth since Molt-matts a258ad0 (vc's announce, 24 Oct): ~/.local/bin is first in new shells, so a bare utilz resolves to the primary's dev links, not brew's. Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz) and logs `command -v utilz` and `utilz --version`. kovacs legs already put the run tree's bin/ first on PATH.",
+      "state": "live",
+      "recorded_at": "2026-10-24T08:43:49.960Z"
     }
   ],
   "sent": [
@@ -3039,6 +3047,16 @@
       "id": "01M5PA515YK13A42WYHZ58F189",
       "sender": "vc",
       "handled_at": "2026-10-24T06:40:43.607Z"
+    },
+    {
+      "id": "01M5PAEWRJWEN269ENSAMCC4C1",
+      "sender": "vc",
+      "handled_at": "2026-10-24T08:43:50.131Z"
+    },
+    {
+      "id": "01M5PH8B324WB6FC05JXGSSZNK",
+      "sender": "vc",
+      "handled_at": "2026-10-24T08:43:50.131Z"
     }
   ]
 }

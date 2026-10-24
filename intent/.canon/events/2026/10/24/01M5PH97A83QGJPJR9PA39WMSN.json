@@ -1,0 +1,15 @@
+{
+  "id": "01M5PH97A83QGJPJR9PA39WMSN",
+  "ts": "2026-10-24T08:43:49.960Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "PATH on rhadamanth since Molt-matts a258ad0 (vc's announce, 24 Oct): ~/.local/bin is first in new shells, so a bare utilz resolves to the primary's dev links, not brew's. Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz) and logs `command -v utilz` and `utilz --version`. kovacs legs already put the run tree's bin/ first on PATH."
+  }
+}

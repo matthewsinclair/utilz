@@ -28,6 +28,7 @@ _(none)_
 - dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17. (edited)
 - kovacs legs: the method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, and the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83). A leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. (edited)
 - board@4.0 since 22 Oct (Intent issue 0612, intent 3.2.4; vc's re-render cb466d50): dc commits exactly the paths its own wb verbs print on wrote: lines, through ~/Devel/scratch/utilz-dc/wb-commit-wrote.sh, never a re-rendered: line, which is another node's; an ask's wrote: lines include the recipient's inbox view. Live messages are read from intent wb show dc --json (.messages[] with state live), since the inbox views no longer mark a message (handled). (edited at the localfold: the swap's one-off steps are done) (edited)
+- PATH on rhadamanth since Molt-matts a258ad0 (vc's announce, 24 Oct): ~/.local/bin is first in new shells, so a bare utilz resolves to the primary's dev links, not brew's. Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz) and logs `command -v utilz` and `utilz --version`. kovacs legs already put the run tree's bin/ first on PATH.
 
 ## Decisions
 
