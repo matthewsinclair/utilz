@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 06:34Z
+heartbeat_at: 2026-10-24 09:50Z
 status: active
-focus: "Localfold on hv's word (not released): todo 28's 0104 kovacs leg is STARTed at fb14c90f (5c961abb over 27e1d281, diff sha256 ddb62c74), vc read it sound, and the GO comes after intent-vc's kovacs END; at the GO, run leg-menuz.sh 0104 as STARTed in the background, then the END to vc on the board and by socket, copied to intent-vc. 0103's leg was green in slot 261 (85261ed7). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "Localfold on hv's word via molt-vc (not released): holding for the 2.14.3 kovacs twins once 0105 and 0106 land and vc names the START (hold 1); shellcheck 0.9.0 and Lua 5.4.6 on kovacs at vbubq3 and UHvvGX, kv-remote.sh at 1bb5c1d3. 0103 and 0104 legs done and archived. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- The 2.14.3 kovacs twins (then the dry run), on vc's word. Released when 0105 and 0106 have both landed and vc names the twins' START; vc books each with molt-vc and GOes only after molt-vc's GO. Ready: shellcheck 0.9.0 in kovacs:/var/tmp/dc-2141-sc090.vbubq3 and Lua 5.4.6 in /var/tmp/dc-2141-lua.UHvvGX (slot 266, END 8b5266a0, both sha256 matched); kv-remote.sh repointed to them at 1bb5c1d31e8e (vc read it; the old 5bc5decbfe06 is in gate/superseded/). kv-state-check.sh and kv-rm-tooldirs.sh still name the old dirs and get the same repoint before either runs. Mac runs name their tree's bin/ (watchout 6). Size S.
 
 ## Watch-outs
 
