@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-23 21:46Z
+heartbeat_at: 2026-10-24 05:42Z
 status: active
-focus: "After hv's compact, on the night of the close: nothing starts until hv's word. Then ic's 0103 bytes from wt-0103 to vc's read, slot 260, dc's kovacs leg, the landing and close; 0104's bytes on top, the same flow plus one run against the real Launch Services; the next release's number is hv's. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "0103 green on both legs (slot 260 Mac, 0 of 25 failed; slot 261 kovacs, 151 ran, 0 not ok): ic lands it by path on vc's word, vc checks by change, then the close; 0104's bytes on top next, the same flow plus one run against the real Launch Services. Release 2.14.3 (hv). Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
