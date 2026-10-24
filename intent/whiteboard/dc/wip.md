@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-23 21:46Z
+heartbeat_at: 2026-10-24 06:32Z
 status: active
-focus: "Booted after the night's fold on hv's word to boot and hold, and holding: todo 28, the kovacs legs for ic's 0103 then 0104, is ready and unrun. vc read the wrappers sound (5e49314c: leg-menuz.sh cd3ca8514e98, kv-remote.sh 5bc5decbfe06) and names each leg's bytes as a commit in wt-0103 with its base and the sha256 of its git diff from that base; the START follows, and nothing runs before vc's GO. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "Localfold on hv's word (not released): todo 28's 0104 kovacs leg is STARTed at fb14c90f (5c961abb over 27e1d281, diff sha256 ddb62c74), vc read it sound, and the GO comes after intent-vc's kovacs END; at the GO, run leg-menuz.sh 0104 as STARTed in the background, then the END to vc on the board and by socket, copied to intent-vc. 0103's leg was green in slot 261 (85261ed7). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb): one leg each of `utilz test menuz` (tests.yml's Ubuntu loop for menuz: menuz.bats, and macos.bats with its fakes) on the bytes vc names from ic's worktree ~/Devel/scratch/utilz-ic/wt-0103, from a full bundle in the leg's own /var/tmp run dir on kovacs, which goes once its logs are back. One wrapper for both, readied from 0102's leg: it refuses on any diff hash but vc's, runs under a kill timeout, and reads back the bats count from the run with every not ok and skip named. START to vc once vc names each one's bytes; nothing runs before vc's GO. Size XS each.
+- Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb), with ~/Devel/scratch/utilz-dc/work/leg-menuz.sh (cd3ca8514e98, commit form). 0103's leg is done: slot 261 green (END 85261ed7: 151 of 151 ran, 150 passed, 1 skip AC-06.3, not ok 0), its Mac dirs removed once 0103 closed. 0104's leg is STARTed at fb14c90f on 5c961abb over 27e1d281 (diff sha256 ddb62c74), vc read it sound; the GO comes after intent-vc's kovacs END (hv's 3.2.6 preflight). Archive once 0104's END is in. Size XS. (edited)
 
 ## Holds
 

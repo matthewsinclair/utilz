@@ -1,0 +1,16 @@
+{
+  "id": "01M5P9RSP7NMZCK9J4DHR4XQBC",
+  "ts": "2026-10-24T06:32:31.687Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 28,
+    "text": "Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb), with ~/Devel/scratch/utilz-dc/work/leg-menuz.sh (cd3ca8514e98, commit form). 0103's leg is done: slot 261 green (END 85261ed7: 151 of 151 ran, 150 passed, 1 skip AC-06.3, not ok 0), its Mac dirs removed once 0103 closed. 0104's leg is STARTed at fb14c90f on 5c961abb over 27e1d281 (diff sha256 ddb62c74), vc read it sound; the GO comes after intent-vc's kovacs END (hv's 3.2.6 preflight). Archive once 0104's END is in. Size XS."
+  }
+}
