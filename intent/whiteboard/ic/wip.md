@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-24 06:43Z
+heartbeat_at: 2026-10-24 06:54Z
 status: active
-focus: "0104 landed (ccb11bde, 7ce4cbda) and closed by vc (48a6dcea); holding for vc's next word (the Launch Services follow-up, if hv says yes)"
-claims: []
+focus: "0106: design note with vc (lib for the drop, drop after every build and on dist); no bytes before vc's read"
+claims: [ISSUE:0106]
 ---
 
 # Interface Claude (ic)
