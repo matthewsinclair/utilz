@@ -1455,6 +1455,15 @@ kind_stamp() {
   [[ "$(xcodebuild_call)" == *" MENUZ_KIND=release "* ]] || false
 }
 
+@test "AT-07.3: the kind is release when the root VERSION's tag on HEAD is annotated, as the release core makes it (issue 0103)" {
+  source_home
+  git -C "$SRC" -c user.name=t -c user.email=t@t tag -a "$(cat "$SRC/VERSION")" -m release
+  [[ "$(git -C "$SRC" cat-file -t "$(cat "$SRC/VERSION")")" == tag ]] || false
+  run_src_menuz stamps
+  assert_success
+  [[ "$(kind_stamp)" == release ]] || false
+}
+
 @test "AT-07.3: the kind is dev when HEAD carries no tag" {
   source_home
   run_src_menuz stamps

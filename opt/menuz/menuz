@@ -584,8 +584,9 @@ build_stamps() {
 # The build's kind for source stamp TREE, as Intent's build.rs decides its
 # own: release when TREE is clean and HEAD carries the release tag the root
 # VERSION file names (bare, 2.14.0, never v2.14.0), dev otherwise. The tags
-# are read with --points-at, since release tags are lightweight. 1 with why
-# on stderr when VERSION or the tags cannot be read.
+# are read with --points-at, which lists every tag whose commit is HEAD:
+# annotated, as the release core makes them, or lightweight. 1 with why on
+# stderr when VERSION or the tags cannot be read.
 build_kind() {
   local tree="$1" release tags tag
   if ! release="$(tr -d '[:space:]' <"$UTILZ_HOME/VERSION")"; then

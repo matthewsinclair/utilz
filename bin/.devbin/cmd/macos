@@ -271,10 +271,24 @@ app_sign_nested() {
   printf '  %-21s %s\n' "nested code signed" "$signed"
 }
 
+# The build stamps a bundle carries, as menuz stamped them: its version and
+# build, the commit it was built from, and its kind, release or dev.
+app_stamps_readback() { # $1 bundle
+  local version build commit kind
+  version="$(plist_get "$1" CFBundleShortVersionString)"
+  build="$(plist_get "$1" CFBundleVersion)"
+  commit="$(plist_get "$1" MenuzCommit)"
+  kind="$(plist_get "$1" MenuzKind)"
+  printf '  %-21s %s (build %s)\n' "version" "${version:-<unreadable>}" "${build:-<unreadable>}"
+  printf '  %-21s %s\n' "commit" "${commit:-<unreadable>}"
+  printf '  %-21s %s\n' "kind" "${kind:-<unreadable>}"
+}
+
 # app_signature_readback <bundle> -- what the bytes say, not what was asked
 # for: the identifier, the team and the hardened runtime read off the
-# signature. A bundle still carrying the build's signature names itself
-# otherwise, and is refused here.
+# signature, and the build stamps off the Info.plist, so each step shows which
+# build it has (issue 0103). A bundle still carrying the build's signature
+# names itself otherwise, and is refused here.
 app_signature_readback() {
   local bundle="$1" desc flags team ident want_team
   codesign --verify --strict --deep "$bundle" >/dev/null 2>&1 ||
@@ -287,6 +301,7 @@ app_signature_readback() {
   printf '  %-21s %s\n' "identifier" "${ident:-<unreadable>}"
   printf '  %-21s %s\n' "team" "${team:-<none>}"
   printf '  %-21s %s\n' "flags" "${flags:-<unreadable>}"
+  app_stamps_readback "$bundle"
   [ "$ident" = "$APP_BUNDLE_ID" ] ||
     die "the bundle is signed as '${ident:-<none>}', not $APP_BUNDLE_ID -- it still carries the build's signature, not a Developer ID one"
   [ "$team" = "$want_team" ] ||
@@ -328,17 +343,76 @@ app_verify_notarised() {
   return $rc
 }
 
-# The bundle's id and version against what this release ships, one reason
-# per line; empty means it may ship.
-app_ship_blockers() { # $1 bundle
-  local id version want
+# The release tag the tree's root VERSION names: bare, 2.14.0, as the release
+# core tags it. That is this project's declaration in bin/.devbin/config.yaml
+# (release.tag "{version}", version_from the default VERSION), not the core's
+# own default, v{version}; macos.bats pins the declaration, for menuz's
+# build_kind as well, so the readings cannot drift apart unseen (issue 0103).
+app_release_tag() { tr -d '[:space:]' <"$ROOT/VERSION"; }
+
+# The full commit release tag $1 names in this tree, peeled through the
+# annotated tag the release core makes; non-zero, printing nothing, when the
+# tree has no such tag.
+app_tag_commit() { # $1 tag
+  git -C "$ROOT" rev-parse --verify --quiet "refs/tags/$1^{commit}"
+}
+
+# The bundle against what release $2 ships, one reason per line; empty means
+# it may ship. Its id and version, then the stamps that make it the tag's own
+# build (issue 0103): MenuzKind release, which menuz stamps only at the tag
+# from a clean tree, and a MenuzCommit the tag's commit begins with. A commit
+# stamp that is not 8 to 40 lowercase hex characters is refused before any
+# comparison, so a missing or garbled one never matches by prefix.
+app_ship_blockers() { # $1 bundle, $2 the release tag
+  local id version want kind commit tagged formed=no
   want="$(tr -d '[:space:]' <"$ROOT/opt/menuz/VERSION")"
   id="$(plist_get "$1" CFBundleIdentifier)"
   version="$(plist_get "$1" CFBundleShortVersionString)"
+  kind="$(plist_get "$1" MenuzKind)"
+  commit="$(plist_get "$1" MenuzCommit)"
   [ "$id" = "$APP_BUNDLE_ID" ] || printf 'the bundle id is %s, not %s\n' "${id:-<unreadable>}" "$APP_BUNDLE_ID"
   [ "$version" = "$want" ] ||
     printf 'the bundle is version %s and opt/menuz/VERSION is %s -- it was built from another tree; run app-sign and app-notarize at the tag\n' "${version:-<unreadable>}" "$want"
+  [ "$kind" = release ] ||
+    printf "the bundle's MenuzKind is %s, not release -- it was built off the tag %s or from a dirty tree; run app-sign and app-notarize in a tree at the tag\n" "${kind:-<unreadable>}" "$2"
+  if [[ "$commit" =~ ^[0-9a-f]{8,40}$ ]]; then
+    formed=yes
+  else
+    printf "the bundle's MenuzCommit is %s, not a commit of 8 to 40 lowercase hex characters, so it cannot be checked against the tag %s\n" "${commit:-<unreadable>}" "$2"
+  fi
+  if ! tagged="$(app_tag_commit "$2")"; then
+    printf "the tag %s that VERSION names is not in this tree, so the bundle's commit cannot be checked against it\n" "$2"
+  elif [ "$formed" = yes ] && [[ "$tagged" != "$commit"* ]]; then
+    printf "the bundle's MenuzCommit is %s and the tag %s names %s -- it was built off the tag; run app-sign and app-notarize in a tree at the tag\n" "$commit" "$2" "${tagged:0:8}"
+  fi
   return 0
+}
+
+# app-sign signs the release's build alone (issue 0103). Before any build it
+# asks menuz what the build would carry (`utilz menuz stamps`), and refuses
+# unless the kind is release, which menuz's build_kind, the one place that
+# decides it, gives only at the root VERSION's tag from a clean tree. The
+# refusal names the route: the three steps in a worktree at the tag.
+app_require_release_build() {
+  local stamps kind commit tag tagged where
+  stamps="$("$ROOT/bin/utilz" menuz stamps)" ||
+    die "utilz menuz stamps failed, so app-sign cannot tell whether the build would be the release's -- nothing built or signed"
+  kind="$(printf '%s\n' "$stamps" | sed -n 's/^MENUZ_KIND=//p')"
+  commit="$(printf '%s\n' "$stamps" | sed -n 's/^MENUZ_COMMIT=//p')"
+  if [ "$kind" = release ]; then
+    printf '  %-21s %s at %s\n' "next build" "$kind" "${commit:-<unreadable>}"
+    return 0
+  fi
+  tag="$(app_release_tag)"
+  if tagged="$(app_tag_commit "$tag")"; then
+    where="which names ${tagged:0:8}"
+  else
+    where="which is not in this tree"
+  fi
+  die "the build here would be MENUZ_KIND=${kind:-<unreadable>} at MENUZ_COMMIT=${commit:-<unreadable>}, and app-sign signs only the release's build: HEAD at the tag $tag, $where, from a clean tree -- nothing built or signed. Run the three steps in a worktree at the tag:
+       git worktree add --detach <dir> $tag
+       cd <dir>, then bin/devbin macos app-sign, app-notarize and publish
+       git worktree remove <dir>, once publish has run"
 }
 
 cmd_store_creds() {
@@ -367,13 +441,17 @@ cmd_store_creds() {
   printf 'Stored. Check with: %s macos doctor\n' "$DEVBIN_INVOKE"
 }
 
-# app-sign: `utilz menuz build --release`, the one build path; a copy staged
-# out of the products; signed inside-out with the Developer ID identity and
-# the hardened runtime; the identifier, team and runtime read back.
+# app-sign: refused unless menuz says the build would be the release's; then
+# `utilz menuz build --release`, the one build path; a copy staged out of the
+# products, refused with nothing signed unless it is the release's build, as
+# publish asks; signed inside-out with the Developer ID identity and the
+# hardened runtime; the identifier, team, runtime and build stamps read back.
 cmd_app_sign() {
   load_creds
   require_identity
   [ -f "$APP_ENTITLEMENTS" ] || die "no release entitlements at ${APP_ENTITLEMENTS#"$ROOT"/}"
+  step "checking the build would be the release's, through utilz menuz stamps"
+  app_require_release_build
   step "building Release through utilz menuz build --release"
   local out rc=0
   out="$(mktemp)"
@@ -384,7 +462,7 @@ cmd_app_sign() {
   fi
   rm -f "$out"
   [ "$rc" -eq 0 ] || die "utilz menuz build --release failed (exit $rc) -- nothing signed"
-  local src dist
+  local src dist tag blockers
   src="$(app_product Release)"
   dist="$(app_dist)"
   [ -d "$src" ] || die "the build left no bundle at $src"
@@ -395,6 +473,17 @@ cmd_app_sign() {
   # codesign refuses "resource fork, Finder information, or similar detritus".
   xattr -cr "$dist" || true
   printf '  %s\n' "$dist"
+  # The products are shared by every tree, so another build can replace the
+  # one just made before it is staged: the staged copy is asked publish's own
+  # question before anything is signed or a notary submission spent.
+  step "checking the staged copy is the release's build, as publish will"
+  tag="$(app_release_tag)"
+  blockers="$(app_ship_blockers "$dist" "$tag")"
+  if [ -n "$blockers" ]; then
+    rm -rf "$APP_DIST_DIR"
+    die "the staged Menuz.app cannot ship with release $tag -- nothing signed:
+$(printf '%s\n' "$blockers" | sed 's/^/       /')"
+  fi
   step "signing Menuz.app inside-out (nested code, then the bundle), team $(identity_team)"
   app_sign_nested "$dist"
   codesign --force --options runtime --timestamp --entitlements "$APP_ENTITLEMENTS" --sign "$IDENTITY" "$dist" ||
@@ -442,10 +531,10 @@ cmd_app_notarize() {
 }
 
 # app-verify [debug|release|dist]: read-only. A build product's executable,
-# LSUIElement and version; for dist (the default) also its signature and its
-# ticket. Exit 1 on any failure.
+# LSUIElement and build stamps; for dist (the default) also its signature and
+# its ticket. Exit 1 on any failure.
 cmd_app_verify() {
-  local config bundle exe v
+  local config bundle exe
   case "${1:-dist}" in
     debug | Debug) config="Debug" ;;
     release | Release) config="Release" ;;
@@ -466,9 +555,11 @@ cmd_app_verify() {
   [ -x "$exe" ] || die "no executable at $exe"
   [ "$(plist_get "$bundle" LSUIElement)" = true ] || die "LSUIElement is not true in $bundle -- the app would take a Dock slot"
   printf '  %-21s %s\n' "LSUIElement" "true"
-  v="$(plist_get "$bundle" CFBundleShortVersionString)"
-  printf '  %-21s %s (build %s)\n' "version" "${v:-<unreadable>}" "$(plist_get "$bundle" CFBundleVersion)"
-  [ "$config" = dist ] || return 0
+  # dist's stamps come with its signature's readback, below.
+  if [ "$config" != dist ]; then
+    app_stamps_readback "$bundle"
+    return 0
+  fi
   load_creds
   require_identity
   app_signature_readback "$bundle"
@@ -477,15 +568,15 @@ cmd_app_verify() {
 
 # publish: Menuz.app.zip attached to the release object the release core made
 # for the tree's VERSION. Refused, with nothing uploaded, if the bundle is not
-# opt/menuz/VERSION's, if the release object does not exist, or if it already
-# holds the asset. The zip is proven by unpacking it as a user does and
-# checking the bundle inside, before the upload.
+# opt/menuz/VERSION's or not the tag's own build, if the release object does
+# not exist, or if it already holds the asset. The zip is proven by unpacking
+# it as a user does and checking the bundle inside, before the upload.
 cmd_publish() {
   local dist tag blockers assets staging zip
   dist="$(app_dist)"
   [ -d "$dist" ] || die "no signed bundle at $dist -- run: $DEVBIN_INVOKE macos app-sign, then app-notarize"
-  tag="$(tr -d '[:space:]' <"$ROOT/VERSION")"
-  blockers="$(app_ship_blockers "$dist")"
+  tag="$(app_release_tag)"
+  blockers="$(app_ship_blockers "$dist" "$tag")"
   [ -z "$blockers" ] || die "Menuz.app cannot ship with release $tag:
 $(printf '%s\n' "$blockers" | sed 's/^/       /')"
   command -v gh >/dev/null 2>&1 || die "gh not found -- publish attaches the asset with gh release upload"
@@ -504,7 +595,7 @@ $(printf '%s\n' "$blockers" | sed 's/^/       /')"
     rm -rf "$staging"
     die "$APP_ASSET does not unpack to Menuz.app -- nothing uploaded"
   fi
-  blockers="$(app_ship_blockers "$staging/unpacked/Menuz.app")"
+  blockers="$(app_ship_blockers "$staging/unpacked/Menuz.app" "$tag")"
   [ -z "$blockers" ] || { rm -rf "$staging"; die "the bundle inside $APP_ASSET cannot ship: $blockers"; }
   app_verify_notarised "$staging/unpacked/Menuz.app" ||
     { rm -rf "$staging"; die "the bundle inside $APP_ASSET is not notarised and stapled -- nothing uploaded"; }
@@ -531,21 +622,26 @@ bin/devbin macos <subcommand>
                anything is missing or the identity cannot sign.
 
   The release asset, on the maintainer's machine, after the release core has
-  made the release object (D12). In order:
+  made the release object (D12), in a tree whose HEAD is the tag: once main has
+  moved past it, a worktree (git worktree add --detach <dir> <tag>). In order:
 
   app-sign     utilz menuz build --release, a copy staged under XDG state, signed
                inside-out with the Developer ID identity and the hardened
-               runtime, its identifier, team and runtime read back
+               runtime, its identifier, team, runtime and build stamps read
+               back. Refuses, building nothing, unless utilz menuz stamps says
+               the build would be the release's: HEAD at the tag, clean;
+               refuses, signing nothing, a staged copy publish would refuse
   app-notarize Submit the signed copy to Apple and wait; staple the ticket only
                when Accepted; check a quarantined copy with spctl
   publish      Zip the stapled bundle as Menuz.app.zip, prove the zip, and
                attach it to the release for VERSION with gh. Refuses a bundle
-               that is not opt/menuz/VERSION's, a missing release, and one that
-               already holds the asset
+               that is not opt/menuz/VERSION's, one whose MenuzKind is not
+               release or whose MenuzCommit is not the tag's commit, a missing
+               release, and one that already holds the asset
 
   app-verify [debug|release|dist]
-               Read-only: a bundle's executable, LSUIElement and version, and
-               for dist (the default) its signature and ticket
+               Read-only: a bundle's executable, LSUIElement and build stamps,
+               and for dist (the default) its signature and ticket
   store-creds  Store the notary credentials in the login keychain under
                utilz.apple.*; interactive, in a terminal only
 USAGE

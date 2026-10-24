@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.3] - unreleased
+
+### Fixed
+
+- **`bin/devbin macos` takes only the release tag's own build of Menuz.app** (issue 0103). `app-sign` built whatever commit HEAD was, and `publish` checked only the bundle's id and version. So 2.14.2's first publish, run after the nodes' records had moved main five commits past the tag, attached a Menuz.app stamped with that later commit and the kind `dev`. It was deleted and rebuilt at the tag before the tap was pushed, so no install fetched it. `app-sign` now asks `utilz menuz stamps` what the build would carry, and refuses, building and signing nothing, unless its kind is `release`; the refusal names the stamps, the tag and the route through a worktree at the tag. Once it has staged the build, it refuses, signing nothing, a copy that `publish` would refuse, since another tree's build can replace the product in between. `publish` refuses, uploading nothing, a bundle whose `MenuzKind` is not `release`, a bundle whose `MenuzCommit` is not the commit the tag names, or is not a commit at all, and a tag that is not in the tree. `app-sign`, `app-notarize` and `app-verify` print the bundle's version, build, commit and kind, and `docs/releasing.md` runs the three steps in a worktree at the tag.
+
 ## [2.14.2] - 2026-10-23
 
 ### Changed

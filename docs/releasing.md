@@ -67,11 +67,22 @@ bin/devbin macos doctor        # each credential PRESENT or MISSING, the identit
 
 Nothing is written to this repository, and nothing prints a value. `store-creds` refuses to run without a terminal.
 
-**After every cut, at the tag**, hv runs, in order:
+**After every cut, at the tag**, hv runs the three steps below, in order, in a tree whose HEAD is the tag. Once the nodes' records have moved main past the tag, that is a detached worktree:
 
-1. **`bin/devbin macos app-sign`**: builds Release through `utilz menuz build --release`, stages a copy under `${XDG_STATE_HOME:-~/.local/state}/menuz/build/macos/dist`, signs it inside-out with the Developer ID identity and the hardened runtime, and reads the identifier, the team and the runtime back off the signature.
+```bash
+git worktree add --detach <dir> 2.14.2   # the tag the top-level VERSION names
+cd <dir>
+bin/devbin macos app-sign
+bin/devbin macos app-notarize
+bin/devbin macos publish
+cd - && git worktree remove <dir>
+```
+
+`app-sign` and `publish` refuse anything else (issue 0103). A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
+
+1. **`bin/devbin macos app-sign`**: asks `utilz menuz stamps` what the build would carry, and refuses, building and signing nothing, unless its kind is `release`, which menuz gives only to a build of the tag from a clean tree. The refusal names the stamps, the tag and the worktree route. Then it builds Release through `utilz menuz build --release`, stages a copy under `${XDG_STATE_HOME:-~/.local/state}/menuz/build/macos/dist`, and refuses, signing nothing, a staged copy that `publish` would refuse: the build products are shared by every tree, so another build can replace the one just made. Then it signs the copy inside-out with the Developer ID identity and the hardened runtime, and reads the identifier, the team and the runtime back off the signature, and the version, build, commit and kind off the bundle.
 2. **`bin/devbin macos app-notarize`**: submits the signed copy to Apple and waits. Anything but `Accepted` prints Apple's log and staples nothing. Then it staples the ticket and checks a quarantined copy with `spctl` for `source=Notarized Developer ID`.
-3. **`bin/devbin macos publish`**: zips the stapled bundle as `Menuz.app.zip`, unpacks the zip and checks the bundle inside, then attaches it with `gh release upload` to the release for the top-level `VERSION`. It refuses, uploading nothing, when the bundle's version is not `opt/menuz/VERSION`, when that release object does not exist yet, and when the release already holds `Menuz.app.zip`.
+3. **`bin/devbin macos publish`**: zips the stapled bundle as `Menuz.app.zip`, unpacks the zip and checks the bundle inside, then attaches it with `gh release upload` to the release for the top-level `VERSION`. It refuses, uploading nothing, when the bundle's version is not `opt/menuz/VERSION`, when its `MenuzKind` is not `release`, when its `MenuzCommit` is not the commit the tag names or the tag is not in the tree, when that release object does not exist yet, and when the release already holds `Menuz.app.zip`.
 
 `bin/devbin macos app-verify` checks the signed bundle again at any time, read-only.
 

@@ -15,6 +15,12 @@
 # They are set in setup for every test, so a test that forgets one still
 # reaches no real tool.
 #
+# The fixture project is a git repository whose one commit carries an
+# annotated tag, 2.14.0, its VERSION, as the release core tags a cut. So the
+# stamps the fake bin/utilz gives, for `menuz stamps` and on the bundles its
+# build makes, are the tag's own build unless a test moves HEAD or sets a
+# knob (issue 0103).
+#
 # devbin itself needs bash 5 (it refuses 3.2 by name), so these tests run
 # under the first bash 5 on PATH, linked into the fakes. PATH is otherwise a
 # copy of /usr/bin and /bin without rsvg-convert, so "not installed" is real
@@ -74,6 +80,23 @@ setup() {
   DIST="$XDG_STATE_HOME/menuz/build/macos/dist/Menuz.app"
   fake_tools
   fake_shim
+  fixture_repo
+}
+
+# The fixture project as a cut leaves it (issue 0103): one commit, tagged with
+# an annotated 2.14.0, the root VERSION, as the release core tags, so every
+# --points-at and ^{commit} has to peel it. git signs nothing here
+# (isolate_tool_homes), and the commit and the tag carry a fixture identity.
+fixture_repo() {
+  git -C "$PROJ" -c init.defaultBranch=main init -q
+  git -C "$PROJ" add -A
+  fixture_git commit -qm fixture
+  fixture_git tag -a 2.14.0 -m 2.14.0
+}
+
+# git in the fixture project, as the fixture's author.
+fixture_git() {
+  git -C "$PROJ" -c user.name=fixture -c user.email=fixture@example.com "$@"
 }
 
 IDENTITY_NAME="Developer ID Application: Fixture Co (TEAM123)"
@@ -143,16 +166,29 @@ write_fake() { # $1 name, $2 body
   chmod +x "$FAKES/$1"
 }
 
-# The fixture project's bin/utilz: `menuz build --release` makes a Release
-# bundle at VERSION (or $FAKES/build.version), unless $FAKES/no-build-verb is
-# set, when it refuses as a shim without the verb does.
+# The fixture project's bin/utilz. Its stamps come from the fixture repository
+# as menuz's build_kind takes its own: HEAD's commit, and the kind release
+# when a tag on HEAD is the one VERSION names, dev otherwise (a dirty tree is
+# not modelled). `menuz stamps` prints them, and fails when $FAKES/stamps.fail
+# is set. `menuz build --release` makes a Release bundle at opt/menuz/VERSION
+# carrying them, or carrying $FAKES/build.commit and $FAKES/build.kind, which
+# model a product another tree's build replaced after stamps was asked; it
+# refuses as a shim without the verb does when $FAKES/no-build-verb is set.
 fake_shim() {
   cat >"$PROJ/bin/utilz" <<EOF
 #!/usr/bin/env bash
 printf '%s\n' "\$*" >>"$FAKES/utilz.calls"
+commit="\$(git -C "$PROJ" rev-parse --short=8 HEAD)" || exit 1
+kind=dev
+if git -C "$PROJ" tag --points-at HEAD | grep -qxF "\$(cat "$PROJ/VERSION")"; then kind=release; fi
+if [ "\$1 \$2" = "menuz stamps" ]; then
+  if [ -f "$FAKES/stamps.fail" ]; then echo "menuz: git tag --points-at HEAD failed in $PROJ" >&2; exit 1; fi
+  printf 'MENUZ_VERSION=%s\nMENUZ_BUILD=1\nMENUZ_COMMIT=%s\nMENUZ_SOURCE_TREE=fixture\nMENUZ_KIND=%s\n' "\$(cat "$PROJ/opt/menuz/VERSION")" "\$commit" "\$kind"
+  exit 0
+fi
 if [ -f "$FAKES/no-build-verb" ]; then echo "menuz: unknown verb: 'build' (menuz --help names the verbs)" >&2; exit 2; fi
 mkdir -p "$PRODUCT/Contents/MacOS"
-printf 'CFBundleIdentifier=com.matthewsinclair.utilz.menuz\nCFBundleShortVersionString=%s\nCFBundleVersion=42\nCFBundleExecutable=Menuz\nLSUIElement=true\n' "\$(cat "$FAKES/build.version" 2>/dev/null || echo 0.1.0)" >"$PRODUCT/Contents/Info.plist"
+printf 'CFBundleIdentifier=com.matthewsinclair.utilz.menuz\nCFBundleShortVersionString=%s\nCFBundleVersion=42\nCFBundleExecutable=Menuz\nLSUIElement=true\nMenuzCommit=%s\nMenuzKind=%s\n' "\$(cat "$PROJ/opt/menuz/VERSION")" "\$(cat "$FAKES/build.commit" 2>/dev/null || echo "\$commit")" "\$(cat "$FAKES/build.kind" 2>/dev/null || echo "\$kind")" >"$PRODUCT/Contents/Info.plist"
 printf '#!/bin/sh\n' >"$PRODUCT/Contents/MacOS/Menuz"
 chmod +x "$PRODUCT/Contents/MacOS/Menuz"
 EOF
@@ -376,7 +412,7 @@ run_macos() {
   store_creds_fixture
   run_macos app-sign
   [ "$status" -eq 0 ] || fail "exit $status: $output"
-  [ "$(cat "$FAKES/utilz.calls")" = "menuz build --release" ]
+  [ "$(cat "$FAKES/utilz.calls")" = "$(printf 'menuz stamps\nmenuz build --release')" ]
   grep -qx -- "$PRODUCT $DIST" "$FAKES/ditto.calls"
   [ -x "$DIST/Contents/MacOS/Menuz" ]
   grep -qx -- "--force --options runtime --timestamp --entitlements $PROJ/native/macos/Menuz/Menuz/Menuz.entitlements --sign $IDENTITY_NAME $DIST" "$FAKES/codesign.calls" ||
@@ -388,6 +424,14 @@ run_macos() {
   [[ "$output" == *"identifier            com.matthewsinclair.utilz.menuz"* ]]
   [[ "$output" == *"nested code signed    0"* ]]
   [[ "$output" != *"$IDENTITY_NAME"* ]]
+  # issue 0103: what the build would be, said before it, and the stamps read
+  # back off the signed bundle.
+  local head
+  head="$(git -C "$PROJ" rev-parse --short=8 HEAD)"
+  [[ "$output" == *"next build            release at $head"* ]] || fail "$output"
+  [[ "$output" == *"version               0.1.0 (build 42)"* ]] || fail "$output"
+  [[ "$output" == *"commit                $head"* ]] || fail "$output"
+  [[ "$output" == *"kind                  release"* ]] || fail "$output"
 }
 
 @test "AC-05.3: app-sign refuses a bundle that still carries the build's signature" {
@@ -420,16 +464,25 @@ run_macos() {
   if grep -q "stapler staple" "$FAKES/xcrun.calls"; then fail "stapled after an Invalid submission"; fi
 }
 
-# A signed, notarised dist bundle at VERSION (or the version given).
+# A signed, notarised dist bundle, the tag's own build.
 notarised_dist() {
   store_creds_fixture
-  [ -z "${1:-}" ] || printf '%s' "$1" >"$FAKES/build.version"
   (cd "$PROJ" && bin/devbin macos app-sign >/dev/null 2>&1) || fail "app-sign failed in the fixture"
   (cd "$PROJ" && bin/devbin macos app-notarize >/dev/null 2>&1) || fail "app-notarize failed in the fixture"
 }
 
+# One stamp of the dist bundle set to another value, after it was signed and
+# notarised: a bundle publish meets that app-sign did not make (app-sign
+# refuses to sign one; issue 0103).
+dist_stamp() { # $1 key, $2 value
+  local plist="$DIST/Contents/Info.plist"
+  grep -q "^$1=" "$plist" || fail "no $1 in $plist"
+  sed "s|^$1=.*|$1=$2|" "$plist" >"$plist.new" && mv "$plist.new" "$plist"
+}
+
 @test "AC-05.3: publish refuses a bundle whose version is not opt/menuz/VERSION, uploading nothing" {
-  notarised_dist 0.0.9
+  notarised_dist
+  dist_stamp CFBundleShortVersionString 0.0.9
   touch "$FAKES/release.2.14.0"
   run_macos publish
   [ "$status" -eq 1 ]
@@ -489,5 +542,124 @@ notarised_dist() {
   [ "$status" -eq 0 ] || fail "exit $status: $output"
   [[ "$output" == *"LSUIElement           true"* ]]
   [[ "$output" == *"version               0.1.0 (build 42)"* ]] || fail "$output"
+  [[ "$output" == *"kind                  release"* ]] || fail "$output"
   [[ "$output" == *"stapled ticket        present, validates"* ]]
+}
+
+# --- issue 0103: app-sign and publish take the release tag's build alone ----
+
+@test "issue 0103: app-sign refuses off VERSION's tag before any build, naming the stamps, the tag and the route" {
+  store_creds_fixture
+  printf 'a record made after the cut\n' >"$PROJ/record.md"
+  git -C "$PROJ" add record.md
+  fixture_git commit -qm "a record after the tag"
+  local head tagged
+  head="$(git -C "$PROJ" rev-parse --short=8 HEAD)"
+  tagged="$(git -C "$PROJ" rev-parse --short=8 '2.14.0^{commit}')"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the build here would be MENUZ_KIND=dev at MENUZ_COMMIT=$head"* ]] || fail "$output"
+  [[ "$output" == *"HEAD at the tag 2.14.0, which names $tagged, from a clean tree -- nothing built or signed"* ]] || fail "$output"
+  [[ "$output" == *"git worktree add --detach <dir> 2.14.0"* ]] || fail "$output"
+  [[ "$output" == *"cd <dir>, then bin/devbin macos app-sign, app-notarize and publish"* ]] || fail "$output"
+  [[ "$output" == *"git worktree remove <dir>, once publish has run"* ]] || fail "$output"
+  [ "$(cat "$FAKES/utilz.calls")" = "menuz stamps" ]
+  [ ! -e "$FAKES/codesign.calls" ]
+  [ ! -e "$DIST" ]
+}
+
+@test "issue 0103: app-sign stops before any build when utilz menuz stamps fails, naming it" {
+  store_creds_fixture
+  touch "$FAKES/stamps.fail"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"utilz menuz stamps failed, so app-sign cannot tell whether the build would be the release's -- nothing built or signed"* ]] || fail "$output"
+  [ "$(cat "$FAKES/utilz.calls")" = "menuz stamps" ]
+  [ ! -e "$FAKES/codesign.calls" ]
+}
+
+@test "issue 0103: app-sign refuses a staged copy that is not the release's build, signing nothing" {
+  store_creds_fixture
+  # menuz stamps says release; the product staged says dev, as one another
+  # tree's build put in the shared products would.
+  printf 'dev' >"$FAKES/build.kind"
+  run_macos app-sign
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the staged Menuz.app cannot ship with release 2.14.0 -- nothing signed:"* ]] || fail "$output"
+  [[ "$output" == *"the bundle's MenuzKind is dev, not release"* ]] || fail "$output"
+  [ "$(cat "$FAKES/utilz.calls")" = "$(printf 'menuz stamps\nmenuz build --release')" ]
+  [ ! -e "$FAKES/codesign.calls" ]
+  [ ! -e "$DIST" ]
+}
+
+@test "issue 0103: the release core tags the root VERSION bare, as app-sign, publish and menuz's build_kind read it" {
+  local cfg="$UTILZ_HOME/bin/.devbin/config.yaml" yq
+  yq="$(PATH="$ORIGINAL_PATH_FOR_RSVG" command -v yq)" || fail "yq is not on PATH; this guard reads $cfg with it, as CI installs it"
+  run "$yq" '.release.tag' "$cfg"
+  [ "$status" -eq 0 ] || fail "yq could not read $cfg: $output"
+  [ "$output" = "{version}" ] || fail "release.tag is '$output', not \"{version}\": app_release_tag and build_kind read the tag as the bare VERSION"
+  run "$yq" '.project.version_from // "VERSION"' "$cfg"
+  [ "$status" -eq 0 ] || fail "yq could not read $cfg: $output"
+  [ "$output" = VERSION ] || fail "project.version_from is '$output', not VERSION: app_release_tag and build_kind read the root VERSION"
+}
+
+@test "issue 0103: publish refuses a bundle whose MenuzKind is not release, uploading nothing" {
+  notarised_dist
+  dist_stamp MenuzKind dev
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle's MenuzKind is dev, not release -- it was built off the tag 2.14.0 or from a dirty tree; run app-sign and app-notarize in a tree at the tag"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0103: publish refuses a bundle whose MenuzCommit is not the commit VERSION's tag names, uploading nothing" {
+  local tagged other
+  tagged="$(git -C "$PROJ" rev-parse '2.14.0^{commit}')"
+  # Each hex digit moved on by one, so it differs from the tag's at every place.
+  other="$(printf '%s' "${tagged:0:8}" | tr '0-9a-f' '1-9a-f0')"
+  notarised_dist
+  dist_stamp MenuzCommit "$other"
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle's MenuzCommit is $other and the tag 2.14.0 names ${tagged:0:8} -- it was built off the tag; run app-sign and app-notarize in a tree at the tag"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0103: publish refuses a MenuzCommit that is not 8 to 40 lowercase hex characters, though it begins the tag's commit" {
+  local tagged stamp
+  tagged="$(git -C "$PROJ" rev-parse '2.14.0^{commit}')"
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  # Seven characters: one short of the floor, so a lowered floor turns it red.
+  for stamp in "${tagged:0:7}" ""; do
+    notarised_dist
+    dist_stamp MenuzCommit "$stamp"
+    run_macos publish
+    [ "$status" -eq 1 ] || fail "the stamp '$stamp' was not refused: $output"
+    [[ "$output" == *"the bundle's MenuzCommit is ${stamp:-<unreadable>}, not a commit of 8 to 40 lowercase hex characters, so it cannot be checked against the tag 2.14.0"* ]] || fail "$output"
+    [[ "$output" != *"and the tag 2.14.0 names"* ]] || fail "the stamp '$stamp' was compared: $output"
+    [ ! -e "$FAKES/uploaded.zip" ]
+  done
+}
+
+@test "issue 0103: publish refuses when the tag VERSION names is not in the tree, uploading nothing" {
+  notarised_dist
+  git -C "$PROJ" tag -d 2.14.0 >/dev/null
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the tag 2.14.0 that VERSION names is not in this tree, so the bundle's commit cannot be checked against it"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0103: app-verify prints a build product's stamps: version, build, commit and kind" {
+  (cd "$PROJ" && bin/utilz menuz build --release) || fail "the fixture build failed"
+  run_macos app-verify release
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  local head
+  head="$(git -C "$PROJ" rev-parse --short=8 HEAD)"
+  [[ "$output" == *"version               0.1.0 (build 42)"* ]] || fail "$output"
+  [[ "$output" == *"commit                $head"* ]] || fail "$output"
+  [[ "$output" == *"kind                  release"* ]] || fail "$output"
 }
