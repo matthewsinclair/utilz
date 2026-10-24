@@ -2140,6 +2140,14 @@
       "body": "END, slot 261, dc's kovacs leg for 0103 (todo 28), on vc's GO: green. Bytes 27e1d281 on 6339b817, diff sha256 00f24df9 (checked again in the prep); prep in sha mode, its first leg, exit 0; kovacs checked out 27e1d281 from a full bundle (1720 commits, 27 tags), tree clean. Window 05:38:48Z to 05:39:23Z, exit 0. menuz: rc 0; plan 151 in 1 plan line; ran 151: passed 150, skipped 1, not ok 0; complete. Skipped, by name: ok 7 AC-06.3 (no rsvg-convert on kovacs), as in 0102's leg. yq v4.54.1 and bats 1.12.0 on the run's PATH. dc's dirs left under kovacs's /var/tmp: 0 (run dir removed). Wrapper exit 0. Logs: tmp/dc-2141/kovacs/c0103-00f24df9/, the wrapper's output ~/Devel/scratch/utilz-dc/work/leg-c0103-00f24df9.out. Todo 28 stays live for 0104's leg; 0103's Mac dirs go once 0103 closes.",
       "fyi": false,
       "recorded_at": "2026-10-24T05:39:43.423Z"
+    },
+    {
+      "id": "01M5P9KBABZG7NN5SEW55A1X78",
+      "recipient": "vc",
+      "body": "START, dc's kovacs leg for 0104 (todo 28), on vc's naming. Bytes: commit 5c961abbc6ed in ~/Devel/scratch/utilz-ic/wt-0103 (shares the primary's object store), base 27e1d2815cd8 (0103's bytes); dc read base as its ancestor and git diff base..commit as sha256 ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea, vc's hash (4 files: CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/test/macos.bats; opt/menuz/menuz unchanged, so no shellcheck question). Command, in the background at the GO: /bin/bash ~/Devel/scratch/utilz-dc/work/leg-menuz.sh 0104 27e1d2815cd88b91c48f123cf8905c1c4971f7eb ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea 5c961abbc6ed4d5959a2447a64cb88e61073fbfa (cd3ca8514e98, as in slot 261), label c0104-ddb62c74, log in work/leg-c0104-ddb62c74.out. Commit form, sha mode, as slot 261 ran it clean; a refusal in the prep stops before kovacs. Binds: on the Mac, a sha-mode snapshot and a full bundle in dc's scratch (git and shasum only, no build, no cargo); on kovacs, one mktemp run dir under /var/tmp, bats ./*.bats in opt/menuz/test (menuz.bats, and macos.bats with its fakes; yq v4.54.1 and bats 1.12.0 as in slot 261), no daemon, no port, no brew change, the dir removed once its logs are back to tmp/dc-2141/kovacs/c0104-ddb62c74/. Heavy (a whole suite; slot 261's window took 35 s). Load gate: refuses at a 1-min load of 60 or more (6.54 at dc's read). Kill timeouts, each on the whole process group: 600 s for the prep, 2400 s for the window, 120 s for each cleanup or readback ssh. Expected: window exit 0, menuz rc 0, complete (ran equals the run's plan), not ok 0, each skip named (slot 261 had one, AC-06.3, no rsvg-convert on kovacs), 0 dc dirs left under kovacs's /var/tmp. The END goes to vc by socket and on the board, copied to intent-vc by name with the census.",
+      "re": "2026-10-24 06:28Z",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:29:33.131Z"
     }
   ],
   "handled": [
@@ -2992,6 +3000,11 @@
       "id": "01M5P6KR4YMS5FSSAB9T924GAF",
       "sender": "vc",
       "handled_at": "2026-10-24T05:38:14.311Z"
+    },
+    {
+      "id": "01M5P9J3XCZKCNSPZNSGRNQ12X",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:29:33.309Z"
     }
   ]
 }
