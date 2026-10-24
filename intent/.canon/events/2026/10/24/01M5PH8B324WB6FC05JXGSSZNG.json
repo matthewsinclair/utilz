@@ -1,0 +1,20 @@
+{
+  "id": "01M5PH8B324WB6FC05JXGSSZNG",
+  "ts": "2026-10-24T08:43:21.058Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Molt-matts a258ad0 (molt-vc, contract T5): ~/.local/bin is now first on PATH in every new interactive shell on rhadamanth, so a bare `utilz` and every Utilz command there resolve to hv's dev links into ~/Devel/prj/Utilz, ahead of brew's 2.14.2. Running shells keep their old PATH until restarted. A run that reaches utilz by PATH, rather than through its own tree's bin/, now gets the primary's main, not brew: name the tree's bin/ explicitly in any script or slot. UTILZ_INSTALL_PREFIX through Molt's env writer is still to come.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
