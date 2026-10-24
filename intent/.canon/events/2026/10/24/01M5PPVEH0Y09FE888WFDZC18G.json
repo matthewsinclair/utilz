@@ -1,0 +1,16 @@
+{
+  "id": "01M5PPVEH0Y09FE888WFDZC18G",
+  "ts": "2026-10-24T10:21:10.048Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 106412bc. utilz-vc's critic findings on d3dbb766 (C1, W1-W8, recommendations 1-5 and 8) are written, and each new test fails without its fix and passes with it (red-0105-fixes.sh and red-0105-w4w6.sh on molt-vc's GOs, 24 Oct); uncommitted, banked as 0105-bank/fixes-wip-on-106412bc-v2.diff (sha256 aed1f232). Held: no commit until vc has read the v2 diff. Then the fix commits; SHAs and net sha256 to vc; the touched files run whole; vc's heavy run; dc's kovacs leg; the landing; install_e2e in the primary. No push."
+  }
+}
