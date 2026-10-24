@@ -348,7 +348,15 @@ app_verify_notarised() {
 # (release.tag "{version}", version_from the default VERSION), not the core's
 # own default, v{version}; macos.bats pins the declaration, for menuz's
 # build_kind as well, so the readings cannot drift apart unseen (issue 0103).
-app_release_tag() { tr -d '[:space:]' <"$ROOT/VERSION"; }
+# Non-zero, saying why on stderr, when VERSION cannot be read or is empty.
+app_release_tag() {
+  local tag
+  if ! tag="$(tr -d '[:space:]' 2>/dev/null <"$ROOT/VERSION")" || [ -z "$tag" ]; then
+    warn "$ROOT/VERSION could not be read or is empty, so the release tag is unknown"
+    return 1
+  fi
+  printf '%s\n' "$tag"
+}
 
 # The full commit release tag $1 names in this tree, peeled through the
 # annotated tag the release core makes; non-zero, printing nothing, when the
@@ -365,14 +373,16 @@ app_tag_commit() { # $1 tag
 # comparison, so a missing or garbled one never matches by prefix.
 app_ship_blockers() { # $1 bundle, $2 the release tag
   local id version want kind commit tagged formed=no
-  want="$(tr -d '[:space:]' <"$ROOT/opt/menuz/VERSION")"
   id="$(plist_get "$1" CFBundleIdentifier)"
   version="$(plist_get "$1" CFBundleShortVersionString)"
   kind="$(plist_get "$1" MenuzKind)"
   commit="$(plist_get "$1" MenuzCommit)"
   [ "$id" = "$APP_BUNDLE_ID" ] || printf 'the bundle id is %s, not %s\n' "${id:-<unreadable>}" "$APP_BUNDLE_ID"
-  [ "$version" = "$want" ] ||
+  if ! want="$(tr -d '[:space:]' 2>/dev/null <"$ROOT/opt/menuz/VERSION")" || [ -z "$want" ]; then
+    printf "opt/menuz/VERSION could not be read or is empty, so the bundle's version %s cannot be checked against it\n" "${version:-<unreadable>}"
+  elif [ "$version" != "$want" ]; then
     printf 'the bundle is version %s and opt/menuz/VERSION is %s -- it was built from another tree; run app-sign and app-notarize at the tag\n' "${version:-<unreadable>}" "$want"
+  fi
   [ "$kind" = release ] ||
     printf "the bundle's MenuzKind is %s, not release -- it was built off the tag %s or from a dirty tree; run app-sign and app-notarize in a tree at the tag\n" "${kind:-<unreadable>}" "$2"
   if [[ "$commit" =~ ^[0-9a-f]{8,40}$ ]]; then
@@ -388,6 +398,28 @@ app_ship_blockers() { # $1 bundle, $2 the release tag
   return 0
 }
 
+# Refuses with headline $1 and the blockers in $2 under it, one per line,
+# indented, when there are any, removing $3 first when it is given; returns
+# when $2 is empty. Every ship check refuses through it.
+app_refuse_blockers() { # $1 headline, $2 blockers, $3 a path to remove first
+  [ -n "$2" ] || return 0
+  [ -z "${3:-}" ] || rm -rf "$3"
+  die "$1:
+$(printf '%s\n' "$2" | sed 's/^/       /')"
+}
+
+# The staged copy asked publish's own question before anything is signed or a
+# notary submission spent: the products are shared by every tree, so another
+# build can replace the one just made before it is staged. The stage is
+# removed when it is refused, or when the question cannot be asked.
+app_require_shippable_stage() { # $1 the staged bundle
+  local tag blockers
+  tag="$(app_release_tag)" || { rm -rf "$APP_DIST_DIR"; die "no release tag to check the staged Menuz.app against -- nothing signed"; }
+  blockers="$(app_ship_blockers "$1" "$tag")" ||
+    { rm -rf "$APP_DIST_DIR"; die "could not check the staged Menuz.app against release $tag -- nothing signed"; }
+  app_refuse_blockers "the staged Menuz.app cannot ship with release $tag -- nothing signed" "$blockers" "$APP_DIST_DIR"
+}
+
 # app-sign signs the release's build alone (issue 0103). Before any build it
 # asks menuz what the build would carry (`utilz menuz stamps`), and refuses
 # unless the kind is release, which menuz's build_kind, the one place that
@@ -397,13 +429,14 @@ app_require_release_build() {
   local stamps kind commit tag tagged where
   stamps="$("$ROOT/bin/utilz" menuz stamps)" ||
     die "utilz menuz stamps failed, so app-sign cannot tell whether the build would be the release's -- nothing built or signed"
+  # KEY=VALUE lines, in the format menuz's print_stamps owns.
   kind="$(printf '%s\n' "$stamps" | sed -n 's/^MENUZ_KIND=//p')"
   commit="$(printf '%s\n' "$stamps" | sed -n 's/^MENUZ_COMMIT=//p')"
   if [ "$kind" = release ]; then
     printf '  %-21s %s at %s\n' "next build" "$kind" "${commit:-<unreadable>}"
     return 0
   fi
-  tag="$(app_release_tag)"
+  tag="$(app_release_tag)" || die "no release tag to name -- nothing built or signed"
   if tagged="$(app_tag_commit "$tag")"; then
     where="which names ${tagged:0:8}"
   else
@@ -462,7 +495,7 @@ cmd_app_sign() {
   fi
   rm -f "$out"
   [ "$rc" -eq 0 ] || die "utilz menuz build --release failed (exit $rc) -- nothing signed"
-  local src dist tag blockers
+  local src dist
   src="$(app_product Release)"
   dist="$(app_dist)"
   [ -d "$src" ] || die "the build left no bundle at $src"
@@ -473,17 +506,8 @@ cmd_app_sign() {
   # codesign refuses "resource fork, Finder information, or similar detritus".
   xattr -cr "$dist" || true
   printf '  %s\n' "$dist"
-  # The products are shared by every tree, so another build can replace the
-  # one just made before it is staged: the staged copy is asked publish's own
-  # question before anything is signed or a notary submission spent.
   step "checking the staged copy is the release's build, as publish will"
-  tag="$(app_release_tag)"
-  blockers="$(app_ship_blockers "$dist" "$tag")"
-  if [ -n "$blockers" ]; then
-    rm -rf "$APP_DIST_DIR"
-    die "the staged Menuz.app cannot ship with release $tag -- nothing signed:
-$(printf '%s\n' "$blockers" | sed 's/^/       /')"
-  fi
+  app_require_shippable_stage "$dist"
   step "signing Menuz.app inside-out (nested code, then the bundle), team $(identity_team)"
   app_sign_nested "$dist"
   codesign --force --options runtime --timestamp --entitlements "$APP_ENTITLEMENTS" --sign "$IDENTITY" "$dist" ||
@@ -575,10 +599,9 @@ cmd_publish() {
   local dist tag blockers assets staging zip
   dist="$(app_dist)"
   [ -d "$dist" ] || die "no signed bundle at $dist -- run: $DEVBIN_INVOKE macos app-sign, then app-notarize"
-  tag="$(app_release_tag)"
-  blockers="$(app_ship_blockers "$dist" "$tag")"
-  [ -z "$blockers" ] || die "Menuz.app cannot ship with release $tag:
-$(printf '%s\n' "$blockers" | sed 's/^/       /')"
+  tag="$(app_release_tag)" || die "no release tag to publish to -- nothing uploaded"
+  blockers="$(app_ship_blockers "$dist" "$tag")" || die "could not check $dist against release $tag -- nothing uploaded"
+  app_refuse_blockers "Menuz.app cannot ship with release $tag" "$blockers"
   command -v gh >/dev/null 2>&1 || die "gh not found -- publish attaches the asset with gh release upload"
   assets="$(gh release view "$tag" --json assets --jq '.assets[].name' 2>/dev/null)" ||
     die "there is no release object for $tag -- the release core makes it (bin/devbin release); publish attaches to it"
@@ -595,8 +618,9 @@ $(printf '%s\n' "$blockers" | sed 's/^/       /')"
     rm -rf "$staging"
     die "$APP_ASSET does not unpack to Menuz.app -- nothing uploaded"
   fi
-  blockers="$(app_ship_blockers "$staging/unpacked/Menuz.app" "$tag")"
-  [ -z "$blockers" ] || { rm -rf "$staging"; die "the bundle inside $APP_ASSET cannot ship: $blockers"; }
+  blockers="$(app_ship_blockers "$staging/unpacked/Menuz.app" "$tag")" ||
+    { rm -rf "$staging"; die "could not check the bundle inside $APP_ASSET against release $tag -- nothing uploaded"; }
+  app_refuse_blockers "the bundle inside $APP_ASSET cannot ship with release $tag -- nothing uploaded" "$blockers" "$staging"
   app_verify_notarised "$staging/unpacked/Menuz.app" ||
     { rm -rf "$staging"; die "the bundle inside $APP_ASSET is not notarised and stapled -- nothing uploaded"; }
   step "uploading $APP_ASSET to release $tag"

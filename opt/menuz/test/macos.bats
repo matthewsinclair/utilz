@@ -179,8 +179,9 @@ fake_shim() {
 #!/usr/bin/env bash
 printf '%s\n' "\$*" >>"$FAKES/utilz.calls"
 commit="\$(git -C "$PROJ" rev-parse --short=8 HEAD)" || exit 1
+tags="\$(git -C "$PROJ" tag --points-at HEAD)" || exit 1
 kind=dev
-if git -C "$PROJ" tag --points-at HEAD | grep -qxF "\$(cat "$PROJ/VERSION")"; then kind=release; fi
+if printf '%s\n' "\$tags" | grep -qxF "\$(cat "$PROJ/VERSION")"; then kind=release; fi
 if [ "\$1 \$2" = "menuz stamps" ]; then
   if [ -f "$FAKES/stamps.fail" ]; then echo "menuz: git tag --points-at HEAD failed in $PROJ" >&2; exit 1; fi
   printf 'MENUZ_VERSION=%s\nMENUZ_BUILD=1\nMENUZ_COMMIT=%s\nMENUZ_SOURCE_TREE=fixture\nMENUZ_KIND=%s\n' "\$(cat "$PROJ/opt/menuz/VERSION")" "\$commit" "\$kind"
@@ -650,6 +651,29 @@ dist_stamp() { # $1 key, $2 value
   run_macos publish
   [ "$status" -eq 1 ]
   [[ "$output" == *"the tag 2.14.0 that VERSION names is not in this tree, so the bundle's commit cannot be checked against it"* ]] || fail "$output"
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0103: publish refuses, naming it, when the root VERSION is empty, uploading nothing" {
+  notarised_dist
+  : >"$PROJ/VERSION"
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"$PROJ/VERSION could not be read or is empty, so the release tag is unknown"* ]] || fail "$output"
+  [[ "$output" == *"no release tag to publish to -- nothing uploaded"* ]] || fail "$output"
+  [ ! -e "$FAKES/gh.calls" ]
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0103: publish refuses a bundle when opt/menuz/VERSION is empty, rather than matching an empty version" {
+  notarised_dist
+  dist_stamp CFBundleShortVersionString ""
+  : >"$PROJ/opt/menuz/VERSION"
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"opt/menuz/VERSION could not be read or is empty, so the bundle's version <unreadable> cannot be checked against it"* ]] || fail "$output"
   [ ! -e "$FAKES/uploaded.zip" ]
 }
 
