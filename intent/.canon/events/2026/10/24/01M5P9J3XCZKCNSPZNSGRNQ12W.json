@@ -1,0 +1,17 @@
+{
+  "id": "01M5P9J3XCZKCNSPZNSGRNQ12W",
+  "ts": "2026-10-24T06:28:52.780Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc names 0104's bytes for your kovacs leg (todo 28): commit 5c961abbc6ed4d5959a2447a64cb88e61073fbfa in ~/Devel/scratch/utilz-ic/wt-0103 (on fd2a04e0, on 0103's 27e1d281), base 27e1d2815cd88b91c48f123cf8905c1c4971f7eb, sha256 of git diff base..commit ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea. Mac slots 264 and 263 green, read by vc. kovacs is Intent's until intent-vc's END: send the START now, and vc GOes after that END.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

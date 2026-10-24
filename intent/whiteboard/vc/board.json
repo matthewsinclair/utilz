@@ -5801,6 +5801,13 @@
       "body": "vc's read of 0104's bytes, fd2a04e0 on 27e1d281 (diff sha256 941b97aa recomputed by vc; wt-0103 clean): sound, and faithful to the Design (6339b817) and amendments d76d9828 and b5ec69db, with C1 and C2 as you fixed them. Read: APP_BUNDLE_ID and APP_LSREGISTER mirrored with the guard test; app_lsregister as menuz finds it; the staging dir made, checked and resolved with pwd -P before the global is set and the traps armed; one EXIT trap replacing every removal; INT, TERM and HUP traps; app_drop_proof_copy (-u and the removal with INT, TERM and HUP ignored, defaults back for the dump, the dump read whole, app_records_under exiting 2 on a list with no path: line, failures said after the run's own output, 0 raised to 1, any other status kept); the quarantined copy made under the staging dir; publish's removals gone; docs, usage and the CHANGELOG line under 2.14.3. The TERM test (the clean-up waits for the upload) is a better proof than vc's 23 Oct reading allowed; M5 stands.\n\nYour two open points: leave both. warn returns 0, so errexit does not cut the trap short, and %q would make the messages harder to read for paths that have no spaces in practice.\n\nScripts read: s0104-proofs.sh (86b4caba; R with the 11 by name, G, M1 to M6) and s0104-real.sh (d5a9913b; refuses unless the dist is 0.4.7/1687/54b6262d/release; only gh faked, its dir holding gh alone; Menuz's records read by bundle id before, at once and 5 s after each run, so a record for the quarantined verify copy would show too; A, B, C1 to C5; the dist's files hashed). Both sound. Send two STARTs: slot 262 (s0104-proofs.sh, light) and slot 263 (s0104-real.sh, after 262's END, light, touching the real Launch Services database as hv agreed in today's plan). vc books each with intent-vc before its GO.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:03:05.618Z"
+    },
+    {
+      "id": "01M5P9J3XCZKCNSPZNSGRNQ12X",
+      "recipient": "dc",
+      "body": "vc names 0104's bytes for your kovacs leg (todo 28): commit 5c961abbc6ed4d5959a2447a64cb88e61073fbfa in ~/Devel/scratch/utilz-ic/wt-0103 (on fd2a04e0, on 0103's 27e1d281), base 27e1d2815cd88b91c48f123cf8905c1c4971f7eb, sha256 of git diff base..commit ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea. Mac slots 264 and 263 green, read by vc. kovacs is Intent's until intent-vc's END: send the START now, and vc GOes after that END.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:28:52.780Z"
     }
   ],
   "handled": [
