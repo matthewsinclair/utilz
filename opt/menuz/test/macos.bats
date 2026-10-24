@@ -1041,3 +1041,22 @@ resolved_dist() {
   d="$(resolved_dist)"
   [[ "$output" == *"could not drop the Launch Services record for $d: lsregister -dump listed no record at all, so the list was not read, so whether it is gone is unknown; drop it with: $FAKES/lsregister -u $d"* ]] || fail "$output"
 }
+
+@test "issue 0106: app-verify dist drops the record spctl gave the quarantined copy it checks, before removing it" {
+  notarised_dist
+  # shellcheck disable=SC2016 # the fake's body expands when it runs
+  write_fake spctl '
+p="$(cd "${*: -1}" 2>/dev/null && pwd -P)" && printf "%s\n" "$p" >>"'"$FAKES"'/ls.records" && echo "registered $p" >>"'"$FAKES"'/order.log"
+if [ -f "'"$FAKES"'/stapled" ]; then echo "source=Notarized Developer ID"; else echo "source=Unnotarized Developer ID"; exit 3; fi'
+  : >"$FAKES/order.log"
+  : >"$FAKES/lsregister.calls"
+  run_macos app-verify
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  local copy left
+  copy="$(sed -n 's/^registered \(.*\/Menuz\.app\)$/\1/p' "$FAKES/order.log" | grep -vxF "$(resolved_dist)" | head -1)"
+  [ -n "$copy" ] || fail "spctl registered no quarantined copy: $(cat "$FAKES/order.log")"
+  grep -qx -- "-u $copy" "$FAKES/lsregister.calls" || fail "no -u on the quarantined copy: $(cat "$FAKES/lsregister.calls")"
+  left="$(ls_fake_records "$FAKES")"
+  [ -z "$left" ] || fail "records left: $left"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+}
