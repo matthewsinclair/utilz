@@ -1,0 +1,16 @@
+{
+  "id": "01M5Q13SRD00ZDGGJBBV0RMDXB",
+  "ts": "2026-10-24T13:20:29.453Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 8a15eaf6 and read by vc (96a74b9c the critic findings and F1; 47fc3d28 dc's kovacs K1 and K2; 8a15eaf6 an unknown tree is source, from slot 301's prez red, proved red then green). Slot 301 on 96a74b9c: utilz 330 run 1 not ok (install_e2e's worktree refusal), menuz 162 ok, prez 32 run 2 not ok (fixed by 8a15eaf6). Next: run-0105-c.sh (fresh wt-0105-run2 at 8a15eaf6, all three suites) booked heavy with molt-vc, not started; START on its GO by name, END with TAP counts and each not ok named; then dc's kovacs leg on 8a15eaf6; the landing on vc's word; install_e2e in the primary. No push."
+  }
+}
