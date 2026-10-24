@@ -1,0 +1,16 @@
+{
+  "id": "01M5Q23ENHBBW1JBN3WBXYVSQ4",
+  "ts": "2026-10-24T13:37:46.673Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 26,
+    "text": "The 2.14.3 kovacs twins (then the dry run), on vc's word. Released when 0105 and 0106 have both landed and vc names the twins' START; vc books each with molt-vc and GOes only after molt-vc's GO. Ready: shellcheck 0.9.0 in kovacs:/var/tmp/dc-2141-sc090.vbubq3 and Lua 5.4.6 in /var/tmp/dc-2141-lua.UHvvGX (slot 266, END 8b5266a0, both sha256 matched); kv-remote.sh repointed to them at 1bb5c1d31e8e, and kv-state-check.sh (7a922e6fc248) and kv-rm-tooldirs.sh (a764a9c3eee5) repointed too (vc read them; the old copies are in gate/superseded/). The wrapper is work/leg.sh d4ef6559e834. Mac runs name their tree's bin/ (watchout 6). Size S."
+  }
+}
