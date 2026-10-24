@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-24 06:32Z
+heartbeat_at: 2026-10-24 06:34Z
 status: active
-focus: "Localfold on hv's word (vc's announce 06:32Z), session not released. 0103 landed (47c7344f, 5153db2d) and closed. 0104: fd2a04e0 then 5c961abb in wt-0103 on 27e1d281, read sound by vc, slots 264 and 263 green; next dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested. Then the proofs scripts' sweep (todo 12). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "0104: fd2a04e0 then 5c961abb in wt-0103, green on the Mac; holding for dc's kovacs leg, then the landing as two commits on vc's word"
 claims: [ISSUE:0104]
 ---
 
