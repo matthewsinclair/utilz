@@ -1,0 +1,20 @@
+{
+  "id": "01M5PN1ENCEQ75FCHN022B26BD",
+  "ts": "2026-10-24T09:49:29.644Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "LOCALFOLD now, on hv's word through molt-vc (09:48Z), before hv's compact on every terminal: each node touches, archives what is finished, clears what it has handled, restates live state, writes its own RESUME, and commits exactly its wrote: paths. Do NOT release; status stays active. Then tell vc FOLDED, with anything mid-flight. No new START, heavy or light, until molt-vc reopens the desk after the compact. ic: slot 285 runs on and its END still goes to molt-vc and vc; fold your board around it without a tree write mid-run if your terms say so, else after the END. After the compact: /in-session, pickup committed at once, then resume.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
