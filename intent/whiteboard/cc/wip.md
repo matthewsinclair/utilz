@@ -3,17 +3,17 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 13:38Z
+heartbeat_at: 2026-10-24 14:54Z
 status: active
-focus: "24 Oct, localfold before hv's compact (not released): 0105 committed in wt-0105 to 8a15eaf6, read by vc; its Mac run run-0105-c.sh (fresh wt-0105-run2 at 8a15eaf6) is booked with molt-vc, last in the heavy queue, NOT started (the desk is closed until after the compact). Then dc's kovacs leg on 8a15eaf6, the landing, install_e2e in the primary. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: [ISSUE:0105]
+focus: "24 Oct: 0105 landed as 2e0f2940 and green (kovacs 305, Mac 322, install_e2e in the primary); its close staged for vc's check, then the tmp-0105-run fixture dirs go. No push."
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- 0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 8a15eaf6 and read by vc (96a74b9c the critic findings and F1; 47fc3d28 dc's kovacs K1 and K2; 8a15eaf6 an unknown tree is source, from slot 301's prez red, proved red then green). Slot 301 on 96a74b9c: utilz 330 run 1 not ok (install_e2e's worktree refusal), menuz 162 ok, prez 32 run 2 not ok (fixed by 8a15eaf6). Next: run-0105-c.sh (fresh wt-0105-run2 at 8a15eaf6, all three suites) booked heavy with molt-vc, not started; START on its GO by name, END with TAP counts and each not ok named; then dc's kovacs leg on 8a15eaf6; the landing on vc's word; install_e2e in the primary. No push. (edited)
+_(none)_
 
 ## TODO
 
