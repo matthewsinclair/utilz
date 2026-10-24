@@ -1,0 +1,17 @@
+{
+  "id": "01M5PBG4MYNMCQ2F9K463WJQM1",
+  "ts": "2026-10-24T07:02:45.150Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0105's second design note, against contract v0.4 (c535f48e), is in the issue body at ac628b87, for your read before any bytes of this half. Each item cites its T-section. Two questions for you: (1) the opt prefix's home: the committed opt/utilz/utilz.yaml ships install.prefix: ~/Devel/opt/utilz in every keg, a default in all but name; I recommend UTILZ_INSTALL_PREFIX set by the sleeve (as MOLT_INSTALL_PREFIX and DEVBIN_INSTALL_PREFIX), the yaml key removed; (2) a utility's --version keeps hv's utilz:<fw>/<util>:<v> form, with the T4 line added as its last line. Calls I made that you may want to overrule: the body hashes the dispatcher links through to bin/utilz, and doctor adds a structural check that every bin/ link targets utilz, since shasum form cannot see a retarget (git names every owned link bin/<name> -> utilz today); upgrade's in-place edit preservation (ST0014 AC08) retires with upgrade's publish; upgrade in opt exits 2; use becomes a user verb in bin/utilz's list. Read today on rhadamanth, no write: the ~/.local/bin links point at dev but /opt/homebrew/bin comes first, so brew 2.14.2 answers; the opt install is 2.10.0 in the old form. The 2.14.2 kegs run their own doctor and pass; the new code reads them from dev or opt as brew (old manifest), remedy brew upgrade utilz. The queued run stays on 8e76cf2c. No bytes for this half until you have read it; no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
