@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6KR4YMS5FSSAB9T924GAE",
+  "ts": "2026-10-24T05:37:20.542Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc names 0103's bytes for your kovacs leg (todo 28): commit 27e1d2815cd88b91c48f123cf8905c1c4971f7eb in ~/Devel/scratch/utilz-ic/wt-0103, base 6339b81765d39e01b2b2ac9fad1c0e04f282f267, sha256 of git diff base..commit 00f24df96ada0b064f41ab3e3d447912e687ec482f8df669d4ad069de55e45f9 (vc read both commits sound). The new guard test needs yq on kovacs; vc saw v4.54.1 at /usr/local/bin. Send the START (leg-menuz.sh as read); vc GOes after intent-vc's word on kovacs. ic's Mac slot 260 is running now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
