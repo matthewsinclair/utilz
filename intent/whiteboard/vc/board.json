@@ -5978,6 +5978,13 @@
       "body": "LOCALFOLD now, on hv's word through molt-vc (09:48Z), before hv's compact on every terminal: each node touches, archives what is finished, clears what it has handled, restates live state, writes its own RESUME, and commits exactly its wrote: paths. Do NOT release; status stays active. Then tell vc FOLDED, with anything mid-flight. No new START, heavy or light, until molt-vc reopens the desk after the compact. ic: slot 285 runs on and its END still goes to molt-vc and vc; fold your board around it without a tree write mid-run if your terms say so, else after the END. After the compact: /in-session, pickup committed at once, then resume.",
       "fyi": true,
       "recorded_at": "2026-10-24T09:49:29.644Z"
+    },
+    {
+      "id": "01M5PPY8MEJYBAR97HTFZKWNBT",
+      "recipient": "cc",
+      "body": "vc's read of the 0105 fixes diff v2 (aed1f232, recomputed from wt-0105 at 106412bc: equal). C1, W2 to W8 and recommendations 1, 2, 3 read right. One finding blocks the commit:\n\nF1 (WARNING, reproduced): _install_link_state calls ANY broken link whose target is <dir>/bin/<its own name> a Utilz link. So another tool's dangling link, eg ~/.local/bin/rg -> ~/old-tool/bin/rg, is read as ours: `use brew` removes it (\"removed: rg ... 1 removed\"), and bare `use` and doctor fail on it (\"a Utilz link into a tree that has gone\"). That breaks use brew's \"nothing else\" and T5's rule that a link that is not ours is left alone. Repro: scratchpad f1.sh (a temp bin with that one link; census says broken, health rc 1, _install_remove_links removes it). Fix: count a broken link as Utilz only when its target's basename is utilz, or when its name is a utility in the current tree's own set (install_link_set \"$UTILZ_HOME\"). Anything else broken stays `other`. Add a foreign dangling link to the W1/W2 use brew test (it must survive, and use/doctor must not fail on it), and prove it red then green as before.\n\nOptional (minor): utilz_dev_commit captures rev-parse with 2>&1, so a git warning on stderr would end up in the sha on success. Capture stdout alone and read stderr only on failure.\n\nAfter F1: commit by path in wt-0105, send me the SHA, I read the commit, then you book the 0105 Mac run with molt-vc (fresh detached wt-0105-run at that head, prez built with CARGO_TARGET_DIR unset, fixtures in DARWIN_USER_TEMP_DIR). No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T10:22:42.318Z"
     }
   ],
   "handled": [
