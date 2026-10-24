@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 06:34Z
+heartbeat_at: 2026-10-24 09:50Z
 status: active
-focus: "24 Oct, picked up after hv's compact (localfold 8d7cc02e, not released): holding for vc's word, nothing STARTs on cc; nothing open on cc (no claims, DOING, TODO or hold). 0104 is ic's, its kovacs leg dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "24 Oct, localfold before hv's compact on vc's word (not released): 0105 in wt-0105 to 106412bc, with the critic fixes banked uncommitted (fixes-wip-on-106412bc.diff, sha256 2231be15); nothing STARTs until molt-vc reopens the desk and ic's 0106 (B) ENDs. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0105]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-- 0105 (dev, opt, brew, for 2.14.3): all bytes in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2, first half to 8e76cf2c, second half 645a380f..d3dbb766 (net 6de27936 for the whole), with vc to read; then one booked Mac run (prez built with CARGO_TARGET_DIR unset), dc's kovacs leg with shellcheck 0.9.0, the landing on vc's word, install_e2e in the primary before the close; no push (edited)
+- 0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 106412bc (d3dbb766 plus brew update before outdated). utilz-vc's critic findings on d3dbb766 (C1, W1-W8, recommendations 1-5 and 8) are written but uncommitted, banked as 0105-bank/fixes-wip-on-106412bc.diff (sha256 2231be15); not yet run. Next: on molt-vc's reopened desk and after ic's 0106 (B) ENDs, the light batch red-0105-fixes.sh (each new test red without its fix, green with it) plus the touched files whole; commit as fix steps; SHAs and net sha256 to vc; then vc books the heavy run (fixtures in DARWIN_USER_TEMP_DIR); dc's kovacs leg; the landing; install_e2e in the primary. No push. (edited)
 
 ## TODO
 

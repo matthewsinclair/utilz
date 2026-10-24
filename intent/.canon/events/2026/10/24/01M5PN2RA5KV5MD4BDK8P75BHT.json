@@ -1,0 +1,16 @@
+{
+  "id": "01M5PN2RA5KV5MD4BDK8P75BHT",
+  "ts": "2026-10-24T09:50:12.293Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3), in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2: committed to 106412bc (d3dbb766 plus brew update before outdated). utilz-vc's critic findings on d3dbb766 (C1, W1-W8, recommendations 1-5 and 8) are written but uncommitted, banked as 0105-bank/fixes-wip-on-106412bc.diff (sha256 2231be15); not yet run. Next: on molt-vc's reopened desk and after ic's 0106 (B) ENDs, the light batch red-0105-fixes.sh (each new test red without its fix, green with it) plus the touched files whole; commit as fix steps; SHAs and net sha256 to vc; then vc books the heavy run (fixtures in DARWIN_USER_TEMP_DIR); dc's kovacs leg; the landing; install_e2e in the primary. No push."
+  }
+}
