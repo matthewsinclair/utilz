@@ -1625,6 +1625,14 @@
       "archived_at": "2026-10-24T14:54:40.628Z",
       "recorded_at": "2026-10-24T06:41:01.854Z",
       "edited_at": "2026-10-24T13:20:29.453Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 46,
+      "text": "The Mac twins on 82e8b021 for 2.14.3: released when vc names their START, after hv's molt resleeve is in. Then book with molt-vc, START on its GO by name, END with TAP counts and the run dir. No push.",
+      "state": "live",
+      "recorded_at": "2026-10-24T14:57:39.162Z"
     }
   ],
   "sent": [

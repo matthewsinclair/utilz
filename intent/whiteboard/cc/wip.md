@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- The Mac twins on 82e8b021 for 2.14.3: released when vc names their START, after hv's molt resleeve is in. Then book with molt-vc, START on its GO by name, END with TAP counts and the run dir. No push.
 
 ## Watch-outs
 
