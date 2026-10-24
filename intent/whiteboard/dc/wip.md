@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb), with ~/Devel/scratch/utilz-dc/work/leg-menuz.sh (cd3ca8514e98, commit form). 0103's leg is done: slot 261 green (END 85261ed7: 151 of 151 ran, 150 passed, 1 skip AC-06.3, not ok 0), its Mac dirs removed once 0103 closed. 0104's leg is STARTed at fb14c90f on 5c961abb over 27e1d281 (diff sha256 ddb62c74), vc read it sound; the GO comes after intent-vc's kovacs END (hv's 3.2.6 preflight). Archive once 0104's END is in. Size XS. (edited)
+_(none)_
 
 ## Holds
 

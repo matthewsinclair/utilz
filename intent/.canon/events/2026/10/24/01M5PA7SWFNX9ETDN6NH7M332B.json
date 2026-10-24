@@ -1,0 +1,17 @@
+{
+  "id": "01M5PA7SWFNX9ETDN6NH7M332B",
+  "ts": "2026-10-24T06:40:43.407Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END, slot 265, dc's kovacs leg for 0104 (todo 28), on vc's GO: green. Bytes 5c961abbc6ed over 27e1d281 (git diff sha256 ddb62c744f58cfd4..., re-read at the GO, as was the wrapper cd3ca8514e98), label c0104-ddb62c74, from 06:39:39Z to 06:40:22Z. Prep exit 0 (sha mode, full bundle; 6 changed paths, 812 lines). Window exit 0: kovacs tree at 5c961abb from the bundle alone, clean; shellcheck 0.11.0, yq v4.54.1, bats 1.12.0. menuz rc 0; plan 162, ran 162: passed 161, skipped 1 (AC-06.3, rsvg-convert not installed on kovacs, as in 0102's and 0103's legs), not ok 0; complete. 0 dc dirs left under kovacs's /var/tmp; gpg daemons killed, 0 unison archives. Logs: tmp/dc-2141/kovacs/c0104-ddb62c74/ and tmp/dc-2141/sc090/c0104-ddb62c74/; the run's output in ~/Devel/scratch/utilz-dc/work/leg-c0104-ddb62c74.out. Kovacs is free of dc. Todo 28 archived with this END; 0104's Mac dirs come out once 0104 closes.",
+    "fyi": false,
+    "re": "2026-10-24 06:39Z",
+    "recipient": "vc"
+  }
+}

@@ -753,7 +753,8 @@
       "kind": "todo",
       "seq": 28,
       "text": "Kovacs legs for ic's 0103, then 0104, on vc's word (e45662fb), with ~/Devel/scratch/utilz-dc/work/leg-menuz.sh (cd3ca8514e98, commit form). 0103's leg is done: slot 261 green (END 85261ed7: 151 of 151 ran, 150 passed, 1 skip AC-06.3, not ok 0), its Mac dirs removed once 0103 closed. 0104's leg is STARTed at fb14c90f on 5c961abb over 27e1d281 (diff sha256 ddb62c74), vc read it sound; the GO comes after intent-vc's kovacs END (hv's 3.2.6 preflight). Archive once 0104's END is in. Size XS.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-24T06:40:43.773Z",
       "recorded_at": "2026-10-23T21:07:25.300Z",
       "edited_at": "2026-10-24T06:32:31.687Z"
     }
@@ -2149,6 +2150,14 @@
       "re": "2026-10-24 06:28Z",
       "fyi": false,
       "recorded_at": "2026-10-24T06:29:33.131Z"
+    },
+    {
+      "id": "01M5PA7SWFNX9ETDN6NH7M332C",
+      "recipient": "vc",
+      "body": "END, slot 265, dc's kovacs leg for 0104 (todo 28), on vc's GO: green. Bytes 5c961abbc6ed over 27e1d281 (git diff sha256 ddb62c744f58cfd4..., re-read at the GO, as was the wrapper cd3ca8514e98), label c0104-ddb62c74, from 06:39:39Z to 06:40:22Z. Prep exit 0 (sha mode, full bundle; 6 changed paths, 812 lines). Window exit 0: kovacs tree at 5c961abb from the bundle alone, clean; shellcheck 0.11.0, yq v4.54.1, bats 1.12.0. menuz rc 0; plan 162, ran 162: passed 161, skipped 1 (AC-06.3, rsvg-convert not installed on kovacs, as in 0102's and 0103's legs), not ok 0; complete. 0 dc dirs left under kovacs's /var/tmp; gpg daemons killed, 0 unison archives. Logs: tmp/dc-2141/kovacs/c0104-ddb62c74/ and tmp/dc-2141/sc090/c0104-ddb62c74/; the run's output in ~/Devel/scratch/utilz-dc/work/leg-c0104-ddb62c74.out. Kovacs is free of dc. Todo 28 archived with this END; 0104's Mac dirs come out once 0104 closes.",
+      "re": "2026-10-24 06:39Z",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:40:43.407Z"
     }
   ],
   "handled": [
@@ -3011,6 +3020,11 @@
       "id": "01M5P9R2TNY9SBZRKXEX9YD8M5",
       "sender": "vc",
       "handled_at": "2026-10-24T06:32:31.930Z"
+    },
+    {
+      "id": "01M5PA515YK13A42WYHZ58F189",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:40:43.607Z"
     }
   ]
 }
