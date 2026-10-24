@@ -6,7 +6,7 @@ session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
 heartbeat_at: 2026-10-24 06:34Z
 status: active
 focus: "24 Oct, picked up after hv's compact (localfold 8d7cc02e, not released): holding for vc's word, nothing STARTs on cc; nothing open on cc (no claims, DOING, TODO or hold). 0104 is ic's, its kovacs leg dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
-claims: []
+claims: [ISSUE:0105]
 ---
 
 # Control Claude (cc)
