@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-23 21:49Z
+heartbeat_at: 2026-10-24 06:32Z
 status: active
-focus: "23 Oct, booted on hv's word to boot and hold, after the night's fold and hv's compact: holding for vc's word, and nothing STARTs on cc meanwhile; nothing open on cc (no claims, DOING, TODO or hold); 0103 and 0104 are ic's, their kovacs legs dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
+focus: "24 Oct, localfold before hv's compact on vc's word (not released): holding for vc's word, nothing STARTs on cc; nothing open on cc (no claims, DOING, TODO or hold). 0103 landed and closed; 0104 is ic's, its kovacs leg dc's, and vc reads the bytes. cc's pruned scratch sits in ~/.Trash/utilz-cc-scratch-pruned-20261023 for hv to empty or restore. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: []
 ---
 
