@@ -1,0 +1,16 @@
+{
+  "id": "01M5Q6RWVSHGDSNCQ9FQ0M1K46",
+  "ts": "2026-10-24T14:59:23.642Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 52,
+    "text": "The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md.\n- **0103, 0104, 0105, 0106:** landed and closed. 0105 landed as 2e0f2940 (net of f9e5e4b2..8a15eaf6, diff 06fde9c2, beside 0106's hunks; vc checked it staged and by change), green on kovacs slot 305 and Mac slot 322 on 8a15eaf6, install_e2e 11/0 in the primary at 2e0f2940; closed 82e8b021. vc dropped the 11 stale Launch Services records under cc's tmp-0105-run; the Menuz id resolves to ~/Applications/Menuz.app alone.\n- **Final head 82e8b021.** Next: ready to cut per watchout 22. kovacs twins (dc, hold 26: leg.sh d4ef6559 with --cargo lua-build shellcheck prez-build lua-plan loop, plus Rust fmt and clippy 1.99.1) book with molt-vc after the compact; Mac twins (cc: macOS suites, cargo, acceptance, menuz app build) and dc's dry run wait for hv's `molt resleeve` on rhadamanth (grep UTILZ_INSTALL_PREFIX ~/.config/molt/env.sh reads 0 at 14:59Z). Tell molt-vc before telling hv. Then hv's cut, the Menuz.app asset at the tag, tools/formula publish, brew upgrade on rhadamanth and kovacs.\n- **Host:** molt-vc keeps the slot desk; every Utilz run books through vc with molt-vc."
+  }
+}

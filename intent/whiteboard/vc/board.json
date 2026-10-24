@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "74b51d87-af54-4adf-9287-d19216567c43",
-    "heartbeat_at": "2026-10-24T13:37:49.725Z",
+    "heartbeat_at": "2026-10-24T14:59:24.123Z",
     "status": "active",
-    "focus": "after hv's compact (13:37Z): 0105's Mac run on 8a15eaf6 waits for molt-vc's GO; then the landing, install_e2e in the primary, the close; then ready to cut 2.14.3 (needs hv's molt resleeve first)",
+    "focus": "fold for hv's compact (molt-vc, 14:58Z): 0105 landed 2e0f2940 and closed 82e8b021; final head 82e8b021; next the twins (kovacs books after the compact; Mac and the dry run wait for hv's molt resleeve)",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1971,10 +1971,10 @@
       "node": "vc",
       "kind": "todo",
       "seq": 52,
-      "text": "The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md.\n    - **0103, 0104, 0106:** landed and closed (0106: b9a2d559..ddba75f6, closed a797c337; real run slot 292 green 0 of 33). Stale Menuz Launch Services records dropped by vc; the id resolves to ~/Applications/Menuz.app alone.\n    - **0105** (cc, dev/opt/brew on devbin docs/dev-opt-brew.md aeed31e4 plus the T3 amendment): final head 8a15eaf6 in wt-0105 (f9e5e4b2..8a15eaf6 sha256 06fde9c2), every commit read by vc (106412bc, 96a74b9c F1, 47fc3d28 K1 K2, 8a15eaf6 unknown-is-source). dc's kovacs leg slot 305 GREEN (21 ran, 0 failed, vc re-tallied). cc's Mac run of 8a15eaf6 (utilz, menuz, prez) booked or in flight at the fold. Green → land by path on vc's word, vc checks by change, install_e2e in the primary as a booked run, close. 0105 and 0106 both touch opt/menuz/menuz and CHANGELOG.md: the combination is proved only by the final-head twins.\n    - **Then:** ready-to-cut per watchout 22 (kovacs shellcheck 0.9.0 at vbubq3, Lua 5.4.6 at UHvvGX; dc's kv-remote.sh 1bb5c1d3, leg.sh d4ef6559); tell molt-vc first (Molt's UTILZ_INSTALL_PREFIX, ST0008 WP05); dc's dry run; hv's cut, then tools/formula publish and brew upgrade on rhadamanth and kovacs. A switch (T10) proof is judged from a fresh login shell (env -i ... /bin/zsh -lc).\n    - **Host:** molt-vc keeps the slot desk; every Utilz run books through vc with molt-vc.",
+      "text": "The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md.\n- **0103, 0104, 0105, 0106:** landed and closed. 0105 landed as 2e0f2940 (net of f9e5e4b2..8a15eaf6, diff 06fde9c2, beside 0106's hunks; vc checked it staged and by change), green on kovacs slot 305 and Mac slot 322 on 8a15eaf6, install_e2e 11/0 in the primary at 2e0f2940; closed 82e8b021. vc dropped the 11 stale Launch Services records under cc's tmp-0105-run; the Menuz id resolves to ~/Applications/Menuz.app alone.\n- **Final head 82e8b021.** Next: ready to cut per watchout 22. kovacs twins (dc, hold 26: leg.sh d4ef6559 with --cargo lua-build shellcheck prez-build lua-plan loop, plus Rust fmt and clippy 1.99.1) book with molt-vc after the compact; Mac twins (cc: macOS suites, cargo, acceptance, menuz app build) and dc's dry run wait for hv's `molt resleeve` on rhadamanth (grep UTILZ_INSTALL_PREFIX ~/.config/molt/env.sh reads 0 at 14:59Z). Tell molt-vc before telling hv. Then hv's cut, the Menuz.app asset at the tag, tools/formula publish, brew upgrade on rhadamanth and kovacs.\n- **Host:** molt-vc keeps the slot desk; every Utilz run books through vc with molt-vc.",
       "state": "live",
       "recorded_at": "2026-10-23T20:41:21.848Z",
-      "edited_at": "2026-10-24T13:20:53.494Z"
+      "edited_at": "2026-10-24T14:59:23.642Z"
     },
     {
       "node": "vc",
