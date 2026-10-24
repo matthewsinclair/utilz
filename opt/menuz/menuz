@@ -934,7 +934,7 @@ cmd_install() {
 # on, and the exit is then 1.
 cmd_uninstall() {
   no_args uninstall "$@"
-  local bundle bin out said failed=""
+  local bundle bin out said line failed=""
   bundle="$(installed_bundle)"
   if [[ ! -e "$bundle" ]]; then
     printf 'menuz: nothing installed at %s; nothing changed\n' "$bundle"
@@ -949,8 +949,12 @@ cmd_uninstall() {
   else
     failed="the login item: $out"
   fi
+  # Each line ls_drop printed, joined as it stands (slot 273).
   if ! said="$(ls_drop "$bundle")"; then
-    failed="${failed:+$failed; }$(printf '%s\n' "$said" | paste -sd ';' - | sed 's/;/; /g')"
+    while IFS= read -r line; do
+      [[ -n "$line" ]] || continue
+      failed="${failed:+$failed; }$line"
+    done <<<"$said"
   fi
   rm -rf "${bundle:?}" || fail_step remove "$bundle could not be removed${failed:+; and $failed}"
   printf 'menuz: removed %s\n' "$bundle"

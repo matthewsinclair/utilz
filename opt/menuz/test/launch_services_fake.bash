@@ -37,7 +37,9 @@ case "\$1" in
     [ ! -f "$dir/ls.stuck" ] || exit 0
     # grep exits 1 when the record dropped was the last one; that is a drop.
     grep -vxF -- "\$2" "\$records" >"\$records.new" || true
-    mv "\$records.new" "\$records" ;;
+    # The system's mv, never a test's: menuz.bats's mv_fake counts the
+    # calls on PATH by their order (slot 273).
+    command -p mv "\$records.new" "\$records" ;;
   -f)
     p="\$(cd "\$2" 2>/dev/null && pwd -P)" || p="\$2"
     grep -qxF -- "\$p" "\$records" || printf '%s\n' "\$p" >>"\$records" ;;

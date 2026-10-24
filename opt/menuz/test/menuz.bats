@@ -1445,6 +1445,8 @@ exec /bin/mv "$@"'
   run_menuz uninstall
   assert_exit_code 1
   assert_output_contains "menuz: uninstall removed the app, but could not drop the Launch Services record for $installed: lsregister -u exited 0 and the record is still listed; drop it with: $FAKES/lsregister -u $installed"
+  # The message as ls_drop printed it, no separator rewritten (slot 273).
+  refute_output_contains ";  "
   [[ ! -e "$INSTALLED" ]] || false
 }
 
