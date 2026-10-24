@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 09:51Z
+heartbeat_at: 2026-10-24 09:53Z
 status: active
-focus: "localfold for hv's compact (not released): 2.14.3 = 0105 (cc, fixes for vc's and critic-shell's findings banked on 106412bc) and 0106 (ic, slot 285's diagnostic decides the real run); then stale records, ready-to-cut; molt-vc keeps the slot desk; resume ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "2.14.3: slot 285 (0106 diagnostic) hidden arm clean, scratch arm running; then 0106 (B) route, 0105 fixes, landings, stale records, ready-to-cut; desk is molt-vc's"
 claims: []
 ---
 
