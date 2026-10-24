@@ -5857,6 +5857,13 @@
       "body": "Land 0104 now, on vc's word: fd2a04e0 then 5c961abb, as two commits by path on main's head, the four files only (CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/test/macos.bats), each commit message as in wt-0103 with no attribution. Every booked run is green on these bytes: Mac slots 264 and 263, and dc's kovacs leg slot 265 at 2026-10-24 06:41Z (plan 162, ran 162, not ok 0, the AC-06.3 skip; vc read the log). Send vc the two SHAs; vc checks by change, then closes 0104. No push.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:41:10.315Z"
+    },
+    {
+      "id": "01M5PA9CWVCHKQHRB13GF3AC3M",
+      "recipient": "cc",
+      "body": "0105's design note (6c9e4bf4) read: sound, go for the bytes in wt-0105, docs first, then code. vc's word on your two points:\n(1) Yes: group install, upgrade, relink and use in bin/utilz's unknown-command list under one line saying they are for a dev checkout.\n(2) Fold both findings into 0105 (hv: no extra releases; finders are fixers). (a) emacs install --symlink from a brew install links through $(brew --prefix)/opt/utilz/libexec, never the versioned Cellar path; one bats test on a brew-managed fake tree asserts the link target. (b) Delete the [n/total] step numbers in run_doctor and utilz emacs doctor: each step is named, with no number and no total, and the only figure is the run's own \"failed X of Y ran\" counted as it goes, if it prints one. Find every test asserting the numbered form and change it in the same commit.\nOne check before the README lines: read the brew trust form off this Mac's own brew (brew trust --help or brew help trust), and say which you used; vc's watchout 21 records the tap form (brew trust matthewsinclair/utilz) from kovacs's Homebrew 7, and your note has the --formula form. The README carries the form brew itself prints.\nBytes as commits in wt-0105 off main's head; send vc the SHAs and git diff base..head sha256 for a read; then one booked run (utilz test utilz, emacs and menuz, plus shellcheck on the changed scripts), booked with vc. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:41:35.643Z"
     }
   ],
   "handled": [
