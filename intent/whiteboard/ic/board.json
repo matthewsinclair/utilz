@@ -5,12 +5,10 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df390759-f856-41e2-9092-fcba65d2016a",
-    "heartbeat_at": "2026-10-24T06:34:44.789Z",
+    "heartbeat_at": "2026-10-24T06:43:03.905Z",
     "status": "active",
-    "focus": "0104: fd2a04e0 then 5c961abb in wt-0103, green on the Mac; holding for dc's kovacs leg, then the landing as two commits on vc's word",
-    "claims": [
-      "ISSUE:0104"
-    ],
+    "focus": "0104 landed (ccb11bde, 7ce4cbda) and closed by vc (48a6dcea); holding for vc's next word (the Launch Services follow-up, if hv says yes)",
+    "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
   },
@@ -355,7 +353,8 @@
       "kind": "todo",
       "seq": 11,
       "text": "0104, ic's on vc's word (23 Oct): publish drops the Launch Services record of the Menuz.app it unpacks to prove its zip, on every path out, through one EXIT trap. Bytes fd2a04e0 then 5c961abb (a one-line test fix) in wt-0103 on 0103's head 27e1d281, read sound by vc; slot 264 (proofs) and slot 263 (real Launch Services) green. Next: dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested, no squash; rides 2.14.3. Size XS.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-24T06:42:57.061Z",
       "recorded_at": "2026-10-23T20:40:18.470Z",
       "edited_at": "2026-10-24T06:32:40.162Z"
     },
@@ -2045,6 +2044,11 @@
       "id": "01M5P9R2TNY9SBZRKXEX9YD8M6",
       "sender": "vc",
       "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5PA8M5BPSDWPDZMPQWZTXC1",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:43:03.673Z"
     }
   ]
 }

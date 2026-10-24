@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-24 06:34Z
+heartbeat_at: 2026-10-24 06:43Z
 status: active
-focus: "0104: fd2a04e0 then 5c961abb in wt-0103, green on the Mac; holding for dc's kovacs leg, then the landing as two commits on vc's word"
-claims: [ISSUE:0104]
+focus: "0104 landed (ccb11bde, 7ce4cbda) and closed by vc (48a6dcea); holding for vc's next word (the Launch Services follow-up, if hv says yes)"
+claims: []
 ---
 
 # Interface Claude (ic)
@@ -17,7 +17,6 @@ _(none)_
 
 ## TODO
 
-- 0104, ic's on vc's word (23 Oct): publish drops the Launch Services record of the Menuz.app it unpacks to prove its zip, on every path out, through one EXIT trap. Bytes fd2a04e0 then 5c961abb (a one-line test fix) in wt-0103 on 0103's head 27e1d281, read sound by vc; slot 264 (proofs) and slot 263 (real Launch Services) green. Next: dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested, no squash; rides 2.14.3. Size XS. (edited)
 - The slot proofs scripts sweep after R and after each mutation (vc, 24 Oct, for next time): macos.bats's publish tests stage in DARWIN_USER_TEMP_DIR, and R and the mutations break the clean-up on purpose, so slots 262 and 264 left 26 fixture staging dirs (removed; listed in ic's runs/s0104-leftover-staging.txt). Sweep only fake-tar staging dirs made since the run began. Size XS.
 
 ## Holds
