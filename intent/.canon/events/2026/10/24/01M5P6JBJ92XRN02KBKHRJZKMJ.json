@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6JBJ92XRN02KBKHRJZKMJ",
+  "ts": "2026-10-24T05:36:34.889Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0103's second commit, 27e1d281 on 58620f2c on base 6339b817 (diff base..head sha256 00f24df9 recomputed by vc; wt-0103 clean at that head): sound. R2 (app_refuse_blockers at all three sites, indented alike, the stage or staging removed first), R3 (app_release_tag non-zero with a warn on an unreadable or empty VERSION, each caller dies naming it; an empty opt/menuz/VERSION is a blocker, not a match), R6 (app_require_shippable_stage), R7 (the shim reads the tags whole and exits 1 on a failing git), R1's comment, and the two empty-VERSION tests. Send the START for slot 260 on this head.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
