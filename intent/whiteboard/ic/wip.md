@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-24 10:21Z
+heartbeat_at: 2026-10-24 11:10Z
 status: active
-focus: "0106: (B) rerun of s0106-real.sh at 40b50e0d, to book heavy with molt-vc (slot 285 did not reproduce 282's re-registration); then land on vc's word"
-claims: [ISSUE:0106]
+focus: "0106 landed (b9a2d559..ddba75f6) and closed after vc's check by change; no open work, awaiting vc's next assignment"
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- 0106 (ISSUE:0106, for 2.14.3): wt-0106 at 40b50e0d on b9bf831f (0b49cd69, bc216acd, a9205f30, 40b50e0d, read sound by vc; net diff sha256 7316c4a0). Fakes slot 276 green. Real run slot 282 red on a re-registration of the Release product; slot 285's diagnostic (10:16:38Z, 0 of 10 failed) did not reproduce it in either arm. Next on vc's route: rerun s0106-real.sh as written at 40b50e0d, booked heavy with molt-vc; if red again on a re-registration, a design note for a wait-and-recheck before any code. Keep both 285 build dirs until (B) ENDs. Then land by path, vc checks and closes. Resume: ~/Devel/scratch/utilz-ic/RESUME.md.
+_(none)_
 
 ## TODO
 
