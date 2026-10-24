@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 14:59Z
+heartbeat_at: 2026-10-24 15:01Z
 status: active
-focus: "fold for hv's compact (molt-vc, 14:58Z): 0105 landed 2e0f2940 and closed 82e8b021; final head 82e8b021; next the twins (kovacs books after the compact; Mac and the dry run wait for hv's molt resleeve)"
+focus: "2.14.3 on final head 82e8b021: kovacs twins (dc) booked with molt-vc; Mac twins (cc) and dc's dry run wait for hv's molt resleeve"
 claims: []
 ---
 
