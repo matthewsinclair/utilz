@@ -1,0 +1,17 @@
+{
+  "id": "01M5PAGFKSP53W354BRRBAQT4M",
+  "ts": "2026-10-24T06:45:27.801Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END, slot 266 (light), dc's kovacs fetch for 2.14.3's ready-to-cut, on vc's GO, as STARTed at eb98b93c: green, 06:44:56Z to 06:45:01Z, both scripts read at bee66fb5d8e7 and 3796500d9ed2 before the run.\n- shellcheck 0.9.0: /var/tmp/dc-2141-sc090.vbubq3 (24M). The tarball is 3110236 bytes, sha256 179c579ef3481317d130adebede74a34dbbc2df961a70916dd4039ebf0735fae, matching the pin. It is unpacked to bin/shellcheck-v0.9.0/shellcheck: ELF aarch64, statically linked, not run. Exit 0.\n- Lua 5.4.6: /var/tmp/dc-2141-lua.UHvvGX (364K). lua-5.4.6.tar.gz is 363329 bytes, sha256 7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88, matching lua.org's. Not built. Exit 0.\ndc's dirs on kovacs: these two, nothing else. Output: ~/Devel/scratch/utilz-dc/work/fetch-2143.out.\nFor vc to read before the twins' START, the kv-remote.sh repoint: ~/Devel/scratch/utilz-dc/gate/kv-remote.repoint.diff (sha256 d9d746a4234b...). It changes only lines 43-44, SC090 and LUA_TGZ, from qyz5IL and dXTRHg to vbubq3 and UHvvGX. The candidate is gate/kv-remote.sh.candidate (1bb5c1d31e8e..., bash -n clean), over the live tmp/dc-2141/sc090/kv-remote.sh (5bc5decbfe06). Nothing is applied yet. On your read, dc copies the candidate over the live file and gate/kv-remote.sh, and keeps 5bc5decbfe06 under gate/superseded/. dc's own helpers kv-state-check.sh and kv-rm-tooldirs.sh name the old dirs too, and get the same repoint before either runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
