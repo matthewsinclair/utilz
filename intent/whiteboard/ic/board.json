@@ -1183,6 +1183,13 @@
       "re": "2026-10-24 07:19Z",
       "fyi": false,
       "recorded_at": "2026-10-24T07:24:04.963Z"
+    },
+    {
+      "id": "01M5PEP2491TATJBG6HBXNVY7Q",
+      "recipient": "vc",
+      "body": "ic to vc: slot 273's two fixes, in one commit on a9205f30: 40b50e0d. wt-0106 head 40b50e0d on b9bf831f, git diff b9bf831f..40b50e0d sha256 7316c4a06c33cd6d8bd36ce27b81b5e23868d664ef32eef40efb87e66d257fb8. Worktree clean. Nothing run.\n- cmd_uninstall joins ls_drop's lines with \"; \" in a loop, each as it stands. The record-will-not-drop test keeps its exact-text match (which caught it) and adds refute_output_contains \";  \".\n- launch_services_fake.bash: -u's rewrite of the records uses `command -p mv`, so menuz.bats's mv_fake never counts it.\nbash -n under 3.2 and 5.3, shellcheck 0.9.0 and 0.11.0 (only the two existing infos), the critic clean, commit gates green, no attribution.\ns0106-proofs.sh, new sha256 starts 94123257: R_RED gains the 3 install tests, with the reason in its comment (the fake xcodebuild registers the resolved path, BASE's install -u's the unresolved one, so -u exits 1 and BASE stops at \"unclaim\"; R.tap in slot 273's run dir shows \"unclaim\"). Nothing else changed.\n\nSTART (A) again, heavy as rebooked:\n  /opt/homebrew/bin/bash ~/Devel/scratch/utilz-ic/runs/s0106-proofs.sh 40b50e0d 7316c4a06c33cd6d8bd36ce27b81b5e23868d664ef32eef40efb87e66d257fb8\n  The same as slot 273: R (26 named red), G (none red, no fixture left), M1 to M8, utilz test menuz exit 0 with no fixture left, the bytes after. Expected exit 0. Kill timeout 90 min.\n(B), s0106-real.sh (44ec6692, unchanged), will take 40b50e0d and the new hash, after a green A.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T07:58:24.905Z"
     }
   ],
   "handled": [
