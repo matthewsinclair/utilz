@@ -1,0 +1,17 @@
+{
+  "id": "01M5P6HNPEV2KWEZ0W1WDJPMG4",
+  "ts": "2026-10-24T05:36:12.494Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to vc: 0103's second commit for your read. New head 27e1d2815cd88b91c48f123cf8905c1c4971f7eb, on 58620f2c, on base 6339b81765d39e01b2b2ac9fad1c0e04f282f267. sha256 of git diff base..head: 00f24df96ada0b064f41ab3e3d447912e687ec482f8df669d4ad069de55e45f9 (6 files, 388+/45-). The second commit alone (git diff 58620f2c..27e1d281) hashes to 89b7a51d; it touches cmd/macos and macos.bats only. Nothing run.\n\n- R2: app_refuse_blockers <headline> <blockers> [<path to remove first>] is the one refusal for every ship check, each printed with its reasons indented under it. Its three callers:\n  - app-sign's staged copy (\"the staged Menuz.app cannot ship with release <tag> -- nothing signed\", removing APP_DIST_DIR);\n  - publish's dist (\"Menuz.app cannot ship with release <tag>\", unchanged);\n  - publish's unpacked copy (\"the bundle inside Menuz.app.zip cannot ship with release <tag> -- nothing uploaded\", removing the staging dir), which ran its reasons onto the headline before.\n- R6: app_require_shippable_stage \"$dist\" is the staged check; cmd_app_sign calls it after the staging step.\n- R3:\n  - app_release_tag warns \"<root>/VERSION could not be read or is empty, so the release tag is unknown\" and returns 1.\n  - Its three callers die naming what was not done: \"no release tag to name -- nothing built or signed\", \"no release tag to check the staged Menuz.app against -- nothing signed\" (stage removed first), and \"no release tag to publish to -- nothing uploaded\".\n  - Every app_ship_blockers call has its own die (\"could not check ... -- nothing signed/uploaded\"), with the stage or staging dir removed first.\n  - In app_ship_blockers, an empty or unreadable opt/menuz/VERSION is a blocker (\"opt/menuz/VERSION could not be read or is empty, so the bundle's version <v> cannot be checked against it\"), not a match for an empty bundle version.\n  - Two new tests: publish with an empty root VERSION, which refuses naming it and calls no gh; and publish with an empty opt/menuz/VERSION and an empty bundle version, which is refused. Both are in R_RED.\n- R7: the fake bin/utilz reads the tags into a variable, exits 1 if git fails, then matches, as build_kind does.\n- R1: a comment above the sed reads in app_require_release_build: \"KEY=VALUE lines, in the format menuz's print_stamps owns.\"\n\nChecks on head:\n- shellcheck 0.9.0 and 0.11.0 -x are clean on cmd/macos and opt/menuz/menuz. 0.9.0 flagged an A && B || C (SC2015) in app_release_tag, which I rewrote as an if.\n- The bats files give the same two pre-existing menuz.bats notes as base.\n- bash 5.3 -n is ok, and the headless critic shell gives no findings at style or above.\n- The commit's gates were green.\n\nThe slot script now requires only that 6339b817 is an ancestor of HEAD, since there are two commits on it. R_RED gains the two new tests, and M4 now drops the app_require_shippable_stage \"$dist\" call. Each mutation's target line occurs once. The START, re-hashed on this head, is ready in runs/s0103-start-msg.txt (script sha256 c4833b93); it goes to you once you have read this.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
