@@ -4,7 +4,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- utilz-cc: 0105, Utilz's docs and install messages read against dev, opt, brew (hv: in 2.14.3), in wt-0105, docs first, then code; then vc's read, a booked run, the landing and the close.
+- utilz-cc: 0105, Utilz's docs and install messages read against dev, opt, brew (hv: in 2.14.3), in wt-0105; the parts independent of the shared spec now, the rest (install, use, version, doctor's PATH remedy, the formula, README's Installation) once devbin-vc's shared dev, opt, brew spec lands (hv: one approach across Molt, Utilz, devbin and Intent; PATH is your links first).
 
 ## TODO
 
