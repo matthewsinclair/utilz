@@ -1,0 +1,15 @@
+{
+  "id": "01M5P9S27AFMDRJSGQZ9EEEV06",
+  "ts": "2026-10-24T06:32:40.426Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "The slot proofs scripts sweep after R and after each mutation (vc, 24 Oct, for next time): macos.bats's publish tests stage in DARWIN_USER_TEMP_DIR, and R and the mutations break the clean-up on purpose, so slots 262 and 264 left 26 fixture staging dirs (removed; listed in ic's runs/s0104-leftover-staging.txt). Sweep only fake-tar staging dirs made since the run began. Size XS."
+  }
+}

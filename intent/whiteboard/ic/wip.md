@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-23 21:47Z
+heartbeat_at: 2026-10-24 06:32Z
 status: active
-focus: "Booted after the night's fold on hv's compact, and holding for vc's word: 0103's work in progress banked in wt-0103 (dae819dc, base 6339b817); vc's answers to the fold notes (21:30Z) agree all four critic points (the guard test pinning the bare tag, the 7-character floor, an annotated-tag build_kind case, app_ship_blockers on the staged dist), then the bytes to vc; 0104's code after, on its amendments (d76d9828, b5ec69db). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
-claims: [ISSUE:0103, ISSUE:0104]
+focus: "Localfold on hv's word (vc's announce 06:32Z), session not released. 0103 landed (47c7344f, 5153db2d) and closed. 0104: fd2a04e0 then 5c961abb in wt-0103 on 27e1d281, read sound by vc, slots 264 and 263 green; next dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested. Then the proofs scripts' sweep (todo 12). Resume: ~/Devel/scratch/utilz-ic/RESUME.md."
+claims: [ISSUE:0104]
 ---
 
 # Interface Claude (ic)
@@ -17,8 +17,8 @@ _(none)_
 
 ## TODO
 
-- 0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag, and refuses a staged copy publish would refuse; docs/releasing.md and macos.bats with it. Design read by vc; bytes committed in wt-0103 for vc's read, then booked runs and vc's check before the landing; rides 2.14.3 (hv's number). Size S. (edited)
-- 0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides 2.14.3 (hv's number). Size XS. (edited)
+- 0104, ic's on vc's word (23 Oct): publish drops the Launch Services record of the Menuz.app it unpacks to prove its zip, on every path out, through one EXIT trap. Bytes fd2a04e0 then 5c961abb (a one-line test fix) in wt-0103 on 0103's head 27e1d281, read sound by vc; slot 264 (proofs) and slot 263 (real Launch Services) green. Next: dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested, no squash; rides 2.14.3. Size XS. (edited)
+- The slot proofs scripts sweep after R and after each mutation (vc, 24 Oct, for next time): macos.bats's publish tests stage in DARWIN_USER_TEMP_DIR, and R and the mutations break the clean-up on purpose, so slots 262 and 264 left 26 fixture staging dirs (removed; listed in ic's runs/s0104-leftover-staging.txt). Sweep only fake-tar staging dirs made since the run began. Size XS.
 
 ## Holds
 

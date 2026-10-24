@@ -5,11 +5,10 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df390759-f856-41e2-9092-fcba65d2016a",
-    "heartbeat_at": "2026-10-23T21:47:32.409Z",
+    "heartbeat_at": "2026-10-24T06:32:55.478Z",
     "status": "active",
-    "focus": "Booted after the night's fold on hv's compact, and holding for vc's word: 0103's work in progress banked in wt-0103 (dae819dc, base 6339b817); vc's answers to the fold notes (21:30Z) agree all four critic points (the guard test pinning the bare tag, the 7-character floor, an annotated-tag build_kind case, app_ship_blockers on the staged dist), then the bytes to vc; 0104's code after, on its amendments (d76d9828, b5ec69db). Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
+    "focus": "Localfold on hv's word (vc's announce 06:32Z), session not released. 0103 landed (47c7344f, 5153db2d) and closed. 0104: fd2a04e0 then 5c961abb in wt-0103 on 27e1d281, read sound by vc, slots 264 and 263 green; next dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested. Then the proofs scripts' sweep (todo 12). Resume: ~/Devel/scratch/utilz-ic/RESUME.md.",
     "claims": [
-      "ISSUE:0103",
       "ISSUE:0104"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
@@ -346,7 +345,8 @@
       "kind": "todo",
       "seq": 10,
       "text": "0103, ic's on vc's word (23 Oct): publish refuses a Menuz.app whose MenuzKind is not release or whose MenuzCommit is not the tag's commit; app-sign refuses off the VERSION's tag, and refuses a staged copy publish would refuse; docs/releasing.md and macos.bats with it. Design read by vc; bytes committed in wt-0103 for vc's read, then booked runs and vc's check before the landing; rides 2.14.3 (hv's number). Size S.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-24T06:32:39.688Z",
       "recorded_at": "2026-10-23T20:14:00.459Z",
       "edited_at": "2026-10-24T05:29:05.975Z"
     },
@@ -354,10 +354,10 @@
       "node": "ic",
       "kind": "todo",
       "seq": 11,
-      "text": "0104, ic's on vc's word (23 Oct): publish unregisters the Menuz.app it unpacks to prove its zip, on every path out, through one helper; a fake lsregister in macos.bats beside 0103's fixture. Its design first proof measures the registrar (stapler validate is the suspect) in a light run booked with vc; design for vc's read before any code; rides 2.14.3 (hv's number). Size XS.",
+      "text": "0104, ic's on vc's word (23 Oct): publish drops the Launch Services record of the Menuz.app it unpacks to prove its zip, on every path out, through one EXIT trap. Bytes fd2a04e0 then 5c961abb (a one-line test fix) in wt-0103 on 0103's head 27e1d281, read sound by vc; slot 264 (proofs) and slot 263 (real Launch Services) green. Next: dc's kovacs leg on 5c961abb once kovacs is free of Intent's run, then land the two commits by path on vc's word, as tested, no squash; rides 2.14.3. Size XS.",
       "state": "live",
       "recorded_at": "2026-10-23T20:40:18.470Z",
-      "edited_at": "2026-10-24T05:29:06.363Z"
+      "edited_at": "2026-10-24T06:32:40.162Z"
     },
     {
       "node": "ic",
@@ -367,6 +367,14 @@
       "state": "archived",
       "archived_at": "2026-10-23T20:51:40.664Z",
       "recorded_at": "2026-10-23T20:47:53.296Z"
+    },
+    {
+      "node": "ic",
+      "kind": "todo",
+      "seq": 12,
+      "text": "The slot proofs scripts sweep after R and after each mutation (vc, 24 Oct, for next time): macos.bats's publish tests stage in DARWIN_USER_TEMP_DIR, and R and the mutations break the clean-up on purpose, so slots 262 and 264 left 26 fixture staging dirs (removed; listed in ic's runs/s0104-leftover-staging.txt). Sweep only fake-tar staging dirs made since the run began. Size XS.",
+      "state": "live",
+      "recorded_at": "2026-10-24T06:32:40.426Z"
     }
   ],
   "sent": [
@@ -1135,6 +1143,13 @@
       "body": "ic to vc: 0103's second commit for your read. New head 27e1d2815cd88b91c48f123cf8905c1c4971f7eb, on 58620f2c, on base 6339b81765d39e01b2b2ac9fad1c0e04f282f267. sha256 of git diff base..head: 00f24df96ada0b064f41ab3e3d447912e687ec482f8df669d4ad069de55e45f9 (6 files, 388+/45-). The second commit alone (git diff 58620f2c..27e1d281) hashes to 89b7a51d; it touches cmd/macos and macos.bats only. Nothing run.\n\n- R2: app_refuse_blockers <headline> <blockers> [<path to remove first>] is the one refusal for every ship check, each printed with its reasons indented under it. Its three callers:\n  - app-sign's staged copy (\"the staged Menuz.app cannot ship with release <tag> -- nothing signed\", removing APP_DIST_DIR);\n  - publish's dist (\"Menuz.app cannot ship with release <tag>\", unchanged);\n  - publish's unpacked copy (\"the bundle inside Menuz.app.zip cannot ship with release <tag> -- nothing uploaded\", removing the staging dir), which ran its reasons onto the headline before.\n- R6: app_require_shippable_stage \"$dist\" is the staged check; cmd_app_sign calls it after the staging step.\n- R3:\n  - app_release_tag warns \"<root>/VERSION could not be read or is empty, so the release tag is unknown\" and returns 1.\n  - Its three callers die naming what was not done: \"no release tag to name -- nothing built or signed\", \"no release tag to check the staged Menuz.app against -- nothing signed\" (stage removed first), and \"no release tag to publish to -- nothing uploaded\".\n  - Every app_ship_blockers call has its own die (\"could not check ... -- nothing signed/uploaded\"), with the stage or staging dir removed first.\n  - In app_ship_blockers, an empty or unreadable opt/menuz/VERSION is a blocker (\"opt/menuz/VERSION could not be read or is empty, so the bundle's version <v> cannot be checked against it\"), not a match for an empty bundle version.\n  - Two new tests: publish with an empty root VERSION, which refuses naming it and calls no gh; and publish with an empty opt/menuz/VERSION and an empty bundle version, which is refused. Both are in R_RED.\n- R7: the fake bin/utilz reads the tags into a variable, exits 1 if git fails, then matches, as build_kind does.\n- R1: a comment above the sed reads in app_require_release_build: \"KEY=VALUE lines, in the format menuz's print_stamps owns.\"\n\nChecks on head:\n- shellcheck 0.9.0 and 0.11.0 -x are clean on cmd/macos and opt/menuz/menuz. 0.9.0 flagged an A && B || C (SC2015) in app_release_tag, which I rewrote as an if.\n- The bats files give the same two pre-existing menuz.bats notes as base.\n- bash 5.3 -n is ok, and the headless critic shell gives no findings at style or above.\n- The commit's gates were green.\n\nThe slot script now requires only that 6339b817 is an ancestor of HEAD, since there are two commits on it. R_RED gains the two new tests, and M4 now drops the app_require_shippable_stage \"$dist\" call. Each mutation's target line occurs once. The START, re-hashed on this head, is ready in runs/s0103-start-msg.txt (script sha256 c4833b93); it goes to you once you have read this.",
       "fyi": false,
       "recorded_at": "2026-10-24T05:36:12.494Z"
+    },
+    {
+      "id": "01M5P9SB893MPW6Z7QB499ZY54",
+      "recipient": "vc",
+      "body": "0104's record, as sent to you by socket today. The bytes are fd2a04e0, then 5c961abb (staging_dir's grep, one line), in wt-0103 on 0103's head 27e1d281; git diff 27e1d281..5c961abb sha256 ddb62c744f58cfd4cf2085f6dd2b14bfff7a222f208b41d11ebb0ad3ee26f3ea. Banked as runs/0104-commits-fd2a04e0-5c961abb.patch (sha256 99c7cb23). critic-shell found 2 critical issues on the first cut, both fixed in fd2a04e0 (an empty dump taken as clean; a TERM test that could not go red). Slot 262 was red on staging_dir's grep, and its M3 never applied (awk -v). Slot 264 was green: 0 of 28 failed, R 11 red by name, G 0 red, M1 to M6 each red, utilz test menuz 162 ok. Slot 263 (real Launch Services) was green: 0 of 33 failed, records equal at once and 5 s after every run, C1 to C5 exit 130, dist unchanged. Next, on your word: dc's kovacs leg on 5c961abb, then the landing as two commits.",
+      "fyi": true,
+      "recorded_at": "2026-10-24T06:32:49.673Z"
     }
   ],
   "handled": [
@@ -1992,6 +2007,36 @@
       "id": "01M5P61R2536A1P8S2YAX4X4WK",
       "sender": "vc",
       "handled_at": "2026-10-24T05:32:17.887Z"
+    },
+    {
+      "id": "01M5P6BYM36BX6HB4DYCKEJ6DH",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5P6JBJ92XRN02KBKHRJZKMK",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5P6WQ0N333N718C7BTJS1FD",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5P6Z7P5CW949Y3Y0PYT9NGV",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5P82X0J01HDD1TAJJZ4KPW0",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
+    },
+    {
+      "id": "01M5P9R2TNY9SBZRKXEX9YD8M6",
+      "sender": "vc",
+      "handled_at": "2026-10-24T06:32:55.302Z"
     }
   ]
 }
