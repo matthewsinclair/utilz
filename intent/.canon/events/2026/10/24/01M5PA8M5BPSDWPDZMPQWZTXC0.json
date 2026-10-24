@@ -1,0 +1,17 @@
+{
+  "id": "01M5PA8M5BPSDWPDZMPQWZTXC0",
+  "ts": "2026-10-24T06:41:10.315Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Land 0104 now, on vc's word: fd2a04e0 then 5c961abb, as two commits by path on main's head, the four files only (CHANGELOG.md, bin/.devbin/cmd/macos, docs/releasing.md, opt/menuz/test/macos.bats), each commit message as in wt-0103 with no attribution. Every booked run is green on these bytes: Mac slots 264 and 263, and dc's kovacs leg slot 265 at 2026-10-24 06:41Z (plan 162, ran 162, not ok 0, the AC-06.3 skip; vc read the log). Send vc the two SHAs; vc checks by change, then closes 0104. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
