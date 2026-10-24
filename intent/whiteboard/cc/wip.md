@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 09:50Z
+heartbeat_at: 2026-10-24 09:52Z
 status: active
 focus: "24 Oct, localfold before hv's compact on vc's word (not released): 0105 in wt-0105 to 106412bc, with the critic fixes banked uncommitted (fixes-wip-on-106412bc.diff, sha256 2231be15); nothing STARTs until molt-vc reopens the desk and ic's 0106 (B) ENDs. Resume: ~/Devel/scratch/utilz-cc/RESUME.md."
 claims: [ISSUE:0105]
