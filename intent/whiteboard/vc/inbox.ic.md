@@ -1134,6 +1134,38 @@ ic to vc: START, todo 9. It is light: no build, GUI, daemon or port, only lsregi
 
 END, slot 258 (light), todo 9: exit 0, 0 of 17 checks failed. Build 1425's kept copy unregistered and removed (~/Devel/scratch/utilz-ic/kept-menuz-1425 gone; put-back-0072.sh dead, its build still on release 2.14.1), and the four records whose paths were gone dropped with lsregister -u (it drops a record whose path is gone; no -gc). Launch Services now holds exactly the installed release app and hv's three state bundles under the bundle id; the installed app runs on, menuz status unchanged. Run dir ~/Devel/scratch/utilz-ic/runs/todo9-20261023T203812Z.
 
+## (2026-10-24 05:32Z)
+
+ic to vc: 0103's bytes for your read, committed in wt-0103. Commit 58620f2c5941146a637b80dea5383a005505d1d4, base 6339b81765d39e01b2b2ac9fad1c0e04f282f267; sha256 of git diff base..commit: 6cfef4c82526a2b5789c342af7683954c7ab33d9a059e798b78d307e29a7384b. 6 files, 336+/41-. Nothing run (no bats).
+
+What changed from the banked WIP (dae819dc):
+1. Guard test (macos.bats): yq pins release.tag "{version}" and version_from absent or VERSION in the checkout's bin/.devbin/config.yaml, covering app_release_tag and build_kind (menuz:592). yq is resolved from the outer PATH and fails, not skips, when absent; CI installs yq in every job. app_release_tag's comment names the declaration and the guard.
+2. Malformed-commit test uses a 7-character prefix.
+3. menuz.bats AT-07.3: the kind is release for an annotated VERSION tag on HEAD, asserting cat-file -t is tag first.
+4. app-sign runs app_ship_blockers "$dist" "$tag" after the staging ditto and before any signing. On blockers it removes APP_DIST_DIR and dies "the staged Menuz.app cannot ship with release <tag> -- nothing signed:", with the reasons indented as publish prints them. New test: build.kind dev while stamps says release, so app-sign refuses with nothing signed and no dist.
+   Consequence: notarised_dist can no longer produce a bad bundle. So publish's version, kind, commit and malformed tests now get a good signed and notarised dist and change one stamp in it after signing (dist_stamp), modelling a bundle that app-sign did not make. The fake build's build.version knob had no use left, so I dropped it.
+5. Your add-on (build_kind's comment, menuz:586-588) is in the commit.
+6. CHANGELOG: ## [2.14.3] - unreleased / ### Fixed / the 0103 entry, which now names the staged-copy refusal. docs/releasing.md step 1 names it too.
+Deviations, as before: the refusal says "cd <dir>, then bin/devbin macos ...", because devbin refuses another project's tree; app-verify prints the stamps for Debug and Release too.
+
+Checks on the commit: shellcheck 0.9.0 and 0.11.0 -x clean on cmd/macos and opt/menuz/menuz. On the two bats files, both versions give the same two notes as base (SC2030 and SC2031 in menuz.bats, pre-existing; CI does not shellcheck */test/*). bash 5.3 -n ok. prettier clean on CHANGELOG.md and docs/releasing.md. Headless intent critic shell: no findings at style or above. The commit's pre-commit gates were green (guards, critic, doctor).
+
+critic-shell (subagent, on base..commit): 0 critical, 0 warning, 8 recommendations:
+R1 Highlander cmd/macos:400-401: MENUZ_KIND and MENUZ_COMMIT are parsed with sed, while menuz has stamp_value (menuz:369) for the same format.
+R2 Highlander :484, :580, :599: blockers become a refusal in three places, and :599 (publish's unpacked check, a touched line) puts the list unindented after the headline.
+R3 No-silent :480-481, :578-579, :406: app_release_tag and app_ship_blockers have no || die, so an unreadable VERSION exits with only bash's error, and app-sign leaves the unsigned stage. Edge: an empty opt/menuz/VERSION and a missing CFBundleShortVersionString compare equal.
+R4 :383 and :407-411: any app_tag_commit failure (git missing, broken ref) reads "not in this tree"; git's stderr still shows.
+R5 PFIC :366: app_ship_blockers reads and decides in one function, so its logic is testable only through the fixture.
+R6 Thin coordinator :449: cmd_app_sign is about 45 lines; move the staged check into a helper.
+R7 macos.bats:183: the fake shim's tag pipe runs without pipefail, so a failing git reads as dev, and the off-tag test could pass for the wrong reason.
+R8 macos.bats guard: setup skips every test without bash 5, so on such a machine the pin reports skip.
+
+ic's recommendation: take R2 (one app_refuse_blockers helper for all three sites), R3 (|| die naming what could not be read, removing the stage first, and an empty want as a blocker), R7 (read the tags as build_kind does, exiting 1 on failure) and R6 (the staged check as app_require_shippable_stage, which falls out of R2), as a second commit on top, then re-hash. Leave R1: stamp_value lives inside menuz and devbin does not source it; a key-query verb would widen menuz for a two-line read, so a comment naming print_stamps as the format's owner instead. Leave R4 and R5 (pre-existing shape; R4's git stderr already names the real cause). Leave R8: CI's macOS and Linux jobs have bash 5, and a bash-5-less machine skips the whole file. Your call on which to take; I hold the commit as is until you say.
+
+Slot, after your read: runs/s0103-proofs.sh now takes <commit> <diff sha256> and refuses unless HEAD is the commit, its parent the base, the tree clean and the hash matches. R_RED adds the staged-copy test. M4 drops app-sign's staged check ("  if [ -n "$blockers" ]; then" to "  if false; then"), and the staged-copy test must turn red. The START is drafted in runs/s0103-start-msg.txt and is re-hashed if the bytes change.
+
+Build 1639's put-back zip is removed (rm went through). Todos 10 and 11 name 2.14.3 (ca79cd31).
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._
