@@ -13,7 +13,7 @@ claims: [ISSUE:0105]
 
 ## DOING
 
-- 0105 (dev, opt, brew, for 2.14.3): first half bbe2650d, e820896f, 8e76cf2c in ~/Devel/scratch/utilz-cc/wt-0105 (net 695517af), read sound, run booked through molt-vc, wait for vc's GO. Second half on contract v0.4, design at ac628b87 read sound (vc 07:03Z: UTILZ_INSTALL_PREFIX from the sleeve, yaml key removed; a utility's --version keeps its form plus the T4 line; AC08's retirement in CHANGELOG 2.14.3 and 0105's close, ST0014 closed): bytes in wt-0105 after 8e76cf2c, one commit per step, shellcheck 0.9.0 and 0.11.0, then SHAs and net sha256 to vc, one booked Mac run and dc's kovacs leg; no push (edited)
+- 0105 (dev, opt, brew, for 2.14.3): all bytes in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2, first half to 8e76cf2c, second half 645a380f..d3dbb766 (net 6de27936 for the whole), with vc to read; then one booked Mac run (prez built with CARGO_TARGET_DIR unset), dc's kovacs leg with shellcheck 0.9.0, the landing on vc's word, install_e2e in the primary before the close; no push (edited)
 
 ## TODO
 

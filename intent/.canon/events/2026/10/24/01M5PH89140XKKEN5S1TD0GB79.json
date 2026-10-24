@@ -1,0 +1,16 @@
+{
+  "id": "01M5PH89140XKKEN5S1TD0GB79",
+  "ts": "2026-10-24T08:43:18.949Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 62,
+    "text": "0105 (dev, opt, brew, for 2.14.3): all bytes in ~/Devel/scratch/utilz-cc/wt-0105 on f9e5e4b2, first half to 8e76cf2c, second half 645a380f..d3dbb766 (net 6de27936 for the whole), with vc to read; then one booked Mac run (prez built with CARGO_TARGET_DIR unset), dc's kovacs leg with shellcheck 0.9.0, the landing on vc's word, install_e2e in the primary before the close; no push"
+  }
+}

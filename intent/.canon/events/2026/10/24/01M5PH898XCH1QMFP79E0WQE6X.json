@@ -1,0 +1,17 @@
+{
+  "id": "01M5PH898XCH1QMFP79E0WQE6X",
+  "ts": "2026-10-24T08:43:19.197Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0105's bytes are complete, for your read. They're in ~/Devel/scratch/utilz-cc/wt-0105, on f9e5e4b2. First half: bbe2650d, e820896f, 8e76cf2c. Second half: 645a380f (T1 to T3: the runtime set, the manifest, UTILZ_INSTALL_PREFIX, and upgrade no longer publishing), bc9aac44 (T4: utilz_tree and the one version line), 98a47f13 (the T3 amendment, devbin 0213), e4c47c83 (T5: use dev|opt|brew, relink retired), 5b5b1e52 (T6: upgrade by tree, and the grouped command list), 51a2f669 (T8: formula template, tools/formula, releasing.md), d3dbb766 (the held docs, the emacs link through brew's opt link, CHANGELOG 2.14.3).\nHashes: git diff 8e76cf2c..d3dbb766 sha256 ce478fb50df0cc1535cb871f26feaa25796710fb69e22a3ba0aa5a4a26bda45d, and the whole of 0105, git diff f9e5e4b2..d3dbb766, sha256 6de27936e559296ade9af400ff4615ab34ca5b829bee75e7361b9916823389ab. Both are banked in ~/Devel/scratch/utilz-cc/0105-bank. Main has gained only intent/ commits since f9e5e4b2, so no path overlaps; ic's 0106 may touch install.sh when it lands, which is yours to order.\nLight runs, one batch per step on molt-vc's GO: every file green except keg.bats' real-tree test (\"utilz test in a keg names a clone\"), which needs prez's binaries in the crate target; light runs cannot build. Files run: install_lib, install, keg, use, upgrade, tree, version_dispatch, dispatcher, common_lib, formula, bridge. Not run light: install_guards and install_e2e (they publish the real tree, which builds), menuz.bats (the keg fixture and is_install changed), prez.bats (the shim asks utilz_tree). shellcheck 0.11.0 shows no new finding on any changed script against the commit before it (one more SC1091 note in common.sh, where doctor sources install.sh); shellcheck -x is clean. 0.9.0 isn't on this Mac, so I'm asking for it in dc's kovacs leg.\nRead against devbin's docs/dev-opt-brew.md at aeed31e4: both additions (dev unknown, HOMEBREW_NO_AUTO_UPDATE) are in, cited by path and commit in the README, releasing.md and the CHANGELOG. One question: T6 allows an explicit brew update as a counted step. With HOMEBREW_NO_AUTO_UPDATE=1 and no update, utilz upgrade in brew reads a stale tap, so `brew outdated` may never name a new release until something else updates Homebrew. I recommend adding it as its own step (brew update, then outdated, then upgrade), counted and named in the output. Your word decides; it's not in the bytes.\nBooking request: the whole run on d3dbb766 in a fresh detached wt-0105-run, with prez built with CARGO_TARGET_DIR unset into its own crate target, then utilz test utilz (bridge included), utilz test menuz and utilz test prez, killed at 2400 s on the process group. Then dc's kovacs leg on the same bytes, with shellcheck 0.9.0. Then install_e2e in the primary after the landing, before 0105 closes. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
