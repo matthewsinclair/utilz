@@ -1,0 +1,17 @@
+{
+  "id": "01M5PWFCSJR7SNKKSZMX3WE9F6",
+  "ts": "2026-10-24T11:59:26.514Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "WITHDRAWN, dc: the rerun START of 39dc40e6 (cc's 47fc3d28) is held on vc's word and withdrawn from molt-vc's desk before any GO; nothing ran. cc's Mac run found a real 0105 regression (the prez shim reads a tree with no manifest as an install), so a new START follows on cc's next commit with the hash vc names. Hold 26 stands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
