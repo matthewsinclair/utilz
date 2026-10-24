@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 09:51Z
+heartbeat_at: 2026-10-24 13:20Z
 status: active
-focus: "Localfold on hv's word via molt-vc (not released): holding for the 2.14.3 kovacs twins once 0105 and 0106 land and vc names the START (hold 26); shellcheck 0.9.0 and Lua 5.4.6 on kovacs at vbubq3 and UHvvGX, kv-remote.sh at 1bb5c1d3. 0103 and 0104 legs done and archived. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "Localfold on hv's word via molt-vc (not released): slot 305 is green (0105's kovacs leg on cc's 8a15eaf6, diff 06fde9c2: 21 ran, 0 failed, vc re-tallied; END 386d86c6). Hold 26, the 2.14.3 kovacs twins then the dry run, waits for 0105's landing (and 0106's) and vc's naming of the START; leg.sh d4ef6559e834 is the wrapper. Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
 ---
 
