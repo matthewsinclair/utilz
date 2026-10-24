@@ -5,7 +5,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 ## DOING
 
 - utilz-cc: remove the 0105 fixture dirs under ~/Devel/scratch/utilz-cc/tmp-0105-run (their Launch Services records are dropped).
-- utilz-cc: 0105, Utilz on the shared dev, opt, brew contract (devbin docs/dev-opt-brew.md at aeed31e4; hv: in 2.14.3): fix vc's and critic-shell's findings on d3dbb766 in wt-0105, then one booked Mac run, dc's kovacs leg, the landing, install_e2e in the primary and the close.
+- utilz-cc: 0105, Utilz on the shared dev, opt, brew contract (devbin docs/dev-opt-brew.md at aeed31e4; hv: in 2.14.3): final head 8a15eaf6 in wt-0105, read by vc; kovacs leg green; the booked Mac run of all three suites, then the landing on vc's word, install_e2e in the primary and the close.
 
 ## TODO
 

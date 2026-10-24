@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 09:53Z
+heartbeat_at: 2026-10-24 13:20Z
 status: active
-focus: "2.14.3: slot 285 (0106 diagnostic) hidden arm clean, scratch arm running; then 0106 (B) route, 0105 fixes, landings, stale records, ready-to-cut; desk is molt-vc's"
+focus: "2.14.3: 0106 landed and closed; 0105 final head 8a15eaf6, kovacs green (slot 305), cc's Mac run decides the landing; then ready-to-cut. Folded for hv's compact (13:19Z)"
 claims: []
 ---
 
@@ -18,12 +18,10 @@ _(none)_
 ## TODO
 
 - The next release, 2.14.3 (hv's number; hv's rule: stack everything outstanding). Resume: ~/Devel/scratch/utilz-vc/RESUME.md. (edited)
-  - **0103, 0104:** landed and closed (0104: ccb11bde, 7ce4cbda; closed 48a6dcea).
-  - **0105** (cc, dev/opt/brew, hv: in 2.14.3; one approach across Molt, Utilz, devbin, Intent; contract devbin docs/dev-opt-brew.md at aeed31e4, plus the T3 amendment, devbin 0213): wt-0105, f9e5e4b2..d3dbb766 (net 6de27936), read by vc; critic-shell plus vc found 1 critical (tools/formula bash 3.2 quoted replacement, reproduced) and 8 warnings, sent to cc (board, 2026-10-24); cc fixing, plus the brew update step. Then one booked Mac run (fresh wt-0105-run, prez built with CARGO_TARGET_DIR unset, fixtures in system temp), dc's kovacs leg, the landing, install_e2e in the primary, the close.
-  - **0106** (ic, Launch Services, hv: yes, fix): wt-0106 at 40b50e0d (net 7316c4a0), read by vc. Slot 276 (fakes) green. Slot 282 (real) red: the Release product re-registered after menuz's checked drop, with its original dates. Slot 285, a diagnostic (hidden ~/.local/state arm, then indexed scratch arm), running at the fold; its verdict decides (B): hidden clean, so (B) runs hidden and 0106 stands; hidden back too, so a wait-and-recheck in 0106.
-  - **After the landings:** vc drops the stale Menuz records (hv's Debug, Release, dist; cc's fixture bundles under ~/Devel/scratch/utilz-cc/tmp-0105-run; the diagnostic's leftovers), reading the id before and after; ic's hidden arm dir goes.
-  - **Then:** ready-to-cut per watchout 22 (kovacs has shellcheck 0.9.0 at vbubq3 and Lua 5.4.6 at UHvvGX; dc's kv-remote.sh 1bb5c1d3); tell molt-vc first (Molt's UTILZ_INSTALL_PREFIX, ST0008 WP05, live before the cut); dc's dry run; hv's cut, then tools/formula publish and brew upgrade on rhadamanth and kovacs.
-  - **Host:** molt-vc keeps the slot desk while hv is AFK; every Utilz run books through vc with molt-vc.
+      - **0103, 0104, 0106:** landed and closed (0106: b9a2d559..ddba75f6, closed a797c337; real run slot 292 green 0 of 33). Stale Menuz Launch Services records dropped by vc; the id resolves to ~/Applications/Menuz.app alone.
+      - **0105** (cc, dev/opt/brew on devbin docs/dev-opt-brew.md aeed31e4 plus the T3 amendment): final head 8a15eaf6 in wt-0105 (f9e5e4b2..8a15eaf6 sha256 06fde9c2), every commit read by vc (106412bc, 96a74b9c F1, 47fc3d28 K1 K2, 8a15eaf6 unknown-is-source). dc's kovacs leg slot 305 GREEN (21 ran, 0 failed, vc re-tallied). cc's Mac run of 8a15eaf6 (utilz, menuz, prez) booked or in flight at the fold. Green → land by path on vc's word, vc checks by change, install_e2e in the primary as a booked run, close. 0105 and 0106 both touch opt/menuz/menuz and CHANGELOG.md: the combination is proved only by the final-head twins.
+      - **Then:** ready-to-cut per watchout 22 (kovacs shellcheck 0.9.0 at vbubq3, Lua 5.4.6 at UHvvGX; dc's kv-remote.sh 1bb5c1d3, leg.sh d4ef6559); tell molt-vc first (Molt's UTILZ_INSTALL_PREFIX, ST0008 WP05); dc's dry run; hv's cut, then tools/formula publish and brew upgrade on rhadamanth and kovacs. A switch (T10) proof is judged from a fresh login shell (env -i ... /bin/zsh -lc).
+      - **Host:** molt-vc keeps the slot desk; every Utilz run books through vc with molt-vc.
 
 ## Holds
 
