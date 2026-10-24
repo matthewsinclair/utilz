@@ -12,8 +12,8 @@ load "test_helper.bash"
 # THE OWNED SET (design.md D2)
 # ============================================================================
 
-@test "AT07: install_owned_paths names exactly the utilities' bin symlinks" {
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+@test "AT07: utilz_runtime_set names exactly the utilities' bin symlinks" {
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
 
   # The one roster here; the count is read from it, so a new utility is one
@@ -38,11 +38,11 @@ load "test_helper.bash"
   done
 }
 
-@test "install_owned_paths carries the runtime payload an inclusion list drops" {
+@test "utilz_runtime_set carries the runtime payload an inclusion list drops" {
   # The five measured on 7 Sep. Each is read at runtime by a utility whose
   # three obvious files (impl, yaml, README) would have shipped without it,
   # so the install breaks only on the one code path that needs the file.
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
 
   local p
@@ -60,8 +60,8 @@ load "test_helper.bash"
   done
 }
 
-@test "install_owned_paths excludes tests, crate source, vendored devbin and the project record" {
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+@test "utilz_runtime_set excludes tests, crate source, vendored devbin and the project record" {
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
 
   refute_output_contains "opt/utilz/test/"
@@ -81,28 +81,28 @@ load "test_helper.bash"
   return 0
 }
 
-@test "install_owned_paths names the built prez binary, and only where the crate is" {
+@test "utilz_runtime_set names the built prez binary, and only where the crate is" {
   # Gitignored, so it is named rather than enumerated (D5). It must appear
   # regardless of whether it has been BUILT -- an owned path that is absent is
   # a publish that must fail, not a set that quietly shrinks -- but a tree that
   # carries no crate names no prez output at all.
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
   printf '%s\n' "$output" | grep -qx "opt/prez/crate/target/release/prez"
 
   local nocrate="$BATS_TEST_TMPDIR/src-nocrate"
   make_fake_src "$nocrate"
-  run run_install_function "install_owned_paths '$nocrate'"
+  run run_install_function "utilz_runtime_set '$nocrate'"
   assert_success
   refute_output_contains "prez"
 }
 
-@test "install_owned_paths names the built showreel binary beside prez's (issue 0024)" {
+@test "utilz_runtime_set names the built showreel binary beside prez's (issue 0024)" {
   # The shim execs either binary -- `prez showreel <...>` hands over to the
   # second -- so an owned set naming only prez's shipped an install that handed
   # over to a file it never published. Named rather than enumerated for the
   # same reason as prez's: it is gitignored, and absent must fail the publish.
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
   printf '%s\n' "$output" | grep -qx "opt/prez/crate/target/release/showreel" || {
     echo "owned set is missing showreel's binary" >&2
@@ -132,8 +132,8 @@ EOF
   assert_output_contains "--workspace"
 }
 
-@test "install_owned_paths is LC_ALL=C sorted and free of duplicates" {
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+@test "utilz_runtime_set is LC_ALL=C sorted and free of duplicates" {
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
 
   local sorted uniq_count total
@@ -147,10 +147,10 @@ EOF
   [[ "$total" -eq "$uniq_count" ]]
 }
 
-@test "install_owned_paths refuses a tree that is not a git repository" {
+@test "utilz_runtime_set refuses a tree that is not a git repository" {
   local nogit="$BATS_TEST_TMPDIR/nogit"
   mkdir -p "$nogit/bin"
-  run run_install_function "install_owned_paths '$nogit'"
+  run run_install_function "utilz_runtime_set '$nogit'"
   # rc 1 is the refusal. A bare assert_failure also passes at rc 127, which
   # is the library failing to load -- the check would then be green against a
   # library that does not exist.
@@ -159,110 +159,92 @@ EOF
 }
 
 # ============================================================================
-# THE PREFIX READER (design.md D6, AC05)
+# THE PREFIX READER (design.md D6, AC05; UTILZ_INSTALL_PREFIX since issue 0105)
 # ============================================================================
 
-@test "install_prefix_configured refuses an absent key rather than returning the string null" {
-  # get_util_metadata ends `echo \"\$result\"` and yq prints the four-character
-  # string `null` for an absent key -- measured. A `[[ -n ]]` guard therefore
-  # PASSES on unset and the publish writes a directory called ./null.
-  local src="$BATS_TEST_TMPDIR/src-noprefix"
-  make_fake_src "$src"
-
-  run run_install_function "install_prefix_configured '$src'"
-  # Same trap as the git-repo check: rc 127 is the library failing to load,
-  # and a bare assert_failure cannot tell it from the refusal.
+@test "install_prefix_configured refuses an unset UTILZ_INSTALL_PREFIX by name, saying who sets it (issue 0105)" {
+  run run_install_function "unset UTILZ_INSTALL_PREFIX; install_prefix_configured"
+  # rc 127 is the library failing to load, and a bare assert_failure cannot
+  # tell it from the refusal.
   assert_exit_code 1
-  # AC05: unset is refused BY NAME.
-  assert_output_contains "install.prefix"
-  refute_output_contains "null"
+  # AC05: unset is refused BY NAME, and the refusal says where it comes from.
+  assert_output_contains "UTILZ_INSTALL_PREFIX is not set"
+  assert_output_contains "Molt's"
+  assert_output_contains "sleeve config sets it"
+}
+
+@test "install_prefix_configured refuses an empty UTILZ_INSTALL_PREFIX as unset (issue 0105)" {
+  run run_install_function "UTILZ_INSTALL_PREFIX=''; install_prefix_configured"
+  assert_exit_code 1
+  assert_output_contains "UTILZ_INSTALL_PREFIX is not set"
 }
 
 @test "install_prefix_configured expands a leading tilde" {
-  local src="$BATS_TEST_TMPDIR/src-tilde"
-  make_fake_src "$src"
-  printf 'name: utilz\ninstall:\n  prefix: ~/Devel/opt/utilz\n' > "$src/opt/utilz/utilz.yaml"
-
-  run run_install_function "install_prefix_configured '$src'"
+  run run_install_function "UTILZ_INSTALL_PREFIX='~/Devel/opt/utilz'; install_prefix_configured"
   assert_success
   assert_output "$HOME/Devel/opt/utilz"
   refute_output_contains "~"
 }
 
 @test "install_prefix_configured returns an absolute prefix unchanged" {
-  local src="$BATS_TEST_TMPDIR/src-abs"
-  make_fake_src "$src"
-  printf 'name: utilz\ninstall:\n  prefix: /opt/utilz\n' > "$src/opt/utilz/utilz.yaml"
-
-  run run_install_function "install_prefix_configured '$src'"
+  run run_install_function "UTILZ_INSTALL_PREFIX=/opt/utilz; install_prefix_configured"
   assert_success
   assert_output "/opt/utilz"
 }
 
-@test "install_prefix_configured names a read it cannot make, and why, not a missing key (issue 0081)" {
-  # get_util_metadata read a yaml yq could not read as an absent field, so
-  # this refused with "install.prefix is not set", sending the reader after a
-  # key the file may well carry. install: written as a list parses, and no
-  # prefix can be read from it, so the refusal names the read, not the file.
-  local src="$BATS_TEST_TMPDIR/src-unreadable"
+@test "install_prefix_configured reads no key from utilz.yaml, so no install ships a prefix (issue 0105)" {
+  # The key was install.prefix in the committed yaml until 0105, and every
+  # keg shipped it. A yaml that still carries one is not read.
+  local src="$BATS_TEST_TMPDIR/src-yamlkey"
   make_fake_src "$src"
-  printf 'name: utilz\ninstall:\n  - prefix: /opt/utilz\n' > "$src/opt/utilz/utilz.yaml"
+  printf 'name: utilz\ninstall:\n  prefix: /opt/from-yaml\n' > "$src/opt/utilz/utilz.yaml"
 
-  run run_install_function "set -euo pipefail; install_prefix_configured '$src'"
+  run run_install_function "unset UTILZ_INSTALL_PREFIX; UTILZ_HOME='$src'; install_prefix_configured"
   assert_exit_code 1
-  assert_output_contains "install.prefix cannot be read from $src/opt/utilz/utilz.yaml: it parses, but yq could not read the part asked for"
-  refute_output_contains "install.prefix is not set"
+  refute_output_contains "/opt/from-yaml"
+  [[ "$(yq '.install' "$UTILZ_HOME/opt/utilz/utilz.yaml")" == "null" ]] || fail "the committed utilz.yaml still carries an install key"
 }
 
 # ============================================================================
 # THE MANIFEST (design.md D4, AC06, AC07)
 # ============================================================================
 
-@test "AT07: install_manifest_rows records a symlink's TARGET STRING, never a content hash" {
-  local src="$BATS_TEST_TMPDIR/src-links"
+@test "AT07: install_manifest_rows writes each line in shasum -a 256 -c form, links hashed through (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src-body"
   make_fake_src "$src"
 
   run run_install_function "install_manifest_rows '$src'"
   assert_success
 
-  local alpha beta
-  alpha=$(printf '%s\n' "$output" | grep 'bin/alpha$')
-  beta=$(printf '%s\n' "$output" | grep 'bin/beta$')
+  # Every line is "<64 hex>  <path>", and the dispatcher links carry the
+  # dispatcher's own sha256, as shasum reads a link.
+  local bad dispatcher alpha
+  bad=$(printf '%s\n' "$output" | grep -v -E '^[0-9a-f]{64}  [^ ]' || true)
+  [[ -z "$bad" ]] || fail "lines not in shasum form: $bad"
+  dispatcher=$(printf '%s\n' "$output" | awk '$2 == "bin/utilz" { print $1 }')
+  alpha=$(printf '%s\n' "$output" | awk '$2 == "bin/alpha" { print $1 }')
+  [[ -n "$dispatcher" && "$alpha" == "$dispatcher" ]] || fail "bin/alpha hashed as '$alpha', the dispatcher as '$dispatcher'"
 
-  printf '%s\n' "$alpha" | grep -q '^link' || {
-    echo "bin/alpha row is not a link row: $alpha" >&2
-    return 1
-  }
-  printf '%s\n' "$alpha" | grep -q 'utilz' || {
-    echo "bin/alpha row does not carry its target string: $alpha" >&2
-    return 1
-  }
-  # The anti-degeneracy check. cp would dereference both links into copies of
-  # two DIFFERENT files, so a content hash distinguishes these two by accident.
-  # The case that matters is two links to the same file, covered below.
-  [[ "$alpha" != "$beta" ]]
+  # And the system's own tool reads the body back from the tree's root.
+  printf '%s\n' "$output" > "$BATS_TEST_TMPDIR/body"
+  run bash -c "cd '$src' && shasum -a 256 -c '$BATS_TEST_TMPDIR/body'"
+  assert_success
 }
 
-@test "AT07: install_manifest_rows distinguishes two links whose resolved content is identical" {
-  # This is the case a resolved-content hash cannot see: fifteen links all
-  # pointing at bin/utilz hash identically, so a link retargeted at the wrong
-  # utility reads as intact (AC06).
-  local src="$BATS_TEST_TMPDIR/src-samecontent"
+@test "AT07: install_manifest_rows refuses a bin/ entry that is not a link to the dispatcher (issue 0105)" {
+  # THE STRUCTURAL RULE THAT REPLACES THE LINK ROW. Two links to two
+  # byte-identical files hash alike, so the body alone cannot see a link
+  # retargeted at the wrong file (ST0014 AC06). Every link git names in
+  # Utilz's runtime set is bin/<name> -> utilz, so the write refuses any other.
+  local src="$BATS_TEST_TMPDIR/src-twin"
   make_fake_src "$src"
   cp "$src/bin/utilz" "$src/bin/twin"
   ln -s twin "$src/bin/gamma"
   fixture_commit "$src" twin
 
   run run_install_function "install_manifest_rows '$src'"
-  assert_success
-
-  local alpha gamma
-  alpha=$(printf '%s\n' "$output" | grep 'bin/alpha$')
-  gamma=$(printf '%s\n' "$output" | grep 'bin/gamma$')
-
-  # bin/utilz and bin/twin are byte-identical, so their sha256 is identical.
-  # The rows must still differ, because the recorded value is the target.
-  [[ "$(printf '%s\n' "$alpha" | cut -f2)" != "$(printf '%s\n' "$gamma" | cut -f2)" ]]
+  assert_failure
+  assert_output_contains "is not a link to the dispatcher"
 }
 
 @test "AT08: install_manifest_rows emits exactly one row per owned path" {
@@ -270,7 +252,7 @@ EOF
   make_fake_src "$src"
 
   local paths rows
-  paths=$(run_install_function "install_owned_paths '$src'" | wc -l | tr -d ' ')
+  paths=$(run_install_function "utilz_runtime_set '$src'" | wc -l | tr -d ' ')
   rows=$(run_install_function "install_manifest_rows '$src'" | wc -l | tr -d ' ')
 
   [[ "$paths" -eq "$rows" ]] || {
@@ -280,23 +262,32 @@ EOF
   [[ "$rows" -gt 0 ]]
 }
 
-@test "AT08: install_manifest_write records the utilz version and the source commit" {
+@test "AT08: install_manifest_write writes the contract's header, then the body (issue 0105)" {
   local src="$BATS_TEST_TMPDIR/src-header"
   make_fake_src "$src"
   local out="$BATS_TEST_TMPDIR/manifest.sha256"
 
-  run run_install_function "install_manifest_write '$src' '$out'"
+  run run_install_function "install_manifest_write '$src' '$out' '' \"\$(install_manifest_rows '$src')\" brew"
   assert_success
   assert_file_exists "$out"
 
   local head_sha
   head_sha=$(git -C "$src" rev-parse HEAD)
-  grep -q "^utilz-version	9.9.9$" "$out" || {
-    echo "version header missing or wrong:" >&2; head -3 "$out" >&2; return 1
-  }
-  grep -q "^source-commit	$head_sha$" "$out" || {
-    echo "source-commit header missing or wrong:" >&2; head -3 "$out" >&2; return 1
-  }
+  # The contract's four, first and in its order (T3), then Utilz's own.
+  [[ "$(sed -n 1,4p "$out")" == "# tool: utilz
+# version: 9.9.9
+# source_commit: $head_sha
+# managed_by: brew" ]] || fail "the header's first four lines are: $(sed -n 1,4p "$out")"
+  grep -q "^# source_tree: $(cd "$src" && pwd)$" "$out" || fail "no source_tree line: $(head -8 "$out")"
+  grep -q '^# ci_state: unknown$' "$out" || fail "no ci_state line: $(head -8 "$out")"
+  grep -q '^# ci_detail: not asked: ' "$out" || fail "no ci_detail line: $(head -8 "$out")"
+
+  # The body follows the header, and every body line names a path.
+  [[ "$(run_install_function "install_manifest_path_count '$out'")" -eq "$(run_install_function "utilz_runtime_set '$src'" | wc -l | tr -d ' ')" ]] || fail "the body does not name every runtime path"
+
+  run run_install_function "utilz_manifest_value '$out' source_commit; utilz_manifest_value '$out' managed_by"
+  assert_success
+  [[ "$output" == "$head_sha"$'\n'"brew" ]] || fail "utilz_manifest_value read: $output"
 }
 
 @test "AT08: install_manifest_write is deterministic - no generated-at timestamp" {
@@ -350,9 +341,12 @@ EOF
   chmod +x "$stub"
 }
 
-# Echo <manifest>'s ci-state row as "<state> <detail>", or nothing.
+# Echo <manifest>'s CI verdict as "<state> <detail>", or nothing.
 ci_state_row() {
-  awk -F'\t' '$1 == "ci-state" { print $2 " " $3; exit }' "$1"
+  local state detail
+  state=$(awk '/^# ci_state: / { print substr($0, 13); exit }' "$1")
+  detail=$(awk '/^# ci_detail: / { print substr($0, 14); exit }' "$1")
+  [[ -n "$state" ]] && printf '%s %s\n' "$state" "$detail"
 }
 
 @test "AT08: a publish asks CI about the commit it publishes and records the answer (issue 0016)" {
@@ -542,20 +536,19 @@ ROWS
     || fail "answered: $output"
 }
 
-@test "AT08: the verifier reads the ci-state row as a header, and the publish's path count leaves it out (issue 0016)" {
+@test "AT08: the verifier reads the CI lines as header, and the publish's path count leaves them out (issue 0016)" {
   local src="$BATS_TEST_TMPDIR/src-ci-rows" dst="$BATS_TEST_TMPDIR/dst-ci-rows"
   make_fake_src "$src"
   local m="$dst/manifest.sha256" paths
 
   run_publish "$src" "$dst"
   assert_success
-  paths=$(awk -F'\t' '$1 == "file" || $1 == "link"' "$m" | wc -l | tr -d ' ')
+  paths=$(grep -c -E '^[0-9a-f]{64}  ' "$m")
   assert_output_contains "at $dst -- $paths paths"
 
-  # The row written here rather than by the writer, so this half does not
-  # rest on the writer's. A kind the verifier does not know is refused as
-  # unrecognised, so this fails until ci-state is a key the verifier reads.
-  { printf 'ci-state\tsuccess\t101\n'; grep -v $'^ci-state\t' "$m"; } > "$m.tmp" && mv "$m.tmp" "$m"
+  # The lines written here rather than by the writer, so this half does not
+  # rest on the writer's: a header line in another value is still a header.
+  sed -i.bak -e 's/^# ci_state: .*/# ci_state: success/' -e 's/^# ci_detail: .*/# ci_detail: 101/' "$m" && rm -f "$m.bak"
   run run_install_function "install_manifest_check '$dst'"
   assert_success
   assert_output ""
@@ -586,28 +579,57 @@ ROWS
   run run_install_function "install_tree_kind '$other'"
   assert_success
   assert_output "other"
+
+  # Utilz's old manifest form is an install too, so --force may republish over
+  # it; a manifest.sha256 Utilz did not write is not (contract T2, issue 0105).
+  local old="$BATS_TEST_TMPDIR/old-kind" foreign="$BATS_TEST_TMPDIR/foreign-kind"
+  mkdir -p "$old" "$foreign"
+  printf 'utilz-version\t2.14.2\nmanaged-by\tutilz\n' > "$old/manifest.sha256"
+  printf 'deadbeef  something\n' > "$foreign/manifest.sha256"
+  run run_install_function "install_tree_kind '$old'; install_tree_kind '$foreign'"
+  assert_success
+  [[ "$output" == $'install\nforeign' ]] || fail "install_tree_kind answered: $output"
 }
 
-@test "install_tree_state distinguishes clean, dirty and not-a-git-repo" {
+@test "utilz_runtime_state distinguishes clean, dirty and not-a-git-repo" {
   # "no changes" and "cannot tell" must never render as the same answer (D7).
   local src="$BATS_TEST_TMPDIR/src-state"
   make_fake_src "$src"
 
-  run run_install_function "install_tree_state '$src'"
+  run run_install_function "utilz_runtime_state '$src'"
   assert_success
   assert_output "clean"
 
-  # The gate reads the WHOLE tree, not the owned subset: a dirty file outside
-  # the owned set still means the recorded commit does not describe the
-  # checkout the bytes came from.
+  # THE RUNTIME SET ONLY (contract T2, issue 0105): a file outside it, a test
+  # inside an excluded subtree, changes no byte the manifest names.
   printf 'scratch\n' > "$src/NOTES.md"
-  run run_install_function "install_tree_state '$src'"
+  printf 'edited\n' >> "$src/opt/alpha/test/alpha.bats"
+  run run_install_function "utilz_runtime_state '$src'"
+  assert_success
+  assert_output "clean"
+
+  # A file in the set, changed or new, is dirty.
+  printf 'edited\n' >> "$src/help/alpha.md"
+  run run_install_function "utilz_runtime_state '$src'"
+  assert_success
+  assert_output "dirty"
+  git -C "$src" checkout -q -- help/alpha.md
+  printf 'new\n' > "$src/help/beta.md"
+  run run_install_function "utilz_runtime_state '$src'"
+  assert_success
+  assert_output "dirty"
+  rm -f "$src/help/beta.md"
+
+  # A file moved OUT of the set, staged, is dirty: the commit the manifest
+  # would record still holds it at its old path (utilz-vc's W5).
+  git -C "$src" mv help/alpha.md opt/alpha/test/alpha-help.md
+  run run_install_function "utilz_runtime_state '$src'"
   assert_success
   assert_output "dirty"
 
   local nogit="$BATS_TEST_TMPDIR/nogit-state"
   mkdir -p "$nogit"
-  run run_install_function "install_tree_state '$nogit'"
+  run run_install_function "utilz_runtime_state '$nogit'"
   assert_success
   assert_output "unknown"
 }
@@ -631,7 +653,7 @@ make_fake_install() {
     else
       cp "$src/$path" "$dst/$path"
     fi
-  done < <(run_install_function "install_owned_paths '$src'")
+  done < <(run_install_function "utilz_runtime_set '$src'")
 
   run_install_function "install_manifest_write '$src' '$dst/manifest.sha256'"
 }
@@ -659,15 +681,18 @@ make_fake_install() {
 }
 
 @test "install_manifest_check names a retargeted link" {
-  # The AC06 case. All the dispatcher links resolve to one file, so a
-  # resolved-content hash gives every one of them the same value and this
-  # retarget reads as intact.
+  # The AC06 case. All the dispatcher links resolve to one file, so the body's
+  # hash gives every one of them the same value and this retarget reads as
+  # intact unless every bin/ link is held to its target string, utilz.
   local src="$BATS_TEST_TMPDIR/src-retarget" dst="$BATS_TEST_TMPDIR/inst-retarget"
   make_fake_src "$src"
   make_fake_install "$src" "$dst"
+  cp "$dst/bin/utilz" "$dst/bin/twin"
   rm "$dst/bin/alpha"
-  ln -s other "$dst/bin/alpha"
+  ln -s twin "$dst/bin/alpha"
 
+  # bin/twin is the dispatcher's bytes, so the body alone reads alpha as
+  # intact; the structural rule (issue 0105) is what names it.
   run run_install_function "install_manifest_check '$dst'"
   assert_failure
   assert_output_contains "retargeted"
@@ -701,6 +726,33 @@ make_fake_install() {
   assert_failure
   assert_output_contains "missing"
   assert_output_contains "help/alpha.md"
+}
+
+@test "install_manifest_check answers rc 3 for Utilz's old manifest form, and rc 2 for one it did not write (issue 0105)" {
+  local old="$BATS_TEST_TMPDIR/old-chk" foreign="$BATS_TEST_TMPDIR/foreign-chk"
+  mkdir -p "$old" "$foreign"
+  printf 'utilz-version\t2.14.2\nsource-commit\t%040d\nfile\t%064d\tVERSION\n' 0 0 > "$old/manifest.sha256"
+  printf 'deadbeef  something\n' > "$foreign/manifest.sha256"
+
+  # The old form is not read as a second format (contract T3): it is named.
+  run run_install_function "install_manifest_check '$old'"
+  assert_exit_code 3
+  assert_output ""
+
+  run run_install_function "install_manifest_check '$foreign'"
+  assert_exit_code 2
+  assert_output_contains "is not a manifest Utilz wrote"
+}
+
+@test "install_manifest_check refuses a body line it cannot read" {
+  local src="$BATS_TEST_TMPDIR/src-badline" dst="$BATS_TEST_TMPDIR/inst-badline"
+  make_fake_src "$src"
+  make_fake_install "$src" "$dst"
+  printf 'not a body line\n' >> "$dst/manifest.sha256"
+
+  run run_install_function "install_manifest_check '$dst'"
+  assert_exit_code 2
+  assert_output_contains "unreadable manifest line"
 }
 
 @test "install_manifest_check refuses a tree with no manifest" {
@@ -777,7 +829,7 @@ ROWS
 
 @test "AT01 (ST0019 AC-01.3): tools/ci-state is in no install: the owned set names nothing under tools/" {
   [ -x "$UTILZ_HOME/tools/ci-state" ] || fail "tools/ci-state is missing, so this would pass vacuously"
-  run run_install_function "install_owned_paths '$UTILZ_HOME'"
+  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
   if printf '%s\n' "$output" | grep -q '^tools/'; then
     fail "the publish would ship: $(printf '%s\n' "$output" | grep '^tools/')"

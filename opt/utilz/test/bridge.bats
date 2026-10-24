@@ -189,7 +189,7 @@ run_common_function() {
 
 @test "utilz emacs doctor - the whole report is on stdout, and nothing on stderr" {
   # ONE STREAM (issue 0037), for utilz doctor's reason. "Canonical elisp
-  # present" is step 3's verdict; its title, "Checking canonical elisp
+  # present" is the elisp file check's verdict; its title, "Checking canonical elisp
   # file...", does not contain it.
   run bash -c '"$1" emacs doctor 2>/dev/null' _ "$UTILZ_BIN_DIR/utilz"
   assert_output_contains "Canonical elisp present"
@@ -385,7 +385,7 @@ gamma_row() {
   run_common_strict "$home" emacs_doctor
   assert_output_contains "    - beta (beta.yaml cannot be read: "
   assert_output_contains "    - omega (opt/omega/omega.yaml)"
-  assert_output_contains "[3/3]"
+  assert_output_contains "Checking canonical elisp file"
 }
 
 @test "emacs_doctor lists flags that are not a list as invalid, as the manifest skips them (issue 0080)" {
@@ -396,5 +396,22 @@ gamma_row() {
   run_common_strict "$home" emacs_doctor
   assert_output_contains "    - beta (integration.flags is a string, not a list)"
   assert_output_contains "    - omega (opt/omega/omega.yaml)"
-  assert_output_contains "[3/3]"
+  assert_output_contains "Checking canonical elisp file"
+}
+
+@test "utilz emacs install --symlink from the Homebrew install links through brew's opt link, never the versioned keg (issue 0105)" {
+  # A keg laid out as brew lays one out, from the real tree's static/ and
+  # library, with the opt link brew keeps across upgrades.
+  local prefix="$BATS_TEST_TMPDIR/homebrew" keg dest="$BATS_TEST_TMPDIR/doom/160-utilz.el"
+  keg="$prefix/Cellar/utilz/9.9.9/libexec"
+  mkdir -p "$keg/opt/utilz" "$keg/static" "$prefix/opt" "$(dirname "$dest")"
+  cp -R "$UTILZ_HOME/opt/utilz/lib" "$keg/opt/utilz/"
+  cp -R "$UTILZ_HOME/static/emacs" "$keg/static/"
+  printf '# tool: utilz\n# version: 9.9.9\n# managed_by: brew\n' > "$keg/manifest.sha256"
+  ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
+
+  run bash -c "source '$keg/opt/utilz/lib/common.sh'; UTILZ_HOME='$keg'; emacs_install --dest '$dest' --symlink"
+  assert_success
+  [[ "$(readlink "$dest")" == "$prefix/opt/utilz/libexec/static/emacs/utilz.el" ]] || fail "the link names $(readlink "$dest")"
+  [[ -f "$dest" ]] || fail "the link resolves to nothing"
 }

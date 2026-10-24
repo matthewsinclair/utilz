@@ -84,6 +84,16 @@ setup() {
 
   isolate_tool_homes
 
+  # THE OPT PREFIX IS THE SLEEVE'S (issue 0105), so a maintainer's own
+  # UTILZ_INSTALL_PREFIX must never reach a test: a publish with no --prefix
+  # would write into the real opt tree. A test that wants one sets it, with
+  # set_prefix_key.
+  unset UTILZ_INSTALL_PREFIX
+  # AND THE LINK DIRECTORY IS THE TEST'S (issue 0105): doctor and `use` read
+  # ~/.local/bin, which on a maintainer's machine holds the live link set.
+  # UTILZ_LINK_DIR names it for tests only, here a directory no test has made.
+  export UTILZ_LINK_DIR="$BATS_TEST_TMPDIR/link-dir"
+
   # A suite about one platform's paths names it at its top (issue 0083).
   if [[ -n "${UTILZ_TEST_PLATFORM:-}" ]]; then
     stub_platform "$UTILZ_TEST_PLATFORM"
@@ -721,17 +731,17 @@ fixture_commit() {
   fi
 }
 
-# A minimal source tree: a git repo carrying two bin symlinks with DIFFERENT
-# targets, which is the case a content-hash manifest cannot tell apart.
+# A minimal source tree: a git repo whose bin/ is the dispatcher and two links
+# to it, the shape git names in Utilz's own bin/ (every link is
+# bin/<name> -> utilz, which the manifest's structural check holds, issue 0105).
 make_fake_src() {
   local home="$1"
   mkdir -p "$home/bin" "$home/opt/utilz/lib" "$home/opt/alpha/test" "$home/help"
   echo "9.9.9" > "$home/VERSION"
   printf '#!/usr/bin/env bash\necho dispatcher\n' > "$home/bin/utilz"
-  printf '#!/usr/bin/env bash\necho other\n' > "$home/bin/other"
-  chmod +x "$home/bin/utilz" "$home/bin/other"
+  chmod +x "$home/bin/utilz"
   ln -s utilz "$home/bin/alpha"
-  ln -s other "$home/bin/beta"
+  ln -s utilz "$home/bin/beta"
   printf 'name: alpha\n' > "$home/opt/alpha/alpha.yaml"
   printf '#!/usr/bin/env bash\n' > "$home/opt/alpha/alpha"
   printf 'this must not ship\n' > "$home/opt/alpha/test/alpha.bats"
@@ -741,10 +751,12 @@ make_fake_src() {
   fixture_commit "$home" init
 }
 
-# install.prefix written into a fixture tree's utilz.yaml, then committed so
-# the publish's dirty gate is satisfied.
+# The opt prefix for this test, as a sleeve sets it: UTILZ_INSTALL_PREFIX,
+# exported so every command the test runs reads it (issue 0105). <tree> is
+# the fixture it is for, kept so each call still reads as which tree it
+# configures; the variable names no tree.
 set_prefix_key() {
   local tree="$1" value="$2"
-  printf 'name: utilz\ninstall:\n  prefix: %s\n' "$value" > "$tree/opt/utilz/utilz.yaml"
-  fixture_commit "$tree" prefix
+  : "$tree"
+  export UTILZ_INSTALL_PREFIX="$value"
 }

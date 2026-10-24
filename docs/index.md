@@ -35,7 +35,7 @@ Start here if you want to build your own utilities with Utilz:
 - **[Architecture](architecture.md)** - Dispatcher pattern, common library, metadata system, integration manifest.
 - **[Testing Guide](../opt/utilz/test/README.md)** - Test framework and best practices.
 - **[CI/CD Workflows](../.github/workflows/README.md)** - GitHub Actions setup.
-- **[Releasing](releasing.md)** - Before a cut, and the Homebrew formula after it (`tools/formula-bump`).
+- **[Releasing](releasing.md)** - Before a cut, and the Homebrew formula after it (`tools/formula`).
 
 ## Quick Reference
 
@@ -85,23 +85,16 @@ See [Framework Help](../help/utilz.md) for complete function documentation.
 - **Utility sprawl**: Multiple personal scripts scattered across systems
 - **Inconsistent UX**: Different help formats, error handling
 - **Code duplication**: Every script reimplements common functions
-- **Portability**: Easy to clone to new machine (single `UTILZ_HOME`)
+- **Portability**: One Homebrew install per machine
 - **Discoverability**: `utilz list` shows all available utilities
 - **Testing**: Built-in test framework vs ad-hoc testing
 
 ## Getting Started
 
-1. Clone the repository
-2. Set environment variables:
-
-   ```bash
-   export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-   export PATH="$UTILZ_HOME/bin:$PATH"
-   ```
-
-3. Run diagnostics: `utilz doctor`
-4. List utilities: `utilz list`
-5. Get help: `utilz help`
+1. Install with Homebrew, as the README's [Installation](../README.md#installation) says (`brew install matthewsinclair/utilz/utilz`, after trusting the formula)
+2. Run diagnostics: `utilz doctor`
+3. List utilities: `utilz list`
+4. Get help: `utilz help`
 
 For detailed installation instructions, see the [README](../README.md).
 

@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+#
+# formula -- render Utilz's Homebrew formula from a release tag, and publish it
+# to the tap (dev, opt, brew contract T8, issue 0105; docs/releasing.md).
+#
+#   tools/formula render <tag> <out>     write the formula for <tag> to <out>
+#   tools/formula publish [--tap <url>]  render the newest release into a fresh
+#                                        clone of the tap, commit it, push it
+#
+# The formula is kept as a TEMPLATE at packaging/homebrew/utilz.rb, never
+# installed from, holding exactly one @@TAG@@ and one @@REVISION@@. It replaced
+# tools/formula-bump, which rewrote the committed formula's tag: and revision:
+# lines and left hv to copy it into the tap. devbin's `bin/devbin formula` has
+# the same two verbs, so every tool's formula is rendered one way.
+#
+# NO TAG OR COMMIT IS TYPED BY HAND, WHICH IS WHY THIS EXISTS. The offline
+# `brew audit --strict` accepted a revision of 40 zeros (ST0019 WP-04), so it
+# accepts a wrong commit just as quietly, and a wrong commit is a formula that
+# fails at every user's install. The commit comes from git and nowhere else:
+# `git rev-parse <tag>^{commit}`. A tag that does not exist, and a lightweight
+# one, are refused: every release tag is annotated.
+#
+# PUBLISH PUSHES THE TAP, SO IT IS A VERB HV TYPES (ST0019 WP-05, hv's ruling of
+# 2026-09-21): no release hook runs it. It publishes the newest release, the
+# highest tag of the bare-semver form Utilz tags with, rendered from the
+# template that tag carries, so an edit no commit holds never reaches the tap.
+# It writes nothing in this tree; its
+# clone of the tap is a temporary, removed when it exits. A tap that already
+# carries the formula is left as it is.
+#
+# It lives in tools/, not bin/, because bin/ is published.
+#
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TEMPLATE_REL="packaging/homebrew/utilz.rb"
+FORMULA_REL="Formula/utilz.rb"
+# The tap, named as Homebrew names a tap's repository: homebrew-<name> under
+# its owner, so `brew tap matthewsinclair/utilz` finds it.
+TAP_URL="https://github.com/matthewsinclair/homebrew-utilz.git"
+
+die() {
+  printf 'formula: %s\n' "$*" >&2
+  exit 1
+}
+
+usage() {
+  cat <<EOF
+usage: tools/formula render <tag> <out>
+       tools/formula publish [--tap <url>]
+
+  render <tag> <out>     write Utilz's Homebrew formula for <tag>, an annotated
+                         tag in this checkout, to <out>
+  publish [--tap <url>]  render the newest release into a fresh clone of the
+                         tap, commit it and push it; a tap that already carries
+                         it is left as it is (default tap: $TAP_URL)
+EOF
+}
+
+# Echo how many times <needle> occurs in <text>.
+placeholder_count() {
+  local rest="${1//"$2"/}"
+  printf '%s\n' "$(((${#1} - ${#rest}) / ${#2}))"
+}
+
+# Echo the commit annotated tag <tag> names, or die by name.
+tag_commit() {
+  local tag="$1"
+  git -C "$root" rev-parse -q --verify "refs/tags/$tag" >/dev/null ||
+    die "no tag '$tag' in $root"
+  [[ "$(git -C "$root" cat-file -t "refs/tags/$tag")" == "tag" ]] ||
+    die "'$tag' is a lightweight tag; every release tag is annotated, so it is not a release"
+  git -C "$root" rev-parse --verify "$tag^{commit}" ||
+    die "cannot read the commit '$tag' names"
+}
+
+# Write the formula for <tag> to <out>, and echo the commit it names.
+write_formula() {
+  local tag="$1" out="$2" commit text tags revs
+  # Every $(...) carries its own `|| exit 1`: bash does not carry set -e into a
+  # command substitution, so a die inside one would not stop the caller.
+  commit="$(tag_commit "$tag")" || exit 1
+  [[ "$tag" =~ ^[0-9A-Za-z._+-]+$ ]] ||
+    die "the tag '$tag' holds a character a release tag never does, and it would be written into a Ruby string brew evaluates"
+  # THE TAG'S OWN TEMPLATE, never the working tree's (utilz-vc's W7): a
+  # formula names the tag, so it is rendered from the bytes the tag carries,
+  # and an edit no commit holds cannot reach the tap. Read whole, with a
+  # sentinel, so a trailing newline survives $(...).
+  text="$(git -C "$root" show "$tag:$TEMPLATE_REL" && printf .)" ||
+    die "the tag '$tag' carries no formula template at $TEMPLATE_REL"
+  text="${text%.}"
+  tags="$(placeholder_count "$text" @@TAG@@)"
+  revs="$(placeholder_count "$text" @@REVISION@@)"
+  if [[ "$tags" != 1 || "$revs" != 1 ]]; then
+    die "$TEMPLATE_REL holds $tags tag placeholder(s) and $revs revision placeholder(s), and it is filled only when it holds exactly one of each"
+  fi
+  # THE REPLACEMENT IS UNQUOTED. bash 3.2 keeps double quotes written inside
+  # a ${var//pattern/replacement} replacement as literal characters, so
+  # "$tag" rendered `tag: ""9.9.8""`, which brew cannot parse, while bash 5
+  # gave `"9.9.8"` (utilz-vc's C1, reproduced under /bin/bash). The pattern
+  # holds no glob character, and the tag is checked above to hold no `&`,
+  # which bash 5.2's patsub_replacement would read as the match.
+  text="${text//@@TAG@@/$tag}"
+  text="${text//@@REVISION@@/$commit}"
+  printf '%s' "$text" > "$out" || die "cannot write the formula to $out"
+  printf '%s\n' "$commit"
+}
+
+cmd_render() {
+  [[ $# -eq 2 ]] || { usage >&2; exit 2; }
+  local commit
+  commit="$(write_formula "$1" "$2")" || exit 1
+  printf 'formula: wrote %s, utilz %s at %s\n' "$2" "$1" "$commit"
+}
+
+# Echo the newest release tag: the highest bare-semver tag.
+newest_release_tag() {
+  local tags releases
+  tags="$(git -C "$root" tag --list)" || die "cannot list the tags in $root"
+  # grep answers 1 for no match, which is the refusal below, named; any other
+  # status is a grep that could not run.
+  releases="$(printf '%s\n' "$tags" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$')" || {
+    [[ $? -eq 1 ]] || die "cannot read which tags in $root name a release"
+    releases=""
+  }
+  [[ -n "$releases" ]] || die "no tag in $root names a release (bare semver, eg 2.14.3)"
+  printf '%s\n' "$releases" | sort -t. -k1,1n -k2,2n -k3,3n | tail -1
+}
+
+cmd_publish() {
+  local tap="$TAP_URL" tag work clone commit dirt
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --tap)
+        [[ -n "${2:-}" ]] || die "--tap needs the tap's git url"
+        tap="$2"
+        shift 2
+        ;;
+      *) die "publish takes --tap <url> and nothing else, not '$1'" ;;
+    esac
+  done
+
+  tag="$(newest_release_tag)" || exit 1
+
+  work="$(mktemp -d "${TMPDIR:-/tmp}/utilz-formula.XXXXXX")" ||
+    die "cannot make a temporary directory for the tap's clone, so nothing was published"
+  # shellcheck disable=SC2064 # the path is fixed now, and quoted for the trap
+  trap "rm -rf -- $(printf '%q' "$work")" EXIT
+  clone="$work/tap"
+  git clone -q -- "$tap" "$clone" ||
+    die "cannot clone the tap from $tap, so nothing was published"
+  mkdir -p "$clone/${FORMULA_REL%/*}"
+  commit="$(write_formula "$tag" "$clone/$FORMULA_REL")" || exit 1
+
+  dirt="$(git -C "$clone" status --porcelain -- "$FORMULA_REL")" ||
+    die "cannot read the tap's clone, so nothing was published"
+  if [[ -z "$dirt" ]]; then
+    printf 'formula: the tap at %s already carries utilz %s at %s, so nothing was published\n' "$tap" "$tag" "$commit"
+    return 0
+  fi
+
+  git -C "$clone" add -- "$FORMULA_REL"
+  git -C "$clone" commit -q -m "utilz $tag" ||
+    die "cannot commit the formula in the tap's clone, so nothing was published"
+  git -C "$clone" push -q origin HEAD ||
+    die "cannot push the tap to $tap; the formula for utilz $tag is not published"
+  printf 'formula: published utilz %s at %s to %s\n' "$tag" "$commit" "$tap"
+}
+
+case "${1:-}" in
+  render)
+    shift
+    cmd_render "$@"
+    ;;
+  publish)
+    shift
+    cmd_publish "$@"
+    ;;
+  -h | --help)
+    usage
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

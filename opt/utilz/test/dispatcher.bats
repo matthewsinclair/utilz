@@ -57,7 +57,7 @@ load "test_helper.bash"
   # above passes whichever stream a line took. Doctor printed its titles on
   # stdout and every verdict on stderr, so a saved or paged report kept the
   # titles and lost the answers. Both directions are asserted, so an empty
-  # report cannot pass for a whole one. "UTILZ_HOME=" is check 1's verdict;
+  # report cannot pass for a whole one. "UTILZ_HOME=" is the UTILZ_HOME check's verdict;
   # its title, "Checking UTILZ_HOME...", carries no "=".
   run bash -c '"$1" doctor 2>/dev/null' _ "$UTILZ_BIN_DIR/utilz"
   assert_output_contains "UTILZ_HOME="
@@ -79,8 +79,9 @@ load "test_helper.bash"
   # This asserted the bare letter "v" until 2026-09-08 -- an assertion so
   # weak it was satisfied by the "v" in "every" inside a description, which
   # is why five of the ten tests carrying it stayed GREEN through a change
-  # that rewrote every one of these lines. ST0015/AC01.
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  # that rewrote every one of these lines. ST0015/AC01. Since issue 0105 the
+  # form is the dev, opt, brew contract's one version line (T4).
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
 }
 
 @test "utilz test - runs without bats shows error" {
@@ -113,9 +114,9 @@ load "test_helper.bash"
 @test "utilz --version - flag form of 'version' (issue 0003)" {
   run_utilz --version
   assert_success
-  # `utilz v2.6.1` until ST0015. hv dropped the `v` so the framework half is
-  # spelled identically alone and inside a pair -- `utilz:2.6.1` either way.
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  # `utilz v2.6.1` until ST0015, then `utilz:2.6.1`, and since issue 0105 the
+  # contract's one version line (T4). No `v` in any of them.
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
   refute_output_contains "utilz v"
 }
 

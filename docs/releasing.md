@@ -92,41 +92,49 @@ Only the installed `~/Applications/Menuz.app` keeps a Launch Services record, so
 
 ## After the cut: the Homebrew formula
 
-Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The formula is kept in this repository at `packaging/homebrew/utilz.rb` and copied into the tap.
+Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The repository keeps the formula as a template, `packaging/homebrew/utilz.rb`, with one `@@TAG@@` and one `@@REVISION@@`, and is never installed from. `tools/formula` fills them from git, as the dev, opt, brew contract has every tool's formula rendered (T8, devbin's `docs/dev-opt-brew.md` at devbin commit aeed31e4; issue 0105).
+
+- `tools/formula render <tag> <out>` writes the formula for an annotated tag to `<out>`. It refuses a tag that does not exist, a lightweight one, and a template without exactly one of each placeholder, and writes nothing in this tree.
+- `tools/formula publish [--tap <url>]` renders the newest release, the highest annotated tag of Utilz's bare-semver form, into a fresh clone of the tap, commits it and pushes it. It refuses a template with changes no commit holds, and leaves a tap that already carries the formula as it is. It pushes, so it is hv's to run, as pushing this repository is. No release `after:` hook runs it (ST0019 WP-05, hv's ruling of 2026-09-21).
+
+**Never type the commit by hand.** The offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install. The commit comes from `git rev-parse <tag>^{commit}`, inside `tools/formula`.
+
+### After every cut, hv:
+
+1. **Publishes Menuz.app's asset first** (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives.
+2. **Publishes the formula to the tap:**
+
+   ```bash
+   tools/formula publish
+   ```
+
+   Nothing is committed in this repository: the template does not change from one release to the next.
+
+3. **Brings this machine's tap up to date and audits it**, with Homebrew's auto-update off, as every scripted brew call runs:
+
+   ```bash
+   git -C "$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz" pull --ff-only
+   HOMEBREW_NO_AUTO_UPDATE=1 brew audit --strict matthewsinclair/utilz/utilz
+   ```
+
+4. **Upgrades each machine's brew install and reads it back.** On rhadamanth, and on kovacs through kovacs-sysadm:
+
+   ```bash
+   HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz
+   utilz version   # utilz <version> (brew, <sha12>) at $(brew --prefix)/opt/utilz/libexec
+   utilz doctor
+   ```
+
+   An install from before the contract's manifest reads as `brew (old manifest)`, which doctor notes, and this upgrade replaces it.
+
+5. **Proves the switch on rhadamanth** (contract T10): `utilz use dev`, `utilz use opt`, `utilz use brew` in turn, each followed by `utilz version` and `utilz doctor`, whose PATH check fails if a link is shadowed. It needs `~/.local/bin` before Homebrew's bin on PATH, which Molt-matts' sleeve config sets.
+
+A formula that names a commit brew cannot fetch fails every install, so the tap is published only after this repository's tag is pushed.
+
+**A wrong commit fails loudly at install, never silently.** When brew fetches a git URL with both `tag:` and `revision:`, it checks out the tag and compares the commit it got with the formula's revision. On a mismatch it stops: "`<tag>` tag should be `<revision>` but is actually `<commit>`" (`download_strategy/vcs_download_strategy.rb:46-51` in this machine's Homebrew). The offline audit makes no such check, which is why the commit comes from `tools/formula` and the first install after a publish is the real proof.
 
 ### Where the tap lives, and how it was set up
 
-The tap lives where brew keeps every tap, `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`: a git clone whose `origin` is the GitHub repository, as hv's Intent tap is. hv edits, commits and pushes the formula there.
+The tap's repository is `matthewsinclair/homebrew-utilz` on GitHub. On a machine that has tapped it, brew keeps its clone at `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`, as hv's Intent tap is kept.
 
-It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed:
-
-1. `tools/formula-bump 2.11.0` here, and the bump committed (d5899ee).
-2. A local repository staged with that formula as `Formula/utilz.rb`, then `gh repo create matthewsinclair/homebrew-utilz --source . --push`.
-3. `brew tap matthewsinclair/utilz`, which cloned it into the path above.
-4. `brew audit --strict matthewsinclair/utilz/utilz` (clean), `brew install matthewsinclair/utilz/utilz` (built in 44 s) and `utilz doctor` (7/7, manifest intact, `managed-by` brew). ST0019 AC-05.2.
-
-### After every later cut, hv:
-
-1. **Writes the new tag and its commit into the formula, from git:**
-
-   ```bash
-   tools/formula-bump 2.12.0
-   ```
-
-   It refuses a tag that does not exist or is not annotated, reads the commit with `git rev-parse 2.12.0^{commit}`, rewrites only the formula's `tag:` and `revision:` lines, and prints the diff. **Never type the commit by hand**: the offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install.
-
-2. **Commits the bump here**, by path: `packaging/homebrew/utilz.rb`.
-
-3. **Copies the formula into the tap** as `Formula/utilz.rb`, in the tap's clone above.
-
-4. **Audits it from the tap:**
-
-   ```bash
-   brew audit --strict matthewsinclair/utilz/utilz
-   ```
-
-5. **Commits and pushes the tap.** Pushing the tap is hv's, as pushing this repository is. No release `after:` hook does it (ST0019 WP-05, hv's ruling of 2026-09-21).
-
-A formula that names a commit brew cannot fetch fails every install, so the tap is pushed only after this repository's tag is.
-
-**A wrong commit fails loudly at install, never silently.** When brew fetches a git URL with both `tag:` and `revision:`, it checks out the tag and compares the commit it got with the formula's revision. On a mismatch it stops: "`<tag>` tag should be `<revision>` but is actually `<commit>`" (`download_strategy/vcs_download_strategy.rb:46-51` in this machine's Homebrew). The offline audit makes no such check, which is why the commit comes from `tools/formula-bump` and the first install after a push is the real proof.
+It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed: the formula then committed here, written by the tool `tools/formula` replaced, was staged as `Formula/utilz.rb` in a new repository, created with `gh repo create matthewsinclair/homebrew-utilz --source . --push`, then tapped with `brew tap matthewsinclair/utilz`, audited clean, installed and checked with `utilz doctor` (ST0019 AC-05.2).

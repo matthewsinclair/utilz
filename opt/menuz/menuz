@@ -203,10 +203,12 @@ drop_record() {
 # SOURCE CLONE OR INSTALL
 # ============================================================================
 
-# An install (a brew keg or a utilz install publish) carries manifest.sha256
-# at its root and leaves native/macos out, as prez's shim reads it (ST0014 D5).
+# An install (a brew keg or a utilz install publish) leaves native/macos out
+# (ST0014 D5). Which tree this is, is utilz_tree's to say: the one function
+# that names a tree (dev, opt, brew contract T4, issue 0105). Until 0105 menuz
+# spelt the manifest's name out here, a second home for it.
 is_install() {
-  [[ -f "$UTILZ_HOME/manifest.sha256" ]]
+  utilz_tree_is_install "$UTILZ_HOME"
 }
 
 # A failure after something changed: exit 1, naming the step.
@@ -228,7 +230,7 @@ no_args() {
 require_build_tools() {
   local verb="$1" out
   if is_install; then
-    refuse "$verb: this is an install of Utilz, which carries no app source; build from a source clone: git clone https://github.com/matthewsinclair/utilz"
+    refuse "$verb: this is an install of Utilz, which carries no app source; menuz install takes the release's signed app; to build it, use a source clone: git clone https://github.com/matthewsinclair/utilz"
   fi
   [[ -f "$(project_yml)" ]] || refuse "$verb: no app source at $(source_dir)"
   if ! out="$(xcodebuild -version 2>&1)"; then

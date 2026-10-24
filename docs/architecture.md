@@ -150,19 +150,20 @@ determine_utilz_home() {
 This allows flexible installation:
 
 ```bash
-# Scenario 1: Direct PATH addition
-export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"
-$ mdagg file.md  # Works - UTILZ_HOME detected
+# Scenario 1: the Homebrew install (the user's)
+# brew links $(brew --prefix)/bin/mdagg into the keg's libexec/bin
+$ mdagg file.md  # Works - symlink chain followed to find UTILZ_HOME
 
-# Scenario 2: Symlink to ~/bin
-ln -s ~/Devel/prj/Utilz/bin/utilz ~/bin/utilz
-ln -s ~/Devel/prj/Utilz/bin/mdagg ~/bin/mdagg
+# Scenario 2: the maintainer's links, made by `utilz use dev` or `use opt`
+# ~/.local/bin/mdagg -> ~/Devel/prj/Utilz/bin/mdagg
 $ mdagg file.md  # Works - symlink followed to find UTILZ_HOME
 
-# Scenario 3: Explicit UTILZ_HOME
-export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-$ mdagg file.md  # Works - uses explicit value
+# Scenario 3: a dev checkout's bin on PATH
+export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"
+$ mdagg file.md  # Works - UTILZ_HOME detected
 ```
+
+An exported `UTILZ_HOME` is ignored: the dispatcher always works its tree out from its own path.
 
 ## Common Library Integration
 
@@ -298,7 +299,7 @@ This allows a single source of truth for the framework version (`/VERSION` file)
 
 ### Reading Metadata
 
-The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list`, doctor's `[5/7]`, and install's read of `install.prefix`. It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
+The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list` and doctor's installed utilities check. (install read `install.prefix` through it until issue 0105 made the opt prefix `UTILZ_INSTALL_PREFIX`.) It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
 
 ```bash
 # Get utility version
@@ -461,7 +462,7 @@ With Utilz:
 2. **Consistent UX**: Unified help, error handling, output formatting
 3. **Code Reuse**: Common library shared across all utilities
 4. **Easy Discovery**: `utilz list` shows all available utilities
-5. **Portable**: Clone repo, add bin/ to PATH, done
+5. **Portable**: One Homebrew install per machine puts every utility on PATH
 6. **Testable**: Built-in test framework with `utilz test`
 7. **Maintainable**: Update common library once, all utilities benefit
 8. **Zero Overhead**: Uses `exec`, not subprocesses

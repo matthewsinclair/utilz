@@ -276,26 +276,27 @@ show_version() {
     # that explains it. The pair is the FORM, not merely two numbers present:
     # `utilz:<framework>/<util>:<version>`. Both are read, never restated.
     #
-    # utilz itself is the degenerate case of the same form: the framework is
-    # not "part of" anything, so the pair has no second term and it prints
-    # `utilz:<version>` alone. It keeps its third line, which answers WHICH
-    # TREE replied -- load-bearing in a two-tree estate and held by an AC.
+    # utilz itself answers with the ONE VERSION LINE of the dev, opt, brew
+    # contract (T4, issue 0105): `utilz <version> (<tree>, <sha12>) at <root>`,
+    # which says which tree replied and what it was cut from on one line, as
+    # every tool released through Homebrew says it. It replaced the framework's
+    # three lines (`utilz:<version>`, the description, the tree).
+    #
+    # A utility keeps hv's pair and its description, and the tool's line comes
+    # last (utilz-vc, 24 Oct), so a utility's answer also names the tree.
     #
     # NO `v` PREFIX ANYWHERE (hv, 2026-09-08, resolving D3 toward symmetry):
     # it is noise, and it was the only thing separating the framework's shape
     # from every utility's. This line was the estate's ONLY minter of one.
     if [[ "$util" == "utilz" ]]; then
-      echo "$util:$version"
-    else
-      echo "utilz:$(get_utilz_version)/$util:$version"
+      utilz_version_line
+      return 0
     fi
+    echo "utilz:$(get_utilz_version)/$util:$version"
     if [[ -n "$description" && "$description" != "null" ]]; then
       echo "$description"
     fi
-    # AC12: which tree answered, and what it was cut from.
-    if [[ "$util" == "utilz" ]]; then
-      utilz_tree_provenance
-    fi
+    utilz_version_line
   else
     # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
     # unconditionally, and printed it for a tree whose yaml was present and
@@ -757,6 +758,224 @@ expand_tilde() {
 # one name. install.sh reads it from here rather than carrying a second copy.
 UTILZ_MANIFEST_NAME="manifest.sha256"
 
+# THE MANIFEST'S HEADER KEYS, DEFINED ONCE (issue 0016; dev, opt, brew contract
+# T3, issue 0105). The contract fixes the first four, under these names, and
+# Utilz keeps three of its own after them: source_tree is what makes `use dev`
+# from opt turnkey, and ci_state with ci_detail is CI's verdict on the commit,
+# split in two because a `key: value` line cannot hold the tab that joined them.
+# The writer, the reader and the checker all read this list.
+# shellcheck disable=SC2034 # read by install.sh, which sources this file
+UTILZ_MANIFEST_HEADER_KEYS=(tool version source_commit managed_by source_tree ci_state ci_detail)
+
+# ============================================================================
+# THE RUNTIME SET (dev, opt, brew contract T1, issue 0105)
+# ============================================================================
+#
+# What a tree runs from, and nothing else: what git names under the runtime
+# roots, less what is tracked but not ours to publish, plus the build products
+# the publish makes. ONE function lists it, and install and doctor both read
+# that function: install to publish it, doctor and the version line to ask
+# whether a dev tree's runtime set is dirty. Here, not in install.sh, because
+# the version line asks it on the dispatcher's own path.
+
+# The roots git is asked about. A file outside them (intent/, docs/, a board
+# view) is never in the runtime set, so an edit to one never makes a tree dirty.
+UTILZ_RUNTIME_ROOTS=(bin opt help static VERSION)
+
+# Subtrees that are tracked but not ours to publish. See ST0014 design.md D2 for
+# why the enumeration is by EXCLUSION rather than by an inclusion list: five of
+# the fifteen utilities keep runtime payload outside the three obvious
+# filenames, and an inclusion list drops all five silently.
+UTILZ_RUNTIME_EXCLUDE_RE='^(bin/devbin$|bin/\.devbin/|opt/[^/]+/test/|opt/prez/crate/)'
+
+# THE BUILD PRODUCTS, built at publish time and gitignored, so they are named
+# rather than enumerated. They are part of the runtime set whether or not they
+# have been built: a path in the set that is absent is a publish that must
+# fail, not a set that quietly shrinks.
+#
+# showreel ships beside prez (issue 0024): the prez shim hands
+# `prez showreel <...>` to it, so an install without it ran prez and then
+# exec'd a file it never published. One workspace build makes both.
+#
+# prez.yaml points `version_file` at the crate's Cargo.toml, because cargo
+# REQUIRES a version in [package] and that makes it the one home that cannot be
+# deleted. The exclusion above drops all of opt/prez/crate/, so without this
+# line an install shipped a prez.yaml pointing at a file it did not carry.
+UTILZ_PREZ_BINARY="opt/prez/crate/target/release/prez"
+UTILZ_SHOWREEL_BINARY="opt/prez/crate/target/release/showreel"
+UTILZ_PREZ_VERSION_FILE="opt/prez/crate/Cargo.toml"
+
+# True when <tree> is the TOP LEVEL of a git worktree, not merely inside one.
+# Publishing from a subdirectory would enumerate a set relative to the wrong
+# root, and git answers happily either way.
+#
+# COMPARED AS FILES, NEVER AS STRINGS (utilz-vc's W4): git reports its toplevel
+# physically and in the case the filesystem stores, so a tree reached through a
+# link, or spelt in another case on APFS, compared unequal and read as no repo.
+utilz_is_git_toplevel() {
+  local tree="$1"
+  local top
+
+  top=$(git -C "$tree" rev-parse --show-toplevel 2>/dev/null) || return 1
+  [[ -n "$top" && "$top" -ef "$tree" ]]
+}
+
+# Echo the commit a dev tree at <root> is at, in full, or say why not on stderr
+# and return 1. THE ONE READING, for the version line and doctor's tree check
+# alike, so the two cannot disagree about whether a checkout can be read
+# (utilz-vc's W4).
+utilz_dev_commit() {
+  local root="$1" out err
+  # The commit from stdout alone, so a git warning on stderr never joins it;
+  # stderr is read only to say why it failed.
+  if ! out=$(git -C "$root" rev-parse HEAD 2>/dev/null); then
+    err=$(git -C "$root" rev-parse HEAD 2>&1 >/dev/null)
+    printf '%s\n' "${err%%$'\n'*}" >&2
+    return 1
+  fi
+  if ! utilz_is_git_toplevel "$root"; then
+    printf '%s is inside a git work tree, not the top of one\n' "$root" >&2
+    return 1
+  fi
+  printf '%s\n' "$out"
+}
+
+# Echo every path of a SOURCE tree's runtime set, one per line, relative to its
+# root, LC_ALL=C sorted so the order is stable across filesystems.
+#
+# Git is the authority for the same reason the manifest is: the manifest's
+# claim is "these bytes are commit X", and `git ls-files` is exactly "the files
+# commit X names". Any other enumeration makes the file list and the provenance
+# claim two authorities that agree until they do not.
+utilz_runtime_set() {
+  local tree="$1"
+  local tracked kept
+
+  if ! utilz_is_git_toplevel "$tree"; then
+    error "not a git repository (or not its top level): $tree"
+    return 1
+  fi
+
+  tracked=$(git -C "$tree" ls-files -- "${UTILZ_RUNTIME_ROOTS[@]}") || {
+    error "could not enumerate tracked files in $tree"
+    return 1
+  }
+
+  if [[ -z "$tracked" ]]; then
+    error "no tracked files under the runtime roots in $tree"
+    return 1
+  fi
+
+  # grep exits 1 when nothing survives, which here means every runtime root
+  # was excluded -- a real error, not an empty result, so it is named rather
+  # than allowed to surface later as a short manifest.
+  kept=$(printf '%s\n' "$tracked" | grep -Ev "$UTILZ_RUNTIME_EXCLUDE_RE") || true
+
+  if [[ -z "$kept" ]]; then
+    error "every tracked path under the runtime roots was excluded in $tree"
+    return 1
+  fi
+
+  # The built binaries are in the set whenever the tree carries the crate to
+  # build them from. That is the same predicate the publish uses to decide
+  # whether to run cargo at all, so neither binary can leave the set while
+  # there is still something to build -- and a tree with no prez names no
+  # prez output.
+  if [[ -f "$tree/$UTILZ_PREZ_VERSION_FILE" ]]; then
+    kept="$kept
+$UTILZ_PREZ_BINARY
+$UTILZ_SHOWREEL_BINARY
+$UTILZ_PREZ_VERSION_FILE"
+  fi
+
+  printf "%s\n" "$kept" | LC_ALL=C sort
+}
+
+# Echo the git state of a source tree's RUNTIME SET: clean, dirty, or unknown.
+#
+# Three values, not two. "no changes" and "cannot tell" must never render as
+# the same answer: a tree that is not a git repository cannot establish the
+# provenance the manifest claims, and that is a different fact from a tree
+# whose provenance is intact.
+#
+# THE RUNTIME SET, NOT THE WHOLE TREE (contract T2, issue 0105). The manifest's
+# claim is "these bytes are commit X", and an edit outside the set changes no
+# byte it names: a live board view or a doc being written beside a publish no
+# longer blocks it. The excluded subtrees are left out the same way, so a
+# test edited in place is not a dirty runtime set. The build products are
+# gitignored, so they never read as dirty.
+utilz_runtime_state() {
+  local tree="$1"
+  local porcelain
+
+  if ! utilz_is_git_toplevel "$tree"; then
+    printf 'unknown\n'
+    return 0
+  fi
+
+  porcelain=$(git -C "$tree" status --porcelain -- "${UTILZ_RUNTIME_ROOTS[@]}") || {
+    error "could not read git status for $tree"
+    return 1
+  }
+
+  # Each porcelain line is two status columns and a space before the path. A
+  # rename's line carries BOTH paths, `old -> new`, and either in the set makes
+  # it dirty: `git mv bin/x opt/a/test/x` moves a file out of the set, and the
+  # commit the manifest would record still holds bin/x (utilz-vc's W5). grep
+  # exits 1 when every changed path is excluded, which is a clean set.
+  porcelain=$(printf '%s\n' "$porcelain" | cut -c4- |
+    awk '{ i = index($0, " -> "); if (i) { print substr($0, 1, i - 1); print substr($0, i + 4) } else print }' |
+    grep -v '^$' | grep -Ev "$UTILZ_RUNTIME_EXCLUDE_RE") || true
+
+  if [[ -n "$porcelain" ]]; then
+    printf 'dirty\n'
+  else
+    printf 'clean\n'
+  fi
+}
+
+# Succeed when <manifest> is in the contract's form: its first line names the
+# tool (contract T3). A manifest from before the contract -- Utilz's old
+# tab-separated rows, first `utilz-version` -- is NOT read as a second format.
+# Its tree is named as one with an old manifest, and doctor fails with the
+# remedy, until it is republished.
+utilz_manifest_is_current() {
+  local first=""
+  IFS= read -r first < "$1" 2>/dev/null || true
+  [[ "$first" == "# tool: utilz" ]]
+}
+
+# Succeed when <manifest> is Utilz's in the OLD form, before the contract: the
+# one thing the old form is read for is that Utilz wrote it, so `install
+# --force` may republish over it and the tree can be named with its remedy.
+utilz_manifest_is_old() {
+  local first="" key=""
+  IFS= read -r first < "$1" 2>/dev/null || true
+  key="${first%%$'\t'*}"
+  [[ "$key" == "utilz-version" ]]
+}
+
+# Echo the value of header <key> in a current-form <manifest>, or nothing when
+# the key is absent. rc 1, by name, when the file cannot be read. The header is
+# every leading `# key: value` line; the first line that is not one ends it.
+utilz_manifest_value() {
+  local manifest="$1" key="$2"
+
+  if [[ ! -r "$manifest" ]]; then
+    error "cannot read the manifest at $manifest"
+    return 1
+  fi
+
+  awk -v key="$key" '
+    !/^# [a-z_]+: / { exit }
+    {
+      line = substr($0, 3)
+      k = substr(line, 1, index(line, ": ") - 1)
+      if (k == key) { print substr(line, length(k) + 3); exit }
+    }
+  ' "$manifest"
+}
+
 # Echo who manages the tree at <dir>: `brew` for a Homebrew keg, else what its
 # manifest's managed-by row says, `utilz` for every other publish (ST0019 D4).
 #
@@ -767,47 +986,213 @@ UTILZ_MANIFEST_NAME="manifest.sha256"
 #
 # A tree with no manifest, or a manifest from before the row existed, is
 # `utilz`: brew's publish is the only writer of `brew`, and it has always
-# written the row. rc 1, by name, when the manifest is there and unreadable.
+# written the row.
+#
+# A READING OF utilz_tree, THE ONE FUNCTION THAT NAMES A TREE (contract T4,
+# issue 0105). A keg in the old form is still brew's, and a write into it is
+# still refused: the old form is read for who wrote it and nothing else (T3).
 #
 # Here, not in install.sh, because run_tests asks it where install.sh is not
 # loaded, and the install verbs read it from here as they read the name.
 install_tree_manager() {
-  local manifest="$1/$UTILZ_MANIFEST_NAME"
+  case "$(utilz_tree "$1")" in
+    brew*) printf 'brew\n' ;;
+    *) printf 'utilz\n' ;;
+  esac
+}
+
+# Echo the brew prefix of the keg at <tree>, <prefix>/Cellar/utilz/<version>/libexec,
+# or return 1 for a tree that is not laid out as one.
+brew_keg_prefix() {
+  case "$1" in
+    */Cellar/utilz/*/libexec) printf '%s\n' "${1%/Cellar/utilz/*/libexec}" ;;
+    *) return 1 ;;
+  esac
+}
+
+# Echo the path brew keeps for the keg at <tree> across upgrades, or return 1.
+#
+# BREW IS NAMED BY ITS OPT LINK (contract T1, T4; issue 0105). A keg is
+# <prefix>/Cellar/utilz/<version>/libexec, and brew cleanup removes it once an
+# upgrade has installed the next one, so a version line that names it, or a
+# link into it, names nothing after an upgrade. brew keeps <prefix>/opt/utilz
+# pointing at the current keg, so <prefix>/opt/utilz/libexec follows each
+# upgrade. The Cellar layout only proposes the path: it is used only when it
+# leads back to <tree> (-ef), so a HOMEBREW_CELLAR set apart from the prefix
+# returns 1 rather than a path to some other keg.
+brew_stable_home() {
+  local tree="$1" prefix stable
+  prefix=$(brew_keg_prefix "$tree") || return 1
+  stable="$prefix/opt/utilz/libexec"
+  [[ "$stable" -ef "$tree" ]] || return 1
+  printf '%s\n' "$stable"
+}
+
+# ============================================================================
+# TREE IDENTITY AND THE VERSION LINE (dev, opt, brew contract T4, issue 0105)
+# ============================================================================
+
+# Echo the tree at <root>, $UTILZ_HOME by default: dev, opt, brew or unknown,
+# with ` old` after opt or brew when its manifest is Utilz's old form.
+#
+# THE ONE FUNCTION THAT NAMES A TREE. The version line, doctor, install's
+# target check, the prez shim and menuz all ask it, so no two of them can
+# disagree about which tree they are in. Read in the contract's order:
+#
+#   1. brew      the manifest says managed_by: brew
+#   2. opt       the manifest says tool: utilz (and any other manager)
+#   3. dev       the root is a git work tree with no manifest
+#   4. unknown   anything else, and doctor fails on it
+#
+# A root with a .git that git cannot read is still dev: the version line then
+# says `(dev, unknown)` and doctor says why (contract T4). A manifest that is
+# neither form is unknown, never opt: a file of that name proves nothing about
+# who wrote it.
+#
+# THE OLD MARK IS NOT A FAILURE IN BREW (T3 amendment, devbin issue 0213). An
+# old keg is still brew, and doctor notes it with `brew upgrade utilz`, since
+# that remedy arrives only with the next release; an old opt install fails,
+# since its remedy, `utilz install --force` from dev, is there now.
+utilz_tree() {
+  local root="${1:-$UTILZ_HOME}"
+  local manifest="$root/$UTILZ_MANIFEST_NAME"
   local manager
 
-  if [[ ! -f "$manifest" ]]; then
-    printf 'utilz\n'
+  if [[ -f "$manifest" ]]; then
+    if utilz_manifest_is_current "$manifest"; then
+      manager=$(utilz_manifest_value "$manifest" managed_by 2>/dev/null) || manager=""
+      if [[ "$manager" == "brew" ]]; then
+        printf 'brew\n'
+      else
+        printf 'opt\n'
+      fi
+    elif utilz_manifest_is_old "$manifest"; then
+      manager=$(awk -F'\t' '$1 == "managed-by" { print $2; exit }' "$manifest" 2>/dev/null) || manager=""
+      if [[ "$manager" == "brew" ]]; then
+        printf 'brew old\n'
+      else
+        printf 'opt old\n'
+      fi
+    else
+      printf 'unknown\n'
+    fi
     return 0
   fi
 
-  manager=$(awk -F'\t' '$1 == "managed-by" { print $2; exit }' "$manifest") || {
-    error "could not read $manifest"
-    return 1
-  }
-
-  printf '%s\n' "${manager:-utilz}"
+  if [[ -e "$root/.git" ]]; then
+    printf 'dev\n'
+  # A keg under brew's opt link with no manifest at all is an old brew one
+  # (the contract's T3 amendment, devbin issue 0213): a formula from before the
+  # manifest, which only the next release replaces.
+  elif brew_stable_home "$root" >/dev/null; then
+    printf 'brew old\n'
+  else
+    printf 'unknown\n'
+  fi
 }
 
-# Echo one line describing the tree utilz is running from, and what it was cut
-# from if it is an install.
-#
-# Without this the two-tree arrangement is invisible in precisely the situation
-# it exists for (AC12): the version string is identical either way, so someone
-# debugging behaviour cannot tell which copy produced it.
-utilz_tree_provenance() {
-  local manifest="$UTILZ_HOME/$UTILZ_MANIFEST_NAME"
-  local commit ci
+# Succeed when the tree at <root> ($UTILZ_HOME by default) is an install: a
+# tree that ships a manifest, opt or brew, the old forms included (contract T3,
+# T4). An unknown tree is not one: it ships no manifest, so it is source, and a
+# copy of the source with no git still builds, as prez and menuz read it before
+# 0105. THE ONE READING for the prez shim and menuz alike (utilz-vc's
+# recommendation 1), which read `unknown` two ways before.
+utilz_tree_is_install() {
+  case "$(utilz_tree "${1:-$UTILZ_HOME}")" in
+    opt* | brew*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
 
-  if [[ -f "$manifest" ]]; then
-    commit=$(awk -F'\t' '$1 == "source-commit" { print substr($2, 1, 7); exit }' "$manifest")
-    # CI's verdict on that commit, as the publish recorded it (issue 0016). A
-    # manifest cut before the row existed says so: absent is neither unknown
-    # nor success.
-    ci=$(awk -F'\t' '$1 == "ci-state" { found = 1; print ($2 != "" ? $2 : "unreadable"); exit } END { if (!found) print "not recorded" }' "$manifest")
-    printf 'installed at %s (%s, CI %s)\n' "$UTILZ_HOME" "${commit:-unknown}" "$ci"
-  else
-    printf 'source at %s\n' "$UTILZ_HOME"
-  fi
+# Echo the root a version line names for the tree at <root>: brew's opt link
+# for the Homebrew install (contract T4: never the versioned keg), else <root>
+# itself, absolute.
+utilz_tree_root() {
+  local root="${1:-$UTILZ_HOME}" stable
+  case "$(utilz_tree "$root")" in
+    brew*)
+      if stable=$(brew_stable_home "$root"); then
+        printf '%s\n' "$stable"
+        return 0
+      fi
+      ;;
+  esac
+  (cd "$root" 2>/dev/null && pwd) || printf '%s\n' "$root"
+}
+
+# Echo the version line's parenthesis for the tree at <root>: "<tree>, <sha12>"
+# with +dirty in dev while the runtime set is dirty; "dev, unknown" when a dev
+# tree's git cannot be read; "<tree>, old manifest" for the old form; and
+# "unknown" for a tree this cannot name.
+utilz_tree_provenance() {
+  local root="${1:-$UTILZ_HOME}" tree sha state
+  tree=$(utilz_tree "$root")
+
+  case "$tree" in
+    *" old")
+      printf '%s, old manifest\n' "${tree% old}"
+      ;;
+    opt | brew)
+      # A manifest that records no commit says so, rather than `(opt, )`.
+      sha=$(utilz_manifest_value "$root/$UTILZ_MANIFEST_NAME" source_commit 2>/dev/null) || sha=""
+      sha="${sha:0:12}"
+      printf '%s, %s\n' "$tree" "${sha:-unknown}"
+      ;;
+    dev)
+      if sha=$(utilz_dev_commit "$root" 2>/dev/null) &&
+        state=$(utilz_runtime_state "$root" 2>/dev/null) && [[ "$state" != "unknown" ]]; then
+        sha="${sha:0:12}"
+        [[ "$state" == "dirty" ]] && sha="$sha+dirty"
+        printf 'dev, %s\n' "$sha"
+      else
+        printf 'dev, unknown\n'
+      fi
+      ;;
+    *)
+      printf 'unknown\n'
+      ;;
+  esac
+}
+
+# Print, indented, how to put utilz on PATH for the tree at $UTILZ_HOME.
+#
+# THE ONE REMEDY, for utilz doctor and utilz emacs doctor alike (issue 0105).
+# The Homebrew install is the user's: brew links it into brew's bin, which must
+# be on PATH. A dev checkout or an opt install is the maintainer's, reached
+# through the links in ~/.local/bin that `use` makes. Never an exported
+# UTILZ_HOME, which the dispatcher ignores.
+print_path_remedy() {
+  local tree prefix
+  tree=$(utilz_tree)
+
+  case "$tree" in
+    brew*)
+      prefix=$(brew_keg_prefix "$UTILZ_HOME") || prefix="<brew's prefix>"
+      echo "  This is the Homebrew install. Link it into brew's bin:"
+      echo "    brew link utilz"
+      echo "  and put brew's bin on \$PATH, in your shell config:"
+      echo "    eval \"\$($prefix/bin/brew shellenv)\""
+      ;;
+    "opt old")
+      # `use opt` refuses an old manifest, so the remedy is the republish.
+      echo "  This opt install has an old manifest. Republish it from the dev"
+      echo "  checkout with 'utilz install --force', then 'utilz use opt'."
+      ;;
+    dev* | opt)
+      echo "  Link this tree into ~/.local/bin, and put ~/.local/bin on \$PATH"
+      echo "  before Homebrew's bin:"
+      echo "    $UTILZ_HOME/bin/utilz use ${tree% *}"
+      ;;
+    *)
+      echo "  Install Utilz with Homebrew, which puts it on \$PATH:"
+      echo "    brew install matthewsinclair/utilz/utilz"
+      ;;
+  esac
+}
+
+# Echo the one version line: `utilz <version> (<tree>, <sha12>[+dirty]) at <root>`.
+utilz_version_line() {
+  printf 'utilz %s (%s) at %s\n' "$(get_utilz_version)" "$(utilz_tree_provenance "$UTILZ_HOME")" "$(utilz_tree_root "$UTILZ_HOME")"
 }
 
 # Check if a required command is installed
@@ -933,11 +1318,12 @@ each_utility() {
 # DOCTOR COMMAND
 # ============================================================================
 
-# One of check 6's notes, which are info and never a failure, with the purpose
-# its declarers' yaml gives. <kind> optional: a missing optional dependency,
-# with its install line as <detail>. <kind> platform: a dependency this
-# platform cannot have, with the platforms it runs on as <detail>, and no
-# install line, since nothing installs it here (issue 0083).
+# One of the external dependencies check's notes, which are info and never a
+# failure, with the purpose its declarers' yaml gives. <kind> optional: a
+# missing optional dependency, with its install line as <detail>. <kind>
+# platform: a dependency this platform cannot have, with the platforms it runs
+# on as <detail>, and no install line, since nothing installs it here (issue
+# 0083).
 _doctor_dep_note() {
   local kind="$1" name="$2" detail="$3" purpose="$4" declarers="$5"
   local why=""
@@ -957,20 +1343,23 @@ _doctor_dep_note() {
 run_doctor() {
   echo -e "${BOLD}Utilz Doctor - System Diagnostics${RESET}"
   echo -e "=================================="
+  # The version line first, as `utilz version` prints it (contract T4).
+  utilz_version_line
   echo -e ""
 
   local issues=0
 
   # Resolved once, up front. doctor is the command you run to find out that
-  # yq is missing, so it must not require yq to complete -- checks 5 and 6
+  # yq is missing, so it must not require yq to complete -- the installed
+  # utilities and external dependencies checks
   # both branch on this rather than calling require_yq and bailing.
   local have_yq=0
   if check_command yq; then
     have_yq=1
   fi
 
-  # Check 1: UTILZ_HOME is set and valid
-  echo -e "${BOLD}[1/7]${RESET} Checking UTILZ_HOME..."
+  # Check: UTILZ_HOME is set and valid
+  echo -e "${BOLD}Checking UTILZ_HOME...${RESET}"
   if [[ -z "${UTILZ_HOME:-}" ]]; then
     error "UTILZ_HOME is not set"
     issues=$((issues + 1))
@@ -982,8 +1371,37 @@ run_doctor() {
   fi
   echo ""
 
-  # Check 2: Directory structure
-  echo -e "${BOLD}[2/7]${RESET} Checking directory structure..."
+  # Check: which tree this is (contract T4, issue 0105). A tree utilz_tree
+  # cannot name fails here, and so does a dev tree whose git cannot be read:
+  # the version line then says `(dev, unknown)`, and this says why. An old
+  # manifest is the install integrity check's to name, with its remedy.
+  echo -e "${BOLD}Checking which tree this is...${RESET}"
+  local tree git_err
+  tree=$(utilz_tree)
+  case "$tree" in
+    unknown)
+      error "$UTILZ_HOME is no tree Utilz can name: not a git checkout, and no manifest Utilz wrote"
+      issues=$((issues + 1))
+      ;;
+    dev)
+      if git_err=$(utilz_dev_commit "$UTILZ_HOME" 2>&1 >/dev/null); then
+        success "dev: the git checkout at $UTILZ_HOME"
+      else
+        error "dev, but git cannot read $UTILZ_HOME: ${git_err:-git is not installed}"
+        issues=$((issues + 1))
+      fi
+      ;;
+    *" old")
+      success "${tree% old}: an install at $UTILZ_HOME, with an old manifest (see install integrity)"
+      ;;
+    *)
+      success "$tree: an install at $UTILZ_HOME"
+      ;;
+  esac
+  echo ""
+
+  # Check: Directory structure
+  echo -e "${BOLD}Checking directory structure...${RESET}"
   local required_dirs=("bin" "opt" "opt/utilz" "opt/utilz/lib" "help")
   local missing_dirs=()
 
@@ -1001,8 +1419,8 @@ run_doctor() {
   fi
   echo ""
 
-  # Check 3: bin/utilz exists and is executable
-  echo -e "${BOLD}[3/7]${RESET} Checking bin/utilz..."
+  # Check: bin/utilz exists and is executable
+  echo -e "${BOLD}Checking bin/utilz...${RESET}"
   if [[ ! -f "$UTILZ_HOME/bin/utilz" ]]; then
     error "bin/utilz not found"
     issues=$((issues + 1))
@@ -1015,7 +1433,7 @@ run_doctor() {
   fi
   echo ""
 
-  # Check 4: PATH configuration
+  # Check: PATH configuration
   #
   # Two ways to have a working install, and this check used to recognise only
   # the first -- so a symlink install was reported as a problem and doctor said
@@ -1026,7 +1444,7 @@ run_doctor() {
   # the path is a metacharacter) and any substring satisfied it, so a stray
   # /opt/Utilz/binaries passed a test for /opt/Utilz/bin. `case` on a delimited
   # PATH is an exact element match with no regex in play.
-  echo -e "${BOLD}[4/7]${RESET} Checking PATH configuration..."
+  echo -e "${BOLD}Checking PATH configuration...${RESET}"
   local bin_dir="$UTILZ_HOME/bin"
   local dispatcher="$bin_dir/utilz"
   local path_entry reached_via=""
@@ -1061,26 +1479,35 @@ run_doctor() {
   else
     warn "\$UTILZ_HOME/bin is not in \$PATH"
     echo ""
-    echo "  Add to your shell config (~/.zshrc or ~/.bashrc):"
-    echo "    export UTILZ_HOME=\"$UTILZ_HOME\""
-    echo "    export PATH=\"\$UTILZ_HOME/bin:\$PATH\""
-    echo ""
-    echo "  Or symlink the dispatcher onto a directory already on \$PATH:"
-    echo "    ln -s \"$dispatcher\" ~/.local/bin/utilz"
+    print_path_remedy
     issues=$((issues + 1))
+  fi
+
+  # THE LINK SET'S HEALTH (contract T5, issue 0105): a link in ~/.local/bin
+  # that a Homebrew link shadows, or a set split across trees, is named here
+  # and by `utilz use`, from the one check both read.
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
+    # shellcheck source=opt/utilz/lib/install.sh
+    source "$UTILZ_HOME/opt/utilz/lib/install.sh"
+    local link_dir health
+    link_dir=$(install_link_dir)
+    if ! health=$(install_link_health "$link_dir"); then
+      install_link_health_render "$link_dir" "$health" 2>&1
+      issues=$((issues + 1))
+    fi
   fi
   echo ""
 
-  # Check 5: Installed utilities
-  echo -e "${BOLD}[5/7]${RESET} Checking installed utilities..."
+  # Check: Installed utilities
+  echo -e "${BOLD}Checking installed utilities...${RESET}"
   local util_count=0
   local broken_utils=()
   local incompatible_utils=()
   local name impl required_utilz_version required_major meta_status
   local unreadable_utils=()
   # What runs elsewhere alone, said once each and counted as nothing, and the
-  # names, padded with spaces, for [6/7] to skip their dependencies (issue
-  # 0083).
+  # names, padded with spaces, for the external dependencies check to skip
+  # their dependencies (issue 0083).
   local elsewhere_lines=() elsewhere_names=" " plat plat_status
   local unchecked_count=0
   local framework_version framework_major
@@ -1102,16 +1529,16 @@ run_doctor() {
 
     # A UTILITY WITHOUT A YAML IS AN ISSUE OF THIS SECTION'S (issue 0087). The
     # metadata read answers 1 for it, which this section took as no
-    # requirement, and [6/7] skips it, so doctor named it nowhere while
-    # `<name> --version` called its version unknown. Asked before the yq branch,
-    # so it is named with or without yq.
+    # requirement, and the external dependencies check skips it, so doctor
+    # named it nowhere while `<name> --version` called its version unknown.
+    # Asked before the yq branch, so it is named with or without yq.
     if [[ ! -f "$(util_yaml_path "$name")" ]]; then
       broken_utils+=("$name (no $name.yaml)")
       continue
     fi
 
-    # Version compatibility needs the YAML; check 6 reports the missing yq,
-    # and the verdict below says what was not checked.
+    # Version compatibility needs the YAML; the external dependencies check
+    # reports the missing yq, and the verdict below says what was not checked.
     if [[ $have_yq -eq 0 ]]; then
       unchecked_count=$((unchecked_count + 1))
       continue
@@ -1119,7 +1546,8 @@ run_doctor() {
 
     # ONE FAULT, ONE COUNT (issue 0081). A yaml that cannot be read is named
     # here, so this section no longer calls every utility properly configured,
-    # but [6/7] counts it: [6/7] reads every yaml, utilz's own too.
+    # but the external dependencies check counts it: that check reads every
+    # yaml, utilz's own too.
     meta_status=0
     required_utilz_version=$(get_util_metadata "$name" ".utilz_version") || meta_status=$?
     if [[ $meta_status -eq 2 ]]; then
@@ -1177,14 +1605,15 @@ run_doctor() {
     success "Found $util_count utilities, all properly configured"
   fi
   # NO VERDICT ON WHAT WAS NOT READ (issue 0087). Without yq no utilz_version is
-  # read, so no utility is called configured. [6/7] counts yq, so this does not.
+  # read, so no utility is called configured. The external dependencies check
+  # counts yq, so this does not.
   # It counts only the utilities whose version yq alone kept unread, not those
   # already listed above as broken.
   if [[ $unchecked_count -gt 0 ]]; then
-    warn "utilz_version is not checked without yq: $unchecked_count of $util_count utilities, yq counted by [6/7]"
+    warn "utilz_version is not checked without yq: $unchecked_count of $util_count utilities, yq counted by the external dependencies check"
   fi
   if [[ ${#unreadable_utils[@]} -gt 0 ]]; then
-    warn "utilz_version is not checked where a yaml cannot be read: ${#unreadable_utils[@]} of $util_count utilities, each counted by [6/7]:"
+    warn "utilz_version is not checked where a yaml cannot be read: ${#unreadable_utils[@]} of $util_count utilities, each counted by the external dependencies check:"
     # The reason is asked here, in an argument, so its status is no statement's,
     # as it would be the array append's above.
     for util in "${unreadable_utils[@]}"; do
@@ -1198,8 +1627,8 @@ run_doctor() {
   fi
   echo ""
 
-  # Check 6: External dependencies
-  echo -e "${BOLD}[6/7]${RESET} Checking external dependencies..."
+  # Check: External dependencies
+  echo -e "${BOLD}Checking external dependencies...${RESET}"
   local missing_deps=()
   local missing_dep_info=()
   # Info lines, one per name: kind|name|detail|purpose|declarer (_doctor_dep_note).
@@ -1228,7 +1657,7 @@ run_doctor() {
         continue
       fi
       # A utility that runs elsewhere alone has no dependency here to check:
-      # [5/7] said so (issue 0083).
+      # the installed utilities check said so (issue 0083).
       if [[ "$elsewhere_names" == *" $name "* ]]; then
         continue
       fi
@@ -1438,7 +1867,7 @@ run_doctor() {
 
   # ------------------------------------------------------------------------
   echo -e ""
-  echo -e "${BOLD}[7/7]${RESET} Checking install integrity..."
+  echo -e "${BOLD}Checking install integrity...${RESET}"
 
   # THIS CHECK EXISTS BECAUSE THE MANIFEST CHECKER HAD NO USER-FACING SURFACE.
   # It could only be reached by sourcing the library, so an operator had no way
@@ -1460,8 +1889,30 @@ run_doctor() {
       source "$UTILZ_HOME/opt/utilz/lib/install.sh"
       drift=$(install_manifest_check "$UTILZ_HOME") || check_rc=$?
 
+      # THE REMEDY IS THE TREE'S (contract T3, issue 0105): an opt install is
+      # republished from its dev tree, and brew's is brew's to replace.
+      local republish="'utilz install --force' from the dev checkout"
+      if [[ "$(install_tree_manager "$UTILZ_HOME" 2>/dev/null)" == "brew" ]]; then
+        republish="'brew upgrade utilz', or 'brew reinstall utilz' at the same version"
+      fi
+
       if [[ $check_rc -eq 0 ]]; then
         success "Install matches its manifest"
+        # CI's verdict on the commit, as the publish recorded it (issue 0016).
+        # It moved here from the version line with the contract (T4): a record,
+        # never a gate.
+        local ci_state ci_detail
+        ci_state=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ci_state 2>/dev/null) || ci_state=""
+        ci_detail=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ci_detail 2>/dev/null) || ci_detail=""
+        info "CI on that commit, as published: ${ci_state:-not recorded}${ci_detail:+ ($ci_detail)}"
+      elif [[ $check_rc -eq 3 && "$(utilz_tree)" == "brew old" ]]; then
+        # Noted, not counted (T3 amendment, devbin issue 0213): the fix for an
+        # old keg is the next release, which nothing on this machine can make.
+        info "The manifest at $UTILZ_HOME is in the old form, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
+      elif [[ $check_rc -eq 3 ]]; then
+        error "The manifest at $UTILZ_HOME is in the old form, from before the dev, opt, brew contract"
+        echo "  Republish it: $republish."
+        issues=$((issues + 1))
       elif [[ $check_rc -eq 2 ]]; then
         error "The manifest at $UTILZ_HOME could not be read"
         issues=$((issues + 1))
@@ -1469,8 +1920,7 @@ run_doctor() {
         warn "$(printf '%s\n' "$drift" | wc -l | tr -d ' ') owned path(s) differ from the manifest"
         printf '%s\n' "$drift" | sed 's/^/    /'
         echo ""
-        echo "  'utilz upgrade' from the source tree reports these and leaves"
-        echo "  them alone; --force overwrites them."
+        echo "  Republish to restore them: $republish."
         issues=$((issues + 1))
       fi
     else
@@ -1478,7 +1928,11 @@ run_doctor() {
       issues=$((issues + 1))
     fi
   else
-    info "Not an install tree, so there is no manifest to check"
+    if [[ "$(utilz_tree)" == "brew old" ]]; then
+      info "This Homebrew install has no manifest, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
+    else
+      info "Not an install tree, so there is no manifest to check"
+    fi
   fi
   echo -e ""
 
@@ -1685,9 +2139,13 @@ run_tests() {
     # A KEG'S source-tree NAMES NOTHING (ST0019 D4): it is brew's build
     # directory, deleted once the formula's install returned. So a keg names a
     # clone of the repository, the one source a brew user can have.
-    local src_tree manager
-    src_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' \
-      "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" 2>/dev/null || true)
+    #
+    # A manifest in the old form is not read for its source tree (contract T3),
+    # so it takes the description, as one from before the key did.
+    local src_tree="" manager
+    if utilz_manifest_is_current "$UTILZ_HOME/$UTILZ_MANIFEST_NAME"; then
+      src_tree=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" source_tree 2>/dev/null) || src_tree=""
+    fi
     manager=$(install_tree_manager "$UTILZ_HOME") || manager="unknown"
 
     if [[ "$manager" == "brew" ]]; then
@@ -1976,20 +2434,20 @@ emacs_doctor() {
 
   local issues=0
 
-  # Check 1: utilz on PATH (so Emacs child processes can find it)
-  echo -e "${BOLD}[1/3]${RESET} Checking utilz command on PATH..."
+  # Check: utilz on PATH (so Emacs child processes can find it)
+  echo -e "${BOLD}Checking utilz command on PATH...${RESET}"
   if command -v utilz >/dev/null 2>&1; then
     success "utilz is on PATH: $(command -v utilz)"
   else
     warn "utilz is not on PATH"
-    echo "  Emacs child processes need to find 'utilz'. Ensure"
-    echo "  \$UTILZ_HOME/bin is in PATH before Emacs starts."
+    echo "  Emacs child processes need to find 'utilz', on the PATH Emacs starts with."
+    print_path_remedy
     issues=$((issues + 1))
   fi
   echo ""
 
-  # Check 2: integration metadata on every installed utility
-  echo -e "${BOLD}[2/3]${RESET} Checking integration metadata..."
+  # Check: integration metadata on every installed utility
+  echo -e "${BOLD}Checking integration metadata...${RESET}"
   local missing=()
   local invalid=()
   local exposed=0
@@ -2043,8 +2501,8 @@ emacs_doctor() {
   fi
   echo ""
 
-  # Check 3: canonical elisp file (info only — absence expected pre-WP03)
-  echo -e "${BOLD}[3/3]${RESET} Checking canonical elisp file..."
+  # Check: canonical elisp file (info only — absence expected pre-WP03)
+  echo -e "${BOLD}Checking canonical elisp file...${RESET}"
   local canonical="$UTILZ_HOME/static/emacs/utilz.el"
   if [[ -f "$canonical" ]]; then
     success "Canonical elisp present: $canonical"
@@ -2111,7 +2569,17 @@ emacs_install() {
     return 1
   fi
 
-  local src="$UTILZ_HOME/static/emacs/utilz.el"
+  # FROM THE HOMEBREW INSTALL, THROUGH BREW'S OPT LINK (issue 0105; contract T1:
+  # brew is always named by its opt link). The keg's own path names its
+  # version, and brew cleanup removes it after an upgrade, so a symlink to it
+  # would load nothing then; one through $(brew --prefix)/opt/utilz/libexec
+  # follows each `brew upgrade utilz`. A copy is the same bytes either way.
+  local home="$UTILZ_HOME" stable
+  if [[ "$(utilz_tree)" == brew* ]] && stable=$(brew_stable_home "$UTILZ_HOME"); then
+    home="$stable"
+  fi
+
+  local src="$home/static/emacs/utilz.el"
   if [[ ! -f "$src" ]]; then
     error "Canonical elisp file not found: $src"
     echo "The Emacs bridge file has not been created yet." >&2

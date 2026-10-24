@@ -22,7 +22,7 @@
 #
 # IT LIVES IN tools/, NOT bin/, BECAUSE bin/ IS PUBLISHED. The publish ships
 # every tracked file under bin except devbin's own (install.sh:99 with
-# INSTALL_EXCLUDE_RE), so a release tool there would ship to every install and
+# UTILZ_RUNTIME_EXCLUDE_RE), so a release tool there would ship to every install and
 # every keg as if it were a utility.
 #
 set -euo pipefail

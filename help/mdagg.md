@@ -434,9 +434,8 @@ If no title provided, use the filename (without extension) as title.
 ## Quick Start
 
 ```bash
-# Install (copy to PATH)
-cp ~/Devel/prj/Utils/bin/mdagg ~/bin/
-chmod +x ~/bin/mdagg
+# mdagg comes with Utilz: once Utilz is installed, it is on PATH
+mdagg --help
 
 # Quick test
 cd ~/my-sow-directory

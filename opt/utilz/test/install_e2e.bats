@@ -121,12 +121,13 @@ teardown_file() {
 @test "AC01: utilz version runs from the install with no source tree" {
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" version
   assert_success
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
-  # The provenance line is NOT cosmetic: ST0014/AC12 holds that an installed
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \(opt, [0-9a-f]{12}\) at /"
+  # Which tree answered is NOT cosmetic: ST0014/AC12 holds that an installed
   # utilz can be told from a source utilz at the prompt, and it earned that
   # within the hour -- it was the one command that said WHICH TREE answered
-  # when a checkout and a stale install disagreed about --version.
-  assert_output_contains "installed at $E2E_PREFIX"
+  # when a checkout and a stale install disagreed about --version. Since issue
+  # 0105 the contract's one version line carries it (T4).
+  assert_output_contains ") at $E2E_PREFIX"
 }
 
 # The one roster of what an install carries. doctor's count below is read
@@ -218,11 +219,11 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
   # is still there. Grepping the artefact is the only thing that catches it.
   #
   # THE MANIFEST IS EXEMPT AND THE DISTINCTION IS THE POINT, not a concession.
-  # Its source-tree row is a RECORD of where the bytes came from; a path in
+  # Its source_tree line is a RECORD of where the bytes came from; a path in
   # code would be a DEPENDENCY on that tree still existing. The row is what
   # makes `utilz use dev` turnkey (AC21), and the eight tests above this one
   # prove it is inert for running: every one of them passes against an install
-  # whose source-tree names a directory that no longer exists.
+  # whose source_tree names a directory that no longer exists.
   run bash -c "grep -rIl -e '$E2E_SRC_PATH' '$E2E_PREFIX' 2>/dev/null || true"
   assert_success
 
@@ -236,8 +237,8 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
 
   # And the manifest really does carry it, so the exemption is covering a row
   # that exists rather than quietly covering nothing.
-  grep -q "^source-tree	$E2E_SRC_PATH$" "$E2E_PREFIX/manifest.sha256" || {
-    echo "the manifest does not record source-tree, so this exemption is vacuous" >&2
+  grep -q "^# source_tree: $E2E_SRC_PATH$" "$E2E_PREFIX/manifest.sha256" || {
+    echo "the manifest does not record source_tree, so this exemption is vacuous" >&2
     return 1
   }
 }
@@ -254,29 +255,20 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
   # one greps for E2E_SRC_PATH, a throwaway fixture tree, so a path naming the
   # real checkout goes straight past it. That is how the eight survived.
   #
-  # TWO THINGS ARE FILTERED AND NEITHER IS A PER-FILE EXCEPTION LIST.
-  # `/Users/you/` is the documented placeholder, available to any doc; the
-  # manifest is a RECORD of where the bytes came from, exempt here for the same
-  # reason and by the same argument as the test above. The control at the end
-  # fails if the placeholder stops appearing, so the filter cannot quietly come
-  # to cover nothing.
+  # ONE THING IS EXEMPT AND IT IS NOT A PER-FILE EXCEPTION LIST: the manifest
+  # is a RECORD of where the bytes came from, exempt here for the same reason
+  # and by the same argument as the test above. No installed file needs a home
+  # path any more, the /Users/you/ placeholder included, so any /Users/ in an
+  # install fails (issue 0105 dropped the last placeholder from help/utilz.md).
   run bash -c "
     cd '$E2E_PREFIX' || exit 1
     find . -type f ! -path './opt/prez/crate/*' ! -name 'manifest.sha256' -print0 \
-      | xargs -0 grep -In '/Users/' 2>/dev/null \
-      | grep -v '/Users/you/' || true
+      | xargs -0 grep -In '/Users/' 2>/dev/null || true
   "
   assert_success
   [[ -z "$output" ]] || {
     echo "these installed files name an absolute home path:" >&2
     printf '%s\n' "$output" >&2
-    return 1
-  }
-
-  # The placeholder really is in the shipped tree, so the filter covers
-  # something that exists rather than nothing.
-  grep -rq '/Users/you/' "$E2E_PREFIX" || {
-    echo "the /Users/you/ placeholder no longer appears; the filter above covers nothing" >&2
     return 1
   }
 }

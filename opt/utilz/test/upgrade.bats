@@ -1,231 +1,182 @@
 #!/usr/bin/env bats
-# upgrade.bats - ST0014/WP-03: the `utilz upgrade` verb
+# upgrade.bats - `utilz upgrade`, by tree (dev, opt, brew contract T6, issue 0105)
 #
-# The mirror of install (AC04), plus the one behaviour install does not have:
-# a file edited in place is REPORTED and LEFT ALONE, and keeps its install-time
-# checksum (AC08). Re-checksumming a file the upgrade declined to overwrite
-# would record the edit as canonical and the next check would pronounce it
-# intact -- the refuse-then-bless failure, where the refusal still prints and
-# the evidence that made it necessary is destroyed by the same pass.
+# It never publishes: `install --force` is the one republish (T2), and ST0014's
+# upgrade -- the mirror of install, which kept a file edited in place at its
+# install-time row (AC08) -- retired with that. What it does is the tree's own
+# upgrade: dev pulls and builds, opt says it is republished from dev, brew runs
+# brew update and then asks brew, with HOMEBREW_NO_AUTO_UPDATE=1. Every tree,
+# remote and brew here is a fixture; nothing reaches the network or the real
+# Homebrew.
 
 load "test_helper.bash"
 
-run_upgrade() {
-  local src="$1" prefix="$2"
-  shift 2
-  run run_install_function "UTILZ_HOME='$src'; install_verb_upgrade --prefix '$prefix' $*"
+# A dev clone at <dev> of a bare remote at <remote>, seeded from a fake source.
+make_dev_clone() {
+  local remote="$1" dev="$2" seed="$BATS_TEST_TMPDIR/seed"
+  make_fake_src "$seed"
+  git clone -q --bare "$seed" "$remote"
+  git clone -q "$remote" "$dev"
 }
 
-manifest_row_for() {
-  awk -F'\t' -v p="$2" '$3 == p { print $2; exit }' "$1/manifest.sha256"
+# Push one more commit to <remote>, from a scratch clone.
+advance_remote() {
+  local remote="$1" w="$BATS_TEST_TMPDIR/pusher"
+  rm -rf "$w"
+  git clone -q "$remote" "$w"
+  printf 'more\n' >> "$w/help/alpha.md"
+  fixture_commit "$w" more
+  git -C "$w" push -q origin HEAD
 }
 
-# ============================================================================
-# AT05 (AC04) - the mirror refusal
-# ============================================================================
+# A stub brew at <stub> answering `--prefix` with <prefix>, `outdated` with
+# <outdated> and exit <outdated_rc> (0 by default), and `update` with exit
+# <update_rc> (0 by default), and recording each call, in order, with
+# HOMEBREW_NO_AUTO_UPDATE's value.
+make_brew_stub() {
+  local stub="$1" prefix="$2" outdated="$3" update_rc="${4:-0}" outdated_rc="${5:-0}"
+  cat > "$stub" <<EOF
+#!/bin/sh
+printf '%s NO_AUTO_UPDATE=%s\n' "\$*" "\${HOMEBREW_NO_AUTO_UPDATE:-unset}" >> "$stub.calls"
+case "\$1" in
+  --prefix) echo "$prefix" ;;
+  outdated) [ -n "$outdated" ] && echo "$outdated"; exit $outdated_rc ;;
+  update) exit $update_rc ;;
+esac
+exit 0
+EOF
+  chmod +x "$stub"
+}
 
-@test "upgrade refuses when no install exists, and NAMES install" {
-  local src="$BATS_TEST_TMPDIR/src" dst="$BATS_TEST_TMPDIR/empty"
-  make_fake_src "$src"
-  mkdir -p "$dst"
+@test "upgrade in dev pulls fast-forward and ends with the version line (issue 0105)" {
+  local remote="$BATS_TEST_TMPDIR/remote.git" dev="$BATS_TEST_TMPDIR/dev"
+  make_dev_clone "$remote" "$dev"
+  advance_remote "$remote"
+  local want
+  want=$(git -C "$remote" rev-parse --short=12 HEAD)
 
-  run_upgrade "$src" "$dst"
+  run run_install_function "set -euo pipefail; UTILZ_HOME='$dev'; install_verb_upgrade"
+  assert_success
+  assert_output_contains "git pull --ff-only in $dev"
+  [[ "$(git -C "$dev" rev-parse --short=12 HEAD)" == "$want" ]] || fail "dev is at $(git -C "$dev" rev-parse --short=12 HEAD), not $want"
+  assert_output_contains "utilz 9.9.9 (dev, $want) at $dev"
+}
+
+@test "upgrade in dev refuses over a dirty runtime set, and pulls nothing (issue 0105)" {
+  local remote="$BATS_TEST_TMPDIR/remote.git" dev="$BATS_TEST_TMPDIR/dev"
+  make_dev_clone "$remote" "$dev"
+  advance_remote "$remote"
+  local before
+  before=$(git -C "$dev" rev-parse HEAD)
+  printf 'edited\n' >> "$dev/help/alpha.md"
+
+  run run_install_function "UTILZ_HOME='$dev'; install_verb_upgrade"
   assert_exit_code 1
-  # Both halves or the mirror is untested: install names upgrade (AT04), and
-  # upgrade names install here. Whichever verb is reached for, the wrong one
-  # names the right one.
-  assert_output_contains "install"
+  assert_output_contains "the runtime set is dirty"
+  [[ "$(git -C "$dev" rev-parse HEAD)" == "$before" ]] || fail "a refused upgrade pulled"
 }
 
-@test "upgrade announces its mode" {
-  local src="$BATS_TEST_TMPDIR/src-mode" dst="$BATS_TEST_TMPDIR/dst-mode"
+@test "upgrade in opt writes nothing, names install --force in the dev checkout, and says when dev is ahead (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src" opt="$BATS_TEST_TMPDIR/opt"
   make_fake_src "$src"
-  run_publish "$src" "$dst"
+  run_publish "$src" "$opt"
   assert_success
+  printf 'more\n' >> "$src/help/alpha.md"
+  fixture_commit "$src" more
+  local before
+  before=$(shasum "$opt/manifest.sha256")
 
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_output_contains "mode"
-  assert_output_contains "upgrade"
+  run run_install_function "UTILZ_HOME='$opt'; install_verb_upgrade"
+  assert_exit_code 2
+  assert_output_contains "cd $src && bin/utilz install --force"
+  assert_output_contains "The dev checkout is at $(git -C "$src" rev-parse --short=12 HEAD)"
+  [[ "$(shasum "$opt/manifest.sha256")" == "$before" ]] || fail "upgrade in opt rewrote the install"
 }
 
-@test "upgrade refuses a dirty source tree" {
-  local src="$BATS_TEST_TMPDIR/src-dirty" dst="$BATS_TEST_TMPDIR/dst-dirty"
+@test "upgrade in brew runs brew upgrade utilz with HOMEBREW_NO_AUTO_UPDATE=1 when brew names it outdated (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src" prefix="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew"
+  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
   make_fake_src "$src"
-  run_publish "$src" "$dst"
+  run_publish "$src" "$keg" --managed-by brew
   assert_success
+  mkdir -p "$prefix/opt"
+  ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
+  make_brew_stub "$stub" "$prefix" "utilz"
 
-  printf 'uncommitted\n' > "$src/SCRATCH.md"
-  run_upgrade "$src" "$dst"
+  run run_install_function "INSTALL_BREW='$stub'; UTILZ_HOME='$keg'; install_verb_upgrade"
+  assert_success
+  grep -qx 'outdated --quiet utilz NO_AUTO_UPDATE=1' "$stub.calls" || fail "brew was asked: $(cat "$stub.calls")"
+  grep -qx 'upgrade utilz NO_AUTO_UPDATE=1' "$stub.calls" || fail "brew was asked: $(cat "$stub.calls")"
+  # IN THIS ORDER: the update first, so outdated reads the current tap.
+  [[ "$(grep -v '^--prefix' "$stub.calls" | cut -d' ' -f1 | tr '\n' ' ')" == "update outdated upgrade " ]] || fail "brew was asked, in order: $(cat "$stub.calls")"
+  assert_output_contains "upgrade: brew update"
+  assert_output_contains "(brew, "
+  assert_output_contains "at $prefix/opt/utilz/libexec"
+}
+
+@test "upgrade in brew upgrades nothing when brew's utilz is current (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src" prefix="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew"
+  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
+  make_fake_src "$src"
+  run_publish "$src" "$keg" --managed-by brew
+  assert_success
+  mkdir -p "$prefix/opt"
+  ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
+  make_brew_stub "$stub" "$prefix" ""
+
+  run run_install_function "INSTALL_BREW='$stub'; UTILZ_HOME='$keg'; install_verb_upgrade"
+  assert_success
+  assert_output_contains "brew's utilz is current"
+  if grep -q '^upgrade' "$stub.calls"; then fail "brew upgrade ran for a current utilz"; fi
+}
+
+@test "upgrade in brew fails by name when brew update fails, and asks nothing more (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src" prefix="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew"
+  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
+  make_fake_src "$src"
+  run_publish "$src" "$keg" --managed-by brew
+  assert_success
+  mkdir -p "$prefix/opt"
+  ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
+  make_brew_stub "$stub" "$prefix" "utilz" 1
+
+  run run_install_function "INSTALL_BREW='$stub'; UTILZ_HOME='$keg'; install_verb_upgrade"
   assert_exit_code 1
-  assert_output_contains "dirty"
+  assert_output_contains "brew update failed"
+  if grep -q -e '^outdated' -e '^upgrade' "$stub.calls"; then fail "brew was asked more after a failed update: $(cat "$stub.calls")"; fi
 }
 
-# ============================================================================
-# The happy path
-# ============================================================================
-
-@test "upgrade replaces an install and the manifest verifies afterwards" {
-  local src="$BATS_TEST_TMPDIR/src-ok" dst="$BATS_TEST_TMPDIR/dst-ok"
+@test "upgrade in brew fails by name when brew outdated fails saying nothing, never reading it as current (utilz-vc's W6)" {
+  local src="$BATS_TEST_TMPDIR/src" prefix="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew"
+  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
   make_fake_src "$src"
-  run_publish "$src" "$dst"
+  run_publish "$src" "$keg" --managed-by brew
   assert_success
+  mkdir -p "$prefix/opt"
+  ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
+  make_brew_stub "$stub" "$prefix" "" 0 1
 
-  printf '#!/usr/bin/env bash\necho v2\n' > "$src/opt/alpha/alpha"
-  fixture_commit "$src" v2
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_file_contains "$dst/opt/alpha/alpha" "echo v2"
-
-  run run_install_function "install_manifest_check '$dst'"
-  assert_success
-  assert_output ""
+  run run_install_function "INSTALL_BREW='$stub'; UTILZ_HOME='$keg'; install_verb_upgrade"
+  assert_exit_code 1
+  assert_output_contains "brew outdated failed (exit 1): it said nothing"
+  refute_output_contains "is current"
 }
 
-@test "upgrade brings across a file the source has gained" {
-  local src="$BATS_TEST_TMPDIR/src-new" dst="$BATS_TEST_TMPDIR/dst-new"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
+@test "upgrade in an old opt install refuses, naming install --force (issue 0105)" {
+  local old="$BATS_TEST_TMPDIR/oldopt"
+  mkdir -p "$old"
+  printf 'utilz-version\t2.10.0\nmanaged-by\tutilz\n' > "$old/manifest.sha256"
 
-  printf '# new\n' > "$src/help/beta.md"
-  fixture_commit "$src" newfile
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_file_exists "$dst/help/beta.md"
+  run run_install_function "UTILZ_HOME='$old'; install_verb_upgrade"
+  assert_exit_code 2
+  assert_output_contains "utilz install --force"
 }
 
-@test "upgrade restores an owned file that was DELETED from the install" {
-  # A missing file is not an edit to preserve. Nothing was authored there.
-  local src="$BATS_TEST_TMPDIR/src-del" dst="$BATS_TEST_TMPDIR/dst-del"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
+@test "upgrade takes no arguments, and --help says what it does in each tree" {
+  run run_install_function "install_verb_upgrade --prefix /tmp"
+  assert_exit_code 2
+  run run_install_function "install_verb_upgrade --help"
   assert_success
-  rm "$dst/help/alpha.md"
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_file_exists "$dst/help/alpha.md"
-}
-
-# ============================================================================
-# AT09 (AC08) - an edited file is reported, left alone, and keeps its row
-# ============================================================================
-
-@test "upgrade REPORTS a file edited in place and LEAVES IT ALONE" {
-  local src="$BATS_TEST_TMPDIR/src-edit" dst="$BATS_TEST_TMPDIR/dst-edit"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
-
-  printf '\n# hand edit\n' >> "$dst/opt/alpha/alpha"
-
-  # The source moves on too, so "left alone" is distinguishable from "the
-  # source happened to match".
-  printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  fixture_commit "$src" upstream
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_output_contains "opt/alpha/alpha"
-
-  assert_file_contains "$dst/opt/alpha/alpha" "hand edit"
-  refute_file_contains "$dst/opt/alpha/alpha" "upstream-v2"
-}
-
-@test "a file the upgrade declined to overwrite keeps its INSTALL-TIME checksum" {
-  # The row must be neither a re-checksum of the edit (which blesses it, and
-  # the next check then calls the file intact) nor the new source's checksum
-  # (which claims a file was updated that was not). It is the row the install
-  # wrote, so the drift stays visible.
-  local src="$BATS_TEST_TMPDIR/src-row" dst="$BATS_TEST_TMPDIR/dst-row"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
-
-  local install_time_row edited_sum upstream_sum after_row
-  install_time_row=$(manifest_row_for "$dst" "opt/alpha/alpha")
-
-  printf '\n# hand edit\n' >> "$dst/opt/alpha/alpha"
-  edited_sum=$(shasum -a 256 "$dst/opt/alpha/alpha" | awk '{print $1}')
-
-  printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  fixture_commit "$src" upstream
-  upstream_sum=$(shasum -a 256 "$src/opt/alpha/alpha" | awk '{print $1}')
-
-  run_upgrade "$src" "$dst"
-  assert_success
-
-  after_row=$(manifest_row_for "$dst" "opt/alpha/alpha")
-  [[ "$after_row" == "$install_time_row" ]] || {
-    echo "row is not the install-time one" >&2
-    echo "  install-time: $install_time_row" >&2
-    echo "  after:        $after_row" >&2
-    echo "  (edited:      $edited_sum)" >&2
-    echo "  (upstream:    $upstream_sum)" >&2
-    return 1
-  }
-  [[ "$after_row" != "$edited_sum" ]]
-  [[ "$after_row" != "$upstream_sum" ]]
-
-  # And therefore the very next check still reports the edit.
-  run run_install_function "install_manifest_check '$dst'"
-  assert_failure
-  assert_output_contains "modified"
-  assert_output_contains "opt/alpha/alpha"
-}
-
-@test "upgrade reports a RETARGETED link and leaves it alone" {
-  local src="$BATS_TEST_TMPDIR/src-link" dst="$BATS_TEST_TMPDIR/dst-link"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
-
-  rm "$dst/bin/alpha"
-  ln -s other "$dst/bin/alpha"
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  assert_output_contains "bin/alpha"
-  [[ "$(readlink "$dst/bin/alpha")" == "other" ]]
-}
-
-@test "upgrade --force overwrites the edit and records the new checksum" {
-  local src="$BATS_TEST_TMPDIR/src-force" dst="$BATS_TEST_TMPDIR/dst-force"
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
-
-  printf '\n# hand edit\n' >> "$dst/opt/alpha/alpha"
-  printf '#!/usr/bin/env bash\necho upstream-v2\n' > "$src/opt/alpha/alpha"
-  fixture_commit "$src" upstream
-
-  run_upgrade "$src" "$dst" "--force"
-  assert_success
-  assert_file_contains "$dst/opt/alpha/alpha" "upstream-v2"
-  refute_file_contains "$dst/opt/alpha/alpha" "hand edit"
-
-  run run_install_function "install_manifest_check '$dst'"
-  assert_success
-  assert_output ""
-}
-
-@test "an upgrade asks CI too, and its path count leaves the ci-state row out (issue 0016)" {
-  local src="$BATS_TEST_TMPDIR/src-ci-count" dst="$BATS_TEST_TMPDIR/dst-ci-count" paths
-  make_fake_src "$src"
-  run_publish "$src" "$dst"
-  assert_success
-
-  run_upgrade "$src" "$dst"
-  assert_success
-  # The gh first on PATH is test_helper's stub, which refuses every call: so
-  # the upgrade asked, through PATH, and recorded the refusal as unknown.
-  grep -q $'^ci-state\tunknown\tgh stub: ' "$dst/manifest.sha256" \
-    || fail "the upgrade recorded no CI answer from the gh on PATH"
-  # A regression guard: this half goes red only if the count reads that row
-  # as a path.
-  paths=$(awk -F'\t' '$1 == "file" || $1 == "link"' "$dst/manifest.sha256" | wc -l | tr -d ' ')
-  assert_output_contains "at $dst -- $paths paths"
+  assert_output_contains "git pull --ff-only"
+  assert_output_contains "brew update, then HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz"
 }

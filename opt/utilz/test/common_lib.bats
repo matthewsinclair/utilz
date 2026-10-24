@@ -164,8 +164,9 @@ run_without_yq() {
   # This asserted the bare letter "v" until 2026-09-08 -- an assertion so
   # weak it was satisfied by the "v" in "every" inside a description, which
   # is why five of the ten tests carrying it stayed GREEN through a change
-  # that rewrote every one of these lines. ST0015/AC01.
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  # that rewrote every one of these lines. ST0015/AC01. Since issue 0105 the
+  # form is the dev, opt, brew contract's one version line (T4).
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
 }
 
 @test "show_version() extracts version from utility help file" {
@@ -334,7 +335,7 @@ EOF
 }
 
 # ----------------------------------------------------------------------------
-# doctor check 4 -- PATH reachability (issue 0005)
+# doctor's PATH check -- PATH reachability (issue 0005)
 # ----------------------------------------------------------------------------
 #
 # The old test was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"`: one expression,
@@ -342,7 +343,7 @@ EOF
 # entry, so a working symlink-on-PATH install was reported as a problem; and it
 # matched by unanchored regex, so any substring satisfied it.
 
-@test "doctor check 4 passes when UTILZ_HOME/bin is on PATH" {
+@test "doctor's PATH check passes when UTILZ_HOME/bin is on PATH" {
   local home
   home="$(make_fake_home)"
 
@@ -351,7 +352,7 @@ EOF
   refute_output_contains "is not in \$PATH"
 }
 
-@test "doctor check 4 accepts a utilz symlink on PATH (issue 0005)" {
+@test "doctor's PATH check accepts a utilz symlink on PATH (issue 0005)" {
   local home shim
   home="$(make_fake_home)"
   shim="$BATS_TEST_TMPDIR/shim"
@@ -365,7 +366,7 @@ EOF
   refute_output_contains "is not in \$PATH"
 }
 
-@test "doctor check 4 warns when the dispatcher is unreachable on PATH (issue 0005)" {
+@test "doctor's PATH check warns when the dispatcher is unreachable on PATH (issue 0005)" {
   local home
   home="$(make_fake_home)"
 
@@ -375,7 +376,7 @@ EOF
   assert_output_contains "is not in \$PATH"
 }
 
-@test "doctor check 4 rejects a PATH substring match (issue 0005)" {
+@test "doctor's PATH check rejects a PATH substring match (issue 0005)" {
   local home
   home="$(make_fake_home)"
   mkdir -p "$home/binaries"
@@ -419,7 +420,7 @@ EOF
 # ----------------------------------------------------------------------------
 #
 # The sweep's first read of each yaml had no ||, so under bin/utilz's
-# `set -euo pipefail` a yaml yq could not read ended doctor under its [6/7]
+# `set -euo pipefail` a yaml yq could not read ended doctor under its external dependencies check
 # title, with no verdict. And a dependencies list that was not a list was read
 # as a list of its length: `dependencies: jq` checked two entries with empty
 # names. Each test runs run_doctor strict, as bin/utilz does, and checks that
@@ -454,7 +455,7 @@ doctor_issue_count() {
   run_common_strict "$home" run_doctor
   assert_output_contains "beta: beta.yaml cannot be read, so neither of its dependency lists is checked: "
   assert_output_contains "zz-absent-0080"
-  assert_output_contains "[7/7]"
+  assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
@@ -469,7 +470,7 @@ doctor_issue_count() {
   run_common_strict "$home" run_doctor
   assert_output_contains "beta: beta.yaml cannot be read, so neither of its dependency lists is checked: its top level is a list, not a map"
   assert_output_contains "2 dependency list(s) not checked"
-  assert_output_contains "[7/7]"
+  assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
@@ -485,7 +486,7 @@ doctor_issue_count() {
   assert_output_contains "beta: dependencies is a string, not a list, so it is not checked"
   assert_output_contains "1 dependency list(s) not checked"
   refute_output_contains "All required dependencies installed"
-  assert_output_contains "[7/7]"
+  assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
@@ -501,7 +502,7 @@ doctor_issue_count() {
   run_common_strict "$home" run_doctor
   assert_output_contains "beta: optional_dependencies is a map, not a list, so it is not checked"
   assert_output_contains "zz-absent-0080"
-  assert_output_contains "[7/7]"
+  assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
 }
@@ -550,7 +551,7 @@ doctor_issue_count() {
 
   run_common_strict "$home" run_doctor
   assert_output_contains "beta: optional_dependencies[0] is a list, not a map with a name"
-  assert_output_contains "[7/7]"
+  assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's entry. Actual output:\n$output"
 }
@@ -660,7 +661,7 @@ doctor_issue_count() {
   refute_output_contains "No description available"
 }
 
-@test "run_doctor's [5/7] names a yaml it cannot read, and why, and [6/7] counts it once (issue 0081)" {
+@test "run_doctor's installed utilities check names a yaml it cannot read, and why, and the external dependencies check counts it once (issue 0081)" {
   local home before
   home="$(make_fake_home)"
   run_common_strict "$home" run_doctor
@@ -674,10 +675,10 @@ doctor_issue_count() {
   refute_output_contains "all properly configured"
   refute_output_contains "Version incompatibilities"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
-    fail "Expected $((before + 1)) issues, the one fault counted once, by [6/7]. Actual output:\n$output"
+    fail "Expected $((before + 1)) issues, the one fault counted once, by the external dependencies check. Actual output:\n$output"
 }
 
-@test "run_doctor's [5/7] names a utility with no yaml and counts it (issue 0087)" {
+@test "run_doctor's installed utilities check names a utility with no yaml and counts it (issue 0087)" {
   local home before
   home="$(make_fake_home)"
   run_common_strict "$home" run_doctor
@@ -689,7 +690,7 @@ doctor_issue_count() {
   assert_output_contains "    - beta (no beta.yaml)"
   refute_output_contains "all properly configured"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
-    fail "Expected $((before + 1)) issues, the missing yaml counted once, by [5/7]. Actual output:\n$output"
+    fail "Expected $((before + 1)) issues, the missing yaml counted once, by the installed utilities check. Actual output:\n$output"
 }
 
 # ============================================================================
@@ -777,28 +778,29 @@ beta"
   assert_output_contains "yq is not installed"
   assert_output_contains "brew install yq"
   assert_output_contains "issue"
-  # [5/7] read no utilz_version, so it calls no utility configured (issue 0087).
+  # the installed utilities check read no utilz_version, so it calls no utility configured (issue 0087).
   assert_output_contains "utilz_version is not checked without yq"
   refute_output_contains "all properly configured"
 }
 
-# **THE DEPENDENCY VERDICT BELONGS TO STEP 6** (issue 0026). run_doctor printed
-# step 6's verdict only after [7/7] had printed its own result, so "All required
-# dependencies installed" -- or "Missing dependencies: yq" -- read as the
-# install-integrity step's. Whichever verdict this machine produces, it must
-# print before step 7 begins.
-@test "run_doctor() prints the dependency verdict before step 7 begins (issue 0026)" {
+# **THE DEPENDENCY VERDICT BELONGS TO THE EXTERNAL DEPENDENCIES CHECK** (issue
+# 0026). run_doctor printed that verdict only after the install integrity check
+# had printed its own result, so "All required dependencies installed" -- or
+# "Missing dependencies: yq" -- read as the install-integrity check's.
+# Whichever verdict this machine produces, it must print before the install
+# integrity check begins.
+@test "run_doctor() prints the dependency verdict before the install integrity check begins (issue 0026)" {
   run run_common_function run_doctor
-  local verdict step7
+  local verdict integrity
   verdict=$(printf '%s\n' "$output" | grep -n -E 'All required dependencies installed|Missing dependencies:' | head -1 | cut -d: -f1 || true)
-  step7=$(printf '%s\n' "$output" | grep -n -F '[7/7]' | head -1 | cut -d: -f1 || true)
+  integrity=$(printf '%s\n' "$output" | grep -n -F 'Checking install integrity' | head -1 | cut -d: -f1 || true)
   [ -n "$verdict" ] || fail "no dependency verdict in the doctor output: $output"
-  [ -n "$step7" ] || fail "no [7/7] header in the doctor output: $output"
-  [ "$verdict" -lt "$step7" ] || fail "the dependency verdict prints at line $verdict, after [7/7] at line $step7"
+  [ -n "$integrity" ] || fail "no 'Checking install integrity' header in the doctor output: $output"
+  [ "$verdict" -lt "$integrity" ] || fail "the dependency verdict prints at line $verdict, after 'Checking install integrity' at line $integrity"
 }
 
 # **A DECLARED OPTIONAL DEPENDENCY IS REPORTED FROM ITS YAML** (issue 0041).
-# Until 2026-09-19 check 6 read `.dependencies` alone, so no utility's
+# Until 2026-09-19 the external dependencies check read `.dependencies` alone, so no utility's
 # `optional_dependencies` was ever read, and an entry marked `required: false`
 # was reported as a missing requirement. The fake home's yamls declare nothing
 # by default, so each test appends what it needs.

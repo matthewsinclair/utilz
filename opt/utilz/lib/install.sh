@@ -19,35 +19,11 @@
 # for AC09. An alias here would be a second NAME for the one thing this thread
 # cannot afford two answers about.
 
-# Built at publish time and gitignored, so they are named rather than
-# enumerated. They are part of the owned set whether or not they have been
-# built: an owned path that is absent is a publish that must fail, not a set
-# that quietly shrinks.
-INSTALL_PREZ_BINARY="opt/prez/crate/target/release/prez"
-
-# **THE SECOND BINARY, SHIPPED BESIDE THE FIRST** (issue 0024). The prez shim
-# hands `prez showreel <...>` to it, so an install without it ran prez and then
-# exec'd a file it never published. One workspace build makes both, and
-# install_build_prez asks for the workspace so that it does.
-INSTALL_SHOWREEL_BINARY="opt/prez/crate/target/release/showreel"
-
-# prez.yaml carries no inline version and points `version_file` at the crate's
-# Cargo.toml, because cargo REQUIRES a version in [package] and that makes it
-# the one home that cannot be deleted. TRUE IN A SOURCE TREE, FALSE IN A
-# PUBLISHED ONE until this line existed: the exclusion below drops all of
-# opt/prez/crate/, so the install shipped a prez.yaml pointing at a file the
-# install did not carry, and `prez --version` answered "version unknown" while
-# the binary beside it answered 2.0.0. Shipping the manifest itself keeps ONE
-# home read by both trees; the alternative -- writing the number into the
-# install's yaml at publish time -- would re-create the second copy the
-# consolidation removed, and it would be the copy nobody ever re-reads.
-INSTALL_PREZ_VERSION_FILE="opt/prez/crate/Cargo.toml"
-
-# Subtrees that are tracked but not ours to publish. See design.md D2 for why
-# the enumeration is by EXCLUSION rather than by an inclusion list: five of the
-# fifteen utilities keep runtime payload outside the three obvious filenames,
-# and an inclusion list drops all five silently.
-INSTALL_EXCLUDE_RE='^(bin/devbin$|bin/\.devbin/|opt/[^/]+/test/|opt/prez/crate/)'
+# THE RUNTIME SET -- what a publish copies and the manifest names -- is
+# common.sh's utilz_runtime_set, with its roots, exclusions and build products
+# (dev, opt, brew contract T1, issue 0105). It moved there because doctor and
+# the version line read it too, on the dispatcher's own path, and one function
+# is the whole of the rule that install and doctor agree on it.
 
 # ============================================================================
 # PURE: facts about a tree
@@ -55,122 +31,65 @@ INSTALL_EXCLUDE_RE='^(bin/devbin$|bin/\.devbin/|opt/[^/]+/test/|opt/prez/crate/)
 
 # A file's sha256 is common.sh's sha256_of, shared with stampz (issue 0083).
 
-# True when <tree> is the TOP LEVEL of a git worktree, not merely inside one.
-# Publishing from a subdirectory would enumerate a set relative to the wrong
-# root, and git answers happily either way.
-_install_is_git_toplevel() {
-  local tree="$1"
-  local top here
-
-  top=$(git -C "$tree" rev-parse --show-toplevel 2>/dev/null) || return 1
-  here=$(cd "$tree" 2>/dev/null && pwd -P) || return 1
-  [[ "$top" == "$here" ]]
-}
-
-# Echo every owned path of a SOURCE tree, one per line, relative to its root,
-# LC_ALL=C sorted so the order is stable across filesystems.
+# Echo the opt prefix, tilde-expanded, or return 1, by name, when it is unset.
 #
-# Git is the authority for the same reason the manifest is: the manifest's
-# claim is "these bytes are commit X", and `git ls-files` is exactly "the files
-# commit X names". Any other enumeration makes the file list and the provenance
-# claim two authorities that agree until they do not.
-install_owned_paths() {
-  local tree="$1"
-  local tracked kept
-
-  if ! _install_is_git_toplevel "$tree"; then
-    error "not a git repository (or not its top level): $tree"
-    return 1
-  fi
-
-  tracked=$(git -C "$tree" ls-files -- bin opt help static VERSION) || {
-    error "could not enumerate tracked files in $tree"
-    return 1
-  }
-
-  if [[ -z "$tracked" ]]; then
-    error "no tracked files under the owned roots in $tree"
-    return 1
-  fi
-
-  # grep exits 1 when nothing survives, which here means every owned root was
-  # excluded -- a real error, not an empty result, so it is named rather than
-  # allowed to surface later as a short manifest.
-  kept=$(printf '%s\n' "$tracked" | grep -Ev "$INSTALL_EXCLUDE_RE") || true
-
-  if [[ -z "$kept" ]]; then
-    error "every tracked path under the owned roots was excluded in $tree"
-    return 1
-  fi
-
-  # The built binaries are owned whenever the tree carries the crate to build
-  # them from. That is the same predicate the publish uses to decide whether to
-  # run cargo at all, so neither binary can leave the owned set while there is
-  # still something to build -- and a tree with no prez names no prez output.
-  if [[ -f "$tree/opt/prez/crate/Cargo.toml" ]]; then
-    kept="$kept
-$INSTALL_PREZ_BINARY
-$INSTALL_SHOWREEL_BINARY
-$INSTALL_PREZ_VERSION_FILE"
-  fi
-
-  printf "%s\n" "$kept" | LC_ALL=C sort
-}
-
-# Echo the configured install prefix of a SOURCE tree, tilde-expanded.
-# Returns 1, not an empty string, when it is unset.
+# UTILZ_INSTALL_PREFIX, SET BY THE SLEEVE (dev, opt, brew contract T1, issue
+# 0105): Molt's sleeve config writes it into every shell (Molt ST0008 WP05),
+# as it does MOLT_INSTALL_PREFIX and DEVBIN_INSTALL_PREFIX. Utilz reads only
+# the variable. Until 0105 it was
+# install.prefix in the committed opt/utilz/utilz.yaml, which every Homebrew
+# keg then shipped: one machine's path, read on every machine, a default in
+# all but name. There is still NO built-in default (ST0014 AC05): unset is
+# refused rather than guessed, because a publish to the wrong place looks
+# exactly like a publish to the right one.
 #
 # A caller that forgets to check an empty return proceeds and writes to /bin;
 # a caller that forgets to check rc 1 is killed by set -e at the assignment.
 # Only one of those is silent.
 install_prefix_configured() {
-  local tree="$1"
-  local raw meta_status=0 yaml
-  yaml=$(util_yaml_path utilz "$tree")
+  local raw="${UTILZ_INSTALL_PREFIX:-}"
 
-  # The tree under examination is PASSED, not bound ambiently. AC05 requires the
-  # read go through the one metadata reader like every other utility's yaml, and
-  # that reader now takes the root as its third argument. A read it cannot make
-  # is named as that, not as a key that is not set (issue 0081). The yaml may
-  # well parse: `install:` written as a list does, and no prefix can be read.
-  raw=$(get_util_metadata utilz '.install.prefix' "$tree") || meta_status=$?
-  if [[ $meta_status -eq 2 ]]; then
-    error "install.prefix cannot be read from $yaml: $(yaml_read_error "$yaml")"
-    return 1
-  fi
-  if [[ $meta_status -ne 0 ]]; then
-    raw=""
-  fi
-
-  # yq prints the four-character string `null` for an absent key and
-  # get_util_metadata ends `echo "$result"`, so it passes straight through.
-  # `null` and empty are the same answer -- unset -- and a `[[ -n ]]` guard
-  # PASSES on unset, then publishes to a directory called ./null and reports
-  # success. Measured 7 Sep against opt/utilz/utilz.yaml.
-  if [[ -z "$raw" || "$raw" == "null" ]]; then
-    error "install.prefix is not set in $yaml"
+  if [[ -z "$raw" ]]; then
+    error "UTILZ_INSTALL_PREFIX is not set, so there is no opt prefix"
+    echo "  It names where 'utilz install' publishes this checkout, and Molt's" >&2
+    echo "  sleeve config sets it in every shell. --prefix DIR names one for a" >&2
+    echo "  single run. There is no default." >&2
     return 1
   fi
 
-  # Shared with emacs_install --dest (D10): one expander, one home. A YAML
-  # scalar is not a shell word, so an unexpanded ~ creates a directory
-  # literally named ~ under the cwd, and every later command then finds the
-  # install exactly where it looked -- silent and self-consistent.
+  # Shared with emacs_install --dest (D10): one expander, one home. A value
+  # written in a config file is not always expanded by a shell, and an
+  # unexpanded ~ creates a directory literally named ~ under the cwd, which
+  # every later command then finds exactly where it looked.
   raw=$(expand_tilde "$raw")
 
   printf '%s\n' "$raw"
 }
 
-# Echo which kind of tree <dir> is: install, source, or other.
+# Echo which kind of tree <dir> is: install, source, foreign, or other.
+#
+#   install   a manifest Utilz wrote, in either form (contract T3)
+#   source    a tree that could be published from, with no manifest
+#   foreign   a manifest.sha256 that Utilz did not write
+#   other     anything else, eg an empty or absent directory
 #
 # The manifest is tested FIRST because an install tree also carries bin/utilz
 # and opt/utilz/utilz.yaml -- the source test alone would call every install a
-# source tree.
+# source tree. A manifest of someone else's is its own answer, so a publish
+# never takes a file of that name for its own and overwrites what it guards
+# (contract T2: only a prefix whose manifest says this tool wrote it).
 install_tree_kind() {
   local dir="$1"
+  local manifest="$dir/$UTILZ_MANIFEST_NAME"
 
-  if [[ -f "$dir/$UTILZ_MANIFEST_NAME" ]]; then
-    printf 'install\n'
+  # utilz_tree is the one function that names a tree (contract T4): an opt or
+  # brew tree, in either manifest form, is an install, and a manifest it
+  # cannot name is someone else's.
+  if [[ -f "$manifest" ]]; then
+    case "$(utilz_tree "$dir")" in
+      opt* | brew*) printf 'install\n' ;;
+      *) printf 'foreign\n' ;;
+    esac
     return 0
   fi
 
@@ -189,7 +108,7 @@ install_tree_kind() {
 # Echo the short commit a tree is at, or `none` when the tree is not a git
 # repository of its own (issue 0044).
 #
-# THE SAME TEST install_tree_state MAKES, SO THE TWO HALVES OF THE ANNOUNCE
+# THE SAME TEST utilz_runtime_state MAKES, SO THE TWO HALVES OF THE ANNOUNCE
 # CANNOT DISAGREE. A bare `git -C <tree> rev-parse` walks up to the nearest
 # enclosing repository and answers with its HEAD: from a Homebrew keg, which
 # has no .git, that was Homebrew's own commit, printed beside `unknown`.
@@ -197,7 +116,7 @@ install_tree_commit() {
   local tree="$1"
   local commit
 
-  if _install_is_git_toplevel "$tree" &&
+  if utilz_is_git_toplevel "$tree" &&
     commit=$(git -C "$tree" rev-parse --short HEAD 2>/dev/null); then
     printf '%s\n' "$commit"
   else
@@ -205,116 +124,73 @@ install_tree_commit() {
   fi
 }
 
-# Echo the git state of a source tree: clean, dirty, or unknown.
-#
-# Three values, not two. "no changes" and "cannot tell" must never render as
-# the same answer: a tree that is not a git repository cannot establish the
-# provenance the manifest claims, and that is a different fact from a tree
-# whose provenance is intact.
-install_tree_state() {
-  local tree="$1"
-  local porcelain
-
-  if ! _install_is_git_toplevel "$tree"; then
-    printf 'unknown\n'
-    return 0
-  fi
-
-  porcelain=$(git -C "$tree" status --porcelain) || {
-    error "could not read git status for $tree"
-    return 1
-  }
-
-  # The WHOLE tree, not the owned subset. The manifest's claim is "these bytes
-  # are commit X", and that holds only when nothing is uncommitted: a dirty .md
-  # beside a clean opt/ still means the recorded commit does not describe the
-  # checkout the bytes came from.
-  if [[ -n "$porcelain" ]]; then
-    printf 'dirty\n'
-  else
-    printf 'clean\n'
-  fi
-}
-
 # ============================================================================
-# PURE: the manifest
+# PURE: the manifest (dev, opt, brew contract T3, issue 0105)
 # ============================================================================
+#
+#   # tool: utilz
+#   # version: <VERSION>
+#   # source_commit: <the full sha>
+#   # managed_by: utilz | brew
+#   # source_tree: <the dev tree's absolute path>
+#   # ci_state: <CI's verdict on the commit>
+#   # ci_detail: <its run id, or the reason there is none>
+#   <sha256>  <path>
+#   ...
+#
+# The header keys are common.sh's UTILZ_MANIFEST_HEADER_KEYS. The body is one
+# line per runtime path in `shasum -a 256 -c` form, LC_ALL=C sorted, so the
+# manifest reads back with the system's own tool from the install root.
+#
+# THE DISPATCHER LINKS ARE IN THE BODY, HASHED THROUGH TO bin/utilz, as shasum
+# reads a link. That proves each one is there and resolves to the dispatcher's
+# bytes; what the body cannot see is a link retargeted from `utilz` to another
+# file, which ST0014 AC06 caught with a link row of its own. The rule that
+# replaces the row is structural, and install_manifest_check holds it: every
+# link git names in the runtime set is `bin/<name> -> utilz`, so every link the
+# body names under bin/ must still be one, with that target string.
 
-# Echo one manifest row per owned path, TAB-separated, in owned-set order.
-#
-#   file<TAB><sha256><TAB><path>
-#   link<TAB><target><TAB><path>
-#
-# The type discriminator is what lets a checker pick the right comparison
-# without inferring it from the path.
+# Echo one body line per runtime path: "<sha256>  <path>", in runtime-set order.
 install_manifest_rows() {
   local tree="$1"
-  local paths path target sum
+  local paths path sum
 
-  paths=$(install_owned_paths "$tree") || return 1
+  paths=$(utilz_runtime_set "$tree") || return 1
 
   while IFS= read -r path; do
     [[ -n "$path" ]] || continue
 
-    if [[ -L "$tree/$path" ]]; then
-      # The TARGET STRING, never a content hash. All fifteen dispatcher links
-      # resolve to one file, so a resolved-content hash gives every one of them
-      # the same value and a link retargeted at the wrong utility reads as
-      # intact (AC06).
-      target=$(readlink "$tree/$path") || {
-        error "could not read link target: $path"
-        return 1
-      }
-      printf 'link\t%s\t%s\n' "$target" "$path"
-    elif [[ -f "$tree/$path" ]]; then
-      sum=$(sha256_of "$tree/$path") || {
-        error "could not checksum: $path"
-        return 1
-      }
-      printf 'file\t%s\t%s\n' "$sum" "$path"
-    else
-      error "owned path is missing from $tree: $path"
+    if [[ ! -e "$tree/$path" ]]; then
+      error "runtime path is missing from $tree: $path"
       return 1
     fi
+
+    # The structural rule the checker holds (above), held at the write too, so
+    # no publish records a tree its own doctor would call drifted.
+    if [[ "$path" == bin/* && "$path" != "bin/utilz" && "$path" != */*/* ]] &&
+      [[ ! -L "$tree/$path" || "$(readlink "$tree/$path")" != "utilz" ]]; then
+      error "$path is not a link to the dispatcher (bin/<name> -> utilz): $tree"
+      return 1
+    fi
+
+    sum=$(sha256_of "$tree/$path") || {
+      error "could not checksum: $path"
+      return 1
+    }
+    printf '%s  %s\n' "$sum" "$path"
   done <<< "$paths"
 }
 
-# THE MANIFEST'S HEADER KEYS, DEFINED ONCE (issue 0016). A row whose first
-# field is one of these is a header, not a path. The writer, the verifier's
-# skip and both path counts read this list. Until 2026-09-14 each of them
-# restated the three keys it knew, so a fourth key would have missed one of
-# them and been verified as a path, or counted as one.
-INSTALL_MANIFEST_HEADER_KEYS=(utilz-version source-commit source-tree ci-state managed-by)
-
-# Succeed when <kind> names a manifest header row.
-install_manifest_is_header() {
-  local key
-  for key in "${INSTALL_MANIFEST_HEADER_KEYS[@]}"; do
-    if [[ "$1" == "$key" ]]; then
-      return 0
-    fi
-  done
-  return 1
-}
-
-# Echo how many rows of <manifest> name a path: every non-empty row that is
-# not a header.
+# Echo how many lines of <manifest>'s body name a path.
 install_manifest_path_count() {
-  local manifest="$1" kind n=0
+  local manifest="$1"
 
   if [[ ! -r "$manifest" ]]; then
     error "cannot read the manifest at $manifest"
     return 1
   fi
 
-  while IFS=$'\t' read -r kind _; do
-    [[ -n "$kind" ]] || continue
-    if install_manifest_is_header "$kind"; then
-      continue
-    fi
-    n=$((n + 1))
-  done < "$manifest"
-  echo "$n"
+  grep -c -v -E '^(#|$)' "$manifest" || true
 }
 
 # Write the manifest for a SOURCE tree to <out>:
@@ -341,10 +217,6 @@ install_manifest_write() {
     return 1
   }
 
-  # Rows may be supplied by the caller: upgrade composes them so a file it
-  # declined to overwrite keeps its install-time row (install_manifest_rows_
-  # preserving). One writer either way -- the header is composed in exactly
-  # one place.
   if [[ $# -ge 4 ]]; then
     rows="$4"
   else
@@ -354,13 +226,13 @@ install_manifest_write() {
   # NO generated-at timestamp. A timestamp makes two manifests of identical
   # bytes compare unequal, which turns the one instrument that reports drift
   # into a thing that always reports drift.
-  # source-tree is what makes `utilz use dev` turnkey (D13): each tree then
-  # holds the address of the other, so neither direction needs a path typed or
+  # source_tree is what makes `utilz use dev` turnkey (D13): an opt tree then
+  # holds the address of the dev tree, so that direction needs no path typed or
   # a second config key invented. Made absolute, because a relative spelling
   # names the tree only from where the publish ran. Resolved LOGICALLY, never
   # with -P (issue 0039): the row is an address, compared as a string with link
-  # roots that _install_link_root resolves logically, as the dispatcher
-  # resolves its own home. _install_is_git_toplevel's -P is the one exception,
+  # roots that _install_link_state resolves logically, as the dispatcher
+  # resolves its own home. utilz_is_git_toplevel's -P is the one exception,
   # because git reports its toplevel physically.
   local source_tree
   source_tree=$(cd "$tree" 2>/dev/null && pwd) || {
@@ -377,36 +249,38 @@ install_manifest_write() {
   fi
 
   # One value per header key, IN THE KEYS' ORDER. The count is checked, so a
-  # key added to INSTALL_MANIFEST_HEADER_KEYS without a value here fails the
-  # write rather than recording a row with nothing in it.
-  local header_values=("$version" "$commit" "$source_tree" "$ci_state" "$manager")
-  if [[ ${#header_values[@]} -ne ${#INSTALL_MANIFEST_HEADER_KEYS[@]} ]]; then
-    error "the manifest has ${#INSTALL_MANIFEST_HEADER_KEYS[@]} header keys but ${#header_values[@]} values for them"
+  # key added to UTILZ_MANIFEST_HEADER_KEYS without a value here fails the
+  # write rather than recording a key with nothing in it.
+  local header_values=("utilz" "$version" "$commit" "$manager" "$source_tree"
+    "${ci_state%%$'\t'*}" "${ci_state#*$'\t'}")
+  if [[ ${#header_values[@]} -ne ${#UTILZ_MANIFEST_HEADER_KEYS[@]} ]]; then
+    error "the manifest has ${#UTILZ_MANIFEST_HEADER_KEYS[@]} header keys but ${#header_values[@]} values for them"
     return 1
   fi
 
   local i
   {
-    for i in "${!INSTALL_MANIFEST_HEADER_KEYS[@]}"; do
-      printf '%s\t%s\n' "${INSTALL_MANIFEST_HEADER_KEYS[$i]}" "${header_values[$i]}"
+    for i in "${!UTILZ_MANIFEST_HEADER_KEYS[@]}"; do
+      printf '# %s: %s\n' "${UTILZ_MANIFEST_HEADER_KEYS[$i]}" "${header_values[$i]}"
     done
     printf '%s\n' "$rows"
   } > "$out"
 }
 
-# Echo one row per owned path whose on-disk state differs from its manifest
-# row, TAB-separated as "<reason><TAB><path>". Silence means the install
+# Echo one row per runtime path whose on-disk state differs from its manifest
+# line, TAB-separated as "<reason><TAB><path>". Silence means the install
 # matches the manifest it was written with.
 #
 #   missing      the path is not there at all
-#   modified     a file whose sha256 differs from its row
-#   retargeted   a link whose target string differs from its row
-#   not-a-link   the manifest says link and the disk holds a regular file
-#   not-a-file   the manifest says file and the disk holds a link
+#   modified     a file whose sha256 differs from its line
+#   not-a-link   a dispatcher link under bin/ that arrived as a regular file
+#   retargeted   a dispatcher link whose target is not `utilz`
 #
-# rc 0 no drift, rc 1 drift reported, rc 2 the manifest could not be read.
-# Three answers, three codes, for the same reason install_tree_state has three
-# values: "matches" and "cannot tell" must never render as the same answer.
+# rc 0 no drift, rc 1 drift reported, rc 2 the manifest could not be read,
+# rc 3 the manifest is Utilz's in the old form (contract T3), read for nothing
+# more. Four answers, four codes, for the same reason utilz_runtime_state has
+# three values: "matches" and "cannot tell" must never render as the same
+# answer, and "cannot tell" has two remedies.
 #
 # THE ROLL-CALL IS REQUIRED, NOT MERELY CONVENIENT. THIS FUNCTION MUST NEVER
 # WALK THE TREE (AC18). It reads the manifest and looks at nothing else, so a
@@ -434,7 +308,7 @@ install_manifest_write() {
 install_manifest_check() {
   local root="$1"
   local manifest="$root/$UTILZ_MANIFEST_NAME"
-  local kind value path actual
+  local line sum path actual
   local drift=0
 
   if [[ ! -f "$manifest" ]]; then
@@ -442,32 +316,34 @@ install_manifest_check() {
     return 2
   fi
 
-  while IFS=$'\t' read -r kind value path; do
-    # A header row is not a path, and the header keys have one home (issue 0016).
-    if install_manifest_is_header "$kind"; then
-      continue
+  if ! utilz_manifest_is_current "$manifest"; then
+    if utilz_manifest_is_old "$manifest"; then
+      return 3
     fi
-    case "$kind" in
-      file | link) ;;
-      "") continue ;;
-      *)
-        # An unrecognised row is a manifest this code cannot vouch for, and
-        # skipping it would report "no drift" over a file nothing checked.
-        error "unrecognised manifest row kind '$kind' in $manifest"
-        return 2
-        ;;
+    error "$manifest is not a manifest Utilz wrote"
+    return 2
+  fi
+
+  while IFS= read -r line; do
+    # The header is not a path, and its keys have one home (issue 0016).
+    case "$line" in
+      "" | "#"*) continue ;;
     esac
 
-    [[ -n "$path" ]] || continue
-
-    if [[ ! -e "$root/$path" && ! -L "$root/$path" ]]; then
-      printf 'missing\t%s\n' "$path"
-      drift=1
-      continue
+    # "<sha256>  <path>": a line in any other shape is a manifest this code
+    # cannot vouch for, and skipping it would report "no drift" over a file
+    # nothing checked.
+    sum="${line%%  *}"
+    path="${line#*  }"
+    if [[ ! "$sum" =~ ^[0-9a-f]{64}$ || -z "$path" || "$path" == "$line" ]]; then
+      error "unreadable manifest line in $manifest: $line"
+      return 2
     fi
 
-    if [[ "$kind" == "link" ]]; then
-      if [[ ! -L "$root/$path" ]]; then
+    # The dispatcher links, structurally (above): a link git names in the
+    # runtime set is bin/<name> -> utilz, and nothing else is a link.
+    if [[ "$path" == bin/* && "$path" != "bin/utilz" && "$path" != */*/* ]]; then
+      if [[ -e "$root/$path" && ! -L "$root/$path" ]]; then
         # cp dereferences a symlink, so an install that took this path still
         # WORKS: N copies of the dispatcher, nothing failing, and nothing
         # saying anything. It is its own reason rather than 'modified'.
@@ -475,29 +351,24 @@ install_manifest_check() {
         drift=1
         continue
       fi
-
-      actual=$(readlink "$root/$path") || {
-        error "could not read link target: $path"
-        return 2
-      }
-
-      if [[ "$actual" != "$value" ]]; then
+      if [[ -L "$root/$path" && "$(readlink "$root/$path")" != "utilz" ]]; then
         printf 'retargeted\t%s\n' "$path"
-        drift=1
-      fi
-    else
-      if [[ -L "$root/$path" ]]; then
-        printf 'not-a-file\t%s\n' "$path"
         drift=1
         continue
       fi
+    fi
 
-      actual=$(sha256_of "$root/$path") || return 2
+    if [[ ! -e "$root/$path" ]]; then
+      printf 'missing\t%s\n' "$path"
+      drift=1
+      continue
+    fi
 
-      if [[ "$actual" != "$value" ]]; then
-        printf 'modified\t%s\n' "$path"
-        drift=1
-      fi
+    actual=$(sha256_of "$root/$path") || return 2
+
+    if [[ "$actual" != "$sum" ]]; then
+      printf 'modified\t%s\n' "$path"
+      drift=1
     fi
   done < "$manifest"
 
@@ -517,7 +388,7 @@ install_copy_owned() {
   local skip="${3:-}"
   local paths path target
 
-  paths=$(install_owned_paths "$src") || return 1
+  paths=$(utilz_runtime_set "$src") || return 1
 
   mkdir -p "$dst" || {
     error "could not create $dst"
@@ -862,8 +733,9 @@ install_ci_state() {
 # ONE REFUSAL FOR EVERY VERB THAT WRITES OR LINKS A TREE. brew checksums what
 # it installed and removes a versioned keg at the next `brew upgrade`, so a
 # rewrite breaks brew's record and a PATH link into the keg breaks later. The
-# verb is not named: `use` reaches this through relink, and one message that
-# is true for both is better than two that each name one.
+# verb is not named: install and `use opt` both reach it, and one message that
+# is true for both is better than two that each name one. `use brew` points no
+# link into the keg: it removes the links, so brew's own answer (T5).
 install_refuse_keg() {
   local dir="$1"
   local manager
@@ -902,13 +774,13 @@ Usage: utilz install [--prefix DIR] [--force] [--managed-by brew]
 
 Publish a runnable install of this Utilz checkout.
 
-  --prefix DIR        Publish here instead of install.prefix from opt/utilz/utilz.yaml
-  --force             Publish over an existing install
+  --prefix DIR        Publish here instead of $UTILZ_INSTALL_PREFIX
+  --force             Republish over an existing install (the one republish)
   --managed-by brew   Record that Homebrew owns the tree (the formula's publish)
 
-The source tree must be CLEAN. The manifest records the commit the bytes came
-from, and that claim holds only when nothing is uncommitted. No flag overrides
-it, --force included.
+It runs only in a dev checkout. The checkout's runtime set must be CLEAN: the
+manifest records the commit the bytes came from, and that claim holds only
+when none of them is uncommitted. No flag overrides it, --force included.
 USAGE
 }
 
@@ -961,11 +833,11 @@ install_verb_install() {
   done
 
   if [[ -z "$prefix" ]]; then
-    prefix=$(install_prefix_configured "$src") || return 1
+    prefix=$(install_prefix_configured) || return 1
   fi
 
   local state kind commit
-  state=$(install_tree_state "$src")
+  state=$(utilz_runtime_state "$src")
   kind=$(install_tree_kind "$prefix")
   commit=$(install_tree_commit "$src")
 
@@ -977,9 +849,19 @@ install_verb_install() {
   install_refuse_keg "$src" || return 1
   install_refuse_keg "$prefix" || return 1
 
+  # ONLY FROM A DEV TREE, BY NAME (contract T2, issue 0105). An opt install is
+  # no git repository, so the provenance refusal below caught it too, but by a
+  # reason that does not name the rule.
+  if [[ "$(install_tree_kind "$src")" == "install" ]]; then
+    error "utilz install runs only in a dev checkout, and this is an install: $src"
+    echo "  Publish from the dev checkout it came from, with 'utilz install" >&2
+    echo "  --force' there." >&2
+    return 1
+  fi
+
   case "$state" in
     dirty)
-      error "source tree is dirty: $src"
+      error "the runtime set is dirty: $src"
       echo "  An install cut from a dirty tree launders the bytes through one" >&2
       echo "  more hop and gives them the look of provenance. Devbin measured" >&2
       echo "  five of thirteen estates running bytes that matched no commit." >&2
@@ -1003,26 +885,34 @@ install_verb_install() {
       echo "  it happens to equal the source." >&2
       return 1
       ;;
+    foreign)
+      error "$prefix holds a $UTILZ_MANIFEST_NAME that Utilz did not write"
+      echo "  A republish replaces only a prefix whose manifest says Utilz wrote" >&2
+      echo "  it (contract T2). Choose another prefix, or clear this one first." >&2
+      return 1
+      ;;
     install)
       if [[ $force -eq 0 ]]; then
         error "an install already exists at $prefix"
-        echo "  Use 'utilz upgrade' to replace it, which reports files edited" >&2
-        echo "  in place instead of overwriting them. Or --force to publish" >&2
-        echo "  straight over it." >&2
+        echo "  Republish over it with 'utilz install --force'. An install in the" >&2
+        echo "  old manifest form is Utilz's too, and --force republishes it." >&2
         return 1
       fi
       ;;
   esac
 
   install_build_prez "$src" || return 1
+  # The body is read before anything is copied, so a runtime set its own doctor
+  # would refuse (a bin/ entry that is not a link to the dispatcher) stops the
+  # publish with the prefix untouched.
+  local rows
+  rows=$(install_manifest_rows "$src") || return 1
   install_copy_owned "$src" "$prefix" || return 1
   # CI's verdict on the commit being published (issue 0016), asked here, at the
   # coordination, and handed to the writer. Recorded, never enforced: no
   # answer refuses the publish.
   local ci_state
   ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
-  local rows
-  rows=$(install_manifest_rows "$src") || return 1
   install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" "$rows" "$manager" || return 1
 
   local count
@@ -1030,564 +920,662 @@ install_verb_install() {
   success "installed $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
 }
 
-# Echo the manifest rows for <src>, except that any path listed in <preserved>
-# (newline-separated) keeps its row from <old_manifest> verbatim.
-#
-# A file the upgrade declined to overwrite keeps its INSTALL-TIME row, and the
-# two wrong answers are both worse in the same direction. Re-checksumming what
-# is on disk records the edit as canonical and the next check pronounces the
-# file intact -- the refusal still prints, and the evidence that made it
-# necessary is destroyed by the same pass. Writing the NEW source's checksum
-# claims a file was updated that was not. The install-time row leaves the
-# drift visible, which is the only one of the three that stays true.
-install_manifest_rows_preserving() {
-  local src="$1"
-  local old_manifest="$2"
-  local preserved="$3"
-  local rows row path old
-
-  rows=$(install_manifest_rows "$src") || return 1
-
-  if [[ -z "$preserved" ]]; then
-    printf '%s\n' "$rows"
-    return 0
-  fi
-
-  while IFS= read -r row; do
-    [[ -n "$row" ]] || continue
-
-    # The path is the third TAB-separated field; no owned path contains a tab.
-    path=${row##*$'\t'}
-
-    if printf '%s\n' "$preserved" | grep -qxF "$path"; then
-      # A path row only: ci-state is a header whose third field is free text
-      # (issue 0016), and a match on the field alone could take it for a path.
-      old=$(awk -F'\t' -v p="$path" '($1 == "file" || $1 == "link") && $3 == p { print; exit }' "$old_manifest")
-      if [[ -n "$old" ]]; then
-        printf '%s\n' "$old"
-        continue
-      fi
-      # No old row for a path we chose to preserve means the manifest and the
-      # drift report disagree, which is a state neither can be trusted in.
-      error "preserved path has no row in $old_manifest: $path"
-      return 1
-    fi
-
-    printf '%s\n' "$row"
-  done <<< "$rows"
-}
-
 install_usage_upgrade() {
   cat <<'USAGE'
-Usage: utilz upgrade [--prefix DIR] [--force]
+Usage: utilz upgrade
 
-Replace an existing install with this Utilz checkout.
+Upgrade the tree this utilz runs from, as that tree is upgraded:
 
-  --prefix DIR  Upgrade the install here instead of install.prefix
-  --force       Overwrite files that were edited in place
-
-Files edited in place are REPORTED and left alone, and keep their install-time
-checksum so the next check still reports them. The source tree must be clean;
-no flag overrides that.
+  dev    git pull --ff-only, then build prez and showreel
+  opt    nothing: opt is republished from its dev checkout with
+         'utilz install --force', and this says when dev is ahead
+  brew   brew update, then HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz,
+         when brew says it is outdated
 USAGE
 }
 
-# `utilz upgrade` -- replace an install, preserving what someone edited.
+# `utilz upgrade` -- UPGRADE BY TREE (dev, opt, brew contract T6, issue 0105).
 #
-# The mirror of install (AC04) plus the one behaviour install does not have.
+# It never publishes: `install --force` is the one republish (T2). What it does
+# is the tree's own upgrade, asked of utilz_tree, so the one verb is right in
+# every tree and nobody has to remember which tree they are in.
 install_verb_upgrade() {
-  local prefix=""
-  local force=0
-  local src="$UTILZ_HOME"
+  case "${1:-}" in
+    "") ;;
+    -h | --help)
+      install_usage_upgrade
+      return 0
+      ;;
+    *)
+      error "utilz upgrade takes no arguments, and was given '$*'"
+      install_usage_upgrade >&2
+      return 2
+      ;;
+  esac
 
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --prefix)
-        if [[ $# -lt 2 ]]; then
-          error "--prefix requires a DIR argument"
-          return 2
-        fi
-        prefix=$(expand_tilde "$2")
-        shift 2
-        ;;
-      --force)
-        force=1
-        shift
-        ;;
-      -h | --help)
-        install_usage_upgrade
-        return 0
-        ;;
-      *)
-        error "Unknown option: $1"
-        install_usage_upgrade >&2
-        return 2
-        ;;
-    esac
-  done
+  local tree
+  tree=$(utilz_tree)
 
-  if [[ -z "$prefix" ]]; then
-    prefix=$(install_prefix_configured "$src") || return 1
-  fi
+  case "$tree" in
+    dev)
+      _install_upgrade_dev
+      ;;
+    opt)
+      _install_upgrade_opt
+      ;;
+    brew*)
+      # An old keg's remedy is this very upgrade (T3 amendment).
+      _install_upgrade_brew
+      ;;
+    "opt old")
+      error "this opt install has an old manifest: $UTILZ_HOME"
+      echo "  Republish it from the dev checkout with 'utilz install --force'." >&2
+      return 2
+      ;;
+    *)
+      error "$UTILZ_HOME is no tree Utilz can name, so there is no upgrade for it"
+      echo "  Install Utilz with Homebrew: brew install matthewsinclair/utilz/utilz" >&2
+      return 1
+      ;;
+  esac
+}
 
-  local state kind commit
-  state=$(install_tree_state "$src")
-  kind=$(install_tree_kind "$prefix")
-  commit=$(install_tree_commit "$src")
-
-  install_announce "upgrade" "$src" "$state" "$commit" "$prefix" "$kind"
-
-  # A keg's upgrade is brew's, from either end (ST0019 D4).
-  install_refuse_keg "$src" || return 1
-  install_refuse_keg "$prefix" || return 1
+# dev: the pull, refused over a dirty runtime set, then the publish's own build.
+_install_upgrade_dev() {
+  local state before after
+  state=$(utilz_runtime_state "$UTILZ_HOME") || return 1
 
   case "$state" in
     dirty)
-      error "source tree is dirty: $src"
-      echo "  The manifest records the commit the bytes came from, and that is" >&2
-      echo "  only true when nothing is uncommitted. There is no flag for this" >&2
-      echo "  one. Commit or stash first." >&2
+      error "the runtime set is dirty, so upgrade will not pull over it: $UTILZ_HOME"
+      echo "  Commit or stash first." >&2
       return 1
       ;;
     unknown)
-      error "cannot establish provenance: $src is not a git repository"
+      error "git cannot read $UTILZ_HOME, so there is nothing to pull"
       return 1
       ;;
   esac
 
-  if [[ "$kind" != "install" ]]; then
-    error "no install at $prefix"
-    echo "  Use 'utilz install' to publish one. upgrade replaces an install" >&2
-    echo "  that is already there; it will not create the first one, because" >&2
-    echo "  there would be nothing to preserve and nothing to report." >&2
+  before=$(git -C "$UTILZ_HOME" rev-parse --short=12 HEAD) || return 1
+  echo "upgrade: git pull --ff-only in $UTILZ_HOME"
+  git -C "$UTILZ_HOME" pull --ff-only || {
+    error "git pull --ff-only failed in $UTILZ_HOME"
     return 1
-  fi
-
-  # The drift is computed BEFORE anything is written. A report taken after the
-  # copy would describe the tree the copy just made, not the one someone edited.
-  local drift check_rc=0
-  drift=$(install_manifest_check "$prefix") || check_rc=$?
-
-  if [[ $check_rc -eq 2 ]]; then
-    error "the install at $prefix has a manifest this cannot read"
-    return 1
-  fi
-
-  local preserved="" reason path kept=0
-  if [[ $force -eq 0 && -n "$drift" ]]; then
-    while IFS=$'\t' read -r reason path; do
-      [[ -n "$path" ]] || continue
-      case "$reason" in
-        modified | retargeted | not-a-link | not-a-file)
-          warn "left alone ($reason): $path"
-          preserved="${preserved}${path}"$'\n'
-          kept=$((kept + 1))
-          ;;
-        missing)
-          # Nothing was authored there, so there is nothing to preserve. The
-          # copy restores it.
-          ;;
-      esac
-    done <<< "$drift"
-  fi
-
-  install_build_prez "$src" || return 1
-  install_copy_owned "$src" "$prefix" "$preserved" || return 1
-
-  local rows
-  rows=$(install_manifest_rows_preserving "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$preserved") || return 1
-  # CI's verdict on the commit being published, asked and handed in exactly as
-  # install does (issue 0016).
-  local ci_state
-  ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
-  install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" "$rows" || return 1
-
-  local count
-  count=$(install_manifest_path_count "$prefix/$UTILZ_MANIFEST_NAME") || return 1
-
-  if [[ $kept -gt 0 ]]; then
-    success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths, $kept left alone"
-    echo "  The $kept file(s) above keep their install-time checksum, so the" >&2
-    echo "  next check still reports them. Re-run with --force to overwrite." >&2
+  }
+  after=$(git -C "$UTILZ_HOME" rev-parse --short=12 HEAD) || return 1
+  if [[ "$before" == "$after" ]]; then
+    success "already at $after"
   else
-    success "upgraded to $(cat "$src/VERSION") ($commit) at $prefix -- $count paths"
-  fi
-}
-
-# Echo the Utilz tree root that <link> points into, or return 1 if it points
-# somewhere else. Resolution follows the kernel's rule: a relative target is
-# resolved from the LINK's own directory, not from the caller's cwd.
-_install_link_root() {
-  local link="$1"
-  local target tdir root
-
-  target=$(readlink "$link") || return 1
-
-  if [[ "$target" == /* ]]; then
-    tdir=$(cd "$(dirname "$target")" 2>/dev/null && pwd) || return 1
-  else
-    tdir=$(cd "$(dirname "$link")" 2>/dev/null && cd "$(dirname "$target")" 2>/dev/null && pwd) || return 1
+    success "pulled $before to $after"
   fi
 
-  # Every Utilz link, whatever its shape, lands in <root>/bin.
-  [[ "$(basename "$tdir")" == "bin" ]] || return 1
-  root=$(cd "$tdir/.." 2>/dev/null && pwd) || return 1
-
-  case "$(install_tree_kind "$root")" in
-    install | source) printf '%s\n' "$root" ;;
-    *) return 1 ;;
-  esac
+  # The build the publish makes, so one build path serves both (T6: then the
+  # tool's build where it has one).
+  install_build_prez "$UTILZ_HOME" || return 1
+  utilz_version_line
 }
 
-# Echo one row per SYMLINK in <bindir>: "<name><TAB><root>", where <root> is
-# the Utilz tree the link resolves into, or "-" when it resolves elsewhere.
-#
-# THE ONE LINK-WALK. relink acts on this census and `use` reports from it; a
-# second walk anywhere would be a second answer to "which of these links are
-# ours" (IN-AG-HIGHLANDER-001), and the one that drifted would be whichever
-# nobody was reading.
-install_link_census() {
-  local bindir="$1"
-  local entry name root
+# opt: nothing written. It says how opt is upgraded, and when its dev checkout
+# is ahead of what was published. rc 2: refused, nothing changed, as Utilz's
+# refusals are.
+_install_upgrade_opt() {
+  local manifest="$UTILZ_HOME/$UTILZ_MANIFEST_NAME" src commit head
 
-  for entry in "$bindir"/*; do
-    [[ -L "$entry" ]] || continue
-    name=$(basename "$entry")
+  src=$(utilz_manifest_value "$manifest" source_tree 2>/dev/null) || src=""
+  commit=$(utilz_manifest_value "$manifest" source_commit 2>/dev/null) || commit=""
 
-    if root=$(_install_link_root "$entry"); then
-      printf '%s\t%s\n' "$name" "$root"
-    else
-      printf '%s\t-\n' "$name"
-    fi
-  done
-}
+  error "an opt install is upgraded from its dev checkout, never on its own"
+  echo "  Republish it there: cd ${src:-<the dev checkout>} && bin/utilz install --force" >&2
 
-# Echo one row per utility of <tree> with no link in <bindir>:
-# "<name><TAB>missing" when nothing holds its name there, or
-# "<name><TAB>not-a-link" when a file that is not a link does. A link of that
-# name is the census's to judge. The tree's utilities, not the running
-# tree's, since only those can be linked into it (issue 0079). Each name is
-# looked up rather than listed, so the census stays the one walk of the bin
-# dir.
-install_link_gaps() {
-  local tree="$1"
-  local bindir="$2"
-  local name
-
-  while IFS= read -r name; do
-    if [[ -L "$bindir/$name" ]]; then
-      continue
-    fi
-    if [[ -e "$bindir/$name" ]]; then
-      printf '%s\tnot-a-link\n' "$name"
-    else
-      printf '%s\tmissing\n' "$name"
-    fi
-  done < <(each_utility "$tree")
-}
-
-install_usage_relink() {
-  cat <<'USAGE'
-Usage: utilz relink [--prefix DIR] [--bin-dir DIR]
-
-Repoint the PATH symlinks at a Utilz tree.
-
-  --prefix DIR   The tree to point at. Default: install.prefix
-  --bin-dir DIR  Where the links live. Default: ~/.local/bin
-
-Links that resolve into a Utilz tree are repointed; anything else is left
-alone and reported as skipped. Where the directory holds a Utilz link, each
-utility of the tree with no link there gets one, and a link for a utility
-the tree does not have is left as it is. install and upgrade NEVER do this
-implicitly.
-USAGE
-}
-
-# `utilz relink` -- the explicit PATH cutover (AC20).
-#
-# AC11 and AC20 are one policy from two sides: never implicitly, always
-# available explicitly. A --relink flag on install was rejected because a flag
-# becomes habitual, and habitual relinking is implicit relinking with a longer
-# spelling.
-install_verb_relink() {
-  local prefix=""
-  local bindir=""
-  local src="$UTILZ_HOME"
-
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --prefix)
-        if [[ $# -lt 2 ]]; then
-          error "--prefix requires a DIR argument"
-          return 2
-        fi
-        prefix=$(expand_tilde "$2")
-        shift 2
-        ;;
-      --bin-dir)
-        if [[ $# -lt 2 ]]; then
-          error "--bin-dir requires a DIR argument"
-          return 2
-        fi
-        bindir=$(expand_tilde "$2")
-        shift 2
-        ;;
-      -h | --help)
-        install_usage_relink
-        return 0
-        ;;
-      *)
-        error "Unknown option: $1"
-        install_usage_relink >&2
-        return 2
-        ;;
-    esac
-  done
-
-  if [[ -z "$prefix" ]]; then
-    prefix=$(install_prefix_configured "$src") || return 1
+  if [[ -n "$src" && "$(utilz_tree "$src")" == dev* ]] &&
+    head=$(git -C "$src" rev-parse HEAD 2>/dev/null) && [[ "$head" != "$commit" ]]; then
+    echo "  The dev checkout is at ${head:0:12}; this install is ${commit:0:12}." >&2
   fi
-  if [[ -z "$bindir" ]]; then
-    bindir="$HOME/.local/bin"
-  fi
+  return 2
+}
 
-  # From a keg or into one, PATH is brew's to link (ST0019 D4). `use` reaches
-  # this too: it is a coordinator over relink and carries no refusal of its own.
-  install_refuse_keg "$src" || return 1
-  install_refuse_keg "$prefix" || return 1
+# brew: an explicit `brew update` first, as a step of its own (T6 allows one),
+# because with Homebrew's auto-update off `brew outdated` reads a stale tap and
+# never names a new release (utilz-vc, 24 Oct). Then brew's own upgrade, with
+# HOMEBREW_NO_AUTO_UPDATE=1, and only when brew names utilz as outdated.
+_install_upgrade_brew() {
+  local out rc=0 root
 
-  case "$(install_tree_kind "$prefix")" in
-    install | source) ;;
-    *)
-      error "not a Utilz tree: $prefix"
-      echo "  relink points PATH symlinks at a tree that already exists. Publish" >&2
-      echo "  one with 'utilz install' first." >&2
-      return 1
-      ;;
-  esac
-
-  # Absolute, once. A relative tree went into each link as typed, and the
-  # kernel reads a relative target from the link's own directory, so every
-  # link broke while the report said changed (issue 0079). Logical pwd, as
-  # _install_link_root resolves the links' trees, so the census's roots
-  # compare with it.
-  prefix=$(CDPATH='' cd -- "$prefix" && pwd) || {
-    error "could not resolve the tree's path: $prefix"
+  echo "upgrade: brew update, so brew outdated reads the current tap"
+  "$INSTALL_BREW" update || {
+    error "brew update failed, so upgrade did not ask whether utilz is outdated"
     return 1
   }
 
-  if [[ ! -d "$bindir" ]]; then
-    error "no such directory: $bindir"
-    return 1
-  fi
-
-  echo "relink: $bindir into $prefix"
-
-  local name target root newtarget gap
-  local changed=0 already=0 left=0 linked=0 ours=0
-
-  # Process substitution, never a pipe: the counters below accumulate in this
-  # shell and a pipe would subshell the loop body away.
-  while IFS=$'\t' read -r name root; do
-    [[ -n "$name" ]] || continue
-
-    if [[ "$root" == "-" ]]; then
-      # Not ours. Leaving it is the whole point of the row: a verb that
-      # quietly tidies what it was not pointed at is the same shape as a
-      # manifest check that re-blesses a file it refused.
-      echo "  skipped:   $name (not a Utilz link)"
-      left=$((left + 1))
-      continue
-    fi
-    ours=$((ours + 1))
-
-    # A utility the tree does not have keeps the link it has: pointed into
-    # the tree it would name nothing, as `use opt` would make of a utility
-    # added since the install was published, and a link into the tree whose
-    # file has gone is not already correct (issue 0079).
-    if [[ ! -e "$prefix/bin/$name" ]]; then
-      echo "  skipped:   $name (not in $prefix)"
-      left=$((left + 1))
-      continue
-    fi
-
-    target=$(readlink "$bindir/$name")
-
-    if [[ "$root" == "$prefix" ]]; then
-      echo "  unchanged: $name"
-      already=$((already + 1))
-      continue
-    fi
-
-    # WHICH FILE the link names is preserved. bin/utilz and bin/<name> both
-    # dispatch, because the dispatcher reads basename "$0", so choosing
-    # between them would be normalising a convention rather than relinking
-    # (design.md D9). ~/.local/bin/prez names the dispatcher and stays that
-    # way.
-    #
-    # What is NOT preserved is relative-ness, and it cannot be: a relative
-    # target names the OLD tree by construction, so a repoint has to rewrite
-    # it, and recomputing a relative path across a tree move is arithmetic
-    # that produces a silently broken link when it is wrong.
-    newtarget="$prefix/bin/$(basename "$target")"
-
-    ln -sfn "$newtarget" "$bindir/$name" || {
-      error "could not relink $name"
+  out=$(HOMEBREW_NO_AUTO_UPDATE=1 "$INSTALL_BREW" outdated --quiet utilz 2>&1) || rc=$?
+  # brew naming utilz is the outdated answer, whatever its status. Any other
+  # non-zero is a brew outdated that did not answer, which is never "current"
+  # (utilz-vc's W6).
+  if printf '%s\n' "$out" | grep -qE '(^|/)utilz$'; then
+    echo "upgrade: HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz"
+    HOMEBREW_NO_AUTO_UPDATE=1 "$INSTALL_BREW" upgrade utilz || {
+      error "brew upgrade utilz failed"
       return 1
     }
-    echo "  relinked:  $name -> $newtarget"
-    changed=$((changed + 1))
+  elif [[ $rc -ne 0 ]]; then
+    error "brew outdated failed (exit $rc): ${out:-it said nothing}"
+    return 1
+  else
+    success "brew's utilz is current"
+  fi
+
+  root=$(_install_brew_root) || return 1
+  (UTILZ_HOME="$root" utilz_version_line)
+}
+
+# Echo the state of <link> and, for a link into a Utilz tree, that tree's root,
+# TAB-separated: "ours<TAB><root>", "broken<TAB><target>" or "other". Resolution
+# follows the kernel's rule: a relative target is resolved from the LINK's own
+# directory, not from the caller's cwd.
+#
+#   ours     its target is the DISPATCHER in a Utilz tree's bin/: bin/utilz,
+#            or a bin/<name> that is itself a link to utilz, each_utility's
+#            own test (utilz-vc's W2). Anything else a checkout's bin/ holds,
+#            eg bin/devbin or a personal script, is not ours, and `use brew`
+#            never removes it.
+#   broken   it names <dir>/bin/<name> or <dir>/bin/utilz, and nothing is there:
+#            a Utilz link into a tree that has gone, eg a removed worktree
+#            (utilz-vc's W1). use dev|opt repoints it, use brew removes it, and
+#            the report and doctor fail on it.
+#   other    anything else.
+#
+# The root is LOGICAL, as the dispatcher resolves its own home, so a report
+# names the path a person typed. Two roots are compared by what they resolve
+# to (-ef, or pwd -P), never as strings (utilz-vc's W3).
+_install_link_state() {
+  local link="$1"
+  local target tdir base root hop
+
+  target=$(readlink "$link") || {
+    printf 'other\n'
+    return 0
+  }
+  base=$(basename "$target")
+
+  if [[ "$target" == /* ]]; then
+    tdir=$(cd "$(dirname "$target")" 2>/dev/null && pwd) || tdir=""
+  else
+    tdir=$(cd "$(dirname "$link")" 2>/dev/null && cd "$(dirname "$target")" 2>/dev/null && pwd) || tdir=""
+  fi
+
+  # A dispatcher-shaped target that names nothing is a link into a tree that
+  # has gone: one to a utilz, or one named for a utility of the current tree's
+  # own set. Any other dangling */bin/<name> is another tool's, left alone
+  # (utilz-vc's F1).
+  if [[ ! -e "$link" && "$(basename "$(dirname "$target")")" == "bin" ]]; then
+    if [[ "$base" == "utilz" ]] ||
+      { [[ "$base" == "$(basename "$link")" ]] && _install_is_link_set_name "$base"; }; then
+      printf 'broken\t%s\n' "$target"
+      return 0
+    fi
+  fi
+
+  if [[ -z "$tdir" || "$(basename "$tdir")" != "bin" ]]; then
+    printf 'other\n'
+    return 0
+  fi
+  root=$(cd "$tdir/.." 2>/dev/null && pwd) || {
+    printf 'other\n'
+    return 0
+  }
+  case "$(install_tree_kind "$root")" in
+    install | source) ;;
+    *)
+      printf 'other\n'
+      return 0
+      ;;
+  esac
+
+  # The dispatcher, and nothing else in that bin/.
+  hop="$tdir/$base"
+  if [[ "$base" == "utilz" && ! -L "$hop" ]] ||
+    [[ -L "$hop" && "$(readlink "$hop")" == "utilz" ]]; then
+    printf 'ours\t%s\n' "$root"
+  else
+    printf 'other\n'
+  fi
+}
+
+# Echo one row per SYMLINK in <bindir>: "<name><TAB><state>[<TAB><detail>]",
+# as _install_link_state answers for it.
+#
+# THE ONE LINK-WALK. `use` acts on this census and reports from it, and doctor
+# reads it; a second walk anywhere would be a second answer to "which of these
+# links are ours" (IN-AG-HIGHLANDER-001), and the one that drifted would be
+# whichever nobody was reading.
+install_link_census() {
+  local bindir="$1"
+  local entry
+
+  for entry in "$bindir"/*; do
+    [[ -L "$entry" ]] || continue
+    printf '%s\t%s\n' "$(basename "$entry")" "$(_install_link_state "$entry")"
+  done
+}
+
+# ============================================================================
+# THE SWITCH: `utilz use [dev|opt|brew]` (dev, opt, brew contract T5, issue 0105)
+# ============================================================================
+#
+# The link set is `utilz` and every utility of a tree, in the link directory,
+# ~/.local/bin. The links are the only record of which tree serves the shell,
+# and nothing else stores it. `use dev|opt` points every link of the set at that
+# tree; `use brew` removes them, so Homebrew's own bin links answer: NO LINK
+# MEANS BREW. `use` is the one verb that points links; `relink`, which did it
+# with a tree typed, is retired as a public verb and its logic is this.
+
+# The brew command `use brew` asks for brew's prefix, assigned here so only
+# code that has sourced this file -- a test -- can point it anywhere else.
+INSTALL_BREW="brew"
+
+# Echo the link directory: UTILZ_LINK_DIR, FOR TESTS ONLY (contract T5 allows a
+# tool to name the directory for its tests), else ~/.local/bin. `use --bin-dir`
+# sets it for one run. One resolver, so use, its report and doctor read the
+# same directory.
+install_link_dir() {
+  printf '%s\n' "${UTILZ_LINK_DIR:-$HOME/.local/bin}"
+}
+
+# Echo the link set of <tree>, one name per line: the dispatcher, then each
+# utility the tree carries (each_utility, the one walker of bin/).
+install_link_set() {
+  printf 'utilz\n'
+  each_utility "$1"
+}
+
+# True when <name> is in the current tree's link set. The set is read whole
+# first: grep -q under pipefail would kill its producer.
+_install_is_link_set_name() {
+  local name="$1" set
+  set=$(install_link_set "$UTILZ_HOME") || return 1
+  grep -qxF -- "$name" <<<"$set"
+}
+
+# Echo the path <path> resolves to, following every link, as the kernel does: a
+# relative target is read from its link's own directory. Logical, so it
+# compares with the census's roots.
+_install_resolve() {
+  local path="$1" target dir
+  while [[ -L "$path" ]]; do
+    target=$(readlink "$path") || return 1
+    if [[ "$target" == /* ]]; then
+      path="$target"
+    else
+      path="$(dirname "$path")/$target"
+    fi
+  done
+  dir=$(cd "$(dirname "$path")" 2>/dev/null && pwd) || return 1
+  printf '%s/%s\n' "$dir" "$(basename "$path")"
+}
+
+# Echo one row per problem with the link set in <bindir>, TAB-separated, and
+# return 1 if there is any (contract T5's shadow and split checks):
+#
+#   broken<TAB><name><TAB><target>   a Utilz link into a tree that has gone
+#   split<TAB><root>                 the set serves more than one tree; one row
+#                                    per tree
+#   shadowed<TAB><name><TAB><hit>    a link in the set is not the first hit on
+#                                    PATH
+#
+# A directory with no Utilz link has no set to check, and answers nothing.
+# EVERY COMPARISON IS OF RESOLVED DIRECTORIES, never path strings (T5; utilz-
+# vc's W3): a PATH entry or a tree can be reached through a link (~/bin to
+# ~/.local/bin on rhadamanth, /tmp to /private/tmp on macOS).
+install_link_health() {
+  local bindir="$1"
+  local name state detail hit here there key keys="" roots="" n_roots=0 problems=0
+
+  [[ -d "$bindir" ]] || return 0
+  here=$(cd "$bindir" && pwd -P) || return 0
+
+  while IFS=$'\t' read -r name state detail; do
+    case "$state" in
+      broken)
+        printf 'broken\t%s\t%s\n' "$name" "$detail"
+        problems=1
+        continue
+        ;;
+      ours) ;;
+      *) continue ;;
+    esac
+    key=$(cd "$detail" 2>/dev/null && pwd -P) || key="$detail"
+    if [[ "$keys" != *$'\n'"$key"$'\n'* ]]; then
+      keys="${keys}"$'\n'"$key"$'\n'
+      roots="${roots}${detail}"$'\n'
+      n_roots=$((n_roots + 1))
+    fi
+    hit=$(type -P "$name" 2>/dev/null || true)
+    there=""
+    [[ -n "$hit" ]] && there=$(cd "$(dirname "$hit")" 2>/dev/null && pwd -P)
+    if [[ "$there" != "$here" ]]; then
+      printf 'shadowed\t%s\t%s\n' "$name" "${hit:-nothing on PATH}"
+      problems=1
+    fi
   done < <(install_link_census "$bindir")
 
-  # Each utility of the tree with nothing in the bin dir gets a link, which a
-  # census of the links already there can never name (issue 0079). Only where
-  # the census found a Utilz link: a directory holding none is not Utilz's to
-  # fill.
-  if [[ $ours -gt 0 ]]; then
-    while IFS=$'\t' read -r name gap; do
-      if [[ "$gap" == "not-a-link" ]]; then
-        echo "  skipped:   $name (not a link)"
-        left=$((left + 1))
-        continue
+  if [[ $n_roots -gt 1 ]]; then
+    while IFS= read -r detail; do
+      [[ -n "$detail" ]] && printf 'split\t%s\n' "$detail"
+    done <<< "$roots"
+    problems=1
+  fi
+
+  return "$problems"
+}
+
+# Say each problem install_link_health found in <bindir>, with the remedy, on
+# stderr. THE ONE RENDERER, for `use`'s report and doctor alike (utilz-vc's
+# recommendation 2), so the two cannot word one fault two ways.
+install_link_health_render() {
+  local bindir="$1" health="$2"
+  local kind a b
+
+  while IFS=$'\t' read -r kind a b; do
+    case "$kind" in
+      broken) error "$a in $bindir is a Utilz link into a tree that has gone: $b" ;;
+      split) error "the links in $bindir are split across trees; one points into $a" ;;
+      shadowed) error "$a in $bindir is shadowed: the first $a on PATH is $b" ;;
+    esac
+  done <<< "$health"
+  echo "  Put $bindir before Homebrew's bin on PATH (the sleeve's PATH order)," >&2
+  echo "  and make the set one tree with 'utilz use dev|opt|brew'." >&2
+}
+
+# Point every link of <tree>'s set in <bindir> at <tree>, creating the ones
+# that are missing and repointing a broken one. A link that is not Utilz's, and
+# a file that is not a link, are left alone and reported; so is a Utilz link
+# for a utility <tree> does not carry, which pointed into <tree> would name
+# nothing (issue 0079).
+_install_point_links() {
+  local tree="$1" bindir="$2"
+  local name link state detail target newtarget
+  local changed=0 already=0 left=0 linked=0
+
+  # Absolute, once. A relative tree went into each link as typed, and the
+  # kernel reads a relative target from the link's own directory, so every
+  # link broke while the report said changed (issue 0079). Logical pwd, so a
+  # link names the path a person typed; trees are compared with -ef.
+  tree=$(CDPATH='' cd -- "$tree" && pwd) || {
+    error "could not resolve the tree's path: $tree"
+    return 1
+  }
+
+  mkdir -p "$bindir" || {
+    error "could not create the link directory $bindir"
+    return 1
+  }
+
+  echo "use: $bindir into $tree"
+
+  while IFS= read -r name; do
+    link="$bindir/$name"
+    if [[ -L "$link" ]]; then
+      IFS=$'\t' read -r state detail <<< "$(_install_link_state "$link")"
+      case "$state" in
+        other)
+          # Not ours. Leaving it is the whole point of the row: a verb that
+          # quietly tidies what it was not pointed at is the same shape as a
+          # manifest check that re-blesses a file it refused.
+          echo "  skipped:   $name (not a Utilz link)"
+          left=$((left + 1))
+          continue
+          ;;
+        ours)
+          if [[ "$detail" -ef "$tree" ]]; then
+            echo "  unchanged: $name"
+            already=$((already + 1))
+            continue
+          fi
+          ;;
+      esac
+      target=$(readlink "$link")
+      # WHICH FILE the link names is preserved. bin/utilz and bin/<name> both
+      # dispatch, because the dispatcher reads basename "$0", so choosing
+      # between them would be normalising a convention (ST0014 design.md D9).
+      # Relative-ness is not preserved, and cannot be: a relative target names
+      # the OLD tree by construction.
+      newtarget="$tree/bin/$(basename "$target")"
+      ln -sfn "$newtarget" "$link" || {
+        error "could not repoint $name"
+        return 1
+      }
+      if [[ "$state" == "broken" ]]; then
+        echo "  relinked:  $name -> $newtarget (it named $target, which has gone)"
+      else
+        echo "  relinked:  $name -> $newtarget"
       fi
-      ln -s "$prefix/bin/$name" "$bindir/$name" || {
+      changed=$((changed + 1))
+    elif [[ -e "$link" ]]; then
+      echo "  skipped:   $name (not a link)"
+      left=$((left + 1))
+    else
+      ln -s "$tree/bin/$name" "$link" || {
         error "could not link $name"
         return 1
       }
-      echo "  linked:    $name -> $prefix/bin/$name"
+      echo "  linked:    $name -> $tree/bin/$name"
       linked=$((linked + 1))
-    done < <(install_link_gaps "$prefix" "$bindir")
-  fi
+    fi
+  done < <(install_link_set "$tree")
+
+  # A Utilz link this tree has no utility for keeps where it points.
+  while IFS=$'\t' read -r name state detail; do
+    [[ "$state" == "ours" || "$state" == "broken" ]] || continue
+    if [[ ! -e "$tree/bin/$name" ]]; then
+      echo "  skipped:   $name (not in $tree)"
+      left=$((left + 1))
+    fi
+  done < <(install_link_census "$bindir")
 
   success "$changed changed, $linked linked, $already already correct, $left left alone"
 }
 
-# Echo the tree that <word> names -- `opt` or `dev` -- for the source tree
-# <src>. Returns 1, by name, when the address cannot be read.
-#
-# EACH TREE HOLDS THE ADDRESS OF THE OTHER, which is the whole reason this
-# verb is turnkey (D13). `opt` is install.prefix from utilz.yaml, which both
-# trees carry. `dev` is source-tree from the install's manifest, recorded at
-# the one moment the source path is known for certain. Neither direction needs
-# a path typed or a second config key invented, and a second key would be an
-# address that can disagree with the manifest.
+# Remove every Utilz link in <bindir>, a broken one included, and nothing
+# else (`use brew`: no link means brew).
+_install_remove_links() {
+  local bindir="$1"
+  local name state detail removed=0 left=0
+
+  [[ -d "$bindir" ]] || {
+    success "no link directory at $bindir, so nothing points away from brew"
+    return 0
+  }
+
+  echo "use: removing the Utilz links in $bindir"
+  while IFS=$'\t' read -r name state detail; do
+    [[ -n "$name" ]] || continue
+    case "$state" in
+      ours | broken) ;;
+      *)
+        left=$((left + 1))
+        continue
+        ;;
+    esac
+    # Both names are guarded, so an empty one stops the shell rather than
+    # widening what is removed.
+    rm -f -- "${bindir:?}/${name:?}" || {
+      error "could not remove $bindir/$name"
+      return 1
+    }
+    echo "  removed:   $name (was $detail)"
+    removed=$((removed + 1))
+  done < <(install_link_census "$bindir")
+
+  success "$removed removed, $left left alone (not Utilz links)"
+}
+
+# Echo the tree <word> names -- dev or opt -- from the running tree, or return
+# 1 by name when it cannot be reached. Each tree can reach the other without a
+# path typed: opt is UTILZ_INSTALL_PREFIX, from the sleeve; dev is the running
+# tree when that is dev, and the opt install's source_tree when it is opt.
 _install_use_tree() {
   local word="$1"
-  local src="$2"
-  local prefix manifest source_tree
+  local here prefix dev
 
-  prefix=$(install_prefix_configured "$src") || return 1
+  here=$(utilz_tree)
 
   if [[ "$word" == "opt" ]]; then
-    printf '%s\n' "$prefix"
+    prefix=$(install_prefix_configured) || return 1
+    case "$(utilz_tree "$prefix")" in
+      opt)
+        printf '%s\n' "$prefix"
+        ;;
+      "opt old")
+        error "the opt install at $prefix has an old manifest"
+        echo "  Republish it from the dev checkout with 'utilz install --force'." >&2
+        return 1
+        ;;
+      brew*)
+        install_refuse_keg "$prefix"
+        return 1
+        ;;
+      *)
+        error "no opt install at $prefix"
+        echo "  Publish one from the dev checkout with 'utilz install'." >&2
+        return 1
+        ;;
+    esac
     return 0
   fi
 
-  # A keg's source-tree is brew's build directory, deleted once the formula's
-  # install returned, so it is refused here, before the address is read and
-  # handed to relink as if it named a tree (ST0019 D4).
-  install_refuse_keg "$prefix" || return 1
+  case "$here" in
+    dev*)
+      dev="$UTILZ_HOME"
+      ;;
+    opt)
+      dev=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" source_tree) || return 1
+      ;;
+    brew*)
+      # A keg's source_tree is brew's build directory, deleted once the
+      # formula's install returned (ST0019 D4), so it names no tree.
+      error "the Homebrew install does not know where a dev checkout is"
+      echo "  Run 'use dev' from the checkout: <checkout>/bin/utilz use dev." >&2
+      return 1
+      ;;
+    *)
+      error "this tree ($here) records no dev checkout to point at"
+      echo "  Run 'use dev' from the checkout: <checkout>/bin/utilz use dev." >&2
+      return 1
+      ;;
+  esac
 
-  manifest="$prefix/$UTILZ_MANIFEST_NAME"
-
-  if [[ ! -f "$manifest" ]]; then
-    error "no install at $prefix, so the source tree's address cannot be read"
-    echo "  'use dev' reads source-tree from the install's manifest, which is" >&2
-    echo "  where the publish recorded it. Run 'utilz install' first." >&2
+  if [[ -z "$dev" || "$(utilz_tree "$dev")" != dev* ]]; then
+    error "no dev checkout at ${dev:-(none recorded)}"
+    echo "  The opt install records the checkout it was published from, and it" >&2
+    echo "  is not there. Run 'use dev' from the checkout itself." >&2
     return 1
   fi
-
-  source_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' "$manifest")
-
-  if [[ -z "$source_tree" ]]; then
-    error "the install at $prefix records no source-tree"
-    echo "  It was published before that row existed. Run 'utilz upgrade' from" >&2
-    echo "  the source tree; the manifest is rewritten and gains the row." >&2
-    return 1
-  fi
-
-  printf '%s\n' "$source_tree"
+  printf '%s\n' "$dev"
 }
 
-# Report which tree the PATH links currently serve. Changes nothing.
-install_use_report() {
-  local src="$1"
-  local bindir="$2"
-  local prefix manifest source_tree dev_label name root
-  local opt_n=0 dev_n=0 other_n=0
-
-  prefix=$(install_prefix_configured "$src") || return 1
-
-  # THREE ANSWERS, NOT TWO. "there is no install" and "there is an install
-  # that predates the source-tree row" are different facts with different
-  # remedies, and printing them as one sends the reader to publish something
-  # that is already published. Measured 8 Sep: the live install was cut before
-  # the row existed, and the first draft of this reported it as absent.
-  source_tree=""
-  dev_label="(no install at $prefix)"
-  manifest="$prefix/$UTILZ_MANIFEST_NAME"
-
-  if [[ -f "$manifest" ]]; then
-    source_tree=$(awk -F'\t' '$1 == "source-tree" { print $2; exit }' "$manifest")
-    if [[ -n "$source_tree" ]]; then
-      dev_label="$source_tree"
-    else
-      dev_label="(install predates source-tree; 'utilz upgrade' records it)"
-    fi
-  fi
-
-  if [[ ! -d "$bindir" ]]; then
-    error "no such directory: $bindir"
+# Echo the Homebrew install's root, by its opt link, or return 1 by name.
+_install_brew_root() {
+  local prefix
+  if ! prefix=$("$INSTALL_BREW" --prefix 2>/dev/null) || [[ -z "$prefix" ]]; then
+    error "Homebrew is not installed ($INSTALL_BREW --prefix answered nothing)"
     return 1
   fi
+  if [[ ! -x "$prefix/opt/utilz/libexec/bin/utilz" ]]; then
+    error "there is no Homebrew install of Utilz under $prefix"
+    echo "  Install it: brew install matthewsinclair/utilz/utilz" >&2
+    return 1
+  fi
+  printf '%s\n' "$prefix/opt/utilz/libexec"
+}
 
-  while IFS=$'\t' read -r name root; do
-    [[ -n "$name" ]] || continue
+# Report which tree each link serves, and change nothing. rc 1 when the set is
+# split, shadowed or broken (contract T5), naming what splits, shadows or
+# breaks it.
+install_use_report() {
+  local bindir="$1"
+  local name state detail rows="" n=0 hit root health rc=0 prefix dev count
 
-    if [[ "$root" == "$prefix" ]]; then
-      opt_n=$((opt_n + 1))
-    elif [[ -n "$source_tree" && "$root" == "$source_tree" ]]; then
-      dev_n=$((dev_n + 1))
+  printf 'links: %s\n' "$bindir"
+
+  if [[ -d "$bindir" ]]; then
+    while IFS=$'\t' read -r name state detail; do
+      [[ "$state" == "ours" || "$state" == "broken" ]] || continue
+      [[ "$state" == "ours" ]] && rows="${rows}${detail}"$'\n'
+      n=$((n + 1))
+    done < <(install_link_census "$bindir")
+  fi
+
+  if [[ $n -gt 0 ]]; then
+    printf '%s' "$rows" | LC_ALL=C sort | uniq -c | while read -r count root; do
+      [[ -n "$root" ]] && printf '  %s at %s -- %s link(s)\n' "$(utilz_tree "$root")" "$root" "$count"
+    done
+  else
+    # NO LINK MEANS BREW (contract T5): it is the state a brew-only user is in
+    # without ever running `use`, when the first utilz on PATH is the keg's.
+    hit=$(type -P utilz 2>/dev/null || true)
+    if [[ -n "$hit" ]] && root=$(_install_resolve "$hit") &&
+      [[ "$(utilz_tree "$(dirname "$(dirname "$root")")")" == brew* ]]; then
+      printf '  brew: no links, and %s (the Homebrew install) answers\n' "$hit"
+    elif [[ -n "$hit" ]]; then
+      printf '  no links; %s answers, which is not the Homebrew install\n' "$hit"
     else
-      other_n=$((other_n + 1))
+      printf '  no links, and no utilz on PATH\n'
     fi
-  done < <(install_link_census "$bindir")
+  fi
 
-  printf 'bin:   %s\n' "$bindir"
-  printf 'opt:   %s -- %s link(s)\n' "$prefix" "$opt_n"
-  printf 'dev:   %s -- %s link(s)\n' "$dev_label" "$dev_n"
-  printf 'other: %s link(s), which relink leaves alone\n' "$other_n"
+  if ! health=$(install_link_health "$bindir"); then
+    rc=1
+    install_link_health_render "$bindir" "$health"
+  fi
+
+  # The two addresses the switch can reach from here.
+  if prefix=$(install_prefix_configured 2>/dev/null); then
+    case "$(utilz_tree "$prefix")" in
+      opt) printf 'opt:   %s\n' "$prefix" ;;
+      "opt old") printf "opt:   old manifest at %s; 'utilz install --force' republishes it\n" "$prefix" ;;
+      *) printf 'opt:   no install at %s\n' "$prefix" ;;
+    esac
+  else
+    printf 'opt:   UTILZ_INSTALL_PREFIX is not set\n'
+  fi
+  case "$(utilz_tree)" in
+    dev*) printf 'dev:   %s\n' "$UTILZ_HOME" ;;
+    opt)
+      dev=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" source_tree 2>/dev/null) || dev=""
+      printf 'dev:   %s\n' "${dev:-(none recorded)}"
+      ;;
+    *) printf 'dev:   not known from this tree\n' ;;
+  esac
+
+  return "$rc"
 }
 
 install_usage_use() {
   cat <<'USAGE'
-Usage: utilz use [dev|opt] [--bin-dir DIR]
+Usage: utilz use [dev|opt|brew] [--bin-dir DIR]
 
-Switch which tree the PATH symlinks serve.
+Switch which tree the links in ~/.local/bin serve.
 
-  utilz use opt   Point them at install.prefix from opt/utilz/utilz.yaml
-  utilz use dev   Point them at the source tree the install was published from
-  utilz use       Report which tree they serve now, and change nothing
+  utilz use dev    Point them at the dev checkout
+  utilz use opt    Point them at the opt install, $UTILZ_INSTALL_PREFIX
+  utilz use brew   Remove them, so Homebrew's own links answer
+  utilz use        Report which tree they serve, and change nothing
 
-  --bin-dir DIR   Where the links live. Default: ~/.local/bin
+  --bin-dir DIR    Where the links live, for tests. Default: ~/.local/bin
 
-No path is typed either way: each tree carries the address of the other.
+No link means brew. ~/.local/bin must come before Homebrew's bin on PATH for a
+dev or opt link to answer; `utilz use` and doctor say when it does not.
 USAGE
 }
 
-# `utilz use dev|opt` -- the two-word switch (AC21).
-#
-# A THIN COORDINATOR OVER relink, and there is exactly one relinker. This
-# parses a word to a tree, calls relink, and renders. If it ever grows a
-# link-walk, a skip policy or a report of its own, it has gone wrong.
+# `utilz use dev|opt|brew` -- the one switch (contract T5).
 install_verb_use() {
   local word=""
-  local bindir=""
-  local src="$UTILZ_HOME"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      dev | opt)
+      dev | opt | brew)
         word="$1"
         shift
         ;;
@@ -1596,7 +1584,8 @@ install_verb_use() {
           error "--bin-dir requires a DIR argument"
           return 2
         fi
-        bindir=$(expand_tilde "$2")
+        local UTILZ_LINK_DIR
+        UTILZ_LINK_DIR=$(expand_tilde "$2")
         shift 2
         ;;
       -h | --help)
@@ -1605,23 +1594,36 @@ install_verb_use() {
         ;;
       *)
         error "Unknown argument: $1"
-        echo "  utilz use takes the word 'dev' or 'opt', or no word at all." >&2
+        echo "  utilz use takes the word 'dev', 'opt' or 'brew', or no word at all." >&2
         return 2
         ;;
     esac
   done
 
-  if [[ -z "$bindir" ]]; then
-    bindir="$HOME/.local/bin"
-  fi
+  local bindir
+  bindir=$(install_link_dir)
 
   if [[ -z "$word" ]]; then
-    install_use_report "$src" "$bindir"
+    install_use_report "$bindir"
     return $?
   fi
 
   local tree
-  tree=$(_install_use_tree "$word" "$src") || return 1
+  if [[ "$word" == "brew" ]]; then
+    tree=$(_install_brew_root) || return 1
+    _install_remove_links "$bindir" || return 1
+  else
+    tree=$(_install_use_tree "$word") || return 1
+    _install_point_links "$tree" "$bindir" || return 1
+  fi
 
-  install_verb_relink --prefix "$tree" --bin-dir "$bindir"
+  # The version line of the tree the shell now reaches (contract T5), read as
+  # that tree would read it.
+  (UTILZ_HOME="$tree" utilz_version_line)
+
+  # Said, not refused: the PATH order is the sleeve's, not this verb's.
+  local health
+  if [[ "$word" != "brew" ]] && ! health=$(install_link_health "$bindir"); then
+    warn "the links are set, but PATH does not reach them first; 'utilz use' says what shadows them"
+  fi
 }

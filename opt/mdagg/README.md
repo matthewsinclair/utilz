@@ -23,20 +23,9 @@
 
 ## Installation
 
-As part of the Utilz framework, `mdagg` is automatically available once Utilz is set up:
+`mdagg` comes with Utilz: once Utilz is installed, as the [README](../../README.md#installation) says, `mdagg` is on your PATH, and so is `yq`, which it needs.
 
 ```bash
-# Ensure Utilz is configured
-export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-export PATH="$UTILZ_HOME/bin:$PATH"
-
-# Create symlink (if not already present)
-cd $UTILZ_HOME/bin
-ln -s utilz mdagg
-
-# Install dependencies
-brew install yq  # Required for YAML parsing
-
 # Verify installation
 utilz doctor
 mdagg --help

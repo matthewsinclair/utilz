@@ -168,11 +168,12 @@ teardown_file() {
   assert_output_contains "cd $GUARD_SRC && utilz test"
 }
 
-@test "AT13: the refusal falls back to prose when the manifest predates source-tree" {
-  # An install published before source-tree existed carries no such row. The
-  # refusal must still say where to go rather than printing an empty path --
-  # the failure mode a naive awk-and-interpolate would produce, silently.
-  grep -v $'^source-tree\t' "$GUARD_INSTALL/manifest.sha256" > "$GUARD_INSTALL/manifest.tmp"
+@test "AT13: the refusal falls back to prose when the manifest names no source_tree" {
+  # A manifest with no source_tree line, as an old-form one is read (contract
+  # T3, issue 0105). The refusal must still say where to go rather than
+  # printing an empty path -- the failure mode a naive awk-and-interpolate
+  # would produce, silently.
+  grep -v '^# source_tree: ' "$GUARD_INSTALL/manifest.sha256" > "$GUARD_INSTALL/manifest.tmp"
   mv "$GUARD_INSTALL/manifest.tmp" "$GUARD_INSTALL/manifest.sha256"
 
   run env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" test
@@ -305,23 +306,24 @@ teardown_file() {
 @test "utilz version tells an install from a source tree, and names the commit" {
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" version
   assert_success
-  assert_output_contains "installed"
-  assert_output_contains "$GUARD_INSTALL"
+  # The contract's one line (T4, issue 0105): the tree, the commit, the root.
+  assert_output_contains "(opt, "
+  assert_output_contains ") at $GUARD_INSTALL"
 
   # THE MANIFEST IS THE RECORD; LIVE HEAD IS ONLY A PROXY FOR IT. The runtime
-  # reads `source-commit` out of the manifest, so that is the value the
+  # reads `source_commit` out of the manifest, so that is the value the
   # provenance line is a claim ABOUT. Asserting against `git rev-parse HEAD`
   # instead tested a slightly different claim, true only while nobody committed
   # between setup_file and here -- see issue 0011.
   local recorded
-  recorded=$(awk -F'\t' '$1 == "source-commit" { print $2; exit }' "$GUARD_INSTALL/manifest.sha256")
+  recorded=$(awk '/^# source_commit: / { print substr($0, 18); exit }' "$GUARD_INSTALL/manifest.sha256")
   [ -n "$recorded" ]
-  assert_output_contains "${recorded:0:7}"
+  assert_output_contains "(opt, ${recorded:0:12})"
 
   run env -u UTILZ_HOME "$GUARD_SRC/bin/utilz" version
   assert_success
-  assert_output_contains "source"
-  refute_output_contains "installed at"
+  assert_output_contains "(dev, "
+  refute_output_contains "(opt, "
 }
 
 # The check above is awk agreeing with awk unless something also checks that
@@ -339,28 +341,28 @@ teardown_file() {
   fi
 
   local recorded
-  recorded=$(awk -F'\t' '$1 == "source-commit" { print $2; exit }' "$GUARD_INSTALL/manifest.sha256")
+  recorded=$(awk '/^# source_commit: / { print substr($0, 18); exit }' "$GUARD_INSTALL/manifest.sha256")
   [ "$recorded" = "$GUARD_SRC_HEAD_BEFORE" ]
 }
 
-@test "utilz version names CI's recorded verdict on the commit, and says when none was recorded (issue 0016)" {
+@test "doctor names CI's recorded verdict on the commit, and says when none was recorded (issues 0016, 0105)" {
   # A copy, because the shared install is read-only.
   local sandbox="$BATS_TEST_TMPDIR/ci-install"
   cp -R "$GUARD_INSTALL" "$sandbox"
   local m="$sandbox/manifest.sha256"
 
-  { printf 'ci-state\tsuccess\t101\n'; grep -v $'^ci-state\t' "$m"; } > "$m.tmp" && mv "$m.tmp" "$m"
+  # CI's verdict moved from the version line to doctor with the contract (T4).
+  sed -i.bak -e 's/^# ci_state: .*/# ci_state: success/' -e 's/^# ci_detail: .*/# ci_detail: 101/' "$m" && rm -f "$m.bak"
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
+  assert_output_contains "CI on that commit, as published: success (101)"
   run env -u UTILZ_HOME "$sandbox/bin/utilz" version
-  assert_success
-  assert_output_contains "installed at $sandbox ("
-  assert_output_contains ", CI success)"
+  refute_output_contains "CI"
 
-  # A manifest cut before the row existed. Absent is neither unknown nor
-  # success, and the line says which.
-  grep -v $'^ci-state\t' "$m" > "$m.tmp" && mv "$m.tmp" "$m"
-  run env -u UTILZ_HOME "$sandbox/bin/utilz" version
-  assert_success
-  assert_output_contains ", CI not recorded)"
+  # A manifest with no ci_state line. Absent is neither unknown nor success,
+  # and the line says which.
+  grep -v '^# ci_state: ' "$m" > "$m.tmp" && mv "$m.tmp" "$m"
+  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
+  assert_output_contains "CI on that commit, as published: not recorded"
 }
 
 # ============================================================================
@@ -393,7 +395,7 @@ teardown_file() {
   assert_output_contains "opt/gitz/gitz"
   assert_output_contains "not-a-link"
   assert_output_contains "bin/cleanz"
-  assert_output_contains "utilz upgrade"
+  assert_output_contains "utilz install --force"
 }
 
 @test "doctor says NOT APPLICABLE in a source tree rather than skipping" {
@@ -412,7 +414,7 @@ teardown_file() {
 # THE EXISTING VERSION GUARD ASSERTS BOTH CHANNELS IN THE SOURCE TREE, WHICH IS
 # THE TREE WHERE THE ANSWER WAS NEVER IN DOUBT. prez.yaml points version_file
 # at crate/Cargo.toml -- the one home that cannot be deleted, which is true of a
-# checkout and was false of a publish: INSTALL_EXCLUDE_RE drops all of
+# checkout and was false of a publish: UTILZ_RUNTIME_EXCLUDE_RE drops all of
 # opt/prez/crate/, so the install shipped a yaml pointing at a file it did not
 # carry. `prez --version` in the install said "version unknown - missing
 # prez.yaml" while prez.yaml sat beside it and the binary answered 2.0.0.
@@ -455,8 +457,8 @@ teardown_file() {
   # was meant to be compared against produces identical output either way.
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
   assert_success
-  assert_output_contains "installed at $GUARD_INSTALL"
-  assert_output_matches "^utilz:[0-9]+\\.[0-9]+\\.[0-9]+($|[^0-9.])"
+  assert_output_contains ") at $GUARD_INSTALL"
+  assert_output_matches "^utilz [0-9]+\\.[0-9]+\\.[0-9]+ \\(opt, [0-9a-f]{12}\\) at /"
   refute_output_contains "utilz v"
 
   local fw
@@ -497,7 +499,8 @@ teardown_file() {
   # that silently retargets produces identical output either way.
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
   assert_success
-  assert_output_contains "installed at $GUARD_INSTALL"
+  assert_output_contains "(opt, "
+  assert_output_contains ") at $GUARD_INSTALL"
 
   local u n=0 bad=0 a b marker hf
   for u in "${GUARD_UTILITIES[@]}"; do

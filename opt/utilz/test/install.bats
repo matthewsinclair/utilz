@@ -31,7 +31,7 @@ load "test_helper.bash"
     return 1
   }
   [[ "$(readlink "$dst/bin/alpha")" == "utilz" ]]
-  [[ "$(readlink "$dst/bin/beta")" == "other" ]]
+  [[ "$(readlink "$dst/bin/beta")" == "utilz" ]]
 
   # AC13's exclusion: the suites are not shipped.
   assert_file_not_exists "$dst/opt/alpha/test/alpha.bats"
@@ -86,7 +86,7 @@ load "test_helper.bash"
 @test "install refuses a dirty source tree, and --force does not override it" {
   local src="$BATS_TEST_TMPDIR/src-dirty" dst="$BATS_TEST_TMPDIR/dst-dirty"
   make_fake_src "$src"
-  printf 'uncommitted\n' > "$src/SCRATCH.md"
+  printf 'uncommitted\n' > "$src/help/scratch.md"
 
   run_publish "$src" "$dst"
   assert_exit_code 1
@@ -100,18 +100,20 @@ load "test_helper.bash"
   assert_directory_not_exists "$dst"
 }
 
-@test "install refuses a dirty tree for a change OUTSIDE the owned set" {
-  # The gate reads the WHOLE tree. The manifest's claim is "these bytes are
-  # commit X", and a dirty file anywhere means the recorded commit does not
-  # describe the checkout the bytes came from.
+@test "install publishes past a change OUTSIDE the runtime set, recording HEAD (issue 0105)" {
+  # THE RUNTIME SET ONLY (contract T2). Until 0105 the gate read the whole
+  # tree, so a live board view or a doc being written blocked every publish.
+  # A file outside the set changes no byte the manifest names, so the commit
+  # it records still describes every byte shipped.
   local src="$BATS_TEST_TMPDIR/src-outside" dst="$BATS_TEST_TMPDIR/dst-outside"
   make_fake_src "$src"
   mkdir -p "$src/docs"
-  printf 'not owned, still dirty\n' > "$src/docs/notes.md"
+  printf 'not in the runtime set\n' > "$src/docs/notes.md"
 
   run_publish "$src" "$dst"
-  assert_exit_code 1
-  assert_output_contains "dirty"
+  assert_success
+  grep -q "^# source_commit: $(git -C "$src" rev-parse HEAD)$" "$dst/manifest.sha256" || fail "the manifest does not record HEAD"
+  assert_file_not_exists "$dst/docs/notes.md"
 }
 
 # ============================================================================
@@ -157,10 +159,10 @@ load "test_helper.bash"
 }
 
 # ============================================================================
-# AT04 (AC04) - install onto an existing install names upgrade
+# AT04 (AC04) - install onto an existing install names --force (issue 0105)
 # ============================================================================
 
-@test "install refuses when an install already exists, and NAMES upgrade" {
+@test "install refuses when an install already exists, and NAMES --force" {
   local src="$BATS_TEST_TMPDIR/src-twice" dst="$BATS_TEST_TMPDIR/dst-twice"
   make_fake_src "$src"
 
@@ -169,9 +171,9 @@ load "test_helper.bash"
 
   run_publish "$src" "$dst"
   assert_exit_code 1
-  # Assert the word, not just the non-zero rc: whichever verb is reached for,
-  # the wrong one has to name the right one.
-  assert_output_contains "upgrade"
+  # Assert the word, not just the non-zero rc: the refusal names the one
+  # republish (contract T2), which upgrade no longer is.
+  assert_output_contains "utilz install --force"
 }
 
 # ============================================================================
@@ -188,30 +190,62 @@ load "test_helper.bash"
   assert_file_exists "$dst/manifest.sha256"
 }
 
-@test "install refuses an absent prefix key BY NAME, and creates no ./null" {
-  # The key IS absent today, so this is the live path rather than a contrived
-  # one. get_util_metadata returns the four-character string 'null' for an
-  # absent key, so a bare [[ -n ]] guard passes and publishes to ./null.
+@test "install refuses an unset UTILZ_INSTALL_PREFIX BY NAME, and creates nothing (issue 0105)" {
+  # The test helper unsets it, as no sleeve's value may reach a test, so this
+  # is the path a machine with no sleeve config takes.
   local src="$BATS_TEST_TMPDIR/src-nokey"
   make_fake_src "$src"
 
+  local before after
+  before=$(cd "$BATS_TEST_TMPDIR" && find . | LC_ALL=C sort)
   run run_install_function "cd '$BATS_TEST_TMPDIR'; UTILZ_HOME='$src'; install_verb_install"
   assert_exit_code 1
-  assert_output_contains "install.prefix"
-  assert_output_contains "utilz.yaml"
-  assert_directory_not_exists "$BATS_TEST_TMPDIR/null"
+  assert_output_contains "UTILZ_INSTALL_PREFIX is not set"
+  after=$(cd "$BATS_TEST_TMPDIR" && find . | LC_ALL=C sort)
+  [[ "$before" == "$after" ]] || fail "a refused publish wrote: $(diff <(printf '%s\n' "$before") <(printf '%s\n' "$after"))"
 }
 
-@test "install refuses an EMPTY prefix value as well as an absent one" {
-  # yq yields a zero-length result where it yields 'null' for an absent key.
-  # A guard written for either case alone lets the other through.
+@test "install refuses an EMPTY UTILZ_INSTALL_PREFIX as well as an unset one (issue 0105)" {
   local src="$BATS_TEST_TMPDIR/src-empty"
   make_fake_src "$src"
-  set_prefix_key "$src" '""'
+  set_prefix_key "$src" ''
 
   run run_install_function "UTILZ_HOME='$src'; install_verb_install"
   assert_exit_code 1
-  assert_output_contains "install.prefix"
+  assert_output_contains "UTILZ_INSTALL_PREFIX is not set"
+}
+
+@test "install refuses from an install by name: it runs only in a dev checkout (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src-fromopt" opt="$BATS_TEST_TMPDIR/opt-fromopt"
+  make_fake_src "$src"
+  run_publish "$src" "$opt"
+  assert_success
+
+  run run_install_function "UTILZ_HOME='$opt'; install_verb_install --prefix '$BATS_TEST_TMPDIR/elsewhere'"
+  assert_exit_code 1
+  assert_output_contains "runs only in a dev checkout"
+  assert_directory_not_exists "$BATS_TEST_TMPDIR/elsewhere"
+}
+
+@test "install --force republishes over Utilz's old manifest form, and refuses a prefix whose manifest is not Utilz's (issue 0105)" {
+  local src="$BATS_TEST_TMPDIR/src-old" old="$BATS_TEST_TMPDIR/opt-old" foreign="$BATS_TEST_TMPDIR/foreign"
+  make_fake_src "$src"
+  mkdir -p "$old" "$foreign"
+  printf 'utilz-version\t2.10.0\nmanaged-by\tutilz\n' > "$old/manifest.sha256"
+  printf 'deadbeef  something\n' > "$foreign/manifest.sha256"
+
+  run_publish "$src" "$old"
+  assert_exit_code 1
+  assert_output_contains "--force"
+
+  run_publish "$src" "$old" --force
+  assert_success
+  [[ "$(head -1 "$old/manifest.sha256")" == "# tool: utilz" ]] || fail "the republish left: $(head -1 "$old/manifest.sha256")"
+
+  run_publish "$src" "$foreign" --force
+  assert_exit_code 1
+  assert_output_contains "that Utilz did not write"
+  [[ "$(cat "$foreign/manifest.sha256")" == "deadbeef  something" ]] || fail "the foreign manifest was overwritten"
 }
 
 # ============================================================================

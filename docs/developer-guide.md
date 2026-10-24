@@ -687,7 +687,7 @@ The `utilz doctor` command checks version compatibility:
 
 ```bash
 $ utilz doctor
-[5/6] Checking installed utilities...
+Checking installed utilities...
 ⚠ Version incompatibilities detected:
     - logtool (requires Utilz ^2.0.0, have 1.0.0)
 ```

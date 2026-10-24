@@ -20,7 +20,7 @@ The framework prioritizes:
 
 1. **Simplicity**: Bash/zsh only, minimal dependencies
 2. **Consistency**: All utilities follow the same patterns
-3. **Portability**: Clone repo, set PATH, done
+3. **Portability**: One Homebrew install per machine
 4. **Maintainability**: Shared code in common library
 5. **Discoverability**: `utilz list` shows what's available
 
@@ -213,8 +213,8 @@ show_help "myutil"          # Consistent help display
 
 **After**:
 
-- Clone repo: `git clone https://github.com/you/utilz`
-- Add to PATH: `export PATH="$UTILZ_HOME/bin:$PATH"`
+- Install once per machine: `brew install matthewsinclair/utilz/utilz`
+- Every utility is on PATH, with no environment variable to set
 - Everything works
 
 ### Problem 5: No Testing
@@ -297,8 +297,7 @@ $ cleanup --help  # Works immediately
 # Team repo
 git clone https://github.com/company/team-utils
 cd team-utils
-export UTILZ_HOME="$(pwd)"
-export PATH="$UTILZ_HOME/bin:$PATH"
+export PATH="$(pwd)/bin:$PATH"   # the dispatcher finds its tree from its own path
 
 # Everyone has same tools
 $ utilz list
@@ -356,16 +355,16 @@ Use Utilz when:
 
 ### 1. Public Distribution
 
-**Wrong**: Public utilities for end users
+**Wrong**: One utility published for end users on its own
 
 ```bash
 # Don't do this:
-brew install myutil  # Points to Utilz framework?
+brew install myutil  # one utility, carrying the whole framework with it
 ```
 
-**Why Not**: Users shouldn't need entire framework for one utility.
+**Why Not**: Users shouldn't need the entire framework for one utility. Utilz itself ships as one Homebrew formula, the framework and every utility together.
 
-**Instead**: Use proper packaging (Homebrew, npm, cargo, etc.)
+**Instead**: Give a utility meant for the public on its own its own package (Homebrew, npm, cargo, etc.)
 
 ### 2. Complex Dependencies
 

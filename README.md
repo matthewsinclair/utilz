@@ -51,16 +51,23 @@ Utilz/
 
 ## Installation
 
+Install Utilz with Homebrew:
+
 ```bash
-# Clone the repo
-git clone https://github.com/matthewsinclair/utilz.git ~/Devel/prj/Utilz
+brew tap matthewsinclair/utilz
 
-# Put the dispatcher on PATH
-echo 'export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"' >> ~/.zshrc
+# Homebrew 7 loads a formula from a tap outside its own only once you trust it
+brew trust --formula matthewsinclair/utilz/utilz
 
-# Check installation
+brew install matthewsinclair/utilz/utilz
+
+# Check the install, and see which utilities' own dependencies are missing
 utilz doctor
 ```
+
+brew links the dispatcher and every utility into its own `bin` (`$(brew --prefix)/bin`), so nothing else goes on your PATH and no environment variable is needed. `brew upgrade utilz` updates it.
+
+A clone of this repository is for working on Utilz itself: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
 
 **Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's apply, diff and discover need macOS and Hammerspoon, while its list, show, delete and current work anywhere. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
 
@@ -69,47 +76,11 @@ to from its own location, following the symlink chain from `$0` and taking the
 parent of `bin/`. An exported `UTILZ_HOME` is ignored.
 
 This README told you to export it until v2.5.1, and that instruction was worse
-than redundant. Once Utilz gained a second tree (below), an ambient
+than redundant. Once Utilz gained a second tree (see Maintaining Utilz), an ambient
 `UTILZ_HOME` pointing at the checkout silently redirected the _installed_
 utilz back to the checkout: every command answered from the source tree while
 appearing to run the install. Nothing reported it. If you have those lines in
 your shell config, delete them.
-
-## Two trees: dev and opt
-
-A Utilz checkout can publish a runnable **install** of itself, so you can work
-on the source without disturbing the copy you actually use.
-
-```bash
-utilz install                 # publish this checkout to install.prefix
-utilz use opt                 # point your PATH symlinks at the install
-utilz use dev                 # point them back at the checkout
-utilz use                     # report which tree they serve, change nothing
-```
-
-`utilz version` always names the tree that answered, so the two are never
-ambiguous at the prompt:
-
-```
-installed at /Users/you/Devel/opt/utilz (a1b2c3d, CI success)
-source at /Users/you/Devel/prj/Utilz
-```
-
-Where `utilz install` publishes is **configuration with no built-in default**:
-set `install.prefix` in `opt/utilz/utilz.yaml`. Unset is refused by name rather
-than guessed, because a publish to the wrong place looks exactly like a publish
-to the right one.
-
-Three things the install deliberately does:
-
-- **It refuses to publish from a dirty tree, and no flag overrides that.** The
-  manifest records the commit the bytes came from, and that claim only holds if
-  nothing is uncommitted.
-- **It never touches your PATH symlinks on its own.** Relinking your
-  environment needs a verb you typed: `utilz use` or `utilz relink`.
-- **It refuses `utilz test`.** The suite rewrites `bin/`, which is exactly what
-  the manifest checksums, so an install would report drift nobody caused. The
-  refusal names the source tree to run it in.
 
 ## Usage
 
@@ -121,27 +92,9 @@ utilz help <utility>          # Show utility-specific help
 utilz list                    # List installed utilities
 utilz version                 # Show framework version
 utilz doctor                  # Run diagnostics
-utilz test                    # Run all tests
-utilz test <utility>          # Run tests for specific utility
-utilz generate <name> [desc]  # Generate new utility scaffold
 ```
 
-### Install Commands
-
-```bash
-utilz install                 # Publish a runnable install to install.prefix
-utilz install --prefix DIR    # Publish somewhere else
-utilz install --force         # Publish over an existing install
-utilz upgrade                 # Replace an install with this checkout
-utilz upgrade --force         # Overwrite files that were edited in place
-utilz use [dev|opt]           # Switch which tree the PATH symlinks serve
-utilz relink [--prefix DIR]   # Repoint the PATH symlinks at a tree
-```
-
-`upgrade` reports files that were edited in place and leaves them alone without
-`--force`, keeping their install-time checksum so the next check still reports
-them. `install` and `upgrade` mirror each other: reach for the wrong one and it
-names the right one.
+`utilz test`, `utilz generate` and the install verbs work in a clone of this repository: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
 
 ### Calling Utilities
 
@@ -550,7 +503,7 @@ Utilz ships with a Doom-ready elisp bridge that exposes every utility with an `i
 
 ### Install
 
-The canonical elisp lives in the Utilz repo at `static/emacs/utilz.el`. Install it into your Doom custom directory via the bundled installer (preferred: symlink, so `git pull` rolls the bridge forward automatically):
+The canonical elisp ships with Utilz at `static/emacs/utilz.el`. Install it into your Doom custom directory with the bundled installer. A symlink is preferred, because it follows each `brew upgrade utilz`: from the Homebrew install it links through `$(brew --prefix)/opt/utilz/libexec`, the path brew keeps across upgrades, never the versioned keg.
 
 ```bash
 utilz emacs install --dest ~/.config/doom/custom/160-utilz.el --symlink
@@ -568,7 +521,7 @@ Run `doom sync && doom doctor` and restart Emacs. Sanity-check with:
 utilz emacs doctor
 ```
 
-All three checks should be green: `utilz` on PATH, all utilities carry an `integration:` block, canonical elisp present.
+Every check should be green: `utilz` on PATH, all utilities carry an `integration:` block, canonical elisp present.
 
 ### Everyday usage
 
@@ -635,7 +588,96 @@ The bridge is a thin coordinator. It reads a TSV manifest from `utilz integratio
 
 See `intent/st/ST0007/design.md` for the full design and `static/emacs/utilz.el` for the bridge source (~270 lines).
 
-## Creating a New Utility
+## Common Functions
+
+All utilities have access to functions from `opt/utilz/lib/common.sh`:
+
+- `info()` - Info message (blue)
+- `success()` - Success message (green)
+- `warn()` - Warning message (yellow)
+- `error()` - Error message (red)
+- `show_help()` - Display help file
+- `show_version()` - Display version
+- `check_command()` - Check if command exists
+- `require_command()` - Require command or show error
+- `get_util_metadata()` - Read utility YAML metadata
+
+## Version Management
+
+The framework version is stored in `/VERSION`. Utility metadata files (`*.yaml`) can either:
+
+1. Reference the framework version:
+
+```yaml
+version_file: ../../VERSION
+```
+
+2. Specify their own version:
+
+```yaml
+version: 1.0.0
+utilz_version: "^2.0.0" # Compatible framework versions
+```
+
+`utilz generate` stamps `utilz_version` from the framework's own `VERSION` (major only), so a generated utility is always compatible with the framework that generated it. Do not hardcode a floor in the template.
+
+## Maintaining Utilz: dev, opt, brew
+
+This section is for the maintainer of a dev checkout, a clone of this repository. A user installs from Homebrew ([Installation](#installation)); nothing here is needed to use Utilz.
+
+Utilz follows the dev, opt, brew contract that every tool released through Homebrew follows (devbin's `docs/dev-opt-brew.md`, at devbin commit aeed31e4), as dev, stage and prod:
+
+- **dev** is the checkout, where the work happens: the bleeding edge.
+- **opt** is a working copy the checkout publishes with `utilz install`, kept apart from dev so what works is not disturbed by what is in progress. It lives at `$UTILZ_INSTALL_PREFIX`, which the sleeve sets (Molt's sleeve config); there is no default, and unset is refused by name.
+- **brew** is the one prod publish: the Homebrew formula, rendered from a release tag ([docs/releasing.md](docs/releasing.md)). Inside it, `utilz install` refuses and names `brew upgrade utilz`.
+
+`utilz version` names the tree that answered, on one line:
+
+```
+utilz <version> (dev, 0123456789ab) at /Users/you/Devel/prj/Utilz
+utilz <version> (opt, 0123456789ab) at /Users/you/Devel/opt/utilz
+utilz <version> (brew, 0123456789ab) at /opt/homebrew/opt/utilz/libexec
+```
+
+The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`. A brew tree is named by brew's opt link, never the versioned keg. `utilz doctor` prints the same line first, and checks the manifest: every file it names, each dispatcher link's target, and CI's verdict on the commit as the publish recorded it.
+
+### Switching the shell between trees
+
+`utilz use` points the links in `~/.local/bin` -- `utilz` and every utility -- at one tree:
+
+```bash
+utilz use dev     # point every link at the dev checkout
+utilz use opt     # point every link at the opt install
+utilz use brew    # remove them, so Homebrew's own links answer
+utilz use         # report which tree they serve, and change nothing
+```
+
+**No link means brew**: a user who never runs `use` has Homebrew's links, and `use brew` returns a maintainer to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on PATH, which the sleeve sets. `utilz use` with no word, and `utilz doctor`, fail when a link is shadowed by an earlier entry on PATH, or when the links serve more than one tree, and name what shadows or splits them. `use` is the one verb that points links: `relink` is retired, and install and upgrade never touch them.
+
+### Publishing and upgrading
+
+```bash
+utilz install                 # publish the checkout to $UTILZ_INSTALL_PREFIX
+utilz install --prefix DIR    # publish somewhere else
+utilz install --force         # republish over an existing install
+utilz upgrade                 # upgrade the tree this utilz runs from
+```
+
+`install` runs only in a dev checkout, and refuses a dirty runtime set -- what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests -- with no flag to override it, because the manifest records the commit the bytes came from. A doc or a board being edited beside it is not in the runtime set. `--force` is the one republish, and it replaces only a prefix whose manifest Utilz wrote.
+
+`upgrade` does the running tree's own upgrade. In dev it runs `git pull --ff-only` and builds prez and showreel. In opt it changes nothing and names `utilz install --force` in the dev checkout, saying when dev is ahead. In brew it runs `brew update`, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated.
+
+`utilz test` refuses in an install: the suite rewrites `bin/`, which is exactly what the manifest checksums, so an install would report drift nobody caused. The refusal names the dev tree to run it in.
+
+### Commands for a dev checkout
+
+```bash
+utilz test                    # Run all tests
+utilz test <utility>          # Run tests for specific utility
+utilz generate <name> [desc]  # Generate new utility scaffold
+```
+
+### Creating a New Utility
 
 Use the built-in generator to scaffold a new utility:
 
@@ -674,7 +716,7 @@ utilz doctor
 utilz list
 ```
 
-## Testing
+### Testing
 
 Tests use [BATS](https://github.com/bats-core/bats-core) (Bash Automated Testing System).
 
@@ -695,44 +737,11 @@ bats mdagg.bats
 
 Test files go in `opt/<utility>/test/*.bats`. See `opt/mdagg/test/mdagg.bats` for examples.
 
-## Common Functions
-
-All utilities have access to functions from `opt/utilz/lib/common.sh`:
-
-- `info()` - Info message (blue)
-- `success()` - Success message (green)
-- `warn()` - Warning message (yellow)
-- `error()` - Error message (red)
-- `show_help()` - Display help file
-- `show_version()` - Display version
-- `check_command()` - Check if command exists
-- `require_command()` - Require command or show error
-- `get_util_metadata()` - Read utility YAML metadata
-
-## Version Management
-
-The framework version is stored in `/VERSION`. Utility metadata files (`*.yaml`) can either:
-
-1. Reference the framework version:
-
-```yaml
-version_file: ../../VERSION
-```
-
-2. Specify their own version:
-
-```yaml
-version: 1.0.0
-utilz_version: "^2.0.0" # Compatible framework versions
-```
-
-`utilz generate` stamps `utilz_version` from the framework's own `VERSION` (major only), so a generated utility is always compatible with the framework that generated it. Do not hardcode a floor in the template.
-
 ## Requirements
 
 - Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
-- `yq` for YAML parsing (install: `brew install yq`) -- required, not optional: it is the single parser for all utility metadata
-- `bats-core` for testing (install: `brew install bats-core`)
+- `yq` for YAML parsing -- required, not optional: it is the single parser for all utility metadata. The formula installs it; a dev checkout needs `brew install yq`
+- `bats-core` for the suites, in a dev checkout (install: `brew install bats-core`)
 
 ## License
 

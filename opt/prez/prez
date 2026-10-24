@@ -55,7 +55,10 @@ MANIFEST="$CRATE_DIR/Cargo.toml"
 PREZ_TREE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 PREZ_INSTALL_MODE=0
 
-if [[ -f "$PREZ_TREE_ROOT/$UTILZ_MANIFEST_NAME" ]]; then
+# An install is built elsewhere: a tree that ships a manifest, opt or brew
+# (dev, opt, brew contract T4, issue 0105), never builds a crate it was not
+# shipped. Any other tree is source and builds.
+if utilz_tree_is_install "$PREZ_TREE_ROOT"; then
   PREZ_INSTALL_MODE=1
 fi
 

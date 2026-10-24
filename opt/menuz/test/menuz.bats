@@ -496,7 +496,7 @@ run_src_menuz() {
 @test "AT-02.3: on a Homebrew install status says the source is homebrew, and compares nothing (issue 0094)" {
   source_home
   rm -rf "$SRC/.git"
-  printf 'managed-by\tbrew\n' >"$SRC/manifest.sha256"
+  printf '# tool: utilz\n# managed_by: brew\n' >"$SRC/manifest.sha256"
   make_app "$INSTALLED"
   run_src_menuz status
   assert_success
@@ -606,7 +606,9 @@ launch_fakes() {
 # manifest.sha256 at its root, the release VERSION, and no native/macos.
 keg_home() {
   source_home --no-source
-  touch "$SRC/manifest.sha256"
+  # The contract's header (issue 0105): utilz_tree names a tree by what its
+  # manifest says, and an empty file says nothing, so it would be unknown.
+  printf '# tool: utilz\n# managed_by: brew\n' >"$SRC/manifest.sha256"
   echo 2.14.0 >"$SRC/VERSION"
 }
 
@@ -872,6 +874,7 @@ app_count() {
     run_src_menuz "$verb"
     assert_exit_code 2
     assert_output_contains "git clone https://github.com/matthewsinclair/utilz"
+    assert_output_contains "menuz install takes the release's signed app"
   done
   [[ -z "$(xcodebuild_call)" ]] || false
 }

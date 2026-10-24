@@ -165,29 +165,24 @@ teardown() {
   assert_failure
 }
 
-@test "AT10 / AC09: utilz itself is the degenerate pair, and keeps its detail lines" {
-  # hv's ruling: `utilz:<version>`, no `v`, so the framework half renders
-  # identically in the solo and the pair form. Lines two and three are NOT
-  # part of that ruling and are asserted here because ST0014/AC12 -- on a
-  # CLOSED thread -- holds that an installed utilz can be told from a source
-  # utilz at the prompt. Rewriting line one and tidying line three away would
-  # break a satisfied criterion elsewhere, and nothing in AC01-AC08 sees it.
+@test "AT10 / AC09: utilz itself answers with the contract's one version line (issue 0105)" {
+  # hv's ST0015 ruling made the framework `utilz:<version>`, the degenerate
+  # pair, with the description and the tree on lines two and three (ST0014
+  # AC12). The dev, opt, brew contract (T4) gives every tool released through
+  # Homebrew one line instead, which carries the tree and the commit itself:
+  # `utilz <version> (<tree>, <sha12>[+dirty]) at <abs root>`. No `v`, still.
   run "$UTILZ_BIN_DIR/utilz" --version
   assert_success
-  assert_output_matches "^utilz:${SEMVER}($|[^0-9.])"
+  [[ "$(printf '%s\n' "$output" | wc -l | tr -d ' ')" -eq 1 ]] || fail "more than one line: $output"
+  [[ "$output" =~ ^utilz\ ${SEMVER}\ \(dev,\ [0-9a-f]{12}(\+dirty)?\)\ at\ /.+$ ]] || fail "not the version line: '$output'"
   refute_output_contains "utilz v"
-
-  local l2 l3
-  l2=$(printf '%s' "$output" | sed -n 2p)
-  l3=$(printf '%s' "$output" | sed -n 3p)
-  [ -n "$l2" ] || fail "the description line is gone"
-  [[ "$l3" =~ ^(source|installed)\ at\  ]] || fail "the tree-provenance line is gone or reshaped: '$l3'"
+  [[ "$output" == "utilz $(cat "$UTILZ_HOME/VERSION") ("* ]] || fail "the version is not ./VERSION's: '$output'"
 }
 
-@test "AT11 / AC09: the framework half is spelled the same way alone as it is in a pair" {
-  local solo pair
-  solo=$("$UTILZ_BIN_DIR/utilz" --version 2>&1 | head -1)
-  pair=$("$UTILZ_BIN_DIR/utilz" syncz --version 2>&1 | head -1)
-  # `utilz:2.6.1` must be a literal prefix of `utilz:2.6.1/syncz:2.0.0`.
-  [[ "$pair" == "$solo/"* ]] || fail "solo '$solo' is not the prefix of pair '$pair'"
+@test "AT11 / AC09: a utility keeps its pair and description, and ends with the tool's version line (issue 0105)" {
+  local solo out
+  solo=$("$UTILZ_BIN_DIR/utilz" --version 2>&1)
+  out=$("$UTILZ_BIN_DIR/utilz" syncz --version 2>&1)
+  [[ "$(printf '%s\n' "$out" | head -1)" == "utilz:$(cat "$UTILZ_HOME/VERSION")/syncz:"* ]] || fail "the pair is gone: $out"
+  [[ "$(printf '%s\n' "$out" | tail -1)" == "$solo" ]] || fail "the last line is not utilz's own: '$(printf '%s\n' "$out" | tail -1)' against '$solo'"
 }
