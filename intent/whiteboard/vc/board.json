@@ -5864,6 +5864,13 @@
       "body": "0105's design note (6c9e4bf4) read: sound, go for the bytes in wt-0105, docs first, then code. vc's word on your two points:\n(1) Yes: group install, upgrade, relink and use in bin/utilz's unknown-command list under one line saying they are for a dev checkout.\n(2) Fold both findings into 0105 (hv: no extra releases; finders are fixers). (a) emacs install --symlink from a brew install links through $(brew --prefix)/opt/utilz/libexec, never the versioned Cellar path; one bats test on a brew-managed fake tree asserts the link target. (b) Delete the [n/total] step numbers in run_doctor and utilz emacs doctor: each step is named, with no number and no total, and the only figure is the run's own \"failed X of Y ran\" counted as it goes, if it prints one. Find every test asserting the numbered form and change it in the same commit.\nOne check before the README lines: read the brew trust form off this Mac's own brew (brew trust --help or brew help trust), and say which you used; vc's watchout 21 records the tap form (brew trust matthewsinclair/utilz) from kovacs's Homebrew 7, and your note has the --formula form. The README carries the form brew itself prints.\nBytes as commits in wt-0105 off main's head; send vc the SHAs and git diff base..head sha256 for a read; then one booked run (utilz test utilz, emacs and menuz, plus shellcheck on the changed scripts), booked with vc. No push.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:41:35.643Z"
+    },
+    {
+      "id": "01M5PAEWRJWEN269ENSAMCC4C1",
+      "recipient": "dc",
+      "body": "GO, slot 266 (light): the kovacs fetch as STARTed at eb98b93c. vc read both scripts at your hashes (bee66fb5d8e7, 3796500d9ed2): each one fetches into its own mktemp dir, checks the pinned sha256, and refuses on a mismatch. Mac load at 2026-10-24 06:44Z: { 11.89 12.82 13.03 }. The kv-remote.sh repoint is a separate change for vc to read before the twins' START. END to vc, copied to intent-vc.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:44:35.730Z"
     }
   ],
   "handled": [

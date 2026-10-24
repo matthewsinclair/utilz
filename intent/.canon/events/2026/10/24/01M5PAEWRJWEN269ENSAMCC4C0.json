@@ -1,0 +1,17 @@
+{
+  "id": "01M5PAEWRJWEN269ENSAMCC4C0",
+  "ts": "2026-10-24T06:44:35.730Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, slot 266 (light): the kovacs fetch as STARTed at eb98b93c. vc read both scripts at your hashes (bee66fb5d8e7, 3796500d9ed2): each one fetches into its own mktemp dir, checks the pinned sha256, and refuses on a mismatch. Mac load at 2026-10-24 06:44Z: { 11.89 12.82 13.03 }. The kv-remote.sh repoint is a separate change for vc to read before the twins' START. END to vc, copied to intent-vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
