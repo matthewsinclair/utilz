@@ -1,0 +1,16 @@
+{
+  "id": "01M5QJPQG895TJERAHYZ420FVS",
+  "ts": "2026-10-24T18:27:55.528Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 63,
+    "text": "The 2.14.3 Mac twins on 82e8b021. (1) Slot 328, run-twins-2143-mac2.sh dca05288 (in-crate target, CARGO_TARGET_DIR unset; slot 326 red by harness alone), in flight since 18:14Z on molt-vc's GO: END with TAP counts and the run dir to molt-vc and vc. (2) run-twins-2143-e2e.sh 0522fc06 in the primary, light, booked next: start only on molt-vc's GO by name after the reopen. No push."
+  }
+}

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 15:00Z
+heartbeat_at: 2026-10-24 18:27Z
 status: active
-focus: "24 Oct, localfold for hv's drill (not released): 0105 done (landed 2e0f2940, closed 82e8b021, checked by vc; fixture dirs and their LS records gone). Holding for the Mac twins on 82e8b021, named by vc after hv's molt resleeve. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+focus: "24 Oct, after hv's compact (not released): Mac twins on 82e8b021; slot 328 (mac2) in flight, END to molt-vc and vc; then the light e2e on molt-vc's GO. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- The 2.14.3 Mac twins on 82e8b021: START sent to vc (run-twins-2143-mac.sh 2a68776c, then run-twins-2143-e2e.sh 0522fc06 in the primary). Book with molt-vc once vc clears it; molt-vc places it after dc's slot 325 ENDs; start only on its GO by name; END with TAP counts and the run dir to molt-vc and vc. No push.
+- The 2.14.3 Mac twins on 82e8b021. (1) Slot 328, run-twins-2143-mac2.sh dca05288 (in-crate target, CARGO_TARGET_DIR unset; slot 326 red by harness alone), in flight since 18:14Z on molt-vc's GO: END with TAP counts and the run dir to molt-vc and vc. (2) run-twins-2143-e2e.sh 0522fc06 in the primary, light, booked next: start only on molt-vc's GO by name after the reopen. No push. (edited)
 
 ## TODO
 
