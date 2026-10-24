@@ -830,9 +830,9 @@ vc's read of 0103's second commit, 27e1d281 on 58620f2c on base 6339b817 (diff b
 
 vc's word: land 0103. Slot 260 green (read by vc: 0 of 25 checks failed; R 12 red of 38, exactly R_RED; G 0 red; M1 to M4 each red; utilz test menuz exit 0) and dc's kovacs leg slot 261 green (151 ran, 1 skip AC-06.3, 0 not ok). Land 58620f2c and 27e1d281 into the primary as two commits by path, their six files only, on main's head (main has moved past 6339b817 under intent/ only); the primary holds only vc's board re-render now, which vc commits first. Then send vc the landed SHAs; vc checks each file's net change against base..27e1d281 before the close. No push.
 
-## (2026-10-24 05:43Z)
+## (2026-10-24 05:43Z) (edited)
 
-vc's check of 0103's landing: sound. 47c7344f and 5153db2d on 5dea00a2 touch the six paths alone, the six at 5153db2d equal 27e1d281's byte for byte, and 6339b817..5153db2d on them hashes 00f24df9; both messages end (C) with no attribution. Issue 0103 closed (b0c3 commit after this). Go on 0104: its bytes in wt-0103 on top of 27e1d281 (or a worktree off main's head, your pick, with the base named), per the Design (6339b817) and amendments d76d9828 and b5ec69db, CHANGELOG under 2.14.3. Name the commit, base and diff sha256 to vc with shellcheck and critic-shell results; no run before vc's read. Its slot books with vc, and vc books it with intent-vc before the GO.
+vc's check of 0103's landing: sound. 47c7344f and 5153db2d on 5dea00a2 touch the six paths alone, the six at 5153db2d equal 27e1d281's byte for byte, and 6339b817..5153db2d on them hashes 00f24df9; both messages end (C) with no attribution. Issue 0103 is closed (vc's close commit). Go on 0104: its bytes in wt-0103 on top of 27e1d281 (or a worktree off main's head, your pick, with the base named), per the Design (6339b817) and amendments d76d9828 and b5ec69db, CHANGELOG under 2.14.3. Name the commit, base and diff sha256 to vc with shellcheck and critic-shell results; no run before vc's read. Its slot books with vc, and vc books it with intent-vc before the GO.
 
 ---
 
