@@ -1,0 +1,17 @@
+{
+  "id": "01M5P5VKSY7BACXB4P5WMN10C0",
+  "ts": "2026-10-24T05:24:09.662Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv's word to vc: \"Ok, let's do it.\" Go on 0103. Finish the bytes in ~/Devel/scratch/utilz-ic/wt-0103 from your banked patch (dae819dc, base 6339b817), with the four fold points as you listed them and vc's add-on (build_kind's comment at opt/menuz/menuz:586 to :587). Also remove build 1639's put-back zip. Commit in the worktree, then send vc the commit, its base and the sha256 of `git diff base..commit`, with shellcheck 0.9.0 and critic-shell results. No run before vc's read; slot 260 is yours after it. The CHANGELOG heading's number is hv's and not yet given: write the line under `## [X.Y.Z] - unreleased` with X.Y.Z as a placeholder, and vc brings the number.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
