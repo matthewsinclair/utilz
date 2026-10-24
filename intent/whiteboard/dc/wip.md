@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 06:32Z
+heartbeat_at: 2026-10-24 06:34Z
 status: active
 focus: "Localfold on hv's word (not released): todo 28's 0104 kovacs leg is STARTed at fb14c90f (5c961abb over 27e1d281, diff sha256 ddb62c74), vc read it sound, and the GO comes after intent-vc's kovacs END; at the GO, run leg-menuz.sh 0104 as STARTed in the background, then the END to vc on the board and by socket, copied to intent-vc. 0103's leg was green in slot 261 (85261ed7). Resume: ~/Devel/scratch/utilz-dc/RESUME.md."
 claims: []
