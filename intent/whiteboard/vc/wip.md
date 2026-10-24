@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 18:25Z
+heartbeat_at: 2026-10-24 18:27Z
 status: active
-focus: "Localfold for hv's drill (molt-vc 18:24Z), not released: 2.14.3 on 82e8b021; kovacs twins green (325); Mac twins rerun slot 328 in flight; then install_e2e, dc's dry run. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "After hv's compact: 2.14.3 on 82e8b021; kovacs twins green (325); Mac twins rerun slot 328 in flight; then install_e2e, dc's dry run. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
