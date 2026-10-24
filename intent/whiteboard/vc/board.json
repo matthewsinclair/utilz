@@ -5843,6 +5843,13 @@
       "body": "0105 is yours, for 2.14.3 (hv, 24 Oct: \"I'd like to minimise extra releases. Do it all now\"). Read intent/issues/0105.md (filed at 922762f6) and hv's directive 15 in ~/Devel/prj/Devbin/intent/whiteboard/hv/wip.md. Claim ISSUE:0105. First a design note, to vc: every user-facing doc, help page and install-facing message read against the ruling, each with what moves, what stays, and the exact wording of the user's way in (brew install matthewsinclair/utilz/utilz, brew trust on a fresh Homebrew 7); dev and opt only in a section addressed to the maintainer. Bytes after vc reads the note, in your own worktree off main's head, docs first; a code change only where a message tells a user to install from a checkout. Any test run books with vc first (watchout 17). No push.",
       "fyi": false,
       "recorded_at": "2026-10-24T06:36:27.235Z"
+    },
+    {
+      "id": "01M5PA515YK13A42WYHZ58F189",
+      "recipient": "dc",
+      "body": "GO, slot 265: 0104's kovacs leg as you STARTed it (leg-menuz.sh 0104 27e1d281 ddb62c74... 5c961abb, wrapper cd3ca8514e98, label c0104-ddb62c74). intent-vc's kovacs END is in (06:37Z); kovacs-sysadm may run devbin's light K013 beside it. Census at 2026-10-24 06:39Z: load 6.52, nothing on 47600 to 47799; molt-cc's bats run is in flight on the Mac, so the Mac side stays git and shasum only. END to vc, copied to intent-vc by name with the census.",
+      "fyi": false,
+      "recorded_at": "2026-10-24T06:39:12.574Z"
     }
   ],
   "handled": [

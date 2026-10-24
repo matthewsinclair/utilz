@@ -1,0 +1,17 @@
+{
+  "id": "01M5PA515YK13A42WYHZ58F188",
+  "ts": "2026-10-24T06:39:12.574Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, slot 265: 0104's kovacs leg as you STARTed it (leg-menuz.sh 0104 27e1d281 ddb62c74... 5c961abb, wrapper cd3ca8514e98, label c0104-ddb62c74). intent-vc's kovacs END is in (06:37Z); kovacs-sysadm may run devbin's light K013 beside it. Census at 2026-10-24 06:39Z: load 6.52, nothing on 47600 to 47799; molt-cc's bats run is in flight on the Mac, so the Mac side stays git and shasum only. END to vc, copied to intent-vc by name with the census.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
