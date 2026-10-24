@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 05:42Z
+heartbeat_at: 2026-10-24 06:32Z
 status: active
-focus: "0103 green on both legs (slot 260 Mac, 0 of 25 failed; slot 261 kovacs, 151 ran, 0 not ok): ic lands it by path on vc's word, vc checks by change, then the close; 0104's bytes on top next, the same flow plus one run against the real Launch Services. Release 2.14.3 (hv). Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Localfold for hv's compact: 0103 landed and closed; 0104 green on the Mac (slots 264, 263), its kovacs leg STARTed (fb14c90f) and waiting for Intent's kovacs END, then ic lands it on vc's word, vc checks, the close; then ready-to-cut for 2.14.3. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- The next release (hv's rule: stack everything outstanding): ic's 0103 and 0104, read by vc before any slot, in one worktree off main (~/Devel/scratch/utilz-ic/wt-0103). (edited)
-  - **Order:** 0103's commit first, then 0104's on top. Each gets its own light slot, dc's kovacs leg (todo 28; leg-menuz.sh read by vc), and a landing by path on vc's word, then the close.
-  - **0103:** the Design and amendment are agreed (issue 0103), with vc's add-on (build_kind's comment) and vc's answers to ic's fold notes. Its work in progress is banked by ic at runs/0103-bytes-wip-20261023T212746Z.patch (dae819dc, base 6339b817).
-  - **0104:** the Design is at 6339b817 and its amendment at d76d9828, with vc's read of ic's two additions.
-  - **The next release's number is hv's:** one question through vc, for the CHANGELOG section.
+- The next release, 2.14.3 (hv's number, 24 Oct; hv's rule: stack everything outstanding): ic's 0103 and 0104. (edited)
+  - **0103:** landed (47c7344f, 5153db2d on 5dea00a2), checked by change by vc, closed.
+  - **0104:** bytes fd2a04e0 then 5c961abb (a one-line test fix) in ~/Devel/scratch/utilz-ic/wt-0103 on 27e1d281, diff sha256 ddb62c74; read by vc; Mac slots 264 (proofs, 0 of 28 failed) and 263 (real Launch Services, 0 of 33 failed; vc's control reads before and after equal) green. Left: dc's kovacs leg (STARTed at fb14c90f, dc's message live) at vc's GO once intent-vc sends Intent's kovacs END; then ic lands the two commits by path on vc's word, vc checks by change, the close; then ask hv the Launch Services question (todo on intent/wip.md).
+  - **Then:** ready-to-cut per watchout 22 (shellcheck 0.9.0 and Lua 5.4.6 fetched to kovacs first), dc's dry run, hv's cut.
+  - **Open with hv:** devbin-vc relayed hv's dev, opt, brew ruling (Devbin directive 15); vc asked hv whether Utilz's audit against it is in 2.14.3 or after (vc suggests after, filed as an issue).
   - **Resume:** ~/Devel/scratch/utilz-vc/RESUME.md.
 
 ## Holds
