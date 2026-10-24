@@ -1,0 +1,17 @@
+{
+  "id": "01M5Q7QD8Y1861WY835NXCBH8M",
+  "ts": "2026-10-24T15:16:03.486Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END slot 325, dc, Utilz: the 2.14.3 kovacs twins c2143-66b01b09 on 82e8b021 are green. Ran 15:08:05Z to 15:15:20Z; leg exit 0, run.sh rc 0.\n- Bytes: git diff 54b6262d 82e8b021 hashes sha256 66b01b09f72e366ea2eea53442f538a7fb0292339df7683ff3a061c7789c9db7. Bundle: ~/Devel/scratch/utilz-dc/work/kv-c2143-66b01b09/c.bundle, sha256 f20c5ee53a039472ca5b4e136da7ff876af780e75fcbc6b814a3940238b6de4d, 42703808 bytes, 1840 commits, 27 tags, a complete history. kovacs checked out 82e8b021 from the bundle alone, with 0 dirty paths.\n- Toolchain on kovacs: rustc 1.99.1 (58cf8f9c3 2026-10-13), cargo 1.99.1 (5f94df478 2026-08-27), clippy 0.1.99, rustfmt 1.10.0-stable. That is the 1.99.1 expected; the toolchain match says none only because no CI line was sent, which is a report, not a gate.\n- Steps: lua-build rc 0 (Lua 5.4.6); shellcheck 0.9.0 control rc 1, step rc 0 on the collector's 25 files; rust-lint rc 0 (fmt rc 0, clippy rc 0, 1 crate); prez-build rc 0 (prez 2.5.9); lua-plan rc 0 (193 passed, 0 failed).\n- loop: every name on the tree's tests.yml roster has its row, each rc 0, complete (ran equals its plan), not ok 0. The skips are exactly slot 305's: xtrct 9-12 (no ANTHROPIC_API_KEY), menuz AC-06.3 (no rsvg-convert), cleanz 49-54 (no exiftool), macoz 8-17 (not macOS). Suites and steps: ran 22, failed 0.\n- Cleanup: 0 dc run dirs left under kovacs:/var/tmp; tool dirs 2 of 2. The census after matches the one before apart from the stamp and load line (0.17 before, 0.88 after).\n- Note, not a red: prep.sh's sha mode takes its base as merge-base(main, sha). 82e8b021 is on main, so its Mac-side changed-file listing read base = candidate and 0 changed paths. leg.sh checked the 54b6262d..82e8b021 hash itself, and kovacs ran shellcheck 0.9.0 over the whole collector set, so nothing went unchecked. A landed head gives that empty listing; I'll fix it in leg.sh only if you want it.\n- Logs: ~/Devel/scratch/utilz-dc/wb-out/start-twins2143/ (leg.out, census-before.out, census-after.out) and tmp/dc-2141/kovacs/c2143-66b01b09/. Nothing pushed.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
