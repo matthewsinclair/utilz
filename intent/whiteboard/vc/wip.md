@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-24 13:20Z
+heartbeat_at: 2026-10-24 13:37Z
 status: active
-focus: "2.14.3: 0106 landed and closed; 0105 final head 8a15eaf6, kovacs green (slot 305), cc's Mac run decides the landing; then ready-to-cut. Folded for hv's compact (13:19Z)"
+focus: "after hv's compact (13:37Z): 0105's Mac run on 8a15eaf6 waits for molt-vc's GO; then the landing, install_e2e in the primary, the close; then ready to cut 2.14.3 (needs hv's molt resleeve first)"
 claims: []
 ---
 
