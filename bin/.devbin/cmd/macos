@@ -41,11 +41,18 @@ MARK_SVG="$APP_DIR/design/menuz-mark.svg"
 # the build product, which any build on this machine can replace mid-
 # notarisation.
 KC_PREFIX="utilz.apple"
+# menuz's BUNDLE_ID (opt/menuz/menuz), mirrored: a devbin command does not
+# source menuz. macos.bats requires the two equal (issue 0104).
 APP_BUNDLE_ID="com.matthewsinclair.utilz.menuz"
 APP_ENTITLEMENTS="$APP_DIR/Menuz/Menuz.entitlements"
 APP_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos"
 APP_DIST_DIR="$APP_STATE_DIR/dist"
 APP_ASSET="Menuz.app.zip"
+# Launch Services' registrar, not on PATH on macOS: menuz's LSREGISTER
+# (opt/menuz/menuz), mirrored as APP_BUNDLE_ID is, and found as menuz's
+# lsregister_cmd finds it (app_lsregister). macos.bats requires the two equal
+# (issue 0104).
+APP_LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 
 # One PNG of <svg> at <px> square. A non-zero rsvg-convert, or one that wrote
 # nothing, stops the run naming the size and the source.
@@ -312,9 +319,11 @@ app_signature_readback() {
   esac
 }
 
-# app_verify_notarised <bundle> -- the ticket, checked the way a download
-# meets it: a quarantined copy, the quarantine asserted before any verdict is
-# read, and spctl's source. The app is not launched. 0 when it passes.
+# app_verify_notarised <bundle> [<dir>] -- the ticket, checked the way a
+# download meets it: a quarantined copy, the quarantine asserted before any
+# verdict is read, and spctl's source. The app is not launched. 0 when it
+# passes. The copy is made under <dir> when it is given (publish's staging
+# dir, which its EXIT trap removes), else under a dir of its own.
 app_verify_notarised() {
   local bundle="$1" t verdict rc=0
   if xcrun stapler validate "$bundle" >/dev/null 2>&1; then
@@ -323,7 +332,12 @@ app_verify_notarised() {
     printf '  %-21s %s\n' "stapled ticket" "NONE (run: $DEVBIN_INVOKE macos app-notarize)"
     rc=1
   fi
-  t="$(mktemp -d)"
+  if [ -n "${2:-}" ]; then
+    t="$2/verify"
+    mkdir "$t" || die "could not make $t to check $bundle"
+  elif ! t="$(mktemp -d)" || [ -z "$t" ]; then
+    die "could not make a temporary dir to check $bundle"
+  fi
   ditto "$bundle" "$t/Menuz.app" || { rm -rf "$t"; die "could not copy $bundle to check it"; }
   xattr -w com.apple.quarantine "0083;0;utilz-verify;" "$t/Menuz.app" || true
   if ! xattr -p com.apple.quarantine "$t/Menuz.app" >/dev/null 2>&1; then
@@ -590,11 +604,97 @@ cmd_app_verify() {
   app_verify_notarised "$bundle" || die "the signed bundle is not notarised and stapled"
 }
 
+# lsregister as menuz finds it: an executable one on PATH first (a test's
+# fake), then the system's.
+app_lsregister() {
+  local found
+  if found="$(command -v lsregister)" && [ -x "$found" ]; then
+    printf '%s\n' "$found"
+  else
+    printf '%s\n' "$APP_LSREGISTER"
+  fi
+}
+
+# The staging dir publish proves its zip in, resolved as Launch Services lists
+# it (pwd -P); empty when there is none. A global, because bash 5 runs an EXIT
+# trap with the function's locals already unwound.
+_APP_PUBLISH_STAGING=""
+
+# The paths of the Launch Services records at or under dir $1, one per line,
+# from lsregister -dump's text on stdin: each `path:` line without its
+# ` (0x...)` id. Exit 2 when the text holds no `path:` line at all: the real
+# list always holds the system's own apps, so none means it was not read.
+app_records_under() { # $1 dir; the dump's text on stdin
+  DIR="$1" awk '
+    /^path:/ {
+      seen = 1
+      sub(/^path:[ \t]+/, ""); sub(/ \(0x[0-9a-fA-F]+\)$/, "")
+      if ($0 == ENVIRON["DIR"] || index($0, ENVIRON["DIR"] "/") == 1) print
+    }
+    END { if (!seen) exit 2 }'
+}
+
+# publish's EXIT trap (issue 0104). `stapler validate` registers the unpacked
+# proof copy with Launch Services, so on every path out its record is dropped
+# with lsregister -u, then the staging dir removed. Then the record list is
+# read whole and must hold no record at or under the dir. A record left, a
+# list not read or a dir not removed is said on stderr, after whatever the run
+# said first, and makes a run that would exit 0 exit 1; any other status
+# stands. INT, TERM and HUP are ignored through -u and the removal only, so
+# a second signal cannot cut them short, and are back at their defaults for
+# the list, which an ignored signal would make uninterruptible. Every command
+# answers its own failure: this runs under errexit.
+app_drop_proof_copy() {
+  local rc=$? dir="$_APP_PUBLISH_STAGING" ls bundle answer urc=0 dump drc=0 left="" lrc=0 unknown="" path why failed=no
+  [ -n "$dir" ] || exit "$rc"
+  ls="$(app_lsregister)"
+  bundle="$dir/unpacked/Menuz.app"
+  trap '' INT TERM HUP
+  answer="$("$ls" -u "$bundle" 2>&1)" || urc=$?
+  if ! rm -rf "$dir"; then
+    warn "could not remove the staging dir $dir; remove it with: rm -rf $dir"
+    failed=yes
+  fi
+  trap - INT TERM HUP
+  dump="$("$ls" -dump 2>&1)" || drc=$?
+  if [ "$drc" -eq 0 ]; then
+    left="$(printf '%s\n' "$dump" | app_records_under "$dir")" || lrc=$?
+  fi
+  if [ "$drc" -ne 0 ]; then
+    unknown="lsregister -dump failed (exit $drc)"
+  elif [ "$lrc" -eq 2 ]; then
+    unknown="lsregister -dump listed no record at all, so the list was not read"
+  elif [ "$lrc" -ne 0 ]; then
+    unknown="the record list could not be searched (exit $lrc)"
+  fi
+  if [ -n "$unknown" ]; then
+    warn "could not drop the Launch Services record for $bundle: $unknown, so whether it is gone is unknown; drop it with: $ls -u $bundle"
+    failed=yes
+  else
+    if [ "$urc" -ne 0 ]; then
+      why="lsregister -u said: ${answer:-nothing} (exit $urc)"
+    else
+      why="lsregister -u exited 0 and the record is still listed"
+    fi
+    while IFS= read -r path; do
+      [ -n "$path" ] || continue
+      warn "could not drop the Launch Services record for $path: $why; drop it with: $ls -u $path"
+      failed=yes
+    done <<<"$left"
+  fi
+  if [ "$failed" = yes ] && [ "$rc" -eq 0 ]; then
+    exit 1
+  fi
+  exit "$rc"
+}
+
 # publish: Menuz.app.zip attached to the release object the release core made
 # for the tree's VERSION. Refused, with nothing uploaded, if the bundle is not
 # opt/menuz/VERSION's or not the tag's own build, if the release object does
 # not exist, or if it already holds the asset. The zip is proven by unpacking
-# it as a user does and checking the bundle inside, before the upload.
+# it as a user does and checking the bundle inside, before the upload; the
+# proof copy's Launch Services record, which stapler validate makes, is
+# dropped and the copy removed on every path out (app_drop_proof_copy).
 cmd_publish() {
   local dist tag blockers assets staging zip
   dist="$(app_dist)"
@@ -608,24 +708,37 @@ cmd_publish() {
   if printf '%s\n' "$assets" | grep -qxF "$APP_ASSET"; then
     die "release $tag already holds $APP_ASSET -- nothing uploaded"
   fi
-  staging="$(mktemp -d)"
+  # Made, then resolved as Launch Services lists it, each step checked, so an
+  # empty answer never stands in for the dir; then every path out, an
+  # interrupt included, goes through app_drop_proof_copy (issue 0104).
+  local made
+  if ! made="$(mktemp -d)" || [ -z "$made" ] || [ ! -d "$made" ]; then
+    die "could not make a staging dir -- nothing uploaded"
+  fi
+  if ! staging="$(cd "$made" && pwd -P)" || [ -z "$staging" ]; then
+    rm -rf "$made"
+    die "could not resolve the staging dir $made -- nothing uploaded"
+  fi
+  _APP_PUBLISH_STAGING="$staging"
+  trap app_drop_proof_copy EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  trap 'exit 129' HUP
   zip="$staging/$APP_ASSET"
   step "zipping the stapled bundle"
-  ditto -c -k --keepParent "$dist" "$zip" || { rm -rf "$staging"; die "could not zip $dist"; }
+  ditto -c -k --keepParent "$dist" "$zip" || die "could not zip $dist"
   step "proving the zip as a download meets it"
   mkdir "$staging/unpacked"
   if ! ditto -x -k "$zip" "$staging/unpacked" || [ ! -d "$staging/unpacked/Menuz.app" ]; then
-    rm -rf "$staging"
     die "$APP_ASSET does not unpack to Menuz.app -- nothing uploaded"
   fi
   blockers="$(app_ship_blockers "$staging/unpacked/Menuz.app" "$tag")" ||
-    { rm -rf "$staging"; die "could not check the bundle inside $APP_ASSET against release $tag -- nothing uploaded"; }
-  app_refuse_blockers "the bundle inside $APP_ASSET cannot ship with release $tag -- nothing uploaded" "$blockers" "$staging"
-  app_verify_notarised "$staging/unpacked/Menuz.app" ||
-    { rm -rf "$staging"; die "the bundle inside $APP_ASSET is not notarised and stapled -- nothing uploaded"; }
+    die "could not check the bundle inside $APP_ASSET against release $tag -- nothing uploaded"
+  app_refuse_blockers "the bundle inside $APP_ASSET cannot ship with release $tag -- nothing uploaded" "$blockers"
+  app_verify_notarised "$staging/unpacked/Menuz.app" "$staging" ||
+    die "the bundle inside $APP_ASSET is not notarised and stapled -- nothing uploaded"
   step "uploading $APP_ASSET to release $tag"
-  gh release upload "$tag" "$zip" || { rm -rf "$staging"; die "gh release upload failed"; }
-  rm -rf "$staging"
+  gh release upload "$tag" "$zip" || die "gh release upload failed"
   printf '\npublished: %s on release %s\n' "$APP_ASSET" "$tag"
 }
 
@@ -661,7 +774,8 @@ bin/devbin macos <subcommand>
                attach it to the release for VERSION with gh. Refuses a bundle
                that is not opt/menuz/VERSION's, one whose MenuzKind is not
                release or whose MenuzCommit is not the tag's commit, a missing
-               release, and one that already holds the asset
+               release, and one that already holds the asset. Drops the proof
+               copy's Launch Services record, and says so if it cannot
 
   app-verify [debug|release|dist]
                Read-only: a bundle's executable, LSUIElement and build stamps,

@@ -130,34 +130,95 @@ case " $* " in
   *" --verify "*) exit "$(cat "'"$FAKES"'/verify.rc" 2>/dev/null || echo 0)" ;;
 esac'
   # xcrun: notarytool submit prints $FAKES/notary.out; stapler staple marks
-  # the bundle stapled, and validate reads the mark.
+  # the bundle stapled, and validate reads the mark. validate registers the
+  # bundle with the fake lsregister, by its resolved path, as the real one
+  # does (issue 0104's slot 259), then fails when $FAKES/staple.fail is set.
   printf 'Conducting pre-submission checks\n  id: 0b9c7f4e-1111-2222-3333-444455556666\n  status: Accepted\n' >"$FAKES/notary.out"
   write_fake xcrun '
 case "$1 $2" in
   "notarytool submit") cat "'"$FAKES"'/notary.out" ;;
   "notarytool log") echo "the notary log" ;;
   "stapler staple") touch "'"$FAKES"'/stapled" ;;
-  "stapler validate") [ -f "'"$FAKES"'/stapled" ] ;;
+  "stapler validate")
+    p="$(cd "$3" 2>/dev/null && pwd -P)" && printf "%s\n" "$p" >>"'"$FAKES"'/ls.records"
+    [ ! -f "'"$FAKES"'/staple.fail" ] && [ -f "'"$FAKES"'/stapled" ] ;;
 esac'
   write_fake spctl '
 if [ -f "'"$FAKES"'/stapled" ]; then echo "source=Notarized Developer ID"; else echo "source=Unnotarized Developer ID"; exit 3; fi'
-  # ditto: a copy, or a "zip" that is a tar of the parent-kept bundle.
+  # ditto: a copy, or a "zip" that is a tar of the parent-kept bundle. The
+  # unpack sets the unpacked copy's MenuzKind to $FAKES/unpack.kind when it
+  # is set, and the copy fails when $FAKES/copy.fail is set (issue 0104).
   write_fake ditto '
 case "$1" in
   -c) shift; while [ "${1#-}" != "$1" ]; do shift; done
       tar -C "$(dirname "$1")" -cf "$2" "$(basename "$1")" ;;
   -x) shift; while [ "${1#-}" != "$1" ]; do shift; done
-      mkdir -p "$2" && tar -C "$2" -xf "$1" ;;
-  *) mkdir -p "$(dirname "$2")" && cp -R "$1" "$2" ;;
+      mkdir -p "$2" && tar -C "$2" -xf "$1" || exit 1
+      if [ -f "'"$FAKES"'/unpack.kind" ]; then
+        plist="$2/Menuz.app/Contents/Info.plist"
+        sed "s/^MenuzKind=.*/MenuzKind=$(cat "'"$FAKES"'/unpack.kind")/" "$plist" >"$plist.new" && mv "$plist.new" "$plist"
+      fi ;;
+  *) [ ! -f "'"$FAKES"'/copy.fail" ] || { echo "ditto: copy failed" >&2; exit 1; }
+     mkdir -p "$(dirname "$2")" && cp -R "$1" "$2" ;;
 esac'
   write_fake xattr ':'
   # plutil -extract KEY raw -o - PLIST, over a fixture Info.plist of KEY=value lines.
   write_fake plutil 'sed -n "s/^$2=//p" "$6" | grep . || exit 1'
   # gh: a release exists when $FAKES/release.<tag> does; it lists its assets.
+  # The upload fails when $FAKES/upload.fail is set. When $FAKES/upload.slow
+  # is set it writes its pid to $FAKES/upload.started, takes two seconds and
+  # then says "upload ended" in $FAKES/order.log, signalled or not; when
+  # $FAKES/upload.int is set it writes its pid, then sleeps until an INT,
+  # which it catches, exiting 0, as a child that handles the interrupt does.
   write_fake gh '
 case "$1 $2" in
   "release view") [ -f "'"$FAKES"'/release.$3" ] && cat "'"$FAKES"'/release.$3" ;;
-  "release upload") cp "$4" "'"$FAKES"'/uploaded.zip" ;;
+  "release upload")
+    [ ! -f "'"$FAKES"'/upload.fail" ] || { echo "gh: upload failed" >&2; exit 1; }
+    if [ -f "'"$FAKES"'/upload.slow" ]; then
+      printf "%s\n" "$$" >"'"$FAKES"'/upload.pid" && mv "'"$FAKES"'/upload.pid" "'"$FAKES"'/upload.started"
+      sleep 2
+      echo "upload ended" >>"'"$FAKES"'/order.log"
+      exit 0
+    fi
+    if [ -f "'"$FAKES"'/upload.int" ]; then
+      sleep 60 &
+      s=$!
+      trap "kill $s 2>/dev/null; exit 0" INT
+      printf "%s\n" "$$" >"'"$FAKES"'/upload.pid" && mv "'"$FAKES"'/upload.pid" "'"$FAKES"'/upload.started"
+      wait "$s"
+      exit 0
+    fi
+    cp "$4" "'"$FAKES"'/uploaded.zip" ;;
+esac'
+  # lsregister: Launch Services' records are the paths in $FAKES/ls.records,
+  # one per line. -u drops the path's record, or exits 1 as the real one
+  # does when it holds none; with $FAKES/ls.stuck set it exits 0 and keeps
+  # it. -dump prints each record in the real dump's shape, fails when
+  # $FAKES/dump.fail is set, and lists nothing, exiting 0, when
+  # $FAKES/dump.empty is set. Each call is also said in $FAKES/order.log.
+  write_fake lsregister '
+records="'"$FAKES"'/ls.records"
+touch "$records"
+echo "lsregister $1" >>"'"$FAKES"'/order.log"
+case "$1" in
+  -u)
+    if ! grep -qxF -- "$2" "$records"; then
+      echo "failed to scan $2: -10814 from spotlight" >&2
+      exit 1
+    fi
+    [ ! -f "'"$FAKES"'/ls.stuck" ] || exit 0
+    # grep exits 1 when the record dropped was the last one; that is a drop.
+    grep -vxF -- "$2" "$records" >"$records.new" || true
+    mv "$records.new" "$records" ;;
+  -dump)
+    [ ! -f "'"$FAKES"'/dump.fail" ] || { echo "lsregister: dump failed" >&2; exit 1; }
+    [ ! -f "'"$FAKES"'/dump.empty" ] || exit 0
+    n=0
+    while IFS= read -r p; do
+      n=$((n + 1))
+      printf "path:                       %s (0x%x)\nidentifier:                 com.matthewsinclair.utilz.menuz\n--------------------------------------------------------------------------------\n" "$p" "$((0x4ed00 + n))"
+    done <"$records" ;;
 esac'
 }
 
@@ -686,4 +747,224 @@ dist_stamp() { # $1 key, $2 value
   [[ "$output" == *"version               0.1.0 (build 42)"* ]] || fail "$output"
   [[ "$output" == *"commit                $head"* ]] || fail "$output"
   [[ "$output" == *"kind                  release"* ]] || fail "$output"
+}
+
+# --- issue 0104: publish drops its proof copy's Launch Services record ------
+#
+# stapler validate registers the unpacked proof copy (slot 259), so every path
+# out of publish after the staging dir is made goes through one EXIT trap that
+# drops the record and removes the dir. Each test reads the records through
+# the fake lsregister's -dump and requires none at or under the staging dir,
+# and the dir gone. The dir is read from the fake ditto's calls, since macOS
+# mktemp ignores TMPDIR.
+
+# The staging dir publish zipped into, from the fake ditto's calls.
+staging_dir() {
+  local line
+  line="$(grep ' Menuz.app.zip$' "$FAKES/ditto.calls" | grep '^-c ' | tail -1)"
+  [ -n "$line" ] || return 1
+  dirname "${line##* }"
+}
+
+# The fake Launch Services' records at or under $1, one per line, read
+# through its -dump as publish reads the real one.
+# Fails when the dump fails or lists no record at all: after notarised_dist
+# the dist bundle is always listed, so an empty list was not read. The dump's
+# own failure knobs are lifted first, so the test reads what is there.
+records_under() {
+  local dump
+  rm -f "$FAKES/dump.empty" "$FAKES/dump.fail"
+  dump="$("$FAKES/lsregister" -dump)" || fail "the fake lsregister -dump failed"
+  printf '%s\n' "$dump" | grep -q '^path:' || fail "the fake lsregister -dump listed no record"
+  printf '%s\n' "$dump" | sed -n 's/^path: *\(.*\) (0x[0-9a-f]*)$/\1/p' |
+    while IFS= read -r p; do
+      case "$p" in "$1" | "$1"/*) printf '%s\n' "$p" ;; esac
+    done
+}
+
+# stapler validate registered the proof copy, and the trap's -u was made on
+# it: the record existed, for the drop to drop.
+proof_copy_was_registered() {
+  local bundle
+  bundle="$(staging_dir)/unpacked/Menuz.app" || fail "publish made no zip"
+  grep -qx -- "stapler validate $bundle" "$FAKES/xcrun.calls" || fail "stapler validate never ran on $bundle: $(cat "$FAKES/xcrun.calls")"
+  grep -qx -- "-u $bundle" "$FAKES/lsregister.calls" || fail "no lsregister -u on $bundle: $(cat "$FAKES/lsregister.calls")"
+}
+
+# The staging dir is gone and no record is left at or under it.
+proof_copy_gone() {
+  local dir left
+  dir="$(staging_dir)" || fail "publish made no zip, so there is no staging dir to check"
+  [ ! -e "$dir" ] || fail "the staging dir is still there: $dir"
+  left="$(records_under "$dir")"
+  [ -z "$left" ] || fail "Launch Services records left under $dir: $left"
+}
+
+# A notarised dist, a release object for 2.14.0 without the asset.
+publishable() {
+  notarised_dist
+  printf 'utilz-2.14.0.tar.gz\n' >"$FAKES/release.2.14.0"
+}
+
+# publish in the background, with SIGINT at its default when $1 is int (a
+# background job under bats starts with it ignored, and an ignored signal
+# cannot be trapped); its pid in $PUB_PID once the fake upload has started,
+# its output in $PUB_OUT.
+publish_in_background() {
+  PUB_OUT="$BATS_TEST_TMPDIR/publish.out"
+  if [ "${1:-}" = int ]; then
+    (cd "$PROJ" && exec perl -e '$SIG{INT} = "DEFAULT"; exec @ARGV or die "exec: $!"' bin/devbin macos publish) >"$PUB_OUT" 2>&1 3>&- &
+  else
+    (cd "$PROJ" && exec bin/devbin macos publish) >"$PUB_OUT" 2>&1 3>&- &
+  fi
+  PUB_PID=$!
+  local _
+  for _ in $(seq 1 200); do
+    [ -s "$FAKES/upload.started" ] && return 0
+    sleep 0.05
+  done
+  kill "$PUB_PID" 2>/dev/null || true
+  [ ! -s "$FAKES/upload.started" ] || kill "$(cat "$FAKES/upload.started")" 2>/dev/null || true
+  fail "the fake upload never started: $(cat "$PUB_OUT")"
+}
+
+@test "issue 0104: cmd/macos's bundle id and lsregister path are menuz's" {
+  local menuz="$UTILZ_HOME/opt/menuz/menuz" macos="$UTILZ_HOME/bin/.devbin/cmd/macos" a b
+  a="$(sed -n 's/^APP_LSREGISTER="\(.*\)"$/\1/p' "$macos")"
+  b="$(sed -n 's/^LSREGISTER="\(.*\)"$/\1/p' "$menuz")"
+  [ -n "$a" ] && [ -n "$b" ] || fail "a literal is missing: APP_LSREGISTER '$a', LSREGISTER '$b'"
+  [ "$a" = "$b" ] || fail "APP_LSREGISTER is $a and menuz's LSREGISTER is $b"
+  a="$(sed -n 's/^APP_BUNDLE_ID="\(.*\)"$/\1/p' "$macos")"
+  b="$(sed -n 's/^BUNDLE_ID="\(.*\)"$/\1/p' "$menuz")"
+  [ -n "$a" ] && [ -n "$b" ] || fail "a literal is missing: APP_BUNDLE_ID '$a', BUNDLE_ID '$b'"
+  [ "$a" = "$b" ] || fail "APP_BUNDLE_ID is $a and menuz's BUNDLE_ID is $b"
+}
+
+@test "issue 0104: publish drops the proof copy's record and its dir after an upload that worked" {
+  publishable
+  run_macos publish
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  [[ "$output" == *"published: Menuz.app.zip on release 2.14.0"* ]] || fail "$output"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+  proof_copy_was_registered
+  proof_copy_gone
+}
+
+@test "issue 0104: publish drops the record and the dir when the bundle inside the zip is refused, before stapler validate" {
+  publishable
+  printf 'dev' >"$FAKES/unpack.kind"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle inside Menuz.app.zip cannot ship with release 2.14.0 -- nothing uploaded"* ]] || fail "$output"
+  [[ "$output" == *"the bundle's MenuzKind is dev, not release"* ]] || fail "$output"
+  grep -qx -- "-u $(staging_dir)/unpacked/Menuz.app" "$FAKES/lsregister.calls" || fail "$(cat "$FAKES/lsregister.calls")"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+  proof_copy_gone
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0104: publish drops the record stapler validate made when the notarisation check refuses" {
+  publishable
+  touch "$FAKES/staple.fail"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"the bundle inside Menuz.app.zip is not notarised and stapled -- nothing uploaded"* ]] || fail "$output"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+  proof_copy_was_registered
+  proof_copy_gone
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0104: publish drops the record when the notarisation check cannot copy the proof copy" {
+  publishable
+  touch "$FAKES/copy.fail"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"could not copy $(staging_dir)/unpacked/Menuz.app to check it"* ]] || fail "$output"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+  proof_copy_was_registered
+  proof_copy_gone
+  [ ! -e "$FAKES/uploaded.zip" ]
+}
+
+@test "issue 0104: publish drops the record and the dir when the upload fails" {
+  publishable
+  touch "$FAKES/upload.fail"
+  run_macos publish
+  [ "$status" -eq 1 ]
+  [[ "$output" == *"gh release upload failed"* ]] || fail "$output"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+  proof_copy_was_registered
+  proof_copy_gone
+}
+
+@test "issue 0104: a record that will not drop after an upload that worked is said once, after published, and publish exits 1" {
+  publishable
+  touch "$FAKES/ls.stuck"
+  run_macos publish
+  [ "$status" -eq 1 ] || fail "exit $status: $output"
+  local dir bundle said
+  dir="$(staging_dir)"
+  bundle="$dir/unpacked/Menuz.app"
+  said="could not drop the Launch Services record for $bundle: lsregister -u exited 0 and the record is still listed; drop it with: $FAKES/lsregister -u $bundle"
+  [[ "$output" == *"published: Menuz.app.zip on release 2.14.0"*"$said"* ]] || fail "$output"
+  [ "$(printf '%s\n' "$output" | grep -c 'could not drop')" -eq 1 ] || fail "$output"
+  [[ "$output" != *"rerun"* ]] || fail "$output"
+  [ ! -e "$dir" ]
+  [ "$(records_under "$dir")" = "$bundle" ]
+}
+
+@test "issue 0104: a record list that cannot be read after an upload that worked is said, and publish exits 1" {
+  publishable
+  touch "$FAKES/dump.fail"
+  run_macos publish
+  [ "$status" -eq 1 ] || fail "exit $status: $output"
+  local bundle
+  bundle="$(staging_dir)/unpacked/Menuz.app"
+  [[ "$output" == *"published: Menuz.app.zip on release 2.14.0"*"could not drop the Launch Services record for $bundle: lsregister -dump failed (exit 1), so whether it is gone is unknown; drop it with: $FAKES/lsregister -u $bundle"* ]] || fail "$output"
+  [ ! -e "$(staging_dir)" ]
+}
+
+@test "issue 0104: a record list that lists nothing after an upload that worked is said as not read, and publish exits 1" {
+  publishable
+  touch "$FAKES/dump.empty"
+  run_macos publish
+  [ "$status" -eq 1 ] || fail "exit $status: $output"
+  local bundle
+  bundle="$(staging_dir)/unpacked/Menuz.app"
+  [[ "$output" == *"published: Menuz.app.zip on release 2.14.0"*"could not drop the Launch Services record for $bundle: lsregister -dump listed no record at all, so the list was not read, so whether it is gone is unknown; drop it with: $FAKES/lsregister -u $bundle"* ]] || fail "$output"
+}
+
+@test "issue 0104: a TERM during the upload exits 143 once the upload has ended, then drops the record and the dir" {
+  publishable
+  touch "$FAKES/upload.slow"
+  publish_in_background
+  local rc=0 _
+  # To publish alone: the trapped TERM waits for its foreground child, so the
+  # record is dropped after the upload has ended, never while it runs.
+  kill -TERM "$PUB_PID"
+  wait "$PUB_PID" || rc=$?
+  [ "$rc" -eq 143 ] || fail "exit $rc, not 143: $(cat "$PUB_OUT")"
+  for _ in $(seq 1 100); do
+    grep -qx "upload ended" "$FAKES/order.log" && break
+    sleep 0.05
+  done
+  [ "$(grep -xE 'upload ended|lsregister -u' "$FAKES/order.log" | head -1)" = "upload ended" ] ||
+    fail "the record was dropped before the upload ended: $(cat "$FAKES/order.log")"
+  [[ "$(cat "$PUB_OUT")" != *"published:"* ]] || fail "$(cat "$PUB_OUT")"
+  proof_copy_was_registered
+  proof_copy_gone
+}
+
+@test "issue 0104: an INT during the upload exits 130, though the upload catches it and exits 0, dropping the record and the dir" {
+  publishable
+  touch "$FAKES/upload.int"
+  publish_in_background int
+  local rc=0
+  kill -INT "$PUB_PID" "$(cat "$FAKES/upload.started")"
+  wait "$PUB_PID" || rc=$?
+  [ "$rc" -eq 130 ] || fail "exit $rc, not 130: $(cat "$PUB_OUT")"
+  [[ "$(cat "$PUB_OUT")" != *"published:"* ]] || fail "$(cat "$PUB_OUT")"
+  proof_copy_was_registered
+  proof_copy_gone
 }
