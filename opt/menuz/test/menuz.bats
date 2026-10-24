@@ -1218,21 +1218,33 @@ app_count() {
   [[ "$(count_calls lsregister)" -eq 0 ]] || false
 }
 
-@test "AT-05.1: uninstall quits, unregisters the login item, unregisters the bundle and removes it" {
+@test "AT-05.1: uninstall quits, unregisters the login item, drops the bundle's record and removes it" {
   running_app
-  fake lsregister 'exit 0'
   make_app "$INSTALLED"
+  ls_fake_register "$FAKES" "$INSTALLED"
+  local installed
+  installed="$(ls_resolved "$INSTALLED")"
   run_menuz uninstall
   assert_success
-  [[ "$(calls_of osascript app lsregister | tr '\n' '|')" == "osascript -l|app --unregister-login-item|lsregister -u|" ]] || false
-  grep -qx "lsregister -u $INSTALLED" "$FAKES/calls"
+  [[ "$(calls_of osascript app lsregister | tr '\n' '|')" == "osascript -l|app --unregister-login-item|lsregister -u|lsregister -dump|" ]] || false
+  grep -qx "lsregister -u $installed" "$FAKES/calls"
+  [[ -z "$(ls_fake_records "$FAKES")" ]] || false
   assert_output_contains "unregistered (now not registered)"
   [[ ! -e "$INSTALLED" ]] || false
 }
 
-@test "AT-05.1: a login item that will not unregister is reported, the removal goes on, exit 1" {
-  fake lsregister 'exit 0'
+@test "AT-05.1: an uninstall whose bundle holds no record already is not a failure (issue 0106)" {
   make_app "$INSTALLED"
+  run_menuz uninstall
+  assert_success
+  grep -q '^lsregister -u ' "$FAKES/calls"
+  refute_output_contains "could not drop"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: a login item that will not unregister is reported, the removal goes on, exit 1" {
+  make_app "$INSTALLED"
+  ls_fake_register "$FAKES" "$INSTALLED"
   FAKE_UNREGISTER_RC=1 FAKE_UNREGISTER_OUT="still enabled" run_menuz uninstall
   assert_exit_code 1
   assert_output_contains "still enabled"
@@ -1424,13 +1436,25 @@ exec /bin/mv "$@"'
   grep -qx "open -a $DEV" "$FAKES/calls"
 }
 
-@test "AT-05.1: an uninstall whose lsregister -u fails removes the app and is exit 1 naming it" {
-  fake lsregister 'echo "lsregister: no such bundle" >&2; exit 1'
+@test "AT-05.1: an uninstall whose bundle's record will not drop removes the app and is exit 1 naming it (issue 0106)" {
   make_app "$INSTALLED"
+  ls_fake_register "$FAKES" "$INSTALLED"
+  touch "$FAKES/ls.stuck"
+  local installed
+  installed="$(ls_resolved "$INSTALLED")"
   run_menuz uninstall
   assert_exit_code 1
-  assert_output_contains "lsregister -u"
-  assert_output_contains "no such bundle"
+  assert_output_contains "menuz: uninstall removed the app, but could not drop the Launch Services record for $installed: lsregister -u exited 0 and the record is still listed; drop it with: $FAKES/lsregister -u $installed"
+  [[ ! -e "$INSTALLED" ]] || false
+}
+
+@test "AT-05.1: an uninstall whose record list cannot be read removes the app and is exit 1 saying so (issue 0106)" {
+  make_app "$INSTALLED"
+  ls_fake_register "$FAKES" "$INSTALLED"
+  touch "$FAKES/dump.fail"
+  run_menuz uninstall
+  assert_exit_code 1
+  assert_output_contains "lsregister -dump failed (exit 1), so whether it is gone is unknown"
   [[ ! -e "$INSTALLED" ]] || false
 }
 

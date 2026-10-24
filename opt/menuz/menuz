@@ -928,11 +928,13 @@ cmd_install() {
 }
 
 # Quits every copy, asks the installed copy to unregister its login item,
-# unregisters the bundle and removes it. An unregistration that fails is
-# said and the removal goes on, and the exit is then 1.
+# drops the bundle's Launch Services record and removes it. The record list,
+# not lsregister -u's exit, says whether the record is gone (issue 0106). An
+# unregistration that fails, or a record left, is said and the removal goes
+# on, and the exit is then 1.
 cmd_uninstall() {
   no_args uninstall "$@"
-  local bundle bin out failed=""
+  local bundle bin out said failed=""
   bundle="$(installed_bundle)"
   if [[ ! -e "$bundle" ]]; then
     printf 'menuz: nothing installed at %s; nothing changed\n' "$bundle"
@@ -947,8 +949,8 @@ cmd_uninstall() {
   else
     failed="the login item: $out"
   fi
-  if ! out="$("$(ls_cmd)" -u "$bundle" 2>&1)"; then
-    failed="${failed:+$failed; }lsregister -u $bundle: $out"
+  if ! said="$(ls_drop "$bundle")"; then
+    failed="${failed:+$failed; }$(printf '%s\n' "$said" | paste -sd ';' - | sed 's/;/; /g')"
   fi
   rm -rf "${bundle:?}" || fail_step remove "$bundle could not be removed${failed:+; and $failed}"
   printf 'menuz: removed %s\n' "$bundle"
