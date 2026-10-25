@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh), on vc's ASSIGN of 25 Oct: shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. DRAFT only, sent to vc: ~/Devel/scratch/utilz-dc/work/c2144/request.md and twins.sh (73b61c7d). A heavy: it goes to molt-vc after cc's Mac twins END, and runs only on molt-vc's GO by name. Then the dry run on the final head (as slot 331), after these twins. Nothing has run.
+- 2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh): shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. On molt-vc's GO HEAVY (after cc's Mac twins END 14:31Z), the request (~/Devel/scratch/utilz-dc/work/c2144/request.md 06d15b28, twins.sh 73b61c7d) is SENT to kovacs-sysadm; waiting for its begun note (START to molt-vc), then its readback to dc and vc, banked as work/c2144/twins.out, then END to molt-vc. Then the dry run on the final head (as slot 331). (edited)
 
 ## TODO
 
