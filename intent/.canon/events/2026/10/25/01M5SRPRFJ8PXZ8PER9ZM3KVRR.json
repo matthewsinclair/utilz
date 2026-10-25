@@ -1,0 +1,16 @@
+{
+  "id": "01M5SRPRFJ8PXZ8PER9ZM3KVRR",
+  "ts": "2026-10-25T14:51:16.850Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 (0107, 0108) pre-release checks on code 21b0385d: cc's Mac twins GREEN (14:13Z to 14:31Z, read from the bank) plus vc's critic leg (known positive rc 1, mdagg rc 0); dc's kovacs twins via kovacs-sysadm GREEN (14:38Z to 14:47Z, tallied from the readback); dc's dry run (dryrun-2144.sh e4de6bc0, main's HEAD at the GO) READY with molt-vc behind Intent's 0645 rebuild, tree frozen from that GO. Then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew."
+  }
+}

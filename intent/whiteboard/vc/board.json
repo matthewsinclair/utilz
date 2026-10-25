@@ -2030,9 +2030,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 (0107, 0108) pre-release checks on main 21b0385d, in hv's order: cc's Mac twins (READY with molt-vc, run-twins-2144-mac.sh 18c38c51, e2e 1f7ecb54; END reads the Swift Testing counts), then dc's kovacs twins through kovacs-sysadm (request.md 06d15b28, twins.sh 73b61c7d; READY, after the Mac twins), then dc's dry run on the head vc names, then hv's cut, then brew on both hosts, utilz use brew, and the version line reading brew. No heavy starts until hv says continue (localfold 10:42Z).",
+      "text": "2.14.4 (0107, 0108) pre-release checks on code 21b0385d: cc's Mac twins GREEN (14:13Z to 14:31Z, read from the bank) plus vc's critic leg (known positive rc 1, mdagg rc 0); dc's kovacs twins via kovacs-sysadm GREEN (14:38Z to 14:47Z, tallied from the readback); dc's dry run (dryrun-2144.sh e4de6bc0, main's HEAD at the GO) READY with molt-vc behind Intent's 0645 rebuild, tree frozen from that GO. Then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew.",
       "state": "live",
-      "recorded_at": "2026-10-25T10:43:07.969Z"
+      "recorded_at": "2026-10-25T10:43:07.969Z",
+      "edited_at": "2026-10-25T14:51:16.850Z"
     }
   ],
   "sent": [
