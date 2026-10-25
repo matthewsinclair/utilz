@@ -1,0 +1,16 @@
+{
+  "id": "01M5S89A302Q4VJN3APHP43NB1",
+  "ts": "2026-10-25T10:04:18.912Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 6,
+    "text": "PATH on rhadamanth: hv uses the brew release of every tool unless a project is being worked on, and runs `utilz use brew` himself (hv's ruling via molt-vc, through vc, 25 Oct). So a bare utilz may be brew's release, not the primary's dev links (Molt-matts a258ad0 put ~/.local/bin first). Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz), never a plain utilz from PATH, and logs `command -v utilz` and `utilz --version`. kovacs runs put the run tree's bin/ first on PATH and check every name resolves into it. A release's checklist ends with brew upgraded on both hosts, `utilz use brew`, and `utilz --version` showing (brew, <release sha>) from a fresh login shell."
+  }
+}
