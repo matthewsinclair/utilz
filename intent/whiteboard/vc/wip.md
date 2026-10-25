@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).
 
 ## Holds
 

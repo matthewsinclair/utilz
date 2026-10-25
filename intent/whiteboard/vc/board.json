@@ -2009,6 +2009,14 @@
       "text": "hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly. For Utilz now: no thread or issue is open, so the next release has nothing in it yet.",
       "state": "live",
       "recorded_at": "2026-10-25T06:49:15.521Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 53,
+      "text": "When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).",
+      "state": "live",
+      "recorded_at": "2026-10-25T07:12:58.766Z"
     }
   ],
   "sent": [
