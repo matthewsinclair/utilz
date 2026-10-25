@@ -396,23 +396,30 @@ EOF
 # ERROR HANDLING
 # ============================================================================
 
-@test "error: missing file shows warning but continues" {
-  create_markdown_files 1
+# A missing file is warned about and skipped: the files after it still go
+# into the join, and mdagg exits non-zero at the end (issue 0108).
+assert_missing_file_skipped() {
+  assert_failure
+  assert_output_contains "File not found"
+  assert_output_contains "missing.md"
+  grep -q "Test File 1" out.md
+  grep -q "Test File 3" out.md
+}
 
-  # If using YAML mode
-  if command_exists yq; then
-    cat > config.yaml <<EOF
-files:
-  - file: "test1.md"
-  - file: "nonexistent.md"
-EOF
-
-    run_mdagg config.yaml
-    # Should show warning but still process test1.md
-    assert_output_contains "Test File 1"
-  else
+@test "error: a missing file in a YAML config is warned about, the rest joined, and the exit non-zero (issue 0108)" {
+  if ! command_exists yq; then
     skip "yq not installed"
   fi
+  create_markdown_files 3
+  printf 'files:\n  - file: "test1.md"\n  - file: "missing.md"\n  - file: "test3.md"\n' > config.yaml
+  run_mdagg config.yaml -o out.md
+  assert_missing_file_skipped
+}
+
+@test "error: a missing file on stdin is warned about, the rest joined, and the exit non-zero (issue 0108)" {
+  create_markdown_files 3
+  run bash -c 'printf "%s\n" test1.md missing.md test3.md | "$0" --stdin -o out.md' "$UTILZ_BIN_DIR/mdagg"
+  assert_missing_file_skipped
 }
 
 @test "error: unknown option shows error and usage" {

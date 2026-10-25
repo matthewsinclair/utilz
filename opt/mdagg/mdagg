@@ -37,6 +37,7 @@ INPUT_MODE=""  # yaml, glob, or stdin
 INPUT_SOURCE=""
 IS_FIRST_FILE=true  # Track first file to preserve YAML front matter
 ENDS_BLANK=false  # Whether the output so far ends with a blank line
+MISSING_FILES=()  # Files named but not found, skipped with a warning
 
 # ============================================================================
 # FUNCTIONS
@@ -107,9 +108,12 @@ process_file() {
   local title="${2:-}"
   local add_page_break="${3:-$PAGE_BREAKS}"
 
+  # A missing file is warned about and skipped, so the rest are still joined;
+  # mdagg exits non-zero once they are (issue 0108).
   if [[ ! -f "$file" ]]; then
     warn "File not found: $file"
-    return 1
+    MISSING_FILES+=("$file")
+    return 0
   fi
 
   if [[ "$VERBOSE" == true ]]; then
@@ -477,6 +481,12 @@ case "$INPUT_MODE" in
     exit 1
     ;;
 esac
+
+# The join is incomplete if any file was missing: say which, and fail.
+if [[ ${#MISSING_FILES[@]} -gt 0 ]]; then
+  error "Joined without ${#MISSING_FILES[@]} missing file(s): ${MISSING_FILES[*]}"
+  exit 1
+fi
 
 # Summary (to stderr if writing to file)
 if [[ "$VERBOSE" == true ]]; then
