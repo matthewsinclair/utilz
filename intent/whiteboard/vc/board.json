@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "74b51d87-af54-4adf-9287-d19216567c43",
-    "heartbeat_at": "2026-10-24T18:27:51.632Z",
+    "heartbeat_at": "2026-10-25T06:27:57.863Z",
     "status": "active",
-    "focus": "After hv's compact: 2.14.3 on 82e8b021; kovacs twins green (325); Mac twins rerun slot 328 in flight; then install_e2e, dc's dry run. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "Localfold for hv's compact (molt-vc 06:26Z), not released: 2.14.3 complete estate-wide; no Utilz work open; open for hv in intent/wip.md TODO. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1554,10 +1554,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 21,
-      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.2 from the tap since 23 Oct (kovacs-sysadm's upgrade on hv's word, which also moved llvm to 23.1.4 and openldap to 2.7.2 through rust; dc's readbacks rb2142 and rb2142b, every keg row ok), with no dev checkout and no link into one. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only while this session is on Remote Control, and it acts at hv's approval in its own session. A readback's outside row reads every writer on the host (Ubuntu's once-a-day release check, a live Claude session), so name each writer from its own record.",
+      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.3 from the tap since 25 Oct (hv's own upgrade, which also moved openssl@4 to 4.1.0; rb2143's checks run by kovacs-sysadm, all green), with no dev checkout and no link into one. NO SSH TO KOVACS from any Utilz node, read-only included (hv's rule on molt-vc's desk, 25 Oct): send kovacs-sysadm the exact commands with the expected output, molt-vc books it as a light, and vc re-tallies; a dc leg that ships a bundle over ssh needs hv's word through molt-vc first. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
       "state": "live",
       "recorded_at": "2026-10-19T07:43:06.800Z",
-      "edited_at": "2026-10-23T20:41:21.587Z"
+      "edited_at": "2026-10-25T06:27:57.575Z"
     },
     {
       "node": "vc",
