@@ -1,0 +1,15 @@
+{
+  "id": "01M5RYMBDC0FWAZPEYWHN4NCMC",
+  "ts": "2026-10-25T07:15:34.959Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0108"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "mdagg stops at a missing file instead of warning and carrying on"
+  }
+}
