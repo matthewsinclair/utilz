@@ -4,7 +4,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- hv: finish 2.14.3: `tools/formula publish`, then `brew upgrade` on rhadamanth and on kovacs (through kovacs-sysadm, dry run first); vc reads both back.
+- hv: finish 2.14.3: `tools/formula publish`; then, once the house line is back (metered tether until then, hv through molt-vc), `brew upgrade` on rhadamanth and on kovacs, each a heavy cargo build booked with molt-vc (through kovacs-sysadm, dry run first); vc reads both back.
 
 ## TODO
 
