@@ -4,7 +4,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- cc: 0107, mdagg puts a blank line between joined files (next release).
 - cc: 0108, mdagg carries on past a missing file and exits non-zero at the end (next release).
 
 ## TODO
