@@ -1,0 +1,15 @@
+{
+  "id": "01M5SRP4809WZJKGFFEV0WR364",
+  "ts": "2026-10-25T14:50:56.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.4's release dry run, on vc's word of 25 Oct: ~/Devel/scratch/utilz-dc/work/dryrun-2144.sh (e4de6bc0, from slot 331's dryrun-2143.sh): bin/devbin release --patch --dry-run in the primary at main's HEAD at molt-vc's GO, its code asserted 21b0385d's, the tree's bin/utilz named on PATH (never brew's), its log in dc's scratch. DRAFT sent to vc to read before the READY; a heavy, runs only on molt-vc's GO by name, and the freeze starts at that GO. Not run."
+  }
+}

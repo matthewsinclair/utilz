@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 2.14.4's release dry run, on vc's word of 25 Oct: ~/Devel/scratch/utilz-dc/work/dryrun-2144.sh (e4de6bc0, from slot 331's dryrun-2143.sh): bin/devbin release --patch --dry-run in the primary at main's HEAD at molt-vc's GO, its code asserted 21b0385d's, the tree's bin/utilz named on PATH (never brew's), its log in dc's scratch. DRAFT sent to vc to read before the READY; a heavy, runs only on molt-vc's GO by name, and the freeze starts at that GO. Not run.
 
 ## TODO
 
