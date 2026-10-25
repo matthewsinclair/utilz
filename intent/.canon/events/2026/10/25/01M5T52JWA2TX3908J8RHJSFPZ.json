@@ -1,0 +1,15 @@
+{
+  "id": "01M5T52JWA2TX3908J8RHJSFPZ",
+  "ts": "2026-10-25T18:27:27.242Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-25, directly to vc: A3's doctor clause (doctor names a path only where a check that fails is about one) goes into 0109 for 2.14.4 with the version line. Utilz's doctor names paths on passing checks (common.sh:1356, :1374, :1381, :1384) and in the old-manifest info line (:1897); cc amends 0109's body first, then the code and tests, then one more whole-suite rerun booked as a HEAVY with molt-vc. Landing still waits on devbin's land220 (A3 at 58ccf8c7)."
+  }
+}
