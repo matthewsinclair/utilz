@@ -4,6 +4,8 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
+- cc: 0107, mdagg puts a blank line between joined files (next release).
+
 ## TODO
 
 - hv: one host queue for every estate on this Mac, or the interleave utilz-vc and intent-vc keep now.
