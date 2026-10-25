@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 05:28Z
+heartbeat_at: 2026-10-25 06:27Z
 status: active
-focus: "No open work: rb2143 goes to kovacs-sysadm through vc (no ssh to kovacs, hv's rule); holding for vc's next word"
+focus: "No open work: 2.14.3 is done estate-wide (rb2143 ran through kovacs-sysadm, green); localfold before hv's compact; holding for vc's next word"
 claims: []
 ---
 
