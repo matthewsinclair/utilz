@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-24 18:49Z
+heartbeat_at: 2026-10-25 03:26Z
 status: active
-focus: "24 Oct: Mac twins on 82e8b021 done (slot 328 and the light install_e2e green, re-tallied by vc). No open work; holding through dc's dry run (slot 331, primary frozen). No push."
+focus: "25 Oct: 2.14.3 cut (1aaa506c, tagged, CI green, per vc); cc's Mac twins for it done. No open work, claim or message; holding for vc's next word. No push."
 claims: []
 ---
 
