@@ -3,9 +3,10 @@
   "number": 107,
   "slug": "mdagg-joins-files-with-no-blank-line-between-the",
   "title": "mdagg joins files with no blank line between them, against its README",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-10-25",
+  "closed": "2026-10-25",
   "reporter": "Matthew Sinclair",
   "body": "## What\n\nReported by gtools-vc, 25 Oct 2026: mdagg joins files with nothing between them. When one file ends with a paragraph and the next one starts with a heading or a list, the two run together. Gtools' proposal works around it (`separate_headings` in gtools-rs's `doc.rs`, ST0018 WP-07) and drops the workaround once mdagg separates the files itself.\n\n## Measured\n\nvc read it at 9ced78db, from the code only, without running it.\n\n- `process_file` takes each file's content into `content=$(...)`, which drops every trailing newline, and then prints it with `echo \"$content\"` (`opt/mdagg/mdagg`), which puts back exactly one. So the next file's first line comes straight after the previous file's last line, with no blank line between them.\n- The README's \"Plain Concatenation (Default)\" output (`opt/mdagg/README.md`, Output Format) shows a blank line between each file's content. So the code does not do what the README promises.\n- The section divider and `--page-breaks` paths print their own blank lines, so they already separate their files. Only the plain join leaves the files touching.\n\n## Fix\n\nPlain concatenation prints one blank line between files. Nothing goes before the first file, so its YAML front matter stays first, and nothing goes after the last. Where a divider or a page break already separates two files, no second blank line is added. The bats suite gains a test that two files joined in each mode, from arguments and from stdin, are separated by exactly one blank line, proven red on today's code. The README already describes this, and the CHANGELOG gets one line.\n\nSize: XS. It goes in the next release under hv's one-next-release ruling (25 Oct).\n"
 }
