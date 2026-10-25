@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 16:25Z
+heartbeat_at: 2026-10-25 16:36Z
 status: active
 focus: "Localfold on hv's word via molt-vc and vc (25 Oct), not released. 2.14.4's kovacs twins at 21b0385d were GREEN (END to molt-vc, banked work/c2144/twins.out cf952249, doing 19 archived). Doing 20: after cc lands 0109 (A3's version-line ' at <root>' off), re-hash work/c2144/twins.sh (SHA) and work/dryrun-2144.sh (CODE, base e4de6bc0) on the new code when vc asks; each reruns only on molt-vc's GO by name. No freeze now. Resume: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
