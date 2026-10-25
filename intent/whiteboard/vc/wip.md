@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- 2.14.3 (hv's number), CUT: release commit 1aaa506c, tag 2.14.3, pushed to local and upstream, GitHub release published, CI green on 1aaa506c. Menuz.app.zip published (slot 336); vc read the asset's Info.plist: MenuzCommit 1aaa506c, MenuzKind release, CFBundleVersion 1870 = rev-list count of the tag. The cut carried hv's 963d414d (vendored devbin update), outside the twins and dry run; the cut's gates passed on it. Left, all hv's: tools/formula publish; brew upgrade on rhadamanth and on kovacs (kovacs-sysadm, dry run first); vc reads both back after. Resume: ~/Devel/scratch/utilz-vc/RESUME.md. (edited)
+_(none)_
 
 ## Holds
 
