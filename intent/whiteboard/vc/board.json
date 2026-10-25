@@ -2017,6 +2017,14 @@
       "text": "When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).",
       "state": "live",
       "recorded_at": "2026-10-25T07:12:58.766Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 60,
+      "text": "hv, 2026-10-25, directly to vc: (1) the next Utilz release is 2.14.4 and carries 0107 and 0108; its pre-release checks start now, in the ruled order: Mac twins, then the Linux twins on kovacs through kovacs-sysadm, then dc's dry run, then hv's cut. (2) vc pushes main before the checks so CI reads it first. (3) molt-vc's desk is the one host queue for every estate on this Mac and kovacs; watchout 17's interleave with intent-vc is retired. (4) dc's kovacs legs no longer ship over ssh: each goes to kovacs-sysadm as a request, with the bundle, the commands and the expected output, and is booked with molt-vc as a heavy.",
+      "state": "live",
+      "recorded_at": "2026-10-25T09:50:07.050Z"
     }
   ],
   "sent": [

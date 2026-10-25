@@ -4,6 +4,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-## TODO
+- vc: 2.14.4 pre-release checks (Mac twins, kovacs twins through kovacs-sysadm, dc's dry run), then hv's cut.
 
-- hv: one host queue for every estate on this Mac, or the interleave utilz-vc and intent-vc keep now.
+## TODO
