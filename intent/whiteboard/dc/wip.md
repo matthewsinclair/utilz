@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4's release dry run, on vc's word of 25 Oct: ~/Devel/scratch/utilz-dc/work/dryrun-2144.sh (e4de6bc0, from slot 331's dryrun-2143.sh): bin/devbin release --patch --dry-run in the primary at main's HEAD at molt-vc's GO, its code asserted 21b0385d's, the tree's bin/utilz named on PATH (never brew's), its log in dc's scratch. DRAFT sent to vc to read before the READY; a heavy, runs only on molt-vc's GO by name, and the freeze starts at that GO. Not run.
+- 2.14.4's release dry run and a re-run of the kovacs twins, both on the new code once cc lands A3's version-line change (hv's ruling via vc, 25 Oct: the ' at <root>' tail off, into 2.14.4). The dry run is withdrawn from molt-vc's queue and there is no freeze. When vc asks: set CODE in ~/Devel/scratch/utilz-dc/work/dryrun-2144.sh (base e4de6bc0) and SHA in work/c2144/twins.sh to the new code sha, and send vc the new hashes. Each is a heavy and runs only on molt-vc's GO by name. Nothing run. (edited)
 
 ## TODO
 
