@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "014f7a2a-6468-4750-a8b2-6587f48d2c84",
-    "heartbeat_at": "2026-10-25T07:40:56.425Z",
+    "heartbeat_at": "2026-10-25T10:43:11.942Z",
     "status": "active",
-    "focus": "25 Oct: 0107 (4baceb67) and 0108 (c5e346ab) landed and closed (4a002293, c03e8893) on vc's checks, for the next release; no open work; holding for vc's next word. No push.",
+    "focus": "25 Oct 10:43Z localfold for hv (not released): 0107 and 0108 landed and closed for 2.14.4. 2.14.4 Mac twins booked with molt-vc (doing item), READY sent, no GO yet; no run until hv says continue; queue place stands. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -1644,6 +1644,14 @@
       "archived_at": "2026-10-24T18:49:02.333Z",
       "recorded_at": "2026-10-24T15:10:36.592Z",
       "edited_at": "2026-10-24T18:27:55.528Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 64,
+      "text": "2.14.4 Mac twins at 21b0385d (pushed), the slot 328 set: ~/Devel/scratch/utilz-cc/run-twins-2144-mac.sh (sha256 18c38c51) in a fresh wt-2144-mac, then run-twins-2144-e2e.sh (1f7ecb54) in the primary. Booked; vc read it and sent READY to molt-vc; no GO yet, and no run until hv says continue. END: ran, failed and skipped per suite, plus menuz's two Swift Testing 'Test run with N tests ... passed' lines (red if missing, N 0, or not passed; XCTest 'Executed 0 tests' reported as it stands).",
+      "state": "live",
+      "recorded_at": "2026-10-25T10:43:11.704Z"
     }
   ],
   "sent": [

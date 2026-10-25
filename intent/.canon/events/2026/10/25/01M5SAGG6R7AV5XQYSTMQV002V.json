@@ -1,0 +1,15 @@
+{
+  "id": "01M5SAGG6R7AV5XQYSTMQV002V",
+  "ts": "2026-10-25T10:43:11.704Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.4 Mac twins at 21b0385d (pushed), the slot 328 set: ~/Devel/scratch/utilz-cc/run-twins-2144-mac.sh (sha256 18c38c51) in a fresh wt-2144-mac, then run-twins-2144-e2e.sh (1f7ecb54) in the primary. Booked; vc read it and sent READY to molt-vc; no GO yet, and no run until hv says continue. END: ran, failed and skipped per suite, plus menuz's two Swift Testing 'Test run with N tests ... passed' lines (red if missing, N 0, or not passed; XCTest 'Executed 0 tests' reported as it stands)."
+  }
+}
