@@ -1,0 +1,15 @@
+{
+  "id": "01M5T6A7103843SFSWZ62FJM9Z",
+  "ts": "2026-10-25T18:49:05.824Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After 2.14.4's cut (or in the fleet sweep after Intent's cut, whichever comes first): Utilz's generated CLAUDE.md and AGENTS.md still name /in-standards, which Intent's ST0088 cull folded into /in-essentials (intent-vc, 25 Oct 18:47Z). Ask hv through molt-vc before running `intent claude upgrade --apply --skip-settings`, since it rewrites the project's agent contract; commit by path what it writes."
+  }
+}

@@ -18,6 +18,7 @@ claims: []
 ## TODO
 
 - When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).
+- After 2.14.4's cut (or in the fleet sweep after Intent's cut, whichever comes first): Utilz's generated CLAUDE.md and AGENTS.md still name /in-standards, which Intent's ST0088 cull folded into /in-essentials (intent-vc, 25 Oct 18:47Z). Ask hv through molt-vc before running `intent claude upgrade --apply --skip-settings`, since it rewrites the project's agent contract; commit by path what it writes.
 
 ## Holds
 
