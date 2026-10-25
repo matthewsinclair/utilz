@@ -4,7 +4,7 @@ name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
 heartbeat_at: 2026-10-25 20:00Z
-status: active
+status: paused
 focus: "25 Oct 20:00Z: closed for the night on hv's word (via molt-vc and vc), released. Doing 65, 0109 v2 (A3 plus its doctor clause): wt-0109 at c5d555b4, banked whole as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8); unrun. Tomorrow: re-confirm the bytes, send READY HEAVY for v2/run-0109-v2.sh (f8494283559e) straight after land220, then land citing devbin main. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
