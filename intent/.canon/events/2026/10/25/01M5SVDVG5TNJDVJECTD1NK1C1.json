@@ -1,0 +1,16 @@
+{
+  "id": "01M5SVDVG5TNJDVJECTD1NK1C1",
+  "ts": "2026-10-25T15:38:50.757Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 (0107, 0108, and A3's version line on hv's ruling) pre-release checks. On code 21b0385d the Mac twins, critic leg and kovacs twins were green, but they are superseded by A3. Next: cc's A3 issue and landing (after A3 is in devbin's docs and vc reads the bytes), then the Mac twins, kovacs twins via kovacs-sysadm, and dc's dry run on the new code, each booked fresh with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew."
+  }
+}

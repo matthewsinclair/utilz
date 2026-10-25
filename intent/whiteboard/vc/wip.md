@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 (0107, 0108) pre-release checks on code 21b0385d: cc's Mac twins GREEN (14:13Z to 14:31Z, read from the bank) plus vc's critic leg (known positive rc 1, mdagg rc 0); dc's kovacs twins via kovacs-sysadm GREEN (14:38Z to 14:47Z, tallied from the readback); dc's dry run (dryrun-2144.sh e4de6bc0, main's HEAD at the GO) READY with molt-vc behind Intent's 0645 rebuild, tree frozen from that GO. Then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew. (edited)
+- 2.14.4 (0107, 0108, and A3's version line on hv's ruling) pre-release checks. On code 21b0385d the Mac twins, critic leg and kovacs twins were green, but they are superseded by A3. Next: cc's A3 issue and landing (after A3 is in devbin's docs and vc reads the bytes), then the Mac twins, kovacs twins via kovacs-sysadm, and dc's dry run on the new code, each booked fresh with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew. (edited)
 
 ## TODO
 
@@ -38,6 +38,7 @@ _(none)_
 - hv, 2026-10-24, going AFK: molt-vc is in overall charge of resource-contention coordination for the host (this Mac and kovacs) across the estates. Each vc stays in control of its own Claudes, and they take their instructions from it. For Utilz: vc still books and GOes Utilz's runs, and books each one with molt-vc as the overall keeper (with intent-vc copied as before) until molt-vc names its own terms. Watchout 17's interleave with intent-vc gives way to molt-vc's coordination.
 - hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly. For Utilz now: no thread or issue is open, so the next release has nothing in it yet.
 - hv, 2026-10-25, directly to vc: (1) the next Utilz release is 2.14.4 and carries 0107 and 0108; its pre-release checks start now, in the ruled order: Mac twins, then the Linux twins on kovacs through kovacs-sysadm, then dc's dry run, then hv's cut. (2) vc pushes main before the checks so CI reads it first. (3) molt-vc's desk is the one host queue for every estate on this Mac and kovacs; watchout 17's interleave with intent-vc is retired. (4) dc's kovacs legs no longer ship over ssh: each goes to kovacs-sysadm as a request, with the bundle, the commands and the expected output, and is booked with molt-vc as a heavy.
+- hv, 2026-10-25, directly to vc: A3's version-line change (devbin's contract T4: ' at <root>' comes off; Utilz said SAME to devbin-vc's draft b19ffcb9) goes into 2.14.4, not a later release. cc files the issue and lands it once A3 is in devbin's docs; the Mac twins, kovacs twins and dry run then rerun on the new code. The dry run's READY (dryrun-2144.sh e4de6bc0) is withdrawn from molt-vc's queue and the freeze is lifted.
 
 ---
 

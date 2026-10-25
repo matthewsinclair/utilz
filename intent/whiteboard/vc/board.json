@@ -2030,10 +2030,18 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 (0107, 0108) pre-release checks on code 21b0385d: cc's Mac twins GREEN (14:13Z to 14:31Z, read from the bank) plus vc's critic leg (known positive rc 1, mdagg rc 0); dc's kovacs twins via kovacs-sysadm GREEN (14:38Z to 14:47Z, tallied from the readback); dc's dry run (dryrun-2144.sh e4de6bc0, main's HEAD at the GO) READY with molt-vc behind Intent's 0645 rebuild, tree frozen from that GO. Then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew.",
+      "text": "2.14.4 (0107, 0108, and A3's version line on hv's ruling) pre-release checks. On code 21b0385d the Mac twins, critic leg and kovacs twins were green, but they are superseded by A3. Next: cc's A3 issue and landing (after A3 is in devbin's docs and vc reads the bytes), then the Mac twins, kovacs twins via kovacs-sysadm, and dc's dry run on the new code, each booked fresh with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew.",
       "state": "live",
       "recorded_at": "2026-10-25T10:43:07.969Z",
-      "edited_at": "2026-10-25T14:51:16.850Z"
+      "edited_at": "2026-10-25T15:38:50.757Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 61,
+      "text": "hv, 2026-10-25, directly to vc: A3's version-line change (devbin's contract T4: ' at <root>' comes off; Utilz said SAME to devbin-vc's draft b19ffcb9) goes into 2.14.4, not a later release. cc files the issue and lands it once A3 is in devbin's docs; the Mac twins, kovacs twins and dry run then rerun on the new code. The dry run's READY (dryrun-2144.sh e4de6bc0) is withdrawn from molt-vc's queue and the freeze is lifted.",
+      "state": "live",
+      "recorded_at": "2026-10-25T15:38:50.188Z"
     }
   ],
   "sent": [

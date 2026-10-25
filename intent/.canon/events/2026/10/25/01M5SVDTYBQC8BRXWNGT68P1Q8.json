@@ -1,0 +1,15 @@
+{
+  "id": "01M5SVDTYBQC8BRXWNGT68P1Q8",
+  "ts": "2026-10-25T15:38:50.188Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-25, directly to vc: A3's version-line change (devbin's contract T4: ' at <root>' comes off; Utilz said SAME to devbin-vc's draft b19ffcb9) goes into 2.14.4, not a later release. cc files the issue and lands it once A3 is in devbin's docs; the Mac twins, kovacs twins and dry run then rerun on the new code. The dry run's READY (dryrun-2144.sh e4de6bc0) is withdrawn from molt-vc's queue and the freeze is lifted."
+  }
+}
