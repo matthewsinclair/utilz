@@ -1,0 +1,12 @@
+{
+  "id": "01M5TAB9FPAAYA7R709870PMRS",
+  "ts": "2026-10-25T19:59:35.414Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.release",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {}
+}
