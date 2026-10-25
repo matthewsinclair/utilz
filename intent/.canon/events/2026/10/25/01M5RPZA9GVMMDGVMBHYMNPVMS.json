@@ -1,0 +1,15 @@
+{
+  "id": "01M5RPZA9GVMMDGVMBHYMNPVMS",
+  "ts": "2026-10-25T05:01:45.648Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "rb2143, the 2.14.3 kovacs readback (kv-readback.sh 91fe64285c82, kv-readback-remote.sh df659259480b; START cleared by vc). Released when rhadamanth's brew upgrade and kovacs-sysadm's dry run and upgrade on kovacs have ENDed and vc sends the GO by name (vc books it with molt-vc as a light run). The two kovacs tool dirs stay for the next leg."
+  }
+}

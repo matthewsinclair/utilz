@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 03:31Z
+heartbeat_at: 2026-10-25 05:01Z
 status: active
-focus: "No open work: 2.14.3 cut (1aaa506c); todo 29 done (prep.sh ba5b249eeace, leg.sh 6e8c8907bb19, proof green); holding for vc's next word"
+focus: "Hold for rb2143, the 2.14.3 kovacs readback: START cleared by vc; runs on vc's GO after the rhadamanth and kovacs brew upgrades"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- rb2143, the 2.14.3 kovacs readback (kv-readback.sh 91fe64285c82, kv-readback-remote.sh df659259480b; START cleared by vc). Released when rhadamanth's brew upgrade and kovacs-sysadm's dry run and upgrade on kovacs have ENDed and vc sends the GO by name (vc books it with molt-vc as a light run). The two kovacs tool dirs stay for the next leg.
 
 ## Watch-outs
 
