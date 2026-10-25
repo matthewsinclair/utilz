@@ -8,7 +8,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## TODO
 
-- dc: prep.sh's sha mode measures its changed-file listing from merge-base(main, sha), so on a landed head it lists nothing; fix after 2.14.3.
 - hv: kovacs's old llvm 23.1.3_2 and openldap 2.7.1_1 kegs, `brew cleanup llvm openldap` through kovacs-sysadm, on hv's word.
 - hv: one host queue for every estate on this Mac, or the interleave utilz-vc and intent-vc keep now.
 - hv: empty or restore cc's pruned scratch in `~/.Trash/utilz-cc-scratch-pruned-20261023`.
