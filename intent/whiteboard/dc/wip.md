@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 10:43Z
+heartbeat_at: 2026-10-25 10:51Z
 status: active
 focus: "Localfold on hv's word via molt-vc (10:42Z), not released. 2.14.4 kovacs twins at 21b0385d drafted, vc-approved: work/c2144/request.md 06d15b28, twins.sh 73b61c7d; READY with molt-vc after cc's Mac twins; nothing goes to kovacs-sysadm until hv says continue and the GO comes. Then the dry run, once vc names the head. Resume: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
