@@ -800,7 +800,8 @@
       "kind": "doing",
       "seq": 19,
       "text": "2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh): shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. On molt-vc's GO HEAVY (after cc's Mac twins END 14:31Z), the request (~/Devel/scratch/utilz-dc/work/c2144/request.md 06d15b28, twins.sh 73b61c7d) is SENT to kovacs-sysadm; waiting for its begun note (START to molt-vc), then its readback to dc and vc, banked as work/c2144/twins.out, then END to molt-vc. Then the dry run on the final head (as slot 331).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-25T14:49:12.801Z",
       "recorded_at": "2026-10-25T09:58:33.935Z",
       "edited_at": "2026-10-25T14:33:58.325Z"
     }
