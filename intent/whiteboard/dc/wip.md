@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 03:26Z
+heartbeat_at: 2026-10-25 03:31Z
 status: active
-focus: "2.14.3 cut (1aaa506c); slot 331's END recorded and hold 26 archived; next todo 29 (prep.sh's base), doc before code, runs booked with vc"
+focus: "No open work: 2.14.3 cut (1aaa506c); todo 29 done (prep.sh ba5b249eeace, leg.sh 6e8c8907bb19, proof green); holding for vc's next word"
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- After 2.14.3 (vc, slot 325): leg.sh's commit form passes no base to prep.sh. prep.sh's sha mode measures from merge-base(main, sha), so for a head already on main its Mac-side changed-file listing is empty (slot 325: base = candidate, 0 paths). Make the listing use leg.sh's own base. Doc before code. Not before the cut.
+_(none)_
 
 ## Holds
 
