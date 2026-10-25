@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-25 06:29Z
+heartbeat_at: 2026-10-25 10:43Z
 status: active
-focus: "No open work: 0106 landed and closed (a797c337); holding on vc's word until its next assignment"
+focus: "Localfold for hv's compact (10:42Z via molt-vc), not released: no open work, claim or message; holding for vc's next word. Resume: ~/Devel/scratch/utilz-ic/RESUME.md. No push."
 claims: []
 ---
 
