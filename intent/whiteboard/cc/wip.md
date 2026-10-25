@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-25 06:29Z
+heartbeat_at: 2026-10-25 07:40Z
 status: active
-focus: "25 Oct, localfold for hv's compact (not released): 2.14.3 complete estate-wide; cc's Mac twins for it done. No open work, claim or message; holding for vc's next word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+focus: "25 Oct: 0107 (4baceb67) and 0108 (c5e346ab) landed and closed (4a002293, c03e8893) on vc's checks, for the next release; no open work; holding for vc's next word. No push."
 claims: []
 ---
 
