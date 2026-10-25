@@ -1,0 +1,15 @@
+{
+  "id": "01M5S7YS6FVGCYCKMNTACKBJF0",
+  "ts": "2026-10-25T09:58:33.935Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh), on vc's ASSIGN of 25 Oct: shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. DRAFT only, sent to vc: ~/Devel/scratch/utilz-dc/work/c2144/request.md and twins.sh (73b61c7d). A heavy: it goes to molt-vc after cc's Mac twins END, and runs only on molt-vc's GO by name. Then the dry run on the final head (as slot 331), after these twins. Nothing has run."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5S7YSFCKG3HDTMP1MGZSTP8",
+  "ts": "2026-10-25T09:58:34.220Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "DRAFT of 2.14.4's kovacs twins request for kovacs-sysadm, at main's 21b0385d, for your read; not sent to kovacs-sysadm, nothing run. The request is ~/Devel/scratch/utilz-dc/work/c2144/request.md and the script it pastes is twins.sh there (sha256 73b61c7d5bd91133f1d0b3cd31ef2af48a6c943dbfbc0d42a21646a094d2a5b5): three runs (shellcheck 0.9.0, rust-lint on rustup 1.99.1, tests.yml's Ubuntu loop), each in its own /var/tmp run dir from a GitHub clone, removed after its readback; kill timeouts 600, 3600 and 2400 s on each run's process group, and 7200 s on the whole. No sudo, apt or brew. The readback is the script's stdout, returned verbatim to you. A heavy, for molt-vc after cc's Mac twins END. The dry run on the final head follows the twins.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

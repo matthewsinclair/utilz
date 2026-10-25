@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 06:29Z
+heartbeat_at: 2026-10-25 09:58Z
 status: active
-focus: "No open work: 2.14.3 is done estate-wide (rb2143 ran through kovacs-sysadm, green); localfold before hv's compact; holding for vc's next word"
+focus: "2.14.4: kovacs twins at 21b0385d drafted for vc (through kovacs-sysadm, never ssh); heavy, waits for cc's Mac twins END and molt-vc's GO; then the dry run"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh), on vc's ASSIGN of 25 Oct: shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. DRAFT only, sent to vc: ~/Devel/scratch/utilz-dc/work/c2144/request.md and twins.sh (73b61c7d). A heavy: it goes to molt-vc after cc's Mac twins END, and runs only on molt-vc's GO by name. Then the dry run on the final head (as slot 331), after these twins. Nothing has run.
 
 ## TODO
 

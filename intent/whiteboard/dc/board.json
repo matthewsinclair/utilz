@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2",
-    "heartbeat_at": "2026-10-25T06:29:38.834Z",
+    "heartbeat_at": "2026-10-25T09:58:34.402Z",
     "status": "active",
-    "focus": "No open work: 2.14.3 is done estate-wide (rb2143 ran through kovacs-sysadm, green); localfold before hv's compact; holding for vc's next word",
+    "focus": "2.14.4: kovacs twins at 21b0385d drafted for vc (through kovacs-sysadm, never ssh); heavy, waits for cc's Mac twins END and molt-vc's GO; then the dry run",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -793,6 +793,14 @@
       "state": "archived",
       "archived_at": "2026-10-25T05:28:16.288Z",
       "recorded_at": "2026-10-25T05:01:45.648Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 19,
+      "text": "2.14.4's kovacs twins at main's 21b0385d, through kovacs-sysadm (never over ssh), on vc's ASSIGN of 25 Oct: shellcheck 0.9.0, rust-lint (fmt and clippy on rustup 1.99.1) and tests.yml's Ubuntu loop, each in its own /var/tmp run dir from a GitHub clone, removed after its readback. DRAFT only, sent to vc: ~/Devel/scratch/utilz-dc/work/c2144/request.md and twins.sh (73b61c7d). A heavy: it goes to molt-vc after cc's Mac twins END, and runs only on molt-vc's GO by name. Then the dry run on the final head (as slot 331), after these twins. Nothing has run.",
+      "state": "live",
+      "recorded_at": "2026-10-25T09:58:33.935Z"
     }
   ],
   "sent": [
@@ -2278,6 +2286,13 @@
       "body": "END record, slot 331 (sent by socket at 19:14Z, held for the freeze; vc re-read it green): 2.14.3's release dry run, GREEN. It ran 19:02:25Z to 19:14:31Z on 24 Oct, on molt-vc's heavy GO, alone. dryrun-2143.sh f6bcbd61593d ran on HEAD 367b8262 (code 82e8b021's); wrapper exit 0, dry run exit 0. Gates: check all passed (clippy, format, autotests, targetdir, toolchain and critic; the critic had nothing staged). test estate: All tests passed (23 suites), 0 not ok, only xtrct's 4 ANTHROPIC_API_KEY skips, ESTATE.errors empty, 711 s of gate wall. Release core: resolve 2.14.3 from --patch, new tag; pre-flight done; every later step \"would\"; after skipped; no step failed, and it stopped at step 6. After the run: HEAD unchanged, tree clean, 0 bats-run-* dirs, no bats processes. Logs: tmp/dc-2141/gate/367b826/dry-run.log (f77e2da37402) and ~/Devel/scratch/utilz-dc/work/dryrun-2143-367b826.out. A note, not a red: hv's 963d414d (For release) changed bin/.devbin's release code after the dry run and before the cut 1aaa506c, so the dry run ran 367b8262's release code, not the code that cut. The tag's CI is green per vc. Hold 26 is archived, its condition met.",
       "fyi": false,
       "recorded_at": "2026-10-25T03:26:38.202Z"
+    },
+    {
+      "id": "01M5S7YSFCKG3HDTMP1MGZSTP9",
+      "recipient": "vc",
+      "body": "DRAFT of 2.14.4's kovacs twins request for kovacs-sysadm, at main's 21b0385d, for your read; not sent to kovacs-sysadm, nothing run. The request is ~/Devel/scratch/utilz-dc/work/c2144/request.md and the script it pastes is twins.sh there (sha256 73b61c7d5bd91133f1d0b3cd31ef2af48a6c943dbfbc0d42a21646a094d2a5b5): three runs (shellcheck 0.9.0, rust-lint on rustup 1.99.1, tests.yml's Ubuntu loop), each in its own /var/tmp run dir from a GitHub clone, removed after its readback; kill timeouts 600, 3600 and 2400 s on each run's process group, and 7200 s on the whole. No sudo, apt or brew. The readback is the script's stdout, returned verbatim to you. A heavy, for molt-vc after cc's Mac twins END. The dry run on the final head follows the twins.",
+      "fyi": false,
+      "recorded_at": "2026-10-25T09:58:34.220Z"
     }
   ],
   "handled": [
