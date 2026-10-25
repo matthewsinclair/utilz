@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-25 17:04Z
+heartbeat_at: 2026-10-25 20:00Z
 status: active
-focus: "25 Oct 17:04Z: doing 65, 0109 (contract A3) for 2.14.4. First run: red 16 as booked; green had 2 stale tail pins (upgrade.bats:115, use.bats:266), now whole-line. Whole-suite rerun a3-bank/rerun-0109.sh (936fc5efc864, tests diff 3996ff59a61b, wt-0109 c5d555b4 + patch 9195e7648102) booked HEAVY with molt-vc, eighth; waiting for GO by name. No commit in wt, no push."
+focus: "25 Oct 20:00Z: closed for the night on hv's word (via molt-vc and vc), released. Doing 65, 0109 v2 (A3 plus its doctor clause): wt-0109 at c5d555b4, banked whole as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8); unrun. Tomorrow: re-confirm the bytes, send READY HEAVY for v2/run-0109-v2.sh (f8494283559e) straight after land220, then land citing devbin main. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0109 (contract A3, hv's ruling): " at <root>" comes off utilz's version line, in 2.14.4. Issue filed; the work goes in a detached worktree, wt-0109. Red on main, then green, each run booked through vc with molt-vc. Landing waits until A3 is in devbin's docs and vc has read the bytes. Bank: ~/Devel/scratch/utilz-cc/a3-bank. Size S.
+- 0109 v2 (contract A3 with its doctor clause, hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 402c9c59. wt-0109 is at c5d555b4, uncommitted, with its whole diff banked as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8). Run v2/run-0109-v2.sh (f8494283559e), read by vc, goes READY HEAVY straight after devbin's land220. Then land citing devbin main, on vc's word. Size S. (edited)
 
 ## TODO
 

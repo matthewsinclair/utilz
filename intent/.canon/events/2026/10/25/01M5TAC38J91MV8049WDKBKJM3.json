@@ -1,0 +1,16 @@
+{
+  "id": "01M5TAC38J91MV8049WDKBKJM3",
+  "ts": "2026-10-25T20:00:01.810Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 65,
+    "text": "0109 v2 (contract A3 with its doctor clause, hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 402c9c59. wt-0109 is at c5d555b4, uncommitted, with its whole diff banked as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8). Run v2/run-0109-v2.sh (f8494283559e), read by vc, goes READY HEAVY straight after devbin's land220. Then land citing devbin main, on vc's word. Size S."
+  }
+}
