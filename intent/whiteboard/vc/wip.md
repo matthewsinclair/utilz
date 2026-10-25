@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-25 10:43Z
+heartbeat_at: 2026-10-25 10:51Z
 status: active
 focus: "Localfold for hv (molt-vc 10:42Z), not released: 2.14.4 (0107, 0108) checks queued with molt-vc, no GO yet and none until hv says continue; doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
