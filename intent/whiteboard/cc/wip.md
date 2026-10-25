@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-25 16:36Z
+heartbeat_at: 2026-10-25 17:04Z
 status: active
-focus: "25 Oct 16:25Z localfold for hv (not released): doing 65, issue 0109 (contract A3) for 2.14.4. Tests changed in wt-0109 (c5d555b4), fix banked as a3-bank/0109-fix.patch (9195e764). The one-slot red and green run a3-bank/run-0109.sh (55a53a80) is READY HEAVY with molt-vc, no GO; no run until hv says continue. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+focus: "25 Oct 17:04Z: doing 65, 0109 (contract A3) for 2.14.4. First run: red 16 as booked; green had 2 stale tail pins (upgrade.bats:115, use.bats:266), now whole-line. Whole-suite rerun a3-bank/rerun-0109.sh (936fc5efc864, tests diff 3996ff59a61b, wt-0109 c5d555b4 + patch 9195e7648102) booked HEAVY with molt-vc, eighth; waiting for GO by name. No commit in wt, no push."
 claims: []
 ---
 
