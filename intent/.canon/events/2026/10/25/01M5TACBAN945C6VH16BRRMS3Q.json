@@ -1,0 +1,16 @@
+{
+  "id": "01M5TACBAN945C6VH16BRRMS3Q",
+  "ts": "2026-10-25T20:00:10.069Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 (0107, 0108, and 0109: A3's version line and doctor clause, on hv's rulings) pre-release checks. 0109's version-line part ran green on the whole suite (18:18Z); its v2 run with the doctor clause is booked with molt-vc straight after devbin's land220 (A3 into devbin main). Next: the v2 run, the critic leg, cc's landing by path citing devbin main, vc's check by change; then the Mac twins, kovacs twins via kovacs-sysadm and dc's dry run on the landed head, each booked fresh with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew."
+  }
+}
