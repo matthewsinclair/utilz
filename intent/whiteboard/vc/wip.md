@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-25 10:51Z
+heartbeat_at: 2026-10-25 16:26Z
 status: active
-focus: "Localfold for hv (molt-vc 10:42Z), not released: 2.14.4 (0107, 0108) checks queued with molt-vc, no GO yet and none until hv says continue; doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Localfold for hv (molt-vc 16:24Z), not released: 2.14.4 now carries 0107, 0108 and 0109 (A3's version line, hv's ruling); cc's 0109 one-slot run booked with molt-vc, unrun, no GOs until hv says continue; then the twins and dry run rebook on the new code. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
