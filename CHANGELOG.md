@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.4] - unreleased
+
+### Fixed
+
+- **mdagg puts one blank line between the files it joins**, as its README shows (issue 0107). Each file was read with its trailing newlines dropped and printed with one, so the next file began on the line after the last one, and a paragraph ran into the heading or list that followed it. A plain join now prints one blank line between files, from arguments, a YAML config or stdin; nothing goes before the first file, so its front matter stays first, or after the last. No second blank line is added where a section divider or a page break already separates two files, or before a file whose content starts with one, and a divider after a page break no longer leaves two. mdagg goes from 1.0.0 to 1.0.1.
+
 ## [2.14.3] - 2026-10-24
 
 ### Changed

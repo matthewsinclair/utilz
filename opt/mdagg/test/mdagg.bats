@@ -419,3 +419,110 @@ EOF
   run_mdagg --unknown-option
   assert_failure
 }
+
+# ============================================================================
+# FILE SEPARATION (issue 0107)
+# ============================================================================
+
+# Two files whose join shows a missing separator: a paragraph, then a heading
+# that would run into it.
+make_join_files() {
+  printf 'Para one.\n' > 01-one.md
+  printf '# Heading two\n' > 02-two.md
+}
+
+# Join the two files into out.md, named as arguments or listed on stdin.
+# Usage: join_files args|stdin [flags...]
+join_files() {
+  local how="$1"
+  shift
+  if [[ "$how" == stdin ]]; then
+    run bash -c 'printf "%s\n" 01-one.md 02-two.md | "$0" --stdin -o out.md "$@"' "$UTILZ_BIN_DIR/mdagg" "$@"
+  else
+    run_mdagg "0*.md" -o out.md "$@"
+  fi
+}
+
+# out.md is exactly these bytes.
+assert_joined_as() {
+  printf '%s' "$1" > expected.md
+  diff -u expected.md out.md
+}
+
+PAGE_BREAK_DIV='<div style="page-break-after: always; break-after: page;"></div>'
+
+@test "separation: plain join from arguments puts one blank line between files (issue 0107)" {
+  make_join_files
+  join_files args
+  assert_success
+  assert_joined_as $'Para one.\n\n# Heading two\n'
+}
+
+@test "separation: plain join from stdin puts one blank line between files (issue 0107)" {
+  make_join_files
+  join_files stdin
+  assert_success
+  assert_joined_as $'Para one.\n\n# Heading two\n'
+}
+
+@test "separation: plain join from a YAML config puts one blank line between files (issue 0107)" {
+  if ! command_exists yq; then
+    skip "yq not installed"
+  fi
+  make_join_files
+  printf 'files:\n  - file: "01-one.md"\n  - file: "02-two.md"\n' > config.yaml
+  run_mdagg config.yaml -o out.md
+  assert_success
+  assert_joined_as $'Para one.\n\n# Heading two\n'
+}
+
+@test "separation: front matter stays first and nothing follows the last file (issue 0107)" {
+  printf -- '---\ntitle: One\n---\nPara one.\n' > 01-one.md
+  printf '# Heading two\n' > 02-two.md
+  join_files args
+  assert_success
+  assert_joined_as $'---\ntitle: One\n---\nPara one.\n\n# Heading two\n'
+}
+
+@test "separation: page breaks from arguments add no second blank line (issue 0107)" {
+  make_join_files
+  join_files args -p
+  assert_success
+  assert_joined_as "Para one."$'\n\n'"$PAGE_BREAK_DIV"$'\n\n'"# Heading two"$'\n\n'"$PAGE_BREAK_DIV"$'\n\n'
+}
+
+@test "separation: page breaks from stdin add no second blank line (issue 0107)" {
+  make_join_files
+  join_files stdin -p
+  assert_success
+  assert_joined_as "Para one."$'\n\n'"$PAGE_BREAK_DIV"$'\n\n'"# Heading two"$'\n\n'"$PAGE_BREAK_DIV"$'\n\n'
+}
+
+@test "separation: section dividers from arguments add no second blank line (issue 0107)" {
+  make_join_files
+  join_files args -d
+  assert_success
+  assert_joined_as "Para one."$'\n\n---\n\n# Two\n\n'"$PAGE_BREAK_DIV"$'\n\n'"# Heading two"$'\n'
+}
+
+@test "separation: section dividers from stdin add no second blank line (issue 0107)" {
+  make_join_files
+  join_files stdin -d
+  assert_success
+  assert_joined_as "Para one."$'\n\n---\n\n# Two\n\n'"$PAGE_BREAK_DIV"$'\n\n'"# Heading two"$'\n'
+}
+
+@test "separation: a file whose stripped front matter leaves a blank line gets no second one (issue 0107)" {
+  printf 'Para one.\n' > 01-one.md
+  printf -- '---\ntitle: Two\n---\n\n# Heading two\n' > 02-two.md
+  join_files args -s
+  assert_success
+  assert_joined_as $'Para one.\n\n# Heading two\n'
+}
+
+@test "separation: a page break followed by a section divider leaves one blank line between them (issue 0107)" {
+  make_join_files
+  join_files args -p -d
+  assert_success
+  assert_joined_as "Para one."$'\n\n'"$PAGE_BREAK_DIV"$'\n\n---\n\n# Two\n\n'"$PAGE_BREAK_DIV"$'\n\n'"# Heading two"$'\n\n'"$PAGE_BREAK_DIV"$'\n\n'
+}

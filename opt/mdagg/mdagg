@@ -36,6 +36,7 @@ WORKING_DIR="$(pwd)"
 INPUT_MODE=""  # yaml, glob, or stdin
 INPUT_SOURCE=""
 IS_FIRST_FILE=true  # Track first file to preserve YAML front matter
+ENDS_BLANK=false  # Whether the output so far ends with a blank line
 
 # ============================================================================
 # FUNCTIONS
@@ -153,18 +154,32 @@ process_file() {
   fi
 
   # Output section divider if title provided (skip for first file to preserve YAML front matter)
+  # Its leading blank line is left out after a page break, which ends with one.
   if [[ -n "$title" ]] && [[ "$SECTION_DIVIDERS" == true ]] && [[ "$IS_FIRST_FILE" == false ]]; then
-    echo ""
+    if [[ "$ENDS_BLANK" == false ]]; then echo ""; fi
     echo "---"
     echo ""
     echo "# $title"
     echo ""
     echo '<div style="page-break-after: always; break-after: page;"></div>'
     echo ""
+    ENDS_BLANK=true
+  fi
+
+  # Separate this file from the one before with one blank line (issue 0107):
+  # $(<file) drops the trailing newlines, so the files would otherwise touch.
+  # Nothing goes before the first file, so its front matter stays first, and
+  # no blank line goes where one already separates them: after a divider or a
+  # page break, or before content that starts with one (eg where a stripped
+  # front matter was).
+  if [[ "$IS_FIRST_FILE" == false ]] && [[ "$ENDS_BLANK" == false ]] && [[ -n "$content" ]] && [[ "$content" != $'\n'* ]]; then
+    echo ""
   fi
 
   # Output file content
   echo "$content"
+  ENDS_BLANK=false
+  if [[ -z "$content" ]]; then ENDS_BLANK=true; fi
 
   # Mark that we've processed the first file
   IS_FIRST_FILE=false
@@ -174,6 +189,7 @@ process_file() {
     echo ""
     echo '<div style="page-break-after: always; break-after: page;"></div>'
     echo ""
+    ENDS_BLANK=true
   fi
 }
 
