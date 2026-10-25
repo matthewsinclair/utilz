@@ -1,0 +1,16 @@
+{
+  "id": "01M5S7G6R2M4AR918TNFASZHG2",
+  "ts": "2026-10-25T09:50:36.290Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Host runs on this Mac and on kovacs, for every estate, book on molt-vc's desk, the one host queue (hv, 25 Oct; decision 58 put molt-vc in charge on 24 Oct). Utilz's runs book through vc with molt-vc: vc asks for the GO with sender, repo, worktree and sha or diff hash, the exact command, what it binds or starts, the expected result and the kill timeout; the START follows molt-vc's GO by name, which alone starts a run; an END follows with the results. Heavy runs go one at a time: any build or compile, any whole suite, Chrome, a dry run or cut, a daemon. A light run (no build, GUI, daemon or port; its own temp dirs only) shares the window with a heavy only when molt-vc says so, and a timing-like failure in it is rerun alone. A kovacs leg goes to kovacs-sysadm as a request, never over ssh, and counts as a heavy. Bytes that change after a GO send their new hash before the rerun. The older interleave with intent-vc is retired. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md."
+  }
+}
