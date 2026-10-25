@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-25 16:25Z
+heartbeat_at: 2026-10-25 16:36Z
 status: active
 focus: "Localfold for hv's compact (16:25Z via molt-vc and vc), not released: no open work, claim or message; holding for vc's next word (vc warns before the next 2.14.4 freeze). Resume: ~/Devel/scratch/utilz-ic/RESUME.md. No push."
 claims: []
