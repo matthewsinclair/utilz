@@ -1,0 +1,15 @@
+{
+  "id": "01M5SVF69M4P9BCZDQ81J5H08G",
+  "ts": "2026-10-25T15:39:34.580Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0109 (contract A3, hv's ruling): \" at <root>\" comes off utilz's version line, in 2.14.4. Issue filed; the work goes in a detached worktree, wt-0109. Red on main, then green, each run booked through vc with molt-vc. Landing waits until A3 is in devbin's docs and vc has read the bytes. Bank: ~/Devel/scratch/utilz-cc/a3-bank. Size S."
+  }
+}

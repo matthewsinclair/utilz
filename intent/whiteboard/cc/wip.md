@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 0109 (contract A3, hv's ruling): " at <root>" comes off utilz's version line, in 2.14.4. Issue filed; the work goes in a detached worktree, wt-0109. Red on main, then green, each run booked through vc with molt-vc. Landing waits until A3 is in devbin's docs and vc has read the bytes. Bank: ~/Devel/scratch/utilz-cc/a3-bank. Size S.
 
 ## TODO
 
