@@ -4,8 +4,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- cc: 0108, mdagg carries on past a missing file and exits non-zero at the end (next release).
-
 ## TODO
 
 - hv: one host queue for every estate on this Mac, or the interleave utilz-vc and intent-vc keep now.
