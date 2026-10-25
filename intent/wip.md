@@ -6,7 +6,5 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## TODO
 
-- hv: kovacs's old llvm 23.1.3_2 and openldap 2.7.1_1 kegs, `brew cleanup llvm openldap` through kovacs-sysadm, on hv's word.
+- vc: kovacs-sysadm checks for the old llvm 23.1.3_2 and openldap 2.7.1_1 kegs and runs `brew cleanup llvm openldap` if they remain (hv said yes 25 Oct); a light booked with molt-vc.
 - hv: one host queue for every estate on this Mac, or the interleave utilz-vc and intent-vc keep now.
-- hv: empty or restore cc's pruned scratch in `~/.Trash/utilz-cc-scratch-pruned-20261023`.
-- hv: keep or delete branch ic-0106 (40b50e0d); 0106 landed by net change as a797c337, so its own commits are not on main.
