@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-25 05:01Z
+heartbeat_at: 2026-10-25 05:28Z
 status: active
-focus: "Hold for rb2143, the 2.14.3 kovacs readback: START cleared by vc; runs on vc's GO after the rhadamanth and kovacs brew upgrades"
+focus: "No open work: rb2143 goes to kovacs-sysadm through vc (no ssh to kovacs, hv's rule); holding for vc's next word"
 claims: []
 ---
 
@@ -21,12 +21,12 @@ _(none)_
 
 ## Holds
 
-- rb2143, the 2.14.3 kovacs readback (kv-readback.sh 91fe64285c82, kv-readback-remote.sh df659259480b; START cleared by vc). Released when rhadamanth's brew upgrade and kovacs-sysadm's dry run and upgrade on kovacs have ENDed and vc sends the GO by name (vc books it with molt-vc as a light run). The two kovacs tool dirs stay for the next leg.
+_(none)_
 
 ## Watch-outs
 
 - dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17. (edited)
-- kovacs legs: the method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, and the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83). A leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. (edited)
+- kovacs legs: NO ssh to kovacs, read-only included (hv's rule on molt-vc's desk, through vc, 25 Oct). A check on kovacs goes to kovacs-sysadm as commands with their expected output, and vc re-tallies its answers. A leg over ssh (leg.sh's bundles) needs hv's word through molt-vc first. The method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83), and a leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. dc's two /var/tmp tool dirs on kovacs stay for the next leg. (edited)
 - board@4.0 since 22 Oct (Intent issue 0612, intent 3.2.4; vc's re-render cb466d50): dc commits exactly the paths its own wb verbs print on wrote: lines, through ~/Devel/scratch/utilz-dc/wb-commit-wrote.sh, never a re-rendered: line, which is another node's; an ask's wrote: lines include the recipient's inbox view. Live messages are read from intent wb show dc --json (.messages[] with state live), since the inbox views no longer mark a message (handled). (edited at the localfold: the swap's one-off steps are done) (edited)
 - PATH on rhadamanth since Molt-matts a258ad0 (vc's announce, 24 Oct): ~/.local/bin is first in new shells, so a bare utilz resolves to the primary's dev links, not brew's. Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz) and logs `command -v utilz` and `utilz --version`. kovacs legs already put the run tree's bin/ first on PATH.
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M5RRFVBS83ZH7Z4AZW893J8B",
+  "ts": "2026-10-25T05:28:15.993Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 4,
+    "text": "kovacs legs: NO ssh to kovacs, read-only included (hv's rule on molt-vc's desk, through vc, 25 Oct). A check on kovacs goes to kovacs-sysadm as commands with their expected output, and vc re-tallies its answers. A leg over ssh (leg.sh's bundles) needs hv's word through molt-vc first. The method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83), and a leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. dc's two /var/tmp tool dirs on kovacs stay for the next leg."
+  }
+}
