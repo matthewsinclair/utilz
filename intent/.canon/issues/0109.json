@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 109,
+  "slug": "utilz-s-version-line-drops-at-root-contract-a3",
+  "title": "utilz's version line drops \" at <root>\" (contract A3)",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-25",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\nhv ruled on 25 Oct 2026, relayed to utilz-vc, that ` at <root>` comes off the version line: \"That info is idiotic. Why would that ever be necessary when you can just type of which it!?\" This is devbin-vc's amendment A3 to the dev, opt, brew contract (devbin's `docs/dev-opt-brew.md` T4; draft `contract-A3.md`, sha256 b19ffcb9...21a0), and Utilz has said SAME to it. It goes in 2.14.4, under hv's one-next-release ruling.\n\n`utilz --version`, `utilz version` and `utilz doctor`'s first line become `utilz <version> (<tree>, <sha12>[+dirty])`. `(dev, unknown)`, `(unknown)` and `(<tree>, old manifest)` keep their parenthesis and lose only the tail. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads up to the closing parenthesis and ignores anything after it, so a reader of the old shape still reads the new one.\n\n## Fix\n\n- `utilz_version_line` (`opt/utilz/lib/common.sh`) prints `utilz %s (%s)` with no root.\n- `utilz_tree_root`'s only caller is the version line, so it is deleted (Highlander, no dead code). `brew_stable_home` keeps its other callers, so it stays.\n- Tests that pin the tail are rewritten to pin the new whole line, not kept alongside the old ones. The affected suites are version_dispatch, common_lib, tree, install_e2e, install_guards, upgrade and dispatcher, plus any others a grep finds. tree.bats's tests that a brew line names the opt link rather than the keg become tests that the line names no path at all.\n- Every doc and help text that shows ` at <root>` is updated: README, help/utilz.md, docs/releasing.md and the comments in common.sh.\n- A CHANGELOG entry goes under 2.14.4.\n\nThe tests are proven red on main first, then green. Landing waits until A3 is in devbin's docs and utilz-vc has read the bytes.\n\nSize: S.\n"
+}

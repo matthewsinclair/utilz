@@ -1,0 +1,15 @@
+{
+  "id": "01M5SVET62WE8932P4H4DX8K3Z",
+  "ts": "2026-10-25T15:39:22.180Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0109"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "utilz's version line drops \" at <root>\" (contract A3)"
+  }
+}
