@@ -1,0 +1,15 @@
+{
+  "id": "01M5RYAC620HF1Y6VW5VG4D6Y0",
+  "ts": "2026-10-25T07:10:08.070Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0107"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "mdagg joins files with no blank line between them, against its README"
+  }
+}
