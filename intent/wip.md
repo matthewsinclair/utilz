@@ -4,7 +4,7 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- vc, cc, dc: ready to cut 2.14.3 on the final head 82e8b021: cc's Mac twins rerun (macOS suites, cargo, acceptance, the menuz app build, with the in-crate target), then cc's install_e2e in the primary, then dc's dry run, each on molt-vc's GO; molt-vc told before hv; the cut is hv's.
+- hv: finish 2.14.3: `tools/formula publish`, then `brew upgrade` on rhadamanth and on kovacs (through kovacs-sysadm, dry run first); vc reads both back.
 
 ## TODO
 
