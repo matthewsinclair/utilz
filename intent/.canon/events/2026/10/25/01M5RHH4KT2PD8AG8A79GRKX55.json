@@ -1,0 +1,17 @@
+{
+  "id": "01M5RHH4KT2PD8AG8A79GRKX55",
+  "ts": "2026-10-25T03:26:38.202Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "END record, slot 331 (sent by socket at 19:14Z, held for the freeze; vc re-read it green): 2.14.3's release dry run, GREEN. It ran 19:02:25Z to 19:14:31Z on 24 Oct, on molt-vc's heavy GO, alone. dryrun-2143.sh f6bcbd61593d ran on HEAD 367b8262 (code 82e8b021's); wrapper exit 0, dry run exit 0. Gates: check all passed (clippy, format, autotests, targetdir, toolchain and critic; the critic had nothing staged). test estate: All tests passed (23 suites), 0 not ok, only xtrct's 4 ANTHROPIC_API_KEY skips, ESTATE.errors empty, 711 s of gate wall. Release core: resolve 2.14.3 from --patch, new tag; pre-flight done; every later step \"would\"; after skipped; no step failed, and it stopped at step 6. After the run: HEAD unchanged, tree clean, 0 bats-run-* dirs, no bats processes. Logs: tmp/dc-2141/gate/367b826/dry-run.log (f77e2da37402) and ~/Devel/scratch/utilz-dc/work/dryrun-2143-367b826.out. A note, not a red: hv's 963d414d (For release) changed bin/.devbin's release code after the dry run and before the cut 1aaa506c, so the dry run ran 367b8262's release code, not the code that cut. The tag's CI is green per vc. Hold 26 is archived, its condition met.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

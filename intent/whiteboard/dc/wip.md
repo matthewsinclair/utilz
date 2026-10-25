@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: fb5bf5ff-2844-4c9d-b2e3-9b4325f4e6d2
-heartbeat_at: 2026-10-24 18:49Z
+heartbeat_at: 2026-10-25 03:26Z
 status: active
-focus: "2.14.3's release dry run, slot 331, heavy and alone: START sent to vc (dryrun-2143.sh f6bcbd61); waiting on vc's naming and molt-vc's heavy GO by name; the freeze from the GO"
+focus: "2.14.3 cut (1aaa506c); slot 331's END recorded and hold 26 archived; next todo 29 (prep.sh's base), doc before code, runs booked with vc"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- dc's 2.14.3 dry run. The kovacs twins are done: slot 325, c2143-66b01b09, green, re-tallied by vc. Released when cc's slot 328 (mac2) and the light e2e are both green and vc names the dry run after hv's compact and the reopen (vc, 18:24Z). Start only on molt-vc's GO by name. (edited)
+_(none)_
 
 ## Watch-outs
 
