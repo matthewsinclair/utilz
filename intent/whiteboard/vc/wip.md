@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-25 06:29Z
+heartbeat_at: 2026-10-25 10:43Z
 status: active
-focus: "After hv's compact: 2.14.3 complete estate-wide; no Utilz work open; open for hv in intent/wip.md TODO. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Localfold for hv (molt-vc 10:42Z), not released: 2.14.4 (0107, 0108) checks queued with molt-vc, no GO yet and none until hv says continue; doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 2.14.4 (0107, 0108) pre-release checks on main 21b0385d, in hv's order: cc's Mac twins (READY with molt-vc, run-twins-2144-mac.sh 18c38c51, e2e 1f7ecb54; END reads the Swift Testing counts), then dc's kovacs twins through kovacs-sysadm (request.md 06d15b28, twins.sh 73b61c7d; READY, after the Mac twins), then dc's dry run on the head vc names, then hv's cut, then brew on both hosts, utilz use brew, and the version line reading brew. No heavy starts until hv says continue (localfold 10:42Z).
 
 ## TODO
 

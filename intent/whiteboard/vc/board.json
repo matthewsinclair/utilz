@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "74b51d87-af54-4adf-9287-d19216567c43",
-    "heartbeat_at": "2026-10-25T06:29:56.172Z",
+    "heartbeat_at": "2026-10-25T10:43:15.509Z",
     "status": "active",
-    "focus": "After hv's compact: 2.14.3 complete estate-wide; no Utilz work open; open for hv in intent/wip.md TODO. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "Localfold for hv (molt-vc 10:42Z), not released: 2.14.4 (0107, 0108) checks queued with molt-vc, no GO yet and none until hv says continue; doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2025,6 +2025,14 @@
       "text": "hv, 2026-10-25, directly to vc: (1) the next Utilz release is 2.14.4 and carries 0107 and 0108; its pre-release checks start now, in the ruled order: Mac twins, then the Linux twins on kovacs through kovacs-sysadm, then dc's dry run, then hv's cut. (2) vc pushes main before the checks so CI reads it first. (3) molt-vc's desk is the one host queue for every estate on this Mac and kovacs; watchout 17's interleave with intent-vc is retired. (4) dc's kovacs legs no longer ship over ssh: each goes to kovacs-sysadm as a request, with the bundle, the commands and the expected output, and is booked with molt-vc as a heavy.",
       "state": "live",
       "recorded_at": "2026-10-25T09:50:07.050Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 68,
+      "text": "2.14.4 (0107, 0108) pre-release checks on main 21b0385d, in hv's order: cc's Mac twins (READY with molt-vc, run-twins-2144-mac.sh 18c38c51, e2e 1f7ecb54; END reads the Swift Testing counts), then dc's kovacs twins through kovacs-sysadm (request.md 06d15b28, twins.sh 73b61c7d; READY, after the Mac twins), then dc's dry run on the head vc names, then hv's cut, then brew on both hosts, utilz use brew, and the version line reading brew. No heavy starts until hv says continue (localfold 10:42Z).",
+      "state": "live",
+      "recorded_at": "2026-10-25T10:43:07.969Z"
     }
   ],
   "sent": [
@@ -8379,6 +8387,11 @@
       "id": "01M5RHH4KT2PD8AG8A79GRKX56",
       "sender": "dc",
       "handled_at": "2026-10-25T03:26:57.778Z"
+    },
+    {
+      "id": "01M5S7YSFCKG3HDTMP1MGZSTP9",
+      "sender": "dc",
+      "handled_at": "2026-10-25T10:43:07.702Z"
     }
   ]
 }
