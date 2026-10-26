@@ -1,0 +1,15 @@
+{
+  "id": "01M5W40GB4N45BZR8XTNADF711",
+  "ts": "2026-10-26T12:47:19.396Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Filed at 477f36c4 with its Design as the body (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design.md 1c826f0dc806; rendered intent/issues/0112.md 91e06dc2df03), answering vc's design points (~/Devel/scratch/utilz-vc/a4/design-points.md 5df9270a8894), for vc's read before any code. Then: a detached worktree on main's head, the .githooks/*.intent carriers copied in and prez's target copied from wt-0109 by cp -Rc (a copy, never a link); the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read; the heavy booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing devbin's A4 commit once that is on devbin's main; the close. wt-0109 then goes by Intent 0654's fold step as 0656 amends it (vc's FYIs of 12:26Z and 12:38Z): its checks run from outside it (its index tree is base 0946cd4f with its landed banks applied, nothing in it unstaged or untracked, its base an ancestor of main, no stash naming it), then git -C <path> reset --hard, then a plain git worktree remove, never --force, a refusal being a finding for vc; or at cc's next fold if it is still on disk, prez's target banked first. A4's worktree is held to the same step at its landing. RESUME.md has it."
+  }
+}

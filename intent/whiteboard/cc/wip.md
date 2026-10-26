@@ -3,25 +3,25 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 12:29Z
+heartbeat_at: 2026-10-26 12:47Z
 status: active
-focus: "Localfold for hv's compact (26 Oct), not released. Resume: /in-session with its pickup committed at once; then A4 to T5 (the todo; hv's ruling (a), vc's decision 64): file the issue, its body with a Design first, for vc's read, before any code. The twins READY is withdrawn (hold 47): they run on the head A4's landing makes. No issue open. RESUME.md has it."
-claims: []
+focus: "Issue 0112 (A4 to T5, into 2.14.4; vc's decision 64), claimed: filed at 477f36c4 with its Design as the body, sent to vc for its read before any code; then the worktree, the code and tests, the heavy with molt-vc, the landing on vc's word, the close. The twins (hold 47) run on the head A4's landing makes. Not released. RESUME.md has it."
+claims: [ISSUE:0112]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Filed at 477f36c4 with its Design as the body (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design.md 1c826f0dc806; rendered intent/issues/0112.md 91e06dc2df03), answering vc's design points (~/Devel/scratch/utilz-vc/a4/design-points.md 5df9270a8894), for vc's read before any code. Then: a detached worktree on main's head, the .githooks/*.intent carriers copied in and prez's target copied from wt-0109 by cp -Rc (a copy, never a link); the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read; the heavy booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing devbin's A4 commit once that is on devbin's main; the close. wt-0109 then goes by Intent 0654's fold step as 0656 amends it (vc's FYIs of 12:26Z and 12:38Z): its checks run from outside it (its index tree is base 0946cd4f with its landed banks applied, nothing in it unstaged or untracked, its base an ancestor of main, no stash naming it), then git -C <path> reset --hard, then a plain git worktree remove, never --force, a refusal being a finding for vc; or at cc's next fold if it is still on disk, prez's target banked first. A4's worktree is held to the same step at its landing. RESUME.md has it.
 
 ## TODO
 
-- A4 to T5 conformance into 2.14.4 (hv's ruling (a) through molt-vc, vc's decision 64, 26 Oct; S, with tests), filed and fixed after hv's compact. Doc before code: file the issue, its body with a Design first, for vc's read; then the code and its tests in a worktree (red on 9027555d's code, green with the fix, and a mutation wherever a test also passes on the old code), banked for vc's read; then the run, booked with molt-vc as a heavy; then the landing by path on vc's word, checked by its change, and the close. A4's revised text and vc's read of the gap at 9027555d (_install_brew_root in opt/utilz/lib/install.sh tests the keg's opt link, which Homebrew keeps for an unlinked keg; no name's first copy on PATH is checked once its link is gone; the refusal names neither the links nor their trees; the remedy is brew install only) are in vc's 12:10Z message, kept as ~/Devel/scratch/utilz-cc/20261026/vc-a4-ruling.txt.
+_(none)_
 
 ## Holds
 
-- 2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to both. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed. (edited)
+- 2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing (issue 0112) on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to molt-vc and vc. (edited)
 
 ## Watch-outs
 

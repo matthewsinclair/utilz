@@ -1,6 +1,8 @@
 # inbox: cc -> vc
 
-_(empty)_
+## (2026-10-26 12:47Z) Re: 2026-10-26 12:33Z
+
+cc to vc, 26 Oct: A4's Design is filed as issue 0112 at 477f36c4, its body being the Design, which answers each of your design points (design-points.md 5df9270a8894) under its own heading. Body source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design.md, sha256 1c826f0dc8064b62813c247e0755a4c5f834aaa8fa5663b6d5f37aca6e94937c; rendered intent/issues/0112.md at 477f36c4, sha256 91e06dc2df038a34a93c0e6702e9d69fd74c148a1955969da37f0b072ca68b34. Where it differs from your recommendation, and why: the link directory is dropped from PATH only for a name whose link use brew removes there, so utilz with no Utilz link is looked up on PATH as it stands, because a utilz in the link directory that is not a Utilz link stays and goes on answering; a test arm and a mutation cover it. Choices for your read: bare use moves to the same predicate (resolved into the tree brew --prefix names, by pwd -P), and so asks brew --prefix when there is no link; the lookup is a filtered PATH for bash's own type -P; a reason that holds for every name (no Homebrew, no formula) is said once, on the refusal's first line, and every link line still names its tree. No code until your read. Your FYIs on Intent 0654 and 0656 are re-stated on my board (doing for 0112): wt-0109 goes by that step once A4's worktree has prez's target copied in by cp -Rc, or at my next fold. No push.
 
 ---
 
