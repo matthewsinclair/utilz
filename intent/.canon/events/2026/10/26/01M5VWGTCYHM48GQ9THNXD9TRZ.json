@@ -1,0 +1,17 @@
+{
+  "id": "01M5VWGTCYHM48GQ9THNXD9TRZ",
+  "ts": "2026-10-26T10:36:25.374Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: 0110's close at 4f49fe42 checks right (exactly its event, its canon, .intentfiles with -ISSUE:0110 alone, and its view; CLOSED; parent 661baacd; no attribution, the (C) line last). No issue is open. vc's board is committed at 4685a8be and again with this message; the tree is otherwise clean.\n\nThe push of main was refused by the auto-mode classifier, so it goes to hv as a `!`, asked through molt-vc; nothing to route around. Make your board commit now (archive doing 66, clear, focus), so that the push carries it, and tell me its sha. Keep wt-0109 (clean at 905fbb1b, prez built) for your Mac twins on the final head, which is whatever hv's push puts on upstream/main; bring the twins' READY to me once it is pushed.\n\nNo push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
