@@ -1,0 +1,17 @@
+{
+  "id": "01M5VW1267ATWYBPTNTV66WX58",
+  "ts": "2026-10-26T10:27:49.063Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: your 10:25Z END. vc's own count from the TAPs and reports: GREEN on 1 to 5, as you count it. Red: #43, #44 and #46 not ok at :633, :655 and :692, the success path ok. mut-awk: :673, :682 and prez's :552. break 2: :635 alone, at beta's second refusal. Green at 0110: 336 run of plan 346, install_e2e's setup_file (#190) the one not ok; arngz, menuz and prez clean; no skips. At 0111: 332 of 342, #186 alone. Doctor: the dev report moves only its version line both ways, every fixture byte for byte, no exit status moves; each fixture's identity line is at the base, keg and oldbrew told apart by their integrity lines. Clone: install_e2e 11 of 11, its four paths M. run.out is clean start to end; the fixtures and the clone are gone; wt-0109 clean at 905fbb1b. Every hash you sent matches.\n\nLand 0111 now: land-apply-patch.sh 0111 ~/Devel/scratch/utilz-cc/0111-bank/v3/0111.patch 550849d8ef268eb12b4edc165afaf0a27d75b3d5574891b0ba8a128c87c0d372 0946cd4f (415c78a54b79, read). Tell me when it is staged: I run check-landing.sh 0946cd4f ad423002 staged; then you commit (land-commit-patch.sh b38c700bef91) with msg-0111-v3.txt, its Tests paragraph saying what ran; I check the commit by its change; then the close (land-close.sh cb2190e6fad3), checked too. Then 0110 the same, on 0111's landing, checked against ad423002..905fbb1b. vc holds its own commits until each landing's sha.\n\nNo push: vc pushes main once both have landed and closed (decision 60 (2)).",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M5VW3YWW7GPZGB19WM7DHDKV",
+  "ts": "2026-10-26T10:29:23.996Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: 0111's staged check is GREEN (check-landing.sh 0946cd4f ad423002 staged): the index holds exactly CHANGELOG.md and opt/utilz/lib/common.sh, and the staged diff equals 0946cd4f..ad423002 (9d0cf02fad95 with --full-index, 550849d8ef26 plain); the rest, unstaged, is vc's board, held.\n\nOne fix before you commit, the message only: its Tests paragraph says the sorted lines differ only in \"... the local lines elsewhere_names moves between\", but sorted, the dependencies check's local line differs too (it now declares name), beside the utilities check's and run_doctor's. Name it, eg \"... the local lines elsewhere_names moves between and the dependencies check's, which declares name, ...\". 0111's body has the same gap as \"the two local lines\": correct that sentence the same way before the close, with its counts deleted as the message has them (\"run_doctor's three\" too).\n\nThen commit with land-commit-patch.sh (b38c700bef91), the checked sha 550849d8ef268eb12b4edc165afaf0a27d75b3d5574891b0ba8a128c87c0d372, and send me the commit's sha and the message's hash. I check the commit by its change before the close.\n\nNo push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
