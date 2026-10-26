@@ -11,8 +11,16 @@
 #
 # Every test uses a FIXTURE link directory, by --bin-dir or the test helper's
 # UTILZ_LINK_DIR. Nothing here may touch the real ~/.local/bin.
+#
+# Every use-brew test sets PATH itself and names a stub brew: the harness's
+# PATH can reach a real Homebrew utilz, which would answer for the fixture. So
+# does every bare use that finds no link, since it asks brew too (issue 0112).
 
 load "test_helper.bash"
+
+# `run --separate-stderr` below needs bats >= 1.5.0; without this declaration
+# bats warns BW02 on every run.
+bats_require_minimum_version 1.5.0
 
 # A link directory carrying both link shapes plus one link that is nobody's.
 make_fake_bin() {
@@ -53,17 +61,53 @@ link_dirs() {
   done
 }
 
-# A Homebrew prefix at <prefix> holding a keg published from <src>, with the
-# opt link brew keeps, and a stub brew at <stub> whose --prefix answers it.
+# A Homebrew prefix at <prefix> holding a keg published from <src>, laid out as
+# the formula and brew lay one out, and a stub brew at <stub> whose --prefix
+# answers it. The formula's bin.install_symlink gives the keg a bin/<name> for
+# every entry of libexec/bin, pointing at ../libexec/bin/<name>; brew keeps the
+# opt link; and a linked keg has <prefix>/bin/<name> pointing at
+# ../Cellar/utilz/9.9.9/bin/<name> for each. With "unlinked" there are no
+# <prefix>/bin links and the opt link stays, as `brew unlink utilz` leaves it.
 make_fake_brew() {
-  local src="$1" prefix="$2" stub="$3"
-  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
-  run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$keg' --managed-by brew" >/dev/null
-  mkdir -p "$prefix/opt" "$prefix/bin"
+  local src="$1" prefix="$2" stub="$3" linked="${4:-linked}"
+  local cellar="$prefix/Cellar/utilz/9.9.9" entry name
+  run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$cellar/libexec' --managed-by brew" >/dev/null
+  mkdir -p "$cellar/bin" "$prefix/opt" "$prefix/bin"
+  for entry in "$cellar/libexec/bin"/*; do
+    name=$(basename "$entry")
+    ln -s "../libexec/bin/$name" "$cellar/bin/$name"
+    if [[ "$linked" == "linked" ]]; then
+      ln -s "../Cellar/utilz/9.9.9/bin/$name" "$prefix/bin/$name"
+    fi
+  done
   ln -s ../Cellar/utilz/9.9.9 "$prefix/opt/utilz"
-  ln -s ../Cellar/utilz/9.9.9/libexec/bin/utilz "$prefix/bin/utilz"
   printf '#!/bin/sh\n[ "$1" = --prefix ] && echo %s\n' "$prefix" > "$stub"
   chmod +x "$stub"
+}
+
+# An executable at <dir>/<name> that is no Utilz tree's: another copy.
+make_other_copy() {
+  mkdir -p "$1"
+  printf '#!/bin/sh\necho other\n' > "$1/$2"
+  chmod +x "$1/$2"
+}
+
+# The refusal's contract (contract T5, amendment A4): exit 1, nothing on
+# stdout, and the link directory exactly as <before>, its link_stamps, had it.
+assert_refused_unchanged() {
+  local bindir="$1" before="$2"
+  assert_exit_code 1
+  [[ -z "$output" ]] || fail "the refusal printed on stdout: $output"
+  [[ "$(link_stamps "$bindir")" == "$before" ]] || fail "a refused use brew changed $bindir: $(link_stamps "$bindir")"
+}
+
+# Fail unless the last run's stderr is exactly the lines given, one argument
+# each, in the order printed: a line missing, added or out of place fails it.
+assert_stderr_is() {
+  local want
+  want=$(printf '%s\n' "$@")
+  [[ "$stderr" == "$want" ]] || fail "stderr is not the lines expected (< expected, > printed):
+$(diff <(printf '%s\n' "$want") <(printf '%s\n' "$stderr"))"
 }
 
 # ============================================================================
@@ -258,7 +302,7 @@ make_fake_brew() {
   local before
   before=$(readlink "$bindir/stranger")
 
-  run run_install_function "set -euo pipefail; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  run run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
   assert_success
   [[ "$(cd "$bindir" && echo *)" == "stranger" ]] || fail "the link directory still holds: $(cd "$bindir" && echo *)"
   [[ "$(readlink "$bindir/stranger")" == "$before" ]] || fail "use brew changed a link that is not Utilz's"
@@ -270,31 +314,327 @@ make_fake_brew() {
   printf '%s\n' "$output" | grep -qxF "utilz 9.9.9 (brew, ${recorded:0:12})" || fail "no version line 'utilz 9.9.9 (brew, ${recorded:0:12})': $output"
 }
 
-@test "use brew refuses by name, and removes nothing, when there is no Homebrew install of Utilz" {
-  local src="$BATS_TEST_TMPDIR/nb-src" prefix="$BATS_TEST_TMPDIR/nb-opt" bindir="$BATS_TEST_TMPDIR/nb-bin"
-  local stub="$BATS_TEST_TMPDIR/brew-stub"
+@test "use brew refuses, removing nothing, when there is no Utilz formula under brew's prefix, naming each link and its tree (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/nf-src" prefix="$BATS_TEST_TMPDIR/nf-opt" bindir="$BATS_TEST_TMPDIR/nf-bin"
+  local empty="$BATS_TEST_TMPDIR/empty-homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
   make_two_trees "$src" "$prefix" "$bindir"
-  printf '#!/bin/sh\necho %s\n' "$BATS_TEST_TMPDIR/empty-homebrew" > "$stub"
+  mkdir -p "$empty"
+  printf '#!/bin/sh\necho %s\n' "$empty" > "$stub"
   chmod +x "$stub"
+  local before
+  before=$(link_stamps "$bindir")
 
-  run run_install_function "INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
-  assert_exit_code 1
-  assert_output_contains "brew install matthewsinclair/utilz/utilz"
-  [[ -L "$bindir/alpha" ]] || fail "a refused use brew removed a link"
-
-  run run_install_function "INSTALL_BREW='$BATS_TEST_TMPDIR/no-brew-here'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
-  assert_exit_code 1
-  assert_output_contains "Homebrew is not installed"
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: there is no Homebrew install of Utilz under $empty" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  utilz -> dev at $src" \
+    "  Install the formula: brew install matthewsinclair/utilz/utilz" \
+    "  Or stay on dev or opt: utilz use dev|opt"
 }
 
-@test "bare use reports brew when there is no link and the Homebrew install answers on PATH" {
+@test "use brew refuses, removing nothing, when Homebrew is not installed or not on PATH, naming each link and its tree (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/nh-src" prefix="$BATS_TEST_TMPDIR/nh-opt" bindir="$BATS_TEST_TMPDIR/nh-bin"
+  local nobrew="$BATS_TEST_TMPDIR/no-brew-here"
+  make_two_trees "$src" "$prefix" "$bindir"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:/usr/bin:/bin'; INSTALL_BREW='$nobrew'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: Homebrew is not installed, or is not on PATH ($nobrew --prefix answered nothing)" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  utilz -> dev at $src" \
+    "  Install Homebrew, then the formula: brew install matthewsinclair/utilz/utilz" \
+    "  Or, if Homebrew is installed, put its bin on PATH, in your shell config: eval \"\$(<brew's prefix>/bin/brew shellenv)\"" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when the Homebrew install has no copy of a linked utility (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/lk-src" prefix="$BATS_TEST_TMPDIR/lk-opt" bindir="$BATS_TEST_TMPDIR/lk-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  # A utility newer than the brew release: the dev tree has it, the keg not.
+  ln -s utilz "$src/bin/gamma"
+  ln -s "$src/bin/gamma" "$bindir/gamma"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  gamma -> dev at $src: the Homebrew install has no gamma" \
+    "  utilz -> dev at $src" \
+    "  Upgrade the formula once a release carries it: brew upgrade utilz" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, at a dead link whose name the Homebrew install lacks, and names the link to remove, quoted (contract A4)" {
+  # A dead link answers nothing now, so its remedy is to remove it, never to
+  # wait for a release that need never carry the name. The link directory's
+  # path holds a space, so the remedy is a command only when it is quoted.
+  local src="$BATS_TEST_TMPDIR/dl-src" prefix="$BATS_TEST_TMPDIR/dl-opt" bindir="$BATS_TEST_TMPDIR/dl bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  [[ "$(printf '%q' "$BATS_TEST_TMPDIR")" == "$BATS_TEST_TMPDIR" ]] || fail "BATS_TEST_TMPDIR needs quoting itself: $BATS_TEST_TMPDIR"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  # gamma is a utility of the current tree that the keg lacks, so a link to it
+  # in a tree that has gone is Utilz's. A dead link to a name outside the set
+  # is another tool's, and use brew leaves it be (utilz-vc's F1): rg's is not
+  # named below.
+  ln -s utilz "$src/bin/gamma"
+  ln -s "$BATS_TEST_TMPDIR/gone/bin/gamma" "$bindir/gamma"
+  ln -s "$BATS_TEST_TMPDIR/old-tool/bin/rg" "$bindir/rg"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  gamma -> $BATS_TEST_TMPDIR/gone/bin/gamma, which has gone: the Homebrew install has no gamma" \
+    "  utilz -> dev at $src" \
+    "  Remove the dead link: rm $BATS_TEST_TMPDIR/dl\\ bin/gamma" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses with mixed reasons, each link's line in the census's order and each remedy once in the reasons' order (utilz-vc's bank read)" {
+  local src="$BATS_TEST_TMPDIR/mx-src" prefix="$BATS_TEST_TMPDIR/mx-opt" bindir="$BATS_TEST_TMPDIR/mx-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub" other="$BATS_TEST_TMPDIR/other-copies"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  make_other_copy "$other" beta
+  # Utilities newer than the brew release: gamma linked, and delta's link into
+  # a tree that has gone, which is Utilz's since delta is in the set.
+  ln -s utilz "$src/bin/gamma"
+  ln -s utilz "$src/bin/delta"
+  ln -s "$src/bin/gamma" "$bindir/gamma"
+  ln -s "$BATS_TEST_TMPDIR/gone/bin/delta" "$bindir/delta"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$other:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src: another copy comes first on PATH: $other/beta" \
+    "  delta -> $BATS_TEST_TMPDIR/gone/bin/delta, which has gone: the Homebrew install has no delta" \
+    "  gamma -> dev at $src: the Homebrew install has no gamma" \
+    "  utilz -> dev at $src" \
+    "  Upgrade the formula once a release carries it: brew upgrade utilz" \
+    "  Remove the dead link: rm $bindir/delta" \
+    "  Take each copy named above off PATH, or put $brew/bin before it (the sleeve's PATH order)" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when the Homebrew keg is not linked (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/ul-src" prefix="$BATS_TEST_TMPDIR/ul-opt" bindir="$BATS_TEST_TMPDIR/ul-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub" unlinked
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src: the keg is not linked for alpha: $brew/bin/alpha does not resolve into it" \
+    "  beta -> dev at $src: the keg is not linked for beta: $brew/bin/beta does not resolve into it" \
+    "  utilz -> dev at $src: the keg is not linked for utilz: $brew/bin/utilz does not resolve into it" \
+    "  Link the formula into brew's bin: brew link utilz" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when a link loop stands at a name in brew's bin, and does not hang (utilz-vc's P2)" {
+  local src="$BATS_TEST_TMPDIR/lp-src" prefix="$BATS_TEST_TMPDIR/lp-opt" bindir="$BATS_TEST_TMPDIR/lp-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub" unlinked
+  ln -s alpha "$brew/bin/alpha"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src: the keg is not linked for alpha: $brew/bin/alpha does not resolve into it" \
+    "  beta -> dev at $src: the keg is not linked for beta: $brew/bin/beta does not resolve into it" \
+    "  utilz -> dev at $src: the keg is not linked for utilz: $brew/bin/utilz does not resolve into it" \
+    "  Link the formula into brew's bin: brew link utilz" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when Homebrew's bin is not on PATH (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/op-src" prefix="$BATS_TEST_TMPDIR/op-opt" bindir="$BATS_TEST_TMPDIR/op-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src: Homebrew's bin, $brew/bin, is not on PATH" \
+    "  beta -> dev at $src: Homebrew's bin, $brew/bin, is not on PATH" \
+    "  utilz -> dev at $src: Homebrew's bin, $brew/bin, is not on PATH" \
+    "  Put brew's bin on PATH, in your shell config: eval \"\$($brew/bin/brew shellenv)\"" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when another copy of one utility comes first on PATH, naming that one alone (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/oc-src" prefix="$BATS_TEST_TMPDIR/oc-opt" bindir="$BATS_TEST_TMPDIR/oc-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub" other="$BATS_TEST_TMPDIR/other-copies"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  make_other_copy "$other" beta
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$other:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  # alpha and utilz would be the Homebrew install's: each line names its tree
+  # and no reason.
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src: another copy comes first on PATH: $other/beta" \
+    "  utilz -> dev at $src" \
+    "  Take each copy named above off PATH, or put $brew/bin before it (the sleeve's PATH order)" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when a dev checkout's bin comes before Homebrew's on PATH, naming the checkout's tree (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/db-src" prefix="$BATS_TEST_TMPDIR/db-opt" bindir="$BATS_TEST_TMPDIR/db-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$src/bin:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src: another copy comes first on PATH: $src/bin/alpha (dev at $src)" \
+    "  beta -> dev at $src: another copy comes first on PATH: $src/bin/beta (dev at $src)" \
+    "  utilz -> dev at $src: another copy comes first on PATH: $src/bin/utilz (dev at $src)" \
+    "  Take each copy named above off PATH, or put $brew/bin before it (the sleeve's PATH order)" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew asks about utilz even with no Utilz link to it, looking it up on PATH as it stands (contract A4)" {
+  local src="$BATS_TEST_TMPDIR/nu-src" prefix="$BATS_TEST_TMPDIR/nu-opt" bindir="$BATS_TEST_TMPDIR/nu-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub" other="$BATS_TEST_TMPDIR/other-copies"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  rm "$bindir/utilz"
+  make_other_copy "$other" utilz
+  local before
+  before=$(link_stamps "$bindir")
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$other:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  utilz (no Utilz link): another copy comes first on PATH: $other/utilz" \
+    "  Take each copy named above off PATH, or put $brew/bin before it (the sleeve's PATH order)" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+
+  # A utilz in the link directory that is not a Utilz link stays, and goes on
+  # answering, so the link directory is not dropped for it.
+  make_other_copy "$bindir" utilz
+  before=$(link_stamps "$bindir")
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is \
+    "✗ use brew left the links in $bindir as they were: no Homebrew copy would answer once the links are gone" \
+    "  alpha -> dev at $src" \
+    "  beta -> dev at $src" \
+    "  utilz (no Utilz link): another copy comes first on PATH: $bindir/utilz" \
+    "  Take each copy named above off PATH, or put $brew/bin before it (the sleeve's PATH order)" \
+    "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+@test "use brew refuses, removing nothing, when a name's check cannot finish, naming the name and its status (issue 0112)" {
+  local src="$BATS_TEST_TMPDIR/vf-src" prefix="$BATS_TEST_TMPDIR/vf-opt" bindir="$BATS_TEST_TMPDIR/vf-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  local before
+  before=$(link_stamps "$bindir")
+
+  # The verdict redefined to fail, as arngz.bats redefines check_app.
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; _install_brew_verdict() { return 3; }; install_verb_use brew --bin-dir '$bindir'"
+  assert_refused_unchanged "$bindir" "$before"
+  assert_stderr_is "✗ use brew could not check alpha (its check exited 3), so it removed nothing"
+}
+
+@test "use brew's PATH filter reads an entry written with a leading ~ from HOME, and keeps it as written (issue 0112)" {
+  local home="$BATS_TEST_TMPDIR/tl-home"
+  mkdir -p "$home/.local/bin" "$home/other"
+
+  run run_install_function "set -euo pipefail; HOME='$home'; PATH='~/.local/bin:~/other:/usr/bin:/bin'; _install_path_without '$home/.local/bin'"
+  assert_success
+  [[ "$output" == \~/other:/usr/bin:/bin ]] || fail "the filter answered: $output"
+}
+
+@test "use brew drops a PATH entry that links to the link directory, compared by resolved directory (utilz-vc's W3)" {
+  local src="$BATS_TEST_TMPDIR/w3b-src" prefix="$BATS_TEST_TMPDIR/w3b-opt" bindir="$BATS_TEST_TMPDIR/w3b-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_two_trees "$src" "$prefix" "$bindir"
+  make_fake_brew "$src" "$brew" "$stub"
+  # rhadamanth's shape: PATH names ~/bin, a link to ~/.local/bin.
+  ln -s "$bindir" "$BATS_TEST_TMPDIR/home-bin"
+
+  run run_install_function "set -euo pipefail; PATH='$BATS_TEST_TMPDIR/home-bin:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_success
+  [[ "$(cd "$bindir" && echo *)" == "stranger" ]] || fail "the link directory still holds: $(cd "$bindir" && echo *)"
+  printf '%s\n' "$output" | grep -qxE 'utilz 9\.9\.9 \(brew, [0-9a-f]{12}\)' || fail "no version line 'utilz 9.9.9 (brew, <sha12>)': $output"
+}
+
+@test "bare use reports brew when there is no link and the install brew names answers on PATH, and not for another keg" {
   local src="$BATS_TEST_TMPDIR/nl-src" brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  local brew2="$BATS_TEST_TMPDIR/homebrew2" stub2="$BATS_TEST_TMPDIR/brew-stub2"
   make_fake_src "$src"
   make_fake_brew "$src" "$brew" "$stub"
 
-  run run_install_function "set -euo pipefail; PATH='$brew/bin:/usr/bin:/bin'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$BATS_TEST_TMPDIR/no-links'"
+  run run_install_function "set -euo pipefail; PATH='$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$BATS_TEST_TMPDIR/no-links'"
   assert_success
   assert_output_contains "brew: no links, and $brew/bin/utilz (the Homebrew install) answers"
+
+  # A keg on PATH that is not the install brew --prefix names.
+  make_fake_brew "$src" "$brew2" "$stub2"
+  run run_install_function "set -euo pipefail; PATH='$brew2/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$BATS_TEST_TMPDIR/no-links'"
+  assert_success
+  assert_output_contains "no links; $brew2/bin/utilz answers, which is not the Homebrew install"
+}
+
+@test "bare use with no link and no Homebrew at all prints the not-brew line, and nothing from the missing brew (issue 0112)" {
+  local src="$BATS_TEST_TMPDIR/nb2-src" brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_fake_src "$src"
+  make_fake_brew "$src" "$brew" "$stub"
+
+  run --separate-stderr run_install_function "set -euo pipefail; PATH='$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$BATS_TEST_TMPDIR/no-brew-here'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$BATS_TEST_TMPDIR/no-links'"
+  assert_success
+  assert_output_contains "no links; $brew/bin/utilz answers, which is not the Homebrew install"
+  [[ -z "$stderr" ]] || fail "bare use printed on stderr: $stderr"
 }
 
 # ============================================================================
@@ -342,19 +682,19 @@ link_stamps() {
   set_prefix_key "$src" "$prefix"
   mkdir -p "$bindir"
 
-  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  run run_install_function "set -euo pipefail; PATH='/usr/bin:/bin'; INSTALL_BREW='$BATS_TEST_TMPDIR/no-brew-here'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
   assert_success
   assert_output_contains "no install at $prefix"
 
   mkdir -p "$prefix"
   printf 'utilz-version\t2.10.0\nsource-tree\t%s\nmanaged-by\tutilz\n' "$src" > "$prefix/manifest.sha256"
-  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  run run_install_function "set -euo pipefail; PATH='/usr/bin:/bin'; INSTALL_BREW='$BATS_TEST_TMPDIR/no-brew-here'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
   assert_success
   assert_output_contains "old manifest at $prefix"
   refute_output_contains "no install at"
 
   run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' --force" >/dev/null
-  run run_install_function "UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
+  run run_install_function "set -euo pipefail; PATH='/usr/bin:/bin'; INSTALL_BREW='$BATS_TEST_TMPDIR/no-brew-here'; UTILZ_HOME='$src'; install_verb_use --bin-dir '$bindir'"
   assert_success
   assert_output_contains "opt:   $prefix"
   refute_output_contains "old manifest"
@@ -457,7 +797,7 @@ link_stamps() {
   # Another tool's link into a tree that has gone (utilz-vc's F1).
   ln -s "$BATS_TEST_TMPDIR/old-tool/bin/rg" "$bindir/rg"
 
-  run run_install_function "set -euo pipefail; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  run run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
   assert_success
   [[ "$(cd "$bindir" && echo *)" == "also-mine devbin mine rg" ]] || fail "the link directory holds: $(cd "$bindir" && echo *)"
   [[ ! -L "$bindir/alpha" ]] || fail "the broken Utilz link is still there"

@@ -153,6 +153,8 @@ utilz use         # report which tree they serve, and change nothing
 
 **No link means brew**: a Homebrew user who never runs `use` has brew's links, and `use brew` returns to them. `use dev` and `use opt` link every utility of the tree, making the links that are missing; each reaches the other tree with no path typed (opt is `$UTILZ_INSTALL_PREFIX`; dev is the checkout the opt install was published from), and from the Homebrew install `use dev` is run from the checkout instead. A link that is not Utilz's, and a file in a utility's place, are left alone and reported. Each switch ends with the version line of the tree it reaches.
 
+`use brew` asks first: it removes the links only when Homebrew's own copy would then answer `utilz` and every name whose link it removes. Otherwise it refuses, removing nothing, and names each link and the tree it serves, why no Homebrew copy would answer (Homebrew is not installed or not on `$PATH`, the formula is not, the formula has no such utility, its keg is not linked, Homebrew's bin is not on `$PATH`, or another copy comes first on `$PATH`), and the remedy: install, link or upgrade the formula, remove a dead link, or stay on dev or opt.
+
 For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on `$PATH`. `utilz use` with no word fails, as doctor does, when a link is shadowed or the links serve more than one tree, and names what shadows or splits them. `use` is the one verb that points links; `utilz relink` is retired, and names `use`.
 
 ### `utilz upgrade`

@@ -1010,6 +1010,13 @@ brew_keg_prefix() {
   esac
 }
 
+# Echo the Utilz tree brew keeps under <prefix> by its opt link,
+# <prefix>/opt/utilz/libexec. THE ONE SPELLING of that path (issue 0112):
+# brew_stable_home and install.sh's _install_brew_find read it.
+brew_opt_root() {
+  printf '%s\n' "$1/opt/utilz/libexec"
+}
+
 # Echo the path brew keeps for the keg at <tree> across upgrades, or return 1.
 #
 # BREW IS NAMED BY ITS OPT LINK (contract T1; issue 0105). A keg is
@@ -1023,7 +1030,7 @@ brew_keg_prefix() {
 brew_stable_home() {
   local tree="$1" prefix stable
   prefix=$(brew_keg_prefix "$tree") || return 1
-  stable="$prefix/opt/utilz/libexec"
+  stable=$(brew_opt_root "$prefix")
   [[ "$stable" -ef "$tree" ]] || return 1
   printf '%s\n' "$stable"
 }
@@ -1138,6 +1145,30 @@ utilz_tree_provenance() {
   esac
 }
 
+# The brew commands a remedy names, each printed from a literal and never run:
+# install, link and upgrade the formula, and put brew's bin under <prefix> on
+# PATH from a shell config. ONE WORDING EACH (issue 0112): print_path_remedy,
+# doctor's notes on a manifest, and install.sh's refusals read them, so each
+# remedy is worded the same wherever it is named.
+brew_install_command() {
+  printf '%s\n' "brew install matthewsinclair/utilz/utilz"
+}
+
+brew_link_command() {
+  printf '%s\n' "brew link utilz"
+}
+
+brew_upgrade_command() {
+  printf '%s\n' "brew upgrade utilz"
+}
+
+# With no <prefix>, or an empty one, it names the placeholder for it.
+brew_shellenv_command() {
+  local prefix="${1:-}"
+  [[ -n "$prefix" ]] || prefix="<brew's prefix>"
+  printf '%s\n' "eval \"\$($prefix/bin/brew shellenv)\""
+}
+
 # Print, indented, how to put utilz on PATH for the tree at $UTILZ_HOME.
 #
 # THE ONE REMEDY, for utilz doctor and utilz emacs doctor alike (issue 0105).
@@ -1151,11 +1182,11 @@ print_path_remedy() {
 
   case "$tree" in
     brew*)
-      prefix=$(brew_keg_prefix "$UTILZ_HOME") || prefix="<brew's prefix>"
+      prefix=$(brew_keg_prefix "$UTILZ_HOME") || prefix=""
       echo "  This is the Homebrew install. Link it into brew's bin:"
-      echo "    brew link utilz"
+      echo "    $(brew_link_command)"
       echo "  and put brew's bin on \$PATH, in your shell config:"
-      echo "    eval \"\$($prefix/bin/brew shellenv)\""
+      echo "    $(brew_shellenv_command "$prefix")"
       ;;
     "opt old")
       # `use opt` refuses an old manifest, so the remedy is the republish.
@@ -1169,7 +1200,7 @@ print_path_remedy() {
       ;;
     *)
       echo "  Install Utilz with Homebrew, which puts it on \$PATH:"
-      echo "    brew install matthewsinclair/utilz/utilz"
+      echo "    $(brew_install_command)"
       ;;
   esac
 }
@@ -1932,7 +1963,7 @@ _doctor_check_integrity() {
       # republished from its dev tree, and brew's is brew's to replace.
       local republish="'utilz install --force' from the dev checkout"
       if [[ "$(install_tree_manager "$UTILZ_HOME" 2>/dev/null)" == "brew" ]]; then
-        republish="'brew upgrade utilz', or 'brew reinstall utilz' at the same version"
+        republish="'$(brew_upgrade_command)', or 'brew reinstall utilz' at the same version"
       fi
 
       if [[ $check_rc -eq 0 ]]; then
@@ -1947,7 +1978,7 @@ _doctor_check_integrity() {
       elif [[ $check_rc -eq 3 && "$(utilz_tree)" == "brew old" ]]; then
         # Noted, not counted (T3 amendment, devbin issue 0213): the fix for an
         # old keg is the next release, which nothing on this machine can make.
-        info "The manifest is in the old form, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
+        info "The manifest is in the old form, from before the dev, opt, brew contract; '$(brew_upgrade_command)' replaces it once the next release is out"
       elif [[ $check_rc -eq 3 ]]; then
         error "The manifest at $UTILZ_HOME is in the old form, from before the dev, opt, brew contract"
         echo "  Republish it: $republish."
@@ -1968,7 +1999,7 @@ _doctor_check_integrity() {
     fi
   else
     if [[ "$(utilz_tree)" == "brew old" ]]; then
-      info "This Homebrew install has no manifest, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
+      info "This Homebrew install has no manifest, from before the dev, opt, brew contract; '$(brew_upgrade_command)' replaces it once the next release is out"
     else
       info "Not an install tree, so there is no manifest to check"
     fi

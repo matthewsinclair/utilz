@@ -163,6 +163,22 @@ EOF
   refute_output_contains "is current"
 }
 
+@test "upgrade in brew refuses by name, with the install line, when brew's prefix holds no Utilz formula (issue 0112)" {
+  # The finder _install_brew_root shares with use brew keeps upgrade's words.
+  local src="$BATS_TEST_TMPDIR/src" prefix="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew"
+  local keg="$prefix/Cellar/utilz/9.9.9/libexec"
+  make_fake_src "$src"
+  run_publish "$src" "$keg" --managed-by brew
+  assert_success
+  # No opt link: brew's prefix holds the keg upgrade runs from, but no formula.
+  make_brew_stub "$stub" "$prefix" ""
+
+  run run_install_function "set -euo pipefail; INSTALL_BREW='$stub'; UTILZ_HOME='$keg'; install_verb_upgrade"
+  assert_exit_code 1
+  printf '%s\n' "$output" | grep -qxF "✗ there is no Homebrew install of Utilz under $prefix" || fail "no refusal line naming $prefix: $output"
+  printf '%s\n' "$output" | grep -qxF "  Install it: brew install matthewsinclair/utilz/utilz" || fail "no install line: $output"
+}
+
 @test "upgrade in an old opt install refuses, naming install --force (issue 0105)" {
   local old="$BATS_TEST_TMPDIR/oldopt"
   mkdir -p "$old"

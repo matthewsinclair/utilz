@@ -654,6 +654,8 @@ utilz use         # report which tree they serve, and change nothing
 
 **No link means brew**: a user who never runs `use` has Homebrew's links, and `use brew` returns a maintainer to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on PATH, which the sleeve sets. `utilz use` with no word, and `utilz doctor`, fail when a link is shadowed by an earlier entry on PATH, or when the links serve more than one tree, and name what shadows or splits them. `use` is the one verb that points links: `relink` is retired, and install and upgrade never touch them.
 
+`use brew` asks first: it removes the links only when Homebrew's own copy would then answer `utilz` and every name whose link it removes. Otherwise it refuses, removing nothing, and names each link and the tree it serves, why no Homebrew copy would answer (Homebrew is not installed or not on PATH, the formula is not, the formula has no such utility, its keg is not linked, Homebrew's bin is not on PATH, or another copy comes first on PATH), and the remedy: install, link or upgrade the formula, remove a dead link, or stay on dev or opt.
+
 ### Publishing and upgrading
 
 ```bash

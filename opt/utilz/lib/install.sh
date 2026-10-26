@@ -745,7 +745,7 @@ install_refuse_keg() {
 
   error "$dir is a Homebrew keg: brew owns it"
   echo "  Utilz will not write to a keg or point PATH into one. Upgrade it" >&2
-  echo "  with 'brew upgrade utilz'; brew links its own commands onto PATH." >&2
+  echo "  with '$(brew_upgrade_command)'; brew links its own commands onto PATH." >&2
   return 1
 }
 
@@ -974,7 +974,7 @@ install_verb_upgrade() {
       ;;
     *)
       error "$UTILZ_HOME is no tree Utilz can name, so there is no upgrade for it"
-      echo "  Install Utilz with Homebrew: brew install matthewsinclair/utilz/utilz" >&2
+      echo "  Install Utilz with Homebrew: $(brew_install_command)" >&2
       return 1
       ;;
   esac
@@ -1366,7 +1366,7 @@ _install_point_links() {
 
   # A Utilz link this tree has no utility for keeps where it points.
   while IFS=$'\t' read -r name state detail; do
-    [[ "$state" == "ours" || "$state" == "broken" ]] || continue
+    _install_is_utilz_link "$state" || continue
     if [[ ! -e "$tree/bin/$name" ]]; then
       echo "  skipped:   $name (not in $tree)"
       left=$((left + 1))
@@ -1376,10 +1376,19 @@ _install_point_links() {
   success "$changed changed, $linked linked, $already already correct, $left left alone"
 }
 
-# Remove every Utilz link in <bindir>, a broken one included, and nothing
-# else (`use brew`: no link means brew).
+# True when a census row in <state> is a Utilz link, a broken one included:
+# what use brew removes, what use dev|opt leaves alone when its tree lacks the
+# name, and what the report counts. The one rule they read, so they cannot
+# drift (IN-AG-HIGHLANDER-001).
+_install_is_utilz_link() {
+  [[ "$1" == "ours" || "$1" == "broken" ]]
+}
+
+# Remove from <bindir> every link of <census> that `use brew` removes, and
+# nothing else (no link means brew). <census> is the reading `use brew`
+# checked, so what is removed is what was asked about.
 _install_remove_links() {
-  local bindir="$1"
+  local bindir="$1" census="$2"
   local name state detail removed=0 left=0
 
   [[ -d "$bindir" ]] || {
@@ -1390,13 +1399,10 @@ _install_remove_links() {
   echo "use: removing the Utilz links in $bindir"
   while IFS=$'\t' read -r name state detail; do
     [[ -n "$name" ]] || continue
-    case "$state" in
-      ours | broken) ;;
-      *)
-        left=$((left + 1))
-        continue
-        ;;
-    esac
+    if ! _install_is_utilz_link "$state"; then
+      left=$((left + 1))
+      continue
+    fi
     # Both names are guarded, so an empty one stops the shell rather than
     # widening what is removed.
     rm -f -- "${bindir:?}/${name:?}" || {
@@ -1405,7 +1411,7 @@ _install_remove_links() {
     }
     echo "  removed:   $name (was $detail)"
     removed=$((removed + 1))
-  done < <(install_link_census "$bindir")
+  done <<<"$census"
 
   success "$removed removed, $left left alone (not Utilz links)"
 }
@@ -1474,19 +1480,271 @@ _install_use_tree() {
   printf '%s\n' "$dev"
 }
 
+# Find the Homebrew install of Utilz by its opt link, printing nothing of its
+# own. Echo "<prefix><TAB><root>" and return 0, or echo why there is none,
+# "<reason><TAB><words>", and return 1: nobrew when brew answers no prefix,
+# noformula when there is no Utilz install under it.
+#
+# THE ONE FINDER (issue 0112): use brew's check, bare use's report and
+# _install_brew_root all read it, so none of them can name another install.
+_install_brew_find() {
+  local prefix root
+  if ! prefix=$("$INSTALL_BREW" --prefix 2>/dev/null) || [[ -z "$prefix" ]]; then
+    printf 'nobrew\tHomebrew is not installed, or is not on PATH (%s --prefix answered nothing)\n' "$INSTALL_BREW"
+    return 1
+  fi
+  root=$(brew_opt_root "$prefix")
+  if [[ ! -x "$root/bin/utilz" ]]; then
+    printf 'noformula\tthere is no Homebrew install of Utilz under %s\n' "$prefix"
+    return 1
+  fi
+  printf '%s\t%s\n' "$prefix" "$root"
+}
+
 # Echo the Homebrew install's root, by its opt link, or return 1 by name.
 _install_brew_root() {
-  local prefix
-  if ! prefix=$("$INSTALL_BREW" --prefix 2>/dev/null) || [[ -z "$prefix" ]]; then
-    error "Homebrew is not installed ($INSTALL_BREW --prefix answered nothing)"
+  local found reason words
+  if ! found=$(_install_brew_find); then
+    IFS=$'\t' read -r reason words <<<"$found"
+    error "$words"
+    if [[ "$reason" == "noformula" ]]; then
+      echo "  Install it: $(brew_install_command)" >&2
+    fi
     return 1
   fi
-  if [[ ! -x "$prefix/opt/utilz/libexec/bin/utilz" ]]; then
-    error "there is no Homebrew install of Utilz under $prefix"
-    echo "  Install it: brew install matthewsinclair/utilz/utilz" >&2
+  printf '%s\n' "${found#*$'\t'}"
+}
+
+# Echo <dir> as pwd -P reads it, every link resolved, or return 1 when it
+# cannot be entered. THE ONE SPELLING for use brew's checks (issue 0112):
+# CDPATH is cleared so a relative <dir> is never looked up along it.
+_install_real_dir() {
+  (CDPATH='' cd -- "$1" 2>/dev/null && pwd -P)
+}
+
+# Echo PATH with every entry dropped that resolves to <dir>, each read by
+# pwd -P and never compared as a string (contract T5; utilz-vc's W3): a ~/bin
+# that links to ~/.local/bin is <dir> too, and so is /tmp for /private/tmp. An
+# empty entry is the current directory, as the shell reads it, and is kept
+# unless that is <dir>. An entry written ~ or ~/... is read from HOME, as
+# bash's own lookup reads it, and kept as written. A <dir> that is not there
+# drops nothing.
+_install_path_without() {
+  local dir="$1" here rest entry look there kept=""
+  if ! here=$(_install_real_dir "$dir"); then
+    printf '%s\n' "$PATH"
+    return 0
+  fi
+  rest="$PATH:"
+  while [[ -n "$rest" ]]; do
+    entry="${rest%%:*}"
+    rest="${rest#*:}"
+    look="${entry:-.}"
+    case "$look" in
+      \~ | \~/*) [[ -z "${HOME:-}" ]] || look="$HOME${look:1}" ;;
+    esac
+    there=$(_install_real_dir "$look") || there=""
+    [[ "$there" == "$here" ]] && continue
+    kept="$kept:$entry"
+  done
+  printf '%s\n' "${kept#:}"
+}
+
+# True when <copy> resolves, every link followed, into <tree>'s bin/, each
+# directory read by pwd -P. THE ONE ANSWER to whether the Homebrew install's
+# own copy is what answers (contract T5, amendment A4): use brew asks it of
+# every name it would leave to brew, and bare use of the utilz on PATH. A
+# <copy> that is not there answers nothing, and -e also fails on a link loop,
+# which _install_resolve would follow for ever.
+_install_answers_from() {
+  local copy="$1" tree="$2" resolved there want
+  [[ -e "$copy" ]] || return 1
+  resolved=$(_install_resolve "$copy") || return 1
+  there=$(_install_real_dir "$(dirname "$resolved")") || return 1
+  want=$(_install_real_dir "$tree/bin") || return 1
+  [[ "$there" == "$want" ]]
+}
+
+# Echo "<tree> at <root>", the phrase that names a Utilz tree in the report and
+# in use brew's refusal.
+_install_tree_at() {
+  printf '%s at %s\n' "$(utilz_tree "$1")" "$1"
+}
+
+# Echo "<tree> at <root>" for the Utilz tree whose dispatcher <copy> resolves
+# to, or return 1 when it is not a Utilz tree's.
+_install_copy_tree() {
+  local resolved root
+  resolved=$(_install_resolve "$1") || return 1
+  [[ "$(basename "$resolved")" == "utilz" ]] || return 1
+  [[ "$(basename "$(dirname "$resolved")")" == "bin" ]] || return 1
+  root=$(dirname "$(dirname "$resolved")")
+  case "$(install_tree_kind "$root")" in
+    install | source) _install_tree_at "$root" ;;
+    *) return 1 ;;
+  esac
+}
+
+# Echo why no Homebrew copy would answer <name> on <search>, the path a shell
+# searches once use brew has removed the links, or nothing when the Homebrew
+# install's own copy would (contract T5, amendment A4). <prefix> is brew's,
+# and <tree> the install _install_brew_find names. A function of its
+# arguments: it reads no ambient PATH. The answer is "<reason><TAB><words>",
+# decided in this order, every case landing in exactly one reason:
+#
+#   lacks      <tree> has no <name>, eg a utility newer than the release
+#   other      the first copy on <search> is outside <prefix>/bin
+#   unlinked   <prefix>/bin/<name> does not resolve into <tree>, and nothing
+#              outside <prefix>/bin comes before it
+#   offpath    what is left: <prefix>/bin/<name> is <tree>'s own and nothing
+#              answers, so <prefix>/bin is not on <search>
+_install_brew_verdict() {
+  local name="$1" search="$2" prefix="$3" tree="$4"
+  local copy where brewbin kind
+
+  if [[ ! -e "$tree/bin/$name" ]]; then
+    printf 'lacks\tthe Homebrew install has no %s\n' "$name"
+    return 0
+  fi
+
+  # Bash's own lookup, the one install_link_health uses, in a subshell that
+  # first forgets every remembered command: bash 3.2 answers type -P from
+  # that table even under a PATH set for the one command.
+  copy=$(hash -r && PATH="$search" type -P "$name") || copy=""
+  if [[ -n "$copy" ]] && _install_answers_from "$copy" "$tree"; then
+    return 0
+  fi
+
+  if [[ -n "$copy" ]]; then
+    where=$(_install_real_dir "$(dirname "$copy")") || where=""
+    brewbin=$(_install_real_dir "$prefix/bin") || brewbin=""
+    if [[ -z "$brewbin" || "$where" != "$brewbin" ]]; then
+      if kind=$(_install_copy_tree "$copy"); then
+        printf 'other\tanother copy comes first on PATH: %s (%s)\n' "$copy" "$kind"
+      else
+        printf 'other\tanother copy comes first on PATH: %s\n' "$copy"
+      fi
+      return 0
+    fi
+  fi
+
+  if ! _install_answers_from "$prefix/bin/$name" "$tree"; then
+    printf 'unlinked\tthe keg is not linked for %s: %s/bin/%s does not resolve into it\n' "$name" "$prefix" "$name"
+    return 0
+  fi
+  printf "offpath\tHomebrew's bin, %s/bin, is not on PATH\n" "$prefix"
+}
+
+# Say the remedy for each reason in <kinds>, once, in the order the reasons are
+# decided, then each dead link's (<dead>, its lines whole), and last the one
+# that always holds.
+_install_brew_remedies() {
+  local kinds="$1" prefix="$2" dead="$3"
+  if [[ "$kinds" == *" nobrew "* ]]; then
+    echo "  Install Homebrew, then the formula: $(brew_install_command)"
+    echo "  Or, if Homebrew is installed, put its bin on PATH, in your shell config: $(brew_shellenv_command)"
+  fi
+  if [[ "$kinds" == *" noformula "* ]]; then
+    echo "  Install the formula: $(brew_install_command)"
+  fi
+  if [[ "$kinds" == *" lacks "* ]]; then
+    echo "  Upgrade the formula once a release carries it: $(brew_upgrade_command)"
+  fi
+  printf '%s' "$dead"
+  if [[ "$kinds" == *" other "* ]]; then
+    echo "  Take each copy named above off PATH, or put $prefix/bin before it (the sleeve's PATH order)"
+  fi
+  if [[ "$kinds" == *" unlinked "* ]]; then
+    echo "  Link the formula into brew's bin: $(brew_link_command)"
+  fi
+  if [[ "$kinds" == *" offpath "* ]]; then
+    echo "  Put brew's bin on PATH, in your shell config: $(brew_shellenv_command "$prefix")"
+  fi
+  echo "  Or stay on dev or opt: utilz use dev|opt"
+}
+
+# `use brew`: remove the link set only when the Homebrew install's own copy
+# would then answer utilz and every name whose link it removes (contract T5,
+# amendment A4, issue 0112). Otherwise refuse, removing nothing, and say on
+# stderr which links stay and the tree each serves, why no Homebrew copy would
+# answer, and the remedies. The census is read once, and the check and the
+# removal take that one reading.
+_install_use_brew() {
+  local bindir="$1"
+  local census found prefix="" tree="" reason="" headline="" filtered checks=""
+  local name state detail served search verdict kind why lines="" kinds=" " dead=""
+  local utilz_linked=0 refused=0
+
+  census=$(install_link_census "$bindir")
+  if found=$(_install_brew_find); then
+    IFS=$'\t' read -r prefix tree <<<"$found"
+  else
+    IFS=$'\t' read -r reason headline <<<"$found"
+    kinds=" $reason "
+    refused=1
+  fi
+  filtered=$(_install_path_without "$bindir")
+
+  # The names to ask about, with the tree each link serves: every link use
+  # brew removes, then utilz itself when it has no Utilz link here.
+  while IFS=$'\t' read -r name state detail; do
+    [[ -n "$name" ]] || continue
+    _install_is_utilz_link "$state" || continue
+    [[ "$name" != "utilz" ]] || utilz_linked=1
+    if [[ "$state" == "broken" ]]; then
+      served="$detail, which has gone"
+    else
+      served=$(_install_tree_at "$detail")
+    fi
+    checks="$checks$name"$'\t'"$state"$'\t'"$served"$'\n'
+  done <<<"$census"
+  if [[ $utilz_linked -eq 0 ]]; then
+    checks="${checks}utilz"$'\t'"none"$'\n'
+  fi
+
+  while IFS=$'\t' read -r name state served; do
+    [[ -n "$name" ]] || continue
+    if [[ "$state" == "none" ]]; then
+      # Looked up on PATH as it stands: a utilz here that is not a Utilz
+      # link stays, and goes on answering.
+      search="$PATH"
+      lines="$lines  utilz (no Utilz link)"
+    else
+      search="$filtered"
+      lines="$lines  $name -> $served"
+    fi
+    if [[ -n "$tree" ]]; then
+      verdict=$(_install_brew_verdict "$name" "$search" "$prefix" "$tree") || {
+        error "use brew could not check $name (its check exited $?), so it removed nothing"
+        return 1
+      }
+      if [[ -n "$verdict" ]]; then
+        IFS=$'\t' read -r kind why <<<"$verdict"
+        lines="$lines: $why"
+        refused=1
+        # A dead link answers nothing now, so removing it strands nothing.
+        if [[ "$kind" == "lacks" && "$state" == "broken" ]]; then
+          dead="$dead  Remove the dead link: rm $(printf '%q' "$bindir/$name")"$'\n'
+        else
+          kinds="$kinds$kind "
+        fi
+      fi
+    fi
+    lines="$lines"$'\n'
+  done <<<"$checks"
+
+  if [[ $refused -eq 1 ]]; then
+    error "use brew left the links in $bindir as they were: ${headline:-no Homebrew copy would answer once the links are gone}"
+    printf '%s' "$lines" >&2
+    _install_brew_remedies "$kinds" "$prefix" "$dead" >&2
     return 1
   fi
-  printf '%s\n' "$prefix/opt/utilz/libexec"
+
+  _install_remove_links "$bindir" "$census" || return 1
+
+  # The version line of the tree the shell now reaches (contract T5): the
+  # check above is what makes that the Homebrew install.
+  (UTILZ_HOME="$tree" utilz_version_line)
 }
 
 # Report which tree each link serves, and change nothing. rc 1 when the set is
@@ -1494,13 +1752,13 @@ _install_brew_root() {
 # breaks it.
 install_use_report() {
   local bindir="$1"
-  local name state detail rows="" n=0 hit root health rc=0 prefix dev count
+  local name state detail rows="" n=0 hit root health rc=0 prefix dev count found
 
   printf 'links: %s\n' "$bindir"
 
   if [[ -d "$bindir" ]]; then
     while IFS=$'\t' read -r name state detail; do
-      [[ "$state" == "ours" || "$state" == "broken" ]] || continue
+      _install_is_utilz_link "$state" || continue
       [[ "$state" == "ours" ]] && rows="${rows}${detail}"$'\n'
       n=$((n + 1))
     done < <(install_link_census "$bindir")
@@ -1508,14 +1766,15 @@ install_use_report() {
 
   if [[ $n -gt 0 ]]; then
     printf '%s' "$rows" | LC_ALL=C sort | uniq -c | while read -r count root; do
-      [[ -n "$root" ]] && printf '  %s at %s -- %s link(s)\n' "$(utilz_tree "$root")" "$root" "$count"
+      [[ -n "$root" ]] && printf '  %s -- %s link(s)\n' "$(_install_tree_at "$root")" "$count"
     done
   else
     # NO LINK MEANS BREW (contract T5): it is the state a brew-only user is in
-    # without ever running `use`, when the first utilz on PATH is the keg's.
+    # without ever running `use`, when the first utilz on PATH is the Homebrew
+    # install's own copy, by the predicate use brew asks too (issue 0112).
     hit=$(type -P utilz 2>/dev/null || true)
-    if [[ -n "$hit" ]] && root=$(_install_resolve "$hit") &&
-      [[ "$(utilz_tree "$(dirname "$(dirname "$root")")")" == brew* ]]; then
+    if [[ -n "$hit" ]] && found=$(_install_brew_find) &&
+      _install_answers_from "$hit" "${found#*$'\t'}"; then
       printf '  brew: no links, and %s (the Homebrew install) answers\n' "$hit"
     elif [[ -n "$hit" ]]; then
       printf '  no links; %s answers, which is not the Homebrew install\n' "$hit"
@@ -1566,6 +1825,8 @@ Switch which tree the links in ~/.local/bin serve.
 
 No link means brew. ~/.local/bin must come before Homebrew's bin on PATH for a
 dev or opt link to answer; `utilz use` and doctor say when it does not.
+`utilz use brew` removes nothing, and says why, unless Homebrew's own copy
+would then answer utilz and every name whose link it removes.
 USAGE
 }
 
@@ -1608,14 +1869,14 @@ install_verb_use() {
     return $?
   fi
 
-  local tree
   if [[ "$word" == "brew" ]]; then
-    tree=$(_install_brew_root) || return 1
-    _install_remove_links "$bindir" || return 1
-  else
-    tree=$(_install_use_tree "$word") || return 1
-    _install_point_links "$tree" "$bindir" || return 1
+    _install_use_brew "$bindir" || return 1
+    return 0
   fi
+
+  local tree
+  tree=$(_install_use_tree "$word") || return 1
+  _install_point_links "$tree" "$bindir" || return 1
 
   # The version line of the tree the shell now reaches (contract T5), read as
   # that tree would read it.
@@ -1623,7 +1884,7 @@ install_verb_use() {
 
   # Said, not refused: the PATH order is the sleeve's, not this verb's.
   local health
-  if [[ "$word" != "brew" ]] && ! health=$(install_link_health "$bindir"); then
+  if ! health=$(install_link_health "$bindir"); then
     warn "the links are set, but PATH does not reach them first; 'utilz use' says what shadows them"
   fi
 }
