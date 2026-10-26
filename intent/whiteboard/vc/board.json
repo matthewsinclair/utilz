@@ -2076,6 +2076,14 @@
       "text": "For hv, in the ready-to-cut message: written counts remain in test names and comments across the suites, outside 0111's and 0110's lines (hv's rule: a count written down is deleted, never corrected). Ask where the sweep goes: an issue for the release after 2.14.4 (vc's rec, since it changes no behaviour), or into 2.14.4. One owner: cc files it on hv's word.",
       "state": "live",
       "recorded_at": "2026-10-26T09:56:23.983Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 21,
+      "text": "2.14.4's final-head checks (cc's Mac twins, dc's kovacs twins and dry run) hold until hv rules where Utilz's conformance to devbin-vc's A4 to T5 goes: into 2.14.4 now (vc's rec, as with A3) or the next release. Utilz said SAME on A4's wording; `utilz use brew` tests the keg by its opt link, which Homebrew keeps for an unlinked keg, so on an unlinked utilz keg it removes the links and nothing answers, and its refusal names neither the links nor their trees, nor the link-or-stay remedy. Asked of hv through molt-vc (FOR hv, 26 Oct).",
+      "state": "live",
+      "recorded_at": "2026-10-26T12:06:22.143Z"
     }
   ],
   "sent": [

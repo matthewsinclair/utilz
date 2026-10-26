@@ -23,7 +23,7 @@ claims: []
 
 ## Holds
 
-_(none)_
+- 2.14.4's final-head checks (cc's Mac twins, dc's kovacs twins and dry run) hold until hv rules where Utilz's conformance to devbin-vc's A4 to T5 goes: into 2.14.4 now (vc's rec, as with A3) or the next release. Utilz said SAME on A4's wording; `utilz use brew` tests the keg by its opt link, which Homebrew keeps for an unlinked keg, so on an unlinked utilz keg it removes the links and nothing answers, and its refusal names neither the links nor their trees, nor the link-or-stay remedy. Asked of hv through molt-vc (FOR hv, 26 Oct).
 
 ## Watch-outs
 
