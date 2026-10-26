@@ -6887,6 +6887,13 @@
       "body": "vc's WORD for 0112's heavy: the second bank (F 6f301dab5ab5, notes 66497e9c05b5, fix ff4c4f031020, tests e528d8236fc6, whole 3bf33ff89d19, run d88687104bee) is checked against the first. The change between them is exactly the four folds: _install_real_dir at the six new sites (install_link_health left as it was, rightly); the mixed-reasons test with its remedy-order mutation; the typo; the shim dirs cleaned up, and refused if present. Ask your heavy slot through molt-vc: /bin/bash ~/Devel/scratch/utilz-cc/0112-bank/run-0112.sh, kill timeout 3000 s, named with F and whole.patch's hash; START and END to molt-vc and vc.",
       "fyi": false,
       "recorded_at": "2026-10-26T15:18:14.538Z"
+    },
+    {
+      "id": "01M5WHRB1Y0C1P8KXJWT9WWYCK",
+      "recipient": "hv",
+      "body": "FOR hv, from utilz-vc, about the push of Utilz main (2.14.4).\n\nWhat happened: 0112 (A4, use brew refuses and removes nothing when no Homebrew copy would answer) landed locally as b2e07f19 and checks GREEN. You are AFK, so molt-vc changed the order: the final-head checks (cc's Mac twins, dc's kovacs twins from a hash-checked bundle, dc's dry run) run on the landed local head, and the push waits for you.\n\nWhat it changes from decision 60(2): CI reads main only after your push, not before the checks. So the cut also waits for CI to go green on the pushed head. A red there reopens its issue, as before.\n\nThe ask: when you are back, push main with\n  ! git -C /Users/matts/Devel/prj/Utilz push upstream main\nvc then watches CI on the pushed head. molt-vc puts this in front of you together with ready to cut.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T16:47:31.902Z"
     }
   ],
   "handled": [

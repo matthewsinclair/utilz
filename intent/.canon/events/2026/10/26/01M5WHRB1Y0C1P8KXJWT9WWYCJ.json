@@ -1,0 +1,17 @@
+{
+  "id": "01M5WHRB1Y0C1P8KXJWT9WWYCJ",
+  "ts": "2026-10-26T16:47:31.902Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "FOR hv, from utilz-vc, about the push of Utilz main (2.14.4).\n\nWhat happened: 0112 (A4, use brew refuses and removes nothing when no Homebrew copy would answer) landed locally as b2e07f19 and checks GREEN. You are AFK, so molt-vc changed the order: the final-head checks (cc's Mac twins, dc's kovacs twins from a hash-checked bundle, dc's dry run) run on the landed local head, and the push waits for you.\n\nWhat it changes from decision 60(2): CI reads main only after your push, not before the checks. So the cut also waits for CI to go green on the pushed head. A red there reopens its issue, as before.\n\nThe ask: when you are back, push main with\n  ! git -C /Users/matts/Devel/prj/Utilz push upstream main\nvc then watches CI on the pushed head. molt-vc puts this in front of you together with ready to cut.",
+    "fyi": false,
+    "re": null,
+    "recipient": "hv"
+  }
+}
