@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 13:27Z
+heartbeat_at: 2026-10-26 13:52Z
 status: active
-focus: "Issue 0112 (A4 to T5, into 2.14.4; vc's decision 64), claimed: Design v2 set at 2ecbf217, every point of vc's read taken as written; the code and tests under way in wt-0112 (detached at 1b6eb078), to bank for vc's read with the critic leg, then READY HEAVY. wt-0109 removed by Intent 0654's step. The twins (hold 47) run on the head A4's landing makes. Not released. RESUME.md has it."
+focus: "Issue 0112 (A4 to T5, into 2.14.4), claimed, FOLDED and on hold with the machine (molt-vc's localfold round on hv's word): code, tests and docs in wt-0112, not banked; vc's P1 to P3 first after go on, then the critic leg's folds through Design v3, then the bank for vc's read. The twins (hold 47) on the head A4's landing makes. Not released. RESUME.md has it."
 claims: [ISSUE:0112]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0112]
 
 ## DOING
 
-- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Design v2 set at 2ecbf217 (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design-v2.md 3df55f8d02d3; rendered intent/issues/0112.md 01a87b1e0a44), folding in vc's read of v1 (~/Devel/scratch/utilz-vc/a4/read-0112-design-v1.md 92b44048013c), every point taken as written, so the code is under way in wt-0112 (detached at 1b6eb078; the .githooks/*.intent carriers copied in, and prez's target copied from wt-0109 by cp -Rc). Next: the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read with the critic leg; READY HEAVY to vc, booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing A4's agreed text and devbin's 0235, and devbin's commit if it is on devbin's main by then; the close. wt-0109 was removed at 12:57Z by Intent 0654's fold step as 0656 amends it (every check held; reset --hard; a plain git worktree remove, which did not refuse). wt-0112 goes by the same step at its landing. RESUME.md has it. (edited)
+- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64), claimed. Design v2 GREEN (01a87b1e0a44 at 2ecbf217), D1 widened a YES on vc's conditions (every moved site listed in the bank notes as file:line at 1b6eb078; install.sh:932, :1056 and :1058 kept; bin/.devbin untouched). The code, tests and docs are in wt-0112 (kept, detached at 1b6eb078, uncommitted), NOT banked, nothing run; safety copy ~/Devel/scratch/utilz-cc/20261026/a4/wip-0112-fold.patch (944fd4000f66). Next, after hv's go on: vc's pre-read P1 to P3 (b68e4f0f, live) folded in first (AT17's bare-use runs strict with PATH and a missing brew; an -e guard first in _install_answers_from, with a link-loop test and the guard's mutation under a kill timeout; use.bats and upgrade.bats under bash 3.2 and bash 5 from shim dirs in the heavy); then the critic leg's findings, back and planned in RESUME.md's 13:50Z entry, each written into Design v3 first, which goes to vc with its hashes (the size now M); then the bank for vc's read; READY HEAVY booked through Intent's slots on molt-vc's desk (vc's watchout 17: ask, GO by name, start and release, START and END by message to molt-vc and vc); the landing by path on vc's word, checked by its change; the close; wt-0112 by Intent 0654's step as 0656 amends it. RESUME.md has it. (edited)
 
 ## TODO
 
@@ -22,6 +22,7 @@ _(none)_
 ## Holds
 
 - 2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing (issue 0112) on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to molt-vc and vc. (edited)
+- No new task, no slot ask and no commit past this fold (molt-vc's machine-wide localfold, compact and hold on hv's word, 26 Oct; the slots desk on hold since 13:47:11Z). Released when hv's go on comes through molt-vc and vc. While it stands, after hv's compact: no pickup, since it writes the board; read with intent wb show cc.
 
 ## Watch-outs
 

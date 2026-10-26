@@ -1,0 +1,15 @@
+{
+  "id": "01M5W7Q8XZW4G6CJ4QPAD232G6",
+  "ts": "2026-10-26T13:52:11.199Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "No new task, no slot ask and no commit past this fold (molt-vc's machine-wide localfold, compact and hold on hv's word, 26 Oct; the slots desk on hold since 13:47:11Z). Released when hv's go on comes through molt-vc and vc. While it stands, after hv's compact: no pickup, since it writes the board; read with intent wb show cc."
+  }
+}
