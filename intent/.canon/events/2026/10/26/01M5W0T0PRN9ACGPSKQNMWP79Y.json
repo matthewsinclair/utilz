@@ -1,0 +1,16 @@
+{
+  "id": "01M5W0T0PRN9ACGPSKQNMWP79Y",
+  "ts": "2026-10-26T11:51:21.048Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 20,
+    "text": "2.14.4's kovacs twins and release dry run on the final head, main's 9027555d (0109, 0111 and 0110 landed and closed in it; on GitHub by hv's push; vc's word of 26 Oct 11:42Z), in vc's order: (1) done: vc sent the head; (2) made and banked at hv's localfold, not yet sent: work/c2144/twins.sh (SHA, 4220174e), work/dryrun-2144.sh (CODE, d298223c) and work/c2144/request.md (3df71364), re-read against the diff from 21b0385d, with the 21b0385d bytes in work/c2144/base-21b0385d/ and the diffs beside them. After the compact's pickup, send vc the hashes (board ask Re 11:42Z, and socket), as vc's localfold call says; vc reads them and routes the request; (3) the twins go to kovacs-sysadm as a request after cc's Mac twins END, booked with molt-vc as a heavy (vc's decision 60 (4)); bank the readback as work/c2144/twins-9027555d.out, re-tally it against request.md and twins.out, and send vc the END; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push."
+  }
+}
