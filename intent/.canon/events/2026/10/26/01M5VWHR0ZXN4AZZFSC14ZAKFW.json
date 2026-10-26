@@ -1,0 +1,15 @@
+{
+  "id": "01M5VWHR0ZXN4AZZFSC14ZAKFW",
+  "ts": "2026-10-26T10:36:55.711Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.14.4's Mac twins on the final head, in wt-0109 (kept on vc's word, 26 Oct: clean at 905fbb1b, prez built): released when hv's push puts main on upstream/main (vc's own push was refused by the auto-mode classifier and goes to hv as a ! through molt-vc). Then wt-0109 to the pushed head, the twins' script re-made on it, its READY to vc, and the run on molt-vc's GO by name."
+  }
+}

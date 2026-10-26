@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 10:26Z
+heartbeat_at: 2026-10-26 10:36Z
 status: active
-focus: "0111 v3 (ad423002) and 0110 v3 (905fbb1b): the heavy ran GREEN (10:14Z to 10:24Z on molt-vc's GO), END sent; now each lands by path on vc's word, 0111 first, checked by its change, then closed; then 0110 the same"
+focus: "0111 and 0110 landed and closed, each checked by vc (0111 at 27b441f5, closed 942fa8e7; 0110 at 661baacd, closed 4f49fe42); no issue open. Holding 2.14.4's Mac twins until hv's push puts main on upstream/main; then their READY to vc, in wt-0109"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v3 (comments only, from vc's read of v2) read green by vc: the bodies at bf2cea57 (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at ad423002 and then 0110 at 905fbb1b, banked in 0111-bank/v3. v3's heavy ran GREEN on molt-vc's 10:13Z GO, 10:14:31Z to 10:24:33Z (run-0111-0110-v3.sh c56d4e4ed65f, v3/run.out 2ae620602247): 0110's tests red without its code, the mutations each caught, the whole utilz suite at 0110 and at 0111 with only install_e2e's worktree refusal, arngz, menuz and prez all ok, doctor's report and exit status unchanged on the dev tree (but for its version line's commit) and on the fixtures, and install_e2e all ok in a full clone; END to molt-vc and vc. Now: each commit lands by path on vc's word, 0111 first, checked by its change, then closes; then 0110 on 0111's landing. v1's commits (8c9921b5, daaca460) and v2's (7237b310, d2b9d3c8) stay unamended for the record. (edited)
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- 2.14.4's Mac twins on the final head, in wt-0109 (kept on vc's word, 26 Oct: clean at 905fbb1b, prez built): released when hv's push puts main on upstream/main (vc's own push was refused by the auto-mode classifier and goes to hv as a ! through molt-vc). Then wt-0109 to the pushed head, the twins' script re-made on it, its READY to vc, and the run on molt-vc's GO by name.
 
 ## Watch-outs
 
