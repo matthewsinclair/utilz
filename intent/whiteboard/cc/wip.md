@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 08:45Z
+heartbeat_at: 2026-10-26 09:02Z
 status: active
-focus: "0109 landed at 2de8f0e4 and closed at 0946cd4f; now 0111 then 0110 as two commits in wt-0111 (cut on 0946cd4f), banked for vc's read before any run"
+focus: "0111 (8c9921b5) and 0110 (daaca460) committed in wt-0109 and banked with the heavy's script for vc's read and critic leg; then the heavy on molt-vc's GO; then each lands by path"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S). They go in as two commits in wt-0111, cut detached on 0946cd4f (0109's close), 0111 first, and the bytes are banked for vc's read before any run. 0111's Design is approved by vc, in its body at 0b715a88; the extraction (0111-bank/extract-0111.awk) ran clean on a copy of 0109's common.sh. One heavy for both, booked through vc with molt-vc: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). The bodies were corrected before any code, 0111 at 1a0a26bf and 0110 at 2ff8b1b2. The two commits are in wt-0109, detached on 0946cd4f: 0111 at 8c9921b5, then 0110 at daaca460. They are banked in 0111-bank (0111.patch 91cac2641b04, 0110.patch 782548db8cc7) with the heavy's script, run-0111-0110.sh 9acb865f1569, for vc's read and critic leg before READY. The heavy covers 0110's red on 0111's code, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and five fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. Leave both commits unamended once vc has read them. (edited)
 
 ## TODO
 

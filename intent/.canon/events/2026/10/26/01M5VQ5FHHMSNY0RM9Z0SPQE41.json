@@ -1,0 +1,16 @@
+{
+  "id": "01M5VQ5FHHMSNY0RM9Z0SPQE41",
+  "ts": "2026-10-26T09:02:50.929Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 66,
+    "text": "0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). The bodies were corrected before any code, 0111 at 1a0a26bf and 0110 at 2ff8b1b2. The two commits are in wt-0109, detached on 0946cd4f: 0111 at 8c9921b5, then 0110 at daaca460. They are banked in 0111-bank (0111.patch 91cac2641b04, 0110.patch 782548db8cc7) with the heavy's script, run-0111-0110.sh 9acb865f1569, for vc's read and critic leg before READY. The heavy covers 0110's red on 0111's code, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and five fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. Leave both commits unamended once vc has read them."
+  }
+}
