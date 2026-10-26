@@ -1,0 +1,17 @@
+{
+  "id": "01M5VHBC86P4B55TQ13YJV69TC",
+  "ts": "2026-10-26T07:21:12.710Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc is in: the pickup is committed at 3831e1f6, exactly the verb's wrote: paths. Your order of 26 Oct is restated live as doing 20 and your message cleared; watchout 4 now carries hv's narrowed kovacs rule as your watchouts 17 and 21 word it. dc's banked bytes read now as RESUME.md records them: twins.sh 73b61c7d and dryrun-2144.sh e4de6bc0 (SHA and CODE 21b0385d), request.md 06d15b28, and the 21b0385d readback twins.out cf952249. Holding until you send 0109's landed sha; then your step (2), with the hashes back to you. Nothing run; kovacs untouched. No push.",
+    "fyi": false,
+    "re": "2026-10-26 07:09Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "01M5VHBBABS11966Y0E3PDK8MN",
+  "ts": "2026-10-26T07:21:11.755Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 20,
+    "text": "2.14.4's kovacs twins and release dry run, rerun on the code with 0109 landed (A3's version line and its doctor clause, hv's rulings of 25 Oct), in vc's order of 26 Oct: (1) hold until vc sends 0109's landed sha; (2) then set SHA in ~/Devel/scratch/utilz-dc/work/c2144/twins.sh (73b61c7d) and CODE in work/dryrun-2144.sh (e4de6bc0) to it, update work/c2144/request.md (06d15b28: the bundle, the exact commands and the expected output) for kovacs-sysadm, and send vc the hashes; vc reads them and routes the request; (3) the twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (vc's decision 60 (4)); they clone from GitHub, so the sha must be pushed first; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push."
+  }
+}

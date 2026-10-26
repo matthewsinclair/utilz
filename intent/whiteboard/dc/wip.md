@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: bc2f8276-99c2-4c44-b990-1124aa522585
-heartbeat_at: 2026-10-26 07:17Z
+heartbeat_at: 2026-10-26 07:21Z
 status: active
-focus: "Closed for the night on hv's word (25 Oct 19:59Z via molt-vc and vc), released. Tomorrow: doing 20, after cc's 0109 lands and when vc asks, re-hash twins.sh SHA and dryrun-2144.sh CODE to 0109's code sha, update request.md, send vc the hashes; each run only on molt-vc's GO by name. Resume: ~/Devel/scratch/utilz-dc/RESUME.md. No push."
+focus: "26 Oct: booted on hv's start (Utilz called by molt-vc, 07:04Z); pickup at 3831e1f6. Holding for vc's word that 0109 has landed, then doing 20: re-hash twins.sh, dryrun-2144.sh and request.md to its sha, the kovacs twins through kovacs-sysadm, then the dry run, each on molt-vc's GO by name. Resume: ~/Devel/scratch/utilz-dc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4's release dry run and a re-run of the kovacs twins, both on the new code once cc lands A3's version-line change (hv's ruling via vc, 25 Oct: the ' at <root>' tail off, into 2.14.4). The dry run is withdrawn from molt-vc's queue and there is no freeze. When vc asks: set CODE in ~/Devel/scratch/utilz-dc/work/dryrun-2144.sh (base e4de6bc0) and SHA in work/c2144/twins.sh to the new code sha, and send vc the new hashes. Each is a heavy and runs only on molt-vc's GO by name. Nothing run. (edited)
+- 2.14.4's kovacs twins and release dry run, rerun on the code with 0109 landed (A3's version line and its doctor clause, hv's rulings of 25 Oct), in vc's order of 26 Oct: (1) hold until vc sends 0109's landed sha; (2) then set SHA in ~/Devel/scratch/utilz-dc/work/c2144/twins.sh (73b61c7d) and CODE in work/dryrun-2144.sh (e4de6bc0) to it, update work/c2144/request.md (06d15b28: the bundle, the exact commands and the expected output) for kovacs-sysadm, and send vc the hashes; vc reads them and routes the request; (3) the twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (vc's decision 60 (4)); they clone from GitHub, so the sha must be pushed first; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push. (edited)
 
 ## TODO
 
@@ -26,7 +26,7 @@ _(none)_
 ## Watch-outs
 
 - dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books with utilz-vc, terms in vc's watchout 17. (edited)
-- kovacs legs: NO ssh to kovacs, read-only included (hv's rule on molt-vc's desk, through vc, 25 Oct). A check on kovacs goes to kovacs-sysadm as commands with their expected output, and vc re-tallies its answers. A leg over ssh (leg.sh's bundles) needs hv's word through molt-vc first. The method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83), and a leg runs only its bundle's tree, with rustup's cargo first and the four versions printed. dc's two /var/tmp tool dirs on kovacs stay for the next leg. (edited)
+- kovacs legs (hv, 26 Oct, through molt-vc and vc, narrowing 25 Oct's no-ssh rule; vc's watchouts 17 and 21 hold the rule): while kovacs-sysadm is running, every read and change on kovacs goes through it, read-only included, and only when it is not running is ssh fine; never sudo in a probe. A leg is a heavy booked with molt-vc: a request to kovacs-sysadm (the bundle, the exact commands and their expected output) while it runs, vc re-tallying the answers, and over ssh only when it does not. The method, tools and kovacs's state are in ~/Devel/scratch/utilz-dc/RESUME.md, the baseline is tmp/dc-2141/kovacs/vbase-2d73b7f/BASELINE.md (slot 83), and a leg runs only its bundle's tree, with rustup's cargo first and each tool's version printed. dc's /var/tmp tool dirs on kovacs (shellcheck 0.9.0 and Lua 5.4.6) stay for the next leg. (edited)
 - board@4.0 since 22 Oct (Intent issue 0612, intent 3.2.4; vc's re-render cb466d50): dc commits exactly the paths its own wb verbs print on wrote: lines, through ~/Devel/scratch/utilz-dc/wb-commit-wrote.sh, never a re-rendered: line, which is another node's; an ask's wrote: lines include the recipient's inbox view. Live messages are read from intent wb show dc --json (.messages[] with state live), since the inbox views no longer mark a message (handled). (edited at the localfold: the swap's one-off steps are done) (edited)
 - PATH on rhadamanth: hv uses the brew release of every tool unless a project is being worked on, and runs `utilz use brew` himself (hv's ruling via molt-vc, through vc, 25 Oct). So a bare utilz may be brew's release, not the primary's dev links (Molt-matts a258ad0 put ~/.local/bin first). Every dc run on the Mac, the twins and the dry run among them, names its own tree's bin/ (eg <tree>/bin/utilz), never a plain utilz from PATH, and logs `command -v utilz` and `utilz --version`. kovacs runs put the run tree's bin/ first on PATH and check every name resolves into it. A release's checklist ends with brew upgraded on both hosts, `utilz use brew`, and `utilz --version` showing (brew, <release sha>) from a fresh login shell. (edited)
 
