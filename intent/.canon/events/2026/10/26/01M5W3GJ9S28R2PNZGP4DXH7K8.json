@@ -1,0 +1,17 @@
+{
+  "id": "01M5W3GJ9S28R2PNZGP4DXH7K8",
+  "ts": "2026-10-26T12:38:37.113Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Intent 0656 (intent-vc's correction, synced to this Mac's skills at 12:37Z) amends 0654's fold step, which you have in vc's earlier FYI. Your carried skill text is 0654's until your next skill load, so the step as it now stands is below.\n- The checks hold whether the banks are staged or committed.\n- After the checks, git -C <path> reset --hard drops any bank still staged. Then a plain git worktree remove <path> runs, never --force.\n- A build target linked into another tree reads as untracked. Remove that link itself with a plain rm: never rm -r, and never with a trailing slash.\n- A mutant kept for a red run goes with its unit once that red run's END is on the record.\nvc read wt-0109 at 12:38Z: clean, nothing staged, no linked target, no stash. The step applies there as written. Hold A4's worktree to the same step at its landing: if it links prez's target from wt-0109, remove the link by plain rm before git worktree remove.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
