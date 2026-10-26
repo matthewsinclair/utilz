@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 08:41Z
+heartbeat_at: 2026-10-26 08:45Z
 status: active
-focus: "0109 v5's light is green (END sent to molt-vc and vc); the landing waits on vc's word; then 0111 and 0110 in wt-0111 on 0109's landed bytes"
+focus: "0109 landed at 2de8f0e4 and closed at 0946cd4f; now 0111 then 0110 as two commits in wt-0111 (cut on 0946cd4f), banked for vc's read before any run"
 claims: []
 ---
 
@@ -13,8 +13,7 @@ claims: []
 
 ## DOING
 
-- 0109 v5 (contract A3 with its doctor clause, on hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 42a3a2ff. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v5/wt-0109-full.patch (47769fdd1138). v4's heavy is green, and so is v5's light (08:40:17Z to 08:40:48Z on molt-vc's GO: each mutation red where expected, then tree, install and dispatcher whole green); END went to molt-vc and vc. A3 is on devbin main as 40663691. Next, on vc's word: land-apply-patch.sh stages exactly the patch's paths, vc checks the staged state, the commit cites devbin main's 40663691, vc checks it by change, then the close in its own commit. Size S. (edited)
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design is approved by vc, in its body at 0b715a88; the extraction is drafted as 0111-bank/extract-0111.awk, untried. The worktree is cut after 0109's run and vc's critic re-check. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S). They go in as two commits in wt-0111, cut detached on 0946cd4f (0109's close), 0111 first, and the bytes are banked for vc's read before any run. 0111's Design is approved by vc, in its body at 0b715a88; the extraction (0111-bank/extract-0111.awk) ran clean on a copy of 0109's common.sh. One heavy for both, booked through vc with molt-vc: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M5VP5DHFTM29KM3M0YYEFARJ",
+  "ts": "2026-10-26T08:45:20.303Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 66,
+    "text": "0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S). They go in as two commits in wt-0111, cut detached on 0946cd4f (0109's close), 0111 first, and the bytes are banked for vc's read before any run. 0111's Design is approved by vc, in its body at 0b715a88; the extraction (0111-bank/extract-0111.awk) ran clean on a copy of 0109's common.sh. One heavy for both, booked through vc with molt-vc: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures."
+  }
+}
