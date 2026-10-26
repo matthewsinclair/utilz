@@ -783,9 +783,9 @@ UTILZ_MANIFEST_HEADER_KEYS=(tool version source_commit managed_by source_tree ci
 UTILZ_RUNTIME_ROOTS=(bin opt help static VERSION)
 
 # Subtrees that are tracked but not ours to publish. See ST0014 design.md D2 for
-# why the enumeration is by EXCLUSION rather than by an inclusion list: five of
-# the fifteen utilities keep runtime payload outside the three obvious
-# filenames, and an inclusion list drops all five silently.
+# why the enumeration is by EXCLUSION rather than by an inclusion list: some
+# utilities keep runtime payload outside the obvious filenames, and an
+# inclusion list drops each of them silently.
 UTILZ_RUNTIME_EXCLUDE_RE='^(bin/devbin$|bin/\.devbin/|opt/[^/]+/test/|opt/prez/crate/)'
 
 # THE BUILD PRODUCTS, built at publish time and gitignored, so they are named
@@ -1264,7 +1264,7 @@ ensure_venv() {
 # utilities (issue 0079).
 #
 # Every consumer iterates this and nothing else. Here: list_utilities,
-# run_doctor twice (its version check and its dependency sweep), run_tests,
+# doctor's installed utilities and external dependencies checks, run_tests,
 # emit_integration_tsv and emacs_doctor. Elsewhere: the dispatcher's help
 # listing in bin/utilz, and relink's install_link_gaps. The first five
 # previously open-coded the same glob-and-filter loop, and had already
@@ -1326,25 +1326,20 @@ _doctor_dep_note() {
   fi
 }
 
-run_doctor() {
-  echo -e "${BOLD}Utilz Doctor - System Diagnostics${RESET}"
-  echo -e "=================================="
-  # The version line first, as `utilz version` prints it (contract T4).
-  utilz_version_line
-  echo -e ""
+# DOCTOR'S CHECKS (issue 0111). One function per section of doctor's
+# report, called by run_doctor alone, in the report's order. Each prints its
+# title, its lines and its closing blank line, but for the external
+# dependencies check: the blank line after it is the install integrity
+# check's leading one, as it was inline. They share run_doctor's locals and
+# nothing else: each adds to issues, the installed utilities and external
+# dependencies checks read have_yq, and the installed utilities check fills
+# elsewhere_names for the external dependencies check (issue 0083). Bash's
+# dynamic scope carries them. Each returns 0 and never a count: under
+# bin/utilz's set -e a bare call that returns non-zero ends doctor, and a
+# status stops at 255.
 
-  local issues=0
-
-  # Resolved once, up front. doctor is the command you run to find out that
-  # yq is missing, so it must not require yq to complete -- the installed
-  # utilities and external dependencies checks
-  # both branch on this rather than calling require_yq and bailing.
-  local have_yq=0
-  if check_command yq; then
-    have_yq=1
-  fi
-
-  # Check: UTILZ_HOME is set and valid
+# Check: UTILZ_HOME is set and valid
+_doctor_check_utilz_home() {
   echo -e "${BOLD}Checking UTILZ_HOME...${RESET}"
   if [[ -z "${UTILZ_HOME:-}" ]]; then
     error "UTILZ_HOME is not set"
@@ -1359,11 +1354,14 @@ run_doctor() {
     success "UTILZ_HOME is set, to a directory that exists"
   fi
   echo ""
+  return 0
+}
 
-  # Check: which tree this is (contract T4, issue 0105). A tree utilz_tree
-  # cannot name fails here, and so does a dev tree whose git cannot be read:
-  # the version line then says `(dev, unknown)`, and this says why. An old
-  # manifest is the install integrity check's to name, with its remedy.
+# Check: which tree this is (contract T4, issue 0105). A tree utilz_tree
+# cannot name fails here, and so does a dev tree whose git cannot be read:
+# the version line then says `(dev, unknown)`, and this says why. An old
+# manifest is the install integrity check's to name, with its remedy.
+_doctor_check_tree() {
   echo -e "${BOLD}Checking which tree this is...${RESET}"
   local tree git_err
   tree=$(utilz_tree)
@@ -1388,8 +1386,11 @@ run_doctor() {
       ;;
   esac
   echo ""
+  return 0
+}
 
-  # Check: Directory structure
+# Check: Directory structure
+_doctor_check_dirs() {
   echo -e "${BOLD}Checking directory structure...${RESET}"
   local required_dirs=("bin" "opt" "opt/utilz" "opt/utilz/lib" "help")
   local missing_dirs=()
@@ -1407,8 +1408,11 @@ run_doctor() {
     success "All required directories present"
   fi
   echo ""
+  return 0
+}
 
-  # Check: bin/utilz exists and is executable
+# Check: bin/utilz exists and is executable
+_doctor_check_dispatcher() {
   echo -e "${BOLD}Checking bin/utilz...${RESET}"
   if [[ ! -f "$UTILZ_HOME/bin/utilz" ]]; then
     error "bin/utilz not found"
@@ -1421,18 +1425,22 @@ run_doctor() {
     success "bin/utilz exists and is executable"
   fi
   echo ""
+  return 0
+}
 
-  # Check: PATH configuration
-  #
-  # Two ways to have a working install, and this check used to recognise only
-  # the first -- so a symlink install was reported as a problem and doctor said
-  # "Found 1 issue(s)" about a setup that worked. Issue 0005.
-  #
-  # The old test was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"`, which also
-  # matched by unanchored regex: $UTILZ_HOME went in unescaped (a `.` or `+` in
-  # the path is a metacharacter) and any substring satisfied it, so a stray
-  # /opt/Utilz/binaries passed a test for /opt/Utilz/bin. `case` on a delimited
-  # PATH is an exact element match with no regex in play.
+# Check: PATH configuration
+#
+# A working install has this tree's bin/ on PATH, or a utilz on PATH that is
+# this tree's, and this check used to recognise only bin/ on PATH -- so a
+# symlink install was reported as a problem and doctor said "Found 1 issue(s)"
+# about a setup that worked. Issue 0005.
+#
+# The old test was `echo "$PATH" | grep -q "$UTILZ_HOME/bin"`, which also
+# matched by unanchored regex: $UTILZ_HOME went in unescaped (a `.` or `+` in
+# the path is a metacharacter) and any substring satisfied it, so a stray
+# /opt/Utilz/binaries passed a test for /opt/Utilz/bin. `case` on a delimited
+# PATH is an exact element match with no regex in play.
+_doctor_check_path() {
   echo -e "${BOLD}Checking PATH configuration...${RESET}"
   local bin_dir="$UTILZ_HOME/bin"
   local dispatcher="$bin_dir/utilz"
@@ -1489,18 +1497,22 @@ run_doctor() {
     fi
   fi
   echo ""
+  return 0
+}
 
-  # Check: Installed utilities
+# Check: Installed utilities
+_doctor_check_utilities() {
   echo -e "${BOLD}Checking installed utilities...${RESET}"
   local util_count=0
   local broken_utils=()
   local incompatible_utils=()
   local name impl required_utilz_version required_major meta_status
   local unreadable_utils=()
-  # What runs elsewhere alone, said once each and counted as nothing, and the
-  # names, padded with spaces, for the external dependencies check to skip
-  # their dependencies (issue 0083).
-  local elsewhere_lines=() elsewhere_names=" " plat plat_status
+  # What runs elsewhere alone, said once each and counted as nothing (issue
+  # 0083). Its names go, padded with spaces, into run_doctor's
+  # elsewhere_names, for the external dependencies check to skip their
+  # dependencies.
+  local elsewhere_lines=() plat plat_status
   local unchecked_count=0
   local framework_version framework_major
   framework_version=$(get_utilz_version)
@@ -1618,14 +1630,17 @@ run_doctor() {
     done
   fi
   echo ""
+  return 0
+}
 
-  # Check: External dependencies
+# Check: External dependencies
+_doctor_check_dependencies() {
   echo -e "${BOLD}Checking external dependencies...${RESET}"
   local missing_deps=()
   local missing_dep_info=()
   # Info lines, one per name: kind|name|detail|purpose|declarer (_doctor_dep_note).
   local dep_notes=()
-  local yaml_file dep_count dep_name dep_install dep_purpose dep_required dep_status dep_list i
+  local name yaml_file dep_count dep_name dep_install dep_purpose dep_required dep_status dep_list i
   local dep_where dep_where_status
   local refused_lists=0 refused_entries=0
 
@@ -1818,9 +1833,10 @@ run_doctor() {
     fi
   fi
 
-  # STEP 6'S VERDICT PRINTS HERE, UNDER STEP 6 (issue 0026). It sat after step
-  # 7 until 2026-09-14, so "All required dependencies installed" -- or "Missing
-  # dependencies: yq" -- read as the install-integrity step's result.
+  # THIS CHECK'S VERDICT PRINTS HERE, UNDER ITS OWN TITLE (issue 0026). It sat
+  # after the install integrity check until 2026-09-14, so "All required
+  # dependencies installed" -- or "Missing dependencies: yq" -- read as the
+  # install integrity check's result.
   if [[ ${#missing_deps[@]} -gt 0 ]]; then
     # Remove duplicates. Read into the array a line at a time rather than
     # splitting a command substitution: a dependency name is not guaranteed
@@ -1856,8 +1872,11 @@ run_doctor() {
   else
     success "All required dependencies installed"
   fi
+  return 0
+}
 
-  # ------------------------------------------------------------------------
+# Check: Install integrity
+_doctor_check_integrity() {
   echo -e ""
   echo -e "${BOLD}Checking install integrity...${RESET}"
 
@@ -1876,7 +1895,7 @@ run_doctor() {
     if [[ -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
       local drift check_rc=0
       # Sourced here and nowhere else in this function: install.sh is not
-      # loaded for the fifteen utilities' hot path (ST0014 design.md D1).
+      # loaded for the utilities' hot path (ST0014 design.md D1).
       # shellcheck source=opt/utilz/lib/install.sh
       source "$UTILZ_HOME/opt/utilz/lib/install.sh"
       drift=$(install_manifest_check "$UTILZ_HOME") || check_rc=$?
@@ -1927,6 +1946,38 @@ run_doctor() {
     fi
   fi
   echo -e ""
+  return 0
+}
+
+run_doctor() {
+  echo -e "${BOLD}Utilz Doctor - System Diagnostics${RESET}"
+  echo -e "=================================="
+  # The version line first, as `utilz version` prints it (contract T4).
+  utilz_version_line
+  echo -e ""
+
+  # The checks share these locals and nothing else (DOCTOR'S CHECKS above):
+  # each adds to issues, and the installed utilities check fills
+  # elsewhere_names for the external dependencies check (issue 0083).
+  local issues=0 elsewhere_names=" "
+
+  # Resolved once, up front. doctor is the command you run to find out that
+  # yq is missing, so it must not require yq to complete -- the installed
+  # utilities and external dependencies checks
+  # both branch on this rather than calling require_yq and bailing.
+  local have_yq=0
+  if check_command yq; then
+    have_yq=1
+  fi
+
+  _doctor_check_utilz_home
+  _doctor_check_tree
+  _doctor_check_dirs
+  _doctor_check_dispatcher
+  _doctor_check_path
+  _doctor_check_utilities
+  _doctor_check_dependencies
+  _doctor_check_integrity
 
   # Summary
   echo -e "=================================="
@@ -2466,8 +2517,8 @@ emacs_doctor() {
   # so a utility that declares no integration: block has not failed at anything
   # -- it has declined something optional. Counting it as an issue made every
   # utility added after ST0007 born red, which is a default nobody chose rather
-  # than a rule anyone set, and it matches run_doctor two functions away, where
-  # an absent optional dependency is an `info` and never a failure.
+  # than a rule anyone set, and it matches doctor's external dependencies check,
+  # where an absent optional dependency is an `info` and never a failure.
   #
   # The list stays, because it is the useful half. Only the exit code goes.
   if [[ ${#missing[@]} -gt 0 ]]; then

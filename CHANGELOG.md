@@ -18,6 +18,8 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 - **mdagg puts one blank line between the files it joins**, as its README shows (issue 0107). Each file was read with its trailing newlines dropped and printed with one, so the next file began on the line after the last one, and a paragraph ran into the heading or list that followed it. A plain join now prints one blank line between files, from arguments, a YAML config or stdin; nothing goes before the first file, so its front matter stays first, or after the last. No second blank line is added where a section divider or a page break already separates two files, or before a file whose content starts with one, and a divider after a page break no longer leaves two. mdagg goes from 1.0.0 to 1.0.1.
 - **mdagg carries on past a missing file** (issue 0108). It warned "File not found" and then stopped, under `set -e`, so every file after the missing one was lost. It now warns for each missing file, joins the rest, and then names the missing files and exits 1, so a caller still sees the join is incomplete. This is part of mdagg 1.0.1.
+- **Harness and development only, no behaviour change**:
+  - `utilz doctor`'s checks are each a function of their own, and `run_doctor` only coordinates (issue 0111): it prints the version line, runs the checks in the report's order, and prints the summary and the exit status. Doctor's report and its exit status do not change.
 
 ## [2.14.3] - 2026-10-24
 
