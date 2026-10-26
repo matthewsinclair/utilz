@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 18:30Z
-status: active
-focus: "vc: 2.14.4 dry run waits on Intent's critic exit-0 revert (hv's ruling); then dc re-asks the dry run on the same code, the twins stand; then FOR hv push and cut; no push"
+heartbeat_at: 2026-10-26 19:47Z
+status: paused
+focus: "vc: folded for the night; 2.14.4 ready to cut (checks green, 9711411a pushed and CI green); the cut is hv's tomorrow; no push"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN, and they stand. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) was RED at devbin's check critic: Intent's 0648 made intent critic exit 4 when nothing was judged. hv ruled (via molt-vc, 26 Oct) that Intent reverts to exit 0, landed in a one-bank gap; devbin is unchanged and Utilz does not re-vendor. Next: once the installed Intent carries the revert (vc reads intent --version and the commit), dc re-asks the dry run on main's head (code unchanged since b2e07f19); then FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line. (edited)
+- 2.14.4 cut, hv's. Every pre-release check is GREEN: the Mac twins and the kovacs twins on b2e07f19's code, dc's dry run on 7ec64a64 (0653670e0a86). hv pushed main to 9711411a on 26 Oct, and CI's Utilz Tests is green on it (run 40384674039). Next: book the cut's heavy slot through molt-vc, then hv runs bin/devbin release v2.14.4, which stops at step 6 to confirm; app-sign at the tag; the formula; brew on both hosts; utilz use brew (hv's); the version line reading brew; then todo 54. (edited)
 
 ## TODO
 

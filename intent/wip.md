@@ -4,8 +4,8 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- vc: 2.14.4 pre-release checks. dc's dry run was red at devbin's `check critic` on Intent's critic exit 4 (nothing judged); hv ruled that Intent reverts it to exit 0. Once the installed Intent carries the revert, dc re-asks the dry run on the same code (the Mac and kovacs twins stand), then ready-to-cut goes to hv through molt-vc.
-- hv: push main to upstream, CI green on it, then the 2.14.4 cut; then app-sign at the tag, the formula, brew on rhadamanth and kovacs, `utilz use brew`, and `utilz --version` answering `(brew, <release sha>)` from a fresh login shell.
+- hv: the 2.14.4 cut. Every pre-release check is green and main is pushed to `9711411a` with CI green on it; vc books the cut's heavy slot through molt-vc, then hv runs `bin/devbin release v2.14.4`.
+- after the cut: app-sign at the tag, the formula, brew on rhadamanth and kovacs, `utilz use brew`, and `utilz --version` answering `(brew, <release sha>)` from a fresh login shell.
 
 ## TODO
 
