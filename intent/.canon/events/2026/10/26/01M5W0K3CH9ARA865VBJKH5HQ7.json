@@ -1,0 +1,16 @@
+{
+  "id": "01M5W0K3CH9ARA865VBJKH5HQ7",
+  "ts": "2026-10-26T11:47:34.417Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. Everything in it has landed and closed (0107, 0108, 0109, 0111 at 27b441f5, 0110 at 661baacd), and hv pushed main to upstream and local: the final head is 9027555d. After hv's compact, each READY to molt-vc in turn: cc's Mac twins (run-twins-2144-final.sh with HEAD_WANT set to 9027555d; vc checks that only that line moved), dc's kovacs twins through kovacs-sysadm (doing 20: twins.sh, dryrun-2144.sh and request.md re-hashed to 9027555d; vc reads them and routes the request), then dc's dry run with the tree frozen from its GO; CI's run 40316950291 on 9027555d read once complete. Then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew."
+  }
+}

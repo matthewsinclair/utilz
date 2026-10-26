@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 09:46Z
+heartbeat_at: 2026-10-26 11:47Z
 status: active
-focus: "After hv's compact (26 Oct), not released. Waiting on cc's v2 of 0111 and 0110 (their bodies took vc's critic leg at c1a7aa3b and bad86a52); vc reads the v1-to-v2 delta, then READY HEAVY to molt-vc; then the landings, each checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Localfold for hv's compact (26 Oct), not released. 2.14.4: everything landed and closed, main pushed by hv, the final head 9027555d. After the bounce: cc's Mac twins READY (HEAD_WANT the only line moved), dc's doing 20 hashes (read, then route to kovacs-sysadm), then dc's dry run, each booked with molt-vc; CI run 40316950291 on 9027555d read; then FOR hv: ready to cut. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. Everything in 2.14.4 has landed and closed: 0107, 0108, 0109, then 0111 (landed 27b441f5, closed 942fa8e7) and 0110 (landed 661baacd, closed 4f49fe42), each checked by its change after a green run. Now: vc pushes main to upstream and local (decision 60 (2)) and gives dc the pushed head as the final head (doing 20: twins.sh, dryrun-2144.sh and request.md re-hashed to it); then cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on it, each booked with molt-vc; then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. Everything in it has landed and closed (0107, 0108, 0109, 0111 at 27b441f5, 0110 at 661baacd), and hv pushed main to upstream and local: the final head is 9027555d. After hv's compact, each READY to molt-vc in turn: cc's Mac twins (run-twins-2144-final.sh with HEAD_WANT set to 9027555d; vc checks that only that line moved), dc's kovacs twins through kovacs-sysadm (doing 20: twins.sh, dryrun-2144.sh and request.md re-hashed to 9027555d; vc reads them and routes the request), then dc's dry run with the tree frozen from its GO; CI's run 40316950291 on 9027555d read once complete. Then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 
@@ -41,7 +41,6 @@ _(none)_
 - hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly. For Utilz now: no thread or issue is open, so the next release has nothing in it yet.
 - hv, 2026-10-25, directly to vc: (1) the next Utilz release is 2.14.4 and carries 0107 and 0108; its pre-release checks start now, in the ruled order: Mac twins, then the Linux twins on kovacs through kovacs-sysadm, then dc's dry run, then hv's cut. (2) vc pushes main before the checks so CI reads it first. (3) molt-vc's desk is the one host queue for every estate on this Mac and kovacs; watchout 17's interleave with intent-vc is retired. (4) dc's kovacs legs no longer ship over ssh: each goes to kovacs-sysadm as a request, with the bundle, the commands and the expected output, and is booked with molt-vc as a heavy.
 - hv, 2026-10-25, directly to vc: A3's version-line change (devbin's contract T4: ' at <root>' comes off; Utilz said SAME to devbin-vc's draft b19ffcb9) goes into 2.14.4, not a later release. cc files the issue and lands it once A3 is in devbin's docs; the Mac twins, kovacs twins and dry run then rerun on the new code. The dry run's READY (dryrun-2144.sh e4de6bc0) is withdrawn from molt-vc's queue and the freeze is lifted.
-- hv, 2026-10-26, through molt-vc (option (b) by TUI, then: "It will not take a day. It will take minutes to 10s of minutes in wallclock time. If we don't do it today, it'll get forgotten and then snowball. Fix it now, please."): run_doctor's Thin Coordinator and PFIC refactor goes INTO 2.14.4, now. It is filed as 0111 (51303e22), with 0110's three silent exits (e6628042) on top: each check its own function, and run_doctor only coordinating. 2.14.4's cut waits for both. vc's call on the machine: 0109's run first, at K115's END, then one heavy for 0111 plus 0110 straight after. Both land today.
 
 ---
 
