@@ -1,5 +1,5 @@
 ---
-verblock: "23 Oct 2026:v0.17: matts - 2.14.2 released: menuz's own log window, Xcode 27.1, and a showreel that says what it could not do"
+verblock: "23 Oct 2026:v0.17: matts - 2.14.2 released"
 ---
 
 # Done

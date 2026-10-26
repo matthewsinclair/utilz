@@ -1,5 +1,5 @@
 ---
-verblock: "25 Oct 2026:v1.42: matts - globalfold for the night on hv's word via molt-vc (19:58Z): 2.14.4 in its pre-release checks; 0109 (A3's version line and doctor clause) green on the version line, v2 booked behind devbin's land220; desk closed, no push"
+verblock: "25 Oct 2026:v1.42: matts - 2.14.4 in pre-release checks"
 ---
 
 # Restart Context
