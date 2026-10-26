@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 07:09Z
+heartbeat_at: 2026-10-26 08:10Z
 status: active
-focus: "Utilz called 07:04Z; molt-vc GO 07:07Z, Utilz has the machine, one heavy at a time. 0109 v2: devbin A3 40663691 on devbin main 04f6368d (vc read; T4 text = 58ccf8c7); cc bytes unchanged; vc critic leg (light) STARTed 07:08Z; then cc v2 run, landing citing 40663691, push (decision 60), Mac twins, kovacs twins via kovacs-sysadm, dry run, hv cut. doing 68. Log: ~/Devel/scratch/utilz-vc/host-log-20261026.md"
+focus: "Localfold 26 Oct 08:09Z for hv compact, not released. 0109 v4 heavy running (cc, START 08:06:23Z); vc counts its END from the TAPs, then the landing by path citing devbin 40663691 (check-0109-landing.sh). 0111 design approved; 0111 then 0110, one heavy after 0109 lands; push; twins; dry run; hv cut. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
