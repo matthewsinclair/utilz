@@ -5,7 +5,7 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "bc2f8276-99c2-4c44-b990-1124aa522585",
-    "heartbeat_at": "2026-10-26T13:51:29.077Z",
+    "heartbeat_at": "2026-10-26T14:52:46.878Z",
     "status": "active",
     "focus": "26 Oct 13:51Z: folded for molt-vc's machine-wide localfold, compact and hold (hv's word; vc's word to dc), not released. Holding, as the board's hold says: no new task, no slot ask and no commit past this fold until hv's go on through molt-vc and vc; after hv's compact no pickup until then (it writes the board), reads by intent wb show dc, talk by socket. Doing 20 holds at step (1) for vc's word with the new final head, once A4 (0112) has landed checked; step (2)'s bytes banked at 9027555d are the re-hash's base. Runs book through Intent's slots (watchout 3). Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its top section. No push.",
     "claims": [],
@@ -819,7 +819,8 @@
       "kind": "hold",
       "seq": 28,
       "text": "Machine-wide localfold, compact and hold, called by molt-vc on hv's word (26 Oct; molt-vc's slots desk on hold since 13:47:11Z, hold 01M5W7E40CE071QMSE4JT8KWXQ), with vc's word to dc to fold: no new task, no slot ask and no commit past this fold, until hv's go on comes through molt-vc and vc. While it stands, after hv's compact, dc skips the pickup (it writes the board), reads with intent wb show dc and talks by socket only; on go on, dc picks up, commits it at once, archives this hold and tells vc. Doing 20 stays at step (1). kovacs untouched. No push.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-26T14:52:47.029Z",
       "recorded_at": "2026-10-26T13:51:28.927Z"
     }
   ],
