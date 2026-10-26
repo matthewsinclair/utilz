@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 74b51d87-af54-4adf-9287-d19216567c43
-heartbeat_at: 2026-10-25 20:00Z
-status: paused
-focus: "Globalfold for the night (hv via molt-vc 19:58Z), released: desk closed. 2.14.4 in checks; 0109 v2 booked after devbin's land220, unrun; tomorrow cc re-sends READY. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
+heartbeat_at: 2026-10-26 06:12Z
+status: active
+focus: "HOLDING for molt-vc's word: hv boots the VCs only and calls each project in turn (26 Oct, booted 06:10Z). No runs, no peer woken. Utilz when called: 0109 v2 waits on devbin's land220 (red on 3 tests last night, nothing landed), then cc's v2 run and landing, the twins, dc's dry run, hv's cut. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
