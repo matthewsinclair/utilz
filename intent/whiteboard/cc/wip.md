@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 11:43Z
+heartbeat_at: 2026-10-26 11:49Z
 status: active
-focus: "0111 and 0110 landed and closed, each checked by vc (0111 at 27b441f5, closed 942fa8e7; 0110 at 661baacd, closed 4f49fe42); no issue open. Holding 2.14.4's Mac twins until hv's push puts main on upstream/main; then their READY to vc, in wt-0109"
+focus: "Localfold for hv's compact (26 Oct), not released. Resume: /in-session with its pickup committed at once; re-read both remotes (9027555d) and run-twins-2144-final.sh's hash (f988215fc217); send vc the banked READY (20261026/ready-twins-final.txt, by 20261026/board-ready.sh, then SendMessage); hold for molt-vc's GO by name. No issue open. RESUME.md has it."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- 2.14.4's Mac twins on the final head: released when hv's push puts main on upstream/main (vc's own push was refused by the auto-mode classifier and goes to hv as a ! through molt-vc). Then run-twins-2144-final.sh (ready but for its head, on vc's word of 26 Oct) takes the pushed head, vc reads the bytes, and its READY goes to molt-vc; the run on molt-vc's GO by name, in a fresh detached worktree (a cold build, pdf2md's venv made, as on CI), with install_e2e in a scratch full clone at the same head. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed. (edited)
+- 2.14.4's Mac twins on 9027555d, the final head hv's push put on upstream and local (read by vc at 11:41:52Z, and by cc at 11:46:46Z): run-twins-2144-final.sh is f988215fc217 (only HEAD_WANT moved from the 1826937f0ad1 vc pre-read), and its READY is banked unsent (~/Devel/scratch/utilz-cc/20261026/ready-twins-final.txt), held by vc's localfold call; after the bounce's pickup, re-read both remotes and the script's hash, then send it to vc for vc's check and its booking with molt-vc. Released when molt-vc's GO names cc's Mac twins; then START to molt-vc and vc, the run in a fresh detached worktree (a cold build, pdf2md's venv made, as on CI) with install_e2e in a scratch full clone at the same head, and END to both. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed. (edited)
 
 ## Watch-outs
 

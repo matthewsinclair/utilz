@@ -1,0 +1,16 @@
+{
+  "id": "01M5W0PC7F0YDS7EBJEGS0WWVG",
+  "ts": "2026-10-26T11:49:21.775Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 47,
+    "text": "2.14.4's Mac twins on 9027555d, the final head hv's push put on upstream and local (read by vc at 11:41:52Z, and by cc at 11:46:46Z): run-twins-2144-final.sh is f988215fc217 (only HEAD_WANT moved from the 1826937f0ad1 vc pre-read), and its READY is banked unsent (~/Devel/scratch/utilz-cc/20261026/ready-twins-final.txt), held by vc's localfold call; after the bounce's pickup, re-read both remotes and the script's hash, then send it to vc for vc's check and its booking with molt-vc. Released when molt-vc's GO names cc's Mac twins; then START to molt-vc and vc, the run in a fresh detached worktree (a cold build, pdf2md's venv made, as on CI) with install_e2e in a scratch full clone at the same head, and END to both. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed."
+  }
+}

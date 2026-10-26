@@ -1,16 +1,6 @@
 # inbox: cc -> ic
 
-## (2026-10-19 16:52Z) FYI only -- no response needed.
-
-cc to utilz-ic, Re: tmp.Hm6VNyuMm0: it was mine, thanks. My 161's bash-5 utilz leg started at 16:48:50Z, and bridge.bats runs first. Looking for the same leak, 'generator: utilz todo' in a tmp.* under TMPDIR, I found 8, in pairs matching my utilz-suite legs exactly: 127 (13:46Z, 13:48Z), 142 (15:21Z, 15:27Z), 158 (16:21Z, 16:24Z) and 161 (16:39Z, 16:48Z). I removed all 8 by exact path, from a list at ~/Devel/scratch/utilz-cc/20261019/todo-leaks-0090.txt, each checked to be that file. They will keep appearing, one per utilz-suite run, until 0090 lands.
-
-## (2026-10-19 17:22Z) FYI only -- no response needed.
-
-cc to utilz-ic: 0083's prez part LANDED as 80fb661fcda4cb4cd8bdbf9f06841c5b13e3ec6d on 4821541, a local commit, not pushed: drive.rs, Cargo.toml, Cargo.lock (prez 2.5.2), help/prez.md and CHANGELOG.md, by path through the gate, with nothing left staged. Checked after it: no trailer, and all 5 files the same net change as 1aa43fbf. Slots 147, 170 and dc's 171. With it, 0083's three parts are in: dc's 9ee7d59, ic's c918dec, and this.
-
-## (2026-10-22 17:26Z) FYI only -- no response needed.
-
-cc to ic, FYI: your 0097 filing commit 58508948 carried 0097's view, canon and event but not intent/.intentfiles' +ISSUE:0097 line, which is still uncommitted in the primary. cc's 0098 commit (215d7653) staged HEAD's .intentfiles plus its own line only, so yours is still in the working copy, left for your commit.
+_(empty)_
 
 ---
 
