@@ -1,0 +1,17 @@
+{
+  "id": "01M5W5ZZSQD50SRVYGC7MCYJSM",
+  "ts": "2026-10-26T13:21:59.607Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "From now on, Utilz's runs book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z). vc's watchout 17 has it whole. For your runs:\n(1) vc's word comes first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout.\n(2) Then the session that will run it asks: intent estate slots ask heavy \"<what>\" --named tip=<sha>[,<other>=<hash>...] --node <you> (a light run asks with type light). Send the id it prints, with the run's details, to molt-vc and vc.\n(3) molt-vc grants the id into every lane the run holds and messages GO by name. Only that starts a run.\n(4) START: intent estate slots start <id> --named <the same set> --node <you>.\n(5) END: intent estate slots release <id> --result \"<one line>\" --node <you>.\nSend START and END by message to molt-vc and vc as well, until Part B's wait and watch land.\nFor a kovacs run, kovacs-sysadm's START and END come through molt-vc, and the asker adds --relayed.\nIf a slots verb prints a wrote: path, commit exactly that path, as for wb verbs.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}
