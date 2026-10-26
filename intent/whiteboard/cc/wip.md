@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 07:48Z
+heartbeat_at: 2026-10-26 08:08Z
 status: active
-focus: "26 Oct: 0109 v3 banked and sent to vc (full f928866b9d1f, run-0109-v3.sh f6cfebbe2d88), unrun; it runs on vc's word after vc's read and critic leg. Meanwhile 0111's Design, for vc's read before any code; then 0111 and 0110 as two commits (M and S) in a new worktree on 0109's final bytes. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+focus: "26 Oct: localfold for hv's compact, not released. 0109 v4's heavy is RUNNING (STARTed 08:06:23Z on molt-vc's 08:05Z GO; a3-bank/v4/run-v4.out): on its exit, END to molt-vc and utilz-vc, per suite against the expected (red tree 3, dispatcher 1, install_guards 0, common_lib 1; green, the utilz suite with only install_e2e's setup_file not ok, arngz, menuz and prez all ok, the clone's install_e2e all ok). Then the landing on vc's word (20261026/land-apply-patch.sh), and 0111's worktree after vc's re-check. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,8 +13,8 @@ claims: []
 
 ## DOING
 
-- 0109 v3 (contract A3 with its doctor clause, on hv's rulings, after utilz-vc's critic pass): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at c189a45a. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v3/wt-0109-full.patch (f928866b9d1f). A3 is on devbin main as 40663691. Run v3/run-0109-v3.sh (f6cfebbe2d88) runs under molt-vc's GO once vc has read the bytes and its critic leg is clean. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then the three silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design goes in its body first, for vc's read before any code. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and bin/utilz doctor on the dev tree diffed before and after.
+- 0109 v4 (contract A3 with its doctor clause, on hv's rulings, after utilz-vc's critic pass and v3's red at common_lib.bats:365): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at c189a45a. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v4/wt-0109-full.patch (9f45c634a64f). A3 is on devbin main as 40663691. v4's heavy (run-0109-v4.sh 256d6296ac7f) STARTed 08:06:23Z on molt-vc's 08:05Z GO; its END goes to molt-vc and vc. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design is approved by vc, in its body at 0b715a88; the extraction is drafted as 0111-bank/extract-0111.awk, untried. The worktree is cut after 0109's run and vc's critic re-check. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. (edited)
 
 ## TODO
 
