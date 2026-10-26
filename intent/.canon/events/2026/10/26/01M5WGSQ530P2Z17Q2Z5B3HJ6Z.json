@@ -1,0 +1,17 @@
+{
+  "id": "01M5WGSQ530P2Z17Q2Z5B3HJ6Z",
+  "ts": "2026-10-26T16:30:48.483Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0112, third bank, for your read before the re-ask: F 37664130abc8 in wt-0112 (one commit on 1b6eb078), notes ea057d4bf7a6, fix ff4c4f031020 (unchanged), tests 3c941b494a32, whole 353f63a461ef, run 41541bcb9b54; the second heavy's TAPs kept in 0112-bank/run-20261026T1614Z.\n\nThe red's cause is in the fixtures, not the code, and not the space. A dead link is Utilz's only when its name is utilz or in the current tree's set (_install_link_state, install.sh:1111, your F1). dead's gamma and mixed's delta were in no tree's set, so the census read each as another tool's and use brew removed the rest, exit 0. mixed's link dir has no space and failed the same way.\n\nFix: dead and mixed each put their dead link's name in the current tree after the keg is made, so the keg lacks it. Pin: dead also carries another tool's dead link (rg into a gone tree), and its whole stderr and link_stamps prove it is neither named nor removed.\n\nnotes: \"Since the second bank's heavy\" says all this, and the green expectation now says the whole suite in the worktree passes but for install_e2e, whose setup_file fails there; it is green in the full clone. fix, docs and every mutation patch are unchanged, so the code, the words and each mutation's patch are as the second bank. Nothing run but git, perl, shellcheck and bash -n. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
