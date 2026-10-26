@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 09:49Z
+heartbeat_at: 2026-10-26 09:51Z
 status: active
 focus: "0111 v2 (7237b310) and 0110 v2 (d2b9d3c8) committed in wt-0109 from vc's critic rulings, banked in 0111-bank/v2 with the heavy's script for vc's read of the delta; then the heavy on molt-vc's GO; then each lands by path"
 claims: []
