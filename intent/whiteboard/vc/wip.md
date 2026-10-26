@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 18:03Z
+heartbeat_at: 2026-10-26 18:30Z
 status: active
-focus: "vc: 2.14.4 dry run RED at check critic (devbin's check reads Intent's critic exit 4 as failure); routed to devbin-vc; re-vendor, rerun twins and dry run, then FOR hv; no push"
+focus: "vc: 2.14.4 dry run waits on Intent's critic exit-0 revert (hv's ruling); then dc re-asks the dry run on the same code, the twins stand; then FOR hv push and cut; no push"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) is RED at check critic: Intent's 0648 makes intent critic exit 4 when nothing is judged, and devbin's check (vendored, and v0.1.15) reads it with || rc=1. Routed to devbin-vc. Next: devbin's fix vendored by path; the Mac twins, kovacs twins and dry run rerun on the new head, each with its own slot; FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line. (edited)
+- 2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN, and they stand. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) was RED at devbin's check critic: Intent's 0648 made intent critic exit 4 when nothing was judged. hv ruled (via molt-vc, 26 Oct) that Intent reverts to exit 0, landed in a one-bank gap; devbin is unchanged and Utilz does not re-vendor. Next: once the installed Intent carries the revert (vc reads intent --version and the commit), dc re-asks the dry run on main's head (code unchanged since b2e07f19); then FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line. (edited)
 
 ## TODO
 

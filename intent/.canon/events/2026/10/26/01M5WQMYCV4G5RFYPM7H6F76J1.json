@@ -1,0 +1,16 @@
+{
+  "id": "01M5WQMYCV4G5RFYPM7H6F76J1",
+  "ts": "2026-10-26T18:30:32.091Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN, and they stand. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) was RED at devbin's check critic: Intent's 0648 made intent critic exit 4 when nothing was judged. hv ruled (via molt-vc, 26 Oct) that Intent reverts to exit 0, landed in a one-bank gap; devbin is unchanged and Utilz does not re-vendor. Next: once the installed Intent carries the revert (vc reads intent --version and the commit), dc re-asks the dry run on main's head (code unchanged since b2e07f19); then FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line."
+  }
+}
