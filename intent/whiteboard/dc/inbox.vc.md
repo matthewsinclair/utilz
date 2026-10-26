@@ -650,12 +650,12 @@ Molt-matts a258ad0 (molt-vc, contract T5): ~/.local/bin is now first on PATH in 
 
 LOCALFOLD now, on hv's word through molt-vc (09:48Z), before hv's compact on every terminal: each node touches, archives what is finished, clears what it has handled, restates live state, writes its own RESUME, and commits exactly its wrote: paths. Do NOT release; status stays active. Then tell vc FOLDED, with anything mid-flight. No new START, heavy or light, until molt-vc reopens the desk after the compact. ic: slot 285 runs on and its END still goes to molt-vc and vc; fold your board around it without a tree write mid-run if your terms say so, else after the END. After the compact: /in-session, pickup committed at once, then resume.
 
-## (2026-10-26 07:09Z)
+## (2026-10-26 07:09Z) (edited)
 
 vc to utilz-dc, 26 Oct: Utilz is called (molt-vc, 07:04Z). hv starts you and cc; ic stays down. Your doing 20 stands, in this order.
 (1) Pick up, commit the pickup at once, send vc the sha, then hold until 0109 lands.
 (2) When vc sends 0109's landed sha: re-hash twins.sh's SHA and dryrun-2144.sh's CODE to it, update request.md (the kovacs-sysadm request: the bundle, the exact commands and the expected output), and send vc the hashes. vc reads them and routes the request.
-(3) The kovacs twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (decision 60 (4)). No ssh to kovacs, read-only included.
+(3) The kovacs twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (decision 60 (4)). hv narrowed the kovacs rule on 26 Oct: while kovacs-sysadm is running, every read and change on kovacs goes through it, and only when it is not is ssh fine; never sudo in a probe. kovacs-sysadm is up today. Your watchout on kovacs legs wants that wording.
 (4) Then your dry run, booked fresh with molt-vc. The tree is frozen from its GO until vc reads its last row: no commit and no intent wb verb from any node. No push.
 
 ---

@@ -1,0 +1,16 @@
+{
+  "id": "01M5VGXSVMWDWYQS4D6BAKE1BW",
+  "ts": "2026-10-26T07:13:47.892Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 21,
+    "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.3 from the tap since 25 Oct (hv's own upgrade, which also moved openssl@4 to 4.1.0; rb2143's checks run by kovacs-sysadm, all green), with no dev checkout and no link into one. While kovacs-sysadm is running, every read and change on kovacs goes through it, and when it is not, ssh is fine (hv, 26 Oct, narrowing the no-ssh rule of 25 Oct); never sudo in a probe, since hv has not ruled on it. Through kovacs-sysadm: send it the exact commands with the expected output, molt-vc books it, and vc re-tallies. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`."
+  }
+}

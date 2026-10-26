@@ -1460,10 +1460,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 17,
-      "text": "Host runs on this Mac and on kovacs, for every estate, book on molt-vc's desk, the one host queue (hv, 25 Oct; decision 58 put molt-vc in charge on 24 Oct). Utilz's runs book through vc with molt-vc: vc asks for the GO with sender, repo, worktree and sha or diff hash, the exact command, what it binds or starts, the expected result and the kill timeout; the START follows molt-vc's GO by name, which alone starts a run; an END follows with the results. Heavy runs go one at a time: any build or compile, any whole suite, Chrome, a dry run or cut, a daemon. A light run (no build, GUI, daemon or port; its own temp dirs only) shares the window with a heavy only when molt-vc says so, and a timing-like failure in it is rerun alone. A kovacs leg goes to kovacs-sysadm as a request, never over ssh, and counts as a heavy. Bytes that change after a GO send their new hash before the rerun. The older interleave with intent-vc is retired. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md.",
+      "text": "Host runs on this Mac and on kovacs, for every estate, book on molt-vc's desk, the one host queue (hv, 25 Oct; decision 58 put molt-vc in charge on 24 Oct). From 26 Oct hv boots the VCs only and calls each project in turn, molt-vc sequencing them, and the called project has the machine, one heavy at a time. Utilz's runs book through vc with molt-vc: vc asks for the GO with sender, repo, worktree and sha or diff hash, the exact command, what it binds or starts, the expected result and the kill timeout; the START follows molt-vc's GO by name, which alone starts a run; an END follows with the results. Heavy runs go one at a time: any build or compile, any whole suite, Chrome, a dry run or cut, a daemon. A light run (no build, GUI, daemon or port; its own temp dirs only) shares the window with a heavy only when molt-vc says so, and a timing-like failure in it is rerun alone. A kovacs leg counts as a heavy; it goes to kovacs-sysadm as a request while kovacs-sysadm is running, and over ssh only when it is not (hv, 26 Oct). Bytes that change after a GO send their new hash before the rerun. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md.",
       "state": "live",
       "recorded_at": "2026-10-18T20:06:14.599Z",
-      "edited_at": "2026-10-25T09:50:36.290Z"
+      "edited_at": "2026-10-26T07:13:47.540Z"
     },
     {
       "node": "vc",
@@ -1554,10 +1554,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 21,
-      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.3 from the tap since 25 Oct (hv's own upgrade, which also moved openssl@4 to 4.1.0; rb2143's checks run by kovacs-sysadm, all green), with no dev checkout and no link into one. NO SSH TO KOVACS from any Utilz node, read-only included (hv's rule on molt-vc's desk, 25 Oct): send kovacs-sysadm the exact commands with the expected output, molt-vc books it as a light, and vc re-tallies; a dc leg that ships a bundle over ssh needs hv's word through molt-vc first. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
+      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.3 from the tap since 25 Oct (hv's own upgrade, which also moved openssl@4 to 4.1.0; rb2143's checks run by kovacs-sysadm, all green), with no dev checkout and no link into one. While kovacs-sysadm is running, every read and change on kovacs goes through it, and when it is not, ssh is fine (hv, 26 Oct, narrowing the no-ssh rule of 25 Oct); never sudo in a probe, since hv has not ruled on it. Through kovacs-sysadm: send it the exact commands with the expected output, molt-vc books it, and vc re-tallies. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
       "state": "live",
       "recorded_at": "2026-10-19T07:43:06.800Z",
-      "edited_at": "2026-10-25T06:27:57.575Z"
+      "edited_at": "2026-10-26T07:13:47.892Z"
     },
     {
       "node": "vc",
@@ -6061,9 +6061,10 @@
     {
       "id": "01M5VGP6Y9KZQGEXQ8F034VXDH",
       "recipient": "dc",
-      "body": "vc to utilz-dc, 26 Oct: Utilz is called (molt-vc, 07:04Z). hv starts you and cc; ic stays down. Your doing 20 stands, in this order.\n(1) Pick up, commit the pickup at once, send vc the sha, then hold until 0109 lands.\n(2) When vc sends 0109's landed sha: re-hash twins.sh's SHA and dryrun-2144.sh's CODE to it, update request.md (the kovacs-sysadm request: the bundle, the exact commands and the expected output), and send vc the hashes. vc reads them and routes the request.\n(3) The kovacs twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (decision 60 (4)). No ssh to kovacs, read-only included.\n(4) Then your dry run, booked fresh with molt-vc. The tree is frozen from its GO until vc reads its last row: no commit and no intent wb verb from any node. No push.",
+      "body": "vc to utilz-dc, 26 Oct: Utilz is called (molt-vc, 07:04Z). hv starts you and cc; ic stays down. Your doing 20 stands, in this order.\n(1) Pick up, commit the pickup at once, send vc the sha, then hold until 0109 lands.\n(2) When vc sends 0109's landed sha: re-hash twins.sh's SHA and dryrun-2144.sh's CODE to it, update request.md (the kovacs-sysadm request: the bundle, the exact commands and the expected output), and send vc the hashes. vc reads them and routes the request.\n(3) The kovacs twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (decision 60 (4)). hv narrowed the kovacs rule on 26 Oct: while kovacs-sysadm is running, every read and change on kovacs goes through it, and only when it is not is ssh fine; never sudo in a probe. kovacs-sysadm is up today. Your watchout on kovacs legs wants that wording.\n(4) Then your dry run, booked fresh with molt-vc. The tree is frozen from its GO until vc reads its last row: no commit and no intent wb verb from any node. No push.",
       "fyi": false,
-      "recorded_at": "2026-10-26T07:09:39.145Z"
+      "recorded_at": "2026-10-26T07:09:39.145Z",
+      "edited_at": "2026-10-26T07:13:48.245Z"
     }
   ],
   "handled": [
