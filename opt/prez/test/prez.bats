@@ -541,10 +541,15 @@ EOS
 
 @test "doctor's crate discovery is by convention and finds every crate on disk" {
   # The same opt/*/crate/Cargo.toml convention the test driver and CI use, so a
-  # second Rust utility is covered without editing the check.
-  run bash -c "find '$UTILZ_HOME/opt' -mindepth 3 -maxdepth 3 -path '$UTILZ_HOME/opt/*/crate/Cargo.toml' | wc -l | tr -d ' '"
-  assert_success
-  assert_output "1"
+  # new Rust utility is covered without editing the check. Doctor itself is
+  # asked, not a copy of its probe (issue 0110): it names the count only where
+  # cargo is missing, so cargo is hidden, and the count it must name is the
+  # tree's own, read here by a glob.
+  local crates=("$UTILZ_HOME"/opt/*/crate/Cargo.toml) farm
+  [[ -f "${crates[0]}" ]] || fail "no crate under $UTILZ_HOME/opt/*/crate"
+  farm="$(path_without cargo)"
+  run env PATH="$farm" "$UTILZ_BIN_DIR/utilz" doctor
+  assert_output_contains "Required: Install Rust for the ${#crates[@]} utility/utilities that build from source"
 }
 
 @test "the test driver's three convention sources are all present" {

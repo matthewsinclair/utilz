@@ -1740,10 +1740,25 @@ _doctor_check_dependencies() {
           if dependency_present "$yaml_file" "$dep_list" "$i" "$dep_name"; then
             continue
           fi
-          dep_install=$(yq eval ".${dep_list}[$i].install" "$yaml_file" 2>/dev/null)
+          # ITS INSTALL LINE AND WHETHER IT IS REQUIRED ARE READ, OR THE ENTRY
+          # IS REFUSED BY NAME (issue 0110). Each read was bare, so under
+          # bin/utilz's set -e one that failed ended doctor here, saying
+          # nothing. A required value that cannot be read is never taken as
+          # required or as optional.
+          if ! dep_install=$(yq eval ".${dep_list}[$i].install" "$yaml_file" 2>/dev/null); then
+            error "$name: ${dep_list}[$i] ($dep_name): its install line cannot be read: $(yaml_read_error "$yaml_file")"
+            issues=$((issues + 1))
+            refused_entries=$((refused_entries + 1))
+            continue
+          fi
           dep_required=false
           if [[ "$dep_list" == dependencies ]]; then
-            dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null)
+            if ! dep_required=$(yq eval ".dependencies[$i].required" "$yaml_file" 2>/dev/null); then
+              error "$name: dependencies[$i] ($dep_name): whether it is required cannot be read: $(yaml_read_error "$yaml_file")"
+              issues=$((issues + 1))
+              refused_entries=$((refused_entries + 1))
+              continue
+            fi
           fi
           if [[ "$dep_required" == "false" ]]; then
             dep_purpose=$(dependency_purpose "$yaml_file" "$dep_list" "$i")
@@ -1807,9 +1822,22 @@ _doctor_check_dependencies() {
   # builds on first use through its own shim, and that shim refuses by name
   # when cargo is absent. Doctor points at the toolchain; it does not duplicate
   # the refusal the shim already makes well.
-  local crate_count
-  crate_count=$(find "$UTILZ_HOME/opt" -mindepth 3 -maxdepth 3 \
-    -path "$UTILZ_HOME/opt/*/crate/Cargo.toml" 2>/dev/null | wc -l | tr -d ' ')
+  #
+  # A PROBE THAT FAILED IS SAID, AND NEVER READ AS NO CRATES (issue 0110). It
+  # was a pipeline under pipefail with find's stderr sent to /dev/null, so a
+  # directory under opt/ that find could not read ended doctor here, saying
+  # nothing. find's own words are kept now, and only a line that names a
+  # crate's Cargo.toml is counted as a crate.
+  local crate_count=0 crate_lines crate_why crate_status=0
+  crate_lines=$(find "$UTILZ_HOME/opt" -mindepth 3 -maxdepth 3 \
+    -path "$UTILZ_HOME/opt/*/crate/Cargo.toml" 2>&1) || crate_status=$?
+  if [[ $crate_status -eq 0 ]]; then
+    crate_count=$(printf '%s\n' "$crate_lines" | awk '/\/crate\/Cargo\.toml$/ { n++ } END { print n + 0 }')
+  else
+    crate_why=$(printf '%s\n' "$crate_lines" | awk '!/\/crate\/Cargo\.toml$/ && NF { printf "%s%s", sep, $0; sep = "; " }')
+    warn "The crates under $UTILZ_HOME/opt cannot be counted, so whether Rust is needed is not checked: ${crate_why:-find exited $crate_status and gave no reason}"
+    issues=$((issues + 1))
+  fi
   if [[ "$crate_count" -gt 0 ]] && ! check_command "cargo"; then
     info "Required: Install Rust for the $crate_count utility/utilities that build from source"
     echo -e "    brew install rust  (they build on first use)"

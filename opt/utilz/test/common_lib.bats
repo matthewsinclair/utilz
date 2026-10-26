@@ -560,6 +560,145 @@ doctor_issue_count() {
 }
 
 # ----------------------------------------------------------------------------
+# doctor's reads that ended it, saying nothing (issue 0110)
+# ----------------------------------------------------------------------------
+#
+# A missing dependency's install line and its required value were read bare,
+# and the crates under opt/ were counted by a find in a pipeline, with its
+# stderr sent to /dev/null. Under bin/utilz's `set -euo pipefail` a read that
+# failed ended doctor before its summary, and nothing said why. Each test runs
+# run_doctor strict, as bin/utilz does, and checks that each fault is named, in
+# its whole line, and adds one issue to the same home before it. beta declares
+# more than one dependency a fault stops, so the sweep is seen going on past a
+# refusal. The count's own path, rewritten with its fault's, is run through
+# doctor with cargo hidden, so the Rust note names it.
+
+# A yq first on PATH that fails on a read of <field> of a dependency entry,
+# `.<list>[<i>].<field>`, saying so on stderr as yq does, and hands every other
+# read to the real yq. Prints the directory to put first on PATH.
+yq_failing_on() {
+  local field="$1" dir real
+  real="$(command -v yq)" || return 1
+  dir="$BATS_TEST_TMPDIR/yq-failing-on-$field"
+  mkdir -p "$dir" || return 1
+  cat > "$dir/yq" <<EOF || return 1
+#!/bin/bash
+case "\${2:-}" in
+  *"].$field") echo "Error: failed on purpose (common_lib.bats, issue 0110)" >&2; exit 1 ;;
+esac
+exec "$real" "\$@"
+EOF
+  chmod +x "$dir/yq" || return 1
+  printf '%s\n' "$dir"
+}
+
+# beta's yaml, declaring each <name> as a dependency no machine has, with an
+# install line, and with `required: false` when <required> is false.
+beta_declares_absent() {
+  local home="$1" required="$2" name
+  shift 2
+  {
+    printf 'name: beta\nversion: 1.0.0\ndescription: Fake beta\ndependencies:\n'
+    for name in "$@"; do
+      printf '  - name: %s\n    install: brew install %s\n' "$name" "$name"
+      if [[ "$required" == false ]]; then
+        printf '    required: false\n'
+      fi
+    done
+  } > "$home/opt/beta/beta.yaml"
+}
+
+# A crate under opt/<name>/crate for each <name>, as a utility that builds
+# from source carries it.
+add_crates() {
+  local home="$1" name
+  shift
+  for name in "$@"; do
+    mkdir -p "$home/opt/$name/crate" || return 1
+    printf '[package]\nname = "%s"\nversion = "1.0.0"\n' "$name" > "$home/opt/$name/crate/Cargo.toml" || return 1
+  done
+}
+
+@test "run_doctor refuses each missing dependency whose install line cannot be read, by name, and reaches its verdict (issue 0110)" {
+  local home before stubs absent=(zz-absent-0110-a zz-absent-0110-b)
+  local refusal="its install line cannot be read: it parses, but yq could not read the part asked for"
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  beta_declares_absent "$home" true "${absent[@]}"
+  stubs="$(yq_failing_on install)"
+
+  PATH="$stubs:$PATH" run_common_strict "$home" run_doctor
+  printf '%s\n' "$output" | grep -qxF "✗ beta: dependencies[0] (${absent[0]}): $refusal" ||
+    fail "no refusal of ${absent[0]}. Actual output:\n$output"
+  printf '%s\n' "$output" | grep -qxF "✗ beta: dependencies[1] (${absent[1]}): $refusal" ||
+    fail "no refusal of ${absent[1]}. Actual output:\n$output"
+  refute_output_contains "Missing dependencies"
+  refute_output_contains "Optional: 'zz-absent-0110"
+  assert_output_contains "${#absent[@]} dependency entr(ies) not checked, named above"
+  assert_output_contains "Checking install integrity"
+  [[ "$(doctor_issue_count)" -eq $((before + ${#absent[@]})) ]] ||
+    fail "Expected $((before + ${#absent[@]})) issues, one more for each of beta's entries than the $before before them. Actual output:\n$output"
+}
+
+@test "run_doctor refuses each missing dependency whose required value cannot be read, by name, and takes it as neither required nor optional (issue 0110)" {
+  local home before stubs absent=(zz-absent-0110-a zz-absent-0110-b)
+  local refusal="whether it is required cannot be read: it parses, but yq could not read the part asked for"
+  home="$(make_fake_home)"
+  run_common_strict "$home" run_doctor
+  before=$(doctor_issue_count)
+  beta_declares_absent "$home" false "${absent[@]}"
+  stubs="$(yq_failing_on required)"
+
+  PATH="$stubs:$PATH" run_common_strict "$home" run_doctor
+  printf '%s\n' "$output" | grep -qxF "✗ beta: dependencies[0] (${absent[0]}): $refusal" ||
+    fail "no refusal of ${absent[0]}. Actual output:\n$output"
+  printf '%s\n' "$output" | grep -qxF "✗ beta: dependencies[1] (${absent[1]}): $refusal" ||
+    fail "no refusal of ${absent[1]}. Actual output:\n$output"
+  refute_output_contains "Missing dependencies"
+  refute_output_contains "Optional: 'zz-absent-0110"
+  assert_output_contains "${#absent[@]} dependency entr(ies) not checked, named above"
+  assert_output_contains "Checking install integrity"
+  [[ "$(doctor_issue_count)" -eq $((before + ${#absent[@]})) ]] ||
+    fail "Expected $((before + ${#absent[@]})) issues, one more for each of beta's entries than the $before before them. Actual output:\n$output"
+}
+
+@test "run_doctor counts the crates under opt/, and names the count when cargo is missing (issue 0110)" {
+  local home farm crates=(alpha beta)
+  home="$(make_fake_home)"
+  add_crates "$home" "${crates[@]}"
+  farm="$(path_without cargo)"
+
+  PATH="$farm" run_common_strict "$home" run_doctor
+  assert_output_contains "Required: Install Rust for the ${#crates[@]} utility/utilities that build from source"
+}
+
+@test "run_doctor says when it cannot count the crates under opt/, and why, leaves the Rust note out, and reaches its verdict (issue 0110)" {
+  local home before locked farm line crates=(alpha beta)
+  home="$(make_fake_home)"
+  add_crates "$home" "${crates[@]}"
+  farm="$(path_without cargo)"
+  PATH="$farm" run_common_strict "$home" run_doctor
+  assert_output_contains "Required: Install Rust for the ${#crates[@]} utility/utilities that build from source"
+  before=$(doctor_issue_count)
+  locked="$home/opt/zz-locked-0110"
+  mkdir "$locked"
+  chmod 000 "$locked"
+  [[ ! -r "$locked" ]] || skip "this user can read a directory of mode 000, as root can"
+
+  PATH="$farm" run_common_strict "$home" run_doctor
+  chmod 755 "$locked"
+  line=$(printf '%s\n' "$output" | grep -F "⚠ The crates under $home/opt cannot be counted, so whether Rust is needed is not checked: ") ||
+    fail "no warning that the crates cannot be counted. Actual output:\n$output"
+  [[ "$line" == *"$locked"*"Permission denied" ]] ||
+    fail "the warning does not say find could not read $locked: $line"
+  refute_output_contains "Install Rust"
+  assert_output_contains "Checking install integrity"
+  [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
+    fail "Expected $((before + 1)) issues, one more than the $before before the unreadable directory. Actual output:\n$output"
+}
+
+# ----------------------------------------------------------------------------
 # get_util_metadata on a yaml yq cannot read, and its four callers (issue 0081)
 # ----------------------------------------------------------------------------
 #
