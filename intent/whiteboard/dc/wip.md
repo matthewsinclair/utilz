@@ -3,8 +3,8 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: bc2f8276-99c2-4c44-b990-1124aa522585
-heartbeat_at: 2026-10-26 18:03Z
-status: active
+heartbeat_at: 2026-10-26 19:47Z
+status: paused
 focus: "26 Oct 18:03Z: holding 2.14.4's checks until devbin's critic-exit-4 fix is vendored (dry run RED at the critic gate, banked)"
 claims: []
 ---
