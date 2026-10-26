@@ -1,0 +1,15 @@
+{
+  "id": "01M5W7M86PAH9VTAA7N9YM088T",
+  "ts": "2026-10-26T13:50:32.150Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Utilz holds for molt-vc's machine-wide localfold, compact and hold round, on hv's word (26 Oct; the slots desk on hold since 13:47:11Z, hold 01M5W7E40CE071QMSE4JT8KWXQ): no new task, no slot ask, and no commit past each node's fold, cc's, dc's and vc's. After hv's compact, inside the hold, the pickup is skipped (it writes the board) and boards are read with intent wb show. Released when hv says go on, through molt-vc, and molt-vc lifts the desk's hold; then each node picks up and commits at once."
+  }
+}

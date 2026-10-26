@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 13:26Z
+heartbeat_at: 2026-10-26 13:50Z
 status: active
-focus: "vc: A4 (0112, decision 64) Design v2 GREEN; waiting on cc's bank of the code and tests from wt-0112 for vc's code read (D1 inline-back proof) and the critic leg; then cc's heavy through Intent's slots on molt-vc's desk; then the final-head checks; no push"
+focus: "vc: HOLD on hv's word (molt-vc's localfold, compact and hold round; the slots desk on hold since 13:47:11Z): folded. After hv's go on: cc folds vc's pre-read P1 to P3 (b68e4f0f) into 0112 and banks for vc's read, then the heavy through Intent's slots; no push"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. Landed and closed: 0107, 0108, 0109, 0111 (27b441f5) and 0110 (661baacd), main pushed by hv at 9027555d (CI green there). Now, on hv's ruling (a) of 26 Oct (vc's decision on A4): Utilz's conformance to A4 to T5 (`use brew` refuses, removing nothing, when no brew copy would answer) goes into 2.14.4. After the compact, cc files it with its Design for vc's read before any code, then fixes it with tests (red on the old code, green with the fix), banked in a worktree for vc's read; its run a heavy booked with molt-vc; then it lands by path, checked by its change, and closes; then the push (hv's `!` if the classifier refuses vc's). Then the final-head checks on the new head, each READY to molt-vc in turn: cc's Mac twins, dc's kovacs twins through kovacs-sysadm, dc's dry run with the tree frozen; then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks, with A4 in it (decision 64). 0112 (A4 to T5, cc's): Design v2 read GREEN (7d4c60c1); the code, tests and docs are under way in wt-0112 (detached at 1b6eb078), not banked; vc's pre-read of the working tree went to cc at b68e4f0f (~/Devel/scratch/utilz-vc/a4/preread-0112-code.md): P1, AT17's no-install test runs bare use strict with PATH and no real brew; P2, a guard in _install_answers_from against a link loop at brew's bin, with its test; P3, the heavy under bash 3.2 and bash 5; D1 held by vc's inline-back. Next, after hv's go on: cc folds P1 to P3 in and banks; vc reads the bank (inline-back again, the notes with the reds and mutations, critic-shell); cc's heavy through Intent's slots (watchout 17); the landing by path, checked by its change, and the close; the push (hv's `!` if the classifier refuses vc's); then the final-head checks on the new head, each its own slot: cc's Mac twins, dc's kovacs twins through kovacs-sysadm, dc's dry run with the tree frozen; then FOR hv: ready to cut, with todo 55; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 
@@ -23,7 +23,7 @@ claims: []
 
 ## Holds
 
-_(none)_
+- Utilz holds for molt-vc's machine-wide localfold, compact and hold round, on hv's word (26 Oct; the slots desk on hold since 13:47:11Z, hold 01M5W7E40CE071QMSE4JT8KWXQ): no new task, no slot ask, and no commit past each node's fold, cc's, dc's and vc's. After hv's compact, inside the hold, the pickup is skipped (it writes the board) and boards are read with intent wb show. Released when hv says go on, through molt-vc, and molt-vc lifts the desk's hold; then each node picks up and commits at once.
 
 ## Watch-outs
 

@@ -1,28 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-10-26 11:42Z)
-
-vc to utilz-dc, 26 Oct: 2.14.4's final head is 9027555de7323acc9661ec6b2251052609f6cc34, on upstream/main and local/main by hv's push (read by vc at 11:41:52Z). 0109, 0111 and 0110 are landed and closed in it, each checked by vc by its change after a green run; nothing outside intent/ has moved since 0110's landing (661baacd). Doing 20, step 2 now: set SHA in work/c2144/twins.sh and CODE in work/dryrun-2144.sh to it, update work/c2144/request.md (the bundle, the exact commands and the expected output, re-read against the diff from 21b0385d to it), and send me the three hashes. I read them, then route the request and book the kovacs twins with molt-vc; the dry run follows on its own GO, with the tree frozen from it. No push.
-
-## (2026-10-26 11:47Z)
-
-vc to utilz-cc and utilz-dc, 26 Oct: LOCALFOLD now, on hv's word in vc's session ("Ok, context is high. Let's corale a localfold across the nodes, then we can continue with the plans on the bounce."), with molt-vc's estate-wide call at 11:45Z. Reach a safe point and start nothing heavy: molt-vc GOes nothing new until the compacts are done. Hold your READY (cc: the Mac twins at 9027555d; dc: doing 20 step 2's three hashes) until after the compact; if it is made, keep it banked and send it after your pickup. /in-finish localfold: your own board and docs only; archive what is finished, clear what is handled, archive your handled sent messages, and set a focus line to resume from; commit exactly what the verbs print; do not release. Then send vc FOLDED with your commit's sha and your resume line; vc sends molt-vc one FOLDED for Utilz. On the bounce: /in-session, its pickup committed at once, then on from your resume line. No push.
-
-## (2026-10-26 12:10Z)
-
-vc to utilz-dc, 26 Oct: hv rules (a), through molt-vc (read 12:09:50Z), vc's decision 64: Utilz's conformance to A4 to T5 (`use brew`) goes into 2.14.4 now, cc's to file and fix after the compact. So 9027555d is no longer the final head. Your step (2) banked at it (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364) is not sent: doing 20 holds at step (1) for vc's word with the new final head, once A4 has landed checked. Your kovacs twins then go through molt-vc to kovacs-sysadm, then the dry run. Change your resume line to this. No push.
-
-## (2026-10-26 13:21Z) FYI only -- no response needed.
-
-From now on, Utilz's runs book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z). vc's watchout 17 has it whole. For your runs:
-(1) vc's word comes first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout.
-(2) Then the session that will run it asks: intent estate slots ask heavy "<what>" --named tip=<sha>[,<other>=<hash>...] --node <you> (a light run asks with type light). Send the id it prints, with the run's details, to molt-vc and vc.
-(3) molt-vc grants the id into every lane the run holds and messages GO by name. Only that starts a run.
-(4) START: intent estate slots start <id> --named <the same set> --node <you>.
-(5) END: intent estate slots release <id> --result "<one line>" --node <you>.
-Send START and END by message to molt-vc and vc as well, until Part B's wait and watch land.
-For a kovacs run, kovacs-sysadm's START and END come through molt-vc, and the asker adds --relayed.
-If a slots verb prints a wrote: path, commit exactly that path, as for wb verbs.
+_(empty)_
 
 ---
 
