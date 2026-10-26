@@ -634,12 +634,12 @@ Utilz follows the dev, opt, brew contract that every tool released through Homeb
 `utilz version` names the tree that answered, on one line:
 
 ```
-utilz <version> (dev, 0123456789ab) at /Users/you/Devel/prj/Utilz
-utilz <version> (opt, 0123456789ab) at /Users/you/Devel/opt/utilz
-utilz <version> (brew, 0123456789ab) at /opt/homebrew/opt/utilz/libexec
+utilz <version> (dev, 0123456789ab)
+utilz <version> (opt, 0123456789ab)
+utilz <version> (brew, 0123456789ab)
 ```
 
-The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`. A brew tree is named by brew's opt link, never the versioned keg. `utilz doctor` prints the same line first, and checks the manifest: every file it names, each dispatcher link's target, and CI's verdict on the commit as the publish recorded it.
+The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`. The line names no path: where the running copy lives is the answer `command -v utilz` gives. `utilz doctor` prints the same line first, and checks the manifest: every file it names, each dispatcher link's target, and CI's verdict on the commit as the publish recorded it.
 
 ### Switching the shell between trees
 

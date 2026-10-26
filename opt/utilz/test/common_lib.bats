@@ -166,7 +166,7 @@ run_without_yq() {
   # is why five of the ten tests carrying it stayed GREEN through a change
   # that rewrote every one of these lines. ST0015/AC01. Since issue 0105 the
   # form is the dev, opt, brew contract's one version line (T4).
-  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\)$"
 }
 
 @test "show_version() extracts version from utility help file" {
@@ -360,9 +360,12 @@ EOF
   ln -s "$home/bin/utilz" "$shim/utilz"
 
   # PATH carries the shim but NOT $home/bin, so the only route to the
-  # dispatcher is through the symlink -- a working install either way.
+  # dispatcher is through the symlink -- a working install either way. The
+  # verdict says so and names no path, the link's included (contract A3,
+  # issue 0109).
   run_in_fake_home_with_path "$home" "$shim" run_doctor
-  assert_output_contains "$shim/utilz"
+  assert_output_contains "✓ this tree's utilz is on \$PATH"
+  refute_output_contains "$shim/utilz"
   refute_output_contains "is not in \$PATH"
 }
 

@@ -112,7 +112,7 @@ load "test_helper.bash"
 
   run_publish "$src" "$dst"
   assert_success
-  grep -q "^# source_commit: $(git -C "$src" rev-parse HEAD)$" "$dst/manifest.sha256" || fail "the manifest does not record HEAD"
+  [[ "$(manifest_source_commit "$dst")" == "$(git -C "$src" rev-parse HEAD)" ]] || fail "the manifest does not record HEAD"
   assert_file_not_exists "$dst/docs/notes.md"
 }
 

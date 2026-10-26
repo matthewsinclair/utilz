@@ -121,22 +121,22 @@ Every answer carries **both** versions in play -- the framework's and the utilit
 
 ```bash
 $ utilz version          # --version is accepted as an alias
-utilz 2.7.0 (brew, 0123456789ab) at /opt/homebrew/opt/utilz/libexec
+utilz 2.7.0 (brew, 0123456789ab)
 
 $ utilz mdagg --version  # either invocation form, byte-identical
 utilz:2.7.0/mdagg:1.0.0
 Markdown aggregator
-utilz 2.7.0 (brew, 0123456789ab) at /opt/homebrew/opt/utilz/libexec
+utilz 2.7.0 (brew, 0123456789ab)
 
 $ mdagg --version
 utilz:2.7.0/mdagg:1.0.0
 Markdown aggregator
-utilz 2.7.0 (brew, 0123456789ab) at /opt/homebrew/opt/utilz/libexec
+utilz 2.7.0 (brew, 0123456789ab)
 ```
 
 **Both invocation forms give the same bytes**, and that is a guarantee rather than a coincidence: `bin/utilz` answers `--version` from one place for both. Until ST0015 it intercepted the symlink form only, thirteen utilities hand-copied an arm to cover the other, and the two that never copied it -- `todo` and `prez` -- were the two that disagreed with themselves.
 
-Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>) at <root>`. It names **which tree replied** -- dev, opt or brew -- and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. A Homebrew install is named by brew's opt link, which follows each upgrade, never the versioned keg. A utility's answer is the pair and its description, with that line last. CI's verdict on the commit is `utilz doctor`'s to show: a record, not a gate.
+Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>)`. It names **which tree replied** -- dev, opt or brew -- and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads the line up to its closing parenthesis and ignores anything after it. A utility's answer is the pair and its description, with that line last. CI's verdict on the commit is `utilz doctor`'s to show: a record, not a gate.
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 

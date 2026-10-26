@@ -59,7 +59,8 @@ EOF
   assert_success
   assert_output_contains "git pull --ff-only in $dev"
   [[ "$(git -C "$dev" rev-parse --short=12 HEAD)" == "$want" ]] || fail "dev is at $(git -C "$dev" rev-parse --short=12 HEAD), not $want"
-  assert_output_contains "utilz 9.9.9 (dev, $want) at $dev"
+  # The whole line, which names no path (issue 0109).
+  printf '%s\n' "$output" | grep -qxF "utilz 9.9.9 (dev, $want)" || fail "no version line 'utilz 9.9.9 (dev, $want)': $output"
 }
 
 @test "upgrade in dev refuses over a dirty runtime set, and pulls nothing (issue 0105)" {
@@ -110,8 +111,8 @@ EOF
   # IN THIS ORDER: the update first, so outdated reads the current tap.
   [[ "$(grep -v '^--prefix' "$stub.calls" | cut -d' ' -f1 | tr '\n' ' ')" == "update outdated upgrade " ]] || fail "brew was asked, in order: $(cat "$stub.calls")"
   assert_output_contains "upgrade: brew update"
-  assert_output_contains "(brew, "
-  assert_output_contains "at $prefix/opt/utilz/libexec"
+  # The whole line, which names no path (issue 0109).
+  printf '%s\n' "$output" | grep -qxE 'utilz 9\.9\.9 \(brew, [0-9a-f]{12}\)' || fail "no version line 'utilz 9.9.9 (brew, <sha12>)': $output"
 }
 
 @test "upgrade in brew upgrades nothing when brew's utilz is current (issue 0105)" {

@@ -697,6 +697,14 @@ run_publish() {
   run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
 }
 
+# Echo the commit the manifest of the install at <prefix> records as its
+# source_commit, in full, or nothing when it records none. The version line
+# names no path (contract A3, issue 0109), so this commit is what says an
+# install answered, and this is the one reader the suites ask.
+manifest_source_commit() {
+  awk '/^# source_commit: / { print substr($0, 18); exit }' "$1/manifest.sha256"
+}
+
 # Stage everything in a fixture tree and commit it, so HEAD matches the tree
 # afterwards. A tree that already matches is not an error: a copy of a clean
 # checkout has nothing to commit. Everything else that stops the commit fails

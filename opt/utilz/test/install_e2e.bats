@@ -121,13 +121,17 @@ teardown_file() {
 @test "AC01: utilz version runs from the install with no source tree" {
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" version
   assert_success
-  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \(opt, [0-9a-f]{12}\) at /"
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \(opt, [0-9a-f]{12}\)$"
   # Which tree answered is NOT cosmetic: ST0014/AC12 holds that an installed
   # utilz can be told from a source utilz at the prompt, and it earned that
   # within the hour -- it was the one command that said WHICH TREE answered
   # when a checkout and a stale install disagreed about --version. Since issue
-  # 0105 the contract's one version line carries it (T4).
-  assert_output_contains ") at $E2E_PREFIX"
+  # 0105 the contract's one version line carries it (T4), by the tree and the
+  # commit its manifest records, and no path (contract A3, issue 0109).
+  local recorded
+  recorded=$(manifest_source_commit "$E2E_PREFIX")
+  [ -n "$recorded" ]
+  assert_output_contains "(opt, ${recorded:0:12})"
 }
 
 # The one roster of what an install carries. doctor's count below is read

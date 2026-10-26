@@ -9,6 +9,11 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.14.4] - unreleased
 
+### Changed
+
+- **`utilz --version` names no path**: the line is `utilz <version> (<tree>, <commit>)`, with ` at <root>` gone, on hv's ruling (issue 0109; devbin's contract amendment A3 to `docs/dev-opt-brew.md` T4). Where the running copy lives is the answer `command -v utilz` gives. `(dev, unknown)`, `(unknown)` and `(<tree>, old manifest)` keep their parenthesis. `utilz version`, `utilz doctor`'s first line, `utilz upgrade` and `utilz use` print the same line, as does the last line of each utility's `--version`. A reader reads up to the closing parenthesis and ignores anything after it, so a line in the old shape still reads.
+- **`utilz doctor` names a path only on a check that fails** (issue 0109, A3's doctor clause, on hv's ruling). Its passing lines for `UTILZ_HOME`, the tree and `PATH`, and its note on an old keg's manifest, keep their verdict and name no path. A failing check still names the path it is about, with its remedy.
+
 ### Fixed
 
 - **mdagg puts one blank line between the files it joins**, as its README shows (issue 0107). Each file was read with its trailing newlines dropped and printed with one, so the next file began on the line after the last one, and a paragraph ran into the heading or list that followed it. A plain join now prints one blank line between files, from arguments, a YAML config or stdin; nothing goes before the first file, so its front matter stays first, or after the last. No second blank line is added where a section divider or a page break already separates two files, or before a file whose content starts with one, and a divider after a page break no longer leaves two. mdagg goes from 1.0.0 to 1.0.1.

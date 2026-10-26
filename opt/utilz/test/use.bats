@@ -262,8 +262,12 @@ make_fake_brew() {
   assert_success
   [[ "$(cd "$bindir" && echo *)" == "stranger" ]] || fail "the link directory still holds: $(cd "$bindir" && echo *)"
   [[ "$(readlink "$bindir/stranger")" == "$before" ]] || fail "use brew changed a link that is not Utilz's"
-  assert_output_contains "(brew, "
-  assert_output_contains "at $brew/opt/utilz/libexec"
+  # The whole line, which names no path (issue 0109): the stub keg's version
+  # and the commit its manifest records.
+  local recorded
+  recorded=$(manifest_source_commit "$brew/opt/utilz/libexec")
+  [[ -n "$recorded" ]] || fail "the stub keg's manifest records no commit"
+  printf '%s\n' "$output" | grep -qxF "utilz 9.9.9 (brew, ${recorded:0:12})" || fail "no version line 'utilz 9.9.9 (brew, ${recorded:0:12})': $output"
 }
 
 @test "use brew refuses by name, and removes nothing, when there is no Homebrew install of Utilz" {

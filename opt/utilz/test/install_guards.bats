@@ -292,10 +292,13 @@ teardown_file() {
   assert_success
   assert_output_contains "Trope Analysis"
 
-  # And the child sees the prefix, not the inherited source.
+  # And doctor, which runs in the dispatcher itself rather than in a child,
+  # reads the prefix, not the inherited source: its version line carries the
+  # prefix's marker VERSION and the install's tree, never the dev tree. Its
+  # passing lines name no path (A3, issue 0109), so this line tells them apart.
   run env UTILZ_HOME="$GUARD_SRC" "$inst/bin/utilz" doctor
-  assert_output_contains "UTILZ_HOME=$inst"
-  refute_output_contains "UTILZ_HOME=$GUARD_SRC"
+  assert_output_contains "utilz PREFIX-MARKER-9.9.9 (opt, "
+  refute_output_contains "(dev, "
 }
 
 # ============================================================================
@@ -306,9 +309,9 @@ teardown_file() {
 @test "utilz version tells an install from a source tree, and names the commit" {
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" version
   assert_success
-  # The contract's one line (T4, issue 0105): the tree, the commit, the root.
+  # The contract's one line (T4, issue 0105): the tree and the commit, and no
+  # path (contract A3, issue 0109).
   assert_output_contains "(opt, "
-  assert_output_contains ") at $GUARD_INSTALL"
 
   # THE MANIFEST IS THE RECORD; LIVE HEAD IS ONLY A PROXY FOR IT. The runtime
   # reads `source_commit` out of the manifest, so that is the value the
@@ -316,7 +319,7 @@ teardown_file() {
   # instead tested a slightly different claim, true only while nobody committed
   # between setup_file and here -- see issue 0011.
   local recorded
-  recorded=$(awk '/^# source_commit: / { print substr($0, 18); exit }' "$GUARD_INSTALL/manifest.sha256")
+  recorded=$(manifest_source_commit "$GUARD_INSTALL")
   [ -n "$recorded" ]
   assert_output_contains "(opt, ${recorded:0:12})"
 
@@ -341,7 +344,7 @@ teardown_file() {
   fi
 
   local recorded
-  recorded=$(awk '/^# source_commit: / { print substr($0, 18); exit }' "$GUARD_INSTALL/manifest.sha256")
+  recorded=$(manifest_source_commit "$GUARD_INSTALL")
   [ "$recorded" = "$GUARD_SRC_HEAD_BEFORE" ]
 }
 
@@ -457,8 +460,12 @@ teardown_file() {
   # was meant to be compared against produces identical output either way.
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
   assert_success
-  assert_output_contains ") at $GUARD_INSTALL"
-  assert_output_matches "^utilz [0-9]+\\.[0-9]+\\.[0-9]+ \\(opt, [0-9a-f]{12}\\) at /"
+  # The line names no path (issue 0109), so the install's manifest commit is
+  # what says the install answered.
+  local recorded
+  recorded=$(manifest_source_commit "$GUARD_INSTALL")
+  assert_output_contains "(opt, ${recorded:0:12})"
+  assert_output_matches "^utilz [0-9]+\\.[0-9]+\\.[0-9]+ \\(opt, [0-9a-f]{12}\\)$"
   refute_output_contains "utilz v"
 
   local fw
@@ -499,8 +506,9 @@ teardown_file() {
   # that silently retargets produces identical output either way.
   run env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version
   assert_success
-  assert_output_contains "(opt, "
-  assert_output_contains ") at $GUARD_INSTALL"
+  local recorded
+  recorded=$(manifest_source_commit "$GUARD_INSTALL")
+  assert_output_contains "(opt, ${recorded:0:12})"
 
   local u n=0 bad=0 a b marker hf
   for u in "${GUARD_UTILITIES[@]}"; do

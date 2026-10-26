@@ -121,7 +121,7 @@ Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its 
 
    ```bash
    HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz
-   utilz version   # utilz <version> (brew, <sha12>) at $(brew --prefix)/opt/utilz/libexec
+   utilz version   # utilz <version> (brew, <sha12>)
    utilz doctor
    ```
 

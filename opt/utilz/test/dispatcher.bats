@@ -57,10 +57,12 @@ load "test_helper.bash"
   # above passes whichever stream a line took. Doctor printed its titles on
   # stdout and every verdict on stderr, so a saved or paged report kept the
   # titles and lost the answers. Both directions are asserted, so an empty
-  # report cannot pass for a whole one. "UTILZ_HOME=" is the UTILZ_HOME check's verdict;
-  # its title, "Checking UTILZ_HOME...", carries no "=".
+  # report cannot pass for a whole one. "✓ UTILZ_HOME is set, to a directory
+  # that exists" is the UTILZ_HOME check's verdict; its title, "Checking
+  # UTILZ_HOME...", names UTILZ_HOME and carries none of the verdict's words,
+  # "is set, to a directory that exists".
   run bash -c '"$1" doctor 2>/dev/null' _ "$UTILZ_BIN_DIR/utilz"
-  assert_output_contains "UTILZ_HOME="
+  assert_output_contains "✓ UTILZ_HOME is set, to a directory that exists"
   run bash -c '"$1" doctor 2>&1 >/dev/null' _ "$UTILZ_BIN_DIR/utilz"
   assert_output ""
 }
@@ -81,7 +83,7 @@ load "test_helper.bash"
   # is why five of the ten tests carrying it stayed GREEN through a change
   # that rewrote every one of these lines. ST0015/AC01. Since issue 0105 the
   # form is the dev, opt, brew contract's one version line (T4).
-  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\)$"
 }
 
 @test "utilz test - runs without bats shows error" {
@@ -116,7 +118,7 @@ load "test_helper.bash"
   assert_success
   # `utilz v2.6.1` until ST0015, then `utilz:2.6.1`, and since issue 0105 the
   # contract's one version line (T4). No `v` in any of them.
-  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\) at /"
+  assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\)$"
   refute_output_contains "utilz v"
 }
 

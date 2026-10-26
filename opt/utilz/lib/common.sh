@@ -277,7 +277,7 @@ show_version() {
     # `utilz:<framework>/<util>:<version>`. Both are read, never restated.
     #
     # utilz itself answers with the ONE VERSION LINE of the dev, opt, brew
-    # contract (T4, issue 0105): `utilz <version> (<tree>, <sha12>) at <root>`,
+    # contract (T4, issue 0105; A3, issue 0109): `utilz <version> (<tree>, <sha12>)`,
     # which says which tree replied and what it was cut from on one line, as
     # every tool released through Homebrew says it. It replaced the framework's
     # three lines (`utilz:<version>`, the description, the tree).
@@ -1012,10 +1012,10 @@ brew_keg_prefix() {
 
 # Echo the path brew keeps for the keg at <tree> across upgrades, or return 1.
 #
-# BREW IS NAMED BY ITS OPT LINK (contract T1, T4; issue 0105). A keg is
+# BREW IS NAMED BY ITS OPT LINK (contract T1; issue 0105). A keg is
 # <prefix>/Cellar/utilz/<version>/libexec, and brew cleanup removes it once an
-# upgrade has installed the next one, so a version line that names it, or a
-# link into it, names nothing after an upgrade. brew keeps <prefix>/opt/utilz
+# upgrade has installed the next one, so a link into it names nothing after an
+# upgrade. brew keeps <prefix>/opt/utilz
 # pointing at the current keg, so <prefix>/opt/utilz/libexec follows each
 # upgrade. The Cellar layout only proposes the path: it is used only when it
 # leads back to <tree> (-ef), so a HOMEBREW_CELLAR set apart from the prefix
@@ -1104,22 +1104,6 @@ utilz_tree_is_install() {
   esac
 }
 
-# Echo the root a version line names for the tree at <root>: brew's opt link
-# for the Homebrew install (contract T4: never the versioned keg), else <root>
-# itself, absolute.
-utilz_tree_root() {
-  local root="${1:-$UTILZ_HOME}" stable
-  case "$(utilz_tree "$root")" in
-    brew*)
-      if stable=$(brew_stable_home "$root"); then
-        printf '%s\n' "$stable"
-        return 0
-      fi
-      ;;
-  esac
-  (cd "$root" 2>/dev/null && pwd) || printf '%s\n' "$root"
-}
-
 # Echo the version line's parenthesis for the tree at <root>: "<tree>, <sha12>"
 # with +dirty in dev while the runtime set is dirty; "dev, unknown" when a dev
 # tree's git cannot be read; "<tree>, old manifest" for the old form; and
@@ -1190,9 +1174,11 @@ print_path_remedy() {
   esac
 }
 
-# Echo the one version line: `utilz <version> (<tree>, <sha12>[+dirty]) at <root>`.
+# Echo the one version line: `utilz <version> (<tree>, <sha12>[+dirty])`. It
+# names no path: where the running copy lives is `command -v utilz`'s answer
+# (contract A3, hv's ruling, issue 0109).
 utilz_version_line() {
-  printf 'utilz %s (%s) at %s\n' "$(get_utilz_version)" "$(utilz_tree_provenance "$UTILZ_HOME")" "$(utilz_tree_root "$UTILZ_HOME")"
+  printf 'utilz %s (%s)\n' "$(get_utilz_version)" "$(utilz_tree_provenance "$UTILZ_HOME")"
 }
 
 # Check if a required command is installed
@@ -1367,7 +1353,10 @@ run_doctor() {
     error "UTILZ_HOME points to non-existent directory: $UTILZ_HOME"
     issues=$((issues + 1))
   else
-    success "UTILZ_HOME=$UTILZ_HOME"
+    # A passing line names no path (contract A3, issue 0109): where this tree
+    # lives is `command -v utilz`'s answer. A failing one names the path it is
+    # about.
+    success "UTILZ_HOME is set, to a directory that exists"
   fi
   echo ""
 
@@ -1385,17 +1374,17 @@ run_doctor() {
       ;;
     dev)
       if git_err=$(utilz_dev_commit "$UTILZ_HOME" 2>&1 >/dev/null); then
-        success "dev: the git checkout at $UTILZ_HOME"
+        success "dev: a git checkout git can read"
       else
         error "dev, but git cannot read $UTILZ_HOME: ${git_err:-git is not installed}"
         issues=$((issues + 1))
       fi
       ;;
     *" old")
-      success "${tree% old}: an install at $UTILZ_HOME, with an old manifest (see install integrity)"
+      success "${tree% old}: an install, with an old manifest (see install integrity)"
       ;;
     *)
-      success "$tree: an install at $UTILZ_HOME"
+      success "$tree: an install"
       ;;
   esac
   echo ""
@@ -1474,8 +1463,11 @@ run_doctor() {
   if [[ "$reached_via" == "$bin_dir" ]]; then
     success "\$UTILZ_HOME/bin is in \$PATH"
   elif [[ -n "$reached_via" ]]; then
-    # Named, not just accepted: which route resolved it is the diagnostic.
-    success "utilz is on \$PATH via $reached_via"
+    # An entry other than bin/'s own spelling reached it: a link, or another
+    # spelling of bin/ (eg a trailing slash). -ef proves only that the utilz
+    # there is this tree's, so that is all the line says; the entry is a path,
+    # which a passing line does not name (A3, issue 0109).
+    success "this tree's utilz is on \$PATH"
   else
     warn "\$UTILZ_HOME/bin is not in \$PATH"
     echo ""
@@ -1908,7 +1900,7 @@ run_doctor() {
       elif [[ $check_rc -eq 3 && "$(utilz_tree)" == "brew old" ]]; then
         # Noted, not counted (T3 amendment, devbin issue 0213): the fix for an
         # old keg is the next release, which nothing on this machine can make.
-        info "The manifest at $UTILZ_HOME is in the old form, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
+        info "The manifest is in the old form, from before the dev, opt, brew contract; 'brew upgrade utilz' replaces it once the next release is out"
       elif [[ $check_rc -eq 3 ]]; then
         error "The manifest at $UTILZ_HOME is in the old form, from before the dev, opt, brew contract"
         echo "  Republish it: $republish."

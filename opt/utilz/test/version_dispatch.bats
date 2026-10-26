@@ -170,11 +170,11 @@ teardown() {
   # pair, with the description and the tree on lines two and three (ST0014
   # AC12). The dev, opt, brew contract (T4) gives every tool released through
   # Homebrew one line instead, which carries the tree and the commit itself:
-  # `utilz <version> (<tree>, <sha12>[+dirty]) at <abs root>`. No `v`, still.
+  # `utilz <version> (<tree>, <sha12>[+dirty])`, and no path (issue 0109). No `v`, still.
   run "$UTILZ_BIN_DIR/utilz" --version
   assert_success
   [[ "$(printf '%s\n' "$output" | wc -l | tr -d ' ')" -eq 1 ]] || fail "more than one line: $output"
-  [[ "$output" =~ ^utilz\ ${SEMVER}\ \(dev,\ [0-9a-f]{12}(\+dirty)?\)\ at\ /.+$ ]] || fail "not the version line: '$output'"
+  [[ "$output" =~ ^utilz\ ${SEMVER}\ \(dev,\ [0-9a-f]{12}(\+dirty)?\)$ ]] || fail "not the version line: '$output'"
   refute_output_contains "utilz v"
   [[ "$output" == "utilz $(cat "$UTILZ_HOME/VERSION") ("* ]] || fail "the version is not ./VERSION's: '$output'"
 }

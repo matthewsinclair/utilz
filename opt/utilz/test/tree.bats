@@ -22,6 +22,23 @@ tree_of() {
   run_install_function "utilz_tree '$1'"
 }
 
+# Fail unless doctor's report in $output has a passing or noted line (✓ or ℹ),
+# and fail if any of them names one of <path>...: a check whose selection is
+# empty would pass whatever doctor printed (contract A3, issue 0109).
+refute_passing_line_names() {
+  local passing p
+  passing=$(printf '%s\n' "$output" | grep -E '^(✓|ℹ) ') || {
+    fail "doctor printed no passing or noted line: $output"
+    return 1
+  }
+  for p in "$@"; do
+    if printf '%s\n' "$passing" | grep -qF -- "$p"; then
+      fail "a passing or noted line names $p: $passing"
+      return 1
+    fi
+  done
+}
+
 @test "utilz_tree names every tree in the contract's order, one row per tree (issue 0105)" {
   local t="$BATS_TEST_TMPDIR" sha="0123456789abcdef0123456789abcdef01234567"
 
@@ -51,19 +68,20 @@ tree_of() {
   [[ "$(tree_of "$t/foreign")" == "unknown" ]] || fail "a manifest Utilz did not write: $(tree_of "$t/foreign")"
 }
 
-@test "the version line names opt by its manifest's commit, at its root (issue 0105)" {
+@test "the version line names opt by its manifest's commit, and no path (issues 0105, 0109)" {
   local opt="$BATS_TEST_TMPDIR/opt" sha="0123456789abcdef0123456789abcdef01234567"
   current_manifest "$opt" utilz "$sha"
   echo 9.9.9 > "$opt/VERSION"
 
   run run_install_function "UTILZ_HOME='$opt'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (opt, 0123456789ab) at $opt"
+  assert_output "utilz 9.9.9 (opt, 0123456789ab)"
 }
 
-@test "the version line names brew by its opt link, never the versioned keg (issue 0105)" {
+@test "the version line names brew by its manifest's commit, and no path, with or without the opt link (issues 0105, 0109)" {
   # A keg laid out as brew lays one out, with the opt link brew keeps across
-  # upgrades pointing at it.
+  # upgrades pointing at it. The line names neither: where the running copy
+  # lives is `command -v utilz`'s answer (contract A3, hv's ruling).
   local prefix="$BATS_TEST_TMPDIR/homebrew" sha="0123456789abcdef0123456789abcdef01234567"
   local keg="$prefix/Cellar/utilz/9.9.9/libexec"
   current_manifest "$keg" brew "$sha"
@@ -73,14 +91,13 @@ tree_of() {
 
   run run_install_function "UTILZ_HOME='$keg'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (brew, 0123456789ab) at $prefix/opt/utilz/libexec"
+  assert_output "utilz 9.9.9 (brew, 0123456789ab)"
 
-  # With no opt link leading back to it, the keg is named as it is, rather than
-  # by a path to some other keg.
+  # With no opt link leading back to it, the line is the same.
   rm "$prefix/opt/utilz"
   run run_install_function "UTILZ_HOME='$keg'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (brew, 0123456789ab) at $keg"
+  assert_output "utilz 9.9.9 (brew, 0123456789ab)"
 }
 
 @test "the version line names dev by HEAD, with +dirty while the runtime set is dirty (issue 0105)" {
@@ -90,16 +107,16 @@ tree_of() {
 
   run run_install_function "UTILZ_HOME='$dev'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (dev, $head) at $dev"
+  assert_output "utilz 9.9.9 (dev, $head)"
 
   # Outside the runtime set: still clean.
   printf 'notes\n' > "$dev/NOTES.md"
   run run_install_function "UTILZ_HOME='$dev'; utilz_version_line"
-  assert_output "utilz 9.9.9 (dev, $head) at $dev"
+  assert_output "utilz 9.9.9 (dev, $head)"
 
   printf 'edited\n' >> "$dev/help/alpha.md"
   run run_install_function "UTILZ_HOME='$dev'; utilz_version_line"
-  assert_output "utilz 9.9.9 (dev, $head+dirty) at $dev"
+  assert_output "utilz 9.9.9 (dev, $head+dirty)"
 }
 
 @test "a dev tree whose git cannot be read says (dev, unknown), and doctor fails saying why (issue 0105)" {
@@ -112,7 +129,7 @@ tree_of() {
 
   run run_install_function "UTILZ_HOME='$dev'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (dev, unknown) at $dev"
+  assert_output "utilz 9.9.9 (dev, unknown)"
 
   run run_install_function "UTILZ_HOME='$dev'; run_doctor"
   assert_failure
@@ -126,7 +143,7 @@ tree_of() {
 
   run run_install_function "UTILZ_HOME='$plain'; utilz_version_line"
   assert_success
-  assert_output "utilz 9.9.9 (unknown) at $plain"
+  assert_output "utilz 9.9.9 (unknown)"
 
   run run_install_function "UTILZ_HOME='$plain'; run_doctor"
   assert_failure
@@ -141,7 +158,7 @@ tree_of() {
 
   run run_install_function "UTILZ_HOME='$old'; utilz_version_line"
   assert_success
-  assert_output "utilz 2.14.2 (brew, old manifest) at $old"
+  assert_output "utilz 2.14.2 (brew, old manifest)"
 }
 
 @test "doctor prints the version line first, under its title (issue 0105; utilz-vc's W8)" {
@@ -153,6 +170,27 @@ tree_of() {
   [[ -n "$title" && -n "$at" && -n "$first_check" ]] || fail "title at '$title', version line at '$at', first check at '$first_check': $output"
   # The title, its rule, then the version line, before any check.
   [[ "$at" -eq $((title + 2)) && "$at" -lt "$first_check" ]] || fail "the version line is at line $at, the title at $title, the first check at $first_check"
+}
+
+@test "doctor names a path only on a check that fails, never on a passing line (contract A3, issue 0109)" {
+  local dev="$BATS_TEST_TMPDIR/dev" links="$BATS_TEST_TMPDIR/links"
+  make_fake_src "$dev"
+  mkdir -p "$links"
+  ln -s "$dev/bin/utilz" "$links/utilz"
+
+  # Reached through its bin directory.
+  run run_install_function "PATH='$dev/bin:/usr/bin:/bin'; UTILZ_HOME='$dev'; run_doctor"
+  assert_output_contains "✓ UTILZ_HOME is set, to a directory that exists"
+  assert_output_contains "✓ dev: a git checkout git can read"
+  assert_output_contains "✓ \$UTILZ_HOME/bin is in \$PATH"
+  refute_passing_line_names "$dev" "$links"
+
+  # Reached through a link to it.
+  run run_install_function "PATH='$links:/usr/bin:/bin'; UTILZ_HOME='$dev'; run_doctor"
+  assert_output_contains "✓ UTILZ_HOME is set, to a directory that exists"
+  assert_output_contains "✓ dev: a git checkout git can read"
+  assert_output_contains "✓ this tree's utilz is on \$PATH"
+  refute_passing_line_names "$dev" "$links"
 }
 
 @test "a dev tree reached by another spelling reads its commit, never (dev, unknown) (utilz-vc's W4)" {
@@ -170,7 +208,7 @@ tree_of() {
   for spelling in "${spellings[@]}"; do
     run run_install_function "UTILZ_HOME='$spelling'; utilz_version_line"
     assert_success
-    assert_output "utilz 9.9.9 (dev, $head) at $spelling"
+    assert_output "utilz 9.9.9 (dev, $head)"
     run run_install_function "UTILZ_HOME='$spelling'; utilz_runtime_state '$spelling'"
     assert_output "clean"
   done
@@ -183,7 +221,7 @@ tree_of() {
   echo 9.9.9 > "$opt/VERSION"
 
   run run_install_function "UTILZ_HOME='$opt'; utilz_version_line"
-  assert_output "utilz 9.9.9 (opt, unknown) at $opt"
+  assert_output "utilz 9.9.9 (opt, unknown)"
 }
 
 @test "utilz_tree_is_install is one reading of every tree, for prez and menuz alike (utilz-vc's recommendation 1)" {
@@ -215,6 +253,18 @@ old_install() {
   fi
 }
 
+@test "doctor names a current opt install by its tree, and no passing line names its root (contract A3, issue 0109)" {
+  # old_install's tree, with a manifest in the current form.
+  local opt="$BATS_TEST_TMPDIR/opt-current"
+  old_install "$opt"
+  current_manifest "$opt" utilz "0123456789abcdef0123456789abcdef01234567"
+  [[ "$(tree_of "$opt")" == "opt" ]] || fail "the current opt install is $(tree_of "$opt")"
+
+  run run_install_function "UTILZ_HOME='$opt'; run_doctor"
+  printf '%s\n' "$output" | grep -qxF "✓ opt: an install" || fail "no line '✓ opt: an install': $output"
+  refute_passing_line_names "$opt"
+}
+
 @test "an old keg is noted with brew upgrade utilz and does not fail doctor's integrity check; an old opt install fails it (T3 amendment)" {
   local oldbrew="$BATS_TEST_TMPDIR/oldbrew" oldopt="$BATS_TEST_TMPDIR/oldopt"
   old_install "$oldbrew" $'utilz-version\t2.14.2' $'managed-by\tbrew'
@@ -223,9 +273,12 @@ old_install() {
   [[ "$(tree_of "$oldbrew")" == "brew old" ]] || fail "the old keg is $(tree_of "$oldbrew")"
 
   run run_install_function "UTILZ_HOME='$oldbrew'; run_doctor"
-  assert_output_contains "ℹ The manifest at $oldbrew is in the old form"
+  printf '%s\n' "$output" | grep -qxF "✓ brew: an install, with an old manifest (see install integrity)" || fail "no line '✓ brew: an install, with an old manifest (see install integrity)': $output"
+  # Noted, not failed, so it names no path (A3, issue 0109).
+  assert_output_contains "ℹ The manifest is in the old form"
   assert_output_contains "'brew upgrade utilz' replaces it"
   refute_output_contains "✗ The manifest at $oldbrew"
+  refute_passing_line_names "$oldbrew"
 
   run run_install_function "UTILZ_HOME='$oldopt'; run_doctor"
   assert_failure
@@ -242,7 +295,7 @@ old_install() {
 
   [[ "$(tree_of "$keg")" == "brew old" ]] || fail "the manifestless keg is $(tree_of "$keg")"
   run run_install_function "UTILZ_HOME='$keg'; utilz_version_line"
-  assert_output "utilz 2.14.2 (brew, old manifest) at $prefix/opt/utilz/libexec"
+  assert_output "utilz 2.14.2 (brew, old manifest)"
 
   run run_install_function "UTILZ_HOME='$keg'; run_doctor"
   assert_output_contains "has no manifest, from before the dev, opt, brew contract; 'brew upgrade utilz'"
