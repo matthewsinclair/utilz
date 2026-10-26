@@ -1,0 +1,15 @@
+{
+  "id": "01M5VJY0CA67VAZKFMAF8CMTVS",
+  "ts": "2026-10-26T07:48:51.722Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then the three silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design goes in its body first, for vc's read before any code. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and bin/utilz doctor on the dev tree diffed before and after."
+  }
+}

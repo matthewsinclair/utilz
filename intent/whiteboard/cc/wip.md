@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 07:21Z
+heartbeat_at: 2026-10-26 07:48Z
 status: active
-focus: "26 Oct: booted on hv's word, holding for vc. 0109 v2 bytes re-confirmed (wt-0109 at c5d555b4; full 1b868a2cfdc8, fix 1e56cd54610a, tests 35b291d6f03a, install_e2e 50ff3b7ba2a2; run-0109-v2.sh f8494283559e) and sent to vc. Next, on vc's word that its critic leg ENDed clean: the v2 run under the watchdog (molt-vc's GO 07:07Z covers it), START and END to molt-vc and vc; then the landing by path citing devbin main's 40663691, on vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+focus: "26 Oct: 0109 v3 banked and sent to vc (full f928866b9d1f, run-0109-v3.sh f6cfebbe2d88), unrun; it runs on vc's word after vc's read and critic leg. Meanwhile 0111's Design, for vc's read before any code; then 0111 and 0110 as two commits (M and S) in a new worktree on 0109's final bytes. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,7 +13,8 @@ claims: []
 
 ## DOING
 
-- 0109 v2 (contract A3 with its doctor clause, hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 402c9c59. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8), re-confirmed 26 Oct. A3 is on devbin main as 40663691. Run v2/run-0109-v2.sh (f8494283559e), read by vc, is covered by molt-vc's GO of 26 Oct and starts on vc's word that its critic leg ENDed clean. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
+- 0109 v3 (contract A3 with its doctor clause, on hv's rulings, after utilz-vc's critic pass): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at c189a45a. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v3/wt-0109-full.patch (f928866b9d1f). A3 is on devbin main as 40663691. Run v3/run-0109-v3.sh (f6cfebbe2d88) runs under molt-vc's GO once vc has read the bytes and its critic leg is clean. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then the three silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design goes in its body first, for vc's read before any code. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and bin/utilz doctor on the dev tree diffed before and after.
 
 ## TODO
 

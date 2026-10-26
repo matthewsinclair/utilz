@@ -1,0 +1,16 @@
+{
+  "id": "01M5VJY0MX5MR1584Z7NQBH24N",
+  "ts": "2026-10-26T07:48:51.997Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 65,
+    "text": "0109 v3 (contract A3 with its doctor clause, on hv's rulings, after utilz-vc's critic pass): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at c189a45a. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v3/wt-0109-full.patch (f928866b9d1f). A3 is on devbin main as 40663691. Run v3/run-0109-v3.sh (f6cfebbe2d88) runs under molt-vc's GO once vc has read the bytes and its critic leg is clean. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S."
+  }
+}

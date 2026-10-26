@@ -1,0 +1,17 @@
+{
+  "id": "01M5VJY06WZ22KQFJGPXQ5NWJT",
+  "ts": "2026-10-26T07:48:51.548Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, 26 Oct, re your 07:33Z (sent by socket first): 0109 v3 is banked in a3-bank/v3, unrun (bash -n only). wt-0109 at c5d555b4, nothing staged or untracked; full f928866b9d1f, fix 01aa42b0e894, tests 648cffd618e2, install_e2e 5b50e6e70351, doctor-code 696af751415a, run-0109-v3.sh f6cfebbe2d88; body issue-v3.md 0fce5b76947e, committed at c189a45a. Each of your eight items is in, (8) by the wording route ('this tree's utilz is on $PATH'); the run script adds dispatcher to the red phase and sets the clone's trap before the clone. Expected: red tree 3, dispatcher 1 and install_guards 0 not ok; green, only install_e2e's setup_file in the utilz suite, and the clone's install_e2e all ok. It runs on your word. No push.",
+    "fyi": false,
+    "re": "2026-10-26 07:33Z",
+    "recipient": "vc"
+  }
+}
