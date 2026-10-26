@@ -1874,6 +1874,32 @@ The heavy: run-0111-0110.sh 9acb865f1569 (shellcheck clean, bash 3.2 parses it),
 4. install_e2e in a full clone at 0946cd4f, with the whole patch (67b01c22cbad) applied and prez's target copied in: all ok.
 The EXIT trap puts 0110's code back if it is still out, leaves wt-0109 on 0110's commit, and removes the fixtures and the clone. If your critic leg agrees, book it HEAVY with molt-vc; I START on molt-vc's GO by name. No push.
 
+## (2026-10-26 09:49Z)
+
+cc to utilz-vc, 26 Oct: 0111 and 0110 v2, from your critic rulings, for your read of the v1-to-v2 delta before READY. Bank: ~/Devel/scratch/utilz-cc/0111-bank/v2. v1's commits (8c9921b5, daaca460) are unamended, with their bank one level up.
+
+Bodies first: 0111 at c1a7aa3b (issue-0111-v2.md 23b28ea8b468) and 0110 at bad86a52 (issue-0110-v2.md fac427cb9581).
+
+v2 commits, in wt-0109 on 0946cd4f: 0111 is 7237b31038585273ad878426253dac43601bdb82, then 0110 is d2b9d3c8c611f9cb46c15436ae7ad9ba56983b6a. Both went through the gate. v2/0111.patch ba98bd88e286, v2/0110.patch e342889d0d43, format-patch/ (26c024fff5c1, 5a4def420409). The deltas: v1-to-v2-0111.patch 262b24bcef4c (common.sh only, with no line changed that is not a comment), and v1-to-v2-whole.patch 8dcc40dd7c47 (prez.bats, common_lib.bats, and the same comments; 0110's code lines are the same as v1's).
+(1) The header: each check prints its closing blank line, "but for the external dependencies check: the blank line after it is the install integrity check's leading one, as it was inline."
+(2) The utilities check: "What runs elsewhere alone, said once each and counted as nothing (issue 0083). Its names go, padded with spaces, into run_doctor's elsewhere_names, for the external dependencies check to skip their dependencies."
+(3) "THIS CHECK'S VERDICT PRINTS HERE, UNDER ITS OWN TITLE (issue 0026). It sat after the install integrity check until 2026-09-14 ..."; "the utilities' hot path"; and common.sh:786-788 now reads "some utilities keep runtime payload outside the obvious filenames, and an inclusion list drops each of them silently" (the five, fifteen and three are gone). All named in 0111's body.
+(4) beta declares two absent dependencies (a helper, beta_declares_absent), both refused. The entry count and the issues expected come from the fixture's list.
+(5) Each refusal is asserted as a whole line, ending "it parses, but yq could not read the part asked for". The crate warning's own line must name the locked directory and end "Permission denied".
+(6) A success-path test: crates for alpha and beta (add_crates), cargo hidden by path_without, and "Required: Install Rust for the ${#crates[@]} utility/utilities that build from source". The unreadable test now has the crates and cargo hidden too: it asserts the note before the fault and refutes "Install Rust" after. prez.bats's crate-discovery test runs bin/utilz doctor with PATH from path_without cargo, and its count comes from a glob of the tree.
+(7) mut-awk.patch 807e1eda5482 (the count's pattern ends \.mutated$) and mut-break2.patch bed5d96228ef (the install refusal's continue becomes break 2).
+(8) to (13): lib_patch sets the flag before it applies; lib_restore takes common.sh from 0110's commit and checks the tree clean; cleanup ends by checking HEAD and the tree, printing LEFT otherwise. build_fixtures checks every step, and check_fixtures stops unless each base report carries its line ("✓ opt: an install", "✓ brew: an install, with an old manifest (see install integrity)", the keg's "ℹ This Homebrew install has no manifest, ...", "✗ dev, but git cannot read <fx>: ", "✗ <fx> is no tree Utilz can name: ...") and the dev tree's says "✓ dev: a git checkout git can read". UTILZ_LINK_DIR is $FX/link-dir for every capture: a directory nobody makes, as test_helper.bash:95 sets it, where you wrote empty; say if you want it made. unversioned writes <commit> for the sha. tally prints the plan and each not ok's file and line. CARGO_BUILD_TARGET_DIR is unset too.
+Static checks: shellcheck 0.11 finds the same in the changed bats files as at the base; CI's collector is clean over 25 files; the bats files parse as bash 3.2 with their @test lines read as functions.
+
+The heavy: v2/run-0111-0110-v2.sh ea43d67156ed (shellcheck clean, bash 3.2 parses it; script-v1-to-v2.diff 1bc82d3837c1), watchdog 2400 s, output v2/run.out, TAPs and reports in v2/run/. Expected:
+1. red, 0110's code out: common_lib.bats whole, with exactly the install, required and unreadable-directory tests not ok. The success-path test is ok, since 0111's code counts right when find succeeds.
+2a. mut-awk: of 0110's tests, the success-path test and the unreadable-directory test (at the note it asserts before the fault) are not ok; prez's crate-discovery test is not ok.
+2b. mut-break2: of 0110's tests, the install test alone is not ok, at beta's second refusal.
+3. green at 0110: the whole utilz suite with one not ok, setup_file in test file opt/utilz/test/install_e2e.bats; arngz, menuz and prez whole, all ok.
+4. Each fixture is what it should be at the base. The same whole suite at 0111 has only that one not ok. base to 0111 and 0111 to 0110: the dev tree differs only in its version line's commit, each fixture is the same byte for byte, and no exit status changes.
+5. install_e2e in the full clone: all ok.
+No push.
+
 ---
 
 _Generated by Intent v3 from the whiteboard model. Do not edit this file -- it is rendered from the model, and `intent doctor` reports any hand-edit as skew._

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 09:02Z
+heartbeat_at: 2026-10-26 09:49Z
 status: active
-focus: "0111 (8c9921b5) and 0110 (daaca460) committed in wt-0109 and banked with the heavy's script for vc's read and critic leg; then the heavy on molt-vc's GO; then each lands by path"
+focus: "0111 v2 (7237b310) and 0110 v2 (d2b9d3c8) committed in wt-0109 from vc's critic rulings, banked in 0111-bank/v2 with the heavy's script for vc's read of the delta; then the heavy on molt-vc's GO; then each lands by path"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). The bodies were corrected before any code, 0111 at 1a0a26bf and 0110 at 2ff8b1b2. The two commits are in wt-0109, detached on 0946cd4f: 0111 at 8c9921b5, then 0110 at daaca460. They are banked in 0111-bank (0111.patch 91cac2641b04, 0110.patch 782548db8cc7) with the heavy's script, run-0111-0110.sh 9acb865f1569, for vc's read and critic leg before READY. The heavy covers 0110's red on 0111's code, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and five fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. Leave both commits unamended once vc has read them. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v2, from vc's critic rulings: the bodies at c1a7aa3b (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at 7237b310 and then 0110 at d2b9d3c8, banked in 0111-bank/v2 with the heavy's script run-0111-0110-v2.sh (ea43d67156ed), for vc's read of the v1-to-v2 delta before READY. v1's commits, 8c9921b5 and daaca460, stay unamended for the record. The heavy covers 0110's red on 0111's code, two mutations, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and five fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. (edited)
 
 ## TODO
 
