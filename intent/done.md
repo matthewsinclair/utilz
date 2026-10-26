@@ -1,8 +1,44 @@
 ---
-verblock: "23 Oct 2026:v0.17: matts - 2.14.2 released"
+verblock: "26 Oct 2026:v0.18: matts - 2.14.3 released"
 ---
 
 # Done
+
+## 24 Oct 2026 -- 2.14.3 released: the dev, opt, brew contract, and a Menuz.app taken only from its release tag
+
+**2.14.3 is out**: annotated tag `2.14.3` (`d26a6da`) on `1aaa506` ("release: 2.14.3", committed 19:41Z; the tag and the release object 19:57Z), cut through devbin's release core (`bin/devbin release --patch`). It carries everything outstanding after 2.14.2, stacked into one release on hv's standing rule, and the CHANGELOG entry is the account of what it carries.
+
+**Before the cut**, every check ran green on the final head `82e8b02` (0105's close; every path changed after it was under `intent/`):
+
+- dc's kovacs twins, `c2143-66b01b09` (slot 325): tests.yml's Ubuntu loop with only its standing skips, `cargo fmt` and clippy clean on rustc 1.99.1, and shellcheck 0.9.0 clean, its control firing;
+- the Mac twins (slot 328, on the crate's own target): the utilz suite, acceptance, prez with no skips, cargo, and menuz's build and test on Xcode 27.1, with no Launch Services record left behind; slot 326 before it was red by its harness alone, a `CARGO_TARGET_DIR` outside the crate;
+- cc's `install_e2e` in the primary on `82e8b02`'s bytes, every test passing;
+- dc's dry run (slot 331, 19:02Z to 19:14Z) on HEAD `367b826`, whose code is `82e8b02`'s: `check all` passed, `test estate` passed every suite with only xtrct's API-key skips, and no step of the release core failed.
+
+**One commit reached the cut outside those checks**: hv's `963d414` "For release", which re-vendored devbin from 0.1.12 to 0.1.13 (`bin/.devbin`) after the dry run. The cut's own gates passed on it, and so did the tag's CI.
+
+**CI.** The tag run 40127615571 is green on every job, `Test on macOS` and `menuz app (macOS)` among them. The push run 40127611918 is green, its macOS jobs skipped on a push by design.
+
+**Issues closed and shipped** (fix commits):
+
+- 0103, `bin/devbin macos` takes only the release tag's own build of Menuz.app (`47c7344`, `5153db2`);
+- 0104, `publish` leaves no Launch Services record for the Menuz.app it unpacks to prove its zip (`ccb11bd`, `7ce4cbd`);
+- 0105, Utilz follows the dev, opt, brew contract (devbin's `docs/dev-opt-brew.md`): `utilz --version` on one line, `utilz use dev|opt|brew` as the one switch, `utilz upgrade` upgrading the tree it runs from, and `tools/formula` in place of `tools/formula-bump` (`2e0f294`);
+- 0106, Menuz's bundle id opens the installed app, never a build (`b9a2d55`, `bfd1cdb`, `ce38906`, `ddba75f`).
+
+**Threads closed:** none. **Issues closed:** 0103 to 0106. No utility's own version moved; menuz stays 0.4.7.
+
+**Homebrew:** the formula is rendered and published by `tools/formula` (0105), and hv's `tools/formula publish` put the tap at `b0976ee` "utilz 2.14.3" on 25 Oct. **Release asset:** `Menuz.app.zip` on release 2.14.3, sha256 `324b2f26`: menuz 0.4.7, build 1870, `1aaa506c`, kind release. It was built at the tag and published through 0103's checks (slot 336, 25 Oct), and vc read its stamps back off the asset.
+
+**Installs**, on 25 Oct, once the house line was back, since each is a heavy cargo build and the tether was metered:
+
+- **On this Mac**: `brew upgrade utilz` to 2.14.3 (slot 349), read back by vc.
+- **On kovacs**: hv's own `brew upgrade utilz`, which also moved openssl@4 to 4.1.0, then rb2143's checks, run by kovacs-sysadm, all green.
+
+**Worth re-reading.**
+
+- **A commit after the dry run is outside the dry run.** hv's `963d414` changed `bin/.devbin`'s release code between dc's dry run and the cut, so the dry run proved `367b826`'s release code, not the code that cut; only the cut's own gates and the tag's CI read it.
+- **Run the Mac twins on the crate's own target.** AT01 asserts the in-crate target, so slot 326, with `CARGO_TARGET_DIR` outside the crate, read red by construction; slot 328 reran it in the crate, green.
 
 ## 23 Oct 2026 -- 2.14.2 released: menuz's own log window, Xcode 27.1, and a showreel that says what it could not do
 
