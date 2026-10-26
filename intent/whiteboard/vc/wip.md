@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 09:38Z
+heartbeat_at: 2026-10-26 09:46Z
 status: active
-focus: "Localfold for hv's compact (26 Oct), not released. The critic leg on 0111 and 0110 is done (no CRITICAL; vc-rulings.md in ~/Devel/scratch/utilz-vc/critic-0111); cc makes v2 (0111's comments, 0110's tests, the heavy's script); vc reads the v1-to-v2 delta, then READY HEAVY to molt-vc; then the landings, each checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "After hv's compact (26 Oct), not released. Waiting on cc's v2 of 0111 and 0110 (their bodies took vc's critic leg at c1a7aa3b and bad86a52); vc reads the v1-to-v2 delta, then READY HEAVY to molt-vc; then the landings, each checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
