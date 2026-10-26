@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 08:27Z
+heartbeat_at: 2026-10-26 08:41Z
 status: active
-focus: "0109 v4 green (vc confirmed); now 0109 v5, tests and comments only (vc's plan at 03682dd9), banked in a3-bank/v5 for vc's read, then its light run on molt-vc's GO; the landing on vc's word; then 0111 and 0110 in wt-0111"
+focus: "0109 v5's light is green (END sent to molt-vc and vc); the landing waits on vc's word; then 0111 and 0110 in wt-0111 on 0109's landed bytes"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0109 v5 (contract A3 with its doctor clause, on hv's rulings; v4's heavy green, then utilz-vc's critic re-check of v3): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 42a3a2ff. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v5/wt-0109-full.patch (47769fdd1138). v5 is tests and comments only on v4, the fix (01aa42b0e894) and doctor-code (696af751415a) unchanged. Its light run, run-0109-v5.sh (028444cc67f1: two mutations proving the no-path refutes can fail, then tree, install and dispatcher whole), waits for vc's read and molt-vc's GO; START and END go to molt-vc and vc. A3 is on devbin main as 40663691. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
+- 0109 v5 (contract A3 with its doctor clause, on hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 42a3a2ff. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v5/wt-0109-full.patch (47769fdd1138). v4's heavy is green, and so is v5's light (08:40:17Z to 08:40:48Z on molt-vc's GO: each mutation red where expected, then tree, install and dispatcher whole green); END went to molt-vc and vc. A3 is on devbin main as 40663691. Next, on vc's word: land-apply-patch.sh stages exactly the patch's paths, vc checks the staged state, the commit cites devbin main's 40663691, vc checks it by change, then the close in its own commit. Size S. (edited)
 - 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each become a function of their own and run_doctor only coordinates (0111, M), then 0110's silent exits are fixed in the extracted functions (0110, S), as two commits in a new worktree on 0109's final bytes. 0111's Design is approved by vc, in its body at 0b715a88; the extraction is drafted as 0111-bank/extract-0111.awk, untried. The worktree is cut after 0109's run and vc's critic re-check. One heavy for both after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. (edited)
 
 ## TODO

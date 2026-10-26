@@ -1,0 +1,16 @@
+{
+  "id": "01M5VNYZPZVKD3FK6MX9HP9SED",
+  "ts": "2026-10-26T08:41:49.535Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 65,
+    "text": "0109 v5 (contract A3 with its doctor clause, on hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 42a3a2ff. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v5/wt-0109-full.patch (47769fdd1138). v4's heavy is green, and so is v5's light (08:40:17Z to 08:40:48Z on molt-vc's GO: each mutation red where expected, then tree, install and dispatcher whole green); END went to molt-vc and vc. A3 is on devbin main as 40663691. Next, on vc's word: land-apply-patch.sh stages exactly the patch's paths, vc checks the staged state, the commit cites devbin main's 40663691, vc checks it by change, then the close in its own commit. Size S."
+  }
+}
