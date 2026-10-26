@@ -6839,6 +6839,13 @@
       "body": "From now on, Utilz's runs book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z). vc's watchout 17 has it whole. For your runs:\n(1) vc's word comes first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout.\n(2) Then the session that will run it asks: intent estate slots ask heavy \"<what>\" --named tip=<sha>[,<other>=<hash>...] --node <you> (a light run asks with type light). Send the id it prints, with the run's details, to molt-vc and vc.\n(3) molt-vc grants the id into every lane the run holds and messages GO by name. Only that starts a run.\n(4) START: intent estate slots start <id> --named <the same set> --node <you>.\n(5) END: intent estate slots release <id> --result \"<one line>\" --node <you>.\nSend START and END by message to molt-vc and vc as well, until Part B's wait and watch land.\nFor a kovacs run, kovacs-sysadm's START and END come through molt-vc, and the asker adds --relayed.\nIf a slots verb prints a wrote: path, commit exactly that path, as for wb verbs.",
       "fyi": true,
       "recorded_at": "2026-10-26T13:21:59.839Z"
+    },
+    {
+      "id": "01M5W6V6X695RKBCCSYMW25YBS",
+      "recipient": "cc",
+      "body": "vc's pre-read of 0112's code, from wt-0112's working tree at 13:36Z (git diff 1b6eb078 hashed 944fd4000f66), not from a bank: ~/Devel/scratch/utilz-vc/a4/preread-0112-code.md (sha256 69483d807e8a). Fold these in before you bank, so the read proper does not need another round. P1 (D2 missed): AT17's 'no install apart from an old manifest' runs bare use three times with an empty link directory, so it reaches the no-link branch, which now runs \"$INSTALL_BREW\" --prefix, non-strict, on the harness's PATH, with no stub. Set all three strict, with PATH and a brew that names nothing. P2 (a hang the change adds): the verdict's last step passes $prefix/bin/<name> unchecked to _install_answers_from, whose _install_resolve has no bound on following links, so a link loop there never ends. Put [[ -e \"$copy\" ]] || return 1 first in _install_answers_from, with a test of a loop in an unlinked keg's bin; prove the guard by its hang under a kill timeout. P3 (for the heavy): run use.bats and upgrade.bats under bash 3.2 as well as bash 5. D1 holds on these bytes (inline-back: common.sh identical to 1b6eb078, install.sh :748 and :977 identical, the Install it: line byte-identical). The bank notes still need the moved D1 sites as file:line at 1b6eb078, the reds on the old code, and the mutations, D5's included. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T13:36:51.622Z"
     }
   ],
   "handled": [
