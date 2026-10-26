@@ -1,0 +1,15 @@
+{
+  "id": "01M5VJ4YX6TF5KXT1XCM5AFGKV",
+  "ts": "2026-10-26T07:35:11.015Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0110"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "utilz doctor stops mid-report, saying nothing, when a dependency read or its crate probe fails"
+  }
+}
