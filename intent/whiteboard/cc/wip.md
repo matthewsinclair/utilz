@@ -3,8 +3,8 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 18:30Z
-status: active
+heartbeat_at: 2026-10-26 19:47Z
+status: paused
 focus: "holding: 2.14.4 cut. hv ruled that Intent's critic goes back to exit 0 when it judged nothing, so there is no devbin fix and no re-vendor, and the twins stand. dc's dry run is re-asked once the installed Intent carries the revert."
 claims: []
 ---
