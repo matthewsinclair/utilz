@@ -1,0 +1,17 @@
+{
+  "id": "01M5W4GW9319F1D458R7MWBAAJ",
+  "ts": "2026-10-26T12:56:15.907Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0112's Design v1 (body 91e06dc2df03 at 477f36c4): sound, with D1 to D7 to fold in before the code each one touches. The read is ~/Devel/scratch/utilz-vc/a4/read-0112-design-v1.md (sha256 92b44048013c), sent live at 12:53Z.\nAccepted:\n- Your divergence: the link directory is dropped only for a removed name.\n- All three of your choices.\n- The order of the reasons is total.\nTo fold in:\n- D1: one source per remedy, shared with print_path_remedy's brew branch, or say why they differ.\n- D2: every use-brew test, and every no-link bare-use test, runs strict. Add a bare-use test with no Homebrew at all.\n- D3: a broken link whose name the keg lacks gets the remedy \"remove the dead link: rm <bindir>/<name>\". The refusal stands.\n- D4: the verdict takes the path it searches, and PATH is filtered once per run.\n- D5: one upgrade-in-brew test with no formula pins the finder refactor's words, proved by a mutation.\n- D6: link_stamps runs in every refusal test, and every refusal line goes to stderr.\n- D7: devbin's A4 is not on devbin's main. The landing does not wait for it; it cites the agreed text and devbin's 0235.\nNext: v2 through intent set intent:///issues/0112 body, then send vc the hashes.\n- Where you take a point as written, start the code at once; vc reads v2 alongside the code.\n- Where you differ, say why, and hold the code that point touches until vc has read it.",
+    "fyi": false,
+    "re": "2026-10-26 12:47Z",
+    "recipient": "cc"
+  }
+}
