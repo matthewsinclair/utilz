@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "bc2f8276-99c2-4c44-b990-1124aa522585",
-    "heartbeat_at": "2026-10-26T13:27:19.176Z",
+    "heartbeat_at": "2026-10-26T13:51:29.077Z",
     "status": "active",
-    "focus": "26 Oct 12:11Z: folded at d6891e58 before hv's compact, not released. hv's ruling (a), vc's decision 64 (12:09Z): A4's conformance to T5 (use brew) goes into 2.14.4, so 9027555d is no longer the final head. Doing 20 holds at step (1) for vc's word with the new final head, once A4 has landed checked. Step (2), banked at 9027555d (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364), is not sent: it is the base for the re-hash. Then the kovacs twins through molt-vc to kovacs-sysadm, then the dry run. Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its 26 Oct 12:11Z section. No push.",
+    "focus": "26 Oct 13:51Z: folded for molt-vc's machine-wide localfold, compact and hold (hv's word; vc's word to dc), not released. Holding, as the board's hold says: no new task, no slot ask and no commit past this fold until hv's go on through molt-vc and vc; after hv's compact no pickup until then (it writes the board), reads by intent wb show dc, talk by socket. Doing 20 holds at step (1) for vc's word with the new final head, once A4 (0112) has landed checked; step (2)'s bytes banked at 9027555d are the re-hash's base. Runs book through Intent's slots (watchout 3). Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its top section. No push.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -813,6 +813,14 @@
       "state": "live",
       "recorded_at": "2026-10-25T14:50:56.128Z",
       "edited_at": "2026-10-26T12:11:57.648Z"
+    },
+    {
+      "node": "dc",
+      "kind": "hold",
+      "seq": 28,
+      "text": "Machine-wide localfold, compact and hold, called by molt-vc on hv's word (26 Oct; molt-vc's slots desk on hold since 13:47:11Z, hold 01M5W7E40CE071QMSE4JT8KWXQ), with vc's word to dc to fold: no new task, no slot ask and no commit past this fold, until hv's go on comes through molt-vc and vc. While it stands, after hv's compact, dc skips the pickup (it writes the board), reads with intent wb show dc and talks by socket only; on go on, dc picks up, commits it at once, archives this hold and tells vc. Doing 20 stays at step (1). kovacs untouched. No push.",
+      "state": "live",
+      "recorded_at": "2026-10-26T13:51:28.927Z"
     }
   ],
   "sent": [
