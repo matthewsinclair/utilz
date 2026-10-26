@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- 2.14.4's release dry run, held until the intent on PATH carries Intent's revert of 0648's exit 4 (hv's ruling through molt-vc: the critic goes back to exit 0 when it judged nothing; no devbin 0.1.16, devbin-vc closed 0237 as not needed), read and confirmed to dc by vc (its --version and the commit). The kovacs twins stand: GREEN at b2e07f19's code (slot 01M5WJSWHGXYHTZXBTKQJCNMX6), banked as work/c2144/twins-b2e07f19.out (sha256 471077573d08). The dry run at f6c36bd8 was RED at step 5, check critic exit 1 with nothing staged (slot 01M5WKF8E7B31ZJTDXTSPKS0QT), banked as work/c2144/dryrun-2144-f6c36bd.out (sha256 903b30759b5f), log dry-run-f6c36bd.log beside it. On release: re-ask the dry run as a heavy on main's head as it is then (code still b2e07f19's, only wb commits on top), naming the new tip and the dryrun and gate hashes (85956b42a44b, 113fee7ebb44 if unchanged); it runs only on molt-vc's GO by name and freezes the primary until vc reads its last row. Nothing running. No push. (edited)
+_(none)_
 
 ## Watch-outs
 
