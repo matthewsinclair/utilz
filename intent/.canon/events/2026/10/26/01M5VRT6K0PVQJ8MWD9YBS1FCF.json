@@ -1,0 +1,16 @@
+{
+  "id": "01M5VRT6K0PVQJ8MWD9YBS1FCF",
+  "ts": "2026-10-26T09:31:38.464Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings, as commits 8c9921b5 and daaca460 in wt-0109 on 0946cd4f (bank ~/Devel/scratch/utilz-cc/0111-bank). Now: vc's critic leg on them (light, on molt-vc's 09:04Z GO; vc's own read found nothing; the critic-shell agent's findings to read), then END LIGHT and READY HEAVY for run-0111-0110.sh (9acb865f1569), which goes when K115 ENDs, on molt-vc's word. Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew."
+  }
+}

@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "3202b0da-03ed-4204-9649-0e6ffd2ed624",
-    "heartbeat_at": "2026-10-26T08:39:54.273Z",
+    "heartbeat_at": "2026-10-26T09:31:38.892Z",
     "status": "active",
-    "focus": "0109 v4 GREEN by vc's count (END 08:13:23Z); cc on v5 in a3-bank/v5 (tests and comments only); vc reads its bytes, books the light with molt-vc, counts its END, then checks 0109's landing; then 0111 and 0110 in one heavy; then push main (decision 60 (2))",
+    "focus": "Localfold for hv's compact (26 Oct 09:31Z), not released. 0111 (8c9921b5) and 0110 (daaca460) in wt-0109, read by vc with nothing found; the critic-shell agent's findings to read, then END LIGHT and READY HEAVY to molt-vc (it goes at K115's END); then each landed by path and checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2030,10 +2030,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. Now: cc writes 0111 then 0110 as two commits in a worktree on 0946cd4f, banked for vc's read; vc's light critic leg (any sweep follows variables); READY; one heavy on molt-vc's GO: 0110's red on the 0111 commit, the whole utilz suite plus arngz, menuz and prez green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. Each lands by path, checked by change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
+      "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings, as commits 8c9921b5 and daaca460 in wt-0109 on 0946cd4f (bank ~/Devel/scratch/utilz-cc/0111-bank). Now: vc's critic leg on them (light, on molt-vc's 09:04Z GO; vc's own read found nothing; the critic-shell agent's findings to read), then END LIGHT and READY HEAVY for run-0111-0110.sh (9acb865f1569), which goes when K115 ENDs, on molt-vc's word. Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
       "state": "live",
       "recorded_at": "2026-10-25T10:43:07.969Z",
-      "edited_at": "2026-10-26T08:46:10.704Z"
+      "edited_at": "2026-10-26T09:31:38.464Z"
     },
     {
       "node": "vc",
@@ -2048,7 +2048,8 @@
       "kind": "decision",
       "seq": 62,
       "text": "hv, 2026-10-25, directly to vc: A3's doctor clause (doctor names a path only where a check that fails is about one) goes into 0109 for 2.14.4 with the version line. Utilz's doctor names paths on passing checks (common.sh:1356, :1374, :1381, :1384) and in the old-manifest info line (:1897); cc amends 0109's body first, then the code and tests, then one more whole-suite rerun booked as a HEAVY with molt-vc. Landing still waits on devbin's land220 (A3 at 58ccf8c7).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-26T09:31:38.712Z",
       "recorded_at": "2026-10-25T18:27:27.242Z"
     },
     {
