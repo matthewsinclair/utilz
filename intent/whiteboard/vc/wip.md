@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 08:10Z
+heartbeat_at: 2026-10-26 08:28Z
 status: active
-focus: "Localfold 26 Oct 08:09Z for hv compact, not released. 0109 v4 heavy running (cc, START 08:06:23Z); vc counts its END from the TAPs, then the landing by path citing devbin 40663691 (check-0109-landing.sh). 0111 design approved; 0111 then 0110, one heavy after 0109 lands; push; twins; dry run; hv cut. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "0109 v4 GREEN by vc's count (END 08:13:23Z); cc on v5 in a3-bank/v5 (tests and comments only); vc reads its bytes, books the light with molt-vc, counts its END, then checks 0109's landing; then 0111 and 0110 in one heavy; then push main (decision 60 (2))"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0107 and 0108 have landed. Still to land: 0109 (A3's version line and doctor clause), 0110 (doctor's silent exits) and 0111 (run_doctor's coordinator refactor), on hv's rulings. Now: 0109's critic fixes to vc's read, a light critic re-check, then READY, and molt-vc's GO at K115's END. Meanwhile cc writes 0111's design, then 0111 with 0110 on top in a worktree on 0109's bytes, for one heavy straight after 0109's run. Each lands by path, checked by change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. 0107 and 0108 have landed. Still to land: 0109 (A3's version line and doctor clause), 0110 (doctor's silent exits) and 0111 (run_doctor's coordinator refactor), on hv's rulings. Now: 0109 v5 (tests and comments only, on v4's whole green) to vc's read, its light run on molt-vc's GO, then 0109 landed by path, checked by change, then closed. Then 0111 with 0110 on top in wt-0111 on 0109's final bytes, one heavy, each landed by path, checked by change, then closed. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 

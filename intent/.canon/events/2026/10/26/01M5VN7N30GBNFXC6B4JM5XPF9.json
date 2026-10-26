@@ -1,0 +1,16 @@
+{
+  "id": "01M5VN7N30GBNFXC6B4JM5XPF9",
+  "ts": "2026-10-26T08:29:04.992Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. 0107 and 0108 have landed. Still to land: 0109 (A3's version line and doctor clause), 0110 (doctor's silent exits) and 0111 (run_doctor's coordinator refactor), on hv's rulings. Now: 0109 v5 (tests and comments only, on v4's whole green) to vc's read, its light run on molt-vc's GO, then 0109 landed by path, checked by change, then closed. Then 0111 with 0110 on top in wt-0111 on 0109's final bytes, one heavy, each landed by path, checked by change, then closed. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew."
+  }
+}
