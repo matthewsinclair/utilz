@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 113,
+  "slug": "written-counts-remain-in-test-names-and-comments",
+  "title": "Written counts remain in test names and comments, to be deleted for the release after 2.14.4",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-26",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\nTest names and comments across the tree still carry written counts, outside the lines issues 0110 and 0111 already changed. hv's rule: a count already written down is deleted, never corrected.\n\n## Scope\n\nSweep the test names and comments and delete each written count, rewording the line so it reads without one. For the release after 2.14.4. No work now.\n"
+}
