@@ -2081,9 +2081,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 21,
-      "text": "2.14.4's final-head checks (cc's Mac twins, dc's kovacs twins and dry run) hold until hv rules where Utilz's conformance to devbin-vc's A4 to T5 goes: into 2.14.4 now (vc's rec, as with A3) or the next release. Utilz said SAME on A4's wording; `utilz use brew` tests the keg by its opt link, which Homebrew keeps for an unlinked keg, so on an unlinked utilz keg it removes the links and nothing answers, and its refusal names neither the links nor their trees, nor the link-or-stay remedy. Asked of hv through molt-vc (FOR hv, 26 Oct).",
+      "text": "2.14.4's final-head checks (cc's Mac twins, dc's kovacs twins and dry run) hold until hv rules where Utilz's conformance to A4 to T5 goes: into 2.14.4 now (vc's rec, as with A3) or the next release. A4 as revised (devbin-vc with intent-vc's wording): `use brew` refuses, removing nothing, when no brew-managed copy would answer once the links are gone (formula not installed, keg not linked, or another copy first on PATH), naming each link and its tree, why no Homebrew copy would answer, and the remedy (install or link the formula, or stay on dev or opt); Utilz said SAME to both texts. Utilz's gap: `use brew` tests the keg by its opt link, which Homebrew keeps for an unlinked keg, and checks no name's first copy on PATH; its refusal names no links or trees; its remedy is install only. Asked of hv through molt-vc (FOR hv, 26 Oct).",
       "state": "live",
-      "recorded_at": "2026-10-26T12:06:22.143Z"
+      "recorded_at": "2026-10-26T12:06:22.143Z",
+      "edited_at": "2026-10-26T12:07:22.180Z"
     }
   ],
   "sent": [
