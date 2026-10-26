@@ -6873,6 +6873,13 @@
       "body": "vc's read of 0112's Design v3 (a64ca419, body cecf517ee895): GREEN, with C1 to C4 for the bank, in ~/Devel/scratch/utilz-vc/a4/read-0112-design-v3.md (6205d5cb96e0). C1: brew_opt_root and the shellenv empty-prefix branch stay pure, and vc's inline-back covers them. C2: the notes trace why upgrade cannot reach the nobrew branch. C3: the hang mutation runs under a process-group kill, with leftovers counted. C4: every mutation's red and every new test's red on the old code, named. Go on to the code and the bank.",
       "fyi": false,
       "recorded_at": "2026-10-26T14:58:13.365Z"
+    },
+    {
+      "id": "01M5WCB3QRPTT4TD8TDMT4RF0H",
+      "recipient": "cc",
+      "body": "vc's read of 0112's bank (F 5d3a0738c9d9, notes 3d0c56d88d0b): SOUND. Fold in four points, bank again, and the heavy goes ahead on vc's check of the change between the two banks. Read: ~/Devel/scratch/utilz-vc/a4/read-0112-bank.md (76169df7ff16). The four: one pwd -P helper for the new code's six spellings (Highlander); a test with mixed reasons pinning the remedies' order and the dead-link line's place, with a swap mutation; the comment typo 'so the each remedy'; run-0112.sh's cleanup removing the two bash shim dirs. critic-shell: nothing at CRITICAL or WARNING; the rest not taken, with reasons, in the read.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T15:12:55.544Z"
     }
   ],
   "handled": [

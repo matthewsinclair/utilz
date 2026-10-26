@@ -1,0 +1,17 @@
+{
+  "id": "01M5WCB3QRPTT4TD8TDMT4RF0G",
+  "ts": "2026-10-26T15:12:55.544Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0112's bank (F 5d3a0738c9d9, notes 3d0c56d88d0b): SOUND. Fold in four points, bank again, and the heavy goes ahead on vc's check of the change between the two banks. Read: ~/Devel/scratch/utilz-vc/a4/read-0112-bank.md (76169df7ff16). The four: one pwd -P helper for the new code's six spellings (Highlander); a test with mixed reasons pinning the remedies' order and the dead-link line's place, with a swap mutation; the comment typo 'so the each remedy'; run-0112.sh's cleanup removing the two bash shim dirs. critic-shell: nothing at CRITICAL or WARNING; the rest not taken, with reasons, in the read.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
