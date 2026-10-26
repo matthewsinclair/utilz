@@ -1,0 +1,16 @@
+{
+  "id": "01M5W62MX4KZ6KVDC8F53WBARB",
+  "ts": "2026-10-26T13:23:26.756Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "dc's own limits: no Hammerspoon, pointer, xcodebuild or hv's keychain; no menuz file (utilz-ic's); nothing pushed. Every host run books through Intent's slots on molt-vc's desk (hv's word, molt-vc in control from 13:19:49Z on 26 Oct; vc's watchout 17 has it whole): vc's word on the bytes first, then dc's intent estate slots ask heavy|light with --named tip=<sha> and each script's hash and --node dc, its id sent with the run's details to molt-vc and vc; a run only on molt-vc's GO by name; START and END as slots start and slots release with --node dc (--relayed for a kovacs run, whose START and END come through molt-vc), each also by message to molt-vc and vc; a slots verb's wrote: path committed exactly, as a wb verb's."
+  }
+}
