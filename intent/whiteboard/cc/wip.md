@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 10:05Z
+heartbeat_at: 2026-10-26 10:26Z
 status: active
-focus: "0111 v3 (ad423002) and 0110 v3 (905fbb1b) committed in wt-0109 from vc's read of v2, comments only, banked in 0111-bank/v3 with the heavy's script for vc's read of the delta; then READY HEAVY and the heavy on molt-vc's GO; then each lands by path"
+focus: "0111 v3 (ad423002) and 0110 v3 (905fbb1b): the heavy ran GREEN (10:14Z to 10:24Z on molt-vc's GO), END sent; now each lands by path on vc's word, 0111 first, checked by its change, then closed; then 0110 the same"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v3, from vc's read of v2, comments only, on the house rule that a count written down is deleted: the bodies at bf2cea57 (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at ad423002 and then 0110 at 905fbb1b, banked in 0111-bank/v3 with the heavy's script run-0111-0110-v3.sh (c56d4e4ed65f), for vc's read of the v2-to-v3 delta before READY. v1's commits (8c9921b5, daaca460) and v2's (7237b310, d2b9d3c8) stay unamended for the record. The heavy covers 0110's red on 0111's code, the mutations, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and the fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v3 (comments only, from vc's read of v2) read green by vc: the bodies at bf2cea57 (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at ad423002 and then 0110 at 905fbb1b, banked in 0111-bank/v3. v3's heavy ran GREEN on molt-vc's 10:13Z GO, 10:14:31Z to 10:24:33Z (run-0111-0110-v3.sh c56d4e4ed65f, v3/run.out 2ae620602247): 0110's tests red without its code, the mutations each caught, the whole utilz suite at 0110 and at 0111 with only install_e2e's worktree refusal, arngz, menuz and prez all ok, doctor's report and exit status unchanged on the dev tree (but for its version line's commit) and on the fixtures, and install_e2e all ok in a full clone; END to molt-vc and vc. Now: each commit lands by path on vc's word, 0111 first, checked by its change, then closes; then 0110 on 0111's landing. v1's commits (8c9921b5, daaca460) and v2's (7237b310, d2b9d3c8) stay unamended for the record. (edited)
 
 ## TODO
 
