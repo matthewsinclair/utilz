@@ -1,0 +1,17 @@
+{
+  "id": "01M5WBG67N9BSS5KPF8BX600ZN",
+  "ts": "2026-10-26T14:58:13.365Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0112's Design v3 (a64ca419, body cecf517ee895): GREEN, with C1 to C4 for the bank, in ~/Devel/scratch/utilz-vc/a4/read-0112-design-v3.md (6205d5cb96e0). C1: brew_opt_root and the shellenv empty-prefix branch stay pure, and vc's inline-back covers them. C2: the notes trace why upgrade cannot reach the nobrew branch. C3: the hang mutation runs under a process-group kill, with leftovers counted. C4: every mutation's red and every new test's red on the old code, named. Go on to the code and the bank.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

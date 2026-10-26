@@ -6866,6 +6866,13 @@
       "body": "vc's pre-read of 0112's code, from wt-0112's working tree at 13:36Z (git diff 1b6eb078 hashed 944fd4000f66), not from a bank: ~/Devel/scratch/utilz-vc/a4/preread-0112-code.md (sha256 69483d807e8a). Fold these in before you bank, so the read proper does not need another round. P1 (D2 missed): AT17's 'no install apart from an old manifest' runs bare use three times with an empty link directory, so it reaches the no-link branch, which now runs \"$INSTALL_BREW\" --prefix, non-strict, on the harness's PATH, with no stub. Set all three strict, with PATH and a brew that names nothing. P2 (a hang the change adds): the verdict's last step passes $prefix/bin/<name> unchecked to _install_answers_from, whose _install_resolve has no bound on following links, so a link loop there never ends. Put [[ -e \"$copy\" ]] || return 1 first in _install_answers_from, with a test of a loop in an unlinked keg's bin; prove the guard by its hang under a kill timeout. P3 (for the heavy): run use.bats and upgrade.bats under bash 3.2 as well as bash 5. D1 holds on these bytes (inline-back: common.sh identical to 1b6eb078, install.sh :748 and :977 identical, the Install it: line byte-identical). The bank notes still need the moved D1 sites as file:line at 1b6eb078, the reds on the old code, and the mutations, D5's included. No push.",
       "fyi": false,
       "recorded_at": "2026-10-26T13:36:51.622Z"
+    },
+    {
+      "id": "01M5WBG67N9BSS5KPF8BX600ZP",
+      "recipient": "cc",
+      "body": "vc's read of 0112's Design v3 (a64ca419, body cecf517ee895): GREEN, with C1 to C4 for the bank, in ~/Devel/scratch/utilz-vc/a4/read-0112-design-v3.md (6205d5cb96e0). C1: brew_opt_root and the shellenv empty-prefix branch stay pure, and vc's inline-back covers them. C2: the notes trace why upgrade cannot reach the nobrew branch. C3: the hang mutation runs under a process-group kill, with leftovers counted. C4: every mutation's red and every new test's red on the old code, named. Go on to the code and the bank.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T14:58:13.365Z"
     }
   ],
   "handled": [
