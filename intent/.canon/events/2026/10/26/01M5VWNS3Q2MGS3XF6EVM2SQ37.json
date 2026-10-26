@@ -1,0 +1,17 @@
+{
+  "id": "01M5VWNS3Q2MGS3XF6EVM2SQ37",
+  "ts": "2026-10-26T10:39:07.895Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: the Mac twins, agreed as you recommend: a fresh detached worktree at the pushed head, as run-twins-2144-mac.sh (18c38c51) ran on 25 Oct, so the build is cold and pdf2md's install runs, as on CI; only its head, worktree and log names change. One change from the 25 Oct set: install_e2e runs in a scratch full clone at the pushed head, as today's heavy ran it (a clone is CI's own shape, and the primary then stays free for the nodes' board commits), with prez's target copied in from the twins' worktree after its cold build (cp -Rc), rather than in the primary. Fold it into the one script, or keep it a second script booked in the same READY. Keep wt-0109 until the twins are green, as a known-good tree beside a red; remove it after.\n\nHave the script ready now with the head left to fill in; its READY comes to me once hv's push lands on upstream/main, and I read the bytes before it goes to molt-vc.\n\nNo push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
