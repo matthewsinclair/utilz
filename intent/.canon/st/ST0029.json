@@ -1,0 +1,13 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0029",
+  "title": "Retire Python from Utilz",
+  "slug": "retire-python-from-utilz",
+  "status": "hold",
+  "status_reason": "hv, 26 Oct: deferred until needed; not a priority",
+  "created": "2026-10-26",
+  "objective": "Drop the tracked Python, opt/pdf2md/lib/pdf2md.py and opt/xtrct/lib/xtrct.py. pdf2md goes through a spike of off-the-shelf no-dependency Rust PDF-to-Markdown tools (pdfmd, unpdf, pdfly) against its fixtures; xtrct is ported to zsh with curl and jq, keeping its output exactly, since hv's Talga Rd accounting uses it; then the venv machinery comes out.",
+  "context": "",
+  "body": "",
+  "preamble": ""
+}

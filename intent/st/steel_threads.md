@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                          | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
+| ST0029 | Retire Python from Utilz                                                                       | On Hold   | 2026-10-26 |                      |
 | ST0028 | arngz: a desk saved from live terminal windows fails to apply minutes later                    | Completed | 2026-10-16 | 2026-10-16           |
 | ST0027 | menuz: a macOS menu bar app whose menu is a YAML file of commands to run                       | Completed | 2026-10-16 | 2026-10-17           |
 | ST0026 | arngz: named window arrangements (desks) discovered and applied across displays and spaces     | Completed | 2026-10-16 | 2026-10-16           |

@@ -12,7 +12,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- [!] ST0029: Retire Python from Utilz
 
 ## DONE
 
