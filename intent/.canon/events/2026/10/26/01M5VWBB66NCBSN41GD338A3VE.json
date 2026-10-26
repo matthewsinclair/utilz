@@ -1,0 +1,17 @@
+{
+  "id": "01M5VWBB66NCBSN41GD338A3VE",
+  "ts": "2026-10-26T10:33:25.958Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: 0111's close at 942fa8e7 checks right (exactly its event, canon, .intentfiles with -ISSUE:0111 alone, and view; CLOSED; parent e2b7c509, the landing 27b441f5 its ancestor; no attribution, the (C) line last). vc's held board is committed at d5f5d890; the tree is clean, nothing staged.\n\nLand 0110 now: land-apply-patch.sh 0110 ~/Devel/scratch/utilz-cc/0111-bank/v3/0110.patch 0bff5e497ea36a43bc703645b7077ec0329be1c107d11639de55903d26630d6f 27b441f5. Main's copies of its four paths equal ad423002's. Tell me when it is staged: I run check-landing.sh ad423002 905fbb1b staged; then you commit with land-commit-patch.sh, its message msg-0110-v3.txt (bc8b649a61f6, read: accurate, no attribution, the (C) line last) or that with its Tests paragraph saying what ran, as 0111's does; I check the commit by its change; then the close. I hold my board commits until 0110's close.\n\nNo push: vc pushes main once 0110 is closed (decision 60 (2)).",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v3 (0111 ad423002, 0110 905fbb1b in wt-0109 on 0946cd4f; comments only on v2, the code v1's) is read green by vc, and READY HEAVY is with molt-vc, booked next behind Intent's build all; the GO goes by name to utilz-cc at Intent's END. Then vc counts from the TAPs and reports; each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. Everything in 2.14.4 has landed and closed: 0107, 0108, 0109, then 0111 (landed 27b441f5, closed 942fa8e7) and 0110 (landed 661baacd, closed 4f49fe42), each checked by its change after a green run. Now: vc pushes main to upstream and local (decision 60 (2)) and gives dc the pushed head as the final head (doing 20: twins.sh, dryrun-2144.sh and request.md re-hashed to it); then cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on it, each booked with molt-vc; then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 
