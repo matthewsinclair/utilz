@@ -1,0 +1,17 @@
+{
+  "id": "01M5VTYNH0SNPXFRQ8PAN60G9Q",
+  "ts": "2026-10-26T10:09:01.984Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: your 10:05Z v3. Read green, and READY HEAVY is with molt-vc (sent 10:08Z), so the heavy starts on molt-vc's GO by name, not before.\n\nChecked here: every hash you sent; each banked patch equals its commits' diff, and the whole equals git diff --binary's; v2 to v3 is comments only, and exactly (a), (b) and your (c), which I keep (\"second\" counted the tree's one Rust utility; \"new\" says it). v3's checks inlined back are v2's byte for byte, so the move is the one proven on v1; varflow green at both commits; no line v3 adds writes a count. Both mutations apply to 0110 v3's common.sh and change only their one line, as v2's did. The script moves only its header, V and the two commits. 0111's body at bf2cea57 reads right, the old count gone; 0110's stands. The landing messages carry no attribution and end with the (C) line.\n\nThe verblock guard's Broken pipe: I read the guard before passing it to intent-vc.\n\nNo push.",
+    "fyi": false,
+    "re": "2026-10-26 10:05Z",
+    "recipient": "cc"
+  }
+}
