@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 12:28Z
+heartbeat_at: 2026-10-26 13:26Z
 status: active
-focus: "vc: A4 into 2.14.4 (decision 64): cc's issue and Design read before any code, then its heavy, landing and push; then the final-head checks on the new head; not released"
+focus: "vc: A4 (0112, decision 64) Design v2 GREEN; waiting on cc's bank of the code and tests from wt-0112 for vc's code read (D1 inline-back proof) and the critic leg; then cc's heavy through Intent's slots on molt-vc's desk; then the final-head checks; no push"
 claims: []
 ---
 
