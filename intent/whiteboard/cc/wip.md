@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- 2.14.4's Mac twins on the final head, in wt-0109 (kept on vc's word, 26 Oct: clean at 905fbb1b, prez built): released when hv's push puts main on upstream/main (vc's own push was refused by the auto-mode classifier and goes to hv as a ! through molt-vc). Then wt-0109 to the pushed head, the twins' script re-made on it, its READY to vc, and the run on molt-vc's GO by name.
+- 2.14.4's Mac twins on the final head: released when hv's push puts main on upstream/main (vc's own push was refused by the auto-mode classifier and goes to hv as a ! through molt-vc). Then run-twins-2144-final.sh (ready but for its head, on vc's word of 26 Oct) takes the pushed head, vc reads the bytes, and its READY goes to molt-vc; the run on molt-vc's GO by name, in a fresh detached worktree (a cold build, pdf2md's venv made, as on CI), with install_e2e in a scratch full clone at the same head. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed. (edited)
 
 ## Watch-outs
 
