@@ -2030,10 +2030,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 pre-release checks. 0107 and 0108 have landed. Still to land: 0109 (A3's version line and doctor clause), 0110 (doctor's silent exits) and 0111 (run_doctor's coordinator refactor), on hv's rulings. Now: 0109 v5 (tests and comments only, on v4's whole green) to vc's read, its light run on molt-vc's GO, then 0109 landed by path, checked by change, then closed. Then 0111 with 0110 on top in wt-0111 on 0109's final bytes, one heavy, each landed by path, checked by change, then closed. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
+      "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. Now: cc writes 0111 then 0110 as two commits in a worktree on 0946cd4f, banked for vc's read; vc's light critic leg (any sweep follows variables); READY; one heavy on molt-vc's GO: 0110's red on the 0111 commit, the whole utilz suite plus arngz, menuz and prez green, and doctor's report and exit status diffed before and after, on the dev tree and on fixtures. Each lands by path, checked by change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
       "state": "live",
       "recorded_at": "2026-10-25T10:43:07.969Z",
-      "edited_at": "2026-10-26T08:29:04.992Z"
+      "edited_at": "2026-10-26T08:46:10.704Z"
     },
     {
       "node": "vc",
