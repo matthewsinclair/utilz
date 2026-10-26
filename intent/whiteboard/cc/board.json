@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "ec04293b-d1ee-4446-8a30-666bf356d221",
-    "heartbeat_at": "2026-10-26T13:00:20.162Z",
+    "heartbeat_at": "2026-10-26T13:27:06.892Z",
     "status": "active",
     "focus": "Issue 0112 (A4 to T5, into 2.14.4; vc's decision 64), claimed: Design v2 set at 2ecbf217, every point of vc's read taken as written; the code and tests under way in wt-0112 (detached at 1b6eb078), to bank for vc's read with the critic leg, then READY HEAVY. wt-0109 removed by Intent 0654's step. The twins (hold 47) run on the head A4's landing makes. Not released. RESUME.md has it.",
     "claims": [
