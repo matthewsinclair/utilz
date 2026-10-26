@@ -1,0 +1,16 @@
+{
+  "id": "01M5W1X368GA356ARQ3MCEXA9A",
+  "ts": "2026-10-26T12:10:30.472Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. Landed and closed: 0107, 0108, 0109, 0111 (27b441f5) and 0110 (661baacd), main pushed by hv at 9027555d (CI green there). Now, on hv's ruling (a) of 26 Oct (vc's decision on A4): Utilz's conformance to A4 to T5 (`use brew` refuses, removing nothing, when no brew copy would answer) goes into 2.14.4. After the compact, cc files it with its Design for vc's read before any code, then fixes it with tests (red on the old code, green with the fix), banked in a worktree for vc's read; its run a heavy booked with molt-vc; then it lands by path, checked by its change, and closes; then the push (hv's `!` if the classifier refuses vc's). Then the final-head checks on the new head, each READY to molt-vc in turn: cc's Mac twins, dc's kovacs twins through kovacs-sysadm, dc's dry run with the tree frozen; then FOR hv: ready to cut, with the todo on the suites' other written counts; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew."
+  }
+}

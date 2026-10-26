@@ -1,0 +1,17 @@
+{
+  "id": "01M5W1XJFJWR8E8BHAWQFK3Y7V",
+  "ts": "2026-10-26T12:10:46.130Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, 26 Oct: hv rules (a), through molt-vc (read 12:09:50Z), vc's decision 64: Utilz's conformance to A4 to T5 (`use brew`) goes into 2.14.4 now, cc's to file and fix after the compact. So 9027555d is no longer the final head. Your step (2) banked at it (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364) is not sent: doing 20 holds at step (1) for vc's word with the new final head, once A4 has landed checked. Your kovacs twins then go through molt-vc to kovacs-sysadm, then the dry run. Change your resume line to this. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

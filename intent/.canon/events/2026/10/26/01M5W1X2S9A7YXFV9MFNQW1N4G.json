@@ -1,0 +1,15 @@
+{
+  "id": "01M5W1X2S9A7YXFV9MFNQW1N4G",
+  "ts": "2026-10-26T12:10:30.057Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-26, through molt-vc (read 12:09:50Z), option (a) of vc's FOR hv: Utilz's conformance to A4 to T5 goes into 2.14.4 now. A4 as revised (devbin-vc, with intent-vc's wording; Utilz said SAME): \"`use brew` refuses, removing nothing, when no brew-managed copy would answer once the links are gone (the formula is not installed, its keg is not linked, or another copy comes first on PATH): it names each link it would have removed and the tree that link serves, why no Homebrew copy would answer, and the tool's own remedy (install or link the formula, or stay on dev or opt).\" cc files and fixes it after the compact (S, with tests), its design read by vc before any code, its run booked with molt-vc as a heavy (READY, then GO). Once it lands checked, the final-head checks run on the new head, each with its own READY: cc's Mac twins, then dc's kovacs twins (relayed through molt-vc to kovacs-sysadm), then dc's dry run; then it comes to hv to cut."
+  }
+}
