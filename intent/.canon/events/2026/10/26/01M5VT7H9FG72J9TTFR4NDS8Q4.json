@@ -1,0 +1,15 @@
+{
+  "id": "01M5VT7H9FG72J9TTFR4NDS8Q4",
+  "ts": "2026-10-26T09:56:23.983Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "For hv, in the ready-to-cut message: written counts remain in test names and comments across the suites, outside 0111's and 0110's lines (hv's rule: a count written down is deleted, never corrected). Ask where the sweep goes: an issue for the release after 2.14.4 (vc's rec, since it changes no behaviour), or into 2.14.4. One owner: cc files it on hv's word."
+  }
+}

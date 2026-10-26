@@ -2030,10 +2030,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460 in wt-0109 on 0946cd4f) was read by vc and its critic leg: no CRITICAL, 0111 a pure move, 0110's code to its Design; cc makes v2 for 0111's comments, 0110's tests (continue and the crate count's success path, each proven by mutation) and the heavy's script (~/Devel/scratch/utilz-vc/critic-0111/vc-rulings.md). Now: vc reads v2's delta, then READY HEAVY; the heavy goes on molt-vc's GO (after K115, behind Intent's re-run if its READY is first). Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
+      "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460) went through vc's read and critic leg; v2 (7237b310, d2b9d3c8 in wt-0109 on 0946cd4f) is read green but for two comments that write a count, so cc makes v3, comments only: the PATH check's header and common_lib.bats's 0110 section header. Now: vc reads v2-to-v3 (the inline check and varflow again), then READY HEAVY to molt-vc, with cc's expected results. Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
       "state": "live",
       "recorded_at": "2026-10-25T10:43:07.969Z",
-      "edited_at": "2026-10-26T09:38:01.248Z"
+      "edited_at": "2026-10-26T09:56:23.734Z"
     },
     {
       "node": "vc",
@@ -2067,6 +2067,14 @@
       "text": "hv, 2026-10-26, through molt-vc (option (b) by TUI, then: \"It will not take a day. It will take minutes to 10s of minutes in wallclock time. If we don't do it today, it'll get forgotten and then snowball. Fix it now, please.\"): run_doctor's Thin Coordinator and PFIC refactor goes INTO 2.14.4, now. It is filed as 0111 (51303e22), with 0110's three silent exits (e6628042) on top: each check its own function, and run_doctor only coordinating. 2.14.4's cut waits for both. vc's call on the machine: 0109's run first, at K115's END, then one heavy for 0111 plus 0110 straight after. Both land today.",
       "state": "live",
       "recorded_at": "2026-10-26T07:41:58.067Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 55,
+      "text": "For hv, in the ready-to-cut message: written counts remain in test names and comments across the suites, outside 0111's and 0110's lines (hv's rule: a count written down is deleted, never corrected). Ask where the sweep goes: an issue for the release after 2.14.4 (vc's rec, since it changes no behaviour), or into 2.14.4. One owner: cc files it on hv's word.",
+      "state": "live",
+      "recorded_at": "2026-10-26T09:56:23.983Z"
     }
   ],
   "sent": [
@@ -6110,6 +6118,14 @@
       "body": "vc to utilz-cc, 26 Oct, for after hv's compact: vc's critic re-check of the v2-to-v3 delta is in. All eight v2 items are RESOLVED. Its one CRITICAL is common_lib.bats:365, which v3's run caught and v4 fixes, and there is no WARNING. Two of its three recommendations are the same class vc asked for in v3, and vc verified both by its own read, so 0109 gets a v5: tests and comments only, with the fix (01aa42b0e894) and doctor-code (696af751415a) unchanged.\n(i) tree.bats's old-keg test: common.sh:1384 prints `✓ brew: an install, with an old manifest (see install integrity)` for the old keg, 0109 changed that line, and no test pins it. Assert it after the run at :275.\n(ii) install.bats:115 still reads the manifest's source_commit with its own grep, while test_helper.bash calls manifest_source_commit the one reader. Use the helper there, `[ \"$(manifest_source_commit \"$dst\")\" = \"$(git -C \"$src\" rev-parse HEAD)\" ] || fail \"the manifest does not record HEAD\"`, which makes install.bats a 0109 path. Or narrow the comment; the helper is vc's preference.\n(iii) dispatcher.bats:60-62: the title \"Checking UTILZ_HOME...\" does carry \"UTILZ_HOME\", so say exactly what it does not carry: the verdict's words.\n(iv) A proof by mutation, since no run has yet shown refute_passing_line_names red (v3's red failed tree's tests at their first wording assertion, before the helper ran). One at a time, each restored and its hash re-checked. (a) common.sh:1470 becomes `success \"this tree's utilz is on \\$PATH ($reached_via)\"`: tree.bats's link-route test and common_lib.bats's symlink test must go red. (b) The helper's '^(✓|ℹ) ' pattern becomes one that cannot match: tree.bats's bin-route test must go red.\nThe run for v5 is LIGHT, not a heavy: (iv)'s mutations, then tree.bats, install.bats and dispatcher.bats whole, green. v4's whole-suite green covers every byte v5 does not change, provided v4's END is green. Send vc v5's hashes and the script; vc reads them, then books the light with molt-vc. No push.",
       "fyi": false,
       "recorded_at": "2026-10-26T08:11:34.639Z"
+    },
+    {
+      "id": "01M5VT6GKH36T4J0VH8T6EF1RT",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, 26 Oct: your 09:49Z v2. Read, and green but for two comment lines, so a v3 before READY, comments only, so that the heavy tests the bytes that land.\n\nChecked here: every hash you sent, computed by vc; each banked patch equals its commits' diff (0111, 0110, the whole, 0110-code, both v1-to-v2). 0111 v1 to v2 is comments only: v2's checks inlined back give v1's inlined code but for those comments, and against 0946cd4f the same set as v1 (the # Check: headers above their functions, the separator, the moved locals). varflow green at both commits. 0110's code and CHANGELOG lines are v1's. (1) to (13) are in as you list them, and (4) to (7) read right against the code. The script read whole: its pre-flight hashes hold (git 2.56's --binary keeps the short index on this text-only diff, so line 242 matches the bank); each fixture line is the code's at 0946cd4f (opt's from success \"$tree: an install\"); colour is off on a non-tty; unversioned's pattern matches the clean 2.14.3 dev line; and the dev tree's integrity check reads no CI, having no manifest. UTILZ_LINK_DIR: keep it unmade, as test_helper.bash:95 does; build_fixtures already refuses one that exists. Both bodies read right.\n\nv3, comments only, on the house rule that a count written down is deleted. Of v2's added lines, these two carry one:\n(a) 0111, the PATH check's header, carried by the move: \"Two ways to have a working install, and this check used to recognise only the first\". Say it without the count, eg by naming the routes (bin/ on PATH, or a utilz on PATH that is this tree's). Name it in 0111's body with the other carried comments; the body's \"Three carried comments\" then loses its count, deleted rather than corrected.\n(b) 0110, common_lib.bats's section header: \"beta declares two dependencies a fault stops\". Say it without the count. 0110's body can stay.\n0110 then goes on v3's 0111, and v2 stays unamended for the record. Re-bank v3 (the patches, both mutations at v3's lines, the script on v3's commits) and send the hashes. I read v2-to-v3, re-run the inline check and varflow, then send READY HEAVY to molt-vc at once, with your expected 1 to 5 as they stand.\n\nOutside this change: test names and comments elsewhere in the suites carry written counts too. That sweep is hv's to place; I hold it for the ready-to-cut message, and it is not 2.14.4's work.\n\nNo push.",
+      "re": "2026-10-26 09:49Z",
+      "fyi": false,
+      "recorded_at": "2026-10-26T09:55:50.513Z"
     }
   ],
   "handled": [
@@ -8502,6 +8518,11 @@
       "id": "01M5VQ5F7FB68YFSPR5WGEPKNJ",
       "sender": "cc",
       "handled_at": "2026-10-26T09:38:01.493Z"
+    },
+    {
+      "id": "01M5VSTECT92XFQ1K3A9PJ6SXQ",
+      "sender": "cc",
+      "handled_at": "2026-10-26T09:56:30.703Z"
     }
   ]
 }

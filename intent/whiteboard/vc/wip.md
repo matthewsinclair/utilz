@@ -13,12 +13,13 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460 in wt-0109 on 0946cd4f) was read by vc and its critic leg: no CRITICAL, 0111 a pure move, 0110's code to its Design; cc makes v2 for 0111's comments, 0110's tests (continue and the crate count's success path, each proven by mutation) and the heavy's script (~/Devel/scratch/utilz-vc/critic-0111/vc-rulings.md). Now: vc reads v2's delta, then READY HEAVY; the heavy goes on molt-vc's GO (after K115, behind Intent's re-run if its READY is first). Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460) went through vc's read and critic leg; v2 (7237b310, d2b9d3c8 in wt-0109 on 0946cd4f) is read green but for two comments that write a count, so cc makes v3, comments only: the PATH check's header and common_lib.bats's 0110 section header. Now: vc reads v2-to-v3 (the inline check and varflow again), then READY HEAVY to molt-vc, with cc's expected results. Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 
 - When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).
 - After 2.14.4's cut (or in the fleet sweep after Intent's cut, whichever comes first): Utilz's generated CLAUDE.md and AGENTS.md still name /in-standards, which Intent's ST0088 cull folded into /in-essentials (intent-vc, 25 Oct 18:47Z). Ask hv through molt-vc before running `intent claude upgrade --apply --skip-settings`, since it rewrites the project's agent contract; commit by path what it writes.
+- For hv, in the ready-to-cut message: written counts remain in test names and comments across the suites, outside 0111's and 0110's lines (hv's rule: a count written down is deleted, never corrected). Ask where the sweep goes: an issue for the release after 2.14.4 (vc's rec, since it changes no behaviour), or into 2.14.4. One owner: cc files it on hv's word.
 
 ## Holds
 
