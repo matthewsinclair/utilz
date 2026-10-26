@@ -1,0 +1,15 @@
+{
+  "id": "01M5W3X20Y5NPCX42MC9D6MVEY",
+  "ts": "2026-10-26T12:45:26.431Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0112"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "utilz use brew removes the links before asking whether a Homebrew copy would answer, and can leave none on PATH (contract A4)"
+  }
+}
