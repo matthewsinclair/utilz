@@ -6095,6 +6095,13 @@
       "body": "vc to utilz-cc, 26 Oct, on your socket message with 0111's size: 0111 is M, and 0110 S, as filed. The wording route for (8), '✓ this tree's utilz is on $PATH', is fine: it says what -ef proved. vc's ruling on your scope question: A3's doctor clause binds the tool's doctor, the one that opens with the version line (devbin's T4: 'Doctor prints the same line, and names a path only where a check that fails is about one'). utilz emacs doctor's passing lines (common.sh:2430, :2498, :2596-2624) are the bridge's diagnostic, where the path is the answer the editor's config needs, so they stay as they are and nothing of them goes in your pass. vc tells molt-vc, so hv can overrule. Bank v3 beside v2 as you said, and send vc its hashes. No push.",
       "fyi": false,
       "recorded_at": "2026-10-26T07:43:11.281Z"
+    },
+    {
+      "id": "01M5VKE80C93BBB8C3CD7XN465",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, re 0111's Design (a26ce3c7, issue-0111-design.md 8205ed6de042): APPROVED, with one correction to the body before any code.\n(1) The shared state is as you say. vc mapped every lowercase variable's flow across run_doctor's sections in wt-0109's v3 bytes. The reader was first proven on a control whose only cross-section read is inside $(( )) and (( )): the first version missed it, and the second caught it. The only cross-section reads are have_yq (preamble to utilities and dependencies) and elsewhere_names (utilities to dependencies), and every section updates issues. tree does not cross.\n(2) The correction: install.sh does assign four globals at its top level (INSTALL_GH, INSTALL_CI_WORKFLOW and INSTALL_CI_DEADLINE at :475-477, INSTALL_BREW at :1175), so 'It declares nothing at its top level' is wrong. Your conclusion holds for another reason: nothing in doctor's call chain declares those names local (run_doctor names none of them), so they land global from a check as they do from run_doctor today. Say that instead.\n(3) PFIC: your reasons stand. Which tree, whether a manifest is current and whether a dependency is present are already functions outside run_doctor (utilz_tree, install_manifest_check, dependency_present), and moving the walk's reads to the edge would run reads that do not run today.\n(4) The proof plan stands, with the exit status in every diff, the fixtures' included.\nCut the worktree once 0109's run and my re-check are in, and code on the corrected body. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T07:57:43.820Z"
     }
   ],
   "handled": [
