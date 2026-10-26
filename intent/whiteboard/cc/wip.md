@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 014f7a2a-6468-4750-a8b2-6587f48d2c84
-heartbeat_at: 2026-10-25 20:00Z
-status: paused
-focus: "25 Oct 20:00Z: closed for the night on hv's word (via molt-vc and vc), released. Doing 65, 0109 v2 (A3 plus its doctor clause): wt-0109 at c5d555b4, banked whole as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8); unrun. Tomorrow: re-confirm the bytes, send READY HEAVY for v2/run-0109-v2.sh (f8494283559e) straight after land220, then land citing devbin main. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
+session_id: ec04293b-d1ee-4446-8a30-666bf356d221
+heartbeat_at: 2026-10-26 07:21Z
+status: active
+focus: "26 Oct: booted on hv's word, holding for vc. 0109 v2 bytes re-confirmed (wt-0109 at c5d555b4; full 1b868a2cfdc8, fix 1e56cd54610a, tests 35b291d6f03a, install_e2e 50ff3b7ba2a2; run-0109-v2.sh f8494283559e) and sent to vc. Next, on vc's word that its critic leg ENDed clean: the v2 run under the watchdog (molt-vc's GO 07:07Z covers it), START and END to molt-vc and vc; then the landing by path citing devbin main's 40663691, on vc's word. Resume: ~/Devel/scratch/utilz-cc/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0109 v2 (contract A3 with its doctor clause, hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 402c9c59. wt-0109 is at c5d555b4, uncommitted, with its whole diff banked as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8). Run v2/run-0109-v2.sh (f8494283559e), read by vc, goes READY HEAVY straight after devbin's land220. Then land citing devbin main, on vc's word. Size S. (edited)
+- 0109 v2 (contract A3 with its doctor clause, hv's rulings): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 402c9c59. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v2/wt-0109-full.patch (1b868a2cfdc8), re-confirmed 26 Oct. A3 is on devbin main as 40663691. Run v2/run-0109-v2.sh (f8494283559e), read by vc, is covered by molt-vc's GO of 26 Oct and starts on vc's word that its critic leg ENDed clean. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S. (edited)
 
 ## TODO
 
