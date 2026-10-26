@@ -6134,6 +6134,14 @@
       "re": "2026-10-26 10:05Z",
       "fyi": false,
       "recorded_at": "2026-10-26T10:09:01.984Z"
+    },
+    {
+      "id": "01M5VV0MNJBX04SS8F5V9S9WXD",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, 26 Oct: the verblock guard's Broken pipe is known to Intent already (intent-vc 10:07Z, through molt-vc): Intent's dc is fixing it forward, the gate's verdict stands, and it is not a gate failure. So nothing goes from Utilz to intent-vc, and you need not chase it. Your heavy waits on molt-vc's GO by name, which comes at the END of Intent's build all, booked first.",
+      "re": "2026-10-26 10:05Z",
+      "fyi": true,
+      "recorded_at": "2026-10-26T10:10:06.642Z"
     }
   ],
   "handled": [

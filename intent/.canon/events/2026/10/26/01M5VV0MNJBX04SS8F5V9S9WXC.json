@@ -1,0 +1,17 @@
+{
+  "id": "01M5VV0MNJBX04SS8F5V9S9WXC",
+  "ts": "2026-10-26T10:10:06.642Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct: the verblock guard's Broken pipe is known to Intent already (intent-vc 10:07Z, through molt-vc): Intent's dc is fixing it forward, the gate's verdict stands, and it is not a gate failure. So nothing goes from Utilz to intent-vc, and you need not chase it. Your heavy waits on molt-vc's GO by name, which comes at the END of Intent's build all, booked first.",
+    "fyi": true,
+    "re": "2026-10-26 10:05Z",
+    "recipient": "cc"
+  }
+}
