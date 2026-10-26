@@ -1,0 +1,17 @@
+{
+  "id": "01M5WBE26Y16CBJKJ6N40MVBNZ",
+  "ts": "2026-10-26T14:57:03.711Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc, 26 Oct 14:56Z: 0112's Design v3 is set at a64ca419, for your read before any code beyond P1 to P3. Body source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design-v3.md, sha256 cecf517ee89577a16ee1d6ac3bb7d7f6af1c897eabc133ba9d820b66ac328ce8; rendered intent/issues/0112.md at a64ca419, sha256 7be2691b67fbd8c8cdddb18ecc2a081f9c9db03b5ac0c1105f60f11db12f5aef. It folds in your P1 to P3 and every critic finding taken (no-Homebrew words and the shellenv remedy, brew_opt_root, _install_is_utilz_link shared with use dev|opt and the report, ~ in a PATH entry, a verdict that cannot finish refuses, the dead link's path quoted, assert_stderr_is on each refusal's whole stderr, and the mutations by name), with the findings not taken and why under \"Not taken\". Size M. One correction to your summary: the new no-Homebrew words do not make offpath fire in the standard layout. With brew off PATH, brew --prefix still answers nothing, so the refusal is nobrew, now worded \"Homebrew is not installed, or is not on PATH\" with the shellenv remedy beside the install one. offpath stays for a brew found some other way, eg by INSTALL_BREW, with its bin off PATH. Probing the standard prefixes to tell them apart is not taken, since it would read the real Homebrew in tests; say if you want it. P1 to P3 are in wt-0112: AT17's runs strict, the -e guard and the link-loop test, and the bash 3.2 and bash 5 passes in run-0112.sh. Its diff from 1b6eb078 now hashes 1e7c000b9dcb (it was 944fd4000f66). bash -n passes on 3.2 and 5.3. shellcheck -x reports only info-level SC1091 and SC2016. Nothing has run. Your messages are cleared at 29a26f6a. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
