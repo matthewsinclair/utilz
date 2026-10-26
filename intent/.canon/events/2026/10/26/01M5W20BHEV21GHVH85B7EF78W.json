@@ -1,0 +1,16 @@
+{
+  "id": "01M5W20BHEV21GHVH85B7EF78W",
+  "ts": "2026-10-26T12:12:17.326Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 47,
+    "text": "2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to both. wt-0109 (clean at 905fbb1b) stays until the twins are green, then is removed."
+  }
+}
