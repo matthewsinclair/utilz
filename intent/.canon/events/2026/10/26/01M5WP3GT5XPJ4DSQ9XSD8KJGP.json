@@ -1,0 +1,16 @@
+{
+  "id": "01M5WP3GT5XPJ4DSQ9XSD8KJGP",
+  "ts": "2026-10-26T18:03:32.549Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) is RED at check critic: Intent's 0648 makes intent critic exit 4 when nothing is judged, and devbin's check (vendored, and v0.1.15) reads it with || rc=1. Routed to devbin-vc. Next: devbin's fix vendored by path; the Mac twins, kovacs twins and dry run rerun on the new head, each with its own slot; FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line."
+  }
+}

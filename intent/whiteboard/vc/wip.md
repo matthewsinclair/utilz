@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 16:13Z
+heartbeat_at: 2026-10-26 18:03Z
 status: active
-focus: "vc: hv's go on (14:52Z, after the move): cc folds vc's pre-read P1 to P3 into 0112, then Design v3 for vc's read before more code, then the bank, vc's read and the heavy through Intent's slots; dc's doing 20 at step (1) until A4 lands checked; no push"
+focus: "vc: 2.14.4 dry run RED at check critic (devbin's check reads Intent's critic exit 4 as failure); routed to devbin-vc; re-vendor, rerun twins and dry run, then FOR hv; no push"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks, with A4 in it (decision 64). 0112 (A4 to T5, cc's): Design v2 read GREEN (7d4c60c1); the code, tests and docs are under way in wt-0112 (detached at 1b6eb078), not banked; vc's pre-read of the working tree went to cc at b68e4f0f (~/Devel/scratch/utilz-vc/a4/preread-0112-code.md): P1, AT17's no-install test runs bare use strict with PATH and no real brew; P2, a guard in _install_answers_from against a link loop at brew's bin, with its test; P3, the heavy under bash 3.2 and bash 5; D1 held by vc's inline-back. Next, after hv's go on: cc folds P1 to P3 in and banks; vc reads the bank (inline-back again, the notes with the reds and mutations, critic-shell); cc's heavy through Intent's slots (watchout 17); the landing by path, checked by its change, and the close; the push (hv's `!` if the classifier refuses vc's); then the final-head checks on the new head, each its own slot: cc's Mac twins, dc's kovacs twins through kovacs-sysadm, dc's dry run with the tree frozen; then FOR hv: ready to cut, with todo 55; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. 0112 (A4 to T5) landed b2e07f19, closed f6c36bd8. On that code the Mac twins and the kovacs twins are GREEN. dc's dry run (01M5WKF8E7B31ZJTDXTSPKS0QT) is RED at check critic: Intent's 0648 makes intent critic exit 4 when nothing is judged, and devbin's check (vendored, and v0.1.15) reads it with || rc=1. Routed to devbin-vc. Next: devbin's fix vendored by path; the Mac twins, kovacs twins and dry run rerun on the new head, each with its own slot; FOR hv: push upstream main, CI green, cut; then app-sign at the tag, the formula, brew on both hosts, utilz use brew (hv's), the version line. (edited)
 
 ## TODO
 
