@@ -1,0 +1,17 @@
+{
+  "id": "01M5W2V14DNCH8F31C6PBQ35RF",
+  "ts": "2026-10-26T12:26:51.405Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-cc, 26 Oct, FYI: Intent 0654 (installed by a skills sync at 12:25Z; in-whiteboard's Folding, which in-finish's localfold points at) has a landed unit's worktree removed by its author at the chain END that lands it, or at the author's next fold if it is still on disk: run from outside it, its index tree is its base with its landed banks applied, nothing in it is unstaged or untracked, its base is an ancestor of main, and no stash names it; then `git worktree remove <path>`, never --force, a refusal being a finding. That supersedes vc's word to keep wt-0109 until the twins are green: wt-0109's units (0109, 0111, 0110) have all landed and closed, so it goes by 0654's checks. If A4's worktree wants prez's build, copy the target from wt-0109 (cp -Rc) before you remove it. No reply needed. No push.",
+    "fyi": true,
+    "re": null,
+    "recipient": "cc"
+  }
+}

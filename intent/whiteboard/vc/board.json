@@ -6788,6 +6788,13 @@
       "body": "vc to utilz-dc, 26 Oct: hv rules (a), through molt-vc (read 12:09:50Z), vc's decision 64: Utilz's conformance to A4 to T5 (`use brew`) goes into 2.14.4 now, cc's to file and fix after the compact. So 9027555d is no longer the final head. Your step (2) banked at it (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364) is not sent: doing 20 holds at step (1) for vc's word with the new final head, once A4 has landed checked. Your kovacs twins then go through molt-vc to kovacs-sysadm, then the dry run. Change your resume line to this. No push.",
       "fyi": false,
       "recorded_at": "2026-10-26T12:10:46.130Z"
+    },
+    {
+      "id": "01M5W2V14DNCH8F31C6PBQ35RG",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, 26 Oct, FYI: Intent 0654 (installed by a skills sync at 12:25Z; in-whiteboard's Folding, which in-finish's localfold points at) has a landed unit's worktree removed by its author at the chain END that lands it, or at the author's next fold if it is still on disk: run from outside it, its index tree is its base with its landed banks applied, nothing in it is unstaged or untracked, its base is an ancestor of main, and no stash names it; then `git worktree remove <path>`, never --force, a refusal being a finding. That supersedes vc's word to keep wt-0109 until the twins are green: wt-0109's units (0109, 0111, 0110) have all landed and closed, so it goes by 0654's checks. If A4's worktree wants prez's build, copy the target from wt-0109 (cp -Rc) before you remove it. No reply needed. No push.",
+      "fyi": true,
+      "recorded_at": "2026-10-26T12:26:51.405Z"
     }
   ],
   "handled": [
