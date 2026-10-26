@@ -2030,10 +2030,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 68,
-      "text": "2.14.4 (0107, 0108, and 0109: A3's version line and doctor clause, on hv's rulings) pre-release checks. 0109's version-line part ran green on the whole suite (18:18Z); its v2 run with the doctor clause is booked with molt-vc straight after devbin's land220 (A3 into devbin main). Next: the v2 run, the critic leg, cc's landing by path citing devbin main, vc's check by change; then the Mac twins, kovacs twins via kovacs-sysadm and dc's dry run on the landed head, each booked fresh with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, utilz use brew, and the version line reading brew.",
+      "text": "2.14.4 pre-release checks. 0107 and 0108 have landed. Still to land: 0109 (A3's version line and doctor clause), 0110 (doctor's silent exits) and 0111 (run_doctor's coordinator refactor), on hv's rulings. Now: 0109's critic fixes to vc's read, a light critic re-check, then READY, and molt-vc's GO at K115's END. Meanwhile cc writes 0111's design, then 0111 with 0110 on top in a worktree on 0109's bytes, for one heavy straight after 0109's run. Each lands by path, checked by change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew.",
       "state": "live",
       "recorded_at": "2026-10-25T10:43:07.969Z",
-      "edited_at": "2026-10-25T20:00:10.069Z"
+      "edited_at": "2026-10-26T07:41:58.360Z"
     },
     {
       "node": "vc",
@@ -2058,6 +2058,14 @@
       "text": "After 2.14.4's cut (or in the fleet sweep after Intent's cut, whichever comes first): Utilz's generated CLAUDE.md and AGENTS.md still name /in-standards, which Intent's ST0088 cull folded into /in-essentials (intent-vc, 25 Oct 18:47Z). Ask hv through molt-vc before running `intent claude upgrade --apply --skip-settings`, since it rewrites the project's agent contract; commit by path what it writes.",
       "state": "live",
       "recorded_at": "2026-10-25T18:49:05.824Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 63,
+      "text": "hv, 2026-10-26, through molt-vc (option (b) by TUI, then: \"It will not take a day. It will take minutes to 10s of minutes in wallclock time. If we don't do it today, it'll get forgotten and then snowball. Fix it now, please.\"): run_doctor's Thin Coordinator and PFIC refactor goes INTO 2.14.4, now. It is filed as 0111 (51303e22), with 0110's three silent exits (e6628042) on top: each check its own function, and run_doctor only coordinating. 2.14.4's cut waits for both. vc's call on the machine: 0109's run first, at K115's END, then one heavy for 0111 plus 0110 straight after. Both land today.",
+      "state": "live",
+      "recorded_at": "2026-10-26T07:41:58.067Z"
     }
   ],
   "sent": [
@@ -6073,6 +6081,13 @@
       "re": "2026-10-26 07:21Z",
       "fyi": false,
       "recorded_at": "2026-10-26T07:33:37.134Z"
+    },
+    {
+      "id": "01M5VJGK2NSQ42G1KETTQZFDN2",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, 26 Oct: hv's word through molt-vc: run_doctor's refactor goes INTO 2.14.4, now (\"If we don't do it today, it'll get forgotten and then snowball. Fix it now, please.\"). It is filed as 0111 (51303e22): each doctor check becomes a function of its own, and run_doctor only coordinates (Thin Coordinator, PFIC). 0110 (e6628042), the three silent exits, lands on top of it. Both are yours. vc's sequencing:\n(1) 0109 v2's critic fixes first: send vc the new hashes. vc reads them and re-runs the light critic leg, then READY goes to molt-vc, which GOes your 0109 run at K115's END.\n(2) Meanwhile, make a new worktree on 0109's final bytes (commit them locally there first), and write 0111's Design section into its body before any code (`intent set intent:///issues/0111 body --from <file>`). The body's constraints bind: no count through an exit status (errexit, 255); PFIC only where it pays; behaviour-preserving line for line. vc reads it at once.\n(3) Code 0111, then 0110 on top in the extracted functions, as two commits.\n(4) One heavy for both, straight after 0109's run: 0110's red on the 0111 commit, the whole utilz suite green on 0111 plus 0110, and `bin/utilz doctor` on the dev tree diffed before and after (only the version line's sha may differ). Then the landings by path, each checked by change, 0109 first.\nSend vc a t-shirt size for 0111 now, from your read of run_doctor. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T07:41:32.117Z"
     }
   ],
   "handled": [

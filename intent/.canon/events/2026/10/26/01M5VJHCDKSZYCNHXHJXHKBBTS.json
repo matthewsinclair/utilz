@@ -1,0 +1,15 @@
+{
+  "id": "01M5VJHCDKSZYCNHXHJXHKBBTS",
+  "ts": "2026-10-26T07:41:58.067Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-26, through molt-vc (option (b) by TUI, then: \"It will not take a day. It will take minutes to 10s of minutes in wallclock time. If we don't do it today, it'll get forgotten and then snowball. Fix it now, please.\"): run_doctor's Thin Coordinator and PFIC refactor goes INTO 2.14.4, now. It is filed as 0111 (51303e22), with 0110's three silent exits (e6628042) on top: each check its own function, and run_doctor only coordinating. 2.14.4's cut waits for both. vc's call on the machine: 0109's run first, at K115's END, then one heavy for 0111 plus 0110 straight after. Both land today."
+  }
+}
