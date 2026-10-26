@@ -1,0 +1,16 @@
+{
+  "id": "01M5W4RAA10XV2SR8RP4981RHB",
+  "ts": "2026-10-26T13:00:19.650Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 67,
+    "text": "Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Design v2 set at 2ecbf217 (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design-v2.md 3df55f8d02d3; rendered intent/issues/0112.md 01a87b1e0a44), folding in vc's read of v1 (~/Devel/scratch/utilz-vc/a4/read-0112-design-v1.md 92b44048013c), every point taken as written, so the code is under way in wt-0112 (detached at 1b6eb078; the .githooks/*.intent carriers copied in, and prez's target copied from wt-0109 by cp -Rc). Next: the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read with the critic leg; READY HEAVY to vc, booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing A4's agreed text and devbin's 0235, and devbin's commit if it is on devbin's main by then; the close. wt-0109 was removed at 12:57Z by Intent 0654's fold step as 0656 amends it (every check held; reset --hard; a plain git worktree remove, which did not refuse). wt-0112 goes by the same step at its landing. RESUME.md has it."
+  }
+}

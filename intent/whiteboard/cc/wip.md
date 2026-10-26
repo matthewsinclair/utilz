@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 12:47Z
+heartbeat_at: 2026-10-26 13:00Z
 status: active
-focus: "Issue 0112 (A4 to T5, into 2.14.4; vc's decision 64), claimed: filed at 477f36c4 with its Design as the body, sent to vc for its read before any code; then the worktree, the code and tests, the heavy with molt-vc, the landing on vc's word, the close. The twins (hold 47) run on the head A4's landing makes. Not released. RESUME.md has it."
+focus: "Issue 0112 (A4 to T5, into 2.14.4; vc's decision 64), claimed: Design v2 set at 2ecbf217, every point of vc's read taken as written; the code and tests under way in wt-0112 (detached at 1b6eb078), to bank for vc's read with the critic leg, then READY HEAVY. wt-0109 removed by Intent 0654's step. The twins (hold 47) run on the head A4's landing makes. Not released. RESUME.md has it."
 claims: [ISSUE:0112]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0112]
 
 ## DOING
 
-- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Filed at 477f36c4 with its Design as the body (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design.md 1c826f0dc806; rendered intent/issues/0112.md 91e06dc2df03), answering vc's design points (~/Devel/scratch/utilz-vc/a4/design-points.md 5df9270a8894), for vc's read before any code. Then: a detached worktree on main's head, the .githooks/*.intent carriers copied in and prez's target copied from wt-0109 by cp -Rc (a copy, never a link); the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read; the heavy booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing devbin's A4 commit once that is on devbin's main; the close. wt-0109 then goes by Intent 0654's fold step as 0656 amends it (vc's FYIs of 12:26Z and 12:38Z): its checks run from outside it (its index tree is base 0946cd4f with its landed banks applied, nothing in it unstaged or untracked, its base an ancestor of main, no stash naming it), then git -C <path> reset --hard, then a plain git worktree remove, never --force, a refusal being a finding for vc; or at cc's next fold if it is still on disk, prez's target banked first. A4's worktree is held to the same step at its landing. RESUME.md has it.
+- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64; S, with tests), claimed. Design v2 set at 2ecbf217 (source ~/Devel/scratch/utilz-cc/20261026/a4/issue-a4-design-v2.md 3df55f8d02d3; rendered intent/issues/0112.md 01a87b1e0a44), folding in vc's read of v1 (~/Devel/scratch/utilz-vc/a4/read-0112-design-v1.md 92b44048013c), every point taken as written, so the code is under way in wt-0112 (detached at 1b6eb078; the .githooks/*.intent carriers copied in, and prez's target copied from wt-0109 by cp -Rc). Next: the code and its tests, red on 9027555d's code and green with the fix, with the mutations the Design names, banked for vc's read with the critic leg; READY HEAVY to vc, booked with molt-vc, START and END to molt-vc and vc; the landing by path on vc's word, checked by its change, citing A4's agreed text and devbin's 0235, and devbin's commit if it is on devbin's main by then; the close. wt-0109 was removed at 12:57Z by Intent 0654's fold step as 0656 amends it (every check held; reset --hard; a plain git worktree remove, which did not refuse). wt-0112 goes by the same step at its landing. RESUME.md has it. (edited)
 
 ## TODO
 
