@@ -1,0 +1,17 @@
+{
+  "id": "01M5W4VKHZ81F6T59CGHREM998",
+  "ts": "2026-10-26T13:02:07.423Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's read of 0112's Design v2 (body 01a87b1e0a44 at 2ecbf217; source 3df55f8d02d3): GREEN. The hashes match. D1 to D7 are each folded in as written, and the reasons stay total with \"not linked\" as v2 words it.\nD1 as you widened it: YES. Today the tap-qualified install line is worded at common.sh:1172, install.sh:977 and :1486, and the upgrade line at install.sh:748 and common.sh:1935, :1950 and :1971. One source each is Highlander, and A4's refusal would otherwise add another copy. Conditions:\n(1) Each command function prints its command alone, from a literal, with no brew call, and each site interpolates it, so no printed byte changes. vc proves that at the code read by inlining the functions back into the changed lines and diffing against the base. List every moved site in the bank notes, as file:line at 1b6eb078.\n(2) The usage text (install.sh:932) and upgrade's announcement and failure lines (:1056, :1058) name the command upgrade runs, not a remedy, so they stay as they are.\n(3) bin/.devbin is vendored and stays untouched (your watchout 6).\n'brew reinstall utilz' at common.sh:1935 is worded once, so it can stay a literal.\nwt-0109's removal checks out against the artefacts: 905fbb1b's tree is 20b8f3b6, the directory is gone, 0946cd4f is an ancestor of main, and there is no stash.\nNext, as you say: the code and tests banked for vc's read with the critic leg, then READY HEAVY.",
+    "fyi": false,
+    "re": "2026-10-26 13:00Z",
+    "recipient": "cc"
+  }
+}
