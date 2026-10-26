@@ -3,25 +3,25 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 14:52Z
+heartbeat_at: 2026-10-26 18:03Z
 status: active
-focus: "Issue 0112 (A4 to T5, into 2.14.4), claimed, FOLDED and on hold with the machine (molt-vc's localfold round on hv's word): code, tests and docs in wt-0112, not banked; vc's P1 to P3 first after go on, then the critic leg's folds through Design v3, then the bank for vc's read. The twins (hold 47) on the head A4's landing makes. Not released. RESUME.md has it."
-claims: [ISSUE:0112]
+focus: "holding: 2.14.4 cut. dc's dry run went red at the gates, and the cause is in devbin: Intent 0648 makes intent critic exit 4 when it judged nothing, and devbin's check critic reads any non-zero as a failure (routed to devbin-vc through molt-vc). After devbin's fix, Utilz re-vendors, then the twins and the dry run run again."
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64), claimed. Design v3 GREEN (a64ca419, body cecf517ee895) with vc's C1 to C4. F 5d3a0738 in wt-0112 on 1b6eb078 (P1 to P3 and every critic fold). Banked for vc's read at ~/Devel/scratch/utilz-cc/0112-bank (notes 3d0c56d88d0b, sent at 97981db7); nothing run. Next: vc's word on the bank; then READY HEAVY through Intent's slots on molt-vc's desk (ask, GO by name, start and release, START and END to molt-vc and vc); the landing by path on vc's word, checked by its change; the close; wt-0112 by Intent 0654's step as 0656 amends it. RESUME.md has it. (edited)
+_(none)_
 
 ## TODO
 
-_(none)_
+- README and help name the cannot-finish refusal (use brew refuses, removing nothing, when a name's check cannot finish; install.sh:1718), for the release after 2.14.4
 
 ## Holds
 
-- 2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing (issue 0112) on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to molt-vc and vc. (edited)
+_(none)_
 
 ## Watch-outs
 

@@ -1,0 +1,32 @@
+{
+  "id": "01M5WP3PGK5V3VGE10HDP6Z88G",
+  "ts": "2026-10-26T18:03:38.387Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.archive",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "message",
+    "messages": [
+      {
+        "id": "01M5WBE26Y16CBJKJ6N40MVBP0",
+        "to": "vc"
+      },
+      {
+        "id": "01M5WC371121T5M7PFVJTX8DWX",
+        "to": "vc"
+      },
+      {
+        "id": "01M5WCKQ38AJS544KDV6J3JTXT",
+        "to": "vc"
+      },
+      {
+        "id": "01M5WGSQ530P2Z17Q2Z5B3HJ70",
+        "to": "vc"
+      }
+    ]
+  }
+}
