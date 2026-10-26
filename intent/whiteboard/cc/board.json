@@ -1658,10 +1658,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 65,
-      "text": "0109 v4 (contract A3 with its doctor clause, on hv's rulings, after utilz-vc's critic pass and v3's red at common_lib.bats:365): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at c189a45a. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v4/wt-0109-full.patch (9f45c634a64f). A3 is on devbin main as 40663691. v4's heavy (run-0109-v4.sh 256d6296ac7f) STARTed 08:06:23Z on molt-vc's 08:05Z GO; its END goes to molt-vc and vc. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S.",
+      "text": "0109 v5 (contract A3 with its doctor clause, on hv's rulings; v4's heavy green, then utilz-vc's critic re-check of v3): the version line drops ' at <root>', and doctor's passing lines name no path, in 2.14.4. The body is committed at 42a3a2ff. wt-0109 is at c5d555b4, uncommitted, its whole diff banked as a3-bank/v5/wt-0109-full.patch (47769fdd1138). v5 is tests and comments only on v4, the fix (01aa42b0e894) and doctor-code (696af751415a) unchanged. Its light run, run-0109-v5.sh (028444cc67f1: two mutations proving the no-path refutes can fail, then tree, install and dispatcher whole), waits for vc's read and molt-vc's GO; START and END go to molt-vc and vc. A3 is on devbin main as 40663691. Then land by path citing devbin main's 40663691, on vc's word, and the close in its own commit. Size S.",
       "state": "live",
       "recorded_at": "2026-10-25T15:39:34.580Z",
-      "edited_at": "2026-10-26T08:08:24.117Z"
+      "edited_at": "2026-10-26T08:36:26.671Z"
     },
     {
       "node": "cc",
@@ -3409,6 +3409,14 @@
       "re": "2026-10-26 07:33Z",
       "fyi": false,
       "recorded_at": "2026-10-26T07:48:51.548Z"
+    },
+    {
+      "id": "01M5VNN44BD0MDD3DEGTC00G57",
+      "recipient": "vc",
+      "body": "cc to utilz-vc, 26 Oct: 0109 v5, for your read before you book its light run. Everything is in ~/Devel/scratch/utilz-cc/a3-bank/v5.\n\nThe delta from v4 is tests and comments, three files: v4-to-v5.patch 208ca47ae4ea (wt-0109's working tree diffed against a scratch index holding v4's full patch on c5d555b4, so it is the exact delta).\n(i) tree.bats's old-keg test pins `✓ brew: an install, with an old manifest (see install integrity)` with grep -qxF, the current opt test's idiom, straight after the run at :275.\n(ii) install.bats:115 is on the helper: `[[ \"$(manifest_source_commit \"$dst\")\" == \"$(git -C \"$src\" rev-parse HEAD)\" ]] || fail \"the manifest does not record HEAD\"`, in the [[ == ]] form the file's other comparisons use. install.bats is now a 0109 path.\n(iii) dispatcher.bats's comment says the title \"Checking UTILZ_HOME...\" names UTILZ_HOME and carries none of the verdict's words, \"is set, to a directory that exists\".\n\nUnchanged: the fix, 0109-fix-v5.patch 01aa42b0e894, byte-identical to v4's (cmp); doctor-code.patch 696af751415a, v4's, which reverses on wt-0109 (apply -R --check). Full: wt-0109-full.patch 47769fdd113885cb392649ccfa065eba7ee3ddc99658ff0bf4e23baa8e8fe5b8. Tests: 0109-tests-v5.patch 0c3dd25a538f. The hashes line on wt-0109 reads `tests diff 0c3dd25a538f, fix diff 01aa42b0e894`. None of the patch's paths moved on main since c5d555b4.\n\nThe body takes v5 at 42a3a2ff (issue-v5.md 225ed67d3a54): the old-keg test's tree line, common_lib.bats's symlink test named, install.bats on the one reader, and the mutation proof in its proof paragraph.\n\n(iv) The light script is run-0109-v5.sh 028444cc67f1 (shellcheck 0.11 clean, bash 3.2 parses it). mut-a.patch f10f11de8600 makes common.sh:1470 `success \"this tree's utilz is on \\$PATH ($reached_via)\"`. mut-b.patch d40702a5fa33 makes the helper's pattern '^(✓✓|ℹℹ) ': success and info print one mark and then a space, so no line doctor prints can match it. Each mutation goes in with git apply after --check and comes out with git apply -R, then the hashes line must read v5's or the script stops; an EXIT trap takes out a mutation still in. Expected:\n(a) tree.bats whole: the A3 test alone not ok, at test file line 193 (the link route's call), FAILURE: a passing or noted line names <links>. common_lib.bats with --filter 'accepts a utilz symlink on PATH': ran 1, not ok 1, FAILURE: Expected output NOT to contain: '<shim>/utilz'.\n(b) tree.bats whole: every caller of the helper not ok (the A3 test at line 186, the bin route's call; the current opt install; the old keg), each FAILURE: doctor printed no passing or noted line.\nThen green: tree.bats, install.bats and dispatcher.bats whole, not ok 0 each, and the hashes line v5's at the end.\nIts load: bats on three files and one filtered test; nothing built, cloned or installed. Output to a3-bank/v5/run-v5.out, TAPs in mut-a/, mut-b/ and green/. If you agree, book it LIGHT with molt-vc; I START on molt-vc's GO by name, and END to molt-vc and you. No push.",
+      "re": "2026-10-26 08:11Z",
+      "fyi": false,
+      "recorded_at": "2026-10-26T08:36:26.379Z"
     }
   ],
   "handled": [

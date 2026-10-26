@@ -1,0 +1,17 @@
+{
+  "id": "01M5VNN44BD0MDD3DEGTC00G56",
+  "ts": "2026-10-26T08:36:26.379Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, 26 Oct: 0109 v5, for your read before you book its light run. Everything is in ~/Devel/scratch/utilz-cc/a3-bank/v5.\n\nThe delta from v4 is tests and comments, three files: v4-to-v5.patch 208ca47ae4ea (wt-0109's working tree diffed against a scratch index holding v4's full patch on c5d555b4, so it is the exact delta).\n(i) tree.bats's old-keg test pins `✓ brew: an install, with an old manifest (see install integrity)` with grep -qxF, the current opt test's idiom, straight after the run at :275.\n(ii) install.bats:115 is on the helper: `[[ \"$(manifest_source_commit \"$dst\")\" == \"$(git -C \"$src\" rev-parse HEAD)\" ]] || fail \"the manifest does not record HEAD\"`, in the [[ == ]] form the file's other comparisons use. install.bats is now a 0109 path.\n(iii) dispatcher.bats's comment says the title \"Checking UTILZ_HOME...\" names UTILZ_HOME and carries none of the verdict's words, \"is set, to a directory that exists\".\n\nUnchanged: the fix, 0109-fix-v5.patch 01aa42b0e894, byte-identical to v4's (cmp); doctor-code.patch 696af751415a, v4's, which reverses on wt-0109 (apply -R --check). Full: wt-0109-full.patch 47769fdd113885cb392649ccfa065eba7ee3ddc99658ff0bf4e23baa8e8fe5b8. Tests: 0109-tests-v5.patch 0c3dd25a538f. The hashes line on wt-0109 reads `tests diff 0c3dd25a538f, fix diff 01aa42b0e894`. None of the patch's paths moved on main since c5d555b4.\n\nThe body takes v5 at 42a3a2ff (issue-v5.md 225ed67d3a54): the old-keg test's tree line, common_lib.bats's symlink test named, install.bats on the one reader, and the mutation proof in its proof paragraph.\n\n(iv) The light script is run-0109-v5.sh 028444cc67f1 (shellcheck 0.11 clean, bash 3.2 parses it). mut-a.patch f10f11de8600 makes common.sh:1470 `success \"this tree's utilz is on \\$PATH ($reached_via)\"`. mut-b.patch d40702a5fa33 makes the helper's pattern '^(✓✓|ℹℹ) ': success and info print one mark and then a space, so no line doctor prints can match it. Each mutation goes in with git apply after --check and comes out with git apply -R, then the hashes line must read v5's or the script stops; an EXIT trap takes out a mutation still in. Expected:\n(a) tree.bats whole: the A3 test alone not ok, at test file line 193 (the link route's call), FAILURE: a passing or noted line names <links>. common_lib.bats with --filter 'accepts a utilz symlink on PATH': ran 1, not ok 1, FAILURE: Expected output NOT to contain: '<shim>/utilz'.\n(b) tree.bats whole: every caller of the helper not ok (the A3 test at line 186, the bin route's call; the current opt install; the old keg), each FAILURE: doctor printed no passing or noted line.\nThen green: tree.bats, install.bats and dispatcher.bats whole, not ok 0 each, and the hashes line v5's at the end.\nIts load: bats on three files and one filtered test; nothing built, cloned or installed. Output to a3-bank/v5/run-v5.out, TAPs in mut-a/, mut-b/ and green/. If you agree, book it LIGHT with molt-vc; I START on molt-vc's GO by name, and END to molt-vc and you. No push.",
+    "fyi": false,
+    "re": "2026-10-26 08:11Z",
+    "recipient": "vc"
+  }
+}
