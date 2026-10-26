@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: bc2f8276-99c2-4c44-b990-1124aa522585
-heartbeat_at: 2026-10-26 14:52Z
+heartbeat_at: 2026-10-26 18:03Z
 status: active
-focus: "26 Oct 13:51Z: folded for molt-vc's machine-wide localfold, compact and hold (hv's word; vc's word to dc), not released. Holding, as the board's hold says: no new task, no slot ask and no commit past this fold until hv's go on through molt-vc and vc; after hv's compact no pickup until then (it writes the board), reads by intent wb show dc, talk by socket. Doing 20 holds at step (1) for vc's word with the new final head, once A4 (0112) has landed checked; step (2)'s bytes banked at 9027555d are the re-hash's base. Runs book through Intent's slots (watchout 3). Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its top section. No push."
+focus: "26 Oct 18:03Z: holding 2.14.4's checks until devbin's critic-exit-4 fix is vendored (dry run RED at the critic gate, banked)"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4's kovacs twins and release dry run on the final head, which now waits for A4: hv's ruling (a) through molt-vc (read 12:09:50Z, vc's decision 64) puts Utilz's conformance to A4 to T5 (use brew refuses, removing nothing, when no brew copy would answer) into 2.14.4, so main's 9027555d (0109, 0111 and 0110 landed) is no longer the final head. In vc's order: (1) hold until vc sends the new final head's sha, once A4 has landed checked; (2) then re-hash from the bytes banked at 9027555d and never sent (work/c2144/twins.sh 4220174e, work/dryrun-2144.sh d298223c, work/c2144/request.md 3df71364; the 21b0385d bytes in work/c2144/base-21b0385d/): set SHA and CODE to the new head, re-read request.md against the diff from 9027555d to it (its expected lines stay based on the 21b0385d readback, twins.out), and send vc the hashes; vc reads them and routes the request; (3) the twins go through molt-vc to kovacs-sysadm as a request, after cc's Mac twins END, booked as a heavy (vc's decision 60 (4)); bank the readback as work/c2144/twins-<head8>.out, re-tally it and send vc the END; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push. (edited)
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- 2.14.4's checks on the final head, held until devbin's fix for Intent's critic exit 4 (Intent 0648, 82546e69a: the critic exits 4 when it judged nothing; devbin's check critic reads any non-zero as rc=1, in the vendored copy and at Devbin v0.1.15) is vendored into Utilz on main; routed by vc to devbin-vc. Done at f6c36bd8 (code b2e07f19): the kovacs twins GREEN through kovacs-sysadm (slot 01M5WJSWHGXYHTZXBTKQJCNMX6), banked as work/c2144/twins-b2e07f19.out (sha256 471077573d08); the release dry run RED at step 5, check critic exit 1 with nothing staged (slot 01M5WKF8E7B31ZJTDXTSPKS0QT, 18:00:39Z to 18:00:55Z), banked as work/c2144/dryrun-2144-f6c36bd.out (sha256 903b30759b5f), its log dry-run-f6c36bd.log beside it; vc read it and agreed. On release (vc's word with the new head): re-hash twins.sh, request.md and the bundle to the new head (work/c2144/rehash-head.sh, make-bundle.sh), vc reads the hashes, then the kovacs twins and the dry run again, each booked through its own slot on molt-vc's GO by name; the dry run freezes the primary until vc reads its last row. Nothing running. No push.
 
 ## Watch-outs
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M5WP3ZBH8XW57350WGBCZSH5",
+  "ts": "2026-10-26T18:03:47.441Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.14.4's checks on the final head, held until devbin's fix for Intent's critic exit 4 (Intent 0648, 82546e69a: the critic exits 4 when it judged nothing; devbin's check critic reads any non-zero as rc=1, in the vendored copy and at Devbin v0.1.15) is vendored into Utilz on main; routed by vc to devbin-vc. Done at f6c36bd8 (code b2e07f19): the kovacs twins GREEN through kovacs-sysadm (slot 01M5WJSWHGXYHTZXBTKQJCNMX6), banked as work/c2144/twins-b2e07f19.out (sha256 471077573d08); the release dry run RED at step 5, check critic exit 1 with nothing staged (slot 01M5WKF8E7B31ZJTDXTSPKS0QT, 18:00:39Z to 18:00:55Z), banked as work/c2144/dryrun-2144-f6c36bd.out (sha256 903b30759b5f), its log dry-run-f6c36bd.log beside it; vc read it and agreed. On release (vc's word with the new head): re-hash twins.sh, request.md and the bundle to the new head (work/c2144/rehash-head.sh, make-bundle.sh), vc reads the hashes, then the kovacs twins and the dry run again, each booked through its own slot on molt-vc's GO by name; the dry run freezes the primary until vc reads its last row. Nothing running. No push."
+  }
+}
