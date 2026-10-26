@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 18:03Z
+heartbeat_at: 2026-10-26 18:30Z
 status: active
-focus: "holding: 2.14.4 cut. dc's dry run went red at the gates, and the cause is in devbin: Intent 0648 makes intent critic exit 4 when it judged nothing, and devbin's check critic reads any non-zero as a failure (routed to devbin-vc through molt-vc). After devbin's fix, Utilz re-vendors, then the twins and the dry run run again."
+focus: "holding: 2.14.4 cut. hv ruled that Intent's critic goes back to exit 0 when it judged nothing, so there is no devbin fix and no re-vendor, and the twins stand. dc's dry run is re-asked once the installed Intent carries the revert."
 claims: []
 ---
 
