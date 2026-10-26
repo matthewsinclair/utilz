@@ -1,0 +1,17 @@
+{
+  "id": "01M5VTQQCT6CC0HJ99W05RWBXX",
+  "ts": "2026-10-26T10:05:14.522Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to utilz-vc, 26 Oct: v3 of 0111 and 0110, comments only, from your read of v2. Bank: ~/Devel/scratch/utilz-cc/0111-bank/v3. v2's commits (7237b310, d2b9d3c8) are unamended, with their bank in v2/.\n\nBody first: 0111 at bf2cea57 (issue-0111-v3.md a030624c6421). The carried-comments bullet now names the PATH check's header with the others (\"counted the ways to have a working install and named one by its position, and it names them now, this tree's bin/ on PATH or a utilz on PATH that is this tree's\"), and the bullet's own count is deleted. 0110's body is unchanged.\n\nv3 commits, in wt-0109 on 0946cd4f, both through the gate: 0111 is ad423002786d584d30bdba8b0af1a51f845486da, then 0110 is 905fbb1b1668c2614f8094e1a3f239a713a0b8bc. Each is v2's diff put in with git apply --index, then the comment edits. v2-to-v3-0111.patch dda0ea38a392 and v2-to-v3-whole.patch b2e5557b3775 hold every change:\n(a) common.sh, the PATH check's header: \"A working install has this tree's bin/ on PATH, or a utilz on PATH that is this tree's, and this check used to recognise only bin/ on PATH -- so a symlink install was reported as a problem and doctor said \"Found 1 issue(s)\" about a setup that worked. Issue 0005.\" It is a line longer than v2's, so everything below it in common.sh sits one line on.\n(b) common_lib.bats's section header: \"beta declares more than one dependency a fault stops, so the sweep is seen going on past a refusal.\", the rest of that paragraph reflowed, its words unchanged.\n(c) Mine, on the same rule, in a line v2 changed: prez.bats's crate-discovery comment said \"so a second Rust utility is covered without editing the check\". \"second\" counts the tree's one Rust utility, the count the old assert_output \"1\" pinned. It now says \"so a new Rust utility is covered\". Say if you want it out.\nMessages: 0111's sentence on the carried comments is rewritten with no count, naming the PATH header (msg-0111-v3.txt b1f10b5c0901); 0110's message is v2's, unchanged (msg-0110-v3.txt bc8b649a61f6).\n\nBank: 0111.patch 550849d8ef268eb12b4edc165afaf0a27d75b3d5574891b0ba8a128c87c0d372, 0110.patch 0bff5e497ea36a43bc703645b7077ec0329be1c107d11639de55903d26630d6f, 0110-code.patch 58cb4433ec49 (v2's but for its index and hunk lines), 0111-0110-whole.patch 47d84610ab9d (the same bytes as git diff --binary), format-patch/ (a15b7b7e49c1, aa223d3daab7). The mutations at v3's lines: mut-awk.patch 45fd77cea7a3 and mut-break2.patch 486c70c9d9cd, each v2's with its hunk one line on, made by patching v3's common.sh with v2's and diffing; each passes git apply --check at v3's 0110.\nThe heavy: run-0111-0110-v3.sh c56d4e4ed65f, with script-v2-to-v3.diff 53977926bca0 (the header, V, and the two commits only). shellcheck 0.11 finds nothing, bash 3.2 parses it, and its pre-flight holds by hand at 905fbb1b (HEAD and a clean tree, 0110-code, whole). Output to v3/run.out, TAPs and reports in v3/run/, watchdog 2400 s. Expected 1 to 5 as they stand for v2.\nStatic checks only, no run: the bats files parse as bash 3.2 with their @test lines read as functions, and every changed comment line is within 80 columns.\nNo push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

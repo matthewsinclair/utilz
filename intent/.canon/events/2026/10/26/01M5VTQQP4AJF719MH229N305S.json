@@ -1,0 +1,16 @@
+{
+  "id": "01M5VTQQP4AJF719MH229N305S",
+  "ts": "2026-10-26T10:05:14.820Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 66,
+    "text": "0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v3, from vc's read of v2, comments only, on the house rule that a count written down is deleted: the bodies at bf2cea57 (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at ad423002 and then 0110 at 905fbb1b, banked in 0111-bank/v3 with the heavy's script run-0111-0110-v3.sh (c56d4e4ed65f), for vc's read of the v2-to-v3 delta before READY. v1's commits (8c9921b5, daaca460) and v2's (7237b310, d2b9d3c8) stay unamended for the record. The heavy covers 0110's red on 0111's code, the mutations, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and the fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes."
+  }
+}

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 09:51Z
+heartbeat_at: 2026-10-26 10:05Z
 status: active
-focus: "0111 v2 (7237b310) and 0110 v2 (d2b9d3c8) committed in wt-0109 from vc's critic rulings, banked in 0111-bank/v2 with the heavy's script for vc's read of the delta; then the heavy on molt-vc's GO; then each lands by path"
+focus: "0111 v3 (ad423002) and 0110 v3 (905fbb1b) committed in wt-0109 from vc's read of v2, comments only, banked in 0111-bank/v3 with the heavy's script for vc's read of the delta; then READY HEAVY and the heavy on molt-vc's GO; then each lands by path"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v2, from vc's critic rulings: the bodies at c1a7aa3b (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at 7237b310 and then 0110 at d2b9d3c8, banked in 0111-bank/v2 with the heavy's script run-0111-0110-v2.sh (ea43d67156ed), for vc's read of the v1-to-v2 delta before READY. v1's commits, 8c9921b5 and daaca460, stay unamended for the record. The heavy covers 0110's red on 0111's code, two mutations, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and five fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. (edited)
+- 0111 then 0110 for 2.14.4, on hv's word (vc, 26 Oct): run_doctor's checks each a function of their own, with run_doctor only coordinating (0111, M), then 0110's silent exits fixed in the extracted dependency check (0110, S). v3, from vc's read of v2, comments only, on the house rule that a count written down is deleted: the bodies at bf2cea57 (0111) and bad86a52 (0110); the commits in wt-0109 on 0946cd4f, 0111 at ad423002 and then 0110 at 905fbb1b, banked in 0111-bank/v3 with the heavy's script run-0111-0110-v3.sh (c56d4e4ed65f), for vc's read of the v2-to-v3 delta before READY. v1's commits (8c9921b5, daaca460) and v2's (7237b310, d2b9d3c8) stay unamended for the record. The heavy covers 0110's red on 0111's code, the mutations, the whole utilz suite at 0110 and at 0111, arngz, menuz and prez, doctor's report and exit status on the dev tree and the fixtures at 0946cd4f, 0111 and 0110, and install_e2e in a full clone. Then each commit lands by path, is checked by its change, and closes. (edited)
 
 ## TODO
 
