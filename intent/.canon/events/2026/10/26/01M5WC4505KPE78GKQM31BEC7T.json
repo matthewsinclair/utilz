@@ -1,0 +1,16 @@
+{
+  "id": "01M5WC4505KPE78GKQM31BEC7T",
+  "ts": "2026-10-26T15:09:07.461Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 67,
+    "text": "Issue 0112 (A4 to T5, into 2.14.4; hv's ruling (a), vc's decision 64), claimed. Design v3 GREEN (a64ca419, body cecf517ee895) with vc's C1 to C4. F 5d3a0738 in wt-0112 on 1b6eb078 (P1 to P3 and every critic fold). Banked for vc's read at ~/Devel/scratch/utilz-cc/0112-bank (notes 3d0c56d88d0b, sent at 97981db7); nothing run. Next: vc's word on the bank; then READY HEAVY through Intent's slots on molt-vc's desk (ask, GO by name, start and release, START and END to molt-vc and vc); the landing by path on vc's word, checked by its change; the close; wt-0112 by Intent 0654's step as 0656 amends it. RESUME.md has it."
+  }
+}
