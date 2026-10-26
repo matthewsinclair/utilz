@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 13:52Z
+heartbeat_at: 2026-10-26 14:52Z
 status: active
 focus: "Issue 0112 (A4 to T5, into 2.14.4), claimed, FOLDED and on hold with the machine (molt-vc's localfold round on hv's word): code, tests and docs in wt-0112, not banked; vc's P1 to P3 first after go on, then the critic leg's folds through Design v3, then the bank for vc's read. The twins (hold 47) on the head A4's landing makes. Not released. RESUME.md has it."
 claims: [ISSUE:0112]
@@ -22,7 +22,6 @@ _(none)_
 ## Holds
 
 - 2.14.4's Mac twins: the READY banked at 9027555d (f988215fc217) is withdrawn on vc's word (decision 64), so the twins run on the head A4's landing makes, and run-twins-2144-final.sh is back to the pending bytes vc pre-read (1826937f0ad1, HEAD_WANT=PENDING). Released when hv's push puts A4's landing (issue 0112) on upstream/main; then HEAD_WANT alone takes that head, re-hashed, and the READY goes to vc with the expected results, for vc's check and its booking with molt-vc; on molt-vc's GO by name, START to molt-vc and vc, the run in a fresh detached worktree with install_e2e in a scratch full clone at the same head, and END to molt-vc and vc. (edited)
-- No new task, no slot ask and no commit past this fold (molt-vc's machine-wide localfold, compact and hold on hv's word, 26 Oct; the slots desk on hold since 13:47:11Z). Released when hv's go on comes through molt-vc and vc. While it stands, after hv's compact: no pickup, since it writes the board; read with intent wb show cc.
 
 ## Watch-outs
 

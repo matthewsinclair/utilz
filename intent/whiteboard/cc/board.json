@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "ec04293b-d1ee-4446-8a30-666bf356d221",
-    "heartbeat_at": "2026-10-26T13:52:17.898Z",
+    "heartbeat_at": "2026-10-26T14:52:45.410Z",
     "status": "active",
     "focus": "Issue 0112 (A4 to T5, into 2.14.4), claimed, FOLDED and on hold with the machine (molt-vc's localfold round on hv's word): code, tests and docs in wt-0112, not banked; vc's P1 to P3 first after go on, then the critic leg's folds through Design v3, then the bank for vc's read. The twins (hold 47) on the head A4's landing makes. Not released. RESUME.md has it.",
     "claims": [
@@ -1708,7 +1708,8 @@
       "kind": "hold",
       "seq": 48,
       "text": "No new task, no slot ask and no commit past this fold (molt-vc's machine-wide localfold, compact and hold on hv's word, 26 Oct; the slots desk on hold since 13:47:11Z). Released when hv's go on comes through molt-vc and vc. While it stands, after hv's compact: no pickup, since it writes the board; read with intent wb show cc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-26T14:52:45.555Z",
       "recorded_at": "2026-10-26T13:52:11.199Z"
     }
   ],
