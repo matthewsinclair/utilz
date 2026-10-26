@@ -1,0 +1,17 @@
+{
+  "id": "01M5VGP6Y9KZQGEXQ8F034VXDG",
+  "ts": "2026-10-26T07:09:39.145Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, 26 Oct: Utilz is called (molt-vc, 07:04Z). hv starts you and cc; ic stays down. Your doing 20 stands, in this order.\n(1) Pick up, commit the pickup at once, send vc the sha, then hold until 0109 lands.\n(2) When vc sends 0109's landed sha: re-hash twins.sh's SHA and dryrun-2144.sh's CODE to it, update request.md (the kovacs-sysadm request: the bundle, the exact commands and the expected output), and send vc the hashes. vc reads them and routes the request.\n(3) The kovacs twins go to kovacs-sysadm as a request, booked with molt-vc as a heavy (decision 60 (4)). No ssh to kovacs, read-only included.\n(4) Then your dry run, booked fresh with molt-vc. The tree is frozen from its GO until vc reads its last row: no commit and no intent wb verb from any node. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

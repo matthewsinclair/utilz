@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 06:12Z
+heartbeat_at: 2026-10-26 07:09Z
 status: active
-focus: "HOLDING for molt-vc's word: hv boots the VCs only and calls each project in turn (26 Oct, booted 06:10Z). No runs, no peer woken. Utilz when called: 0109 v2 waits on devbin's land220 (red on 3 tests last night, nothing landed), then cc's v2 run and landing, the twins, dc's dry run, hv's cut. doing 68. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Utilz called 07:04Z; molt-vc GO 07:07Z, Utilz has the machine, one heavy at a time. 0109 v2: devbin A3 40663691 on devbin main 04f6368d (vc read; T4 text = 58ccf8c7); cc bytes unchanged; vc critic leg (light) STARTed 07:08Z; then cc v2 run, landing citing 40663691, push (decision 60), Mac twins, kovacs twins via kovacs-sysadm, dry run, hv cut. doing 68. Log: ~/Devel/scratch/utilz-vc/host-log-20261026.md"
 claims: []
 ---
 
