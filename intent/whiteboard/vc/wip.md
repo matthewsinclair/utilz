@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 09:31Z
+heartbeat_at: 2026-10-26 09:38Z
 status: active
-focus: "Localfold for hv's compact (26 Oct 09:31Z), not released. 0111 (8c9921b5) and 0110 (daaca460) in wt-0109, read by vc with nothing found; the critic-shell agent's findings to read, then END LIGHT and READY HEAVY to molt-vc (it goes at K115's END); then each landed by path and checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Localfold for hv's compact (26 Oct), not released. The critic leg on 0111 and 0110 is done (no CRITICAL; vc-rulings.md in ~/Devel/scratch/utilz-vc/critic-0111); cc makes v2 (0111's comments, 0110's tests, the heavy's script); vc reads the v1-to-v2 delta, then READY HEAVY to molt-vc; then the landings, each checked by its change, and closed; then push main. Resume: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings, as commits 8c9921b5 and daaca460 in wt-0109 on 0946cd4f (bank ~/Devel/scratch/utilz-cc/0111-bank). Now: vc's critic leg on them (light, on molt-vc's 09:04Z GO; vc's own read found nothing; the critic-shell agent's findings to read), then END LIGHT and READY HEAVY for run-0111-0110.sh (9acb865f1569), which goes when K115 ENDs, on molt-vc's word. Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
+- 2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460 in wt-0109 on 0946cd4f) was read by vc and its critic leg: no CRITICAL, 0111 a pure move, 0110's code to its Design; cc makes v2 for 0111's comments, 0110's tests (continue and the crate count's success path, each proven by mutation) and the heavy's script (~/Devel/scratch/utilz-vc/critic-0111/vc-rulings.md). Now: vc reads v2's delta, then READY HEAVY; the heavy goes on molt-vc's GO (after K115, behind Intent's re-run if its READY is first). Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew. (edited)
 
 ## TODO
 

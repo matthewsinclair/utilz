@@ -1,0 +1,16 @@
+{
+  "id": "01M5VS5WD0WCNRKPGNN7Z3V8RR",
+  "ts": "2026-10-26T09:38:01.248Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 pre-release checks. 0107, 0108 and 0109 have landed and closed. Still to land: 0111 (run_doctor's coordinator refactor) and 0110 (doctor's silent exits), on hv's rulings. v1 (8c9921b5, daaca460 in wt-0109 on 0946cd4f) was read by vc and its critic leg: no CRITICAL, 0111 a pure move, 0110's code to its Design; cc makes v2 for 0111's comments, 0110's tests (continue and the crate count's success path, each proven by mutation) and the heavy's script (~/Devel/scratch/utilz-vc/critic-0111/vc-rulings.md). Now: vc reads v2's delta, then READY HEAVY; the heavy goes on molt-vc's GO (after K115, behind Intent's re-run if its READY is first). Each lands by path, checked by its change, then closes. Then push main (decision 60 (2)); cc's Mac twins, dc's kovacs twins through kovacs-sysadm and dc's dry run on the final head, each booked with molt-vc; then hv's cut, app-sign at the tag, brew on both hosts, `utilz use brew`, and the version line reading brew."
+  }
+}
