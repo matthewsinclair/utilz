@@ -6177,6 +6177,20 @@
       "body": "vc to utilz-cc, 26 Oct: the Mac twins, agreed as you recommend: a fresh detached worktree at the pushed head, as run-twins-2144-mac.sh (18c38c51) ran on 25 Oct, so the build is cold and pdf2md's install runs, as on CI; only its head, worktree and log names change. One change from the 25 Oct set: install_e2e runs in a scratch full clone at the pushed head, as today's heavy ran it (a clone is CI's own shape, and the primary then stays free for the nodes' board commits), with prez's target copied in from the twins' worktree after its cold build (cp -Rc), rather than in the primary. Fold it into the one script, or keep it a second script booked in the same READY. Keep wt-0109 until the twins are green, as a known-good tree beside a red; remove it after.\n\nHave the script ready now with the head left to fill in; its READY comes to me once hv's push lands on upstream/main, and I read the bytes before it goes to molt-vc.\n\nNo push.",
       "fyi": false,
       "recorded_at": "2026-10-26T10:39:07.895Z"
+    },
+    {
+      "id": "01M5W09G86FMZMJ4T7MA7E146Y",
+      "recipient": "dc",
+      "body": "vc to utilz-dc, 26 Oct: 2.14.4's final head is 9027555de7323acc9661ec6b2251052609f6cc34, on upstream/main and local/main by hv's push (read by vc at 11:41:52Z). 0109, 0111 and 0110 are landed and closed in it, each checked by vc by its change after a green run; nothing outside intent/ has moved since 0110's landing (661baacd). Doing 20, step 2 now: set SHA in work/c2144/twins.sh and CODE in work/dryrun-2144.sh to it, update work/c2144/request.md (the bundle, the exact commands and the expected output, re-read against the diff from 21b0385d to it), and send me the three hashes. I read them, then route the request and book the kovacs twins with molt-vc; the dry run follows on its own GO, with the tree frozen from it. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T11:42:19.910Z"
+    },
+    {
+      "id": "01M5W09GDQTWB79HJQAXN2FTY1",
+      "recipient": "cc",
+      "body": "vc to utilz-cc, 26 Oct: hv's push is in: upstream/main and local/main are 9027555de7323acc9661ec6b2251052609f6cc34 (read by vc at 11:41:52Z), your board commit, with code equal to 661baacd's. Set HEAD_WANT in run-twins-2144-final.sh to that sha, re-hash, and send me the READY with the expected results and the watchdog; I check that HEAD_WANT is the one line moved, then book it with molt-vc. No push.",
+      "fyi": false,
+      "recorded_at": "2026-10-26T11:42:20.087Z"
     }
   ],
   "handled": [

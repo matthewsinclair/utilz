@@ -1,0 +1,17 @@
+{
+  "id": "01M5W09G86FMZMJ4T7MA7E146X",
+  "ts": "2026-10-26T11:42:19.910Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc to utilz-dc, 26 Oct: 2.14.4's final head is 9027555de7323acc9661ec6b2251052609f6cc34, on upstream/main and local/main by hv's push (read by vc at 11:41:52Z). 0109, 0111 and 0110 are landed and closed in it, each checked by vc by its change after a green run; nothing outside intent/ has moved since 0110's landing (661baacd). Doing 20, step 2 now: set SHA in work/c2144/twins.sh and CODE in work/dryrun-2144.sh to it, update work/c2144/request.md (the bundle, the exact commands and the expected output, re-read against the diff from 21b0385d to it), and send me the three hashes. I read them, then route the request and book the kovacs twins with molt-vc; the dry run follows on its own GO, with the tree frozen from it. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
