@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 3202b0da-03ed-4204-9649-0e6ffd2ed624
-heartbeat_at: 2026-10-26 13:50Z
+heartbeat_at: 2026-10-26 14:52Z
 status: active
-focus: "vc: HOLD on hv's word (molt-vc's localfold, compact and hold round; the slots desk on hold since 13:47:11Z): folded. After hv's go on: cc folds vc's pre-read P1 to P3 (b68e4f0f) into 0112 and banks for vc's read, then the heavy through Intent's slots; no push"
+focus: "vc: hv's go on (14:52Z, after the move): cc folds vc's pre-read P1 to P3 into 0112, then Design v3 for vc's read before more code, then the bank, vc's read and the heavy through Intent's slots; dc's doing 20 at step (1) until A4 lands checked; no push"
 claims: []
 ---
 
@@ -23,7 +23,7 @@ claims: []
 
 ## Holds
 
-- Utilz holds for molt-vc's machine-wide localfold, compact and hold round, on hv's word (26 Oct; the slots desk on hold since 13:47:11Z, hold 01M5W7E40CE071QMSE4JT8KWXQ): no new task, no slot ask, and no commit past each node's fold, cc's, dc's and vc's. After hv's compact, inside the hold, the pickup is skipped (it writes the board) and boards are read with intent wb show. Released when hv says go on, through molt-vc, and molt-vc lifts the desk's hold; then each node picks up and commits at once.
+_(none)_
 
 ## Watch-outs
 
