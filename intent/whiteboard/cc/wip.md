@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: ec04293b-d1ee-4446-8a30-666bf356d221
-heartbeat_at: 2026-10-26 10:36Z
+heartbeat_at: 2026-10-26 11:43Z
 status: active
 focus: "0111 and 0110 landed and closed, each checked by vc (0111 at 27b441f5, closed 942fa8e7; 0110 at 661baacd, closed 4f49fe42); no issue open. Holding 2.14.4's Mac twins until hv's push puts main on upstream/main; then their READY to vc, in wt-0109"
 claims: []
