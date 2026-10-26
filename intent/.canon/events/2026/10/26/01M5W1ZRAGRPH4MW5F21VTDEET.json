@@ -1,0 +1,16 @@
+{
+  "id": "01M5W1ZRAGRPH4MW5F21VTDEET",
+  "ts": "2026-10-26T12:11:57.648Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 20,
+    "text": "2.14.4's kovacs twins and release dry run on the final head, which now waits for A4: hv's ruling (a) through molt-vc (read 12:09:50Z, vc's decision 64) puts Utilz's conformance to A4 to T5 (use brew refuses, removing nothing, when no brew copy would answer) into 2.14.4, so main's 9027555d (0109, 0111 and 0110 landed) is no longer the final head. In vc's order: (1) hold until vc sends the new final head's sha, once A4 has landed checked; (2) then re-hash from the bytes banked at 9027555d and never sent (work/c2144/twins.sh 4220174e, work/dryrun-2144.sh d298223c, work/c2144/request.md 3df71364; the 21b0385d bytes in work/c2144/base-21b0385d/): set SHA and CODE to the new head, re-read request.md against the diff from 9027555d to it (its expected lines stay based on the 21b0385d readback, twins.out), and send vc the hashes; vc reads them and routes the request; (3) the twins go through molt-vc to kovacs-sysadm as a request, after cc's Mac twins END, booked as a heavy (vc's decision 60 (4)); bank the readback as work/c2144/twins-<head8>.out, re-tally it and send vc the END; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push."
+  }
+}

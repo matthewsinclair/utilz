@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "bc2f8276-99c2-4c44-b990-1124aa522585",
-    "heartbeat_at": "2026-10-26T11:51:21.420Z",
+    "heartbeat_at": "2026-10-26T12:11:58.019Z",
     "status": "active",
-    "focus": "26 Oct 11:51Z: localfold on hv's word via vc (11:47Z) and molt-vc's estate-wide call, before hv's compact; not released. Doing 20 step (2) is made and banked at 9027555d (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364), not yet sent: after the pickup, send vc the hashes (board ask Re 11:42Z, and socket), then hold for vc's routing, the twins on molt-vc's GO, then the dry run. Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its 26 Oct 11:51Z section. No push.",
+    "focus": "26 Oct 12:11Z: folded at d6891e58 before hv's compact, not released. hv's ruling (a), vc's decision 64 (12:09Z): A4's conformance to T5 (use brew) goes into 2.14.4, so 9027555d is no longer the final head. Doing 20 holds at step (1) for vc's word with the new final head, once A4 has landed checked. Step (2), banked at 9027555d (twins.sh 4220174e, dryrun-2144.sh d298223c, request.md 3df71364), is not sent: it is the base for the re-hash. Then the kovacs twins through molt-vc to kovacs-sysadm, then the dry run. Resume: ~/Devel/scratch/utilz-dc/RESUME.md, its 26 Oct 12:11Z section. No push.",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -809,10 +809,10 @@
       "node": "dc",
       "kind": "doing",
       "seq": 20,
-      "text": "2.14.4's kovacs twins and release dry run on the final head, main's 9027555d (0109, 0111 and 0110 landed and closed in it; on GitHub by hv's push; vc's word of 26 Oct 11:42Z), in vc's order: (1) done: vc sent the head; (2) made and banked at hv's localfold, not yet sent: work/c2144/twins.sh (SHA, 4220174e), work/dryrun-2144.sh (CODE, d298223c) and work/c2144/request.md (3df71364), re-read against the diff from 21b0385d, with the 21b0385d bytes in work/c2144/base-21b0385d/ and the diffs beside them. After the compact's pickup, send vc the hashes (board ask Re 11:42Z, and socket), as vc's localfold call says; vc reads them and routes the request; (3) the twins go to kovacs-sysadm as a request after cc's Mac twins END, booked with molt-vc as a heavy (vc's decision 60 (4)); bank the readback as work/c2144/twins-9027555d.out, re-tally it against request.md and twins.out, and send vc the END; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push.",
+      "text": "2.14.4's kovacs twins and release dry run on the final head, which now waits for A4: hv's ruling (a) through molt-vc (read 12:09:50Z, vc's decision 64) puts Utilz's conformance to A4 to T5 (use brew refuses, removing nothing, when no brew copy would answer) into 2.14.4, so main's 9027555d (0109, 0111 and 0110 landed) is no longer the final head. In vc's order: (1) hold until vc sends the new final head's sha, once A4 has landed checked; (2) then re-hash from the bytes banked at 9027555d and never sent (work/c2144/twins.sh 4220174e, work/dryrun-2144.sh d298223c, work/c2144/request.md 3df71364; the 21b0385d bytes in work/c2144/base-21b0385d/): set SHA and CODE to the new head, re-read request.md against the diff from 9027555d to it (its expected lines stay based on the 21b0385d readback, twins.out), and send vc the hashes; vc reads them and routes the request; (3) the twins go through molt-vc to kovacs-sysadm as a request, after cc's Mac twins END, booked as a heavy (vc's decision 60 (4)); bank the readback as work/c2144/twins-<head8>.out, re-tally it and send vc the END; (4) then the dry run, booked fresh with molt-vc: from its GO until vc reads its last row the tree is frozen, with no commit and no intent wb verb from any node. Each runs only on molt-vc's GO by name. Nothing run. No push.",
       "state": "live",
       "recorded_at": "2026-10-25T14:50:56.128Z",
-      "edited_at": "2026-10-26T11:51:21.048Z"
+      "edited_at": "2026-10-26T12:11:57.648Z"
     }
   ],
   "sent": [
@@ -3210,6 +3210,11 @@
       "id": "01M5W0JJAB26EC115JET67SSZN",
       "sender": "vc",
       "handled_at": "2026-10-26T11:51:21.277Z"
+    },
+    {
+      "id": "01M5W1XJFJWR8E8BHAWQFK3Y7W",
+      "sender": "vc",
+      "handled_at": "2026-10-26T12:11:57.880Z"
     }
   ]
 }
