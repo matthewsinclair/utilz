@@ -1,0 +1,15 @@
+{
+  "id": "01M5YCKQ5VNJJBMNM9MB254C0B",
+  "ts": "2026-10-27T09:56:06.460Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issue 0119's Menuz rows (dc's ledger; vc's ruling, 27 Oct). They are read and answered: every replacement fits, and the refinements are in the ledger. After 0117 lands and vc reads the ledger at its commit, make the Menuz edits (menuz.bats:918; macos.bats:289, :290, :305, :306 and :416; cmd/macos:115, :752 and :755) in commits of their own. Then the smallest run, booked through vc, shared with 0115's run if both are banked together."
+  }
+}

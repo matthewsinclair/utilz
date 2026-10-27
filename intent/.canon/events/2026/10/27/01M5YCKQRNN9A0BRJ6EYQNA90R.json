@@ -1,0 +1,16 @@
+{
+  "id": "01M5YCKQRNN9A0BRJ6EYQNA90R",
+  "ts": "2026-10-27T09:56:07.062Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 10,
+    "text": "Issue 0118 (owner ic): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today. The devbin half is devbin 0243, for devbin 0.1.16. hv's rulings of 27 Oct: 0118 rides the first Utilz release after 0.1.16 is cut and vendored, and SHA256SUMS and the smaller step changes are accepted. Once 0115 lands, one body edit carries the rulings, 0243 and the publish-end drop, with its diff to vc. No code until then, and no run until booked through vc."
+  }
+}
