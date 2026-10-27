@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y5ZC8KQ8BQMRPXYSCM0CFR",
+  "ts": "2026-10-27T08:00:08.467Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "An issue for the next Utilz release (hv's yes through vc, 27 Oct, owner ic): converge Menuz's signing path on devbin 0.1.15's built-in macos (lib/cmd/macos, opt-in by commands.macos.enabled and a macos: block) and retire the duplicate app half of bin/.devbin/cmd/macos. The design's question is what the built-in may not carry: 0103's stamps refusal, the Launch Services drops of 0104 and 0106, and app-icons, which stays a project command. File it with its design in the body for vc's read before any code, and say how it is proven (a signed, notarised publish) before the next cut. Input: a read-only comparison of lib/cmd/macos with cmd/macos, lib/config and lib/resolve. No run until booked through vc."
+  }
+}

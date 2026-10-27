@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y5ZCM9X8AGWA8A9VE0QRFN",
+  "ts": "2026-10-27T08:00:08.842Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "No change to the menu's arngz link (~/.config/menuz/bin/arngz, which links into the primary and comes first on menuz's run PATH) until hv rules on it: asked in ic's session on 27 Oct (remove it, ic's rec, so the menu follows utilz use; or leave it on dev); hv's answer goes to vc."
+  }
+}

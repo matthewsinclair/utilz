@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 07:41Z
+heartbeat_at: 2026-10-27 08:01Z
 status: active
-focus: "27 Oct: 2.14.4 released (722f532b) and its Menuz.app asset published; holding for hv's word on reinstalling Menuz.app from brew (under (a) a launchsvc run booked through vc after the brew upgrade and use brew); todo: adopt arca_swift 0003 once arca tags it. No push."
+focus: "27 Oct, folded ahead of hv's compact (not released): doing 10, the devbin macos issue, its design to vc before any code (a read-only comparison is the input; draft banked); todo 14, 0115's cause first (notes banked); hold 17, the arngz link on hv's word; todo 13, 0114 on arca_swift's tag. Resume: ~/Devel/scratch/utilz-ic/RESUME.md. No push."
 claims: []
 ---
 
@@ -13,15 +13,16 @@ claims: []
 
 ## DOING
 
-_(none)_
+- An issue for the next Utilz release (hv's yes through vc, 27 Oct, owner ic): converge Menuz's signing path on devbin 0.1.15's built-in macos (lib/cmd/macos, opt-in by commands.macos.enabled and a macos: block) and retire the duplicate app half of bin/.devbin/cmd/macos. The design's question is what the built-in may not carry: 0103's stamps refusal, the Launch Services drops of 0104 and 0106, and app-icons, which stays a project command. File it with its design in the body for vc's read before any code, and say how it is proven (a signed, notarised publish) before the next cut. Input: a read-only comparison of lib/cmd/macos with cmd/macos, lib/config and lib/resolve. No run until booked through vc.
 
 ## TODO
 
 - Watch for arca_swift's tag carrying its issue 0003's fixes (arca_swift's newest tag is 0.2.0, menuz's pin, on 27 Oct); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
+- Issue 0115 (owner ic), the cause first: a code read with no load of each step against the Release product's path, from the build's drop to the doctor (opt/menuz/menuz, opt/menuz/lib/launch-services.sh, bin/.devbin/cmd/macos); then a diagnostic script, its hashes and expected results to vc before any booking (launchsvc). Signing only on hv's word; no notary submission, no publish, nothing that touches the installed app without hv's word. The fix's design goes to vc once the step is known.
 
 ## Holds
 
-_(none)_
+- No change to the menu's arngz link (~/.config/menuz/bin/arngz, which links into the primary and comes first on menuz's run PATH) until hv rules on it: asked in ic's session on 27 Oct (remove it, ic's rec, so the menu follows utilz use; or leave it on dev); hv's answer goes to vc.
 
 ## Watch-outs
 

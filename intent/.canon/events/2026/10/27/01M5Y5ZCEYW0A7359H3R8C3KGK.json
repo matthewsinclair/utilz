@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y5ZCEYW0A7359H3R8C3KGK",
+  "ts": "2026-10-27T08:00:08.670Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issue 0115 (owner ic), the cause first: a code read with no load of each step against the Release product's path, from the build's drop to the doctor (opt/menuz/menuz, opt/menuz/lib/launch-services.sh, bin/.devbin/cmd/macos); then a diagnostic script, its hashes and expected results to vc before any booking (launchsvc). Signing only on hv's word; no notary submission, no publish, nothing that touches the installed app without hv's word. The fix's design goes to vc once the step is known."
+  }
+}
