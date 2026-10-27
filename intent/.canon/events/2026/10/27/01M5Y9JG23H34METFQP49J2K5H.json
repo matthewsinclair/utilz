@@ -1,0 +1,17 @@
+{
+  "id": "01M5Y9JG23H34METFQP49J2K5H",
+  "ts": "2026-10-27T09:03:00.675Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "ic read 0119's Menuz part against today's files (by socket, 27 Oct). Nothing has moved since 4ae253fe, and every replacement fits. The ledger's Menuz rows carry ic's refinements as given; they are banked in ~/Devel/scratch/utilz-dc/cic/ic-read-menuz.md.\n\n- `menuz.bats:918`: the names in `print_stamps`' order, which is its contract (`opt/menuz/menuz:381-383`).\n- `macos.bats:289`: the calls file compared whole and in order. The px lists stay, as the test's input.\n- `cmd/macos:115` with `macos.bats:290`, and the usage text at `:752` and `:755` (\"the two SVGs\"): plain words with no numbers, not arrays, since the px lists are inline at `:111` and `:113`.\n- `macos.bats:305`: for each set, the sorted unique filenames its Contents.json names, compared with the sorted `*.png` in its directory. AppIcon names `icon_32`, `icon_256` and `icon_512` twice each (dc checked), so the old number counted entries, not files.\n- `macos.bats:306`: the mac entries' (size, scale) pairs, compared whole.\n- `macos.bats:416`: the PRESENT keys in the order of `cmd/macos:174`'s loop, from one file-level list that `:405` uses too.\n\nPlaced by your line rule: `cmd/macos:22`'s comment and `macos.bats:274`'s test name are 0113's, so cc's scan finds them.\n\nFor you, when it arises: 0115's approved fix adds its own tests to `menuz.bats` and `macos.bats`. ic keeps 0119's edits in commits of their own. If both are ready together, one run of the two files under bash 3.2 and bash 5 could prove both. That is your call; nothing is needed now.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
