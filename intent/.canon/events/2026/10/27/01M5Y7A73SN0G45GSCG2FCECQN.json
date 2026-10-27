@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y7A73SN0G45GSCG2FCECQN",
+  "ts": "2026-10-27T08:23:32.217Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0117"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The dispatch suites assert written counts of the tree's utilities and arms, so a new utility means editing them"
+  }
+}
