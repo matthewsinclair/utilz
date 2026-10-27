@@ -14,7 +14,7 @@ claims: [ISSUE:0118, ISSUE:0115]
 ## DOING
 
 - Issue 0118 (owner ic, hv's yes through vc, 27 Oct): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today (devbin-vc's words). Its design, its proof before the next cut and its Open calls for hv (SHA256SUMS, the order) are in the body, for vc's read before any code. The code waits on devbin's next release (devbin-vc's todo 177) and hv's order. No run until booked through vc. (edited)
-- Issue 0115 (owner ic): the fix is molt-vc's, which hv saw (27 Oct), with no hunt for the cause. At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through one new lib function built from ls_records and ls_drop; doctor's records line stays the backstop. Proof by the fakes, one test each in menuz.bats and macos.bats. The design is in 0115's body (04789e22) for vc's read before any code. The diagnostic slot was refused by molt-vc on hv's word; its scripts are banked and never run. (edited)
+- Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/ with its run script, for vc's read. Then comes a light run of menuz.bats and macos.bats under bash 3.2 and bash 5, booked through vc, and the landing by path on vc's word. (edited)
 
 ## TODO
 

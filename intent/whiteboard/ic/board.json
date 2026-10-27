@@ -427,10 +427,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 11,
-      "text": "Issue 0115 (owner ic): the fix is molt-vc's, which hv saw (27 Oct), with no hunt for the cause. At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through one new lib function built from ls_records and ls_drop; doctor's records line stays the backstop. Proof by the fakes, one test each in menuz.bats and macos.bats. The design is in 0115's body (04789e22) for vc's read before any code. The diagnostic slot was refused by molt-vc on hv's word; its scripts are banked and never run.",
+      "text": "Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/ with its run script, for vc's read. Then comes a light run of menuz.bats and macos.bats under bash 3.2 and bash 5, booked through vc, and the landing by path on vc's word.",
       "state": "live",
       "recorded_at": "2026-10-27T08:29:00.499Z",
-      "edited_at": "2026-10-27T08:58:16.218Z"
+      "edited_at": "2026-10-27T09:09:54.853Z"
     }
   ],
   "sent": [
