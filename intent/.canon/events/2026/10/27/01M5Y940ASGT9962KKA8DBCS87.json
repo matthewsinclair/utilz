@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y940ASGT9962KKA8DBCS87",
+  "ts": "2026-10-27T08:55:05.817Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "The next Utilz release (its number hv's; decision 65): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (the resizing decision of 27 Oct), and checks each landing by its change. Order: 0116, then 0117, then 0113's docs commit, then its suites commit; 0119 after 0117. cc: 0116 (README and help name use brew's cannot-finish refusal; prettier only, negligible), 0117 (the dispatch suites' counts replaced by bin's link set; population_helper.bash), 0113 (every written count and position in prose, comments and test names; line scan, no booked run). dc: 0119 (counts in test code and strings; Menuz's rows are ic's edits). ic: 0115 (doctor's remedy run at the end of menuz install and the release steps; one direct check), 0118 (the macos convergence; code waits on devbin's release carrying devbin-vc's todo 177), 0114 on arca_swift's tag. FOR hv with molt-vc since 08:34Z: 0118's order, SHA256SUMS, the smaller release-step changes, the next release's number; and molt-vc's own question on mutation runs. Open with molt-vc: dc's /var/tmp check on kovacs. Open with hv through ic: ~/.config/menuz/bin/arngz."
+  }
+}
