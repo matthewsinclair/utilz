@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 08:01Z
+heartbeat_at: 2026-10-27 08:12Z
 status: active
-focus: "27 Oct, folded ahead of hv's compact (not released): doing 10, the devbin macos issue, its design to vc before any code (a read-only comparison is the input; draft banked); todo 14, 0115's cause first (notes banked); hold 17, the arngz link on hv's word; todo 13, 0114 on arca_swift's tag. Resume: ~/Devel/scratch/utilz-ic/RESUME.md. No push."
+focus: "ic: after hv's compact (27 Oct): doing 10, the devbin macos issue (its version gate waits on devbin-vc's answer to vc's todo 56); todo 14, 0115's code read with no load, then a diagnostic to vc before any booking; hold 17, the menu's arngz link (hv's); todo 13, 0114 on arca_swift's tag; resume ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: []
 ---
 
