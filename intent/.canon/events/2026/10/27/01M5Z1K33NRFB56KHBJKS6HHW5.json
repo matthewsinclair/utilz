@@ -1,0 +1,16 @@
+{
+  "id": "01M5Z1K33NRFB56KHBJKS6HHW5",
+  "ts": "2026-10-27T16:02:46.006Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 73,
+    "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct), all approved by vc with the head PENDING: the kovacs twins and request (2145-bank/kovacs: twins.sh 1196839ccb00, request.md 8fe6082cf5cb; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run (2145-bank/dryrun/dryrun-2145.sh 59911c4e4692), filled at the head by fill-2145-head.sh 5fa6af831717 after the Mac twins' END. The filled request goes to molt-vc, never kovacs-sysadm (molt-vc sends one combined message on hv's return); the dry run after the twins, on molt-vc's GO by name, under vc's freeze."
+  }
+}
