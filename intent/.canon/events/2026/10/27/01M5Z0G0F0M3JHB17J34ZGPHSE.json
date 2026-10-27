@@ -1,0 +1,15 @@
+{
+  "id": "01M5Z0G0F0M3JHB17J34ZGPHSE",
+  "ts": "2026-10-27T15:43:36.417Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0122"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "docs/releasing.md does not say that publish and menuz install drop every record left under menuz's build root (issue 0115's drops)"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 122,
+  "slug": "docs-releasing-md-does-not-say-that-publish-and",
+  "title": "docs/releasing.md does not say that publish and menuz install drop every record left under menuz's build root (issue 0115's drops)",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-27",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`docs/releasing.md` describes the steps hv runs after a cut, and two places in it predate issue 0115 (landed at 14103179, closed):\n\n- The publish step (`:85`) says how `bin/devbin macos publish` drops the record of the bundle it unpacks to prove the zip (issue 0104). It does not say that, after its upload, publish drops and checks every record still standing under menuz's build root, a record left or a list not read being a warning while the exit stands.\n- The records paragraph (`:89`) names the steps that drop a record. It does not name `utilz menuz install`'s drop at its end, on both its paths, of every record under menuz's build root.\n\nFound by cc in 2.14.5's pre-flight reads (27 Oct). vc's word: fix it in 2.14.5, before vc names the final head.\n\n## The fix\n\nTwo sentences, and nothing else in the file:\n\n- `:85`, after \"and exits 1, after saying what it published.\": \"After the upload, it drops and checks every record still standing under menuz's build root, a Release build product's included, so the bundle id opens the installed app alone; a record it cannot drop, or a list it cannot read, is a warning, and the publish stands (issue 0115).\"\n- `:89`, after \"drop the product's record after xcodebuild.\": \"A record can come back from outside Utilz after that drop, so `menuz install` ends, on both its paths, by dropping and checking every record under menuz's build root, as `publish` does after its upload (issue 0115).\"\n\n`:73`'s example tag stays as it is (vc: not a defect).\n\n## Proof\n\n`prettier --check --ignore-path /dev/null docs/releasing.md` on the changed file, booked with `--lane none` once vc has read the bytes.\n\n## Landing\n\nThe two sentences and a sub-bullet under 2.14.5's \"Harness and development only, no behaviour change\" bullet, in one pathspec commit of `docs/releasing.md` and `CHANGELOG.md` after vc's check of the working tree; then vc's check by its change, and the close.\n"
+}
