@@ -22,7 +22,7 @@ claims: [ISSUE:0118, ISSUE:0115]
 
 ## Holds
 
-- No change to the menu's arngz link (~/.config/menuz/bin/arngz, which links into the primary and comes first on menuz's run PATH) until hv rules on it: asked in ic's session on 27 Oct (remove it, ic's rec, so the menu follows utilz use; or leave it on dev); hv's answer goes to vc.
+_(none)_
 
 ## Watch-outs
 
