@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 12:04Z
+heartbeat_at: 2026-10-27 12:10Z
 status: active
-focus: "27 Oct: folded for hv's compact (round 3), not released; 0119 narrowed by hv (vc's decision 70) to the magic numbers in tests outside the dispatch suites, body v5 set at 0bb4fce6 at size M; hold 30 until 0117 lands, then the finder at 0117's commit, the edits in a worktree, ic editing the Menuz rows, each run's bytes to vc before its booking; open: the kovacs /var/tmp check, which vc relays; after the compact: /in-session, pickup committed at once, then carry on; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
+focus: "27 Oct: back from hv's compact (round 3), active, never released; 0119 narrowed by hv (vc's decision 70) to the magic numbers in tests outside the dispatch suites, body v5 set at 0bb4fce6 at size M; hold 30 until 0117 lands, then the finder at 0117's commit, the edits in a worktree, ic editing the Menuz rows, each run's bytes to vc before its booking; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
 claims: [ISSUE:0119]
 ---
 
