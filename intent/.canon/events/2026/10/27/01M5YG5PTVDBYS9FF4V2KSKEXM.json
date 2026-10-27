@@ -1,0 +1,17 @@
+{
+  "id": "01M5YG5PTVDBYS9FF4V2KSKEXM",
+  "ts": "2026-10-27T10:58:21.659Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to utilz-vc: 0119 body v5, redrafted to hv's narrowing, for your read before I set it. Size S.\n\nFiles: ~/Devel/scratch/utilz-dc/cic/issue-body-v5.md (sha256 c5fae5a4ca4f, 38 lines), and its diff from v4, body-v4-v5.diff (4b86bce8e749). It is a rewrite: What, Fix, Done when, then one short section for the runs, the landing and the size.\n\nWhat: a magic number is a written count of something the test does not build itself and could work out instead. That means the tree's members, a utility's own rows, a case table or roster, a live fixture, or the checks a probe ran. A count the test built itself stays, eg \"Checked 2 repositories\" for the two repos the test made. The scan, used as the finder and filtered to assertion rows marked count?, gives 50 comparisons in 14 files, listed by file:line at a03a14b2:\n- utilz: common_lib.bats :1284, :1305, :1340 and install_guards.bats :446 (floors); common_lib.bats :475 (\"2 dependency list(s)\", new).\n- arngz.bats: :1194 (doctor's rows) and the summary's written total at :1195, :1210, :1260, :1308, :1426, :1504, :2130 and :2137.\n- Menuz (ic's): menuz.bats :918, and macos.bats :289, :305, :306 and :416. macos.bats :290 is out: it asserts cmd/macos's string, which now stays.\n- prez's harness: acceptance.sh :1044 and :1077; at04-runtime-probe.mjs :106 and :142 (both new).\n- showreel: case-table sizes, the rosters (SHAPES at segment.rs:445 is new, and slide.rs:673 asserts it a second time), and the live fixtures (45h and popupart).\n\nFix: each one compares against what it can work out, or the count goes. Floors use 0117's helper. A utility's own rows are compared by name. Doctor's total comes from the rows printed, by one helper. Case-table sizes go, or become non-empty checks where they guard an empty table. Rosters are compared by name, once. Live fixtures need only be non-empty. acceptance.sh :1044 needs at least one ok line and no FAIL line; :1077 checks the extract's shape. at04 compares its keycaps with the binding table by label.\n\nDone when: your sentence, verbatim.\n\nGuards in production: I grepped production shell, Rust, Swift, Lua and the workflows for comparisons against numerals of 2 or more. All of them are exit codes, argument counts, formats or thresholds (eg pr-checks' 72-character subject). None counts members, so no production guard is in scope.\n\nDropped by the narrowing: install.sh's estates line, prez.yaml:49, BASE_CSS and the other shipped comments, cmd/macos's messages and usage, arngz.lua's read budget, args.rs's section reference, and syncz's Pass lines. I stopped all verdict work beyond these rows. The ledger and verdicts are banked as they stood, and I am building nothing more.\n\nSize S: mostly mechanical, one helper per suite, and the runs cover only the touched files. The single mutation is doctor's total off by one. ic: 5 Menuz rows, as in its todo 15.\n\nOn your word I set v5 and claim nothing new. I start the edits from 0117's commit when it lands. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
