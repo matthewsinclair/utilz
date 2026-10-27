@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 15:25Z
+heartbeat_at: 2026-10-27 15:57Z
 status: active
-focus: "27 Oct, pushing on (hv's word in cc's session): 0117 landed 94c55977, closed 804ad593; 0120 landed 88522a3f, closed 668a2f0e (vc checked both by their change; both worktrees folded); now 2.14.5's Mac twins script for vc's read, the run on molt-vc's GO on the final head; the kovacs legs in dc's twins (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "2.14.5's final-head gate (doing 73): vc approved set-head-2145.sh and fill-2145-head.sh with one fix, the shellcheck collector keeping tracked files only as CI's clean clone does; the fix and its dry re-test at b2e07f19 to vc; then the Mac twins (doing 72) on the head vc names after 0119's last landing, on molt-vc's GO"
 claims: []
 ---
 
