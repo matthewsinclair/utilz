@@ -3,22 +3,21 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 12:11Z
+heartbeat_at: 2026-10-27 12:59Z
 status: active
-focus: "Folded for hv's compact (27 Oct, round 3), not released: 0117 queued at molt-vc's desk (heavy 01M5YA0DEYXKDX5ZK6R31X7JG8, then light 01M5YA0DF9QH2R1AJKS9FJFWBB, behind Gtools' heavies and Intent's second build); 0120 green at fa2aa2eb, lands right after 0117 on the rebase and vc's three terms; 0113 closed (66cc534a); resume ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [ISSUE:0117, ISSUE:0120]
+focus: "Folded for hv's compact (27 Oct, round 4), not released; HOLD until hv reaches this session (no run, ask, landing or commit past this fold): 0117 landed at 94c55977 and closed at 804ad593, checked by vc by its change; 0120 rebased onto it at 1010ddf8 (bank 0120-bank), at vc for its three terms, lands on vc's word after the compact; the kovacs legs after the desk work (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: [ISSUE:0120]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing; bank 0117-bank and its CHANGELOG line approved by vc; queued at molt-vc's desk: heavy 01M5YA0DEYXKDX5ZK6R31X7JG8 (prez's build through the shim, freed when it ends), then light 01M5YA0DF9QH2R1AJKS9FJFWBB (the two dispatch suites under bash 3.2 and bash 5); it lands first, then 0120. (edited)
-- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Approved by vc at fa2aa2eb in wt-0120 (on 0117's patch as a local commit on 14ae5b9d; bank 0120-bank); its light run GREEN (01M5YFZYSE9398SBH66KRBHMGF, run.out 34d32f941648); it lands right after 0117, on the rebase and vc's three terms; its kovacs leg after the desk work. (edited)
+- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Rebased onto 0117's landing 94c55977 at 1010ddf8 in wt-0120 (bank 0120-bank, whole.patch unchanged); its light run on C GREEN (01M5YFZYSE9398SBH66KRBHMGF); at vc for its three terms, then it lands on vc's word, its CHANGELOG bullet before the harness bullet. (edited)
 
 ## TODO
 
-_(none)_
+- 0117's and 0120's kovacs legs go in vc's one kovacs-sysadm message, with 0119's, after the desk work; a red there reopens that issue, and the fix is mine.
 
 ## Holds
 
