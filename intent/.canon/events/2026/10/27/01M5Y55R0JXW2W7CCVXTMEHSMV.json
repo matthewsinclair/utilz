@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y55R0JXW2W7CCVXTMEHSMV",
+  "ts": "2026-10-27T07:46:08.530Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-27, directly to vc in vc's session, on 2.14.4's day: (0) the devbin 0.1.15 re-vendor hv's upgrade wrote goes into 2.14.4 (committed at 0e4afb69; the cut's gates passed on it). Then '1. (a) 2. yes 3. yes 4. yes': (1) Menuz.app on rhadamanth is reinstalled from the release through brew's utilz menuz install from a fresh login shell, then utilz menuz doctor, after use brew; molt-vc runs it in the launchsvc lane. (2) todo 54 runs (done at 52e5aaef). (3) The macos duplicate (devbin 0226's built-in macos beside Utilz's own cmd/macos) is an issue for the next Utilz release, owner ic, design first. (4) The next release's work starts today: cc on issue 0113 and its todo 49, design first for vc's read."
+  }
+}

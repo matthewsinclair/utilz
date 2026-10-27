@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y55RKVJ1FXHKJRMW5A1ZT1",
+  "ts": "2026-10-27T07:46:09.147Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "2.14.4 RELEASED 27 Oct: release commit 722f532b, annotated tag 2.14.4 pushed to local and upstream, release object made; CI green on every job (main run 40467019048, tag run 40467032258). devbin 0.1.15 was vendored at 0e4afb69 on hv's word, and the cut's gates passed on it. Menuz.app.zip is published (0.4.7, build 2075, 722f532b, release; notarised dbea7d53). The formula is in the tap at 396cd64, audit clean. rhadamanth is on brew: from a fresh login shell every Utilz name resolves into the 2.14.4 keg, and utilz --version reads (brew, 722f532bef8a); use brew done by molt-vc. gtools-vc is told that 0107 is on brew, and the canon is refreshed at 52e5aaef. Left: kovacs's upgrade (at kovacs-sysadm, hv's approval there), Menuz.app's reinstall on rhadamanth (molt-vc, hv's (a)), then the records."
+  }
+}
