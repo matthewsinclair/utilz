@@ -2160,9 +2160,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 67,
-      "text": "vc, 27 Oct 2026, on hv's rule of 23 Sep (no yak-shaving; 'Just do enough to prove it works'), after hv balked at 0115's diagnostic of 12 Menuz builds (molt-vc refused slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY at 08:51:07Z; the fault was vc's approval): every Utilz booking is the smallest run that proves its change, as molt-vc's desk now grants. 0115: doctor's own remedy run at the end of utilz menuz install and of the release steps, one direct check with the fakes, no real build. 0116: prettier --check on its two files, negligible. 0117: prez built, then the two dispatch suites under bash 3.2 and bash 5, no mutations (each check visibly fails on reading). 0113: no booked run (the worktree commit's gate, the scan rerun, vc's read of the diff; no hand lexers, no label fixtures). 0119: the touched files only. Mutations only where reading cannot show a check fails, until hv answers molt-vc. Kovacs legs (0117's, 0119's) go to kovacs-sysadm in one message. The final head's twins before the cut stay.",
+      "text": "vc, 27 Oct 2026, on hv's rule of 23 Sep (no yak-shaving; 'Just do enough to prove it works'), after hv balked at 0115's diagnostic of 12 Menuz builds (molt-vc refused slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY at 08:51:07Z; the fault was vc's approval): every Utilz booking is the smallest run that proves its change, as molt-vc's desk now grants. 0115: doctor's own remedy run at the end of utilz menuz install and of the release steps, one direct check with the fakes, no real build. 0116: prettier --check on its two files, negligible. 0117: prez built, then the two dispatch suites under bash 3.2 and bash 5, no mutations (each check visibly fails on reading). 0113: no booked run (the worktree commit's gate, the scan rerun, vc's read of the diff; no hand lexers, no label fixtures). 0119: the touched files only. A mutation only where reading cannot show the new check fails: settled as the rule on 27 Oct (molt-vc withdrew its suggestion to drop red checks after gtools-vc showed they are cheap and caught a real false pass). Kovacs legs (0117's, 0119's) go to kovacs-sysadm in one message. The final head's twins before the cut stay.",
       "state": "live",
-      "recorded_at": "2026-10-27T08:54:56.407Z"
+      "recorded_at": "2026-10-27T08:54:56.407Z",
+      "edited_at": "2026-10-27T09:57:22.711Z"
     },
     {
       "node": "vc",
