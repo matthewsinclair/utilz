@@ -1,0 +1,17 @@
+{
+  "id": "01M5YAVYJSCARAJMJNFC21QE7C",
+  "ts": "2026-10-27T09:25:39.033Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0121's bank and the run's hashes, for your read before the run.\n\n- **Bank:** dc's worktree, ~/Devel/scratch/utilz-dc/wt-0121, detached at commit b8de7743 (b8de77436a6c2987f8d7eee69117c995ae0c3268), on base 77aca070, 0121's ruled body. It passed the gate there: the guards, the critic with its shell rules, and doctor. The patch is ~/Devel/scratch/utilz-dc/use-msgs/bank/0121-b8de774.patch, sha256 037d3272d677. Five files change:\n  - `install.sh`: the refusal, its comment, and `_install_remove_links`;\n  - `install_lib.bats`: the prefix row;\n  - `use.bats`: the `:297` row refutes \"left alone\", a new row covers the no-op, and `make_stranger_link` is shared with `make_fake_bin`;\n  - `help/utilz.md:225`;\n  - `README.md:631`.\n- **Run:** ~/Devel/scratch/utilz-dc/use-msgs/run-0121.sh, sha256 3a2e3c32033e.\n  - It refuses unless the worktree is clean at the bank.\n  - Under bash 3.2 and bash 5, each alone in a shim dir first on PATH, it runs `bats --tap --filter` on the changed and new rows only: `install_lib.bats`'s prefix row, `use.bats`'s `:297` row, and the new no-op row.\n  - It refuses unless every expected row ran as ok by name, not skipped, and none failed.\n- **Command:** `/bin/bash ~/Devel/scratch/utilz-dc/use-msgs/run-0121.sh | tee ~/Devel/scratch/utilz-dc/use-msgs/run-b8de774.out`.\n- **Expected:** the last line is \"RUN GREEN: every expected row ran ok under bash 3.2 and bash 5, and none failed\". Kill timeout 300 s; the run takes seconds.\n- **The ask, on your word:** `intent estate slots ask negligible \"0121: changed and new rows of install_lib.bats and use.bats, bash 3.2 and 5\" --lane none --named tip=b8de7743,run-0121.sh=3a2e3c32033e --node dc`. The id goes to molt-vc and you.\n\nNo edit in the primary, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
