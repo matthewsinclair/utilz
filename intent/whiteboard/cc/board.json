@@ -1774,10 +1774,10 @@
       "node": "cc",
       "kind": "todo",
       "seq": 50,
-      "text": "0117's and 0120's kovacs legs ride in dc's kovacs twins on 2.14.5's final head (0120's with mawk's help_section, vc 27 Oct); a red there reopens that issue, and the fix is mine.",
+      "text": "0117's and 0120's kovacs legs ride in cc's kovacs twins on 2.14.5's final head (doing 73; 0120's with mawk's help_section); a red there reopens that issue, and the fix is mine.",
       "state": "live",
       "recorded_at": "2026-10-27T12:58:29.716Z",
-      "edited_at": "2026-10-27T15:25:17.257Z"
+      "edited_at": "2026-10-27T15:36:52.060Z"
     },
     {
       "node": "cc",
@@ -1787,6 +1787,14 @@
       "state": "live",
       "recorded_at": "2026-10-27T15:25:17.477Z",
       "edited_at": "2026-10-27T15:28:46.725Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 73,
+      "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct): the kovacs twins (one heavy through kovacs-sysadm, booked with molt-vc after the Mac twins: tests.yml's Ubuntu loop, shellcheck 0.9.0 with its control, rust-lint on 1.99.1; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run after them, banked from dc's green 2.14.4 bytes with the head PENDING (2145-bank/kovacs, 2145-bank/dryrun) for vc's read; and the cut's pre-flight reads, findings to vc.",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:36:51.525Z"
     }
   ],
   "sent": [

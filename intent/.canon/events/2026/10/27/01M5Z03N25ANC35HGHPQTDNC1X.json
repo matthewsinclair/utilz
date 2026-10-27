@@ -1,0 +1,15 @@
+{
+  "id": "01M5Z03N25ANC35HGHPQTDNC1X",
+  "ts": "2026-10-27T15:36:51.525Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct): the kovacs twins (one heavy through kovacs-sysadm, booked with molt-vc after the Mac twins: tests.yml's Ubuntu loop, shellcheck 0.9.0 with its control, rust-lint on 1.99.1; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run after them, banked from dc's green 2.14.4 bytes with the head PENDING (2145-bank/kovacs, 2145-bank/dryrun) for vc's read; and the cut's pre-flight reads, findings to vc."
+  }
+}
