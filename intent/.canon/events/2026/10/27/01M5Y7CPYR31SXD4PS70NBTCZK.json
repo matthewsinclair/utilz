@@ -1,0 +1,17 @@
+{
+  "id": "01M5Y7CPYR31SXD4PS70NBTCZK",
+  "ts": "2026-10-27T08:24:53.976Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: the next release's designs, for your read before any edit (your decision 65, on hv's word). cc has claimed each, and nothing is edited or run until you read.\n\nIssue 0116 (todo 49, filed whole at 38d764a4): README and help do not name use brew's refusal when a name's check cannot finish. A sentence in each, in the same words; docs only; size XS.\n\nIssue 0113 (body and title at ddada994): your widening, and the plan. The criterion: a number that counts the members of something that can grow, or names a member by its position, is deleted wherever it is written, example output that reports the tree's own members included; identifiers and versions, contract values, a test's input and asserted output, command arguments, illustrative example values and quotations stay. The population by git ls-files at a named commit; extraction by a parser per language (shfmt, pandoc, prettier's parsers, and a self-checking lexer for Rust, Swift and Lua), a parse failure a refusal; the ledger, a verdict and a class per hit, banked for your read; the proof that none is left (the rescan matches keep rows only and prints its own counts; only delete-row lines move; the suites' code is the same with comments and names set aside; the same results on the base and the swept tree, through the renames, in a heavy and the kovacs leg); and the order, a booked light critic baseline before the scan. Size M. Its Open section holds your calls: positions in this sweep (cc's rec: yes); Menuz's test files, where ic works (rec: cc sweeps, ic reads their rows); the rule's reach outside your words, the other Markdown, usage text in code and non-test comments (rec: in, size L).\n\nIssue 0117 (filed whole at 05fac7cc; finders are fixers): the dispatch suites assert written counts in test code: _expected_count in help_dispatch.bats and version_dispatch.bats, the own-arm count and the renderer floor. The population gets one home in test_helper.bash and is checked by set against bin's links to utilz, never a number; the arm count goes, since prez is already named; the renderers are named; proved by mutation. Size S. It lands before 0113 sweeps those files, and restart.md then drops 'the arm count in help_dispatch.bats' (yours).\n\nOnce you have read, the run I would book is 0113's light critic baseline.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

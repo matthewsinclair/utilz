@@ -3,18 +3,19 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 08:13Z
+heartbeat_at: 2026-10-27 08:24Z
 status: active
-focus: "Next release's work, on hv's word (vc's decision 65): todo 49 as an issue, filed whole with its design, and issue 0113's plan (widened by vc: the suites, docs/, help/ and README.md) written into its body, each to vc for a read before any edit; picked up after hv's compact"
-claims: []
+focus: "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run"
+claims: [ISSUE:0113, ISSUE:0116, ISSUE:0117]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- Issue 0113, widened by vc on hv's rule (27 Oct): every written count in test names and comments across the suites, and in docs/, help/ and README.md (not intent/restart.md, which is vc's), is deleted. Doc before code: the plan (the population by command, extraction by parser, the ledger, and the proof that none is left) goes into 0113's body, then to vc for a read before any edit. Draft banked: ~/Devel/scratch/utilz-cc/0113-bank/plan-draft.md, with its open items for vc.
-- Todo 49 as an issue: README and help name use brew's refusal when it cannot finish a name's check (install.sh:1718, use.bats:586), filed whole with its design, then to vc for a read before any edit. Draft banked: ~/Devel/scratch/utilz-cc/todo49-bank/issue-draft.md.
+- Issue 0113, widened by vc on hv's rule (27 Oct): every written count in the suites' test names and comments and in docs/, help/ and README.md is deleted. Its plan is in its body (ddada994), at vc for a read before any edit; vc's calls are in its Open section. (edited)
+- Issue 0116 (was todo 49): README and help name use brew's refusal when a name's check cannot finish. Filed whole at 38d764a4, its design in its body, at vc for a read before any edit. (edited)
+- Issue 0117: the dispatch suites assert written counts of the tree's utilities and arms in test code. Filed whole at 05fac7cc, its design in its body, at vc for a read before any edit; it lands before 0113 sweeps those files.
 
 ## TODO
 

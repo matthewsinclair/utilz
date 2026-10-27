@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y7CAMBCANH2J4RKQW1AQVX",
+  "ts": "2026-10-27T08:24:41.355Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue 0117: the dispatch suites assert written counts of the tree's utilities and arms in test code. Filed whole at 05fac7cc, its design in its body, at vc for a read before any edit; it lands before 0113 sweeps those files."
+  }
+}
