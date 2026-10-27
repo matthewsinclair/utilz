@@ -18,7 +18,7 @@ _(none)_
 ## TODO
 
 - Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, is ArcaLogConsole's WP-11 and carries none; 0003 is open at arca_swift's main ffdff0ab; menuz's resolved pin is 0.2.0); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
-- Issue 0119's Menuz rows (owner dc; ic edits them): dc's ledger, body v5 at 0bb4fce6, names menuz.bats:918 and macos.bats:289, :305, :306 and :416 (lines at a03a14b2, unmoved since), each to be compared by name as the body's Fix says. The edits start from 0117's commit once it lands; commits of their own, by path on vc's word; the smallest run, booked through vc. Design notes in ~/Devel/scratch/utilz-ic/RESUME.md. (edited)
+- Issue 0119's Menuz rows (owner dc; ic edits them): menuz.bats:918 and macos.bats:289, :305, :306 and :416 (body v5 at 0bb4fce6), each compared by name. Design ~/Devel/scratch/utilz-ic/bank-0119/design-0119-menuz.md (dd98ea8c941d), approved by vc at 2cc68d1a on its terms: MenuBarIcon's scales by name beside :306, both sides sorted; the run is the tests the edits touch, by bats --filter on their whole names, under bash 3.2 and 5 from shim dirs, each TAP read by name, asked as negligible after 0120 lands, with its bytes and hashes to vc first (drafted: bank-0119/s0119-run.sh); no CHANGELOG line from ic. Next: the worktree at main's tip once 0117 is on main, the edits, the bank for vc's read, the landing by path on vc's word. (edited)
 
 ## Holds
 
