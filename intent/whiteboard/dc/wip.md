@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 08:00Z
+heartbeat_at: 2026-10-27 08:13Z
 status: active
-focus: "27 Oct: folded for hv's compact, not released; 2.14.4 released and brewed on both hosts; dc's findings taken by vc and its 2.14.4 scratch retired; vc relays the kovacs /var/tmp answer; after the compact: /in-session, pickup committed at once, then hold for vc's word; no push"
+focus: "27 Oct: after hv's compact, dc holds for vc's word; 2.14.4 released and brewed on both hosts, dc's findings taken by vc, its 2.14.4 scratch retired; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
 claims: []
 ---
 
