@@ -4,10 +4,12 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- cc: issue 0113, every written count in test names and comments, `docs/`, `help/` and `README.md` deleted on hv's rule; its plan to vc before any edit.
-- cc: an issue for README and help to name `use brew`'s cannot-finish refusal; its design to vc before any edit.
-- ic: an issue to converge Menuz's signing on devbin's built-in `macos` (devbin 0226), retiring the duplicate app half of `bin/.devbin/cmd/macos`; its design to vc before any code.
-- ic: issue 0115, Menuz's Release build product left registered with Launch Services after a release; its cause, then its design, to vc.
+- cc: issue 0116, README and help name `use brew`'s refusal when a name's check cannot finish; lands first.
+- cc: issue 0117, the dispatch suites' written counts replaced by the set `bin/`'s links name; lands before 0113 sweeps those files.
+- cc: issue 0113, every written count and position in prose, comments and test names deleted on hv's rule; its critic baseline, then its scan and ledger, to vc before any edit.
+- dc: an issue for the written counts in code (count assertions outside the dispatch suites, user-facing strings); its design to vc before any edit.
+- ic: issue 0115, Menuz's Release build product left registered with Launch Services after a release; its diagnostic to vc before any booking.
+- ic: issue 0118, Menuz's signing converged on devbin's built-in `macos`; its design to vc before any code.
 - vc: read each plan, design and bank; book each run with molt-vc; check each landing by its change.
 
 ## TODO
