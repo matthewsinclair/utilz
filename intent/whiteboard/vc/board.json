@@ -2146,6 +2146,15 @@
       "text": "vc, 27 Oct 2026, on the next release's scope under hv's count rule (no count in a doc, a guard, a test or code; nothing named by its place): (1) 0113 covers prose, comments and test names in every tracked file of Utilz's own (docs/, help/, README.md, each opt/*/README.md, usage-rules.md, .github/workflows/README.md, Menuz's about.md, and the comments in test and non-test code and config), positions included (ordered-list markup stays; a reference by number goes; devbin's steps by their names); intent/, CHANGELOG.md, the generated contracts and the vendored devbin stay out. cc sweeps Menuz's tests and ic reads their ledger rows first. (2) Strings in code (usage text, messages, asserted output) and count assertions outside the dispatch suites are dc's issue; 0117 stays the dispatch suites. (3) 0118's app-verify debug and release modes move into menuz, as a check menuz build makes on its own product (executable, LSUIElement, stamps), not dropped: U:606 is the only built-bundle LSUIElement check.",
       "state": "live",
       "recorded_at": "2026-10-27T08:34:32.663Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 23,
+      "text": "Utilz's booked runs wait for molt-vc's GO (molt-vc's word, received by 08:44Z): the desk is Gtools' until Gtools has landed, pushed and is CI green (hv's rule of 26 Oct). Released when molt-vc sends GO at Gtools' end-point; 0116's light run (slot 01M5Y8CE713MQVKDBFMMAHVABE) may go sooner if hv answers molt-vc's question 4 (an L1 project's light runs beside another's work) yes; 0115's heavy plus launchsvc run queues behind Gtools' end-point whatever the answer. Work with no load (designs, reads, banks, scans) goes on.",
+      "state": "live",
+      "recorded_at": "2026-10-27T08:44:47.131Z",
+      "edited_at": "2026-10-27T08:44:58.937Z"
     }
   ],
   "sent": [

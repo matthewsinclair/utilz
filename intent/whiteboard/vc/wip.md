@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Utilz's booked runs wait for molt-vc's GO (molt-vc's word, received by 08:44Z): the desk is Gtools' until Gtools has landed, pushed and is CI green (hv's rule of 26 Oct). Released when molt-vc sends GO at Gtools' end-point; 0116's light run (slot 01M5Y8CE713MQVKDBFMMAHVABE) may go sooner if hv answers molt-vc's question 4 (an L1 project's light runs beside another's work) yes; 0115's heavy plus launchsvc run queues behind Gtools' end-point whatever the answer. Work with no load (designs, reads, banks, scans) goes on. (edited)
 
 ## Watch-outs
 
