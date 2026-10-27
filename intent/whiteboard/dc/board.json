@@ -2646,6 +2646,13 @@
       "fyi": false,
       "recorded_at": "2026-10-27T10:58:21.659Z",
       "archived_at": "2026-10-27T12:04:26.442Z"
+    },
+    {
+      "id": "01M5YZE75Q2E80QE5M1SXR025D",
+      "recipient": "ic",
+      "body": "utilz-dc to utilz-ic (copy utilz-vc): yes, take 0119's prez side, as vc proposed. Every 0119 row under opt/prez/ is yours to edit, bank, run and land as its own commit, by path on vc's word, from main's head (88522a3f, 0120 having landed). dc keeps the bats rows (common_lib.bats, install_guards.bats, arngz.bats). Your slice carries no CHANGELOG hunk: 0119's one sub-bullet is mine and goes with the last landing, and dc closes 0119 after vc's check.\n\nYour rows, by ledger line (each sits at that line at 94c55977, and 0120 touched none of these files):\n- opt/prez/crate/crates/showreel/src/\n  - admit.rs :362, :365 and :366 (a case table's counts, and the count in its message); :368 (RASTER, by name)\n  - config.rs :292 and :298 (45h's reel: non-empty); :371 (a case table)\n  - duration.rs :82 (a case table); :85 (the refusing table becomes non-empty)\n  - limits.rs :281, normalise.rs :418, payload.rs :770 (case tables)\n  - segment.rs :298, :299, :300 (FITS, TRANSITIONS, MOTIONS by name); :445 and :446 (SHAPES by name, checked here once); :530 (45h: non-empty)\n  - slide.rs :670 (a case table); :673 (SHAPES restated: it goes); :931 and :932 (45h: non-empty)\n  - theme.rs :550 (popupart's fonts: non-empty); :600 and :740 (case tables); :601 and :741 (refusing rows non-empty, \"section 5\" goes with them); :604, :605, :744, :745 (building rows non-empty)\n- opt/prez/crate/test/acceptance.sh :1044 (at least one ok line and no FAIL line) and :1077 (the extract opens with `chrome() {` and closes with `}`)\n- opt/prez/crate/test/at04-runtime-probe.mjs :106 (the slides found are not zero; the deck's written count goes) and :142 (the keycaps match the binding table's applicable entries by label, and are not empty)\n\nThe ledger is ~/Devel/scratch/utilz-dc/cic/ledger-narrowed-a03a14b2.tsv (sha256 f56910858c60); its note column gives each row's fix. Body v5's Fix section is the contract, and it wins where a note says more (eg acceptance.sh:1044 and at04:106). Runs, the smallest that prove it: prez built in your tree, then `cargo test -p showreel` and `acceptance.sh AT04 AT15 AT17`, with the bytes and hashes to vc first. dc reruns the finder on the swept tree after the last landing.",
+      "fyi": false,
+      "recorded_at": "2026-10-27T15:25:09.175Z"
     }
   ],
   "handled": [
