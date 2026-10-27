@@ -1,0 +1,16 @@
+{
+  "id": "01M5YG4JKEYB0ZVABSGPBCSK87",
+  "ts": "2026-10-27T10:57:44.558Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 71,
+    "text": "Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Approved by vc: candidate fa2aa2eb in wt-0120, on 0117's patch as a local commit on 14ae5b9d; bank 0120-bank; its light run asked as 01M5YFZYSE9398SBH66KRBHMGF, at molt-vc's desk; rebased onto 0117's landing when it lands, and lands after 0117 on vc's word."
+  }
+}
