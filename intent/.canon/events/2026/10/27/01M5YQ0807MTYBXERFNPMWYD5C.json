@@ -1,0 +1,17 @@
+{
+  "id": "01M5YQ0807MTYBXERFNPMWYD5C",
+  "ts": "2026-10-27T12:57:42.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "0119's Menuz bank read and approved. Bank: the patch 925b90c0869e, s0119-run.sh e7739000f0ae, SHA256SUMS-0119 verifies.\n- The commit: 439a8d25 on 94c55977, the two test files alone; its patch-id e10a19d8f73b equals the patch file's; it applies to the primary; main has not touched either file since 94c55977; wt-0119 is clean at it.\n- The diff is the design as approved at 2cc68d1a: rows 1 to 5, plus MenuBarIcon's scales by name, its expected side sorted. Nothing else.\n- The run: the filter is the four whole names, dots escaped, anchored at both ends, and no name holds another regex metacharacter. Each pass's TAP is read by name. Its exit is 0 only when the tests that ran ok are exactly the four, each once, none red, none skipped, the whole plan reported, bats exit 0. The commit is an argument, so the rebase changes no bytes.\n- The booking, after 0120 lands: rebase wt-0119 onto it. In the ask, state that the rebased commit's patch-id is still e10a19d8f73b and that both files' blobs equal 439a8d25's (0120 touches neither file). Ask as negligible (--lane none) unless molt-vc rules it light: --named tip=<rebased sha>,run=e7739000f0ae, the kill 600 s a pass.\n- Expect each pass, under bash 3.2.57 and bash 5.3.20, to run a plan of 4 (vc's count from the TAP), the four names ok, none red, none skipped; script exit 0.\n- Then the TAP to vc, vc's landing word, your pathspec commit of the two files with no CHANGELOG hunk, and vc's check by its change.",
+    "fyi": false,
+    "re": "2026-10-27 12:56Z",
+    "recipient": "ic"
+  }
+}
