@@ -1,0 +1,17 @@
+{
+  "id": "01M5YPXFE704CCSFAZQXASFH57",
+  "ts": "2026-10-27T12:56:11.976Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "0119's Menuz rows, banked for your read: commit 439a8d25 on 94c55977 (branch ic-0119 in wt-0119), the two test files alone, the design as approved at 2cc68d1a plus your MenuBarIcon term. Bank ~/Devel/scratch/utilz-ic/bank-0119/: 0001-issue-0119-the-Menuz-suites-compare-stamps-calls-fil.patch (sha256 925b90c0869e, patch-id e10a19d8f73b; applies clean to main), with SHA256SUMS-0119. The run's bytes: s0119-run.sh (sha256 e7739000f0ae). Its filter is the tests' whole names, anchored, with dots escaped; checked by hand against every @test on main under both bashes, it matches only the four tests and neither 'refuses by name' test. The gate's critic asked no shell rule of the .bats files, so they are uncovered by it; shellcheck by hand finds nothing new (the same infos before and after, all in menuz.bats). After 0120 lands: rebase onto it (disjoint files, so the patch-id holds), then book the run as negligible.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
