@@ -275,18 +275,23 @@ run_macos() {
   fake_rsvg
   run_macos app-icons
   [ "$status" -eq 0 ] || fail "exit $status: $output"
-  local px
+  local px call calls=""
   for px in 16 32 64 128 256 512 1024; do
-    grep -qx -- "-w $px -h $px $DESIGN/menuz.svg -o $ASSETS/AppIcon.appiconset/icon_$px.png" "$FAKES/rsvg-convert.calls" ||
+    call="-w $px -h $px $DESIGN/menuz.svg -o $ASSETS/AppIcon.appiconset/icon_$px.png"
+    grep -qx -- "$call" "$FAKES/rsvg-convert.calls" ||
       fail "no call for icon_$px: $(cat "$FAKES/rsvg-convert.calls")"
+    calls="$calls$call"$'\n'
     [ -s "$ASSETS/AppIcon.appiconset/icon_$px.png" ]
   done
   for px in 18 36 54; do
-    grep -qx -- "-w $px -h $px $DESIGN/menuz-mark.svg -o $ASSETS/MenuBarIcon.imageset/menubar_$px.png" "$FAKES/rsvg-convert.calls" ||
+    call="-w $px -h $px $DESIGN/menuz-mark.svg -o $ASSETS/MenuBarIcon.imageset/menubar_$px.png"
+    grep -qx -- "$call" "$FAKES/rsvg-convert.calls" ||
       fail "no call for menubar_$px: $(cat "$FAKES/rsvg-convert.calls")"
+    calls="$calls$call"$'\n'
     [ -s "$ASSETS/MenuBarIcon.imageset/menubar_$px.png" ]
   done
-  [ "$(wc -l <"$FAKES/rsvg-convert.calls")" -eq 10 ]
+  [ "$(sort "$FAKES/rsvg-convert.calls")" = "$(printf '%s' "$calls" | sort)" ] ||
+    fail "calls beyond the listed sizes: $(cat "$FAKES/rsvg-convert.calls")"
   [[ "$output" == *"wrote AppIcon (7 sizes) + MenuBarIcon (template, 3 scales) to native/macos/Menuz/Menuz/Assets.xcassets"* ]]
 }
 
@@ -295,15 +300,25 @@ run_macos() {
   run_macos app-icons
   [ "$status" -eq 0 ] || fail "exit $status: $output"
   [ -f "$ASSETS/Contents.json" ]
-  local set name named=0
+  local set name named
   for set in AppIcon.appiconset MenuBarIcon.imageset; do
+    named=""
     while IFS= read -r name; do
       [ -s "$ASSETS/$set/$name" ] || fail "$set/Contents.json names $name, which was not written"
-      named=$((named + 1))
+      named="$named$name"$'\n'
     done < <(grep -o '"filename" : "[^"]*"' "$ASSETS/$set/Contents.json" | sed 's/.*: "//; s/"$//')
+    [ -n "$named" ] || fail "$set/Contents.json names no file"
+    [ "$(printf '%s' "$named" | sort -u)" = "$(cd "$ASSETS/$set" && printf '%s\n' *.png | sort)" ] ||
+      fail "$set holds a PNG its Contents.json does not name: $(cd "$ASSETS/$set" && printf '%s ' *.png)"
   done
-  [ "$named" -eq 13 ]
-  [ "$(grep -c '"idiom" : "mac"' "$ASSETS/AppIcon.appiconset/Contents.json")" -eq 10 ]
+  local size slots="" have
+  for size in 16x16 32x32 128x128 256x256 512x512; do
+    slots="$slots$size 1x"$'\n'"$size 2x"$'\n'
+  done
+  have="$(grep '"idiom" : "mac"' "$ASSETS/AppIcon.appiconset/Contents.json" | sed 's/.*"scale" : "\([^"]*\)", "size" : "\([^"]*\)".*/\2 \1/' | sort)"
+  [ "$have" = "$(printf '%s' "$slots" | sort)" ] || fail "AppIcon's mac slots: $have"
+  have="$(grep '"idiom" : "universal"' "$ASSETS/MenuBarIcon.imageset/Contents.json" | sed 's/.*"scale" : "\([^"]*\)".*/\1/' | sort)"
+  [ "$have" = "$(printf '%s\n' 1x 2x 3x | sort)" ] || fail "MenuBarIcon's scales: $have"
   grep -qF '"template-rendering-intent" : "template"' "$ASSETS/MenuBarIcon.imageset/Contents.json"
 }
 
@@ -413,7 +428,7 @@ run_macos() {
   run_macos doctor
   [[ "$output" == *"Developer ID          1 found, team TEAM123"* ]] || fail "$output"
   [[ "$output" == *"test-sign             signs and verifies"* ]] || fail "$output"
-  [ "$(printf '%s\n' "$output" | grep -c 'PRESENT$')" -eq 3 ]
+  [ "$(printf '%s\n' "$output" | sed -n 's/^ *\([^ ]*\) .*PRESENT$/\1/p' | sort)" = "$(printf '%s\n' APPLE_ID APPLE_APP_PASSWORD APPLE_TEAM_ID | sort)" ] || fail "$output"
   [[ "$output" != *"hunter2-secret"* && "$output" != *"dev@example.com"* ]]
   [[ "$output" != *"$IDENTITY_NAME"* ]]
   grep -q -- "--sign $IDENTITY_NAME " "$FAKES/codesign.calls"

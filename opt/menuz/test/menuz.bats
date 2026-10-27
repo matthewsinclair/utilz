@@ -908,14 +908,15 @@ app_count() {
   source_home
   run_src_menuz stamps
   assert_success
-  local tree
+  local tree names
   tree="$(printf '%s\n' "$output" | sed -n 's/^MENUZ_SOURCE_TREE=//p')"
   [[ "$tree" =~ ^[0-9a-f]{40}$ ]] || false
   assert_output_contains "MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION")"
   assert_output_contains "MENUZ_BUILD=1"
   assert_output_contains "MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short=8 HEAD)"
   assert_output_contains "MENUZ_KIND=dev"
-  [[ "$(printf '%s\n' "$output" | grep -c '^MENUZ_[A-Z_]*=')" -eq 5 ]] || false
+  names="$(printf '%s\n' "$output" | sed -n 's/^\(MENUZ_[A-Z_]*\)=.*/\1/p' | sort)"
+  [[ "$names" == "$(printf '%s\n' MENUZ_SOURCE_TREE MENUZ_VERSION MENUZ_BUILD MENUZ_COMMIT MENUZ_KIND | sort)" ]] || false
   # The tree's stamp is the one status compares (WP-02's source_stamp).
   make_app "$INSTALLED" 0.1.0 "$tree"
   run_src_menuz status
