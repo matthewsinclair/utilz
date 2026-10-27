@@ -88,7 +88,7 @@ your shell config, delete them.
 
 ```bash
 utilz help                    # Show framework help
-utilz help <utility>          # Show utility-specific help
+utilz help <utility|verb>     # Show a utility's or a verb's help
 utilz list                    # List installed utilities
 utilz version                 # Show framework version
 utilz doctor                  # Run diagnostics

@@ -95,7 +95,8 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
 
   case "$COMMAND" in
     help|-h|--help)
-      # Show help for utilz or a specific utility.
+      # Show help for utilz, a specific utility, or a verb of utilz's own: a
+      # verb's help is its section of help/utilz.md (issue 0120).
       #
       # The flag spellings are aliases, not a second code path: every utility
       # accepts -h/--help, and the nested `integration` and `emacs` verbs below
@@ -254,17 +255,17 @@ EOF
 
         echo ""
         echo "Available commands:"
-        echo "  utilz help [utility]     - Show help"
-        echo "  utilz doctor             - Run diagnostics"
-        echo "  utilz list               - List available utilities"
-        echo "  utilz version            - Show version"
-        echo "  utilz upgrade            - Upgrade the tree this runs from"
-        echo "  utilz use [dev|opt|brew] - Switch which tree the links serve"
+        echo "  utilz help [utility|verb] - Show help"
+        echo "  utilz doctor              - Run diagnostics"
+        echo "  utilz list                - List available utilities"
+        echo "  utilz version             - Show version"
+        echo "  utilz upgrade             - Upgrade the tree this runs from"
+        echo "  utilz use [dev|opt|brew]  - Switch which tree the links serve"
         echo ""
         echo "In a dev checkout (a clone of the repository):"
-        echo "  utilz test [utility]     - Run tests"
-        echo "  utilz generate <name>    - Generate new utility"
-        echo "  utilz install [--force]  - Publish the checkout to opt"
+        echo "  utilz test [utility]      - Run tests"
+        echo "  utilz generate <name>     - Generate new utility"
+        echo "  utilz install [--force]   - Publish the checkout to opt"
         echo ""
         echo "Installed utilities:"
 

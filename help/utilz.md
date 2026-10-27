@@ -60,9 +60,9 @@ mdagg --help
 
 ## Commands
 
-### `utilz help [utility]`
+### `utilz help [utility|verb]`
 
-Show help for Utilz or a specific utility.
+Show help for Utilz, a specific utility, or a verb on this page: a verb shows its own section. A name that is neither says where to look.
 
 ```bash
 # Show this help
@@ -70,9 +70,12 @@ utilz help
 
 # Show help for mdagg utility
 utilz help mdagg
+
+# Show the section on utilz use
+utilz help use
 ```
 
-`-h` and `--help` are accepted as aliases, and take the same optional utility argument:
+`-h` and `--help` are accepted as aliases, and take the same optional utility or verb argument:
 
 ```bash
 utilz --help
@@ -210,7 +213,7 @@ Future integration targets (VSCode, Zed, Vim) are expected to land as parallel `
 
 ## Commands for a dev checkout
 
-These are the maintainer's, in a dev checkout (a clone of the repository). `utilz test` and `utilz generate` work there too.
+These are the maintainer's, in a dev checkout (a clone of the repository).
 
 ### `utilz install`
 
@@ -229,6 +232,28 @@ Where it publishes is `UTILZ_INSTALL_PREFIX`, the opt install's directory: set i
 `--force` is the one republish, and it replaces only a prefix whose manifest Utilz wrote, an old one included. install never touches the links in `~/.local/bin`: switching the shell is `utilz use`.
 
 **A Homebrew keg is brew's.** The formula publishes with `utilz install --managed-by brew`, which records that in the manifest's header. From a keg or onto one, `install` refuses and names `brew upgrade utilz`, and `utilz test` names a clone of the repository to run the suites from.
+
+### `utilz test [utility]`
+
+Run the test suites: every suite with no name, a utility's own with its name, and the framework's own with `utilz test utilz`.
+
+```bash
+utilz test                    # every suite
+utilz test mdagg              # mdagg's suite
+utilz test utilz              # the framework's own suite
+```
+
+It needs `bats`, and it refuses in an install: the suites rewrite `bin/`, which is exactly what the install's manifest checksums, so an install would report drift nobody caused. The refusal says where to run the suites instead.
+
+### `utilz generate <name> [description] [author]`
+
+Scaffold a new utility: its directory under `opt/`, with its implementation, `VERSION`, metadata, README and tests; its page in `help/`; and its link in `bin/`. The author defaults to git's `user.name`.
+
+```bash
+utilz generate mytool "Does something useful"
+```
+
+It stamps `utilz_version` from the framework's own `VERSION` (major only), so a generated utility is always compatible with the framework that generated it.
 
 ---
 

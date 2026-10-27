@@ -218,35 +218,88 @@ yaml_type_words() {
   esac
 }
 
-# Show help for a utility
+# Show help for a utility, or for a verb of utilz's own (issue 0120). A
+# utility's page is help/<name>.md. A verb has none: its help is its section of
+# help/utilz.md, so `utilz help <verb>` renders that section alone and nothing
+# is copied. Any other name is refused with no path in the answer, unless it is
+# a utility missing its page, which is a broken tree that the path explains.
 show_help() {
   local util="${1:-utilz}"
   local help_file="$UTILZ_HOME/help/$util.md"
+  local section dir rc=0
 
   if [[ -f "$help_file" ]]; then
-    # STDIN IS REDIRECTED, AND THAT IS THE WHOLE OF A DOCUMENTED HANG.
-    # A bare `glow "$file"` with a terminal on stdin hangs -- this project has
-    # it recorded twice from real incidents, once as "utilz help <anything>
-    # HANGS", once as a 120-second accident while measuring it. The renderer is
-    # given a FILE; it has no business reading stdin, so closing it costs
-    # nothing and removes the hazard.
-    #
-    # It is NOT about the pager. `-p` was suspected and measured away: glow's
-    # pager is opt-in and injecting it changed nothing. Two of us reached the
-    # same wrong conclusion about `-p` from two different wrong mechanisms and
-    # nearly shipped agreeing -- the defect was underneath the thing we were
-    # both discussing. ST0016/D5.
-    if command -v glow >/dev/null 2>&1; then
-      glow "$help_file" </dev/null
-    elif command -v bat >/dev/null 2>&1; then
-      bat --style=plain --language=markdown "$help_file" </dev/null
-    else
-      cat "$help_file"
-    fi
-  else
-    error "Help file not found: $help_file"
-    return 1
+    render_help "$help_file"
+    return
   fi
+
+  section=$(help_section "$util" "$UTILZ_HOME/help/utilz.md")
+  if [[ -n "$section" ]]; then
+    # The section is rendered as a file named for the verb, so every renderer
+    # reads it as the Markdown it is. The dir goes as soon as the render
+    # returns, with no trap, since an EXIT trap can run after this function's
+    # locals are gone; the template keeps it in TMPDIR, which macOS mktemp
+    # ignores without one.
+    dir=$(mktemp -d "${TMPDIR:-/tmp}/utilz-help.XXXXXX") || return 1
+    { printf '%s\n' "$section" >"$dir/$util.md" && render_help "$dir/$util.md"; } || rc=$?
+    rm -rf "$dir"
+    return "$rc"
+  fi
+
+  if [[ -f "$UTILZ_HOME/opt/$util/$util.yaml" ]]; then
+    error "Help file not found: $help_file"
+  else
+    error "utilz help has nothing on $util: 'utilz list' names the utilities, and 'utilz help' describes the verbs"
+  fi
+  return 1
+}
+
+# Render a Markdown file with the best renderer on PATH: glow, then bat, then
+# cat.
+#
+# STDIN IS REDIRECTED, AND THAT IS THE WHOLE OF A DOCUMENTED HANG. A bare
+# `glow "$file"` with a terminal on stdin hangs -- this project has it on
+# record from real incidents: "utilz help <anything> HANGS", and a hang while
+# measuring it. The renderer is given a FILE; it has no business reading
+# stdin, so closing it costs nothing and removes the hazard.
+#
+# It is NOT about the pager. `-p` was suspected and measured away: glow's pager
+# is opt-in and injecting it changed nothing. The same wrong conclusion about
+# `-p` was reached by separate wrong mechanisms and nearly shipped -- the
+# defect was underneath the thing being discussed. ST0016/D5.
+render_help() {
+  local help_file="$1"
+
+  if command -v glow >/dev/null 2>&1; then
+    glow "$help_file" </dev/null
+  elif command -v bat >/dev/null 2>&1; then
+    bat --style=plain --language=markdown "$help_file" </dev/null
+  else
+    cat "$help_file"
+  fi
+}
+
+# The `utilz <verb>` section of a help page, from its heading to the next
+# heading of the same or a higher level; nothing when the page has none. A `#`
+# line inside a code fence is a shell comment, not a heading, so fences are
+# tracked, and the verb is compared as a word, never as a pattern.
+help_section() {
+  local verb="$1" page="$2"
+
+  [[ -f "$page" ]] || return 0
+  awk -v verb="$verb" '
+    /^(```|~~~)/ { fence = !fence }
+    !fence && /^#+ / {
+      level = index($0, " ") - 1
+      if (inside && level <= top) exit
+      if (!inside && index($0, "### `utilz ") == 1) {
+        word = substr($0, length("### `utilz ") + 1)
+        sub(/[ `].*/, "", word)
+        if (word == verb) { inside = 1; top = level }
+      }
+    }
+    inside { print }
+  ' "$page"
 }
 
 # Show version

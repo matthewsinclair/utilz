@@ -42,7 +42,7 @@ Start here if you want to build your own utilities with Utilz:
 ### Framework Commands
 
 ```bash
-utilz help [utility]          # Show help documentation
+utilz help [utility|verb]     # Show help documentation
 utilz list                    # List available utilities
 utilz version                 # Show framework version
 utilz doctor                  # Run system diagnostics

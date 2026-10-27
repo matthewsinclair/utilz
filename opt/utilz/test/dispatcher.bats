@@ -39,10 +39,88 @@ load "test_helper.bash"
   assert_output_contains "mdagg"
 }
 
-@test "utilz help <unknown> - shows error for unknown utility" {
+@test "utilz help <verb> - prints that verb's section of help/utilz.md, and leaves no temp dir (issue 0120)" {
+  # A verb's help is its section of help/utilz.md, rendered alone: use's runs
+  # from its heading to the line before upgrade's, which is absent. glow and
+  # bat are hidden, so the section comes back as the Markdown it is. It is
+  # written to a temp dir for the renderer and removed straight after; macOS
+  # mktemp writes to the system temp dir whatever TMPDIR says unless given a
+  # template, so that dir is read for what the call left, as well as TMPDIR.
+  local page="$UTILZ_HOME/help/utilz.md" start end farm tmp sys before after
+  start=$(grep -n '^### `utilz use ' "$page" | cut -d: -f1 || true)
+  end=$(grep -n '^### `utilz upgrade' "$page" | cut -d: -f1 || true)
+  [[ -n "$start" && -n "$end" && "$end" -gt "$start" ]] || fail "use's section is not followed by upgrade's in $page -- the test's reading is wrong, not the tree"
+  farm=$(path_without glow bat)
+  tmp="$BATS_TEST_TMPDIR/tmpdir"
+  mkdir "$tmp"
+  sys=$(getconf DARWIN_USER_TEMP_DIR 2>/dev/null || true)
+  if [[ -n "$sys" ]]; then
+    before=$(find "$sys" -maxdepth 1 -name 'utilz-help.*' | LC_ALL=C sort)
+  fi
+  run env PATH="$farm" TMPDIR="$tmp" "$UTILZ_BIN_DIR/utilz" help use
+  assert_success
+  assert_output "$(sed -n "${start},$((end - 1))p" "$page")"
+  [[ -z "$(ls -A "$tmp")" ]] || fail "left in TMPDIR: $(ls -A "$tmp")"
+  if [[ -n "$sys" ]]; then
+    after=$(find "$sys" -maxdepth 1 -name 'utilz-help.*' | LC_ALL=C sort)
+    [[ "$after" == "$before" ]] || fail "left in $sys: $after"
+  fi
+}
+
+@test "utilz help <verb> - a # comment inside a code fence does not end the section (issue 0120)" {
+  # help's own section shows shell comments in a fence. Read as headings, the
+  # first of them would end the section; read as code, the section runs to the
+  # line before doctor's heading. use's section has none, so the row above
+  # cannot show this.
+  local page="$UTILZ_HOME/help/utilz.md" start end farm
+  start=$(grep -n '^### `utilz help ' "$page" | cut -d: -f1 || true)
+  end=$(grep -n '^### `utilz doctor' "$page" | cut -d: -f1 || true)
+  [[ -n "$start" && -n "$end" && "$end" -gt "$start" ]] || fail "help's section is not followed by doctor's in $page -- the test's reading is wrong, not the tree"
+  sed -n "${start},${end}p" "$page" | grep -q '^# ' || fail "help's section holds no # line in a fence -- the row cannot fail"
+  farm=$(path_without glow bat)
+  run env PATH="$farm" "$UTILZ_BIN_DIR/utilz" help help
+  assert_success
+  assert_output "$(sed -n "${start},$((end - 1))p" "$page")"
+}
+
+@test "utilz help <verb> - every verb heading in help/utilz.md answers with its section (issue 0120)" {
+  # The verbs are read from the page's headings, so a verb gets its help by
+  # getting a section, with no list of verbs to keep.
+  local page="$UTILZ_HOME/help/utilz.md" farm heading verb headings=()
+  while IFS= read -r heading; do
+    headings+=("$heading")
+  done < <(grep '^### `utilz ' "$page" || true)
+  [[ ${#headings[@]} -gt 0 ]] || fail "no verb heading in $page -- the grep is wrong, not the tree"
+  farm=$(path_without glow bat)
+  for heading in "${headings[@]}"; do
+    read -r _ _ verb _ <<<"${heading//\`/ }"
+    run env PATH="$farm" "$UTILZ_BIN_DIR/utilz" help "$verb"
+    [[ "$status" -eq 0 ]] || fail "utilz help $verb exited $status: $output"
+    [[ "${lines[0]}" == "$heading" ]] || fail "utilz help $verb opened with '${lines[0]}', not '$heading'"
+  done
+}
+
+@test "utilz help <unknown> - says where to look, with no path in it (issue 0120)" {
+  # A name that is neither a utility nor a verb was answered with the path of
+  # a page nobody wrote. No "/" at all, so no path of any kind is in it.
   run_utilz help nonexistent
-  assert_failure
-  assert_output_contains "not found"
+  assert_exit_code 1
+  assert_output_contains "utilz help has nothing on nonexistent"
+  assert_output_contains "'utilz list' names the utilities"
+  assert_output_contains "'utilz help' describes the verbs"
+  refute_output_contains "/"
+}
+
+@test "utilz help <utility> - a utility whose page is missing names that page (issue 0120)" {
+  # Its opt/<name>/<name>.yaml makes it a utility, so a missing page is a
+  # broken tree and the page's path is the answer. The tree is a fake, since
+  # the real one has every page; show_help runs strict, as bin/utilz runs it.
+  local home="$BATS_TEST_TMPDIR/home"
+  mkdir -p "$home/opt/nopagez"
+  printf 'name: nopagez\n' >"$home/opt/nopagez/nopagez.yaml"
+  run env UTILZ_HOME="$home" bash -c "set -euo pipefail; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; show_help nopagez"
+  assert_exit_code 1
+  assert_output_contains "Help file not found: $home/help/nopagez.md"
 }
 
 @test "utilz doctor - runs diagnostics" {
