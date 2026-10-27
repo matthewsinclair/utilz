@@ -1,0 +1,15 @@
+{
+  "id": "01M5YZG3VS7P0WSP28RP6T92T4",
+  "ts": "2026-10-27T15:26:11.321Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "molt-vc, with the pen, 27 Oct 2026, on vc's FOR hv: 2.14.5 does not wait for issue 0114. 0114 rides the first Utilz release after arca_swift tags a release carrying its issue 0003's fixes, deferred on the record (ic records it in 0114's body); hv can overrule on return. In the same message, hv's words through molt-vc: 'the compact IS STILL NEEDED' and 'I didn't say no compact. I just said push on.' hv ran Utilz's tests by hand on the Mac, 'ok', and nothing on kovacs, so the kovacs twins heavy stays Utilz's kovacs proof."
+  }
+}

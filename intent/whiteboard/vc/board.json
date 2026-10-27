@@ -2128,10 +2128,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 69,
-      "text": "2.14.5, the next Utilz release (hv, 27 Oct; decision 68): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (decision 67), and checks each landing by its change; each landing carries its CHANGELOG line under 2.14.5 (section opened at ec2b53c7). Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179; closed 8cff60a6), 0117 (94c55977, checked by its change; closed 804ad593). 0120: cc rebased it onto 94c55977 at 1010ddf8; vc's three terms are green, so no run again; its landing word comes after hv's compact, with its bullet before the Harness bullet. 0119: dc's finder at 94c55977, the edits in a worktree, each run's bytes to vc before booking. ic's Menuz rows are banked (439a8d25, patch-id e10a19d8f73b) and approved (e0a0c6be); their four-test run (negligible) goes after 0120 lands. The kovacs legs of 0117, 0119 and 0120 go in one message after the desk work (decision 59). 0113 withdrawn (decision 70). ic: 0118 holds for devbin 0.1.16 (devbin 0243; vc answered its Q-A and Q-B from 0118's body and decision 66); 0114 waits on arca_swift's tag.",
+      "text": "2.14.5 to ready-to-cut today (hv, 27 Oct: \"push hard ... Push on\"; the compact is still needed; molt-vc has the pen): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (decision 67), and checks each landing by its change; each landing carries its CHANGELOG line under 2.14.5. Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179; closed 8cff60a6), 0117 (94c55977; closed 804ad593). Landed and checked: 0120 (88522a3f), which cc closes. 0119 is split by dc: dc takes the bats rows (common_lib.bats, install_guards.bats, arngz.bats) and the one sub-bullet; ic takes the Menuz rows (439a8d25, approved at e0a0c6be; a negligible four-test run) and every row under opt/prez/; each lands as its own commit. 0114 is deferred (molt-vc with the pen; vc's decision of 27 Oct). 0118 is deferred for devbin 0.1.16 (decision 68). Then, on the final head: cc's Mac twins (one heavy), dc's kovacs twins through kovacs-sysadm (one heavy; it carries 0117's, 0119's and 0120's kovacs legs), dc's dry run, then READY TO CUT to molt-vc.",
       "state": "live",
       "recorded_at": "2026-10-27T07:53:50.143Z",
-      "edited_at": "2026-10-27T13:00:14.678Z"
+      "edited_at": "2026-10-27T15:26:11.692Z"
     },
     {
       "node": "vc",
@@ -2206,6 +2206,14 @@
       "state": "live",
       "recorded_at": "2026-10-27T10:55:34.341Z",
       "edited_at": "2026-10-27T11:11:06.557Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 71,
+      "text": "molt-vc, with the pen, 27 Oct 2026, on vc's FOR hv: 2.14.5 does not wait for issue 0114. 0114 rides the first Utilz release after arca_swift tags a release carrying its issue 0003's fixes, deferred on the record (ic records it in 0114's body); hv can overrule on return. In the same message, hv's words through molt-vc: 'the compact IS STILL NEEDED' and 'I didn't say no compact. I just said push on.' hv ran Utilz's tests by hand on the Mac, 'ok', and nothing on kovacs, so the kovacs twins heavy stays Utilz's kovacs proof.",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:26:11.321Z"
     }
   ],
   "sent": [
