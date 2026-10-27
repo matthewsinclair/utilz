@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 10:24Z
+heartbeat_at: 2026-10-27 10:28Z
 status: active
-focus: "0115 green at a8fe6b84 (01M5YA0E2HMX377DG3JNW2P648 released), the landing by path on vc's word; 0118's single body edit after 0115 lands (v2 drafted outside the tree); 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
-claims: [ISSUE:0118, ISSUE:0115]
+focus: "0115 landed at 14103179 and closed at 8cff60a6 (vc checked it by its change); 0118's single body edit, its v2 diff with vc for the read; 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
+claims: [ISSUE:0118]
 ---
 
 # Interface Claude (ic)
@@ -14,7 +14,6 @@ claims: [ISSUE:0118, ISSUE:0115]
 ## DOING
 
 - Issue 0118 (owner ic): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today. The devbin half is devbin 0243, for devbin 0.1.16. hv's rulings of 27 Oct: 0118 rides the first Utilz release after 0.1.16 is cut and vendored, and SHA256SUMS and the smaller step changes are accepted. Once 0115 lands, one body edit carries the rulings, 0243 and the publish-end drop, with its diff to vc. No code until then, and no run until booked through vc. (edited)
-- Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/. Its light run is green (01M5YA0E2HMX377DG3JNW2P648, released 10:23Z, the result with vc). The landing by path, with its CHANGELOG line, waits for vc's word. (edited)
 
 ## TODO
 
