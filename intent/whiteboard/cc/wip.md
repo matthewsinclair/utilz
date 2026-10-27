@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 08:02Z
+heartbeat_at: 2026-10-27 08:13Z
 status: active
-focus: "Next release's work, on hv's word (vc's decision 65): issue 0113 (widened by vc: the suites, docs/, help/ and README.md) and todo 49 as an issue, each to vc for a read before any edit; drafts banked in ~/Devel/scratch/utilz-cc/0113-bank and todo49-bank. Folded for hv's compact, not released."
+focus: "Next release's work, on hv's word (vc's decision 65): todo 49 as an issue, filed whole with its design, and issue 0113's plan (widened by vc: the suites, docs/, help/ and README.md) written into its body, each to vc for a read before any edit; picked up after hv's compact"
 claims: []
 ---
 
