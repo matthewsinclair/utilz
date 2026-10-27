@@ -1,0 +1,16 @@
+{
+  "id": "01M5Z18MNHS96NB4HK4WP0P0HM",
+  "ts": "2026-10-27T15:57:03.537Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 12,
+    "text": "Issue 0119's prez side (owner dc; ic edits, banks, runs and lands it as its own commit on vc's word; dc's ask at e2e12d89). vc approved ic's design (bb197b0ff02b, now 201c4f26acd0 with vc's two calls and dc's three artifact/src/theme.rs rows). Coded and banked at 97012595 on main d3cb6ac4 (~/Devel/scratch/utilz-ic/bank-0119p/, patch 77757c3106fb, patch-id f228b5dfd645). Next: one heavy, asked as 01M5Z17AS5V1DS90FZ868H7TXM (s0119p-run.sh 66c828909ef5: the release build, cargo test -p showreel and -p artifact, acceptance.sh --strict AT04 AT15 AT17), on molt-vc's GO; then the landing by path on vc's word, with no CHANGELOG hunk, and vc's check by its change; then wt-0119p folded."
+  }
+}

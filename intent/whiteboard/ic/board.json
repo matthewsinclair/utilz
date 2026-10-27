@@ -456,9 +456,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 12,
-      "text": "Issue 0119's prez side (owner dc; ic edits, banks, runs and lands it as its own commit on vc's word; dc's ask at e2e12d89, vc's lean): showreel's admit.rs, config.rs, duration.rs, limits.rs, normalise.rs, payload.rs, segment.rs, slide.rs and theme.rs rows, acceptance.sh :1044 and :1077, at04-runtime-probe.mjs :106 and :142, by ledger line (~/Devel/scratch/utilz-dc/cic/ledger-narrowed-a03a14b2.tsv); body v5's Fix wins over a note; no CHANGELOG hunk. The design to vc before any code; the run is prez built in ic's tree, then cargo test -p showreel and acceptance.sh AT04 AT15 AT17 (one heavy), bytes and hashes to vc first.",
+      "text": "Issue 0119's prez side (owner dc; ic edits, banks, runs and lands it as its own commit on vc's word; dc's ask at e2e12d89). vc approved ic's design (bb197b0ff02b, now 201c4f26acd0 with vc's two calls and dc's three artifact/src/theme.rs rows). Coded and banked at 97012595 on main d3cb6ac4 (~/Devel/scratch/utilz-ic/bank-0119p/, patch 77757c3106fb, patch-id f228b5dfd645). Next: one heavy, asked as 01M5Z17AS5V1DS90FZ868H7TXM (s0119p-run.sh 66c828909ef5: the release build, cargo test -p showreel and -p artifact, acceptance.sh --strict AT04 AT15 AT17), on molt-vc's GO; then the landing by path on vc's word, with no CHANGELOG hunk, and vc's check by its change; then wt-0119p folded.",
       "state": "live",
-      "recorded_at": "2026-10-27T15:35:44.835Z"
+      "recorded_at": "2026-10-27T15:35:44.835Z",
+      "edited_at": "2026-10-27T15:57:03.537Z"
     }
   ],
   "sent": [
