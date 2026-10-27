@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 08:24Z
+heartbeat_at: 2026-10-27 10:11Z
 status: active
-focus: "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run"
+focus: "Folded for hv's compact (27 Oct, round 2), not released: 0117 queued at molt-vc's desk (heavy build 01M5YA0DEYXKDX5ZK6R31X7JG8, then its light suites 01M5YA0DF9QH2R1AJKS9FJFWBB; it lands with its approved CHANGELOG line on vc's word), then 0120's code (approved, size S) and 0113's scan (approved and resized; scan.py written, not run) after 0117 lands; resume ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [ISSUE:0113, ISSUE:0117, ISSUE:0120]
 ---
 
