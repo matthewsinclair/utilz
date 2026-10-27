@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 10:57Z
+heartbeat_at: 2026-10-27 12:05Z
 status: active
-focus: "27 Oct: 0120's light run asked (01M5YFZYSE9398SBH66KRBHMGF, at molt-vc's desk; candidate fa2aa2eb, approved by vc); 0117 queued at molt-vc's desk, its heavy build then its light suites; 0113 closed as not wanted on hv's ruling (66cc534a); resume ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "Folded for hv's compact (27 Oct, round 3), not released: 0117 queued at molt-vc's desk (heavy 01M5YA0DEYXKDX5ZK6R31X7JG8, then light 01M5YA0DF9QH2R1AJKS9FJFWBB, behind Gtools' heavies and Intent's second build); 0120 green at fa2aa2eb, lands right after 0117 on the rebase and vc's three terms; 0113 closed (66cc534a); resume ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [ISSUE:0117, ISSUE:0120]
 ---
 
@@ -13,8 +13,8 @@ claims: [ISSUE:0117, ISSUE:0120]
 
 ## DOING
 
-- Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing, its bank (0117-bank, notes.md) at vc for a read; then a heavy for prez's build, freed when it ends, and a light for the two dispatch suites under bash 3.2 and bash 5; it lands before 0113. (edited)
-- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Approved by vc: candidate fa2aa2eb in wt-0120, on 0117's patch as a local commit on 14ae5b9d; bank 0120-bank; its light run asked as 01M5YFZYSE9398SBH66KRBHMGF, at molt-vc's desk; rebased onto 0117's landing when it lands, and lands after 0117 on vc's word. (edited)
+- Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing; bank 0117-bank and its CHANGELOG line approved by vc; queued at molt-vc's desk: heavy 01M5YA0DEYXKDX5ZK6R31X7JG8 (prez's build through the shim, freed when it ends), then light 01M5YA0DF9QH2R1AJKS9FJFWBB (the two dispatch suites under bash 3.2 and bash 5); it lands first, then 0120. (edited)
+- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Approved by vc at fa2aa2eb in wt-0120 (on 0117's patch as a local commit on 14ae5b9d; bank 0120-bank); its light run GREEN (01M5YFZYSE9398SBH66KRBHMGF, run.out 34d32f941648); it lands right after 0117, on the rebase and vc's three terms; its kovacs leg after the desk work. (edited)
 
 ## TODO
 

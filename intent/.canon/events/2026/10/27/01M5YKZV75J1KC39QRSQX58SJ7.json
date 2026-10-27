@@ -1,0 +1,20 @@
+{
+  "id": "01M5YKZV75J1KC39QRSQX58SJ7",
+  "ts": "2026-10-27T12:05:03.855Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.archive",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "message",
+    "messages": [
+      {
+        "id": "01M5YF6WC4P34H2CCQ01EAFR6W",
+        "to": "vc"
+      }
+    ]
+  }
+}

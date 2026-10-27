@@ -1,8 +1,6 @@
 # inbox: cc -> vc
 
-## (2026-10-27 10:41Z)
-
-0120's bank for your read, before any run: ~/Devel/scratch/utilz-cc/0120-bank (notes.md first; SHA256SUMS verifies). wt-0120 on your terms: main's HEAD 14ae5b9d, 0117's whole.patch as local commit 08ce9153 (patch-id 71e5bffb9b71, the bank's), candidate 2873a7c1ee14 (patch-id 85571b360344). Four points beyond the design for your word are under that heading in notes.md. The run, light, is run-0120.sh (eb4a7c5bbb08). Also: scan.py's first run at 14ae5b9d is clean after three tool fixes, banked in 0113-bank.
+_(empty)_
 
 ---
 
