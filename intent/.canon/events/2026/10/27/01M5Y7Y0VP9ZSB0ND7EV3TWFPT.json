@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y7Y0VP9ZSB0ND7EV3TWFPT",
+  "ts": "2026-10-27T08:34:21.174Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "The next Utilz release (its number hv's; decision 65): vc reads each plan, design and bank before any code or run, books each run with molt-vc, and checks each landing by its change. Order: 0116, then 0117, then 0113's docs commit, then its suites commit; dc's after 0117. cc: 0116 (README and help name use brew's cannot-finish refusal, XS), 0117 (the dispatch suites' counts replaced by bin's link set, S), 0113 (every written count and position in prose, comments and test names, L; critic baseline next, to vc first). dc: an issue for counts in code (assertions outside the dispatch suites, user-facing strings), design to vc. ic: 0115 (diagnostic script to vc before any booking), 0118 (the macos convergence; code waits on devbin's release carrying devbin-vc's todo 177), 0114 on arca_swift's tag. FOR hv sent to molt-vc by 08:34Z: 0118's order (rec: Utilz does not wait), SHA256SUMS (rec accept), the smaller release-step changes (rec accept), the next release's number (rec 2.14.5). Open with molt-vc: dc's /var/tmp check on kovacs. Open with hv through ic: ~/.config/menuz/bin/arngz."
+  }
+}

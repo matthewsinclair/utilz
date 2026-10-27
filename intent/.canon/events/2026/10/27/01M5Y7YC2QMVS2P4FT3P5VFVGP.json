@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y7YC2QMVS2P4FT3P5VFVGP",
+  "ts": "2026-10-27T08:34:32.663Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 27 Oct 2026, on the next release's scope under hv's count rule (no count in a doc, a guard, a test or code; nothing named by its place): (1) 0113 covers prose, comments and test names in every tracked file of Utilz's own (docs/, help/, README.md, each opt/*/README.md, usage-rules.md, .github/workflows/README.md, Menuz's about.md, and the comments in test and non-test code and config), positions included (ordered-list markup stays; a reference by number goes; devbin's steps by their names); intent/, CHANGELOG.md, the generated contracts and the vendored devbin stay out. cc sweeps Menuz's tests and ic reads their ledger rows first. (2) Strings in code (usage text, messages, asserted output) and count assertions outside the dispatch suites are dc's issue; 0117 stays the dispatch suites. (3) 0118's app-verify debug and release modes move into menuz, as a check menuz build makes on its own product (executable, LSUIElement, stamps), not dropped: U:606 is the only built-bundle LSUIElement check."
+  }
+}
