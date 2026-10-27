@@ -2185,9 +2185,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 69,
-      "text": "hv, 2026-10-27, directly to vc in vc's session, on ic's hold 17 (the menu's arngz link): 'Ah, now I understand. Yes, of course. And that should be true of all of the ~/bin/* links that are linked to a hardcoded dev install location, rather than using whatever use has set up.' So nothing on hv's machine links into a dev checkout; every tool finds Utilz through utilz use's links or brew's. vc searched ~/bin (a link to ~/.local/bin), ~/.local, ~/.config, ~/Applications, ~/.local/share, ~/.hammerspoon and the login shell's PATH: ~/.config/menuz/bin/arngz (to the primary's bin/arngz) was the only one, and no code makes such links (menuz init makes an empty bin/). vc removed it by 09:58Z; the menu's PATH (its bin dir, then the login shell's) now finds /opt/homebrew/bin/arngz (utilz:2.14.4/arngz:1.1.2), and menuz.yaml's arngz items call the bare name. restart.md at aaea8559.",
+      "text": "hv, 2026-10-27, directly to vc in vc's session, on ic's hold 17 (the menu's arngz link): 'Ah, now I understand. Yes, of course. And that should be true of all of the ~/bin/* links that are linked to a hardcoded dev install location, rather than using whatever use has set up.' So nothing on hv's machine links into a dev checkout; every tool finds Utilz through utilz use's links or brew's. vc searched ~/bin (a link to ~/.local/bin), ~/.local, ~/.config, ~/Applications, ~/.local/share, ~/.hammerspoon and the login shell's PATH: ~/.config/menuz/bin/arngz (to the primary's bin/arngz) was the only one, and no code makes such links (menuz init makes an empty bin/). vc removed it at 09:53:24Z (the bin dir's own mtime; this text first said 09:58Z, which was not read off a clock). The menu's PATH (its bin dir, then the login shell's) now finds /opt/homebrew/bin/arngz (utilz:2.14.4/arngz:1.1.2), and menuz.yaml's arngz items call the bare name. restart.md at aaea8559.",
       "state": "live",
-      "recorded_at": "2026-10-27T09:54:00.479Z"
+      "recorded_at": "2026-10-27T09:54:00.479Z",
+      "edited_at": "2026-10-27T09:54:22.464Z"
     }
   ],
   "sent": [
