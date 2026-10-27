@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y99T8T412DQ68N8DXMFGFD",
+  "ts": "2026-10-27T08:58:16.218Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 11,
+    "text": "Issue 0115 (owner ic): the fix is molt-vc's, which hv saw (27 Oct), with no hunt for the cause. At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through one new lib function built from ls_records and ls_drop; doctor's records line stays the backstop. Proof by the fakes, one test each in menuz.bats and macos.bats. The design is in 0115's body (04789e22) for vc's read before any code. The diagnostic slot was refused by molt-vc on hv's word; its scripts are banked and never run."
+  }
+}
