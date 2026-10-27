@@ -8,18 +8,11 @@
 # disagreement between them, and the disagreement WAS the defect.
 
 load "test_helper.bash"
+load "population_helper.bash"
 
-_utilities() {
-  local d u
-  for d in "$UTILZ_HOME"/opt/*/; do
-    u=$(basename "$d")
-    [ "$u" = "utilz" ] && continue
-    [ -f "$d/$u.yaml" ] || continue
-    echo "$u"
-  done
+@test "the population is the whole set, and a narrowed sweep fails loudly (issue 0117)" {
+  assert_population_whole
 }
-
-_expected_count=17
 
 @test "AT01 / AC01: --help is byte-identical across both invocation forms, for every utility" {
   local u a b n=0 bad=0
@@ -29,7 +22,7 @@ _expected_count=17
     b=$("$UTILZ_BIN_DIR/utilz" "$u" --help 2>&1 </dev/null)
     [ "$a" = "$b" ] || { echo "  $u: the two forms differ"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count -- the glob is wrong, not the tree"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities answer --help differently depending on how they were invoked"
 }
 
@@ -43,7 +36,7 @@ _expected_count=17
     b=$("$UTILZ_BIN_DIR/utilz" "$u" -h 2>&1 </dev/null)
     [ "$a" = "$b" ] || { echo "  $u: -h differs between forms"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities answer -h differently by form"
 }
 
@@ -63,7 +56,7 @@ _expected_count=17
       *) echo "  $u: dispatcher form does not render help/$u.md (looked for '$marker')"; bad=$((bad + 1)) ;;
     esac
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities do not render their curated help from the dispatcher form"
 }
 
@@ -82,7 +75,7 @@ _expected_count=17
     [ "$rc" -eq 0 ] || { echo "  $u: exit $rc (124 = timed out, ie it paged or hung)"; bad=$((bad + 1)); continue; }
     [ -n "$out" ] || { echo "  $u: exited 0 with no output"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities are not usable non-interactively"
 }
 
@@ -98,7 +91,7 @@ _expected_count=17
     [ "$a" = "$b" ] || { echo "  $u: --version differs between forms"; bad=$((bad + 1)); }
     [[ "$a" =~ ^utilz:[0-9]+\.[0-9]+\.[0-9]+/${u}:[0-9]+\.[0-9]+\.[0-9]+$ ]] || bad=$((bad + 1))
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad --version regressions"
 }
 
@@ -129,10 +122,11 @@ _expected_count=17
   line=$(grep -nE '(glow|bat)[^|]*"\$help_file"' "$UTILZ_HOME/opt/utilz/lib/common.sh")
   [ -n "$line" ] || fail "no renderer invocation found in show_help -- the grep is wrong, not the tree"
 
-  local n bad
-  n=$(printf '%s\n' "$line" | grep -c .)
+  local r bad
+  for r in glow bat; do
+    printf '%s\n' "$line" | grep -qE "^[0-9]+:[[:space:]]*${r}[[:space:]]" || fail "no $r invocation found in show_help"
+  done
   bad=$(printf '%s\n' "$line" | grep -vc '</dev/null' || true)
-  [ "$n" -ge 2 ] || fail "expected at least 2 renderer arms (glow, bat), found $n"
   [ "$bad" -eq 0 ] || {
     printf '%s\n' "$line" | grep -v '</dev/null'
     fail "$bad renderer arm(s) do not close stdin"
@@ -156,9 +150,9 @@ _expected_count=17
   # prez is the second documented exception: its opt/prez/prez is a SHIM that
   # delegates to a compiled binary, and clap answers --help there. It carries
   # no arm and needs none. So the enforceable claim is that DIRECT EXECUTION
-  # STILL ANSWERS for all 17, and that the 16 shell utilities which own a usage
-  # still own it -- never a count bent to fit whatever the tree happens to hold.
-  local u n=0 arms=0 noarm="" broke=""
+  # STILL ANSWERS for every utility, and that each but prez still owns its
+  # usage: prez is named, never a count bent to fit whatever the tree holds.
+  local u n=0 noarm="" broke=""
   for u in $(_utilities); do
     [ -f "$UTILZ_HOME/opt/$u/$u" ] || fail "$u has no implementation file"
     n=$((n + 1))
@@ -167,9 +161,7 @@ _expected_count=17
     # todo as having no arm -- a population narrowed by an assumption about
     # spelling, which is the same error as matching one flag and missing the
     # other. Tolerate the whitespace rather than tidy the source to suit a test.
-    if grep -qE '^[[:space:]]*(-h[[:space:]]*\|[[:space:]]*--help|--help[[:space:]]*\|[[:space:]]*-h)\)' "$UTILZ_HOME/opt/$u/$u"; then
-      arms=$((arms + 1))
-    else
+    if ! grep -qE '^[[:space:]]*(-h[[:space:]]*\|[[:space:]]*--help|--help[[:space:]]*\|[[:space:]]*-h)\)' "$UTILZ_HOME/opt/$u/$u"; then
       noarm="$noarm $u"
     fi
     # A UTILITY MAY REFUSE FOR A STATED PLATFORM REASON, AND THAT IS AN ANSWER.
@@ -198,8 +190,7 @@ _expected_count=17
         || broke="$broke $u"
     fi
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
-  [ "$arms" -eq 16 ] || fail "$arms utilities carry their own --help arm, expected 16"
+  assert_swept_all "$n"
   [ "$noarm" = " prez" ] || fail "expected prez alone to delegate; got:$noarm"
   [ -z "$broke" ] || fail "these cannot answer --help when executed directly:$broke"
 }

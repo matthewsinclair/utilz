@@ -8,28 +8,17 @@
 # form cannot see a disagreement between them, and the disagreement WAS the bug.
 
 load "test_helper.bash"
+load "population_helper.bash"
 
 SEMVER='[0-9]+\.[0-9]+\.[0-9]+'
 
-# The population, computed ONCE and shared by every row that sweeps it. A
-# per-row glob is a per-row chance to narrow silently; the count control below
-# is what makes a green mean "all of them" rather than "all of the ones I saw".
-_utilities() {
-  local d u
-  for d in "$UTILZ_HOME"/opt/*/; do
-    u=$(basename "$d")
-    [ "$u" = "utilz" ] && continue
-    [ -f "$d/$u.yaml" ] || continue
-    echo "$u"
-  done
-}
-
-_expected_count=17
+# The population is computed ONCE, in population_helper.bash, and shared by
+# every row that sweeps it. A per-row glob is a per-row chance to narrow
+# silently; the check against the bin dir's links is what makes a green mean
+# "all of them" rather than "all of the ones I saw".
 
 @test "AT01 / AC03: the population is the whole set, and a narrowed sweep fails loudly" {
-  local n
-  n=$(_utilities | wc -l | tr -d ' ')
-  [ "$n" -eq "$_expected_count" ] || fail "swept $n utilities, expected $_expected_count -- the glob is wrong, not the tree"
+  assert_population_whole
 }
 
 @test "AT02 / AC01: every utility reports the pair FORM, anchored, not a substring" {
@@ -44,7 +33,7 @@ _expected_count=17
       bad=$((bad + 1))
     }
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities do not report the pair form"
 }
 
@@ -57,7 +46,7 @@ _expected_count=17
     line=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1 | head -1)
     [[ "$line" == "utilz:$fw/"* ]] || fail "$u reports '$line', which does not open with the framework's own $fw"
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
 }
 
 @test "AT04 / AC02: both invocation forms are byte-identical, for every utility" {
@@ -71,7 +60,7 @@ _expected_count=17
       bad=$((bad + 1))
     }
   done
-  [ "$n" -eq "$_expected_count" ] || fail "checked $n, expected $_expected_count"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad utilities answer --version differently depending on how they were invoked"
 }
 
