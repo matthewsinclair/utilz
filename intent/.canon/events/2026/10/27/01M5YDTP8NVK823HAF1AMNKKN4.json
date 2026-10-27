@@ -1,0 +1,16 @@
+{
+  "id": "01M5YDTP8NVK823HAF1AMNKKN4",
+  "ts": "2026-10-27T10:17:23.478Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "2.14.5, the next Utilz release (hv, 27 Oct; decisions 65 and the rulings of 27 Oct): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (the resizing decision of 27 Oct), and checks each landing by its change; each landing carries its CHANGELOG line under 2.14.5 (section opened at ec2b53c7). Landed and closed: 0116 (15920960), 0121 (b0b26fcb). Order next: 0117, then 0120, then 0113's docs commit, then its suites commit; 0119 after 0117; 0115 independent. cc: 0117 (queued), 0120 (after 0117), 0113 (line scan, no booked run). dc: 0119 (Menuz's rows are ic's edits; after 0117). ic: 0115 (molt-vc's GO at 10:13:35Z; ic starts it after the compact, the result to vc; its patch applies to 942ea075, none of its files moved since adbca725), 0114 on arca_swift's tag; 0118 rides the first release after devbin 0.1.16 (devbin 0243) is cut and vendored (hv). Open with molt-vc: dc's /var/tmp check on kovacs."
+  }
+}
