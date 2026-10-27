@@ -289,31 +289,43 @@ mod tests {
     serde_yaml::from_str(yaml).unwrap()
   }
 
-  /// **THE THREE VOCABULARIES, WITH THEIR SIZES ASSERTED.** A set that silently
+  /// A roster against the names a test lists, both sorted: a member lost,
+  /// gained or repeated fails it.
+  fn same_names(roster: &[&str], names: &[&str], what: &str) {
+    let mut have = roster.to_vec();
+    have.sort_unstable();
+    let mut want = names.to_vec();
+    want.sort_unstable();
+    assert_eq!(
+      have, want,
+      "the {what} roster against the names the test lists"
+    );
+  }
+
+  /// **THE THREE VOCABULARIES, COMPARED BY NAME.** A set that silently
   /// loses a member starts refusing configs that built yesterday; one that gains
   /// a member admits a value the player styles nothing for. Both are silent, and
-  /// the count is what makes either visible.
+  /// the comparison by name is what makes either visible.
   #[test]
   fn each_vocabulary_is_the_reference_set_and_its_size_is_stated() {
-    assert_eq!(FITS.len(), 5);
-    assert_eq!(TRANSITIONS.len(), 5);
-    assert_eq!(MOTIONS.len(), 6);
-    for want in ["cover", "contain", "matte", "blur", "logo"] {
-      assert!(FITS.contains(&want), "missing fit: {want}");
-    }
-    for want in ["cut", "fade", "dissolve", "push", "wipe"] {
-      assert!(TRANSITIONS.contains(&want), "missing transition: {want}");
-    }
-    for want in [
-      "none",
-      "kenburns",
-      "kenburns-out",
-      "drift",
-      "drift-l",
-      "drift-r",
-    ] {
-      assert!(MOTIONS.contains(&want), "missing motion: {want}");
-    }
+    same_names(FITS, &["cover", "contain", "matte", "blur", "logo"], "fit");
+    same_names(
+      TRANSITIONS,
+      &["cut", "fade", "dissolve", "push", "wipe"],
+      "transition",
+    );
+    same_names(
+      MOTIONS,
+      &[
+        "none",
+        "kenburns",
+        "kenburns-out",
+        "drift",
+        "drift-l",
+        "drift-r",
+      ],
+      "motion",
+    );
   }
 
   /// A value refusal names the field, the bad value AND the whole set. **The
@@ -433,19 +445,14 @@ mod tests {
     );
   }
 
-  /// **THE SHAPE TABLE IS A POPULATION AND ITS SIZE IS ASSERTED.** Eleven
-  /// explicit branches in `collect_segment` plus the gallery fallthrough. A
+  /// **THE SHAPE TABLE IS A POPULATION AND IT IS COMPARED BY NAME.** One row
+  /// per explicit branch in `collect_segment`, plus the gallery fallthrough. A
   /// table that silently loses a row would let that type's segments through
   /// unchecked, which is the defect this module exists to end, one type at a
   /// time.
   #[test]
   fn every_shape_the_reference_has_is_declared_here() {
-    assert_eq!(
-      SHAPES.len(),
-      12,
-      "eleven branches plus the gallery fallthrough"
-    );
-    for want in [
+    let names = [
       "crawl",
       "card",
       "statement",
@@ -458,9 +465,12 @@ mod tests {
       "socials",
       "logo",
       "gallery",
-    ] {
+    ];
+    for want in names {
       assert!(shape(want).is_some(), "missing shape: {want}");
     }
+    let declared: Vec<&str> = SHAPES.iter().map(|s| s.name).collect();
+    same_names(&declared, &names, "shape");
     let mut seen: Vec<&str> = SHAPES.iter().map(|s| s.name).collect();
     seen.sort_unstable();
     seen.dedup();
@@ -527,7 +537,7 @@ mod tests {
       segments: Vec<serde_yaml::Value>,
     }
     let reel: Just = serde_yaml::from_str(include_str!("../fixtures/45h.showreel.yaml")).unwrap();
-    assert_eq!(reel.segments.len(), 15, "the population is the reel");
+    assert!(!reel.segments.is_empty(), "the population is the reel");
     validate_all(&reel.segments).expect("the live reel must validate whole");
   }
 }

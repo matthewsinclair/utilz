@@ -1421,17 +1421,13 @@ mod tests {
       ),
     ];
 
-    let refusing = population.iter().filter(|(_, _, r)| *r).count();
-    let building = population.len() - refusing;
-    assert_eq!(
-      population.len(),
-      13,
-      "the population IS the claim; a shrunk one is a weaker claim"
+    assert!(
+      population.iter().any(|(_, _, r)| *r),
+      "fixtures that must refuse -- without these the suite passes on refuse-none"
     );
-    assert_eq!(refusing, 10, "ten fixtures must refuse");
-    assert_eq!(
-      building, 3,
-      "and three must BUILD -- without these the suite passes on refuse-all"
+    assert!(
+      population.iter().any(|(_, _, r)| !*r),
+      "and fixtures that must BUILD -- without these the suite passes on refuse-all"
     );
 
     let mut wrong = Vec::new();

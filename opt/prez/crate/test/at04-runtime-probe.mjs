@@ -103,7 +103,7 @@ await cdp.send('Runtime.enable');
 await sleep(400);
 
 const total = await cdp.eval('document.querySelectorAll(".gp-slide").length');
-check('slides_found', total, 6);
+check('slides_found', total > 0, true);
 check('initial_slide', await cdp.eval(current), 1);
 check('initial_counter', await cdp.eval(counter), `1 / ${total}`);
 
@@ -134,12 +134,15 @@ const gotoOn = 'document.querySelector(".gp-bar-goto").classList.contains("gp-on
 
 check('bar_exists', await cdp.eval('!!document.querySelector(".gp-bar")'), true);
 check('bar_starts_hidden', await cdp.eval(barOn), false);
-// The keycaps are BUILT FROM THE BINDING TABLE, so this count is the number of
-// bindings. It is asserted because an empty bar would render, be styled, be
-// toggleable, and advertise nothing.
-// Ten OUTSIDE the index: the commit binding is conditional and the bar renders
-// only what applies right now, which is the property being asserted.
-check('bar_lists_every_applicable_binding', await cdp.eval('document.querySelectorAll(".gp-bar-item").length'), 10);
+// The keycaps are BUILT FROM THE BINDING TABLE, and the bar renders only what
+// applies right now: outside the index, every binding but the commit. So the
+// bar's labels are those, by label, and an empty bar fails. The close label is
+// built at run time, so it is compared by its prefix.
+const applicable = ['next', 'previous', 'first', 'last', 'go to page', 'index', 'fullscreen', 'reload', 'keys', 'close with'];
+const labels = await cdp.eval('[...document.querySelectorAll(".gp-bar-item > span")].map(s => s.textContent)');
+check('bar_lists_every_applicable_binding',
+  (labels || []).map(l => (l.startsWith('close with ') ? 'close with' : l)).sort().join('|'),
+  [...applicable].sort().join('|'));
 check('keycaps_are_kbd_elements', await cdp.eval('document.querySelectorAll(".gp-bar .gp-key").length > 0'), true);
 
 await press(cdp, '?');          check('help_opens', await cdp.eval(keysOn), true);

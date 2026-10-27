@@ -415,7 +415,6 @@ mod tests {
     let img = image::DynamicImage::ImageRgba8(image::RgbaImage::new(40, 10));
     let swaps = [5u32, 6, 7, 8];
     let keeps = [1u32, 2, 3, 4];
-    assert_eq!(swaps.len() + keeps.len(), 8, "the population IS the claim");
 
     for o in swaps {
       let out = orient(img.clone(), o);

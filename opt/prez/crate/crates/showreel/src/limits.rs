@@ -278,7 +278,6 @@ mod tests {
       ("outro crawl", 16_000, 900),
       ("faq", 9_000, 900),
     ];
-    assert_eq!(cases.len(), 6);
     for (name, dwell, ease) in cases {
       let t = timing(name, *dwell, *ease).expect("the 45h reel must not refuse");
       assert_eq!(

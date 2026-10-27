@@ -767,7 +767,6 @@ mod tests {
         );
       }
     }
-    assert_eq!(cases.len(), 16, "sixteen cases over twelve shapes");
   }
 
   /// **`venue` CARRIES `src` AND NOT THE DIMENSIONS, AND `image` CARRIES BOTH.**

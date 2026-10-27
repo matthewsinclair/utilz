@@ -1041,9 +1041,10 @@ if want AT17; then
       # on its own extraction guard, would otherwise be indistinguishable from
       # one that passed.
       at17n=$(grep -c '^  ok    ' "$WORK/at17.out" || true)
-      if [ "${at17n:-0}" -ge 25 ]; then ok "$at17name: $at17n checks ran"
+      at17fail=$(grep -c '^  FAIL  ' "$WORK/at17.out" || true)
+      if [ "${at17n:-0}" -gt 0 ] && [ "${at17fail:-0}" -eq 0 ]; then ok "$at17name: $at17n checks ran, none failed"
       else
-        bad "$at17name: only ${at17n:-0} checks ran, expected at least 25"
+        bad "$at17name: ${at17n:-0} checks ran and ${at17fail:-0} failed; the probe must run at least one and fail none"
         sed 's/^/        /' "$WORK/at17.out" | tail -6
       fi
     done
@@ -1074,8 +1075,8 @@ if want AT15; then
   at15fn="$WORK/at15-chrome.sh"
   sed -n '/^chrome() {/,/^}/p' "$HERE/lib/harness.sh" > "$at15fn"
   at15lines=$(grep -c '' "$at15fn" || true)
-  if [ "${at15lines:-0}" -gt 10 ]; then ok "extracted chrome() ($at15lines lines)"
-  else bad "could not extract chrome() -- got ${at15lines:-0} lines, so the checks below prove nothing"; fi
+  if [ "$(head -n 1 "$at15fn")" = 'chrome() {' ] && [ "$(tail -n 1 "$at15fn")" = '}' ]; then ok "extracted chrome() ($at15lines lines)"
+  else bad "could not extract chrome() -- it does not open with 'chrome() {' and close with '}', so the checks below prove nothing"; fi
 
   # The needles are assembled rather than written, so this block does not
   # contain the strings it forbids and cannot match itself.

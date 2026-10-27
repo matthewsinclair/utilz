@@ -359,13 +359,20 @@ mod tests {
       ("a.txt", Some(Declined::Other)),
       ("noextension", Some(Declined::Other)),
     ];
-    assert_eq!(population.len(), 12, "the population IS the claim");
+    let mut admitted: Vec<String> = population
+      .iter()
+      .filter(|(_, d)| d.is_none())
+      .filter_map(|(name, _)| Path::new(name).extension())
+      .map(|e| e.to_string_lossy().to_lowercase())
+      .collect();
+    admitted.sort_unstable();
+    admitted.dedup();
+    let mut roster = RASTER.to_vec();
+    roster.sort_unstable();
     assert_eq!(
-      population.iter().filter(|(_, d)| d.is_none()).count(),
-      8,
-      "seven spellings plus one proving the check is case-insensitive"
+      admitted, roster,
+      "RASTER is the spellings the population admits, by name"
     );
-    assert_eq!(RASTER.len(), 7, "and the roster itself is asserted");
 
     let mut wrong = Vec::new();
     for (name, want) in population {

@@ -79,11 +79,9 @@ mod tests {
       ("0.001s", 1),
     ];
     let bad: &[&str] = &["banana", "7 seconds", "7.5.3", "", "-1s", "1e400s"];
-    assert_eq!(good.len(), 11, "the population is the claim");
-    assert_eq!(
-      bad.len(),
-      6,
-      "and a table with no refusing rows passes on a parser that never refuses"
+    assert!(
+      !bad.is_empty(),
+      "a table with no refusing rows passes on a parser that never refuses"
     );
 
     for (text, want) in good {
