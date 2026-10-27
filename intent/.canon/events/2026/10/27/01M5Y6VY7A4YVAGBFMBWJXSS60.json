@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y6VY7A4YVAGBFMBWJXSS60",
+  "ts": "2026-10-27T08:15:44.362Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 56,
+    "text": "With devbin-vc since 08:15Z on 27 Oct (sent by vc after hv's compact), waiting on its answer, which vc relays to ic: devbin 0.1.15's built-in macos (Devbin's main is the same code) refuses any app whose CFBundleShortVersionString is not the project's version (app_ship_blockers, lib/cmd/macos:387-396, applied at app-sign and twice at publish; APP_VERSION is read_version, project.version_from, which is VERSION here, 2.14.4), and Menuz is 0.4.7 (opt/menuz/VERSION). So Utilz cannot converge on it until devbin gives an app its own version source (eg macos.version_from, defaulting to project.version_from), in devbin and never in the vendored copy (cc's watchout 6); the tag stays the project's. Asked: whether devbin takes it, who owns it, and which devbin release it rides. ic's design names the dependency (ic's comparison, ~/Devel/scratch/utilz-ic/devbin-macos-comparison.md)."
+  }
+}

@@ -17,7 +17,7 @@ claims: []
 
 ## TODO
 
-- To devbin-vc after hv's compact, before ic's devbin macos issue designs around it: devbin 0.1.15's built-in macos refuses any app whose CFBundleShortVersionString is not the project's version (app_ship_blockers, bin/.devbin/lib/cmd/macos:386-396, read by vc on 27 Oct; APP_VERSION is read_version, project.version_from, which is VERSION here, 2.14.4), and Menuz is 0.4.7 (opt/menuz/VERSION). So it refuses every Menuz build at app-sign and again at publish, and Utilz cannot converge on it until devbin gives an app its own version source (eg a version_from in the macos: block), a default with an override, in devbin and never in the vendored copy (cc's watchout 6). Ask devbin-vc whether it takes that and who owns it; ic's design names the dependency (ic's finding, banked in ~/Devel/scratch/utilz-ic/devbin-macos-comparison.md).
+- With devbin-vc since 08:15Z on 27 Oct (sent by vc after hv's compact), waiting on its answer, which vc relays to ic: devbin 0.1.15's built-in macos (Devbin's main is the same code) refuses any app whose CFBundleShortVersionString is not the project's version (app_ship_blockers, lib/cmd/macos:387-396, applied at app-sign and twice at publish; APP_VERSION is read_version, project.version_from, which is VERSION here, 2.14.4), and Menuz is 0.4.7 (opt/menuz/VERSION). So Utilz cannot converge on it until devbin gives an app its own version source (eg macos.version_from, defaulting to project.version_from), in devbin and never in the vendored copy (cc's watchout 6); the tag stays the project's. Asked: whether devbin takes it, who owns it, and which devbin release it rides. ic's design names the dependency (ic's comparison, ~/Devel/scratch/utilz-ic/devbin-macos-comparison.md). (edited)
 
 ## Holds
 
