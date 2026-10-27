@@ -6,7 +6,6 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 - cc: issue 0117, the dispatch suites' written counts replaced by the set `bin/`'s links name; lands before 0113 sweeps those files.
 - cc: issue 0120, `utilz help <verb>` renders that verb's section of `help/utilz.md`; after 0117.
-- dc: issue 0121, `use opt`'s and `use brew`'s messages say nothing untrue on a brew-only sleeve.
 - cc: issue 0113, every written count and position in prose, comments and test names deleted on hv's rule; its critic baseline, then its scan and ledger, to vc before any edit.
 - dc: issue 0119, the written counts in test code's assertions and in user-facing strings deleted on hv's rule; ic edits Menuz's rows; after 0117.
 - ic: issue 0115, Menuz's Release build product left registered with Launch Services after a release; doctor's remedy run at the end of `utilz menuz install` and the release steps, proven by one direct check.
