@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 16:02Z
+heartbeat_at: 2026-10-27 16:10Z
 status: active
-focus: "2.14.5's final-head gate ready (doing 73): vc approved the head scripts (set-head-2145.sh 0496860436a7, fill-2145-head.sh 5fa6af831717); waiting for vc to name the final head after 0119's last landing, then the Mac twins (doing 72) on molt-vc's GO"
+focus: "2.14.5's final-head gate ready (doing 73): vc approved the head scripts (set-head-2145.sh 0496860436a7, fill-2145-head.sh 4cb52cbaf1ee); waiting for vc to name the final head after 0119's last landing, then the Mac twins (doing 72) on molt-vc's GO"
 claims: []
 ---
 
@@ -14,7 +14,7 @@ claims: []
 ## DOING
 
 - 2.14.5's Mac twins script APPROVED by vc (2145-bank/run-twins-2145-final.sh 8708cbdcf38d, HEAD_WANT=PENDING). When vc names the final head, after 0119's last landing: set-head-2145.sh <head> (the one-line diff to vc), then the heavy asked --named tip=<head>,run=<new hash>, watchdog 3600; start only on molt-vc's GO by name. (edited)
-- 2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct), all approved by vc with the head PENDING: the kovacs twins and request (2145-bank/kovacs: twins.sh 1196839ccb00, request.md 8fe6082cf5cb; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run (2145-bank/dryrun/dryrun-2145.sh 59911c4e4692), filled at the head by fill-2145-head.sh 5fa6af831717 after the Mac twins' END. The filled request goes to molt-vc, never kovacs-sysadm (molt-vc sends one combined message on hv's return); the dry run after the twins, on molt-vc's GO by name, under vc's freeze. (edited)
+- 2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct), all approved by vc with the head PENDING: the kovacs twins and request (2145-bank/kovacs: twins.sh 1196839ccb00, request.md 8fe6082cf5cb; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run (2145-bank/dryrun/dryrun-2145.sh 59911c4e4692), filled at the head by fill-2145-head.sh 4cb52cbaf1ee after the Mac twins' END. The filled request goes to molt-vc, never kovacs-sysadm (molt-vc sends one combined message on hv's return); the dry run after the twins, on molt-vc's GO by name, under vc's freeze. (edited)
 
 ## TODO
 
