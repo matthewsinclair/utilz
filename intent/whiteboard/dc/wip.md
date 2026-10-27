@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 10:12Z
+heartbeat_at: 2026-10-27 10:15Z
 status: active
 focus: "27 Oct: folded for hv's compact (round 2), not released; 0121 landed at b0b26fcb and closed; 0119 holds until 0117 lands, then its scan and ledger at 0117's commit, ic editing the Menuz rows under dc's ledger; open: the kovacs /var/tmp check, which vc relays; after the compact: /in-session, pickup committed at once, then carry on; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
 claims: [ISSUE:0119]
