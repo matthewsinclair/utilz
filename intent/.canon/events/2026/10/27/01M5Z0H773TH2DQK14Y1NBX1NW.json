@@ -1,0 +1,15 @@
+{
+  "id": "01M5Z0H773TH2DQK14Y1NBX1NW",
+  "ts": "2026-10-27T15:44:16.099Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After 2.14.5's cut: the Highlander question for hv through vc. devbin 0.1.15 ships an opt-in bin/devbin formula (render, publish) doing tools/formula's job; Utilz keeps tools/formula until hv rules which one stays."
+  }
+}

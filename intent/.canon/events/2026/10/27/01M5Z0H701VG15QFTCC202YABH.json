@@ -1,0 +1,15 @@
+{
+  "id": "01M5Z0H701VG15QFTCC202YABH",
+  "ts": "2026-10-27T15:44:15.873Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue 0122: docs/releasing.md says what 0115 added to the steps after the cut (publish, after its upload, and menuz install, at its end, drop and check every record under menuz's build root). Two sentences, at :85 and :89; for vc's read, then prettier --check booked with --lane none; landing before vc names the final head, with a sub-bullet under 2.14.5's Harness bullet."
+  }
+}

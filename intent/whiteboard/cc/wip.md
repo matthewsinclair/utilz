@@ -6,7 +6,7 @@ session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
 heartbeat_at: 2026-10-27 15:25Z
 status: active
 focus: "27 Oct, pushing on (hv's word in cc's session): 0117 landed 94c55977, closed 804ad593; 0120 landed 88522a3f, closed 668a2f0e (vc checked both by their change; both worktrees folded); now 2.14.5's Mac twins script for vc's read, the run on molt-vc's GO on the final head; the kovacs legs in dc's twins (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: []
+claims: [ISSUE:0122]
 ---
 
 # Control Claude (cc)
@@ -15,10 +15,12 @@ claims: []
 
 - 2.14.5's Mac twins script APPROVED by vc (2145-bank/run-twins-2145-final.sh 8708cbdcf38d, HEAD_WANT=PENDING). When vc names the final head, after 0119's last landing: set-head-2145.sh <head> (the one-line diff to vc), then the heavy asked --named tip=<head>,run=<new hash>, watchdog 3600; start only on molt-vc's GO by name. (edited)
 - 2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct): the kovacs twins (one heavy through kovacs-sysadm, booked with molt-vc after the Mac twins: tests.yml's Ubuntu loop, shellcheck 0.9.0 with its control, rust-lint on 1.99.1; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run after them, banked from dc's green 2.14.4 bytes with the head PENDING (2145-bank/kovacs, 2145-bank/dryrun) for vc's read; and the cut's pre-flight reads, findings to vc.
+- Issue 0122: docs/releasing.md says what 0115 added to the steps after the cut (publish, after its upload, and menuz install, at its end, drop and check every record under menuz's build root). Two sentences, at :85 and :89; for vc's read, then prettier --check booked with --lane none; landing before vc names the final head, with a sub-bullet under 2.14.5's Harness bullet.
 
 ## TODO
 
 - 0117's and 0120's kovacs legs ride in cc's kovacs twins on 2.14.5's final head (doing 73; 0120's with mawk's help_section); a red there reopens that issue, and the fix is mine. (edited)
+- After 2.14.5's cut: the Highlander question for hv through vc. devbin 0.1.15 ships an opt-in bin/devbin formula (render, publish) doing tools/formula's job; Utilz keeps tools/formula until hv rules which one stays.
 
 ## Holds
 

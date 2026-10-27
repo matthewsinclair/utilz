@@ -8,7 +8,9 @@
     "heartbeat_at": "2026-10-27T15:25:17.627Z",
     "status": "active",
     "focus": "27 Oct, pushing on (hv's word in cc's session): 0117 landed 94c55977, closed 804ad593; 0120 landed 88522a3f, closed 668a2f0e (vc checked both by their change; both worktrees folded); now 2.14.5's Mac twins script for vc's read, the run on molt-vc's GO on the final head; the kovacs legs in dc's twins (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md",
-    "claims": [],
+    "claims": [
+      "ISSUE:0122"
+    ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
@@ -1795,6 +1797,22 @@
       "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct): the kovacs twins (one heavy through kovacs-sysadm, booked with molt-vc after the Mac twins: tests.yml's Ubuntu loop, shellcheck 0.9.0 with its control, rust-lint on 1.99.1; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run after them, banked from dc's green 2.14.4 bytes with the head PENDING (2145-bank/kovacs, 2145-bank/dryrun) for vc's read; and the cut's pre-flight reads, findings to vc.",
       "state": "live",
       "recorded_at": "2026-10-27T15:36:51.525Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 74,
+      "text": "Issue 0122: docs/releasing.md says what 0115 added to the steps after the cut (publish, after its upload, and menuz install, at its end, drop and check every record under menuz's build root). Two sentences, at :85 and :89; for vc's read, then prettier --check booked with --lane none; landing before vc names the final head, with a sub-bullet under 2.14.5's Harness bullet.",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:44:15.873Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 51,
+      "text": "After 2.14.5's cut: the Highlander question for hv through vc. devbin 0.1.15 ships an opt-in bin/devbin formula (render, publish) doing tools/formula's job; Utilz keeps tools/formula until hv rules which one stays.",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:44:16.099Z"
     }
   ],
   "sent": [
