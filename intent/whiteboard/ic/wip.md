@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 10:55Z
+heartbeat_at: 2026-10-27 11:53Z
 status: active
 focus: "0118 held until devbin 0.1.16 is cut and vendored (its body set at 5c8c2687, read by vc); 0119's Menuz rows, narrowed by hv to count assertions in tests, only if dc's narrowed ledger finds any; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
 claims: [ISSUE:0118]
