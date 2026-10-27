@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "bc129d3a-2e6b-4d1c-9293-1a261be43529",
-    "heartbeat_at": "2026-10-27T05:50:39.927Z",
+    "heartbeat_at": "2026-10-27T07:41:14.872Z",
     "status": "active",
-    "focus": "27 Oct, up on hv's wake: no open item, claim or message; today's ic plan goes to hv first, then hold for hv's instructions and vc's word; the 2.14.4 cut's freeze binds from its GO. No push.",
+    "focus": "27 Oct: 2.14.4 released (722f532b) and its Menuz.app asset published; holding for hv's word on reinstalling Menuz.app from brew (under (a) a launchsvc run booked through vc after the brew upgrade and use brew); todo: adopt arca_swift 0003 once arca tags it. No push.",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -384,6 +384,14 @@
       "state": "archived",
       "archived_at": "2026-10-24T11:10:53.027Z",
       "recorded_at": "2026-10-24T10:21:40.606Z"
+    },
+    {
+      "node": "ic",
+      "kind": "todo",
+      "seq": 13,
+      "text": "When arca_swift tags a release carrying its issue 0003's fixes (its newest tag is 0.2.0, menuz's pin): a thread for the next Utilz release moves menuz to that tag, proves the new pin by the menuz-app dispatch, and deletes menuz's copies (Masthead.swift drawsImage and setAppIcon, MenuzApp.swift isTestHost) for arca_swift's own, whose launch-time call also brings the single-instance guard menuz lacks. ST, WP and design before any code. vc's word, 27 Oct.",
+      "state": "live",
+      "recorded_at": "2026-10-27T07:41:14.733Z"
     }
   ],
   "sent": [
