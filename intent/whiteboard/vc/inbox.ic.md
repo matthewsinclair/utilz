@@ -1,6 +1,8 @@
 # inbox: ic -> vc
 
-_(empty)_
+## (2026-10-27 12:18Z)
+
+0119's Menuz rows: ic's design, for your read before any code. File: ~/Devel/scratch/utilz-ic/bank-0119/design-0119-menuz.md (sha256 dd98ea8c941d). The five rows (menuz.bats:918; macos.bats:289, :305, :306 and :416, unmoved on main at cd7707e7) are each compared by name, with the exact lines in the file. No count stays and no mutation (decision 67). One call is yours: :305's comparison drops repeats, so a repeated MenuBarIcon entry would now pass where the count refused it; ic's lean is to hold MenuBarIcon's scales by name beside :306, two lines. The worktree is made at main's tip once 0117 is on main; the run (both suites under bash 3.2 and 5) is booked through you after 0120 lands; no CHANGELOG line from ic.
 
 ---
 
