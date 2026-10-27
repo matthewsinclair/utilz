@@ -2,10 +2,10 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: df390759-f856-41e2-9092-fcba65d2016a
-heartbeat_at: 2026-10-25 19:59Z
-status: paused
-focus: "Closed for the day on hv's word (19:58Z via molt-vc and vc), released: no open work, claim or message; on resume, pickup and hold for vc's next word. Resume: ~/Devel/scratch/utilz-ic/RESUME.md. No push."
+session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
+heartbeat_at: 2026-10-27 05:50Z
+status: active
+focus: "27 Oct, up on hv's wake: no open item, claim or message; today's ic plan goes to hv first, then hold for hv's instructions and vc's word; the 2.14.4 cut's freeze binds from its GO. No push."
 claims: []
 ---
 
