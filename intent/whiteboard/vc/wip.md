@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 12:05Z
+heartbeat_at: 2026-10-27 12:11Z
 status: active
-focus: "Folded for hv's compact (27 Oct, round 3), not released. 2.14.5: 0115, 0116, 0121 landed; 0120 green at fa2aa2eb, lands right after 0117 on vc's three terms; 0117 queued behind Gtools' heavies and Intent's second build; 0119 narrowed by hv (decision 70), its edits after 0117; 0113 closed; kovacs legs together after the desk work; resume ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "2.14.5 (doing 69), after hv's compact round 3: 0117's heavy 01M5YA0DEYXKDX5ZK6R31X7JG8 then light 01M5YA0DF9QH2R1AJKS9FJFWBB queued at molt-vc's desk; on their ENDs the read, the landing word and the check by its change; 0120 lands right after on vc's three terms; 0119 edits from 0117's commit; the kovacs legs together after the desk work"
 claims: []
 ---
 
