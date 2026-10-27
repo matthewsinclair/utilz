@@ -1,0 +1,16 @@
+{
+  "id": "01M5YF6VYQT0EJE5JRGAJR1Y8H",
+  "ts": "2026-10-27T10:41:31.095Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 68,
+    "text": "Issue 0113, widened by vc on hv's rule (27 Oct): every written count and position in the suites' test names and comments, every hand-written Markdown file, and the comments in non-test code and config is deleted. Its method, resized on hv's rule of 23 Sep, is in its body (83daf01a). scan.py runs clean (first run at 14ae5b9d, a read under decision 67, banked in 0113-bank). After 0117 lands: the scan and the ledger at its landing commit, banked for ic's and vc's read, before any edit; at 0113's base, a rescan and its difference from that ledger to vc."
+  }
+}

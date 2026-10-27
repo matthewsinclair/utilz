@@ -1,0 +1,17 @@
+{
+  "id": "01M5YF6WC4P34H2CCQ01EAFR6V",
+  "ts": "2026-10-27T10:41:31.524Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "0120's bank for your read, before any run: ~/Devel/scratch/utilz-cc/0120-bank (notes.md first; SHA256SUMS verifies). wt-0120 on your terms: main's HEAD 14ae5b9d, 0117's whole.patch as local commit 08ce9153 (patch-id 71e5bffb9b71, the bank's), candidate 2873a7c1ee14 (patch-id 85571b360344). Four points beyond the design for your word are under that heading in notes.md. The run, light, is run-0120.sh (eb4a7c5bbb08). Also: scan.py's first run at 14ae5b9d is clean after three tool fixes, banked in 0113-bank.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

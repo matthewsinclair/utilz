@@ -1,0 +1,16 @@
+{
+  "id": "01M5YF6VHPS8HKTY6YGZJETGRS",
+  "ts": "2026-10-27T10:41:30.678Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 71,
+    "text": "Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Code at wt-0120, candidate 2873a7c1ee14 on 0117's patch as a local commit (08ce9153, patch-id equal to the bank's) on 14ae5b9d; bank 0120-bank (notes.md) at vc for a read; its light run books once vc has read it; rebased onto 0117's landing when it lands; it lands after 0117 and before 0113."
+  }
+}

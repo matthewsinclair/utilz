@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 10:16Z
+heartbeat_at: 2026-10-27 10:41Z
 status: active
-focus: "Folded for hv's compact (27 Oct, round 2), not released: 0117 queued at molt-vc's desk (heavy build 01M5YA0DEYXKDX5ZK6R31X7JG8, then its light suites 01M5YA0DF9QH2R1AJKS9FJFWBB; it lands with its approved CHANGELOG line on vc's word), then 0120's code (approved, size S) and 0113's scan (approved and resized; scan.py written, not run) after 0117 lands; resume ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "27 Oct, after hv's compact (round 2), not released: 0120's code banked at 0120-bank for vc's read (candidate 2873a7c1ee14 on 0117's patch, nothing run); 0117 queued at molt-vc's desk, its heavy build then its light suites; scan.py runs clean, 0113's ledger at 0117's landing; resume ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [ISSUE:0113, ISSUE:0117, ISSUE:0120]
 ---
 
@@ -13,9 +13,9 @@ claims: [ISSUE:0113, ISSUE:0117, ISSUE:0120]
 
 ## DOING
 
-- Issue 0113, widened by vc on hv's rule (27 Oct): every written count and position in the suites' test names and comments, every hand-written Markdown file, and the comments in non-test code and config is deleted. Its method, resized on hv's rule of 23 Sep, is in its body (83daf01a). After 0117 lands: the scan and the ledger at the base, banked for ic's and vc's read, before any edit. (edited)
+- Issue 0113, widened by vc on hv's rule (27 Oct): every written count and position in the suites' test names and comments, every hand-written Markdown file, and the comments in non-test code and config is deleted. Its method, resized on hv's rule of 23 Sep, is in its body (83daf01a). scan.py runs clean (first run at 14ae5b9d, a read under decision 67, banked in 0113-bank). After 0117 lands: the scan and the ledger at its landing commit, banked for ic's and vc's read, before any edit; at 0113's base, a rescan and its difference from that ledger to vc. (edited)
 - Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing, its bank (0117-bank, notes.md) at vc for a read; then a heavy for prez's build, freed when it ends, and a light for the two dispatch suites under bash 3.2 and bash 5; it lands before 0113. (edited)
-- Issue 0120: utilz help <verb> refuses every built-in verb with an internal path; utilz help <verb> renders the verb's own section of help/utilz.md. Filed whole at d0bbc28c, its design in its body, at vc for a read before any edit; it lands after 0117 and before 0113.
+- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Code at wt-0120, candidate 2873a7c1ee14 on 0117's patch as a local commit (08ce9153, patch-id equal to the bank's) on 14ae5b9d; bank 0120-bank (notes.md) at vc for a read; its light run books once vc has read it; rebased onto 0117's landing when it lands; it lands after 0117 and before 0113. (edited)
 
 ## TODO
 
