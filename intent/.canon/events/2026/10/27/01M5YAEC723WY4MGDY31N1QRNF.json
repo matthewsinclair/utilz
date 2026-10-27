@@ -1,0 +1,15 @@
+{
+  "id": "01M5YAEC723WY4MGDY31N1QRNF",
+  "ts": "2026-10-27T09:18:14.243Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0120"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "`utilz help <verb>` refuses every built-in verb with an internal path, since show_help looks only for help/<name>.md"
+  }
+}
