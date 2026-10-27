@@ -1,0 +1,16 @@
+{
+  "id": "01M5YG0KRFHRDNDXZBCFJV68EJ",
+  "ts": "2026-10-27T10:55:34.671Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 66,
+    "text": "vc, 27 Oct 2026, on 0118: its app-verify debug and release modes move into menuz, as a check menuz build makes on its own product (executable, LSUIElement, stamps), not dropped: U:607 (at 14103179) is the only built-bundle LSUIElement check. This decision's count-rule parts (0113's scope over prose, comments and test names; strings in code as 0119's) are withdrawn by hv's ruling of 27 Oct (decision 70)."
+  }
+}

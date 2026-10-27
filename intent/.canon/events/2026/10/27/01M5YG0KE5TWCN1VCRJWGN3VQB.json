@@ -1,0 +1,15 @@
+{
+  "id": "01M5YG0KE5TWCN1VCRJWGN3VQB",
+  "ts": "2026-10-27T10:55:34.341Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-27, directly to vc in vc's session, on the count rule, answering vc's question on 0113's 11,008 hits: \"This is _BONKERS_. All I said was don't write guards or tests that compare against arbitrary magic numbers. HOW THE HELL HAS THIS TURNED INTO SOMETHING BIGGER THAN BEN HUR?!\" and \"This should simply be a sweep to get rid of magic numbers in tests and a rule not to add any into the future. The end. What is going on?!\" vc's reading: the sweep is 0117 (the dispatch suites) and 0119 cut to the tests and guards outside them that compare against a written count; 0113 (prose, comments, test names) is withdrawn; strings, comments, test input and test names are out. The rule for the future lives in hv's global AGENTS.md (Molt-matts); its wording, which vc's decision 66 read as a sweep of everything, went to molt-vc for hv's OK of a narrower one, and Utilz writes no copy. The over-reach was vc's: decision 66 scoped from the rule's text without asking hv what it was for, and vc did not stop it as it grew."
+  }
+}

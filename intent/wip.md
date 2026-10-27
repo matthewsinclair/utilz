@@ -4,11 +4,9 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- cc: issue 0117, the dispatch suites' written counts replaced by the set `bin/`'s links name; lands before 0113 sweeps those files.
+- cc: issue 0117, the dispatch suites' written counts replaced by the set `bin/`'s links name.
 - cc: issue 0120, `utilz help <verb>` renders that verb's section of `help/utilz.md`; after 0117.
-- cc: issue 0113, every written count and position in prose, comments and test names deleted on hv's rule; its scan and ledger to vc before any edit; after 0117.
-- dc: issue 0119, the written counts in test code's assertions and in user-facing strings deleted on hv's rule; ic edits Menuz's rows; after 0117.
-- ic: issue 0115, Menuz's Release build product left registered with Launch Services after a release; doctor's remedy run at the end of `utilz menuz install` and the release steps, proven by one direct check.
+- dc: issue 0119, the tests and guards outside the dispatch suites that compare against a written count, each made to derive it or lose it (hv, 27 Oct: magic numbers in tests, nothing else); ic edits any Menuz test row; after 0117.
 - vc: 2.14.5 (hv, 27 Oct): read each plan, design and bank; book the smallest run that proves each change with molt-vc; check each landing by its change; each landing carries its CHANGELOG line under 2.14.5.
 
 ## TODO
