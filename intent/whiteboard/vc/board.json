@@ -2127,6 +2127,14 @@
       "text": "The next Utilz release (its number hv's; decision 65): vc reads each plan, design and bank before any code or run, books each run with molt-vc, and checks each landing by its change. cc: issue 0113, widened by vc on hv's count rule to docs/, help/ and README.md as well as test names and comments, and an issue for its todo 49 (README and help name use brew's cannot-finish refusal). ic: an issue converging Menuz's signing on devbin's built-in macos (devbin 0226), an issue for the app-sign build product left registered with Launch Services after the release (cause first), and the arca_swift 0003 tracking issue. Open with molt-vc: dc's /var/tmp leftover check on kovacs, riding with Gtools' next kovacs message. Open with hv through ic: whether ~/.config/menuz/bin/arngz stays on the dev tree.",
       "state": "live",
       "recorded_at": "2026-10-27T07:53:50.143Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 56,
+      "text": "To devbin-vc after hv's compact, before ic's devbin macos issue designs around it: devbin 0.1.15's built-in macos refuses any app whose CFBundleShortVersionString is not the project's version (app_ship_blockers, bin/.devbin/lib/cmd/macos:386-396, read by vc on 27 Oct; APP_VERSION is read_version, project.version_from, which is VERSION here, 2.14.4), and Menuz is 0.4.7 (opt/menuz/VERSION). So it refuses every Menuz build at app-sign and again at publish, and Utilz cannot converge on it until devbin gives an app its own version source (eg a version_from in the macos: block), a default with an override, in devbin and never in the vendored copy (cc's watchout 6). Ask devbin-vc whether it takes that and who owns it; ic's design names the dependency (ic's finding, banked in ~/Devel/scratch/utilz-ic/devbin-macos-comparison.md).",
+      "state": "live",
+      "recorded_at": "2026-10-27T08:07:25.315Z"
     }
   ],
   "sent": [
