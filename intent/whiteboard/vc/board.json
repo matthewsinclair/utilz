@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-27T11:52:43.103Z",
+    "heartbeat_at": "2026-10-27T12:05:31.942Z",
     "status": "active",
-    "focus": "2.14.5 (doing 69): 0115, 0116, 0121 landed; 0120's light run green at fa2aa2eb, landing right after 0117 on the rebase and vc's three terms; 0117's heavy build then light suites queued behind Gtools' heavies; 0119 narrowed by hv (decision 70; body at 0bb4fce6), its edits from 0117's commit; 0113 closed; kovacs legs of 0117, 0119 and 0120 in one message after the desk work",
+    "focus": "Folded for hv's compact (27 Oct, round 3), not released. 2.14.5: 0115, 0116, 0121 landed; 0120 green at fa2aa2eb, lands right after 0117 on vc's three terms; 0117 queued behind Gtools' heavies and Intent's second build; 0119 narrowed by hv (decision 70), its edits after 0117; 0113 closed; kovacs legs together after the desk work; resume ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1854,9 +1854,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 22,
-      "text": "hv's standing rules for Utilz work (19 and 20 Oct). Stack everything outstanding into the next release, with no small releases. Estimates in t-shirt sizes, never wall-clock. A landing is a local commit by path, one at a time into a primary holding no one else's hunks, on vc's word once vc has read the bytes and every booked run is green, the kovacs leg on the same bytes included; hv keeps every cut, tag and push. Ready to cut means the final head passes a local twin of every CI job (tests.yml's Ubuntu loop, shellcheck 0.9.0 and Rust fmt and clippy on kovacs; the macOS suites, cargo, acceptance and the menuz app build here), then dc's dry run, so no CI job fails on a slip. A finished issue closes as soon as it lands and is checked; a red on CI or the menuz-app dispatch reopens it.",
+      "text": "hv's standing rules for Utilz work (19 and 20 Oct; the kovacs clause as hv's order of 25 Oct, decision 59, places it). Stack everything outstanding into the next release, with no small releases. Estimates in t-shirt sizes, never wall-clock. A landing is a local commit by path, one at a time into a primary holding no one else's hunks, on vc's word once vc has read the bytes and every booked run at the desk is green; the kovacs legs follow together after the desk work, on the bytes as landed, and a red there reopens its issue before the cut; hv keeps every cut, tag and push. Ready to cut means the final head passes a local twin of every CI job (tests.yml's Ubuntu loop, shellcheck 0.9.0 and Rust fmt and clippy on kovacs; the macOS suites, cargo, acceptance and the menuz app build here), then dc's dry run, so no CI job fails on a slip. A finished issue closes as soon as it lands and is checked; a red on CI or the menuz-app dispatch reopens it.",
       "state": "live",
-      "recorded_at": "2026-10-20T18:45:29.279Z"
+      "recorded_at": "2026-10-20T18:45:29.279Z",
+      "edited_at": "2026-10-27T12:05:04.600Z"
     },
     {
       "node": "vc",
@@ -2153,10 +2154,10 @@
       "node": "vc",
       "kind": "hold",
       "seq": 23,
-      "text": "Utilz's heavy runs wait for molt-vc's GO behind Gtools' heavies, one heavy at a time (hv's rule of 26 Oct). Light runs go beside a heavy on molt-vc's GO whenever their own lanes are free (hv's answer to molt-vc's question 4, 10:07Z by molt-vc's date -u: 'Yes, lights can go beside a heavy'; molt-vc's decision 23). Queued: 0117's heavy build 01M5YA0DEYXKDX5ZK6R31X7JG8, then its light suites 01M5YA0DF9QH2R1AJKS9FJFWBB (not before the heavy); 0115's light run 01M5YA0E2HMX377DG3JNW2P648 goes when the bats lane frees (molt-vc treats its hold gate as met; no re-ask); 0119's runs and the kovacs legs later. Negligible runs (--lane none) are granted straight away. Released when 0117's heavy is granted. Work with no load goes on.",
+      "text": "Utilz's heavy runs wait for molt-vc's GO behind Gtools' heavies and Intent's second build (molt-vc, 12:02Z), one heavy at a time (hv's rule of 26 Oct). Light runs go beside a heavy on molt-vc's GO whenever their own lanes are free (hv's answer to molt-vc's question 4, 10:07Z by molt-vc's date -u: 'Yes, lights can go beside a heavy'; molt-vc's decision 23). Queued: 0117's heavy build 01M5YA0DEYXKDX5ZK6R31X7JG8, then its light suites 01M5YA0DF9QH2R1AJKS9FJFWBB (not before the heavy). 0115's and 0120's light runs are done, green. 0119's runs come after 0117 lands, and the kovacs legs of 0117, 0119 and 0120 go in one kovacs-sysadm message after the desk work. Negligible runs (--lane none) are granted straight away. Released when 0117's heavy is granted. Work with no load goes on.",
       "state": "live",
       "recorded_at": "2026-10-27T08:44:47.131Z",
-      "edited_at": "2026-10-27T10:08:32.162Z"
+      "edited_at": "2026-10-27T12:05:03.695Z"
     },
     {
       "node": "vc",
