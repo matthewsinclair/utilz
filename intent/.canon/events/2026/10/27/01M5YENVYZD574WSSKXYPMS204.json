@@ -1,0 +1,15 @@
+{
+  "id": "01M5YENVYZD574WSSKXYPMS204",
+  "ts": "2026-10-27T10:32:14.047Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Issue 0118 (owner ic) holds until devbin 0.1.16 (devbin 0243) is cut and vendored into Utilz, read as bin/.devbin/manifest.sha256 saying devbin_version: 0.1.16 on main (hv, 27 Oct: 0118 rides the first Utilz release after it). Then the Utilz side its body names (set at 5c8c2687, read by vc): the design read by vc before any code, every run booked through vc."
+  }
+}

@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 10:28Z
+heartbeat_at: 2026-10-27 10:32Z
 status: active
-focus: "0115 landed at 14103179 and closed at 8cff60a6 (vc checked it by its change); 0118's single body edit, its v2 diff with vc for the read; 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
+focus: "0118 held until devbin 0.1.16 is cut and vendored (its body set at 5c8c2687, read by vc); 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none); 0115 landed at 14103179 and closed"
 claims: [ISSUE:0118]
 ---
 
@@ -13,16 +13,16 @@ claims: [ISSUE:0118]
 
 ## DOING
 
-- Issue 0118 (owner ic): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today. The devbin half is devbin 0243, for devbin 0.1.16. hv's rulings of 27 Oct: 0118 rides the first Utilz release after 0.1.16 is cut and vendored, and SHA256SUMS and the smaller step changes are accepted. Once 0115 lands, one body edit carries the rulings, 0243 and the publish-end drop, with its diff to vc. No code until then, and no run until booked through vc. (edited)
+_(none)_
 
 ## TODO
 
 - Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, is ArcaLogConsole's WP-11 and carries none; 0003 is open at arca_swift's main ffdff0ab; menuz's resolved pin is 0.2.0); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
-- Issue 0119's Menuz rows (dc's ledger; vc's ruling, 27 Oct). They are read and answered: every replacement fits, and the refinements are in the ledger. After 0117 lands and vc reads the ledger at its commit, make the Menuz edits (menuz.bats:918; macos.bats:289, :290, :305, :306 and :416; cmd/macos:115, :752 and :755) in commits of their own. Then the smallest run, booked through vc, shared with 0115's run if both are banked together.
+- Issue 0119's Menuz rows (dc's ledger; vc's ruling, 27 Oct). They are read and answered: every replacement fits, and the refinements are in the ledger. After 0117 lands and vc reads the ledger at its commit, make the Menuz edits (menuz.bats:918; macos.bats:289, :290, :305, :306 and :416; cmd/macos:116, :760 and :763, where 0115's landing at 14103179 moved them) in commits of their own. Then the smallest run, booked through vc. (edited)
 
 ## Holds
 
-_(none)_
+- Issue 0118 (owner ic) holds until devbin 0.1.16 (devbin 0243) is cut and vendored into Utilz, read as bin/.devbin/manifest.sha256 saying devbin_version: 0.1.16 on main (hv, 27 Oct: 0118 rides the first Utilz release after it). Then the Utilz side its body names (set at 5c8c2687, read by vc): the design read by vc before any code, every run booked through vc.
 
 ## Watch-outs
 
