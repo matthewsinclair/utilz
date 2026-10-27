@@ -957,7 +957,7 @@ app_count() {
   assert_success
   local release="$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app"
   [[ "$(xcodebuild_call)" == *" -configuration Release "* ]] || false
-  [[ "$(calls_of osascript ditto lsregister open | tr '\n' '|')" == "lsregister -u|lsregister -dump|osascript -l|ditto $release|lsregister -f|open -a|" ]] || false
+  [[ "$(calls_of osascript ditto lsregister open | tr '\n' '|')" == "lsregister -u|lsregister -dump|osascript -l|ditto $release|lsregister -f|open -a|lsregister -dump|" ]] || false
   grep -qx "lsregister -u $(cd "$release" && pwd -P)" "$FAKES/calls"
   grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
   # Only the installed app is registered (issue 0106).
@@ -1056,8 +1056,9 @@ app_count() {
   assert_success
   grep -qx 'https://github.com/matthewsinclair/utilz/releases/download/2.14.0/Menuz.app.zip' "$FAKES/curl.args"
   grep -qx -- '-fsSL' "$FAKES/curl.args"
-  # The asset's record is dropped on the way out, after the launch (issue 0106).
-  [[ "$(calls_of curl ditto codesign spctl osascript lsregister open | awk '{ print $1 }' | tr '\n' ' ')" == "curl ditto codesign spctl osascript ditto lsregister open lsregister lsregister " ]] || false
+  # After the launch, the build root's records are read (issue 0115), then the
+  # asset's record is dropped on the way out (issue 0106).
+  [[ "$(calls_of curl ditto codesign spctl osascript lsregister open | awk '{ print $1 }' | tr '\n' ' ')" == "curl ditto codesign spctl osascript ditto lsregister open lsregister lsregister lsregister " ]] || false
   grep -q '^codesign --verify --deep --strict ' "$FAKES/calls"
   grep -q '^spctl -a -t exec -vv ' "$FAKES/calls"
   grep -qx "lsregister -f $INSTALLED" "$FAKES/calls"
@@ -1781,6 +1782,19 @@ config      FAIL no $CONFIG/menuz.yaml (menuz init creates it)"
   fake spctl '(cd "${*: -1}" && pwd -P) >>"'"$FAKES"'/ls.records"; echo "source=Notarized Developer ID"'
   run_src_menuz install
   assert_success
+  [[ "$(ls_fake_records "$FAKES")" == "$(ls_resolved "$INSTALLED")" ]] || false
+  refute_output_contains "could not drop"
+}
+
+@test "issue 0115: install drops any build product's record still standing, leaving only the installed app's" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  make_app "$DEV"
+  ls_fake_register "$FAKES" "$DEV"
+  run_src_menuz install
+  assert_success
+  grep -qx "lsregister -u $(ls_resolved "$DEV")" "$FAKES/calls"
   [[ "$(ls_fake_records "$FAKES")" == "$(ls_resolved "$INSTALLED")" ]] || false
   refute_output_contains "could not drop"
 }

@@ -128,3 +128,25 @@ ls_drop() {
   ls_unregister "$bundle"
   ls_report "$bundle" "$bundle"
 }
+
+# ls_drop_under <dir>: every record at or under <dir>, resolved as Launch
+# Services lists it (pwd -P), dropped and checked, each with ls_drop: doctor's
+# remedy, run by menuz install and publish on the build products (issue 0115).
+# Prints ls_drop's lines, or one saying the list could not be read, and
+# returns 1 when a record is left or the list was not read.
+ls_drop_under() {
+  local dir found path said rc=0
+  dir="$(cd "$1" 2>/dev/null && pwd -P)" || dir="$1"
+  if ! found="$(ls_records under "$dir")"; then
+    printf 'could not drop the Launch Services records under %s: %s; utilz menuz doctor names any left\n' "$dir" "$found"
+    return 1
+  fi
+  while IFS= read -r path; do
+    [ -n "$path" ] || continue
+    if ! said="$(ls_drop "$path")"; then
+      printf '%s\n' "$said"
+      rc=1
+    fi
+  done <<<"$found"
+  return "$rc"
+}

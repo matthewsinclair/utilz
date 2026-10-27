@@ -32,8 +32,9 @@ set -euo pipefail
 
 ROOT="${PROJECT_ROOT:?}"
 # Launch Services' records, menuz's and this command's one home (issue 0106):
-# MENUZ_BUNDLE_ID, LSREGISTER, ls_cmd, ls_records, ls_unregister, ls_report
-# and ls_drop. A lib, not menuz: a devbin command does not source menuz.
+# MENUZ_BUNDLE_ID, LSREGISTER, ls_cmd, ls_records, ls_unregister, ls_report,
+# ls_drop and ls_drop_under. A lib, not menuz: a devbin command does not
+# source menuz.
 LS_LIB="$ROOT/opt/menuz/lib/launch-services.sh"
 [ -f "$LS_LIB" ] || die "no $LS_LIB, which menuz and this command share"
 # shellcheck source=SCRIPTDIR/../../../opt/menuz/lib/launch-services.sh
@@ -693,7 +694,8 @@ app_drop_proof_copy() {
 # not exist, or if it already holds the asset. The zip is proven by unpacking
 # it as a user does and checking the bundle inside, before the upload; the
 # proof copy's Launch Services record, which stapler validate makes, is
-# dropped and the copy removed on every path out (app_drop_proof_copy).
+# dropped and the copy removed on every path out (app_drop_proof_copy). After
+# the upload, any build product's record is dropped too (issue 0115).
 cmd_publish() {
   local dist tag blockers assets staging zip
   dist="$(app_dist)"
@@ -739,6 +741,12 @@ cmd_publish() {
   step "uploading $APP_ASSET to release $tag"
   gh release upload "$tag" "$zip" || die "gh release upload failed"
   printf '\npublished: %s on release %s\n' "$APP_ASSET" "$tag"
+  # The end of the release steps: any build product's record still standing is
+  # dropped, so the bundle id resolves to the installed app alone (issue 0115).
+  local said
+  if ! said="$(ls_drop_under "$APP_STATE_DIR")"; then
+    app_warn_lines "$said"
+  fi
 }
 
 SUBCOMMANDS="app-icons doctor store-creds app-sign app-notarize app-verify publish"

@@ -955,6 +955,21 @@ publish_in_background() {
   proof_copy_gone
 }
 
+# --- issue 0115: the release steps end with no build product registered ------
+
+@test "issue 0115: publish drops any build product's record still standing after the upload" {
+  publishable
+  ls_fake_register "$FAKES" "$PRODUCT"
+  run_macos publish
+  [ "$status" -eq 0 ] || fail "exit $status: $output"
+  local product left
+  product="$(ls_resolved "$PRODUCT")"
+  grep -qx -- "-u $product" "$FAKES/lsregister.calls" || fail "no lsregister -u on $product: $(cat "$FAKES/lsregister.calls")"
+  left="$(records_under "$(ls_resolved "$XDG_STATE_HOME/menuz/build/macos")")"
+  [ -z "$left" ] || fail "records left under the build root: $left"
+  [[ "$output" != *"could not drop"* ]] || fail "$output"
+}
+
 # --- issue 0106: the staged copy keeps no Launch Services record -------------
 #
 # codesign, stapler and spctl can register the staged copy, as the fake

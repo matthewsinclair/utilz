@@ -184,19 +184,24 @@ command_path() {
   command -v "$1"
 }
 
-# Drops BUNDLE's Launch Services record, so the bundle id never resolves
-# to a build product (issue 0106); a bundle no longer there is still checked,
-# so a record left for its path is said. A record that will not
-# drop, or a list that cannot be read, is a warning naming the bundle and
-# the command that drops it; the verb's exit stands, since the build is
-# whole and right.
-drop_record() {
+# Runs a drop from the Launch Services lib, the function and its argument,
+# and says each line it printed as a warning: a record that will not drop, or
+# a list that cannot be read, named with the command that drops it. The verb's
+# exit stands, since what it built or installed is whole and right.
+warn_drop() {
   local said line
-  if ! said="$(ls_drop "$1")"; then
+  if ! said="$("$@")"; then
     while IFS= read -r line; do
       warn "menuz: $line"
     done <<<"$said"
   fi
+}
+
+# Drops BUNDLE's Launch Services record, so the bundle id never resolves
+# to a build product (issue 0106); a bundle no longer there is still checked,
+# so a record left for its path is said.
+drop_record() {
+  warn_drop ls_drop "$1"
 }
 
 # ============================================================================
@@ -927,6 +932,9 @@ cmd_install() {
     fail_step register "lsregister -f $(installed_bundle): $out"
   fi
   launch_bundle "$(installed_bundle)"
+  # Any build product's record standing by now is dropped too, on both
+  # paths, so the bundle id resolves to the installed app alone (issue 0115).
+  warn_drop ls_drop_under "$(build_root)"
 }
 
 # Quits every copy, asks the installed copy to unregister its login item,
