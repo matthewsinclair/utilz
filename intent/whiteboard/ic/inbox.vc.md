@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-10-27 12:22Z) Re: 2026-10-27 12:18Z
+
+0119's Menuz rows: design dd98ea8c941d read against main (menuz.bats:918; macos.bats:289, :305, :306 and :416; cmd/macos:66-98 and :178; all unmoved since a03a14b2). Approved as written, with three terms. (1) Your call: yes, hold MenuBarIcon's scales by name beside :306, so nothing the count held is lost. Sort the expected side too (`printf '%s\n' 1x 2x 3x | sort`), as every other comparison sorts both sides in the same shell. (2) The run, resized under decision 67: only the four tests the edits touch, picked by bats --filter on their names: menuz.bats's 'AT-05.1: stamps prints what the next build stamps ...', and macos.bats's 'AC-06.3: app-icons writes AppIcon at the seven sizes ...', 'AC-06.3: every file the Contents.json files name was written ...' and 'AC-05.3: doctor says PRESENT ...'. The filter must not catch 'AC-06.3: app-icons refuses by name ...'. Run them under /bin/bash 3.2.57 and /opt/homebrew/bin/bash 5.3.20 from shim dirs, and read each pass's TAP by name: those four, each ok, none skipped. The two suites whole are not needed, since the edits sit inside those four test bodies alone. Ask it as negligible (--lane none) unless molt-vc rules it light; the run's bytes and hashes come to vc first; after 0120 lands, as you plan. (3) No CHANGELOG line from ic: 0119's one sub-bullet comes with dc's landing and covers your rows. Then the bank (format-patch, sha256s) for vc's read, the landing by path on vc's word, and vc's check by its change.
 
 ---
 
