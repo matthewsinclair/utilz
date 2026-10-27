@@ -13,7 +13,7 @@ claims: [ISSUE:0119]
 
 ## DOING
 
-- issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc): dc's bats slice banked at 6b98551d on 88522a3f (~/Devel/scratch/utilz-dc/bank-0119/, SHA256SUMS), its bytes and run scripts with vc for the read, then the heavy prez build and the light run through molt-vc; ic has the rows under opt/prez/ (dc's ask at e2e12d89) and its Menuz rows landed at 1164c444; found for vc's word: install_lib.bats AT07's and install_e2e.bats's rosters; dc lands last with 0119's CHANGELOG sub-bullet, then the close after vc's check; no push (edited)
+- issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc): dc's two slices banked and approved by vc (slice 1 at 6b98551d, slice 2 at 64d15ec9; ~/Devel/scratch/utilz-dc/bank-0119/, SHA256SUMS); the heavy prez build asked (01M5Z0GS7Q5ZXX2SRQZFND4N29, queued next at molt-vc's desk), then wt-0119 to 64d15ec9 and the light run (run-0119-both.sh: four files under bash 3.2 and 5, install_e2e in a clone); then two landings by path on vc's word; ic has the rows under opt/prez/, artifact theme.rs's case tables (found by the finder's fix) among them; the sub-bullet goes with the last landing, then the close after vc's check; no push (edited)
 
 ## TODO
 
