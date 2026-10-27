@@ -1,0 +1,16 @@
+{
+  "id": "01M5YM1PNQ2B4CG25H81VQMEPP",
+  "ts": "2026-10-27T12:06:04.727Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 15,
+    "text": "Issue 0119's Menuz rows (owner dc; ic edits them): dc's ledger, body v5 at 0bb4fce6, names menuz.bats:918 and macos.bats:289, :305, :306 and :416 (lines at a03a14b2, unmoved since), each to be compared by name as the body's Fix says. The edits start from 0117's commit once it lands; commits of their own, by path on vc's word; the smallest run, booked through vc. Design notes in ~/Devel/scratch/utilz-ic/RESUME.md."
+  }
+}

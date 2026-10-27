@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 11:53Z
+heartbeat_at: 2026-10-27 12:06Z
 status: active
-focus: "0118 held until devbin 0.1.16 is cut and vendored (its body set at 5c8c2687, read by vc); 0119's Menuz rows, narrowed by hv to count assertions in tests, only if dc's narrowed ledger finds any; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
+focus: "27 Oct: folded for hv's compact (round 3), not released. hold 18: 0118, until devbin 0.1.16 is cut and vendored. todo 15: 0119's Menuz rows, named by dc's ledger (v5 at 0bb4fce6), edited from 0117's commit once it lands. todo 13: 0114, on arca_swift's tag carrying 0003's fixes. Resume ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0118]
 ---
 
@@ -18,7 +18,7 @@ _(none)_
 ## TODO
 
 - Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, is ArcaLogConsole's WP-11 and carries none; 0003 is open at arca_swift's main ffdff0ab; menuz's resolved pin is 0.2.0); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
-- Issue 0119's Menuz rows, narrowed by hv (27 Oct, through vc): only Menuz test assertions that compare against a written count, if dc's narrowed ledger finds any; strings, comments and test names are out, and 0113 is withdrawn. When the ledger comes and vc reads it, make those edits in commits of their own, then the smallest run, booked through vc. None if the ledger finds no Menuz row. (edited)
+- Issue 0119's Menuz rows (owner dc; ic edits them): dc's ledger, body v5 at 0bb4fce6, names menuz.bats:918 and macos.bats:289, :305, :306 and :416 (lines at a03a14b2, unmoved since), each to be compared by name as the body's Fix says. The edits start from 0117's commit once it lands; commits of their own, by path on vc's word; the smallest run, booked through vc. Design notes in ~/Devel/scratch/utilz-ic/RESUME.md. (edited)
 
 ## Holds
 
