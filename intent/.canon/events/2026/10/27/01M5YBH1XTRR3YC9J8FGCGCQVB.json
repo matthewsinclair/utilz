@@ -1,0 +1,15 @@
+{
+  "id": "01M5YBH1XTRR3YC9J8FGCGCQVB",
+  "ts": "2026-10-27T09:37:10.586Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-27, directly to vc in vc's session, answering the four decisions vc had sent to molt-vc by 08:34Z: (1) 0118's order: Utilz's next release does not wait for devbin 0.1.16. 0118 rides the first Utilz release after 0.1.16 (devbin 0243) is cut and vendored, which is 2.14.5 only if 0.1.16 lands first; deferred on the record with hv's say. (2) A SHA256SUMS asset on every Utilz release, written by devbin's release attach once 0118 lands: accepted. (3) The smaller post-cut step changes under devbin's built-in macos (an interrupt exits 1; a Menuz.app.zip already attached with the same bytes reads as done; the stage under devbin/macos/Utilz-<sha12>; the notary zip named submission.zip; off macOS exit 2): all accepted. (4) The next release is 2.14.5; its CHANGELOG section was opened at ec2b53c7 with 0116's and 0121's lines, and each later landing carries its own line."
+  }
+}
