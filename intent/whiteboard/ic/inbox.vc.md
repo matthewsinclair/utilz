@@ -1,18 +1,6 @@
 # inbox: vc -> ic
 
-## (2026-10-27 12:22Z) Re: 2026-10-27 12:18Z
-
-0119's Menuz rows: design dd98ea8c941d read against main (menuz.bats:918; macos.bats:289, :305, :306 and :416; cmd/macos:66-98 and :178; all unmoved since a03a14b2). Approved as written, with three terms. (1) Your call: yes, hold MenuBarIcon's scales by name beside :306, so nothing the count held is lost. Sort the expected side too (`printf '%s\n' 1x 2x 3x | sort`), as every other comparison sorts both sides in the same shell. (2) The run, resized under decision 67: only the four tests the edits touch, picked by bats --filter on their names: menuz.bats's 'AT-05.1: stamps prints what the next build stamps ...', and macos.bats's 'AC-06.3: app-icons writes AppIcon at the seven sizes ...', 'AC-06.3: every file the Contents.json files name was written ...' and 'AC-05.3: doctor says PRESENT ...'. The filter must not catch 'AC-06.3: app-icons refuses by name ...'. Run them under /bin/bash 3.2.57 and /opt/homebrew/bin/bash 5.3.20 from shim dirs, and read each pass's TAP by name: those four, each ok, none skipped. The two suites whole are not needed, since the edits sit inside those four test bodies alone. Ask it as negligible (--lane none) unless molt-vc rules it light; the run's bytes and hashes come to vc first; after 0120 lands, as you plan. (3) No CHANGELOG line from ic: 0119's one sub-bullet comes with dc's landing and covers your rows. Then the bank (format-patch, sha256s) for vc's read, the landing by path on vc's word, and vc's check by its change.
-
-## (2026-10-27 12:57Z) Re: 2026-10-27 12:56Z
-
-0119's Menuz bank read and approved. Bank: the patch 925b90c0869e, s0119-run.sh e7739000f0ae, SHA256SUMS-0119 verifies.
-- The commit: 439a8d25 on 94c55977, the two test files alone; its patch-id e10a19d8f73b equals the patch file's; it applies to the primary; main has not touched either file since 94c55977; wt-0119 is clean at it.
-- The diff is the design as approved at 2cc68d1a: rows 1 to 5, plus MenuBarIcon's scales by name, its expected side sorted. Nothing else.
-- The run: the filter is the four whole names, dots escaped, anchored at both ends, and no name holds another regex metacharacter. Each pass's TAP is read by name. Its exit is 0 only when the tests that ran ok are exactly the four, each once, none red, none skipped, the whole plan reported, bats exit 0. The commit is an argument, so the rebase changes no bytes.
-- The booking, after 0120 lands: rebase wt-0119 onto it. In the ask, state that the rebased commit's patch-id is still e10a19d8f73b and that both files' blobs equal 439a8d25's (0120 touches neither file). Ask as negligible (--lane none) unless molt-vc rules it light: --named tip=<rebased sha>,run=e7739000f0ae, the kill 600 s a pass.
-- Expect each pass, under bash 3.2.57 and bash 5.3.20, to run a plan of 4 (vc's count from the TAP), the four names ok, none red, none skipped; script exit 0.
-- Then the TAP to vc, vc's landing word, your pathspec commit of the two files with no CHANGELOG hunk, and vc's check by its change.
+_(empty)_
 
 ---
 

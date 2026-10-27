@@ -1,0 +1,16 @@
+{
+  "id": "01M5YQ4WEPH3W4S6KPXF3MRXDB",
+  "ts": "2026-10-27T13:00:14.678Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "2.14.5, the next Utilz release (hv, 27 Oct; decision 68): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (decision 67), and checks each landing by its change; each landing carries its CHANGELOG line under 2.14.5 (section opened at ec2b53c7). Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179; closed 8cff60a6), 0117 (94c55977, checked by its change; closed 804ad593). 0120: cc rebased it onto 94c55977 at 1010ddf8; vc's three terms are green, so no run again; its landing word comes after hv's compact, with its bullet before the Harness bullet. 0119: dc's finder at 94c55977, the edits in a worktree, each run's bytes to vc before booking. ic's Menuz rows are banked (439a8d25, patch-id e10a19d8f73b) and approved (e0a0c6be); their four-test run (negligible) goes after 0120 lands. The kovacs legs of 0117, 0119 and 0120 go in one message after the desk work (decision 59). 0113 withdrawn (decision 70). ic: 0118 holds for devbin 0.1.16 (devbin 0243; vc answered its Q-A and Q-B from 0118's body and decision 66); 0114 waits on arca_swift's tag."
+  }
+}
