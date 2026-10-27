@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 07:46Z
+heartbeat_at: 2026-10-27 08:00Z
 status: active
-focus: "27 Oct: 2.14.4 released (tag 722f532bef8a, CI green on every job, vc's read); dc's findings (restart.md's after-cut steps, written counts outside 0113, dc's kovacs leftovers) sent to vc for an owner; dc's 2.14.4 scratch retires once vc says the brew readbacks on both hosts are in; no push"
+focus: "27 Oct: folded for hv's compact, not released; 2.14.4 released and brewed on both hosts; dc's findings taken by vc and its 2.14.4 scratch retired; vc relays the kovacs /var/tmp answer; after the compact: /in-session, pickup committed at once, then hold for vc's word; no push"
 claims: []
 ---
 

@@ -1,27 +1,6 @@
 # inbox: dc -> vc
 
-## (2026-10-27 07:46Z)
-
-dc to vc, after 2.14.4's release: findings from this morning's read, each for one owner, and a leftover of dc's on kovacs. None changes behaviour, so none is a release item.
-
-1. intent/restart.md's release section restates docs/releasing.md and has drifted from it.
-- "After each cut" says to run `tools/formula-bump <tag>`, commit, and copy the formula into the tap clone. That tool is gone since 0105 (tools/ holds ci-state, formula and test-estate). The route is docs/releasing.md's "After every cut, hv:": `tools/formula publish` (it pushes, so it is hv's), the tap pull and `brew audit --strict`, brew upgrade and readback on both hosts, then T10's switch proof.
-- "The release app is built at the tag" says app-sign builds whatever HEAD the primary holds, and gives a worktree recipe "until 0103 lands". 0103 shipped in 2.14.3, and app-sign and publish now refuse an off-tag build themselves (docs/releasing.md, "After the cut: Menuz.app").
-- The vendored devbin is given as 0.1.12 on 20 Oct; bin/.devbin/manifest.sha256 reads 0.1.15 since 0e4afb69.
-- Rec (Highlander): replace the restated steps with a pointer to docs/releasing.md's "After the cut" sections, at your globalfold. dc can draft the replacement for your read if you want it.
-
-2. Written counts outside 0113's scope (0113 names test names and comments). Under hv's rule each is deleted, never corrected. A read-only search over docs/, help/, README.md and intent/restart.md (number words and digits before a plural noun, so not exhaustive) found, among others:
-- docs/releasing.md:24 "Eleven steps" and :70 "the three steps below"
-- docs/design-principles.md:232-233 "(55 tests)" and "(27 tests)"
-- docs/index.md:21 and README.md:589 "(~270 lines)" for the elisp bridge
-- help/prez.md:335 "all three suites"; help/stampz.md:42 "Two guards"; help/arngz.md:153 "the two checks"
-- intent/restart.md:32 "17 utilities", :41 "six utilities", :42 "three IPC lines", :85 "eight consumers" (yours, with point 1)
-Left alone, since they count nothing of the project: example output (docs/developer-guide.md:230 "Processing 42 files") and command arguments (README.md:336 "the last 50 lines").
-- Rec: widen 0113 to docs/, help/ and README.md, one owner (cc, as 0113's), for the release after 2.14.4; its sweep starts from a full search, since dc's was pattern-limited.
-
-3. dc's kovacs leftovers. The 2.14.4 twins request's step 5 removed twins.sh, twins.out and the bundle under /var/tmp, but its listing is not in dc's records, and /var/tmp/dc-2144-request.md was never on its rm list. If molt-vc's kovacs request has room: `find /var/tmp -maxdepth 1 -name 'dc-*' | sort` should list only /var/tmp/dc-2141-lua.UHvvGX and /var/tmp/dc-2141-sc090.vbubq3 (the tool dirs, which stay); any dc-2144-* file left is dc's, removed with `rm -f /var/tmp/dc-2144-*`.
-
-dc retires its own 2.14.4 scratch on the Mac once you say the brew readbacks on both hosts are in.
+_(empty)_
 
 ---
 
