@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 08:13Z
+heartbeat_at: 2026-10-27 08:48Z
 status: active
-focus: "27 Oct: after hv's compact, dc holds for vc's word; 2.14.4 released and brewed on both hosts, dc's findings taken by vc, its 2.14.4 scratch retired; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
-claims: []
+focus: "27 Oct: issue 0119 (counts in code) filed with its design at d5dc7d25 and sent to vc; dc holds for vc's read, no edit or booking before it; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
+claims: [ISSUE:0119]
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-_(none)_
+- issue 0119 (counts in code; vc's split, 27 Oct): filed whole with its design at d5dc7d25 and sent to vc; no edit and no booking before vc's read; after 0117 lands, the scan and the ledger at the base after it, the edits in a worktree under ~/Devel/scratch/utilz-dc/; ic reads the Menuz rows first; owner dc; no push
 
 ## TODO
 

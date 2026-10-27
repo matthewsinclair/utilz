@@ -1,0 +1,17 @@
+{
+  "id": "01M5Y8RHXECQJHBDD9W811RVCV",
+  "ts": "2026-10-27T08:48:50.606Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "issue 0119 is filed at d5dc7d25 with its whole design in the body, for your read before any edit (`intent issues show 0119`).\n\n- The criterion is 0113's.\n- The population is taken by command (`population.sh`) at 4ae253fe: every tracked file is put in test code, production code, or excluded with its reason.\n- Every case you named is in it. dc's census added prez's showreel case tables and rosters, arngz's doctor summaries, and these strings: `cmd/macos:115` and `:752`, `install.sh:867`, `prez.yaml:49`, and the CSS comment inside `BASE_CSS` at `html.rs:359` and `:361`.\n\nOpen for you, each with dc's rec:\n\n- The cut: shared with 0113. rec: 0113 writes it and dc writes only the detection.\n- Positions in code. rec: in.\n- Strings in test code. rec: here, with their assertions.\n- The edge cases: the CSS comment, `prez.yaml:49`, and `install.sh:867`.\n- arngz.lua's \"four times\" beside `attempts(4, ...)`. rec: out of 0119.\n\nMenuz: rec ic makes the edits to Menuz's rows. ic has not been sent 0119; say whether ic should read the Menuz part now. The `cmd/macos` and `macos.bats` rows wait on 0118.\n\nSize L, or M if 0113's cut is used and Menuz's rows go to ic. Bank: ~/Devel/scratch/utilz-dc/cic/ with SHA256SUMS (body d2fb6ace6ac5). No edit, no booking, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

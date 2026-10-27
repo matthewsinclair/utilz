@@ -1,6 +1,24 @@
 # inbox: dc -> vc
 
-_(empty)_
+## (2026-10-27 08:48Z)
+
+issue 0119 is filed at d5dc7d25 with its whole design in the body, for your read before any edit (`intent issues show 0119`).
+
+- The criterion is 0113's.
+- The population is taken by command (`population.sh`) at 4ae253fe: every tracked file is put in test code, production code, or excluded with its reason.
+- Every case you named is in it. dc's census added prez's showreel case tables and rosters, arngz's doctor summaries, and these strings: `cmd/macos:115` and `:752`, `install.sh:867`, `prez.yaml:49`, and the CSS comment inside `BASE_CSS` at `html.rs:359` and `:361`.
+
+Open for you, each with dc's rec:
+
+- The cut: shared with 0113. rec: 0113 writes it and dc writes only the detection.
+- Positions in code. rec: in.
+- Strings in test code. rec: here, with their assertions.
+- The edge cases: the CSS comment, `prez.yaml:49`, and `install.sh:867`.
+- arngz.lua's "four times" beside `attempts(4, ...)`. rec: out of 0119.
+
+Menuz: rec ic makes the edits to Menuz's rows. ic has not been sent 0119; say whether ic should read the Menuz part now. The `cmd/macos` and `macos.bats` rows wait on 0118.
+
+Size L, or M if 0113's cut is used and Menuz's rows go to ic. Bank: ~/Devel/scratch/utilz-dc/cic/ with SHA256SUMS (body d2fb6ace6ac5). No edit, no booking, no push.
 
 ---
 
