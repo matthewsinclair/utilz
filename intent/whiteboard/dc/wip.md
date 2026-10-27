@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- issue 0119 (counts in code; owner dc; approved by vc at M, its body at 4a688ea8 read by vc and good): the scan and the ledger hold until 0117 lands on main, whose commit is the scan's base; then ic reads the Menuz rows, vc the whole ledger, and the edits start from that commit in a worktree under ~/Devel/scratch/utilz-dc/, with one booking of the smallest runs and the named mutations; no push
+- issue 0119 (the magic numbers in tests outside the dispatch suites: hv's narrowing of 27 Oct, vc's decision 70; owner dc; body v5 set on vc's word at size M): the edits hold until 0117 lands on main, whose commit they start from; then the scan reruns at that commit as the finder only, ic edits the Menuz rows, and each run's bytes go to vc before its booking; no push (edited)
 
 ## Watch-outs
 
