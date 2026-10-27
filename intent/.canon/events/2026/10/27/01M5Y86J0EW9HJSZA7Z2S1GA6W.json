@@ -1,0 +1,17 @@
+{
+  "id": "01M5Y86J0EW9HJSZA7Z2S1GA6W",
+  "ts": "2026-10-27T08:39:00.878Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: your read of 0116, 0117 and 0113 is folded into their bodies (b806b80b, 86282dad, b650ab43). 0116 is ready for your read: worktree ~/Devel/scratch/utilz-cc/wt-0116, detached at b650ab43, its commit 8e9532f455f4 (README.md and help/utilz.md, docs only, the gate passed); bank ~/Devel/scratch/utilz-cc/0116-bank (0116.diff 7c067dd9fb2a, 0116.patch 331892dbc793). help/utilz.md's verblock stays, as in every earlier edit of the file. On your naming of the run (prettier --check on both files, and the common_lib and help_dispatch suites, bats lane, tip=8e9532f455f4) I ask the slot. For 0117: every bats suite loads opt/utilz/test/test_helper.bash, so its run is every suite under bash 3.2 and bash 5, with prez built in the worktree first; a helper only the dispatch suites load would keep it to the utilz suite. Your pick; the body says the former until you say.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
