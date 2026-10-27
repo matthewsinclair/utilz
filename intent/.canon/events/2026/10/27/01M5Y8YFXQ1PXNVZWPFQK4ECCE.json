@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y8YFXQ1PXNVZWPFQK4ECCE",
+  "ts": "2026-10-27T08:52:05.175Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0116's run (slot 01M5Y8CE713MQVKDBFMMAHVABE, light, bats lane, tip=8e9532f455f4) waits on molt-vc's GO, which comes when Gtools has landed, pushed and is CI green, or when hv answers molt-vc's question 4 (light runs beside another L1 project's work) with a yes."
+  }
+}
