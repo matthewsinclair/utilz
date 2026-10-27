@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.5] - unreleased
+
+### Fixed
+
+- **README and `utilz help` name `use brew`'s refusal when the check for a name cannot finish** (issue 0116). Both already listed every other reason `use brew` refuses, removing nothing; they now say it also refuses when the check for a name cannot finish, and names that name and its check's exit status, as it has since 2.14.4 (issue 0112).
+- **`utilz use opt` with no prefix says what the prefix is and how to name one, and `utilz use brew` with no Utilz link says Homebrew's install already answers** (issue 0121; found by kovacs-sysadm testing 2.14.4 on a brew-only sleeve).
+  - The refusal claimed that Molt's sleeve config sets `UTILZ_INSTALL_PREFIX`, and it spoke of "this checkout". Neither is true on a brew-only machine or from a keg. It now says the prefix names the opt install's directory and how to name one: set it, or use `utilz install --prefix DIR` for a single publish. The same claim is gone from `help/utilz.md` and `README.md`.
+  - `use brew` with no Utilz link printed "removing the Utilz links", then a tally that counted another tool's link. It now says in one line that Homebrew's install already answers. Its removal path ends "<n> removed", with no tally of other tools' links.
+
 ## [2.14.4] - 2026-10-27
 
 ### Changed
