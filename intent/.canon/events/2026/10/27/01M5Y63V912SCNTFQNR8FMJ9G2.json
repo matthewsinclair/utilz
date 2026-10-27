@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y63V912SCNTFQNR8FMJ9G2",
+  "ts": "2026-10-27T08:02:34.913Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Todo 49 as an issue: README and help name use brew's refusal when it cannot finish a name's check (install.sh:1718, use.bats:586), filed whole with its design, then to vc for a read before any edit. Draft banked: ~/Devel/scratch/utilz-cc/todo49-bank/issue-draft.md."
+  }
+}

@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 07:39Z
+heartbeat_at: 2026-10-27 08:02Z
 status: active
-focus: "2.14.4 is released (tag 2.14.4 at 722f532b; CI green on every job, vc's read). Holding for hv's call on whether issue 0113 (the count sweep) and todo 49 (README and help name the cannot-finish refusal) start today, for the release after 2.14.4; until then, drafts only, in cc's scratch."
+focus: "Next release's work, on hv's word (vc's decision 65): issue 0113 (widened by vc: the suites, docs/, help/ and README.md) and todo 49 as an issue, each to vc for a read before any edit; drafts banked in ~/Devel/scratch/utilz-cc/0113-bank and todo49-bank. Folded for hv's compact, not released."
 claims: []
 ---
 
@@ -13,11 +13,12 @@ claims: []
 
 ## DOING
 
-_(none)_
+- Issue 0113, widened by vc on hv's rule (27 Oct): every written count in test names and comments across the suites, and in docs/, help/ and README.md (not intent/restart.md, which is vc's), is deleted. Doc before code: the plan (the population by command, extraction by parser, the ledger, and the proof that none is left) goes into 0113's body, then to vc for a read before any edit. Draft banked: ~/Devel/scratch/utilz-cc/0113-bank/plan-draft.md, with its open items for vc.
+- Todo 49 as an issue: README and help name use brew's refusal when it cannot finish a name's check (install.sh:1718, use.bats:586), filed whole with its design, then to vc for a read before any edit. Draft banked: ~/Devel/scratch/utilz-cc/todo49-bank/issue-draft.md.
 
 ## TODO
 
-- README and help name the cannot-finish refusal (use brew refuses, removing nothing, when a name's check cannot finish; install.sh:1718), for the release after 2.14.4
+_(none)_
 
 ## Holds
 
