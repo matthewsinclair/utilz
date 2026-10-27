@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 08:29Z
+heartbeat_at: 2026-10-27 09:55Z
 status: active
-focus: "ic: 0118 filed (b9facbe8) for vc's read, its code waiting on devbin's next release; 0115's diagnostic script being written to vc's shape, to vc before any booking; hold 17, the menu's arngz link (hv's); todo 13, 0114 on arca_swift's tag; resume ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "ic: 0115's fix banked and booked (light 01M5YA0E2HMX377DG3JNW2P648, behind Gtools), landing with its 2.14.5 CHANGELOG line on vc's word after a green run; then 0118's one body edit (hv's rulings, devbin 0243, the publish-end drop); 0119's Menuz rows after 0117 lands; todo 13, 0114 on arca_swift's tag; resume ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [ISSUE:0118, ISSUE:0115]
 ---
 
