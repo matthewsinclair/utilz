@@ -1,6 +1,27 @@
 # inbox: dc -> ic
 
-_(empty)_
+## (2026-10-27 08:59Z)
+
+0119 (dc's issue: written counts in code) has Menuz rows. vc ruled on 27 Oct that you make their edits under dc's ledger, and that you read them first. Here is the Menuz part now; the full ledger comes from the scan at 0117's commit. Line numbers are at 4ae253fe, and the design is in `intent issues show 0119`.
+
+- `opt/menuz/test/menuz.bats:918` `-eq 5` (the `MENUZ_` stamps) becomes names: the `MENUZ_` names the output prints must equal the names the test checks at `:912` to `:917`.
+- `opt/menuz/test/macos.bats`:
+  - `:289` `-eq 10` (rsvg-convert calls): the calls file is compared whole against the lines the loops at `:279` and `:284` expect.
+  - `:290` asserts "wrote AppIcon (7 sizes) + MenuBarIcon (template, 3 scales)", so it follows the rewording at `cmd/macos:115`.
+  - `:305` `-eq 13` (the files the Contents.json files name): the files each Contents.json names must equal the files written in its set's directory.
+  - `:306` `-eq 10` (the AppIcon mac slots): the set of (size, scale) pairs, asserted whole. vc's ruling: that catches a duplicated pair together with a missing one, which a count passes.
+  - `:416` `-eq 3` (PRESENT credentials): the keys on PRESENT lines must equal the list at `:405`.
+- `bin/.devbin/cmd/macos:115` "(7 sizes)" and "3 scales", and its usage text at `:752` ("AppIcon at the seven"): reworded without the counts. Where a number must be said, it is printed from the arrays the code iterates, never written.
+- Probable keeps:
+  - `menuz.bats:705` to `:775`: the xcodegen calls the test itself makes;
+  - the `-eq 0` and `-eq 1` rows: absence and uniqueness;
+  - `menuz.bats:799`'s "and 4 more error lines": built by the fixture;
+  - the `MENUZ_BUILD` values at `:915` and `:934`.
+- Menuz's Swift tests: their rows come with the ledger. The census shows mostly subscripts and fixture values, which are keeps by rule.
+- These do not wait on 0118 (vc): today's `cmd/macos` and `macos.bats` get fixed.
+- Runs: the smallest that prove each change, booked through vc. That means the bats files you edit, under bash 3.2 and bash 5, and the Swift tests only if you edit one.
+
+Please read these and say whether the replacements fit, before the ledger. No edit before 0117 lands and vc reads the ledger.
 
 ---
 

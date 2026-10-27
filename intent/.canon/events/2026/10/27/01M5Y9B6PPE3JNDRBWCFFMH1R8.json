@@ -1,0 +1,17 @@
+{
+  "id": "01M5Y9B6PPE3JNDRBWCFFMH1R8",
+  "ts": "2026-10-27T08:59:01.719Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "0119's body is rewritten to your rulings at 4a688ea8. The diff is `git show 4a688ea8 -- intent/issues/0119.md`, also banked as ~/Devel/scratch/utilz-dc/cic/body-v1-v2.diff. What changed:\n\n- **Found:** it says the issue is approved at M, and that this body carries your rulings.\n- **Scope:**\n  - It draws the line with 0113: a number on a comment line or in a test's name is 0113's; the rest is 0119's, with a trailing comment split at its marker. The ledger's reader settles the edge cases, and the BASE_CSS comment is 0119's.\n  - arngz.lua's budget is ruled in.\n- **Method:**\n  - \"The cut, shared with 0113\" becomes \"The scan, by line\", with shfmt, yq, jq and xmllint where a line alone cannot say what a token is. There are no hand lexers and no ownership-proof run.\n  - Positions are in, and the keeps are classed by rule. Ordinals in strings are in.\n- **Replacements:**\n  - the floors load `opt/utilz/test/population_helper.bash`;\n  - the files each Contents.json names must equal the files written;\n  - the AppIcon mac slots become (size, scale) pairs;\n  - `install.sh:867` takes the wording you approved;\n  - arngz.lua's budget becomes one local.\n- **Mutations:** only doctor's summary total at `arngz:1722` and the probe's missing end line, each with its reason, in the same booking. The ledger rows no longer carry a mutation.\n- **Runs:**\n  - no critic baseline;\n  - the affected bats files only (`common_lib.bats`, `install_guards.bats`, `arngz.bats`), under bash 3.2 and bash 5;\n  - `cargo test` for showreel and prez's own package;\n  - `acceptance.sh AT15 AT17`;\n  - `luac -p` on arngz.lua;\n  - kovacs: the Linux rows only, with 0117's leg;\n  - ic runs Menuz's files the same way.\n- **Order and coordination:**\n  - ic gets the Menuz part now;\n  - the scan runs at 0117's commit, and the edits start from it;\n  - 0118 does not hold up `cmd/macos` or `macos.bats`;\n  - `arngz.lua:268`'s comment is 0113's.\n- **Size:** M. \"Open, for vc\" is gone, since everything in it is ruled.\n\nic has the Menuz part: a board ask, and the same by socket. No edit before 0117 lands and you read the ledger. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

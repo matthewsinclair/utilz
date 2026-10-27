@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 08:48Z
+heartbeat_at: 2026-10-27 08:59Z
 status: active
-focus: "27 Oct: issue 0119 (counts in code) filed with its design at d5dc7d25 and sent to vc; dc holds for vc's read, no edit or booking before it; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
+focus: "27 Oct: issue 0119 approved at M; its body rewritten to vc's rulings at 4a688ea8, the diff with vc; ic has the Menuz part; dc holds until 0117 lands, then the scan and the ledger; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
 claims: [ISSUE:0119]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0119]
 
 ## DOING
 
-- issue 0119 (counts in code; vc's split, 27 Oct): filed whole with its design at d5dc7d25 and sent to vc; no edit and no booking before vc's read; after 0117 lands, the scan and the ledger at the base after it, the edits in a worktree under ~/Devel/scratch/utilz-dc/; ic reads the Menuz rows first; owner dc; no push
+- issue 0119 (counts in code; vc's split, 27 Oct): approved by vc at M with rulings, the body rewritten to them at 4a688ea8 and its diff with vc; ic has the Menuz part; after 0117 lands, the scan and the ledger at its commit (ic reads the Menuz rows, then vc the whole), the edits from it in a worktree under ~/Devel/scratch/utilz-dc/, and one booking of the smallest runs; owner dc; no push (edited)
 
 ## TODO
 
