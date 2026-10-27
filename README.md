@@ -628,7 +628,7 @@ This section is for the maintainer of a dev checkout, a clone of this repository
 Utilz follows the dev, opt, brew contract that every tool released through Homebrew follows (devbin's `docs/dev-opt-brew.md`, at devbin commit aeed31e4), as dev, stage and prod:
 
 - **dev** is the checkout, where the work happens: the bleeding edge.
-- **opt** is a working copy the checkout publishes with `utilz install`, kept apart from dev so what works is not disturbed by what is in progress. It lives at `$UTILZ_INSTALL_PREFIX`, which the sleeve sets (Molt's sleeve config); there is no default, and unset is refused by name.
+- **opt** is a working copy the checkout publishes with `utilz install`, kept apart from dev so what works is not disturbed by what is in progress. It lives at `$UTILZ_INSTALL_PREFIX`, which names its directory; there is no default, and unset is refused by name.
 - **brew** is the one prod publish: the Homebrew formula, rendered from a release tag ([docs/releasing.md](docs/releasing.md)). Inside it, `utilz install` refuses and names `brew upgrade utilz`.
 
 `utilz version` names the tree that answered, on one line:

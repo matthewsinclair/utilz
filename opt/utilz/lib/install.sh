@@ -33,9 +33,9 @@
 
 # Echo the opt prefix, tilde-expanded, or return 1, by name, when it is unset.
 #
-# UTILZ_INSTALL_PREFIX, SET BY THE SLEEVE (dev, opt, brew contract T1, issue
-# 0105): Molt's sleeve config writes it into every shell (Molt ST0008 WP05),
-# as it does MOLT_INSTALL_PREFIX and DEVBIN_INSTALL_PREFIX. Utilz reads only
+# UTILZ_INSTALL_PREFIX NAMES THE OPT INSTALL'S DIRECTORY (dev, opt, brew
+# contract T1, issue 0105). It is set where an opt install is wanted, and a
+# brew-only machine rightly leaves it unset (issue 0121). Utilz reads only
 # the variable. Until 0105 it was
 # install.prefix in the committed opt/utilz/utilz.yaml, which every Homebrew
 # keg then shipped: one machine's path, read on every machine, a default in
@@ -51,9 +51,10 @@ install_prefix_configured() {
 
   if [[ -z "$raw" ]]; then
     error "UTILZ_INSTALL_PREFIX is not set, so there is no opt prefix"
-    echo "  It names where 'utilz install' publishes this checkout, and Molt's" >&2
-    echo "  sleeve config sets it in every shell. --prefix DIR names one for a" >&2
-    echo "  single run. There is no default." >&2
+    echo "  It names the directory of the opt install: 'utilz install' publishes a" >&2
+    echo "  dev checkout there, and 'utilz use opt' points the links at it." >&2
+    echo "  Set it to name one, or pass --prefix DIR to 'utilz install' for a" >&2
+    echo "  single publish. There is no default." >&2
     return 1
   fi
 
@@ -1389,20 +1390,31 @@ _install_is_utilz_link() {
 # checked, so what is removed is what was asked about.
 _install_remove_links() {
   local bindir="$1" census="$2"
-  local name state detail removed=0 left=0
+  local name state detail removed=0 ours=""
 
   [[ -d "$bindir" ]] || {
     success "no link directory at $bindir, so nothing points away from brew"
     return 0
   }
 
-  echo "use: removing the Utilz links in $bindir"
+  # The census's Utilz rows alone. Every other link in the directory is
+  # another tool's, which use brew neither touches nor counts (issue 0121).
   while IFS=$'\t' read -r name state detail; do
     [[ -n "$name" ]] || continue
-    if ! _install_is_utilz_link "$state"; then
-      left=$((left + 1))
-      continue
-    fi
+    _install_is_utilz_link "$state" || continue
+    ours="$ours$name"$'\t'"$detail"$'\n'
+  done <<<"$census"
+
+  # No Utilz link: nothing to remove, and _install_use_brew has already seen
+  # Homebrew's utilz answer on PATH as it stands.
+  if [[ -z "$ours" ]]; then
+    success "no Utilz link in $bindir, so Homebrew's install already answers"
+    return 0
+  fi
+
+  echo "use: removing the Utilz links in $bindir"
+  while IFS=$'\t' read -r name detail; do
+    [[ -n "$name" ]] || continue
     # Both names are guarded, so an empty one stops the shell rather than
     # widening what is removed.
     rm -f -- "${bindir:?}/${name:?}" || {
@@ -1411,9 +1423,9 @@ _install_remove_links() {
     }
     echo "  removed:   $name (was $detail)"
     removed=$((removed + 1))
-  done <<<"$census"
+  done <<<"$ours"
 
-  success "$removed removed, $left left alone (not Utilz links)"
+  success "$removed removed"
 }
 
 # Echo the tree <word> names -- dev or opt -- from the running tree, or return

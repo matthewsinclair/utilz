@@ -35,8 +35,14 @@ make_fake_bin() {
   ln -s "../$(basename "$tree")/bin/utilz" "$bindir/beta"
   ln -s "$tree/bin/utilz" "$bindir/utilz"
 
-  # Nobody's. A link into a tree that is not Utilz at all.
-  mkdir -p "$BATS_TEST_TMPDIR/elsewhere"
+  make_stranger_link "$bindir"
+}
+
+# Nobody's link in <bindir>: one into a tree that is not Utilz at all, as
+# another tool's link in ~/.local/bin is.
+make_stranger_link() {
+  local bindir="$1"
+  mkdir -p "$bindir" "$BATS_TEST_TMPDIR/elsewhere"
   printf '#!/usr/bin/env bash\n' > "$BATS_TEST_TMPDIR/elsewhere/stranger"
   chmod +x "$BATS_TEST_TMPDIR/elsewhere/stranger"
   ln -s "$BATS_TEST_TMPDIR/elsewhere/stranger" "$bindir/stranger"
@@ -306,8 +312,32 @@ $(diff <(printf '%s\n' "$want") <(printf '%s\n' "$stderr"))"
   assert_success
   [[ "$(cd "$bindir" && echo *)" == "stranger" ]] || fail "the link directory still holds: $(cd "$bindir" && echo *)"
   [[ "$(readlink "$bindir/stranger")" == "$before" ]] || fail "use brew changed a link that is not Utilz's"
+  # Another tool's link is neither touched nor counted (issue 0121).
+  refute_output_contains "left alone"
   # The whole line, which names no path (issue 0109): the stub keg's version
   # and the commit its manifest records.
+  local recorded
+  recorded=$(manifest_source_commit "$brew/opt/utilz/libexec")
+  [[ -n "$recorded" ]] || fail "the stub keg's manifest records no commit"
+  printf '%s\n' "$output" | grep -qxF "utilz 9.9.9 (brew, ${recorded:0:12})" || fail "no version line 'utilz 9.9.9 (brew, ${recorded:0:12})': $output"
+}
+
+@test "use brew with no Utilz link says Homebrew's install already answers, with no removal header and no tally of other tools' links (issue 0121)" {
+  local src="$BATS_TEST_TMPDIR/n-src" bindir="$BATS_TEST_TMPDIR/n-bin"
+  local brew="$BATS_TEST_TMPDIR/homebrew" stub="$BATS_TEST_TMPDIR/brew-stub"
+  make_fake_src "$src"
+  make_fake_brew "$src" "$brew" "$stub"
+  # Only another tool's link, as kovacs's ~/.local/bin held claude.
+  make_stranger_link "$bindir"
+  local before
+  before=$(readlink "$bindir/stranger")
+
+  run run_install_function "set -euo pipefail; PATH='$bindir:$brew/bin:/usr/bin:/bin'; INSTALL_BREW='$stub'; UTILZ_HOME='$src'; install_verb_use brew --bin-dir '$bindir'"
+  assert_success
+  assert_output_contains "no Utilz link in $bindir, so Homebrew's install already answers"
+  refute_output_contains "removing"
+  refute_output_contains "left alone"
+  [[ "$(readlink "$bindir/stranger")" == "$before" ]] || fail "use brew changed a link that is not Utilz's"
   local recorded
   recorded=$(manifest_source_commit "$brew/opt/utilz/libexec")
   [[ -n "$recorded" ]] || fail "the stub keg's manifest records no commit"

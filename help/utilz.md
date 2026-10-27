@@ -222,7 +222,7 @@ utilz install --prefix DIR    # publish somewhere else
 utilz install --force         # republish over an existing install
 ```
 
-Where it publishes is `UTILZ_INSTALL_PREFIX`, which the sleeve sets (Molt's sleeve config). There is no default: unset is refused by name rather than guessed, because a publish to the wrong place looks exactly like a publish to the right one.
+Where it publishes is `UTILZ_INSTALL_PREFIX`, the opt install's directory: set it to name one, or pass `--prefix DIR` for a single publish. There is no default: unset is refused by name rather than guessed, because a publish to the wrong place looks exactly like a publish to the right one.
 
 **It runs only in a dev checkout, and the checkout's runtime set must be clean**: what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests. No flag overrides that, `--force` included, because the manifest records the commit the bytes came from. A file outside the runtime set, such as a doc or a board, does not block a publish.
 

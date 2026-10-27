@@ -162,15 +162,18 @@ EOF
 # THE PREFIX READER (design.md D6, AC05; UTILZ_INSTALL_PREFIX since issue 0105)
 # ============================================================================
 
-@test "install_prefix_configured refuses an unset UTILZ_INSTALL_PREFIX by name, saying who sets it (issue 0105)" {
+@test "install_prefix_configured refuses an unset UTILZ_INSTALL_PREFIX by name, saying what it is and how to name one (issues 0105, 0121)" {
   run run_install_function "unset UTILZ_INSTALL_PREFIX; install_prefix_configured"
   # rc 127 is the library failing to load, and a bare assert_failure cannot
   # tell it from the refusal.
   assert_exit_code 1
-  # AC05: unset is refused BY NAME, and the refusal says where it comes from.
+  # AC05: unset is refused BY NAME, and the refusal says how to name one. It
+  # claims no sleeve: a brew-only machine rightly leaves the prefix unset, and
+  # use opt reaches this refusal as install does (issue 0121).
   assert_output_contains "UTILZ_INSTALL_PREFIX is not set"
-  assert_output_contains "Molt's"
-  assert_output_contains "sleeve config sets it"
+  assert_output_contains "Set it to name one"
+  assert_output_contains "--prefix DIR"
+  refute_output_contains "sleeve"
 }
 
 @test "install_prefix_configured refuses an empty UTILZ_INSTALL_PREFIX as unset (issue 0105)" {
