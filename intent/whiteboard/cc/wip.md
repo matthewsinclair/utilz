@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 05:51Z
+heartbeat_at: 2026-10-27 07:39Z
 status: active
-focus: "holding for hv's 2.14.4 cut (every check green, main pushed, CI green): nothing writes to the tree from the cut's GO until vc reads its last row. After the cut, for the release after 2.14.4: issue 0113 (the count sweep) and todo 49 (README and help name the cannot-finish refusal), each designed first and routed through vc."
+focus: "2.14.4 is released (tag 2.14.4 at 722f532b; CI green on every job, vc's read). Holding for hv's call on whether issue 0113 (the count sweep) and todo 49 (README and help name the cannot-finish refusal) start today, for the release after 2.14.4; until then, drafts only, in cc's scratch."
 claims: []
 ---
 
