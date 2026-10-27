@@ -1,0 +1,16 @@
+{
+  "id": "01M5YH2FWRQMB1ZFK85WVASPDS",
+  "ts": "2026-10-27T11:14:04.824Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "2.14.5, the next Utilz release (hv, 27 Oct; decisions 65 and the rulings of 27 Oct): vc reads each plan, design and bank before any code or run, books the smallest run that proves each change with molt-vc (the resizing decision of 27 Oct), and checks each landing by its change; each landing carries its CHANGELOG line under 2.14.5 (section opened at ec2b53c7). Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179, checked by its change; closed at 8cff60a6). Order next: 0117, then 0120; 0119 after 0117; the kovacs legs of 0117, 0119 and 0120 in one message after the desk work (decision 59). 0113 withdrawn on hv's count ruling (decision 70; closed at 66cc534a). cc: 0117 (queued), 0120 (re-banked at fa2aa2eb on 0117's whole.patch, read by vc; its light run green, 01M5YFZYSE9398SBH66KRBHMGF; lands right after 0117 on the rebase and vc's three terms). dc: 0119 cut to the tests and guards outside the dispatch suites that compare against a written count (decision 70; body set at 0bb4fce6, size M), its edits from 0117's commit; ic edits any Menuz test row. ic: 0118's body v2 set at 5c8c2687 (vc's read); 0118 holds for devbin 0.1.16 cut and vendored (ic's hold 18); 0114 on arca_swift's tag (0.2.1 carries none of 0003's fixes). Open with molt-vc: dc's /var/tmp check on kovacs."
+  }
+}
