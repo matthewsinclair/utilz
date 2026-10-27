@@ -1,0 +1,15 @@
+{
+  "id": "01M5YZ7GW34859N5MMDGH7RASZ",
+  "ts": "2026-10-27T15:21:29.731Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc, ic's Menuz rows on its design approved at 2cc68d1a): hold 30 met when 0117 landed at 94c55977, where the finder reran and found every v5 row at its line, none new; the edits in ~/Devel/scratch/utilz-dc/wt-0119 at 94c55977, rebased onto 0120 if it lands before the bank; each run's bytes and hashes to vc before any booking; lands by path on vc's word with its CHANGELOG sub-bullet; no push"
+  }
+}

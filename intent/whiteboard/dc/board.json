@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff",
-    "heartbeat_at": "2026-10-27T12:10:53.438Z",
+    "heartbeat_at": "2026-10-27T15:21:29.917Z",
     "status": "active",
-    "focus": "27 Oct: back from hv's compact (round 3), active, never released; 0119 narrowed by hv (vc's decision 70) to the magic numbers in tests outside the dispatch suites, body v5 set at 0bb4fce6 at size M; hold 30 until 0117 lands, then the finder at 0117's commit, the edits in a worktree, ic editing the Menuz rows, each run's bytes to vc before its booking; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push",
+    "focus": "27 Oct: folded for hv's compact (round 4), not released; then hv in dc's session: push hard to finish today, molt-vc has the pen, vc coordinates Utilz's nodes; 0119 doing: hold 30 met (0117 at 94c55977), the finder reran there (every v5 row at its line, none new), the edits in wt-0119 at 94c55977, each run's bytes to vc before its booking; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push",
     "claims": [
       "ISSUE:0119"
     ],
@@ -851,7 +851,8 @@
       "kind": "hold",
       "seq": 30,
       "text": "issue 0119 (the magic numbers in tests outside the dispatch suites: hv's narrowing of 27 Oct, vc's decision 70; owner dc; body v5 set on vc's word at size M): the edits hold until 0117 lands on main, whose commit they start from; then the scan reruns at that commit as the finder only, ic edits the Menuz rows, and each run's bytes go to vc before its booking; no push",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T15:21:29.603Z",
       "recorded_at": "2026-10-27T09:00:38.683Z",
       "edited_at": "2026-10-27T11:00:30.286Z"
     },
@@ -863,6 +864,14 @@
       "state": "archived",
       "archived_at": "2026-10-27T09:29:31.414Z",
       "recorded_at": "2026-10-27T09:18:49.771Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 23,
+      "text": "issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc, ic's Menuz rows on its design approved at 2cc68d1a): hold 30 met when 0117 landed at 94c55977, where the finder reran and found every v5 row at its line, none new; the edits in ~/Devel/scratch/utilz-dc/wt-0119 at 94c55977, rebased onto 0120 if it lands before the bank; each run's bytes and hashes to vc before any booking; lands by path on vc's word with its CHANGELOG sub-bullet; no push",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:21:29.731Z"
     }
   ],
   "sent": [
