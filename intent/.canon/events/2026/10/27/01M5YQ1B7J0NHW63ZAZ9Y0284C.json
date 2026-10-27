@@ -1,0 +1,16 @@
+{
+  "id": "01M5YQ1B7J0NHW63ZAZ9Y0284C",
+  "ts": "2026-10-27T12:58:18.738Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 15,
+    "text": "Issue 0119's Menuz rows (owner dc; ic edits them): menuz.bats:918 and macos.bats:289, :305, :306 and :416, each compared by name (body v5 at 0bb4fce6). Banked and approved by vc at e0a0c6be: commit 439a8d25 on 94c55977 (wt-0119, branch ic-0119), patch-id e10a19d8f73b; the run is s0119-run.sh (e7739000f0ae). Next, once 0120 is on main: rebase wt-0119 onto it (the patch-id and both blobs unchanged), book the run as negligible (--named tip=<rebased sha>,run=e7739000f0ae, kill 600 s a pass), the TAP to vc, the pathspec commit of the two files on vc's word (no CHANGELOG hunk), vc's check by its change. Bank and notes in ~/Devel/scratch/utilz-ic/bank-0119/."
+  }
+}
