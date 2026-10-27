@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-27T07:53:50.514Z",
+    "heartbeat_at": "2026-10-27T08:00:38.717Z",
     "status": "active",
-    "focus": "vc: 2.14.4 released and brewed on both hosts (Menuz.app reinstalled through brew); records written; reading the next release's designs as cc and ic send them",
+    "focus": "vc: folded for hv's compact (27 Oct): 2.14.4 released and brewed on both hosts, records at fc5b8910; next, the next release's designs from cc and ic (doing 69); resume ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1460,10 +1460,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 17,
-      "text": "Host runs on this Mac and on kovacs, for every estate, book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z on 26 Oct), in the lanes heavy, cargo, bats, launchsvc and light, their capacities molt-vc's. Utilz's runs go through vc first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout. Only then does the session that will run it ask: intent estate slots ask heavy|light \"<what>\" --named tip=<sha>[,...] --node <node> (a negligible run asks with --lane none). It sends the id it prints, with the run's details, to molt-vc and vc. molt-vc grants the id into every lane the run holds (eg heavy,cargo,bats) and messages GO by name, which alone starts a run. START is intent estate slots start <id> --named <the same set> --node <node>; END is intent estate slots release <id> --result \"<one line>\" --node <node>. Each is also sent by message to molt-vc and vc until Part B's wait and watch land. A kovacs run's START and END come from kovacs-sysadm through molt-vc, and the asker adds --relayed. Heavy runs go one at a time; a light run shares a window only on molt-vc's grant, and a timing-like failure in it is rerun alone. Bytes that change after a grant send their new hash before the rerun. vc keeps its own count from the run's logs. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md.",
+      "text": "Host runs on this Mac and on kovacs, for every estate, book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z on 26 Oct), in the lanes heavy, cargo, bats, launchsvc and light, their capacities molt-vc's. Utilz's runs go through vc first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout. Only then does the session that will run it ask: intent estate slots ask heavy|light \"<what>\" --named tip=<sha>[,...] --node <node> (a negligible run asks with --lane none). It sends the id it prints, with the run's details, to molt-vc and vc. molt-vc grants the id into every lane the run holds (eg heavy,cargo,bats) and messages GO by name, which alone starts a run. START is intent estate slots start <id> --named <the same set> --node <node>; END is intent estate slots release <id> --result \"<one line>\" --node <node>. Each is also sent by message to molt-vc and vc until Part B's wait and watch land. A kovacs run's START and END come from kovacs-sysadm through molt-vc, and the asker adds --relayed. Heavy runs go one at a time; a light run shares a window only on molt-vc's grant, and a timing-like failure in it is rerun alone. Bytes that change after a grant send their new hash before the rerun. vc keeps its own count from the run's logs. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md. A run frees the heavy lane the moment its heavy part ends, and what remains re-asks as negligible (intent estate slots ask negligible \"<what>\" --lane none --named <set> --node <node>), as molt-vc ruled on 27 Oct for the cut's steps 6 to 11 and the app's notarise and publish. START must name its ask's own set: bytes that change after a grant are a new booking, so release the old ask with its result and ask again (--place-of keeps a place only for the same set).",
       "state": "live",
       "recorded_at": "2026-10-18T20:06:14.599Z",
-      "edited_at": "2026-10-26T13:21:49.368Z"
+      "edited_at": "2026-10-27T08:00:36.618Z"
     },
     {
       "node": "vc",
@@ -1554,10 +1554,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 21,
-      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.3 from the tap since 25 Oct (hv's own upgrade, which also moved openssl@4 to 4.1.0; rb2143's checks run by kovacs-sysadm, all green), with no dev checkout and no link into one. While kovacs-sysadm is running, every read and change on kovacs goes through it, and when it is not, ssh is fine (hv, 26 Oct, narrowing the no-ssh rule of 25 Oct); never sudo in a probe, since hv has not ruled on it. Through kovacs-sysadm: send it the exact commands with the expected output, molt-vc books it, and vc re-tallies. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
+      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.4 from the tap since 27 Oct (with devbin 0.1.15, through kovacs-sysadm on molt-vc's relay; each kovacs-sysadm request costs hv an approval in its session, so molt-vc batches them), with no dev checkout and no link into one. While kovacs-sysadm is running, every read and change on kovacs goes through it, and when it is not, ssh is fine (hv, 26 Oct, narrowing the no-ssh rule of 25 Oct); never sudo in a probe, since hv has not ruled on it. Through kovacs-sysadm: send it the exact commands with the expected output, molt-vc books it, and vc re-tallies. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
       "state": "live",
       "recorded_at": "2026-10-19T07:43:06.800Z",
-      "edited_at": "2026-10-26T07:13:47.892Z"
+      "edited_at": "2026-10-27T08:00:37.093Z"
     },
     {
       "node": "vc",
@@ -2006,9 +2006,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 59,
-      "text": "hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly. For Utilz now: no thread or issue is open, so the next release has nothing in it yet.",
+      "text": "hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly.",
       "state": "live",
-      "recorded_at": "2026-10-25T06:49:15.521Z"
+      "recorded_at": "2026-10-25T06:49:15.521Z",
+      "edited_at": "2026-10-27T08:00:37.550Z"
     },
     {
       "node": "vc",
@@ -2024,7 +2025,8 @@
       "kind": "decision",
       "seq": 60,
       "text": "hv, 2026-10-25, directly to vc: (1) the next Utilz release is 2.14.4 and carries 0107 and 0108; its pre-release checks start now, in the ruled order: Mac twins, then the Linux twins on kovacs through kovacs-sysadm, then dc's dry run, then hv's cut. (2) vc pushes main before the checks so CI reads it first. (3) molt-vc's desk is the one host queue for every estate on this Mac and kovacs; watchout 17's interleave with intent-vc is retired. (4) dc's kovacs legs no longer ship over ssh: each goes to kovacs-sysadm as a request, with the bundle, the commands and the expected output, and is booked with molt-vc as a heavy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T08:00:37.850Z",
       "recorded_at": "2026-10-25T09:50:07.050Z"
     },
     {
@@ -2042,7 +2044,8 @@
       "kind": "decision",
       "seq": 61,
       "text": "hv, 2026-10-25, directly to vc: A3's version-line change (devbin's contract T4: ' at <root>' comes off; Utilz said SAME to devbin-vc's draft b19ffcb9) goes into 2.14.4, not a later release. cc files the issue and lands it once A3 is in devbin's docs; the Mac twins, kovacs twins and dry run then rerun on the new code. The dry run's READY (dryrun-2144.sh e4de6bc0) is withdrawn from molt-vc's queue and the freeze is lifted.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T08:00:38.055Z",
       "recorded_at": "2026-10-25T15:38:50.188Z"
     },
     {
@@ -2096,7 +2099,8 @@
       "kind": "decision",
       "seq": 64,
       "text": "hv, 2026-10-26, through molt-vc (read 12:09:50Z), option (a) of vc's FOR hv: Utilz's conformance to A4 to T5 goes into 2.14.4 now. A4 as revised (devbin-vc, with intent-vc's wording; Utilz said SAME): \"`use brew` refuses, removing nothing, when no brew-managed copy would answer once the links are gone (the formula is not installed, its keg is not linked, or another copy comes first on PATH): it names each link it would have removed and the tree that link serves, why no Homebrew copy would answer, and the tool's own remedy (install or link the formula, or stay on dev or opt).\" cc files and fixes it after the compact (S, with tests), its design read by vc before any code, its run booked with molt-vc as a heavy (READY, then GO). Once it lands checked, the final-head checks run on the new head, each with its own READY: cc's Mac twins, then dc's kovacs twins (relayed through molt-vc to kovacs-sysadm), then dc's dry run; then it comes to hv to cut.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T08:00:38.250Z",
       "recorded_at": "2026-10-26T12:10:30.057Z"
     },
     {
@@ -6911,7 +6915,8 @@
       "recipient": "cc",
       "body": "vc's WORD for 0112's heavy: the second bank (F 6f301dab5ab5, notes 66497e9c05b5, fix ff4c4f031020, tests e528d8236fc6, whole 3bf33ff89d19, run d88687104bee) is checked against the first. The change between them is exactly the four folds: _install_real_dir at the six new sites (install_link_health left as it was, rightly); the mixed-reasons test with its remedy-order mutation; the typo; the shim dirs cleaned up, and refused if present. Ask your heavy slot through molt-vc: /bin/bash ~/Devel/scratch/utilz-cc/0112-bank/run-0112.sh, kill timeout 3000 s, named with F and whole.patch's hash; START and END to molt-vc and vc.",
       "fyi": false,
-      "recorded_at": "2026-10-26T15:18:14.538Z"
+      "recorded_at": "2026-10-26T15:18:14.538Z",
+      "archived_at": "2026-10-27T08:00:38.506Z"
     },
     {
       "id": "01M5WHRB1Y0C1P8KXJWT9WWYCK",

@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y607RA19T91NX69JFQ9HKW",
+  "ts": "2026-10-27T08:00:36.618Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Host runs on this Mac and on kovacs, for every estate, book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z on 26 Oct), in the lanes heavy, cargo, bats, launchsvc and light, their capacities molt-vc's. Utilz's runs go through vc first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout. Only then does the session that will run it ask: intent estate slots ask heavy|light \"<what>\" --named tip=<sha>[,...] --node <node> (a negligible run asks with --lane none). It sends the id it prints, with the run's details, to molt-vc and vc. molt-vc grants the id into every lane the run holds (eg heavy,cargo,bats) and messages GO by name, which alone starts a run. START is intent estate slots start <id> --named <the same set> --node <node>; END is intent estate slots release <id> --result \"<one line>\" --node <node>. Each is also sent by message to molt-vc and vc until Part B's wait and watch land. A kovacs run's START and END come from kovacs-sysadm through molt-vc, and the asker adds --relayed. Heavy runs go one at a time; a light run shares a window only on molt-vc's grant, and a timing-like failure in it is rerun alone. Bytes that change after a grant send their new hash before the rerun. vc keeps its own count from the run's logs. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md. A run frees the heavy lane the moment its heavy part ends, and what remains re-asks as negligible (intent estate slots ask negligible \"<what>\" --lane none --named <set> --node <node>), as molt-vc ruled on 27 Oct for the cut's steps 6 to 11 and the app's notarise and publish. START must name its ask's own set: bytes that change after a grant are a new booking, so release the old ask with its result and ask again (--place-of keeps a place only for the same set)."
+  }
+}

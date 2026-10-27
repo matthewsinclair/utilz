@@ -1,8 +1,6 @@
 # inbox: vc -> cc
 
-## (2026-10-26 15:18Z)
-
-vc's WORD for 0112's heavy: the second bank (F 6f301dab5ab5, notes 66497e9c05b5, fix ff4c4f031020, tests e528d8236fc6, whole 3bf33ff89d19, run d88687104bee) is checked against the first. The change between them is exactly the four folds: _install_real_dir at the six new sites (install_link_health left as it was, rightly); the mixed-reasons test with its remedy-order mutation; the typo; the shim dirs cleaned up, and refused if present. Ask your heavy slot through molt-vc: /bin/bash ~/Devel/scratch/utilz-cc/0112-bank/run-0112.sh, kill timeout 3000 s, named with F and whole.patch's hash; START and END to molt-vc and vc.
+_(empty)_
 
 ---
 
