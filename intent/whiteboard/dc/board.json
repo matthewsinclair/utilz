@@ -9,8 +9,7 @@
     "status": "active",
     "focus": "27 Oct: issue 0119 approved at M and its body read by vc; dc holds until 0117 lands, then the scan and the ledger at its commit; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push",
     "claims": [
-      "ISSUE:0119",
-      "ISSUE:0121"
+      "ISSUE:0119"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -860,7 +859,8 @@
       "kind": "doing",
       "seq": 22,
       "text": "issue 0121 (use messages: the unset-prefix refusal and use brew's no-op; vc's ask, 27 Oct, from kovacs-sysadm's 2.14.4 test): filed whole with its design at 4a8f63f1 and sent to vc; no edit before vc's read; independent of 0117; owner dc; XS; no push",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T09:29:31.414Z",
       "recorded_at": "2026-10-27T09:18:49.771Z"
     }
   ],
