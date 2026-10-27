@@ -3,21 +3,21 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 12:59Z
+heartbeat_at: 2026-10-27 15:25Z
 status: active
-focus: "Folded for hv's compact (27 Oct, round 4), not released; HOLD until hv reaches this session (no run, ask, landing or commit past this fold): 0117 landed at 94c55977 and closed at 804ad593, checked by vc by its change; 0120 rebased onto it at 1010ddf8 (bank 0120-bank), at vc for its three terms, lands on vc's word after the compact; the kovacs legs after the desk work (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [ISSUE:0120]
+focus: "27 Oct, pushing on (hv's word in cc's session): 0117 landed 94c55977, closed 804ad593; 0120 landed 88522a3f, closed 668a2f0e (vc checked both by their change; both worktrees folded); now 2.14.5's Mac twins script for vc's read, the run on molt-vc's GO on the final head; the kovacs legs in dc's twins (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Rebased onto 0117's landing 94c55977 at 1010ddf8 in wt-0120 (bank 0120-bank, whole.patch unchanged); its light run on C GREEN (01M5YFZYSE9398SBH66KRBHMGF); at vc for its three terms, then it lands on vc's word, its CHANGELOG bullet before the harness bullet. (edited)
+- 2.14.5's Mac twins script, banked from run-twins-2144-final.sh with HEAD_WANT=PENDING until the final head exists, for vc's read (vc, 27 Oct); the run starts only on molt-vc's GO by name, on the final head.
 
 ## TODO
 
-- 0117's and 0120's kovacs legs go in vc's one kovacs-sysadm message, with 0119's, after the desk work; a red there reopens that issue, and the fix is mine.
+- 0117's and 0120's kovacs legs ride in dc's kovacs twins on 2.14.5's final head (0120's with mawk's help_section, vc 27 Oct); a red there reopens that issue, and the fix is mine. (edited)
 
 ## Holds
 

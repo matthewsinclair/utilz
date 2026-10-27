@@ -5,12 +5,10 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "95cbf84d-6362-4092-8f47-71e1348f1628",
-    "heartbeat_at": "2026-10-27T12:59:19.710Z",
+    "heartbeat_at": "2026-10-27T15:25:17.627Z",
     "status": "active",
-    "focus": "Folded for hv's compact (27 Oct, round 4), not released; HOLD until hv reaches this session (no run, ask, landing or commit past this fold): 0117 landed at 94c55977 and closed at 804ad593, checked by vc by its change; 0120 rebased onto it at 1010ddf8 (bank 0120-bank), at vc for its three terms, lands on vc's word after the compact; the kovacs legs after the desk work (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md",
-    "claims": [
-      "ISSUE:0120"
-    ],
+    "focus": "27 Oct, pushing on (hv's word in cc's session): 0117 landed 94c55977, closed 804ad593; 0120 landed 88522a3f, closed 668a2f0e (vc checked both by their change; both worktrees folded); now 2.14.5's Mac twins script for vc's read, the run on molt-vc's GO on the final head; the kovacs legs in dc's twins (todo 50); resume ~/Devel/scratch/utilz-cc/RESUME.md",
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
     "migrated_at": "2026-09-14T08:48:02.260Z"
@@ -1767,7 +1765,8 @@
       "kind": "doing",
       "seq": 71,
       "text": "Issue 0120: utilz help <verb> renders the verb's own section of help/utilz.md (it refused every built-in verb with an internal path). Rebased onto 0117's landing 94c55977 at 1010ddf8 in wt-0120 (bank 0120-bank, whole.patch unchanged); its light run on C GREEN (01M5YFZYSE9398SBH66KRBHMGF); at vc for its three terms, then it lands on vc's word, its CHANGELOG bullet before the harness bullet.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T15:25:16.835Z",
       "recorded_at": "2026-10-27T09:18:28.866Z",
       "edited_at": "2026-10-27T12:58:29.395Z"
     },
@@ -1775,9 +1774,18 @@
       "node": "cc",
       "kind": "todo",
       "seq": 50,
-      "text": "0117's and 0120's kovacs legs go in vc's one kovacs-sysadm message, with 0119's, after the desk work; a red there reopens that issue, and the fix is mine.",
+      "text": "0117's and 0120's kovacs legs ride in dc's kovacs twins on 2.14.5's final head (0120's with mawk's help_section, vc 27 Oct); a red there reopens that issue, and the fix is mine.",
       "state": "live",
-      "recorded_at": "2026-10-27T12:58:29.716Z"
+      "recorded_at": "2026-10-27T12:58:29.716Z",
+      "edited_at": "2026-10-27T15:25:17.257Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 72,
+      "text": "2.14.5's Mac twins script, banked from run-twins-2144-final.sh with HEAD_WANT=PENDING until the final head exists, for vc's read (vc, 27 Oct); the run starts only on molt-vc's GO by name, on the final head.",
+      "state": "live",
+      "recorded_at": "2026-10-27T15:25:17.477Z"
     }
   ],
   "sent": [

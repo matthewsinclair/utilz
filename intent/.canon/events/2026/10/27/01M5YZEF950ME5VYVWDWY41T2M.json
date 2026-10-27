@@ -1,0 +1,15 @@
+{
+  "id": "01M5YZEF950ME5VYVWDWY41T2M",
+  "ts": "2026-10-27T15:25:17.477Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.14.5's Mac twins script, banked from run-twins-2144-final.sh with HEAD_WANT=PENDING until the final head exists, for vc's read (vc, 27 Oct); the run starts only on molt-vc's GO by name, on the final head."
+  }
+}
