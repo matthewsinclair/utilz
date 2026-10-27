@@ -1,0 +1,16 @@
+{
+  "id": "01M5Z143G8BDY1RDRH95WRHJRB",
+  "ts": "2026-10-27T15:54:34.889Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "2.14.5 to ready-to-cut today (hv, 27 Oct: push hard; the compact is still needed; molt-vc has the pen). vc reads each plan, design and bank before any code or run, books the smallest run that proves each change (decision 67), and checks each landing by its change. Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179), 0117 (94c55977), 0120 (88522a3f). Landed and checked: 0122 (e6838359; docs/releasing.md names 0115's drops; cc closes it). 0119: the Menuz rows landed (1164c444); dc's two bats slices (6b98551d, then 64d15ec9 with install_lib and install_e2e) approved, their build queued at the desk, then one light run, then a split landing with vc's working-tree check between; ic's prez slice (showreel, artifact, the harness) approved by design and in code, one heavy; 0119's sub-bullet rides its last landing. Deferred on the record: 0114 (decision 71), 0118 (decision 68). Menuz stays 0.4.7 (vc's call; 0106's precedent). Then vc names the final head: cc's Mac twins (one heavy, approved), cc's dry run, then READY TO CUT to molt-vc for hv. The kovacs twins (cc's request, approved with the head's values pending) wait for hv's approval in kovacs-sysadm's session: molt-vc sends them in one combined message on hv's return, and the READY TO CUT names them as the one thing waiting on hv. Resume: ~/Devel/scratch/utilz-vc/RESUME.md."
+  }
+}
