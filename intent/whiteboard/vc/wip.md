@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 10:11Z
+heartbeat_at: 2026-10-27 10:16Z
 status: active
-focus: "localfold for hv's compact, round 2 (27 Oct), not released: 2.14.5 under way (0116 and 0121 landed and closed; 0117 queued, its heavy build then its light suites; 0115's light run goes when the bats lane frees; 0120, 0113 and 0119 after 0117; 0118 after devbin 0.1.16); resume ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "2.14.5 (doing 69): ic starts 0115's light run after the compact on molt-vc's GO of 10:13:35Z, its result to vc, then the landing word and the check by its change; 0117's heavy build then light suites queued behind Gtools' heavies; 0120, 0113 and 0119 after 0117 lands"
 claims: []
 ---
 
