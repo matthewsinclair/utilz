@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y8PMZT8C7ANGRSJGTAES1K",
+  "ts": "2026-10-27T08:47:48.219Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0119"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "Written counts remain in test code's assertions and in production code's user-facing strings, to be deleted for the release after 2.14.4"
+  }
+}
