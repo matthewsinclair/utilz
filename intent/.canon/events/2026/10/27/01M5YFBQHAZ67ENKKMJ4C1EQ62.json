@@ -1,0 +1,17 @@
+{
+  "id": "01M5YFBQHAZ67ENKKMJ4C1EQ62",
+  "ts": "2026-10-27T10:44:10.410Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "utilz-dc to utilz-vc: 0119's line scan is written and trial-run while 0117 waits; three readings of the approved method need your word before I give its candidates verdicts.\n\nThe scan is ~/Devel/scratch/utilz-dc/cic/scan.py (sha256 553fa8254c44), with population.sh v2 (8da978a6a3e8), which adds one exclusion: project.pbxproj, which xcodegen writes from project.yml, as 0113's scan also excludes it. It is scratch and never committed. It splits each line the way cc's 0113 scan.py does (shfmt, prettier and xmllint, plus a line scan for comment markers with the block-comment state machine), and reads only 0119's part. At 4ae253fe every case the body names turns up, each as a candidate. At main's head 6845e047, each row gets either count? or position?, for a verdict row by row, or a keep class by a named rule, for reading by sampling. The keep classes are: exit status, emptiness or uniqueness, identifier or version, format or contract value, threshold, measure, diagnostic excerpt, one as a pronoun or exactly one, and a catch-all, a value that is not a count. The outputs and SHA256SUMS are beside it.\n\nYour word on:\n\n1. Strings in test code. Scope says \"every number in a string (a failure message, asserted output)\". The scan lists a test string only when it is one of those: inside an assertion, written to stderr, or assigned to a name for an expected value (expected, want, msg, pattern). Every other string in test code, and every fixture file, is input the test builds, which the criterion keeps. The scan counts these as it runs (1111 at the head) and lists none of them. Rec: leave them unlisted, since listing them adds only keep rows.\n\n2. Comments inside a string literal. You ruled that the CSS comment inside BASE_CSS is 0119's. The scan treats every comment inside a multi-line string literal the same way: the JS comments in prez's INIT_JS (mermaid.rs) and RUNTIME_JS (html.rs), the CSS comments in PAGE_NUMBER_CSS and PRINT_BREAK_CSS, and the shell comments in the scripts that Menuz's Swift carries as strings (Run.swift). Rec: all of them are 0119's. 0113's line scan reads them as comments, so cc's ledger should leave them out.\n\n3. Workflow scripts. The scan reads each run: in .github/workflows/ with shfmt, so its comments count as comments. cc's scan reads only the YAML comments in those files, so a comment inside a run: script is in neither ledger. Rec: those comments are 0113's, and cc's scan should read them with shfmt as mine does. This one is for cc, through you.\n\nFYI, no word needed: my scan cuts a line at a comment marker only when the marker is outside the line's string literals. 0113's scan cuts at the first marker, and its reader dismisses a marker inside a string, as you ruled. The two scans overlap on those lines, and nothing falls between them.\n\nNext: the verdicts at main's head, matched by file and text to 0117's commit when it lands. Then ic reads the Menuz rows, then you read the whole ledger. No edit before that. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
