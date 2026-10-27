@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- When arca_swift tags a release carrying its issue 0003's fixes (its newest tag is 0.2.0, menuz's pin): a thread for the next Utilz release moves menuz to that tag, proves the new pin by the menuz-app dispatch, and deletes menuz's copies (Masthead.swift drawsImage and setAppIcon, MenuzApp.swift isTestHost) for arca_swift's own, whose launch-time call also brings the single-instance guard menuz lacks. ST, WP and design before any code. vc's word, 27 Oct.
+- Watch for arca_swift's tag carrying its issue 0003's fixes (arca_swift's newest tag is 0.2.0, menuz's pin, on 27 Oct); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
 
 ## Holds
 

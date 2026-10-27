@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y5GYE2CT5BPZYSMSBW58Y2",
+  "ts": "2026-10-27T07:52:15.554Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 13,
+    "text": "Watch for arca_swift's tag carrying its issue 0003's fixes (arca_swift's newest tag is 0.2.0, menuz's pin, on 27 Oct); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct)."
+  }
+}
