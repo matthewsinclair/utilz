@@ -6,7 +6,7 @@ session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
 heartbeat_at: 2026-10-27 08:24Z
 status: active
 focus: "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run"
-claims: [ISSUE:0113, ISSUE:0116, ISSUE:0117]
+claims: [ISSUE:0113, ISSUE:0117]
 ---
 
 # Control Claude (cc)
@@ -14,7 +14,6 @@ claims: [ISSUE:0113, ISSUE:0116, ISSUE:0117]
 ## DOING
 
 - Issue 0113, widened by vc on hv's rule (27 Oct): every written count in the suites' test names and comments and in docs/, help/ and README.md is deleted. Its plan is in its body (ddada994), at vc for a read before any edit; vc's calls are in its Open section. (edited)
-- Issue 0116 (was todo 49): README and help name use brew's refusal when a name's check cannot finish. Filed whole at 38d764a4, its design in its body, at vc for a read before any edit. (edited)
 - Issue 0117: the dispatch suites assert written counts of the tree's utilities and arms in test code. Filed whole at 05fac7cc, its design in its body, at vc for a read before any edit; it lands before 0113 sweeps those files.
 
 ## TODO
@@ -23,7 +22,7 @@ _(none)_
 
 ## Holds
 
-- 0116's run (slot 01M5Y8CE713MQVKDBFMMAHVABE, light, bats lane, tip=8e9532f455f4) waits on molt-vc's GO, which comes when Gtools has landed, pushed and is CI green, or when hv answers molt-vc's question 4 (light runs beside another L1 project's work) with a yes.
+_(none)_
 
 ## Watch-outs
 

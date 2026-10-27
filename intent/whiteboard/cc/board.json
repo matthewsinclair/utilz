@@ -10,7 +10,6 @@
     "focus": "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run",
     "claims": [
       "ISSUE:0113",
-      "ISSUE:0116",
       "ISSUE:0117"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
@@ -1739,7 +1738,8 @@
       "kind": "doing",
       "seq": 69,
       "text": "Issue 0116 (was todo 49): README and help name use brew's refusal when a name's check cannot finish. Filed whole at 38d764a4, its design in its body, at vc for a read before any edit.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T09:01:35.304Z",
       "recorded_at": "2026-10-27T08:02:34.913Z",
       "edited_at": "2026-10-27T08:24:41.137Z"
     },
@@ -1756,7 +1756,8 @@
       "kind": "hold",
       "seq": 49,
       "text": "0116's run (slot 01M5Y8CE713MQVKDBFMMAHVABE, light, bats lane, tip=8e9532f455f4) waits on molt-vc's GO, which comes when Gtools has landed, pushed and is CI green, or when hv answers molt-vc's question 4 (light runs beside another L1 project's work) with a yes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T09:01:35.427Z",
       "recorded_at": "2026-10-27T08:52:05.175Z"
     }
   ],
