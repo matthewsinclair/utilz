@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Utilz's booked runs wait for molt-vc's GO (molt-vc's word, received by 08:44Z): the desk is Gtools' until Gtools has landed, pushed and is CI green (hv's rule of 26 Oct). Released when molt-vc sends GO at Gtools' end-point; 0116's light run (slot 01M5Y8CE713MQVKDBFMMAHVABE) may go sooner if hv answers molt-vc's question 4 (an L1 project's light runs beside another's work) yes; 0115's heavy plus launchsvc run queues behind Gtools' end-point whatever the answer. Work with no load (designs, reads, banks, scans) goes on. (edited)
+- Utilz's booked runs wait for molt-vc's GO (molt-vc's word, received by 08:44Z): the desk is Gtools' until Gtools has landed, pushed and is CI green (hv's rule of 26 Oct). Released when molt-vc sends GO at Gtools' end-point. Held: 0116's light run 01M5Y8CE713MQVKDBFMMAHVABE (tip=8e9532f455f4,run=a85ab5cfe22c), which may go sooner if hv answers molt-vc's question 4 (an L1 project's light runs beside another's work) yes; 0115's heavy plus launchsvc run 01M5Y8N7FNFDKXH4XVJ1SY77ZY (tip=0a1ff32d2921,script=441d5652f069,spy=049bef68ba43), which queues behind Gtools' end-point whatever the answer. Work with no load (designs, reads, banks, scans) goes on. (edited)
 
 ## Watch-outs
 
