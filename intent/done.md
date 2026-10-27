@@ -1,8 +1,36 @@
 ---
-verblock: "26 Oct 2026:v0.18: matts - 2.14.3 released"
+verblock: "27 Oct 2026:v0.19: matts - 2.14.4 released"
 ---
 
 # Done
+
+## 27 Oct 2026 -- 2.14.4 released: a version line with no path, a use brew that refuses rather than strand you, and mdagg's joins
+
+**2.14.4 is out**: annotated tag `2.14.4` on `722f532` ("release: 2.14.4"; the tag, both pushes and the release object 07:25Z), cut by hv through devbin's release core (`bin/devbin release v2.14.4`), booked through Intent's slots on molt-vc's desk once molt-vc called Utilz as part of hv's L1. It carries everything outstanding after 2.14.3, stacked into one release on hv's standing rule, and the CHANGELOG entry is the account of what it carries.
+
+**Before the cut**, every check ran green on `b2e07f1`'s code:
+
+- cc's Mac twins (slot 01M5WHTXHPV0RXDHSANAPNYE7D): the utilz suite (`install_e2e` from a full clone, since its setup reads red in a worktree by construction), acceptance, prez, cargo, and menuz's build and test on Xcode 27.1;
+- dc's kovacs twins (slot 01M5WJSWHGXYHTZXBTKQJCNMX6), through kovacs-sysadm from a bundle of main and its tags: tests.yml's Ubuntu loop, `cargo fmt` and clippy clean on rustc 1.99.1, and shellcheck 0.9.0 clean, its control firing;
+- dc's dry run (slot 01M5WS55XRFC2CQNDRDC9XVW4N) on `7ec64a6`, once Intent had reverted its critic's exit 4 on hv's ruling (Intent `ddb749ca7`): no step of the release core failed;
+- CI's Utilz Tests on `9711411` and `6d6d0d5`, after hv's pushes.
+
+**One commit reached the cut outside those checks**: devbin 0.1.15, which hv's devbin upgrade re-vendored into `bin/.devbin` on the morning of the cut. Its dirty tree stopped hv's first run at step 2, having written nothing; vc committed it on hv's word (`0e4afb6`), and the cut's own gates passed on it (`check all`, every option; `test estate`, every suite). It adds a built-in `macos` (devbin 0226), which Utilz's own `bin/.devbin/cmd/macos` shadows, so the app was signed by Utilz's command as at 2.14.3.
+
+**CI.** The tag run 40467032258 is green on every job, `Test on macOS`, `Rust (macos-latest)` and `menuz app (macOS)` among them. The push run 40467019048 is green, its macOS jobs skipped on a push by design.
+
+**After the cut**: `Menuz.app.zip` (0.4.7, build 2075, MenuzCommit `722f532b`, kind release; notarised and stapled) was built and signed at the tag in a detached worktree by vc and published by hv; the formula is on the tap at `396cd64`, `brew audit --strict` clean; brew 2.14.4 answers `utilz 2.14.4 (brew, 722f532bef8a)` from a fresh login shell on rhadamanth and on kovacs (molt-vc, the kovacs leg through kovacs-sysadm); rhadamanth is on `utilz use brew`, and its Menuz.app was reinstalled from the release through brew's `utilz menuz install`, whose doctor reads all ok once a stray Launch Services record of the app-sign build product was dropped (an issue for the next release).
+
+**Issues closed and shipped** (fix commits):
+
+- 0107, mdagg puts one blank line between the files it joins (`4baceb6`);
+- 0108, mdagg carries on past a missing file, then names it and exits 1 (`c5e346a`);
+- 0109, `utilz --version` names no path, and doctor names a path only on a failing check (the contract's A3; `2de8f0e`);
+- 0110, doctor names a dependency read or crate count that fails, and reaches its summary (`661baac`);
+- 0111, each doctor check is a function of its own, and `run_doctor` only coordinates (`27b441f`);
+- 0112, `utilz use brew` refuses, removing nothing, when no Homebrew copy would answer (the contract's A4 to T5; `b2e07f1`).
+
+**Threads closed:** none. **Issues closed:** 0107 to 0112. mdagg moved from 1.0.0 to 1.0.1; menuz stays 0.4.7.
 
 ## 24 Oct 2026 -- 2.14.3 released: the dev, opt, brew contract, and a Menuz.app taken only from its release tag
 

@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 07:41Z
+heartbeat_at: 2026-10-27 07:53Z
 status: active
-focus: "vc: 2.14.4 released (tag 722f532b, CI green, Menuz.app and formula published); brew on both hosts with molt-vc, then the records"
+focus: "vc: 2.14.4 released and brewed on both hosts (Menuz.app reinstalled through brew); records written; reading the next release's designs as cc and ic send them"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.4 RELEASED 27 Oct: release commit 722f532b, annotated tag 2.14.4 pushed to local and upstream, release object made; CI green on every job (main run 40467019048, tag run 40467032258). devbin 0.1.15 was vendored at 0e4afb69 on hv's word, and the cut's gates passed on it. Menuz.app.zip is published (0.4.7, build 2075, 722f532b, release; notarised dbea7d53). The formula is in the tap at 396cd64, audit clean. rhadamanth is on brew: from a fresh login shell every Utilz name resolves into the 2.14.4 keg, and utilz --version reads (brew, 722f532bef8a); use brew done by molt-vc. gtools-vc is told that 0107 is on brew, and the canon is refreshed at 52e5aaef. Left: kovacs's upgrade (at kovacs-sysadm, hv's approval there), Menuz.app's reinstall on rhadamanth (molt-vc, hv's (a)), then the records. (edited)
+- The next Utilz release (its number hv's; decision 65): vc reads each plan, design and bank before any code or run, books each run with molt-vc, and checks each landing by its change. cc: issue 0113, widened by vc on hv's count rule to docs/, help/ and README.md as well as test names and comments, and an issue for its todo 49 (README and help name use brew's cannot-finish refusal). ic: an issue converging Menuz's signing on devbin's built-in macos (devbin 0226), an issue for the app-sign build product left registered with Launch Services after the release (cause first), and the arca_swift 0003 tracking issue. Open with molt-vc: dc's /var/tmp leftover check on kovacs, riding with Gtools' next kovacs message. Open with hv through ic: whether ~/.config/menuz/bin/arngz stays on the dev tree.
 
 ## TODO
 

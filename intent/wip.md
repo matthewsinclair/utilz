@@ -4,11 +4,12 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 
 ## DOING
 
-- hv: the 2.14.4 cut. Every pre-release check is green and main is pushed to `9711411a` with CI green on it; vc books the cut's heavy slot through molt-vc, then hv runs `bin/devbin release v2.14.4`.
-- after the cut: app-sign at the tag, the formula, brew on rhadamanth and kovacs, `utilz use brew`, and `utilz --version` answering `(brew, <release sha>)` from a fresh login shell.
+- cc: issue 0113, every written count in test names and comments, `docs/`, `help/` and `README.md` deleted on hv's rule; its plan to vc before any edit.
+- cc: an issue for README and help to name `use brew`'s cannot-finish refusal; its design to vc before any edit.
+- ic: an issue to converge Menuz's signing on devbin's built-in `macos` (devbin 0226), retiring the duplicate app half of `bin/.devbin/cmd/macos`; its design to vc before any code.
+- ic: an issue for the app-sign build product left registered with Launch Services after a release; its cause, then its design, to vc.
+- vc: read each plan, design and bank; book each run with molt-vc; check each landing by its change.
 
 ## TODO
 
-- vc: after 2.14.4's cut, or in the fleet sweep after Intent's cut, refresh Utilz's generated CLAUDE.md and AGENTS.md (they still name /in-standards, folded into /in-essentials by Intent's ST0088) with `intent claude upgrade --apply --skip-settings`, asked of hv through molt-vc first.
-- vc: when the release carrying 0107 is on brew, tell gtools-vc, so Gtools deletes separate_headings (ST0018 WP-07).
-- cc: the sweep of written counts in test names and comments, where hv rules (an issue for the release after 2.14.4 is vc's rec).
+- ic: adopt arca_swift 0003's fixes once arca_swift tags them (ic's tracking issue).
