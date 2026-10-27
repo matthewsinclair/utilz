@@ -5,10 +5,13 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "bc129d3a-2e6b-4d1c-9293-1a261be43529",
-    "heartbeat_at": "2026-10-27T08:12:54.486Z",
+    "heartbeat_at": "2026-10-27T08:29:00.792Z",
     "status": "active",
-    "focus": "ic: after hv's compact (27 Oct): doing 10, the devbin macos issue (its version gate waits on devbin-vc's answer to vc's todo 56); todo 14, 0115's code read with no load, then a diagnostic to vc before any booking; hold 17, the menu's arngz link (hv's); todo 13, 0114 on arca_swift's tag; resume ~/Devel/scratch/utilz-ic/RESUME.md",
-    "claims": [],
+    "focus": "ic: 0118 filed (b9facbe8) for vc's read, its code waiting on devbin's next release; 0115's diagnostic script being written to vc's shape, to vc before any booking; hold 17, the menu's arngz link (hv's); todo 13, 0114 on arca_swift's tag; resume ~/Devel/scratch/utilz-ic/RESUME.md",
+    "claims": [
+      "ISSUE:0118",
+      "ISSUE:0115"
+    ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
   },
@@ -398,16 +401,18 @@
       "node": "ic",
       "kind": "doing",
       "seq": 10,
-      "text": "An issue for the next Utilz release (hv's yes through vc, 27 Oct, owner ic): converge Menuz's signing path on devbin 0.1.15's built-in macos (lib/cmd/macos, opt-in by commands.macos.enabled and a macos: block) and retire the duplicate app half of bin/.devbin/cmd/macos. The design's question is what the built-in may not carry: 0103's stamps refusal, the Launch Services drops of 0104 and 0106, and app-icons, which stays a project command. File it with its design in the body for vc's read before any code, and say how it is proven (a signed, notarised publish) before the next cut. Input: a read-only comparison of lib/cmd/macos with cmd/macos, lib/config and lib/resolve. No run until booked through vc.",
+      "text": "Issue 0118 (owner ic, hv's yes through vc, 27 Oct): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today (devbin-vc's words). Its design, its proof before the next cut and its Open calls for hv (SHA256SUMS, the order) are in the body, for vc's read before any code. The code waits on devbin's next release (devbin-vc's todo 177) and hv's order. No run until booked through vc.",
       "state": "live",
-      "recorded_at": "2026-10-27T08:00:08.467Z"
+      "recorded_at": "2026-10-27T08:00:08.467Z",
+      "edited_at": "2026-10-27T08:29:00.293Z"
     },
     {
       "node": "ic",
       "kind": "todo",
       "seq": 14,
       "text": "Issue 0115 (owner ic), the cause first: a code read with no load of each step against the Release product's path, from the build's drop to the doctor (opt/menuz/menuz, opt/menuz/lib/launch-services.sh, bin/.devbin/cmd/macos); then a diagnostic script, its hashes and expected results to vc before any booking (launchsvc). Signing only on hv's word; no notary submission, no publish, nothing that touches the installed app without hv's word. The fix's design goes to vc once the step is known.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T08:29:00.649Z",
       "recorded_at": "2026-10-27T08:00:08.670Z"
     },
     {
@@ -417,6 +422,14 @@
       "text": "No change to the menu's arngz link (~/.config/menuz/bin/arngz, which links into the primary and comes first on menuz's run PATH) until hv rules on it: asked in ic's session on 27 Oct (remove it, ic's rec, so the menu follows utilz use; or leave it on dev); hv's answer goes to vc.",
       "state": "live",
       "recorded_at": "2026-10-27T08:00:08.842Z"
+    },
+    {
+      "node": "ic",
+      "kind": "doing",
+      "seq": 11,
+      "text": "Issue 0115 (owner ic): the code read is done and checked by vc (only Xcode's build registers the Release product, and menuz's drop checks once). The diagnostic script is being written to vc's shape: unsigned arms, a spy bracketing menuz's -u with raw reads, timed reads, and the machine's records before and after. Its bytes, hashes, commands, kill timeouts and expected result go to vc before any booking (heavy plus launchsvc). The signed arm and the install's by-id calls run only on hv's word, through vc.",
+      "state": "live",
+      "recorded_at": "2026-10-27T08:29:00.499Z"
     }
   ],
   "sent": [

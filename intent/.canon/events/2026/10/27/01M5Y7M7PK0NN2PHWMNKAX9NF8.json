@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y7M7PK0NN2PHWMNKAX9NF8",
+  "ts": "2026-10-27T08:29:00.499Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue 0115 (owner ic): the code read is done and checked by vc (only Xcode's build registers the Release product, and menuz's drop checks once). The diagnostic script is being written to vc's shape: unsigned arms, a spy bracketing menuz's -u with raw reads, timed reads, and the machine's records before and after. Its bytes, hashes, commands, kill timeouts and expected result go to vc before any booking (heavy plus launchsvc). The signed arm and the install's by-id calls run only on hv's word, through vc."
+  }
+}
