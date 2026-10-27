@@ -15,3 +15,4 @@ DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/rest
 ## TODO
 
 - ic: issue 0114, adopt arca_swift 0003's fixes once arca_swift tags them.
+- cc, dc and ic: each landed issue's CHANGELOG line, written under the next release's section once hv names its number (0116's is banked).
