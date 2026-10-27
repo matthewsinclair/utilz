@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 12:59Z
+heartbeat_at: 2026-10-27 15:22Z
 status: active
-focus: "27 Oct: folded for hv's compact (round 4), not released; holding until hv compacts. todo 15: 0119's Menuz rows banked at 439a8d25 (patch-id e10a19d8f73b), approved by vc (e0a0c6be); once 0120 is on main, the rebase, the negligible run (s0119-run.sh e7739000f0ae) and the landing on vc's word. hold 18: 0118, until devbin 0.1.16 is cut and vendored. todo 13: 0114, on arca_swift's tag carrying 0003's fixes. Resume ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "27 Oct: resumed on hv's word in ic's session (push hard, finish today; molt-vc has the pen; vc coordinates Utilz's nodes). todo 15: 0119's Menuz rows banked at 439a8d25 (patch-id e10a19d8f73b), approved by vc (e0a0c6be); the moment 0120 is on main, the rebase, the negligible run (s0119-run.sh e7739000f0ae) and the landing on vc's word. hold 18: 0118, until devbin 0.1.16 is cut and vendored. todo 13: 0114, on arca_swift's tag carrying 0003's fixes. Resume ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:0118]
 ---
 
