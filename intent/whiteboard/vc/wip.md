@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 05:48Z
+heartbeat_at: 2026-10-27 07:41Z
 status: active
-focus: "vc: folded for the night; 2.14.4 ready to cut (checks green, 9711411a pushed and CI green); the cut is hv's tomorrow; no push"
+focus: "vc: 2.14.4 released (tag 722f532b, CI green, Menuz.app and formula published); brew on both hosts with molt-vc, then the records"
 claims: []
 ---
 
@@ -13,13 +13,12 @@ claims: []
 
 ## DOING
 
-- 2.14.4 cut, hv's. Every pre-release check is GREEN: the Mac twins and the kovacs twins on b2e07f19's code, dc's dry run on 7ec64a64 (0653670e0a86). hv pushed main to 9711411a on 26 Oct, and CI's Utilz Tests is green on it (run 40384674039). Next: book the cut's heavy slot through molt-vc, then hv runs bin/devbin release v2.14.4, which stops at step 6 to confirm; app-sign at the tag; the formula; brew on both hosts; utilz use brew (hv's); the version line reading brew; then todo 54. (edited)
+- 2.14.4 RELEASED 27 Oct: release commit 722f532b, annotated tag 2.14.4 pushed to local and upstream, release object made; CI green on every job (main run 40467019048, tag run 40467032258, macOS tests and the menuz app included). devbin 0.1.15 was vendored at 0e4afb69 on hv's word before the cut, and the cut's gates passed on it. Menuz.app.zip is published (0.4.7, build 2075, 722f532b, release; notarised dbea7d53). The formula is in the tap at 396cd64, audit clean. Left: molt-vc's brew upgrade on rhadamanth and kovacs, then use brew and --version reading (brew, 722f532bef8a) from a fresh login shell; menuz install on hv's (a) or (b); then todos 53 and 54 and the records. (edited)
 
 ## TODO
 
 - When the release carrying 0107 (mdagg's blank line between joined files) is on brew, tell gtools-vc, so Gtools' cc deletes separate_headings in its ST0018 WP-07 (gtools-vc's ACK, 25 Oct).
 - After 2.14.4's cut (or in the fleet sweep after Intent's cut, whichever comes first): Utilz's generated CLAUDE.md and AGENTS.md still name /in-standards, which Intent's ST0088 cull folded into /in-essentials (intent-vc, 25 Oct 18:47Z). Ask hv through molt-vc before running `intent claude upgrade --apply --skip-settings`, since it rewrites the project's agent contract; commit by path what it writes.
-- For hv, in the ready-to-cut message: written counts remain in test names and comments across the suites, outside 0111's and 0110's lines (hv's rule: a count written down is deleted, never corrected). Ask where the sweep goes: an issue for the release after 2.14.4 (vc's rec, since it changes no behaviour), or into 2.14.4. One owner: cc files it on hv's word.
 
 ## Holds
 
