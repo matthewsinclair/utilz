@@ -13,8 +13,8 @@ claims: [ISSUE:0113, ISSUE:0117]
 
 ## DOING
 
-- Issue 0113, widened by vc on hv's rule (27 Oct): every written count in the suites' test names and comments and in docs/, help/ and README.md is deleted. Its plan is in its body (ddada994), at vc for a read before any edit; vc's calls are in its Open section. (edited)
-- Issue 0117: the dispatch suites assert written counts of the tree's utilities and arms in test code. Filed whole at 05fac7cc, its design in its body, at vc for a read before any edit; it lands before 0113 sweeps those files.
+- Issue 0113, widened by vc on hv's rule (27 Oct): every written count and position in the suites' test names and comments, every hand-written Markdown file, and the comments in non-test code and config is deleted. Its method, resized on hv's rule of 23 Sep, is in its body (83daf01a). After 0117 lands: the scan and the ledger at the base, banked for ic's and vc's read, before any edit. (edited)
+- Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing, its bank (0117-bank, notes.md) at vc for a read; then a heavy for prez's build, freed when it ends, and a light for the two dispatch suites under bash 3.2 and bash 5; it lands before 0113. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M5Y9RDG3KZ3KJ4YQTNS9AYH6",
+  "ts": "2026-10-27T09:06:14.660Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 70,
+    "text": "Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing, its bank (0117-bank, notes.md) at vc for a read; then a heavy for prez's build, freed when it ends, and a light for the two dispatch suites under bash 3.2 and bash 5; it lands before 0113."
+  }
+}
