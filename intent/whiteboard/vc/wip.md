@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 10:22Z
+heartbeat_at: 2026-10-27 11:52Z
 status: active
-focus: "2.14.5 (doing 69): 0115's light run STARTed by ic at 10:17:28Z, its result to vc, then the landing word and the check by its change (check-0115-landing.sh ready); 0117's heavy build then light suites queued behind Gtools' heavies; cc writes 0120's code now in a worktree on 0117's patch, nothing run before a booking; 0113 and 0119 after 0117 lands"
+focus: "2.14.5 (doing 69): 0115, 0116, 0121 landed; 0120's light run green at fa2aa2eb, landing right after 0117 on the rebase and vc's three terms; 0117's heavy build then light suites queued behind Gtools' heavies; 0119 narrowed by hv (decision 70; body at 0bb4fce6), its edits from 0117's commit; 0113 closed; kovacs legs of 0117, 0119 and 0120 in one message after the desk work"
 claims: []
 ---
 
