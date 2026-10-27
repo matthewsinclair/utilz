@@ -1,0 +1,15 @@
+{
+  "id": "01M5YCFW4ZEEK0HH5A7ZEY7FG9",
+  "ts": "2026-10-27T09:54:00.479Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2026-10-27, directly to vc in vc's session, on ic's hold 17 (the menu's arngz link): 'Ah, now I understand. Yes, of course. And that should be true of all of the ~/bin/* links that are linked to a hardcoded dev install location, rather than using whatever use has set up.' So nothing on hv's machine links into a dev checkout; every tool finds Utilz through utilz use's links or brew's. vc searched ~/bin (a link to ~/.local/bin), ~/.local, ~/.config, ~/Applications, ~/.local/share, ~/.hammerspoon and the login shell's PATH: ~/.config/menuz/bin/arngz (to the primary's bin/arngz) was the only one, and no code makes such links (menuz init makes an empty bin/). vc removed it by 09:58Z; the menu's PATH (its bin dir, then the login shell's) now finds /opt/homebrew/bin/arngz (utilz:2.14.4/arngz:1.1.2), and menuz.yaml's arngz items call the bare name. restart.md at aaea8559."
+  }
+}

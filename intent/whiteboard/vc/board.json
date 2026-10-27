@@ -2180,6 +2180,14 @@
       "text": "hv, 2026-10-27, directly to vc in vc's session, answering the four decisions vc had sent to molt-vc by 08:34Z: (1) 0118's order: Utilz's next release does not wait for devbin 0.1.16. 0118 rides the first Utilz release after 0.1.16 (devbin 0243) is cut and vendored, which is 2.14.5 only if 0.1.16 lands first; deferred on the record with hv's say. (2) A SHA256SUMS asset on every Utilz release, written by devbin's release attach once 0118 lands: accepted. (3) The smaller post-cut step changes under devbin's built-in macos (an interrupt exits 1; a Menuz.app.zip already attached with the same bytes reads as done; the stage under devbin/macos/Utilz-<sha12>; the notary zip named submission.zip; off macOS exit 2): all accepted. (4) The next release is 2.14.5; its CHANGELOG section was opened at ec2b53c7 with 0116's and 0121's lines, and each later landing carries its own line.",
       "state": "live",
       "recorded_at": "2026-10-27T09:37:10.586Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 69,
+      "text": "hv, 2026-10-27, directly to vc in vc's session, on ic's hold 17 (the menu's arngz link): 'Ah, now I understand. Yes, of course. And that should be true of all of the ~/bin/* links that are linked to a hardcoded dev install location, rather than using whatever use has set up.' So nothing on hv's machine links into a dev checkout; every tool finds Utilz through utilz use's links or brew's. vc searched ~/bin (a link to ~/.local/bin), ~/.local, ~/.config, ~/Applications, ~/.local/share, ~/.hammerspoon and the login shell's PATH: ~/.config/menuz/bin/arngz (to the primary's bin/arngz) was the only one, and no code makes such links (menuz init makes an empty bin/). vc removed it by 09:58Z; the menu's PATH (its bin dir, then the login shell's) now finds /opt/homebrew/bin/arngz (utilz:2.14.4/arngz:1.1.2), and menuz.yaml's arngz items call the bare name. restart.md at aaea8559.",
+      "state": "live",
+      "recorded_at": "2026-10-27T09:54:00.479Z"
     }
   ],
   "sent": [
