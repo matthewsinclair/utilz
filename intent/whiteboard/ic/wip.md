@@ -13,12 +13,11 @@ claims: [ISSUE:0118]
 
 ## DOING
 
-_(none)_
+- Issue 0119's prez side (owner dc; ic edits, banks, runs and lands it as its own commit on vc's word; dc's ask at e2e12d89, vc's lean): showreel's admit.rs, config.rs, duration.rs, limits.rs, normalise.rs, payload.rs, segment.rs, slide.rs and theme.rs rows, acceptance.sh :1044 and :1077, at04-runtime-probe.mjs :106 and :142, by ledger line (~/Devel/scratch/utilz-dc/cic/ledger-narrowed-a03a14b2.tsv); body v5's Fix wins over a note; no CHANGELOG hunk. The design to vc before any code; the run is prez built in ic's tree, then cargo test -p showreel and acceptance.sh AT04 AT15 AT17 (one heavy), bytes and hashes to vc first.
 
 ## TODO
 
-- Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, is ArcaLogConsole's WP-11 and carries none; 0003 is open at arca_swift's main ffdff0ab; menuz's resolved pin is 0.2.0); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
-- Issue 0119's Menuz rows (owner dc; ic edits them): menuz.bats:918 and macos.bats:289, :305, :306 and :416, each compared by name (body v5 at 0bb4fce6). Banked and approved by vc at e0a0c6be: commit 439a8d25 on 94c55977 (wt-0119, branch ic-0119), patch-id e10a19d8f73b; the run is s0119-run.sh (e7739000f0ae). Next, once 0120 is on main: rebase wt-0119 onto it (the patch-id and both blobs unchanged), book the run as negligible (--named tip=<rebased sha>,run=e7739000f0ae, kill 600 s a pass), the TAP to vc, the pathspec commit of the two files on vc's word (no CHANGELOG hunk), vc's check by its change. Bank and notes in ~/Devel/scratch/utilz-ic/bank-0119/. (edited)
+- Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, tag object 7b9ce515 on commit ffdff0ab, main's head, carries none). 0114 is deferred on the record by molt-vc's ruling with the pen (27 Oct, body at 461fded3): 2.14.5 does not wait, and hv can overrule on return. When the tag lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement. (edited)
 
 ## Holds
 
