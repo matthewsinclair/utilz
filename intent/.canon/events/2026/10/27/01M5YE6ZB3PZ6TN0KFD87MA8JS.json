@@ -1,0 +1,16 @@
+{
+  "id": "01M5YE6ZB3PZ6TN0KFD87MA8JS",
+  "ts": "2026-10-27T10:24:05.988Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 11,
+    "text": "Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/. Its light run is green (01M5YA0E2HMX377DG3JNW2P648, released 10:23Z, the result with vc). The landing by path, with its CHANGELOG line, waits for vc's word."
+  }
+}

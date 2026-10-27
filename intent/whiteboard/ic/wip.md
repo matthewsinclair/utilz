@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 10:16Z
+heartbeat_at: 2026-10-27 10:24Z
 status: active
-focus: "after hv's compact, round 2: 0115's light run 01M5YA0E2HMX377DG3JNW2P648 starting at a8fe6b84 on molt-vc's GO (10:13:35Z), the landing on vc's word after a green; 0118's single body edit after 0115 lands; 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag"
+focus: "0115 green at a8fe6b84 (01M5YA0E2HMX377DG3JNW2P648 released), the landing by path on vc's word; 0118's single body edit after 0115 lands (v2 drafted outside the tree); 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag carrying 0003's fixes (0.2.1 carries none)"
 claims: [ISSUE:0118, ISSUE:0115]
 ---
 
@@ -14,11 +14,11 @@ claims: [ISSUE:0118, ISSUE:0115]
 ## DOING
 
 - Issue 0118 (owner ic): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today. The devbin half is devbin 0243, for devbin 0.1.16. hv's rulings of 27 Oct: 0118 rides the first Utilz release after 0.1.16 is cut and vendored, and SHA256SUMS and the smaller step changes are accepted. Once 0115 lands, one body edit carries the rulings, 0243 and the publish-end drop, with its diff to vc. No code until then, and no run until booked through vc. (edited)
-- Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/ with its run script, for vc's read. Then comes a light run of menuz.bats and macos.bats under bash 3.2 and bash 5, booked through vc, and the landing by path on vc's word. (edited)
+- Issue 0115 (owner ic): molt-vc's fix, approved by vc (XS). At the end of utilz menuz install and after publish's upload, every record at or under the build root is dropped and checked, through ls_drop_under. The code is in worktree wt-0115 (branch ic-0115, a8fe6b84 on adbca725), banked in ~/Devel/scratch/utilz-ic/bank-0115/. Its light run is green (01M5YA0E2HMX377DG3JNW2P648, released 10:23Z, the result with vc). The landing by path, with its CHANGELOG line, waits for vc's word. (edited)
 
 ## TODO
 
-- Watch for arca_swift's tag carrying its issue 0003's fixes (arca_swift's newest tag is 0.2.0, menuz's pin, on 27 Oct); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
+- Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, is ArcaLogConsole's WP-11 and carries none; 0003 is open at arca_swift's main ffdff0ab; menuz's resolved pin is 0.2.0); when it lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement (hv's word, 27 Oct). (edited)
 - Issue 0119's Menuz rows (dc's ledger; vc's ruling, 27 Oct). They are read and answered: every replacement fits, and the refinements are in the ledger. After 0117 lands and vc reads the ledger at its commit, make the Menuz edits (menuz.bats:918; macos.bats:289, :290, :305, :306 and :416; cmd/macos:115, :752 and :755) in commits of their own. Then the smallest run, booked through vc, shared with 0115's run if both are banked together.
 
 ## Holds
