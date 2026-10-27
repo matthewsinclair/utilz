@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-27 12:05Z
+heartbeat_at: 2026-10-27 12:11Z
 status: active
 focus: "Folded for hv's compact (27 Oct, round 3), not released: 0117 queued at molt-vc's desk (heavy 01M5YA0DEYXKDX5ZK6R31X7JG8, then light 01M5YA0DF9QH2R1AJKS9FJFWBB, behind Gtools' heavies and Intent's second build); 0120 green at fa2aa2eb, lands right after 0117 on the rebase and vc's three terms; 0113 closed (66cc534a); resume ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [ISSUE:0117, ISSUE:0120]
