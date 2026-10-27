@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y79YTVKWR8AVCQ6TWTM9BV",
+  "ts": "2026-10-27T08:23:23.740Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0116"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "README and help do not name `use brew`'s refusal when it cannot finish a name's check"
+  }
+}
