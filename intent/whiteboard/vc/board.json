@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-27T08:13:30.742Z",
+    "heartbeat_at": "2026-10-27T10:11:27.572Z",
     "status": "active",
-    "focus": "after hv's compact (27 Oct): doing 69, the next Utilz release (its number hv's): todo 56 to devbin-vc first (an app version source for devbin's built-in macos, before ic designs around it); then cc's 0113 plan and todo-49 issue, ic's devbin macos design and 0115 code read, each read by vc before any edit or run; every run booked with molt-vc",
+    "focus": "localfold for hv's compact, round 2 (27 Oct), not released: 2.14.5 under way (0116 and 0121 landed and closed; 0117 queued, its heavy build then its light suites; 0115's light run goes when the bats lane frees; 0120, 0113 and 0119 after 0117; 0118 after devbin 0.1.16); resume ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2117,7 +2117,8 @@
       "kind": "decision",
       "seq": 65,
       "text": "hv, 2026-10-27, directly to vc in vc's session, on 2.14.4's day: (0) the devbin 0.1.15 re-vendor hv's upgrade wrote goes into 2.14.4 (committed at 0e4afb69; the cut's gates passed on it). Then '1. (a) 2. yes 3. yes 4. yes': (1) Menuz.app on rhadamanth is reinstalled from the release through brew's utilz menuz install from a fresh login shell, then utilz menuz doctor, after use brew; molt-vc runs it in the launchsvc lane. (2) todo 54 runs (done at 52e5aaef). (3) The macos duplicate (devbin 0226's built-in macos beside Utilz's own cmd/macos) is an issue for the next Utilz release, owner ic, design first. (4) The next release's work starts today: cc on issue 0113 and its todo 49, design first for vc's read.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T10:11:12.266Z",
       "recorded_at": "2026-10-27T07:46:08.530Z"
     },
     {
@@ -2187,7 +2188,8 @@
       "kind": "decision",
       "seq": 69,
       "text": "hv, 2026-10-27, directly to vc in vc's session, on ic's hold 17 (the menu's arngz link): 'Ah, now I understand. Yes, of course. And that should be true of all of the ~/bin/* links that are linked to a hardcoded dev install location, rather than using whatever use has set up.' Then, through molt-vc: 'Molt does what it's told and if its a local symlink to a dev checkout in the Molt config, then that's perfectly ok. Molt shouldn't judge that.' So no link outside Molt's config points Utilz at a dev checkout; every tool finds Utilz through utilz use's links or brew's, and a link Molt's config makes into a checkout is the sleeve's choice. vc searched ~/bin (a link to ~/.local/bin), ~/.local, ~/.config, ~/Applications, ~/.local/share, ~/.hammerspoon and the login shell's PATH: ~/.config/menuz/bin/arngz (to the primary's bin/arngz) was the only Utilz one, and no code makes such links (menuz init makes an empty bin/). vc removed it at 09:53:24Z (the bin dir's own mtime; this text first said 09:58Z, which was not read off a clock). The menu's PATH (its bin dir, then the login shell's) now finds /opt/homebrew/bin/arngz (utilz:2.14.4/arngz:1.1.2), and menuz.yaml's arngz items call the bare name. restart.md at 91511a0d.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-27T10:11:12.430Z",
       "recorded_at": "2026-10-27T09:54:00.479Z",
       "edited_at": "2026-10-27T10:00:38.910Z"
     }
