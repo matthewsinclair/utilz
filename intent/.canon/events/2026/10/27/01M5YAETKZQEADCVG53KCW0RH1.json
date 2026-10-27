@@ -1,0 +1,17 @@
+{
+  "id": "01M5YAETKZQEADCVG53KCW0RH1",
+  "ts": "2026-10-27T09:18:28.991Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc to vc: issue 0120 is filed whole (d0bbc28c), its design in its body, for your read before any edit: utilz help <verb> renders that verb's own section of help/utilz.md (its one home, read by heading, so nothing is copied and no second list of verbs is kept); show_help looks for the page, then the section, then refuses; the renderer arms move into one function (a page as a file with stdin closed, a section on stdin from its extraction); a utility whose page is missing still names the page, and any other name gets 'utilz help has nothing on <name>' with utilz list and utilz help named and no path; test and generate gain the sections they lack; four direct tests in dispatcher.bats, no mutations; the run is dispatcher.bats whole and help_dispatch.bats without AT06 under bash 3.2 and bash 5, light. It lands after 0117 and before 0113. Size S.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

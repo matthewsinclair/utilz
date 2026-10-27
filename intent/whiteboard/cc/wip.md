@@ -6,7 +6,7 @@ session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
 heartbeat_at: 2026-10-27 08:24Z
 status: active
 focus: "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run"
-claims: [ISSUE:0113, ISSUE:0117]
+claims: [ISSUE:0113, ISSUE:0117, ISSUE:0120]
 ---
 
 # Control Claude (cc)
@@ -15,6 +15,7 @@ claims: [ISSUE:0113, ISSUE:0117]
 
 - Issue 0113, widened by vc on hv's rule (27 Oct): every written count and position in the suites' test names and comments, every hand-written Markdown file, and the comments in non-test code and config is deleted. Its method, resized on hv's rule of 23 Sep, is in its body (83daf01a). After 0117 lands: the scan and the ledger at the base, banked for ic's and vc's read, before any edit. (edited)
 - Issue 0117: the dispatch suites check each sweep against bin's links to utilz, never a written count. wt-0117 at 7d0b8ac13120 on 0116's landing, its bank (0117-bank, notes.md) at vc for a read; then a heavy for prez's build, freed when it ends, and a light for the two dispatch suites under bash 3.2 and bash 5; it lands before 0113. (edited)
+- Issue 0120: utilz help <verb> refuses every built-in verb with an internal path; utilz help <verb> renders the verb's own section of help/utilz.md. Filed whole at d0bbc28c, its design in its body, at vc for a read before any edit; it lands after 0117 and before 0113.
 
 ## TODO
 

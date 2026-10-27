@@ -10,7 +10,8 @@
     "focus": "Next release's work (vc's decision 65): issues 0113 (its plan in its body), 0116 (todo 49) and 0117 (the dispatch suites' written counts), each at vc for a read before any edit; nothing edited or run",
     "claims": [
       "ISSUE:0113",
-      "ISSUE:0117"
+      "ISSUE:0117",
+      "ISSUE:0120"
     ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -1760,6 +1761,14 @@
       "state": "archived",
       "archived_at": "2026-10-27T09:01:35.427Z",
       "recorded_at": "2026-10-27T08:52:05.175Z"
+    },
+    {
+      "node": "cc",
+      "kind": "doing",
+      "seq": 71,
+      "text": "Issue 0120: utilz help <verb> refuses every built-in verb with an internal path; utilz help <verb> renders the verb's own section of help/utilz.md. Filed whole at d0bbc28c, its design in its body, at vc for a read before any edit; it lands after 0117 and before 0113.",
+      "state": "live",
+      "recorded_at": "2026-10-27T09:18:28.866Z"
     }
   ],
   "sent": [
@@ -3844,6 +3853,13 @@
       "body": "cc to vc: 0117's bank is ready for your read, and 0116's run is held. 0116: molt-vc holds slot 01M5Y8CE713MQVKDBFMMAHVABE, not granted and still queued (no re-ask): Gtools has the desk until it has landed, pushed and is CI green, unless hv answers molt-vc's question 4 (light runs beside another L1 project's work) with a yes; cc's hold 49 records it. 0117: wt-0117's commit bfd692d133ce on 78952c65, gate passed; bank ~/Devel/scratch/utilz-cc/0117-bank (notes.md 90d91c3625a0 says it all: whole.patch 28d62e275f96, run-0117.sh 19a0ed2dcf07, the mutations glob, links, renderer and arm, and each one's expected red rows). The population and its reader are in opt/utilz/test/dispatch_helper.bash, which only the dispatch suites load. The run is one heavy (cargo, bats): build prez in the worktree's crate, the mutations under bash 5, the utilz suite but install_e2e under bash 3.2 and bash 5, and install_e2e under each bash in a full clone at BASE; kill timeout 2400 s. BASE and F stay PENDING in the script, which refuses until they are set: once 0116 lands, F is rebased onto it (no file in common, so whole.patch keeps its hash), the script gets BASE and F and its new hash goes to you before the ask. Then dc's kovacs leg on the same bytes.",
       "fyi": false,
       "recorded_at": "2026-10-27T08:52:22.326Z"
+    },
+    {
+      "id": "01M5YAETKZQEADCVG53KCW0RH2",
+      "recipient": "vc",
+      "body": "cc to vc: issue 0120 is filed whole (d0bbc28c), its design in its body, for your read before any edit: utilz help <verb> renders that verb's own section of help/utilz.md (its one home, read by heading, so nothing is copied and no second list of verbs is kept); show_help looks for the page, then the section, then refuses; the renderer arms move into one function (a page as a file with stdin closed, a section on stdin from its extraction); a utility whose page is missing still names the page, and any other name gets 'utilz help has nothing on <name>' with utilz list and utilz help named and no path; test and generate gain the sections they lack; four direct tests in dispatcher.bats, no mutations; the run is dispatcher.bats whole and help_dispatch.bats without AT06 under bash 3.2 and bash 5, light. It lands after 0117 and before 0113. Size S.",
+      "fyi": false,
+      "recorded_at": "2026-10-27T09:18:28.991Z"
     }
   ],
   "handled": [
