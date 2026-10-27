@@ -1,0 +1,15 @@
+{
+  "id": "01M5Y9E5CV0DHVD9CQYT19JXCY",
+  "ts": "2026-10-27T09:00:38.683Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "issue 0119 (counts in code; owner dc; approved by vc at M, its body at 4a688ea8 read by vc and good): the scan and the ledger hold until 0117 lands on main, whose commit is the scan's base; then ic reads the Menuz rows, vc the whole ledger, and the edits start from that commit in a worktree under ~/Devel/scratch/utilz-dc/, with one booking of the smallest runs and the named mutations; no push"
+  }
+}
