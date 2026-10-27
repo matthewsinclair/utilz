@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-27 05:50Z
+heartbeat_at: 2026-10-27 07:46Z
 status: active
-focus: "27 Oct: 2.14.4 ready to cut, hv's (dc's dry run GREEN at 7ec64a64, the kovacs twins GREEN on b2e07f19's code); dc holds for the cut and acts only on vc's or molt-vc's word; no push"
+focus: "27 Oct: 2.14.4 released (tag 722f532bef8a, CI green on every job, vc's read); dc's findings (restart.md's after-cut steps, written counts outside 0113, dc's kovacs leftovers) sent to vc for an owner; dc's 2.14.4 scratch retires once vc says the brew readbacks on both hosts are in; no push"
 claims: []
 ---
 
