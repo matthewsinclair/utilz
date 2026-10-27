@@ -427,9 +427,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 11,
-      "text": "Issue 0115 (owner ic): the code read is done and checked by vc (only Xcode's build registers the Release product, and menuz's drop checks once). The diagnostic script is being written to vc's shape: unsigned arms, a spy bracketing menuz's -u with raw reads, timed reads, and the machine's records before and after. Its bytes, hashes, commands, kill timeouts and expected result go to vc before any booking (heavy plus launchsvc). The signed arm and the install's by-id calls run only on hv's word, through vc.",
+      "text": "Issue 0115 (owner ic): the code read is done and checked by vc. The diagnostic (runs/s0115-diag.sh 441d5652f069 and its spy 049bef68ba43, read and cleared by vc) is booked as slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY, heavy with launchsvc, named tip=0a1ff32d2921, held behind Gtools' end-point (hv's rule of 26 Oct). START only on molt-vc's GO by name, after checking opt/menuz and native/macos are unchanged since 0a1ff32d. The signed arm and the install's by-id calls run only on hv's word, through vc.",
       "state": "live",
-      "recorded_at": "2026-10-27T08:29:00.499Z"
+      "recorded_at": "2026-10-27T08:29:00.499Z",
+      "edited_at": "2026-10-27T08:47:45.286Z"
     }
   ],
   "sent": [

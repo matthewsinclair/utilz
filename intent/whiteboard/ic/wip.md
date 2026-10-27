@@ -14,7 +14,7 @@ claims: [ISSUE:0118, ISSUE:0115]
 ## DOING
 
 - Issue 0118 (owner ic, hv's yes through vc, 27 Oct): converge Menuz's signing path on devbin's built-in macos and delete bin/.devbin/cmd/macos, done when Utilz loses no check it makes today (devbin-vc's words). Its design, its proof before the next cut and its Open calls for hv (SHA256SUMS, the order) are in the body, for vc's read before any code. The code waits on devbin's next release (devbin-vc's todo 177) and hv's order. No run until booked through vc. (edited)
-- Issue 0115 (owner ic): the code read is done and checked by vc (only Xcode's build registers the Release product, and menuz's drop checks once). The diagnostic script is being written to vc's shape: unsigned arms, a spy bracketing menuz's -u with raw reads, timed reads, and the machine's records before and after. Its bytes, hashes, commands, kill timeouts and expected result go to vc before any booking (heavy plus launchsvc). The signed arm and the install's by-id calls run only on hv's word, through vc.
+- Issue 0115 (owner ic): the code read is done and checked by vc. The diagnostic (runs/s0115-diag.sh 441d5652f069 and its spy 049bef68ba43, read and cleared by vc) is booked as slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY, heavy with launchsvc, named tip=0a1ff32d2921, held behind Gtools' end-point (hv's rule of 26 Oct). START only on molt-vc's GO by name, after checking opt/menuz and native/macos are unchanged since 0a1ff32d. The signed arm and the install's by-id calls run only on hv's word, through vc. (edited)
 
 ## TODO
 
