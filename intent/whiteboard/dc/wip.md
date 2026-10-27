@@ -13,7 +13,7 @@ claims: [ISSUE:0119]
 
 ## DOING
 
-- issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc): dc's two slices banked and approved by vc (slice 1 at 6b98551d, slice 2 at 64d15ec9; ~/Devel/scratch/utilz-dc/bank-0119/, SHA256SUMS); the heavy prez build asked (01M5Z0GS7Q5ZXX2SRQZFND4N29, queued next at molt-vc's desk), then wt-0119 to 64d15ec9 and the light run (run-0119-both.sh: four files under bash 3.2 and 5, install_e2e in a clone); then two landings by path on vc's word; ic has the rows under opt/prez/, artifact theme.rs's case tables (found by the finder's fix) among them; the sub-bullet goes with the last landing, then the close after vc's check; no push (edited)
+- issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc): dc's two slices banked and approved by vc (slice 1 at 6b98551d, slice 2 at 64d15ec9; ~/Devel/scratch/utilz-dc/bank-0119/, SHA256SUMS); the heavy prez build GREEN (01M5Z0GS7Q5ZXX2SRQZFND4N29, build.out 351ec81d8319, released 16:06:50Z); wt-0119 at 64d15ec9; the light run asked (01M5Z1XJ30YSSBNJFFDVHKKQNH, light-go.sh 45f52c9294d9 approved), on molt-vc's GO; land-0119.sh in two steps (apply, vc's working-tree check, commit), d17fe6c4fd74 with vc; dc lands last, with 0119's CHANGELOG sub-bullet (vc's route), once ic's prez slice (bank-0119p, heavy 01M5Z17AS5V1DS90FZ868H7TXM) is on main and checked; then the close after vc's check (the title narrowed, the resolution naming the dropped clause and the dropped mutation); no push (edited)
 
 ## TODO
 
