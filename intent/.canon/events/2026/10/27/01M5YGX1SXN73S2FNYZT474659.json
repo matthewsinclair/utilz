@@ -1,0 +1,16 @@
+{
+  "id": "01M5YGX1SXN73S2FNYZT474659",
+  "ts": "2026-10-27T11:11:06.557Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 70,
+    "text": "hv, 2026-10-27, directly to vc in vc's session, on the count rule, answering vc's question on 0113's 11,008 hits: \"This is _BONKERS_. All I said was don't write guards or tests that compare against arbitrary magic numbers. HOW THE HELL HAS THIS TURNED INTO SOMETHING BIGGER THAN BEN HUR?!\" and \"This should simply be a sweep to get rid of magic numbers in tests and a rule not to add any into the future. The end. What is going on?!\" vc's reading: the sweep is 0117 (the dispatch suites) and 0119 cut to the tests and guards outside them that compare against a written count (body set at 0bb4fce6); 0113 (prose, comments, test names) withdrawn (closed at 66cc534a); strings, comments, test input and test names are out. The rule for the future is hv's global AGENTS.md line, which hv OK'd narrowed in molt-vc's session (Molt-matts da71308): \"No magic numbers in tests or guards ... Prose, comments, docs and names are outside this rule.\" Utilz writes no copy. The over-reach was vc's: decision 66 scoped from the old wording without asking hv what it was for, and vc did not stop it as it grew."
+  }
+}
