@@ -17,7 +17,7 @@ claims: []
 
 ## TODO
 
-_(none)_
+- devbin 0243 (filed by devbin-vc at 23272153, for devbin 0.1.16; devbin-cc builds, devbin-vc lands): its Done when 6 is vc's: vc agrees Utilz can delete bin/.devbin/cmd/macos only once its Resolution maps every check Utilz's command makes to the built-in's, 0115's publish-end drop of the build root's records included (sent to devbin-vc). Utilz's switch (0118) waits for 0.1.16 to be cut and vendored.
 
 ## Holds
 

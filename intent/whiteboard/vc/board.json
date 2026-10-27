@@ -2163,6 +2163,14 @@
       "text": "vc, 27 Oct 2026, on hv's rule of 23 Sep (no yak-shaving; 'Just do enough to prove it works'), after hv balked at 0115's diagnostic of 12 Menuz builds (molt-vc refused slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY at 08:51:07Z; the fault was vc's approval): every Utilz booking is the smallest run that proves its change, as molt-vc's desk now grants. 0115: doctor's own remedy run at the end of utilz menuz install and of the release steps, one direct check with the fakes, no real build. 0116: prettier --check on its two files, negligible. 0117: prez built, then the two dispatch suites under bash 3.2 and bash 5, no mutations (each check visibly fails on reading). 0113: no booked run (the worktree commit's gate, the scan rerun, vc's read of the diff; no hand lexers, no label fixtures). 0119: the touched files only. Mutations only where reading cannot show a check fails, until hv answers molt-vc. Kovacs legs (0117's, 0119's) go to kovacs-sysadm in one message. The final head's twins before the cut stay.",
       "state": "live",
       "recorded_at": "2026-10-27T08:54:56.407Z"
+    },
+    {
+      "node": "vc",
+      "kind": "todo",
+      "seq": 57,
+      "text": "devbin 0243 (filed by devbin-vc at 23272153, for devbin 0.1.16; devbin-cc builds, devbin-vc lands): its Done when 6 is vc's: vc agrees Utilz can delete bin/.devbin/cmd/macos only once its Resolution maps every check Utilz's command makes to the built-in's, 0115's publish-end drop of the build root's records included (sent to devbin-vc). Utilz's switch (0118) waits for 0.1.16 to be cut and vendored.",
+      "state": "live",
+      "recorded_at": "2026-10-27T09:10:31.790Z"
     }
   ],
   "sent": [

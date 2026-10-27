@@ -1,0 +1,15 @@
+{
+  "id": "01M5YA08KEYF4ZMP3XEWFF9XSC",
+  "ts": "2026-10-27T09:10:31.790Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "devbin 0243 (filed by devbin-vc at 23272153, for devbin 0.1.16; devbin-cc builds, devbin-vc lands): its Done when 6 is vc's: vc agrees Utilz can delete bin/.devbin/cmd/macos only once its Resolution maps every check Utilz's command makes to the built-in's, 0115's publish-end drop of the build root's records included (sent to devbin-vc). Utilz's switch (0118) waits for 0.1.16 to be cut and vendored."
+  }
+}
