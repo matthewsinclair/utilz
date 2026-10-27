@@ -1,0 +1,16 @@
+{
+  "id": "01M5YZMVM4879RJ39QTPSNYD73",
+  "ts": "2026-10-27T15:28:46.725Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 72,
+    "text": "2.14.5's Mac twins script APPROVED by vc (2145-bank/run-twins-2145-final.sh 8708cbdcf38d, HEAD_WANT=PENDING). When vc names the final head, after 0119's last landing: set-head-2145.sh <head> (the one-line diff to vc), then the heavy asked --named tip=<head>,run=<new hash>, watchdog 3600; start only on molt-vc's GO by name."
+  }
+}

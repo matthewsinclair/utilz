@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.5's Mac twins script, banked from run-twins-2144-final.sh with HEAD_WANT=PENDING until the final head exists, for vc's read (vc, 27 Oct); the run starts only on molt-vc's GO by name, on the final head.
+- 2.14.5's Mac twins script APPROVED by vc (2145-bank/run-twins-2145-final.sh 8708cbdcf38d, HEAD_WANT=PENDING). When vc names the final head, after 0119's last landing: set-head-2145.sh <head> (the one-line diff to vc), then the heavy asked --named tip=<head>,run=<new hash>, watchdog 3600; start only on molt-vc's GO by name. (edited)
 
 ## TODO
 
