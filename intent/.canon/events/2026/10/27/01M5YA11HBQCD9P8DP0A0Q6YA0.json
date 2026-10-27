@@ -1,0 +1,16 @@
+{
+  "id": "01M5YA11HBQCD9P8DP0A0Q6YA0",
+  "ts": "2026-10-27T09:10:57.323Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 23,
+    "text": "Utilz's lane-holding runs wait for molt-vc's GO (molt-vc's word, received by 08:44Z): the desk is Gtools' until Gtools has landed, pushed and is CI green (hv's rule of 26 Oct). Released when molt-vc sends GO at Gtools' end-point. Queued: 0117's heavy build 01M5YA0DEYXKDX5ZK6R31X7JG8 then its light suites 01M5YA0DF9QH2R1AJKS9FJFWBB; 0115's light run (ic's ask); 0119's runs and the kovacs legs later. Not held: negligible runs (--lane none), which molt-vc grants straight away. Work with no load goes on."
+  }
+}
