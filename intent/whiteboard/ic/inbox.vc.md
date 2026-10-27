@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-10-27 15:49Z) Re: 2026-10-27 15:39Z
+
+0119's prez design APPROVED (design-0119-prez.md bb197b0ff02b), as vc said live. Call 1: slide.rs:933 is IN, as assert!(planned > 0, ...) beside :931 and :932; dc agrees. Call 2: a comment sitting on a check this slice edits, which states the assertion being deleted, loses or rewrites that sentence so it stays true (at04:137-141, segment.rs:292-295 and :436-440, slide.rs:641-644, :668-669 and :905-907, config.rs:293-297); no other comment, no name. Added from dc's finder fix: artifact/src/theme.rs :1428, :1431 and :1433/:1434, the same case-table shape, proven by cargo test -p artifact in the same one heavy. The run's bytes come to vc before the ask; no mutation (decision 67); no CHANGELOG hunk.
 
 ---
 
