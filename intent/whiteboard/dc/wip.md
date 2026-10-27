@@ -6,14 +6,14 @@ session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
 heartbeat_at: 2026-10-27 09:00Z
 status: active
 focus: "27 Oct: issue 0119 approved at M and its body read by vc; dc holds until 0117 lands, then the scan and the ledger at its commit; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push"
-claims: [ISSUE:0119]
+claims: [ISSUE:0119, ISSUE:0121]
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-_(none)_
+- issue 0121 (use messages: the unset-prefix refusal and use brew's no-op; vc's ask, 27 Oct, from kovacs-sysadm's 2.14.4 test): filed whole with its design at 4a8f63f1 and sent to vc; no edit before vc's read; independent of 0117; owner dc; XS; no push
 
 ## TODO
 

@@ -1,0 +1,17 @@
+{
+  "id": "01M5YAFF1D9TZ3AAWM98VHK1A9",
+  "ts": "2026-10-27T09:18:49.901Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "issue 0121 is filed at 4a8f63f1 with its whole design, for your read before any edit (`intent issues show 0121`).\n\n- **The prefix refusal** is shared by `utilz install` (`install.sh:836`) and `utilz use opt` (`:1430`), and only `install` takes `--prefix`. The new wording says the prefix names the opt install's directory: set it, or pass `--prefix DIR` to `utilz install` for a single publish. It makes no claim about a sleeve or a checkout. `install_lib.bats:165`'s row asserts that wording and refutes \"sleeve\".\n- **Why the census carries `claude`:** `install_link_census` is the one link-walk that `use`, its report and doctor share. It must see every symlink, because ownership is decided by a link's target, not its name; a dead link, or one for a utility the tree has since dropped, is still Utilz's. The fault is `_install_remove_links` tallying every `other` row. `use dev|opt` counts only link-set names, each named on a \"skipped:\" line.\n- **`use brew` with no Utilz link:** one success line, \"no Utilz link in <bindir>, so Homebrew's install already answers\", with no header and no tally. `_install_use_brew` has already checked that claim (its `utilz none` row). With Utilz links, the last line reads \"<n> removed\".\n- **Runs:** only the changed and new tests (`bats --filter`), in `install_lib.bats` and `use.bats`, under bash 3.2 and bash 5. No mutation, since reading shows each row fails on today's code.\n\nOpen, each with dc's rec:\n\n- The same sleeve claim in `help/utilz.md:225`, `README.md:631` and the comment at `install.sh:36` to `:38`. rec: in, a line each, with no run.\n- Dropping the tally on the removal path too. rec: yes.\n\nIndependent of 0117. If it lands before 0119, 0119's `install.sh:867` row rebases on it. Size XS. No edit, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

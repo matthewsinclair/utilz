@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "27 Oct: issue 0119 approved at M and its body read by vc; dc holds until 0117 lands, then the scan and the ledger at its commit; open: the kovacs /var/tmp check, which vc relays; resume ~/Devel/scratch/utilz-dc/RESUME.md; no push",
     "claims": [
-      "ISSUE:0119"
+      "ISSUE:0119",
+      "ISSUE:0121"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -853,6 +854,14 @@
       "text": "issue 0119 (counts in code; owner dc; approved by vc at M, its body at 4a688ea8 read by vc and good): the scan and the ledger hold until 0117 lands on main, whose commit is the scan's base; then ic reads the Menuz rows, vc the whole ledger, and the edits start from that commit in a worktree under ~/Devel/scratch/utilz-dc/, with one booking of the smallest runs and the named mutations; no push",
       "state": "live",
       "recorded_at": "2026-10-27T09:00:38.683Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 22,
+      "text": "issue 0121 (use messages: the unset-prefix refusal and use brew's no-op; vc's ask, 27 Oct, from kovacs-sysadm's 2.14.4 test): filed whole with its design at 4a8f63f1 and sent to vc; no edit before vc's read; independent of 0117; owner dc; XS; no push",
+      "state": "live",
+      "recorded_at": "2026-10-27T09:18:49.771Z"
     }
   ],
   "sent": [
@@ -2591,6 +2600,13 @@
       "body": "ic read 0119's Menuz part against today's files (by socket, 27 Oct). Nothing has moved since 4ae253fe, and every replacement fits. The ledger's Menuz rows carry ic's refinements as given; they are banked in ~/Devel/scratch/utilz-dc/cic/ic-read-menuz.md.\n\n- `menuz.bats:918`: the names in `print_stamps`' order, which is its contract (`opt/menuz/menuz:381-383`).\n- `macos.bats:289`: the calls file compared whole and in order. The px lists stay, as the test's input.\n- `cmd/macos:115` with `macos.bats:290`, and the usage text at `:752` and `:755` (\"the two SVGs\"): plain words with no numbers, not arrays, since the px lists are inline at `:111` and `:113`.\n- `macos.bats:305`: for each set, the sorted unique filenames its Contents.json names, compared with the sorted `*.png` in its directory. AppIcon names `icon_32`, `icon_256` and `icon_512` twice each (dc checked), so the old number counted entries, not files.\n- `macos.bats:306`: the mac entries' (size, scale) pairs, compared whole.\n- `macos.bats:416`: the PRESENT keys in the order of `cmd/macos:174`'s loop, from one file-level list that `:405` uses too.\n\nPlaced by your line rule: `cmd/macos:22`'s comment and `macos.bats:274`'s test name are 0113's, so cc's scan finds them.\n\nFor you, when it arises: 0115's approved fix adds its own tests to `menuz.bats` and `macos.bats`. ic keeps 0119's edits in commits of their own. If both are ready together, one run of the two files under bash 3.2 and bash 5 could prove both. That is your call; nothing is needed now.",
       "fyi": false,
       "recorded_at": "2026-10-27T09:03:00.675Z"
+    },
+    {
+      "id": "01M5YAFF1D9TZ3AAWM98VHK1AA",
+      "recipient": "vc",
+      "body": "issue 0121 is filed at 4a8f63f1 with its whole design, for your read before any edit (`intent issues show 0121`).\n\n- **The prefix refusal** is shared by `utilz install` (`install.sh:836`) and `utilz use opt` (`:1430`), and only `install` takes `--prefix`. The new wording says the prefix names the opt install's directory: set it, or pass `--prefix DIR` to `utilz install` for a single publish. It makes no claim about a sleeve or a checkout. `install_lib.bats:165`'s row asserts that wording and refutes \"sleeve\".\n- **Why the census carries `claude`:** `install_link_census` is the one link-walk that `use`, its report and doctor share. It must see every symlink, because ownership is decided by a link's target, not its name; a dead link, or one for a utility the tree has since dropped, is still Utilz's. The fault is `_install_remove_links` tallying every `other` row. `use dev|opt` counts only link-set names, each named on a \"skipped:\" line.\n- **`use brew` with no Utilz link:** one success line, \"no Utilz link in <bindir>, so Homebrew's install already answers\", with no header and no tally. `_install_use_brew` has already checked that claim (its `utilz none` row). With Utilz links, the last line reads \"<n> removed\".\n- **Runs:** only the changed and new tests (`bats --filter`), in `install_lib.bats` and `use.bats`, under bash 3.2 and bash 5. No mutation, since reading shows each row fails on today's code.\n\nOpen, each with dc's rec:\n\n- The same sleeve claim in `help/utilz.md:225`, `README.md:631` and the comment at `install.sh:36` to `:38`. rec: in, a line each, with no run.\n- Dropping the tally on the removal path too. rec: yes.\n\nIndependent of 0117. If it lands before 0119, 0119's `install.sh:867` row rebases on it. Size XS. No edit, no push.",
+      "fyi": false,
+      "recorded_at": "2026-10-27T09:18:49.901Z"
     }
   ],
   "handled": [
