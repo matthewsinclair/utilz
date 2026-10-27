@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 10:11Z
+heartbeat_at: 2026-10-27 10:16Z
 status: active
-focus: "ic: folded for hv's compact (27 Oct, round 2), not released. 0115 at a8fe6b84 (wt-0115, bank-0115) is booked light as 01M5YA0E2HMX377DG3JNW2P648 and goes when Intent's judge run frees bats; it lands with its CHANGELOG line on vc's word after a green run. 0118's single body edit comes after 0115 lands. 0119's Menuz rows come after 0117. Todo 13, 0114 on arca_swift's tag. Resume ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "after hv's compact, round 2: 0115's light run 01M5YA0E2HMX377DG3JNW2P648 starting at a8fe6b84 on molt-vc's GO (10:13:35Z), the landing on vc's word after a green; 0118's single body edit after 0115 lands; 0119's Menuz rows after 0117 lands; 0114 on arca_swift's tag"
 claims: [ISSUE:0118, ISSUE:0115]
 ---
 
