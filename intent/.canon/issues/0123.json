@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 123,
+  "slug": "common-lib-bats-154-still-expects-show-help-s-ol",
+  "title": "common_lib.bats:154 still expects show_help's old \"not found\" for a name that is no utility: 0120 changed that message and missed this test",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-28",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`opt/utilz/test/common_lib.bats:154`, in \"show_help() shows error for missing help file\", still expects show_help's old \"not found\" for `nonexistent`, a name that is no utility. Issue 0120 (`88522a3f`) changed that message: a name with no `opt/<name>/<name>.yaml` now gets \"utilz help has nothing on <name>: 'utilz list' names the utilities, and 'utilz help' describes the verbs\" (`opt/utilz/lib/common.sh:250-253`), and \"Help file not found\" is kept for a real utility with no page. 0120's run did not include `common_lib.bats`, so the test has read red on main since `88522a3f`, under bash 3.2 and bash 5. Found by issue 0119's light run (slot `01M5Z1XJ30YSSBNJFFDVHKKQNH`, run.out `bcf4dd4a9bd6`: not ok 149, the only red in 311).\n\n## Fix\n\nThe assertion becomes `assert_output_contains \"utilz help has nothing on nonexistent\"`. No second row: `dispatcher.bats:123` covers the other branch, \"Help file not found\" for a real utility with no page (vc).\n\n## Proof\n\n`common_lib.bats` alone at the fix's tip, under bash 3.2 and bash 5.\n\n## Landing\n\nOne pathspec commit of `common_lib.bats`, landed as the third commit of dc's 0119 landing (after 0119's two slices, which touch the same file at other lines), on vc's word after vc's check of the working tree. No CHANGELOG hunk: this is 0120's own test catching up with 0120's bullet.\n"
+}

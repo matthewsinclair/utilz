@@ -1,0 +1,15 @@
+{
+  "id": "01M60FANR75KBH7VE86XDXFXRN",
+  "ts": "2026-10-28T05:22:04.681Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0123"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "common_lib.bats:154 still expects show_help's old \"not found\" for a name that is no utility: 0120 changed that message and missed this test"
+  }
+}
