@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 13:43Z
+heartbeat_at: 2026-10-28 13:46Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct 13:42Z via vc): holding; issue 0125 banked mid-write (doing item, bank-0125/RESUME-0125.md), no run until vc's word; 0124 landed and closed; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift still 0.2.1)"
+focus: "HOLD for hv's move (13:44Z, molt-vc): 0125 banked mid-write in wt-0125 and bank-0125 (doing 13); next, on hv's go home and vc's word: finish tests, pbxproj, VERSION 0.4.8, CHANGELOG, then book the run"
 claims: [ISSUE:0118, ISSUE:0125]
 ---
 
