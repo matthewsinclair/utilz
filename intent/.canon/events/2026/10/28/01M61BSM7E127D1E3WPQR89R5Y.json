@@ -1,0 +1,15 @@
+{
+  "id": "01M61BSM7E127D1E3WPQR89R5Y",
+  "ts": "2026-10-28T13:39:34.767Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0125"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "Menuz's About window has no icon, build, source or links, unlike Gtools' and Intent's"
+  }
+}
