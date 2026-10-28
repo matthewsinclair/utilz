@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 13:46Z
+heartbeat_at: 2026-10-28 13:47Z
 status: active
 focus: "HOLD for hv's move (13:44Z, molt-vc): 0125 banked mid-write in wt-0125 and bank-0125 (doing 13); next, on hv's go home and vc's word: finish tests, pbxproj, VERSION 0.4.8, CHANGELOG, then book the run"
 claims: [ISSUE:0118, ISSUE:0125]
