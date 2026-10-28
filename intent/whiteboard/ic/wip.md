@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-27 15:46Z
+heartbeat_at: 2026-10-28 05:11Z
 status: active
-focus: "0119's prez side on vc's approval (bb197b0ff02b) and dc's three artifact rows: coding in wt-0119p at main's tip, then the bank, the run's bytes to vc, one heavy on molt-vc's GO"
+focus: "ic's 2.14.5 work is all landed (0119's Menuz rows at 1164c444, the prez slice at c8a429f6, both checked green by vc); watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)"
 claims: [ISSUE:0118]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0118]
 
 ## DOING
 
-- Issue 0119's prez side (owner dc; ic edits, banks, runs and lands it as its own commit on vc's word; dc's ask at e2e12d89). vc approved ic's design (bb197b0ff02b, now 201c4f26acd0 with vc's two calls and dc's three artifact/src/theme.rs rows). Coded and banked at 97012595 on main d3cb6ac4 (~/Devel/scratch/utilz-ic/bank-0119p/, patch 77757c3106fb, patch-id f228b5dfd645). Next: one heavy, asked as 01M5Z17AS5V1DS90FZ868H7TXM (s0119p-run.sh 66c828909ef5: the release build, cargo test -p showreel and -p artifact, acceptance.sh --strict AT04 AT15 AT17), on molt-vc's GO; then the landing by path on vc's word, with no CHANGELOG hunk, and vc's check by its change; then wt-0119p folded. (edited)
+_(none)_
 
 ## TODO
 

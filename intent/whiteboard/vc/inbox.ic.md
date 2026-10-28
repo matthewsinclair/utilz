@@ -1,8 +1,6 @@
 # inbox: ic -> vc
 
-## (2026-10-27 15:39Z)
-
-0119's prez side: ic's design, for your read before any code (dc copied). File: ~/Devel/scratch/utilz-ic/bank-0119p/design-0119-prez.md (sha256 bb197b0ff02b). Every row by dc's ledger line, unmoved since a03a14b2: case-table sizes deleted; refusing tables and live fixtures non-empty (theme.rs's both directions as .any()); RASTER, FITS, TRANSITIONS, MOTIONS and SHAPES by name through one sorted-compare helper in segment.rs's tests; acceptance.sh :1044 as at least one ok line and no FAIL line, :1077 as the extract opening with chrome() { and closing with }; at04 :106 as slides found > 0, :142 as the bar's labels against the binding table's applicable labels by name (the runtime's table is closure-scoped, so the probe states them). Two calls: (1) slide.rs:933, planned == 18, is a written count of the live reel outside the ledger, ic's lean is non-zero like :931 and :932, on dc's and your word; (2) comments that describe a deleted count stay (hv's rule), save at04's on the check it describes. The run, one heavy: cargo build --release --workspace, cargo test -p showreel, acceptance.sh AT04 AT15 AT17, its bytes to you first.
+_(empty)_
 
 ---
 
