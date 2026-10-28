@@ -1,0 +1,16 @@
+{
+  "id": "01M60FKQYAVPWMNXXXDXXVGTX7",
+  "ts": "2026-10-28T05:27:01.835Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 23,
+    "text": "issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc) and issue 0123 (filed at eab2c8fe on vc's ruling: common_lib.bats:154 red on main since 0120; dc's fix): heavy green (01M5Z0GS7Q5ZXX2SRQZFND4N29); 0119's light run (01M5Z1XJ30YSSBNJFFDVHKKQNH, run.out bcf4dd4a9bd6) green but for 0123's not ok 149; 0123's fix 40c02677 on 64d15ec9 in wt-0119 (keep: unlanded), its run (~/Devel/scratch/utilz-dc/bank-0123/go-0123.sh, light 01M60FHAW0Z7HXM7E51SBS629F) queued first after hv's go; vc approved 0123 and land-0119.sh 426c99419f43; then WITH_CHANGELOG=1 land-0119.sh apply, vc's 0119-dc-all --worktree check, commit <sum> (slice 1, slice 2 with the sub-bullet, 0123), vc's checks by change, and the closes of 0119 (title narrowed, resolution naming the dropped clause and decision 67's dropped mutation) and 0123; ic's prez slice landed at c8a429f6; RESUME at ~/Devel/scratch/utilz-dc/RESUME.md; no push"
+  }
+}
