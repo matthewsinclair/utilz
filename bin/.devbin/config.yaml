@@ -94,14 +94,17 @@ commands:
 # switches the core on; this block alone would be inert.
 #
 # tag: bare, hv's ruling at 2.7.0. repo: declared because the core refuses
-# without it -- no origin and two remotes (local, upstream). gates: check all,
-# and test estate, the one driver behind every hand release. ci.query:
+# without it -- no origin and two remotes (local, upstream). gates: check all
+# alone (hv, 28 Oct 2026, ST0030): the dry run and the twins run test estate
+# before a cut. after: tools/post-cut, one line, so Menuz.app and the tap
+# follow the cut and stop at the first failure (ST0030 D2). ci.query:
 # tools/ci-state, so step 11 gives a verdict instead of a skipped row.
 release:
   tag: "{version}"
   repo: matthewsinclair/utilz
   gates:
     - check all
-    - test estate
+  after:
+    - tools/post-cut
   ci:
     query: tools/ci-state

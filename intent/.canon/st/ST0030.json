@@ -1,0 +1,31 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0030",
+  "title": "Lights-out release: one command from cut to tap",
+  "slug": "lights-out-release-one-command-from-cut-to-tap",
+  "status": "triage",
+  "created": "2026-10-28",
+  "objective": "One command, `bin/devbin release --patch --yes` (or `--minor`, `--major`), takes Utilz from a green main to a published release with Menuz.app attached and the Homebrew tap updated, with nobody at the terminal after it starts. Apple's notarisation is the only wait.",
+  "context": "hv, 28 Oct 2026, after cutting 2.14.5: the cut is bitty next to Ccusage's `tools/release`, which bumps, checks, tags, pushes, waits for CI and publishes the tap in one command. 2.14.5 took a confirm prompt, 1514s of gates that re-ran the suites the dry run and the twins had already passed, and four steps by hand after the cut (a worktree at the tag, `macos app-sign`, `app-notarize`, `publish`, then `tools/formula publish`).\n\nhv's rulings, directly to vc on 28 Oct: (a) an `after:` line runs the steps after the cut, reversing hv's ruling of 2026-09-21 (ST0019 WP-05) that no release hook runs `tools/formula publish`; (b) the release gates are `check all` only, with `test estate` dropped, since the dry run and the twins run the suites before a cut; (c) the cut is confirmed by `--yes`, which devbin's release core already takes.\n\nDevbin's core already has `--yes` and `after:`. Its after step runs every line even when one before it failed, so the steps go in one script, `tools/post-cut`, which stops at the first failure: a formula pushed before Menuz.app.zip is attached gives every new install a failing `menuz install` (docs/releasing.md).",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "tools/post-cut, the release config and the docs",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0030 design: lights-out release\n\n## D1. The config\n\n`bin/.devbin/config.yaml`'s `release:` block:\n\n- `gates:` is `check all` alone (hv, 28 Oct). `test estate` stays a declared option, run by hand and by the dry run's operator, out of the cut.\n- `after:` is one line, `tools/post-cut`. One line, not four: the core runs every `after:` line even when an earlier one failed, and the formula must not be pushed unless Menuz.app.zip is attached.\n\nThe cut is `bin/devbin release --patch --yes`. `--yes` is the core's own: it prints what it will push and does not stop to ask.\n\n## D2. `tools/post-cut [<tag>]`\n\nRuns from the project root, as the core runs every `after:` line, with stdin on /dev/null. With no argument the tag is the top-level `VERSION` at HEAD, which at the after step is the release commit. Bash, `set -euo pipefail`, in `tools/` beside `tools/formula` since `bin/` is published.\n\n1. Refuses off macOS (exit 2): app-sign needs Xcode and the keychain.\n2. Refuses a tag that is not an annotated tag in this checkout, or whose release object GitHub does not have.\n3. If the release already carries `Menuz.app.zip`, skips the app steps and says so. A re-run of a cut re-runs its after step (it has no postcondition), and `macos publish` refuses a release already holding the asset, which would stop the formula step for good.\n4. Otherwise makes a detached worktree at the tag under `$(getconf DARWIN_USER_TEMP_DIR)` (never under ~/Devel, where Launch Services registers bundles), and runs in it, in order, stopping at the first failure: `bin/devbin macos app-sign`, `app-notarize`, `publish`. app-sign and publish refuse any tree whose HEAD is not the tag (issue 0103), which is why a worktree, not the primary, even though the primary is at the tag during a cut: a node's board commit during the after step would move it.\n5. Removes the worktree on every way out with plain `git worktree remove`, never `--force`; a removal that fails says LEFT with the path.\n6. Runs `tools/formula publish`, which renders the newest release into a fresh clone of the tap and pushes it, and leaves a tap that already carries it as it is.\n\nExit 0 only when every step it ran passed. A failure names the step, and `tools/post-cut <tag>` re-runs from the top, skipping what is done.\n\n## D3. What stays by hand\n\n`bin/devbin macos store-creds` (once per machine, interactive). Everything the dry run and the twins do before a cut is outside this thread.\n\n## D4. Proof (decision 67: the smallest run that proves the change)\n\n`tools/post-cut 2.14.5`, run by hv, does 2.14.5's outstanding app steps and tap publish: the real path, on the real release. `bin/devbin release --patch --dry-run` shows the gates as `check all` alone and the after row as `would run: tools/post-cut`. shellcheck on `tools/post-cut`. No bats suite: every step it runs is an existing verb with its own tests, and the script's own logic is the order and the skip.\n",
+      "bytes": 2927,
+      "sha256": "033a57e3a87a65847b0fdfbc6ccfb34a9a008b6de33d989ea998611357e11073"
+    }
+  ]
+}

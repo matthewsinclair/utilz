@@ -20,12 +20,13 @@
 # `git rev-parse <tag>^{commit}`. A tag that does not exist, and a lightweight
 # one, are refused: every release tag is annotated.
 #
-# PUBLISH PUSHES THE TAP, SO IT IS A VERB HV TYPES (ST0019 WP-05, hv's ruling of
-# 2026-09-21): no release hook runs it. It publishes the newest release, the
-# highest tag of the bare-semver form Utilz tags with, rendered from the
-# template that tag carries, so an edit no commit holds never reaches the tap.
-# It writes nothing in this tree; its
-# clone of the tap is a temporary, removed when it exits. A tap that already
+# PUBLISH PUSHES THE TAP, SO IT RUNS IN HV'S CUT: tools/post-cut, the release's
+# after: line, runs it once Menuz.app.zip is attached (ST0030, hv's ruling of
+# 28 Oct 2026, replacing ST0019 WP-05's that no release hook runs it). It
+# publishes the newest release, the highest tag of the bare-semver form Utilz
+# tags with, rendered from the template that tag carries, so an edit no commit
+# holds never reaches the tap. It writes nothing in this tree; its clone of the
+# tap is a temporary, removed when it exits. A tap that already
 # carries the formula is left as it is.
 #
 # It lives in tools/, not bin/, because bin/ is published.

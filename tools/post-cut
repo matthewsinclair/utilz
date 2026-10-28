@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+#
+# post-cut -- everything after a Utilz cut, in order, stopping at the first
+# failure: Menuz.app signed, notarised and attached at the tag, then the
+# formula published to the tap (ST0030; docs/releasing.md).
+#
+#   tools/post-cut [<tag>]   <tag> defaults to the top-level VERSION at HEAD
+#
+# It is the release core's one `after:` line (bin/.devbin/config.yaml), so
+# `bin/devbin release --patch --yes` runs from cut to tap with nobody at the
+# terminal. ONE LINE, NOT FOUR: the core runs every after: line even when one
+# before it failed, and a formula pushed before Menuz.app.zip is attached gives
+# every new install a `menuz install` that fails until the asset arrives.
+#
+# A RE-RUN STARTS FROM THE TOP AND SKIPS WHAT IS DONE. The core's after step has
+# no postcondition, so a resumed cut runs this again; `macos publish` refuses a
+# release already holding Menuz.app.zip, so an attached asset skips the app
+# steps here, and `tools/formula publish` leaves a tap that already carries the
+# release as it is.
+#
+# THE APP STEPS RUN IN A DETACHED WORKTREE AT THE TAG, never the primary.
+# app-sign and publish refuse a tree whose HEAD is not the tag (issue 0103),
+# and during a cut a node's board commit can move the primary off it. The
+# worktree goes under the system's own temp dir: Launch Services registers
+# bundles under ~/Devel. It is removed on every way out, never with --force.
+#
+# It lives in tools/, not bin/, because bin/ is published.
+#
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO="matthewsinclair/utilz"
+ASSET="Menuz.app.zip"
+
+die() {
+  printf 'post-cut: %s\n' "$*" >&2
+  exit 1
+}
+
+say() {
+  printf 'post-cut: %s\n' "$*"
+}
+
+usage() {
+  cat <<EOF
+usage: tools/post-cut [<tag>]
+
+  Sign, notarise and attach Menuz.app at <tag>, then publish the formula to
+  the tap, stopping at the first failure. <tag> defaults to the top-level
+  VERSION at HEAD, and must be the newest release. A re-run skips what is done.
+EOF
+}
+
+case "${1:-}" in
+  -h | --help)
+    usage
+    exit 0
+    ;;
+esac
+[[ $# -le 1 ]] || { usage >&2; exit 2; }
+[[ "$(uname -s)" == "Darwin" ]] || {
+  printf 'post-cut: Menuz.app is signed and notarised on macOS only; this is %s\n' "$(uname -s)" >&2
+  exit 2
+}
+
+cd "$root"
+tag="${1:-$(git show HEAD:VERSION)}" || die "cannot read VERSION at HEAD"
+tag="${tag%$'\n'}"
+[[ "$(git cat-file -t "refs/tags/$tag" 2>/dev/null)" == "tag" ]] ||
+  die "'$tag' is not an annotated tag in $root, so it is not a release"
+commit="$(git rev-parse --verify "$tag^{commit}")" || die "cannot read the commit '$tag' names"
+# tools/formula publish publishes the newest release, whatever it is asked, so
+# an older tag here would sign one release and publish another's formula.
+newest="$(git tag --list | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t. -k1,1n -k2,2n -k3,3n | tail -1)" ||
+  die "cannot read which tags in $root name a release"
+[[ "$tag" == "$newest" ]] ||
+  die "'$tag' is not the newest release ($newest), and the formula step publishes the newest"
+
+assets="$(gh release view "$tag" -R "$REPO" --json assets --jq '.assets[].name')" ||
+  die "GitHub has no release object for $tag, or it cannot be read; nothing was done"
+
+say "utilz $tag at ${commit:0:12}"
+if printf '%s\n' "$assets" | grep -qxF "$ASSET"; then
+  say "the release already carries $ASSET, so the app steps are skipped"
+else
+  wt="$(getconf DARWIN_USER_TEMP_DIR)utilz-post-cut-$tag"
+  [[ ! -e "$wt" ]] ||
+    die "$wt is left from an earlier run; read it, then remove it with git worktree remove, and run this again"
+  git worktree add -q --detach "$wt" "$tag" || die "cannot make a worktree at $tag in $wt"
+  # shellcheck disable=SC2064 # the path is fixed now, and quoted for the trap
+  trap "git -C $(printf '%q' "$root") worktree remove $(printf '%q' "$wt") || printf 'post-cut: LEFT: %s\n' $(printf '%q' "$wt") >&2" EXIT
+  for step in app-sign app-notarize publish; do
+    say "macos $step"
+    (cd "$wt" && bin/devbin macos "$step") ||
+      die "macos $step failed at $tag; nothing after it ran. Fix the cause and run tools/post-cut $tag"
+  done
+fi
+
+say "formula publish"
+tools/formula publish ||
+  die "formula publish failed; $ASSET is attached. Fix the cause and run tools/post-cut $tag"
+say "utilz $tag: $ASSET attached and the tap published"

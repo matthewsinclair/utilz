@@ -13,6 +13,8 @@ _(none)_
 ## TODO
 
 - [!] ST0029: Retire Python from Utilz
+- [?] ST0030: Lights-out release: one command from cut to tap
+  - [ ] 01: tools/post-cut, the release config and the docs
 
 ## DONE
 

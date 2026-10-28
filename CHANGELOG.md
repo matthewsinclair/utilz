@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.6] - unreleased
+
+### Changed
+
+- **A cut runs from the confirm to the tap with nobody at the terminal** (ST0030; harness and development only, no behaviour change). The release's one `after:` line, the new `tools/post-cut`, signs, notarises and attaches Menuz.app at the tag in a detached worktree, then publishes the formula to the tap, stopping at the first failure so the tap never gets ahead of the app; a re-run skips what is done. `bin/devbin release --patch --yes` is the whole cut. The release gate is `check all` alone: `test estate` runs before a cut, in the dry run and the twins, and is no longer run again inside it.
+
 ## [2.14.5] - 2026-10-28
 
 ### Fixed
