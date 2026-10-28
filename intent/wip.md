@@ -1,14 +1,15 @@
-# Work In Progress
+---
+verblock: "28 Oct 2026:v1.1: matts - lean: DOING and TODO only, one line each"
+---
 
-DOING and TODO only. Done work goes to `intent/done.md`; context to `intent/restart.md`; everything else to `intent/.history/`.
+# Work In Progress
 
 ## DOING
 
-- cc: 2.14.5's final-head gate: the Mac twins here, the kovacs twins through kovacs-sysadm and the dry run, each derived from 2.14.4's green bytes, and the cut's pre-flight reads.
-- dc: issue 0119, the tests and guards outside the dispatch suites that compare against a written count, each made to derive it or lose it (hv, 27 Oct: magic numbers in tests, nothing else); ic edits the rows under `opt/prez/`.
-- vc: 2.14.5 to ready-to-cut (hv, 27 Oct): read each plan, design and bank; book the smallest run that proves each change with molt-vc; check each landing by its change; each landing carries its CHANGELOG line under 2.14.5; then the final head's twins here and on kovacs, which carry the kovacs legs of 0117, 0119 and 0120, and the dry run.
+- ic: issue 0125, Menuz's About window to Gtools' shape; its run is queued at molt-vc's desk.
+- vc: 2.14.6 (0125 alone): the About screenshot to hv, 0125's landing, then hv's cut.
 
 ## TODO
 
-- ic: issue 0114, adopt arca_swift 0003's fixes once arca_swift tags them.
-- ic: issue 0118, Menuz's signing converged on devbin's built-in `macos`, once devbin 0.1.16 (devbin 0243) is cut and vendored; it rides the first Utilz release after that (hv, 27 Oct).
+- ic: issue 0114, once arca_swift tags its issue 0003's fixes.
+- ic: issue 0118, once devbin 0.1.16 is cut and vendored; 0126 is fixed with it.
