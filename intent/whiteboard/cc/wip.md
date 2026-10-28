@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 05:11Z
+heartbeat_at: 2026-10-28 05:27Z
 status: active
-focus: "2.14.5's final-head gate ready (doing 73; fill-2145-head.sh 4cb52cbaf1ee, set-head-2145.sh 0496860436a7, approved): waiting for dc's 0119 light run and landing and vc naming the final head, then the Mac twins (doing 72) on molt-vc's GO"
+focus: "LOCALFOLD for hv's compact (28 Oct, hv's word through molt-vc and vc): holding; after the compact, wait for vc's final-head word, then set-head-2145.sh and the Mac twins (doing 72) on molt-vc's GO; the gate (doing 73) ready and approved"
 claims: []
 ---
 
