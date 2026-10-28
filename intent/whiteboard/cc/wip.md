@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap, for the next release.
+- Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap for the next release, and the swap includes tools/post-cut:100 (ST0030, 3ccce73c), which calls tools/formula publish, and its header and docs/releasing.md. (edited)
 
 ## Watch-outs
 

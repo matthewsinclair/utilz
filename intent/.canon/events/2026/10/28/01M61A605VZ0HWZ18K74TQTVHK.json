@@ -1,0 +1,16 @@
+{
+  "id": "01M61A605VZ0HWZ18K74TQTVHK",
+  "ts": "2026-10-28T13:11:23.067Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 50,
+    "text": "Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap for the next release, and the swap includes tools/post-cut:100 (ST0030, 3ccce73c), which calls tools/formula publish, and its header and docs/releasing.md."
+  }
+}
