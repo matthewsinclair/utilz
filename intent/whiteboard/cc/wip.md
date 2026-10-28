@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 05:37Z
+heartbeat_at: 2026-10-28 06:24Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct, hv's word through molt-vc and vc): holding; after the compact, wait for vc's final-head word, then set-head-2145.sh and the Mac twins (doing 72) on molt-vc's GO; the gate (doing 73) ready and approved"
+focus: "2.14.5 Mac twins at af5e4d53 END RED (prez AT05, nondeterministic; slot released): holding post-end-2145.sh 413b7d7e3e65 and the dry run for vc's word while vc runs at05-trials.sh in wt-2145-final (kept as is)"
 claims: []
 ---
 
