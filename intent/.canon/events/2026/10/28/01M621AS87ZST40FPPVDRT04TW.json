@@ -1,0 +1,16 @@
+{
+  "id": "01M621AS87ZST40FPPVDRT04TW",
+  "ts": "2026-10-28T19:55:57.063Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 6,
+    "text": "A plain utilz on PATH may be brew's; call the tree's bin/utilz and log its version."
+  }
+}

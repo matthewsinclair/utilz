@@ -1,0 +1,16 @@
+{
+  "id": "01M621ARSRJ6VPXQ23N3Z4ZP0E",
+  "ts": "2026-10-28T19:55:56.601Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 5,
+    "text": "Commit exactly the wrote: paths a verb prints, never re-rendered:; read live messages from intent wb show dc --json."
+  }
+}

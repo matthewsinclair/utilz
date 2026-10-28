@@ -1,0 +1,16 @@
+{
+  "id": "01M621AQQ6SWW8XG4Q24RBQ38Y",
+  "ts": "2026-10-28T19:55:55.494Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file; every run books through molt-vc's slots and runs only on its GO."
+  }
+}
