@@ -1,0 +1,14 @@
+{
+  "id": "01M61AAWESY2KVH64VVE5DG9KC",
+  "ts": "2026-10-28T13:14:03.098Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0030/AC-02"
+  },
+  "payload": {
+    "evidence": "hv's run of tools/post-cut 2.14.5, 28 Oct: Menuz.app.zip attached 13:11:57Z (notarised, Gatekeeper accepted), tap 6dbc261a utilz 2.14.5 13:12:23Z; hv's re-run skipped both; no worktree left; shellcheck clean"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M61AAW6705HV68P45FJWQS96",
+  "ts": "2026-10-28T13:14:02.824Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0030/AC-01"
+  },
+  "payload": {
+    "evidence": "3ccce73c; bin/devbin release check, 28 Oct 13:13Z: gates check all declared, after tools/post-cut declared"
+  }
+}

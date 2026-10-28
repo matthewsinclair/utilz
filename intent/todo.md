@@ -13,8 +13,6 @@ _(none)_
 ## TODO
 
 - [!] ST0029: Retire Python from Utilz
-- [?] ST0030: Lights-out release: one command from cut to tap
-  - [ ] 01: tools/post-cut, the release config and the docs
 
 ## DONE
 
@@ -148,6 +146,8 @@ _(none)_
   - [x] 07: The menu's version line
 - [x] ST0028: arngz: a desk saved from live terminal windows fails to apply minutes later
   - [x] 01: Discover's title patterns survive a moving title, and the report names each
+- [x] ST0030: Lights-out release: one command from cut to tap
+  - [x] 01: tools/post-cut, the release config and the docs
 
 ---
 

@@ -3,8 +3,9 @@
   "id": "ST0030",
   "title": "Lights-out release: one command from cut to tap",
   "slug": "lights-out-release-one-command-from-cut-to-tap",
-  "status": "triage",
+  "status": "completed",
   "created": "2026-10-28",
+  "completed": "2026-10-28",
   "objective": "One command, `bin/devbin release --patch --yes` (or `--minor`, `--major`), takes Utilz from a green main to a published release with Menuz.app attached and the Homebrew tap updated, with nobody at the terminal after it starts. Apple's notarisation is the only wait.",
   "context": "hv, 28 Oct 2026, after cutting 2.14.5: the cut is bitty next to Ccusage's `tools/release`, which bumps, checks, tags, pushes, waits for CI and publishes the tap in one command. 2.14.5 took a confirm prompt, 1514s of gates that re-ran the suites the dry run and the twins had already passed, and four steps by hand after the cut (a worktree at the tag, `macos app-sign`, `app-notarize`, `publish`, then `tools/formula publish`).\n\nhv's rulings, directly to vc on 28 Oct: (a) an `after:` line runs the steps after the cut, reversing hv's ruling of 2026-09-21 (ST0019 WP-05) that no release hook runs `tools/formula publish`; (b) the release gates are `check all` only, with `test estate` dropped, since the dry run and the twins run the suites before a cut; (c) the cut is confirmed by `--yes`, which devbin's release core already takes.\n\nDevbin's core already has `--yes` and `after:`. Its after step runs every line even when one before it failed, so the steps go in one script, `tools/post-cut`, which stops at the first failure: a formula pushed before Menuz.app.zip is attached gives every new install a failing `menuz install` (docs/releasing.md).",
   "body": "",
@@ -14,10 +15,30 @@
       "seq": 1,
       "title": "tools/post-cut, the release config and the docs",
       "scope": "S",
-      "status": "not-started",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01",
+      "text": "The release's gates are check all alone and its one after: line is tools/post-cut, as bin/devbin release check reads them",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "3ccce73c; bin/devbin release check, 28 Oct 13:13Z: gates check all declared, after tools/post-cut declared"
+      }
+    },
+    {
+      "id": "AC-02",
+      "text": "tools/post-cut signs, notarises and attaches Menuz.app at the tag, then publishes the formula, stopping at the first failure; a re-run skips what is done",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "hv's run of tools/post-cut 2.14.5, 28 Oct: Menuz.app.zip attached 13:11:57Z (notarised, Gatekeeper accepted), tap 6dbc261a utilz 2.14.5 13:12:23Z; hv's re-run skipped both; no worktree left; shellcheck clean"
+      }
     }
   ],
   "attachments": [
