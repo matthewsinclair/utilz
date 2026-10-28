@@ -1,0 +1,15 @@
+{
+  "id": "01M61X78Q5VWNEFFPMFYRW60ER",
+  "ts": "2026-10-28T18:44:07.526Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0126"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "devbin macos store-creds puts each Apple notary credential, the app-specific password among them, in security(1)'s argv"
+  }
+}
