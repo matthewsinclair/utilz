@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 13:09Z
+heartbeat_at: 2026-10-28 13:43Z
 status: active
-focus: "issue 0124 (prez AT05 under load): design first, read by vc, then the fix; every run booked through vc at molt-vc's desk; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)"
+focus: "LOCALFOLD for hv's compact (28 Oct 13:42Z via vc): holding; issue 0125 banked mid-write (doing item, bank-0125/RESUME-0125.md), no run until vc's word; 0124 landed and closed; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift still 0.2.1)"
 claims: [ISSUE:0118, ISSUE:0125]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0118, ISSUE:0125]
 
 ## DOING
 
-_(none)_
+- Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): half-written in wt-0125 (ic-0125 on 8b27e4ac, uncommitted), banked as ~/Devel/scratch/utilz-ic/bank-0125/wip-0125.diff (f19ce1e765a0). What's left, in bank-0125/RESUME-0125.md: the tests, pbxproj, VERSION 0.4.8, CHANGELOG, then the commit, the run script and the booking. No run until vc's word after hv's compact; hv sees the screenshot before the landing.
 
 ## TODO
 

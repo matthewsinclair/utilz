@@ -1,0 +1,15 @@
+{
+  "id": "01M61C1PTWHG7C1SWEMVBCF6G1",
+  "ts": "2026-10-28T13:43:59.580Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): half-written in wt-0125 (ic-0125 on 8b27e4ac, uncommitted), banked as ~/Devel/scratch/utilz-ic/bank-0125/wip-0125.diff (f19ce1e765a0). What's left, in bank-0125/RESUME-0125.md: the tests, pbxproj, VERSION 0.4.8, CHANGELOG, then the commit, the run script and the booking. No run until vc's word after hv's compact; hv sees the screenshot before the landing."
+  }
+}
