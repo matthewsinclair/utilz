@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 18:10Z
+heartbeat_at: 2026-10-28 18:24Z
 status: active
 focus: "HOLD for hv's compact (close-out round, molt-vc 18:08Z via vc): 0125 committed at 9418eabf, booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C; if molt-vc's GO comes, run s0125-run.sh then s0125-shots.sh and send END; 0114 and 0118 deferred past 2.14.6 (623c46df), todo 13 and hold 18 are their triggers"
 claims: [ISSUE:0118, ISSUE:0125]
