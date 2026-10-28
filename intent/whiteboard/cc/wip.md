@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 07:02Z
+heartbeat_at: 2026-10-28 13:08Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct 07:02Z via vc), not released: 2.14.5 READY TO CUT at af5e4d53 (cut is hv's); holding under hv's hold and the main freeze; after the cut: wt-2145-final removed on vc's word, todo 51"
+focus: "2.14.5 cut by hv at 4c1fa5f1; freeze and hold lifted: removing wt-2145-final by the fold checks, then todo 51 (formula Highlander question for hv through vc)"
 claims: []
 ---
 
