@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 13:43Z
+heartbeat_at: 2026-10-28 13:45Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct 13:42Z, hv via vc), not released: holding; hold 50 (formula renderer, vc's todo 58, put to hv) waits on hv's ruling"
+focus: "LOCALFOLD and HOLD for hv's move (28 Oct 13:44Z, via molt-vc), not released: start nothing until hv is home and says go; then hold 50 (formula renderer, vc's todo 58) on hv's ruling"
 claims: []
 ---
 
