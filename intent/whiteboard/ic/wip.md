@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 18:24Z
+heartbeat_at: 2026-10-28 19:56Z
 status: active
-focus: "HOLD for hv's compact (close-out round, molt-vc 18:08Z via vc): 0125 committed at 9418eabf, booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C; if molt-vc's GO comes, run s0125-run.sh then s0125-shots.sh and send END; 0114 and 0118 deferred past 2.14.6 (623c46df), todo 13 and hold 18 are their triggers"
+focus: "HOLD: 0125's heavy 01M61KK6G50JMMTY7W9GVMKC4C waits for molt-vc's GO; todo 13 and hold 18 trigger 0114 and 0118."
 claims: [ISSUE:0118, ISSUE:0125]
 ---
 
@@ -13,15 +13,15 @@ claims: [ISSUE:0118, ISSUE:0125]
 
 ## DOING
 
-- Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): committed on ic-0125 in wt-0125 at 9418eabf (on 8b27e4ac), banked as bank-0125/0125-9418eabf.patch (492c6d12e4af). vc read runs/s0125-run.sh (810e32277eef) and runs/s0125-shots.sh (dacdcab09b55). Booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C, queued after devbin's turn; on molt-vc's GO run both and send END with the PNG path; hv sees it before any landing word. See bank-0125/RESUME-0125.md. (edited)
+- Issue 0125 (Menuz's About window): heavy 01M61KK6G50JMMTY7W9GVMKC4C queued; on molt-vc's GO, run it and send END (bank-0125/RESUME-0125.md). (edited)
 
 ## TODO
 
-- Watch for arca_swift's tag carrying its issue 0003's fixes (27 Oct: its newest tag, 0.2.1, tag object 7b9ce515 on commit ffdff0ab, main's head, carries none). 0114 is deferred on the record by molt-vc's ruling with the pen (27 Oct, body at 461fded3): 2.14.5 does not wait, and hv can overrule on return. When the tag lands, tell vc and start issue 0114, whose body holds the trigger, the fix and the placement. (edited)
+- Watch for arca_swift's tag carrying its issue 0003's fixes; when it lands, tell vc and start 0114. (edited)
 
 ## Holds
 
-- Issue 0118 (owner ic) holds until devbin 0.1.16 (devbin 0243) is cut and vendored into Utilz, read as bin/.devbin/manifest.sha256 saying devbin_version: 0.1.16 on main (hv, 27 Oct: 0118 rides the first Utilz release after it). Then the Utilz side its body names (set at 5c8c2687, read by vc): the design read by vc before any code, every run booked through vc.
+- Issue 0118 holds until devbin 0.1.16 is vendored into Utilz (bin/.devbin/manifest.sha256 says devbin_version: 0.1.16 on main); then its body's Utilz side, design read by vc first. (edited)
 
 ## Watch-outs
 

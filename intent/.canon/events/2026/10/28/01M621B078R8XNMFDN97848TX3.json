@@ -1,0 +1,16 @@
+{
+  "id": "01M621B078R8XNMFDN97848TX3",
+  "ts": "2026-10-28T19:56:04.200Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 18,
+    "text": "Issue 0118 holds until devbin 0.1.16 is vendored into Utilz (bin/.devbin/manifest.sha256 says devbin_version: 0.1.16 on main); then its body's Utilz side, design read by vc first."
+  }
+}
