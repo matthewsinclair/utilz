@@ -21,6 +21,10 @@ title: Lights-out release: one command from cut to tap
 
 - AC-02 (non-test) tools/post-cut signs, notarises and attaches Menuz.app at the tag, then publishes the formula, stopping at the first failure; a re-run skips what is done -- evidence: hv's run of tools/post-cut 2.14.5, 28 Oct: Menuz.app.zip attached 13:11:57Z (notarised, Gatekeeper accepted), tap 6dbc261a utilz 2.14.5 13:12:23Z; hv's re-run skipped both; no worktree left; shellcheck clean -- satisfied: yes
 
+### Group AC-03
+
+- AC-03 (non-test) tools/post-cut pulls this machine's clone of the tap, so brew upgrade sees the release -- evidence: vc's run of tools/post-cut 2.14.5, 28 Oct: the tap clone went from 396cd64 (utilz 2.14.4) to 6dbc261 (utilz 2.14.5), rc 0; shellcheck clean -- satisfied: yes
+
 ## Acceptance Tests
 
 ### Group AC-01
@@ -28,6 +32,10 @@ title: Lights-out release: one command from cut to tap
 _(no tests in this group)_
 
 ### Group AC-02
+
+_(no tests in this group)_
+
+### Group AC-03
 
 _(no tests in this group)_
 

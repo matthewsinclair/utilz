@@ -1,0 +1,14 @@
+{
+  "id": "01M61AEZHS0ND6NG6ARZBRK04C",
+  "ts": "2026-10-28T13:16:17.338Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0030/AC-03"
+  },
+  "payload": {
+    "evidence": "vc's run of tools/post-cut 2.14.5, 28 Oct: the tap clone went from 396cd64 (utilz 2.14.4) to 6dbc261 (utilz 2.14.5), rc 0; shellcheck clean"
+  }
+}

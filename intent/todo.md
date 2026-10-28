@@ -148,6 +148,7 @@ _(none)_
   - [x] 01: Discover's title patterns survive a moving title, and the report names each
 - [x] ST0030: Lights-out release: one command from cut to tap
   - [x] 01: tools/post-cut, the release config and the docs
+  - [x] 02: post-cut pulls this machine's tap
 
 ---
 

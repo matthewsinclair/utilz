@@ -20,6 +20,8 @@ Runs from the project root, as the core runs every `after:` line, with stdin on 
 5. Removes the worktree on every way out with plain `git worktree remove`, never `--force`; a removal that fails says LEFT with the path.
 6. Runs `tools/formula publish`, which renders the newest release into a fresh clone of the tap and pushes it, and leaves a tap that already carries it as it is.
 
+7. Pulls this machine's clone of the tap, `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`, with `git pull --ff-only` (WP 02, hv, 28 Oct): `brew upgrade` left it at 2.14.4 after 2.14.5's publish, so brew saw nothing to upgrade. No brew on PATH, or no such clone, is said and skipped; a pull that fails is a failure. The upgrade itself stays hv's.
+
 Exit 0 only when every step it ran passed. A failure names the step, and `tools/post-cut <tag>` re-runs from the top, skipping what is done.
 
 ## D3. What stays by hand

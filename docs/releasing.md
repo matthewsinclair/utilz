@@ -96,10 +96,9 @@ Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its 
 
 Then hv:
 
-1. **Brings this machine's tap up to date and audits it**, with Homebrew's auto-update off, as every scripted brew call runs:
+1. **Audits this machine's tap**, which `tools/post-cut` has pulled (brew's own auto-update can leave a third-party tap behind, as it left 2.14.4 after 2.14.5's publish), with Homebrew's auto-update off, as every scripted brew call runs:
 
    ```bash
-   git -C "$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz" pull --ff-only
    HOMEBREW_NO_AUTO_UPDATE=1 brew audit --strict matthewsinclair/utilz/utilz
    ```
 

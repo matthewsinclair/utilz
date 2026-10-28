@@ -4,6 +4,7 @@
   "title": "Lights-out release: one command from cut to tap",
   "slug": "lights-out-release-one-command-from-cut-to-tap",
   "status": "completed",
+  "status_reason": "hv, 28 Oct: tools/post-cut also brings this machine's tap clone up to date, since brew upgrade left it at 2.14.4 after the 2.14.5 publish",
   "created": "2026-10-28",
   "completed": "2026-10-28",
   "objective": "One command, `bin/devbin release --patch --yes` (or `--minor`, `--major`), takes Utilz from a green main to a published release with Menuz.app attached and the Homebrew tap updated, with nobody at the terminal after it starts. Apple's notarisation is the only wait.",
@@ -14,6 +15,15 @@
     {
       "seq": 1,
       "title": "tools/post-cut, the release config and the docs",
+      "scope": "S",
+      "status": "done",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "post-cut pulls this machine's tap",
       "scope": "S",
       "status": "done",
       "objective": "",
@@ -38,6 +48,15 @@
       "state": {
         "is": "satisfied",
         "evidence": "hv's run of tools/post-cut 2.14.5, 28 Oct: Menuz.app.zip attached 13:11:57Z (notarised, Gatekeeper accepted), tap 6dbc261a utilz 2.14.5 13:12:23Z; hv's re-run skipped both; no worktree left; shellcheck clean"
+      }
+    },
+    {
+      "id": "AC-03",
+      "text": "tools/post-cut pulls this machine's clone of the tap, so brew upgrade sees the release",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "vc's run of tools/post-cut 2.14.5, 28 Oct: the tap clone went from 396cd64 (utilz 2.14.4) to 6dbc261 (utilz 2.14.5), rc 0; shellcheck clean"
       }
     }
   ],

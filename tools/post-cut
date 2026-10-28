@@ -2,7 +2,8 @@
 #
 # post-cut -- everything after a Utilz cut, in order, stopping at the first
 # failure: Menuz.app signed, notarised and attached at the tag, then the
-# formula published to the tap (ST0030; docs/releasing.md).
+# formula published to the tap, then this machine's clone of the tap pulled
+# (ST0030; docs/releasing.md).
 #
 #   tools/post-cut [<tag>]   <tag> defaults to the top-level VERSION at HEAD
 #
@@ -31,6 +32,7 @@ set -euo pipefail
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO="matthewsinclair/utilz"
 ASSET="Menuz.app.zip"
+TAP="matthewsinclair/utilz"
 
 die() {
   printf 'post-cut: %s\n' "$*" >&2
@@ -99,4 +101,22 @@ fi
 say "formula publish"
 tools/formula publish ||
   die "formula publish failed; $ASSET is attached. Fix the cause and run tools/post-cut $tag"
+
+# THIS MACHINE'S CLONE OF THE TAP, pulled so `brew upgrade utilz` sees the
+# release: brew's own auto-update refreshes its API data and can leave a
+# third-party tap behind, as it left 2.14.4 after 2.14.5's publish. The
+# upgrade itself is hv's.
+if ! command -v brew >/dev/null 2>&1; then
+  say "no brew on PATH, so no tap clone to pull"
+else
+  tapdir="$(brew --repository)/Library/Taps/${TAP%%/*}/homebrew-${TAP#*/}" ||
+    die "cannot read brew's repository; $ASSET is attached and the tap published"
+  if [[ ! -d "$tapdir/.git" ]]; then
+    say "no clone of the tap at $tapdir, so nothing to pull"
+  else
+    git -C "$tapdir" pull -q --ff-only ||
+      die "cannot pull $tapdir; $ASSET is attached and the tap published. Pull it by hand before brew upgrade"
+    say "this machine's tap: $(git -C "$tapdir" log -1 --format=%s)"
+  fi
+fi
 say "utilz $tag: $ASSET attached and the tap published"

@@ -2,6 +2,7 @@
 st_id: ST0030
 title: Lights-out release: one command from cut to tap
 status: Completed
+status_reason: hv, 28 Oct: tools/post-cut also brings this machine's tap clone up to date, since brew upgrade left it at 2.14.4 after the 2.14.5 publish
 created: 2026-10-28
 completed: 2026-10-28
 ---
@@ -25,6 +26,7 @@ Devbin's core already has `--yes` and `after:`. Its after step runs every line e
 | WP    | Title                                           | Size | Status |
 | ----- | ----------------------------------------------- | ---- | ------ |
 | WP-01 | tools/post-cut, the release config and the docs | S    | Done   |
+| WP-02 | post-cut pulls this machine's tap               | S    | Done   |
 
 ## Acceptance
 

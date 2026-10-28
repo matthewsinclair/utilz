@@ -1,0 +1,15 @@
+{
+  "id": "01M61ADHMH8ZP5STWJ8J0F9T43",
+  "ts": "2026-10-28T13:15:30.322Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0030/02"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "post-cut pulls this machine's tap"
+  }
+}
