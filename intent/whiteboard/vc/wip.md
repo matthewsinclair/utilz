@@ -17,7 +17,7 @@ claims: []
 
 ## TODO
 
-- FOR hv, open: (1) the next CHANGELOG section is opened as 2.14.6 (hv's number); (2) cc's todo 51, which formula renderer Utilz keeps: A (cc's rec) devbin's bin/devbin formula, retire tools/formula after a byte diff of 2.14.5's render against the tap, tools/post-cut's formula line moves with it; B keep tools/formula. cc's message stays live here until hv answers.
+_(none)_
 
 ## Holds
 
@@ -40,6 +40,7 @@ _(none)_
 - hv, 2026-10-27, directly to vc in vc's session, answering the four decisions vc had sent to molt-vc by 08:34Z: (1) 0118's order: Utilz's next release does not wait for devbin 0.1.16. 0118 rides the first Utilz release after 0.1.16 (devbin 0243) is cut and vendored, which is 2.14.5 only if 0.1.16 lands first; deferred on the record with hv's say. (2) A SHA256SUMS asset on every Utilz release, written by devbin's release attach once 0118 lands: accepted. (3) The smaller post-cut step changes under devbin's built-in macos (an interrupt exits 1; a Menuz.app.zip already attached with the same bytes reads as done; the stage under devbin/macos/Utilz-<sha12>; the notary zip named submission.zip; off macOS exit 2): all accepted. (4) The next release is 2.14.5; its CHANGELOG section was opened at ec2b53c7 with 0116's and 0121's lines, and each later landing carries its own line.
 - hv, 2026-10-27, directly to vc in vc's session, on the count rule, answering vc's question on 0113's 11,008 hits: "This is _BONKERS_. All I said was don't write guards or tests that compare against arbitrary magic numbers. HOW THE HELL HAS THIS TURNED INTO SOMETHING BIGGER THAN BEN HUR?!" and "This should simply be a sweep to get rid of magic numbers in tests and a rule not to add any into the future. The end. What is going on?!" vc's reading: the sweep is 0117 (the dispatch suites) and 0119 cut to the tests and guards outside them that compare against a written count (body set at 0bb4fce6); 0113 (prose, comments, test names) withdrawn (closed at 66cc534a); strings, comments, test input and test names are out. The rule for the future is hv's global AGENTS.md line, which hv OK'd narrowed in molt-vc's session (Molt-matts da71308): "No magic numbers in tests or guards ... Prose, comments, docs and names are outside this rule." Utilz writes no copy. The over-reach was vc's: decision 66 scoped from the old wording without asking hv what it was for, and vc did not stop it as it grew. (edited)
 - molt-vc, with the pen, 27 Oct 2026, on vc's FOR hv: 2.14.5 does not wait for issue 0114. 0114 rides the first Utilz release after arca_swift tags a release carrying its issue 0003's fixes, deferred on the record (ic records it in 0114's body); hv can overrule on return. In the same message, hv's words through molt-vc: 'the compact IS STILL NEEDED' and 'I didn't say no compact. I just said push on.' hv ran Utilz's tests by hand on the Mac, 'ok', and nothing on kovacs, so the kovacs twins heavy stays Utilz's kovacs proof.
+- hv, 28 Oct 2026, directly to vc ('Ok, proceed.' on vc's rating of the open work): (1) the next release is 2.14.6, carrying 0125 alone, cut once hv has seen the About screenshot; (2) formula renderer B: keep tools/formula, devbin's bin/devbin formula stays off (cc's hold 50 is spent); (3) 0114 and 0118 stay deferred on their recorded triggers (arca_swift's tag; devbin 0.1.16 vendored), rated P3.
 
 ---
 

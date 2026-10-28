@@ -2230,8 +2230,17 @@
       "kind": "todo",
       "seq": 58,
       "text": "FOR hv, open: (1) the next CHANGELOG section is opened as 2.14.6 (hv's number); (2) cc's todo 51, which formula renderer Utilz keeps: A (cc's rec) devbin's bin/devbin formula, retire tools/formula after a byte diff of 2.14.5's render against the tap, tools/post-cut's formula line moves with it; B keep tools/formula. cc's message stays live here until hv answers.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T18:02:56.349Z",
       "recorded_at": "2026-10-28T13:43:02.226Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 72,
+      "text": "hv, 28 Oct 2026, directly to vc ('Ok, proceed.' on vc's rating of the open work): (1) the next release is 2.14.6, carrying 0125 alone, cut once hv has seen the About screenshot; (2) formula renderer B: keep tools/formula, devbin's bin/devbin formula stays off (cc's hold 50 is spent); (3) 0114 and 0118 stay deferred on their recorded triggers (arca_swift's tag; devbin 0.1.16 vendored), rated P3.",
+      "state": "live",
+      "recorded_at": "2026-10-28T18:02:56.209Z"
     }
   ],
   "sent": [
@@ -9599,6 +9608,11 @@
       "id": "01M5Z08VFFRSGDWRCH5ZWJT9XR",
       "sender": "ic",
       "handled_at": "2026-10-27T15:49:19.481Z"
+    },
+    {
+      "id": "01M61A1DRDS8DK4S8HK4Q6P5MX",
+      "sender": "cc",
+      "handled_at": "2026-10-28T18:02:56.477Z"
     },
     {
       "id": "01M61A2CEA6ZYYT91SPXZXZKPR",
