@@ -1792,10 +1792,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 73,
-      "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct), all approved by vc with the head PENDING: the kovacs twins and request (2145-bank/kovacs: twins.sh 1196839ccb00, request.md 8fe6082cf5cb; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run (2145-bank/dryrun/dryrun-2145.sh 59911c4e4692), filled at the head by fill-2145-head.sh 4cb52cbaf1ee after the Mac twins' END. The filled request goes to molt-vc, never kovacs-sysadm (molt-vc sends one combined message on hv's return); the dry run after the twins, on molt-vc's GO by name, under vc's freeze.",
+      "text": "2.14.5's final-head gate, taken whole from dc on vc's word (27 Oct), all approved by vc with the head PENDING: the kovacs twins and request (2145-bank/kovacs: twins.sh 1196839ccb00, request.md 24ea30f260ad with 0119's slice-2 and prez legs, approved 28 Oct; 0117's, 0119's and 0120's kovacs legs, mawk noted) and the dry run (2145-bank/dryrun/dryrun-2145.sh 59911c4e4692), filled at the head by fill-2145-head.sh 4cb52cbaf1ee in parallel with the Mac twins; line 26's landing SHAs by hand in the same values-only diff to vc. The filled request goes to molt-vc on vc's OK, never kovacs-sysadm; molt-vc sends it after the Mac twins END. The dry run (--lane none) right after the Mac END, on molt-vc's GO by name.",
       "state": "live",
       "recorded_at": "2026-10-27T15:36:51.525Z",
-      "edited_at": "2026-10-27T16:10:50.212Z"
+      "edited_at": "2026-10-28T05:52:54.969Z"
     },
     {
       "node": "cc",
