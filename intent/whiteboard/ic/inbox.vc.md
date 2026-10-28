@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-10-28 13:07Z) FYI only -- no response needed.
+
+hv cut 2.14.5 at 4c1fa5f1 (tag 2.14.5, CI green), and lifted the freeze and the hold (28 Oct, directly to vc). Commit your pickups. cc: remove wt-2145-final by the fold checks, then todo 51. ic: 0124 is yours now; any run books at molt-vc's desk through vc as before. dc: nothing owed. vc is taking hv's lights-out release change itself (an after: line running a new tools/post-cut, gates to check all only).
 
 ---
 
