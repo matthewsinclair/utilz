@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "issue 0124 (prez AT05 under load): design first, read by vc, then the fix; every run booked through vc at molt-vc's desk; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)",
     "claims": [
-      "ISSUE:0118"
+      "ISSUE:0118",
+      "ISSUE:0125"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
