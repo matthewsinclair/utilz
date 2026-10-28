@@ -2128,10 +2128,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 69,
-      "text": "2.14.5 to ready-to-cut today (hv, 27 Oct: push hard; the compact is still needed; molt-vc has the pen). vc reads each plan, design and bank before any code or run, books the smallest run that proves each change (decision 67), and checks each landing by its change. Landed and closed: 0116 (15920960), 0121 (b0b26fcb), 0115 (14103179), 0117 (94c55977), 0120 (88522a3f). Landed and checked: 0122 (e6838359; docs/releasing.md names 0115's drops; cc closes it). 0119: the Menuz rows landed (1164c444); dc's two bats slices (6b98551d, then 64d15ec9 with install_lib and install_e2e) approved, their build queued at the desk, then one light run, then a split landing with vc's working-tree check between; ic's prez slice (showreel, artifact, the harness) approved by design and in code, one heavy; 0119's sub-bullet rides its last landing. Deferred on the record: 0114 (decision 71), 0118 (decision 68). Menuz stays 0.4.7 (vc's call; 0106's precedent). Then vc names the final head: cc's Mac twins (one heavy, approved), cc's dry run, then READY TO CUT to molt-vc for hv. The kovacs twins (cc's request, approved with the head's values pending) wait for hv's approval in kovacs-sysadm's session: molt-vc sends them in one combined message on hv's return, and the READY TO CUT names them as the one thing waiting on hv. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.",
+      "text": "2.14.5 to ready-to-cut (hv, 27 Oct: push hard; molt-vc has the pen). vc reads each plan, design and bank before any code or run, books the smallest run that proves each change (decision 67), and checks each landing by its change. Landed and closed: 0116, 0121, 0115, 0117, 0120, 0122 (e6838359, closed af70665d). 0119: the Menuz rows (1164c444) and ic's prez slice (c8a429f6) landed and checked; dc's two bats slices (6b98551d, 64d15ec9) ran 28 Oct green but for one red that is 0120's stale test, now issue 0123 (fix 40c02677, its common_lib.bats run 01M60FHAW0Z7HXM7E51SBS629F queued first after hv's go). Then land-0119.sh 426c99419f43 (approved): apply, vc's check-2145-landing.sh 0119-dc-all --worktree, three commits (slice 1, slice 2 with 0119's sub-bullet, 0123), each checked, dc closes 0119 and 0123. Then vc names the final head: cc's Mac twins (approved scripts set-head-2145.sh, run-twins-2145-final.sh, fill-2145-head.sh 4cb52cbaf1ee), the dry run, READY TO CUT to molt-vc. The kovacs twins wait for hv's approval in kovacs-sysadm's session (molt-vc's combined message). Deferred: 0114 (decision 71), 0118 (decision 68). Menuz stays 0.4.7. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.",
       "state": "live",
       "recorded_at": "2026-10-27T07:53:50.143Z",
-      "edited_at": "2026-10-27T15:54:34.889Z"
+      "edited_at": "2026-10-28T05:27:02.403Z"
     },
     {
       "node": "vc",
@@ -7036,7 +7036,8 @@
       "body": "0119's prez design APPROVED (design-0119-prez.md bb197b0ff02b), as vc said live. Call 1: slide.rs:933 is IN, as assert!(planned > 0, ...) beside :931 and :932; dc agrees. Call 2: a comment sitting on a check this slice edits, which states the assertion being deleted, loses or rewrites that sentence so it stays true (at04:137-141, segment.rs:292-295 and :436-440, slide.rs:641-644, :668-669 and :905-907, config.rs:293-297); no other comment, no name. Added from dc's finder fix: artifact/src/theme.rs :1428, :1431 and :1433/:1434, the same case-table shape, proven by cargo test -p artifact in the same one heavy. The run's bytes come to vc before the ask; no mutation (decision 67); no CHANGELOG hunk.",
       "re": "2026-10-27 15:39Z",
       "fyi": false,
-      "recorded_at": "2026-10-27T15:49:19.297Z"
+      "recorded_at": "2026-10-27T15:49:19.297Z",
+      "archived_at": "2026-10-28T05:26:50.613Z"
     }
   ],
   "handled": [
