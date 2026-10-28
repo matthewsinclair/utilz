@@ -459,7 +459,26 @@ STUB
     # exists because the stronger claim was falsified.
     printf '@media print { section { break-after: auto !important; height: auto !important } }\n' > "$WORK/defeat.css"
     "$BIN" pdf "$DEMO" --theme-file "$WORK/defeat.css" -o "$WORK/defeat.pdf" 2>"$WORK/defeat.err" >/dev/null
+    at05rc=$?
     present "a collapsed PDF is reported, not shipped silently" "defeating one-slide-per-page" "$WORK/defeat.err"
+    # A miss once under load kept nothing to say why (issue 0124), because the
+    # trap removes WORK. So a miss names which of three things it was, against
+    # the same deck's unthemed print above, and keeps prez's stderr in the log.
+    if ! grep -q -- "defeating one-slide-per-page" "$WORK/defeat.err" 2>/dev/null; then
+      at05want="$(pages_in "$WORK/demo.pdf")"
+      if [ ! -f "$WORK/defeat.pdf" ]; then
+        printf '    case: no PDF (prez exit %s): the print failed, not the check\n' "$at05rc"
+      else
+        at05got="$(pages_in "$WORK/defeat.pdf")"
+        if [ "$at05got" = "$at05want" ]; then
+          printf '    case: %s pages, as many as the unthemed print (prez exit %s): the fixture did not collapse this print\n' "$at05got" "$at05rc"
+        else
+          printf '    case: %s pages against %s unthemed and no warning (prez exit %s): prez missed a collapse\n' "$at05got" "$at05want" "$at05rc"
+        fi
+      fi
+      printf '    prez stderr:\n'
+      sed 's/^/      /' "$WORK/defeat.err" 2>/dev/null || printf '      (none kept)\n'
+    fi
 
     "$BIN" pdf "$DEMO" --browser /nonexistent -o "$WORK/never.pdf" >/dev/null 2>"$WORK/refuse.err"
     check "--browser /nonexistent exit code" "$?" "2"

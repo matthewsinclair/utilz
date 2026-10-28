@@ -12,6 +12,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 ### Changed
 
 - **A cut runs from the confirm to the tap with nobody at the terminal** (ST0030; harness and development only, no behaviour change). The release's one `after:` line, the new `tools/post-cut`, signs, notarises and attaches Menuz.app at the tag in a detached worktree, then publishes the formula to the tap, stopping at the first failure so the tap never gets ahead of the app; a re-run skips what is done. `bin/devbin release --patch --yes` is the whole cut. The release gate is `check all` alone: `test estate` runs before a cut, in the dry run and the twins, and is no longer run again inside it.
+- **prez's acceptance check of a collapsed PDF says why when it misses** (issue 0124; tests only). AT05 once missed prez's warning under load and kept nothing to say why. A miss now names which case it saw: the print failed, the theme did not collapse that print, or prez missed a collapse. It does so against the same deck's unthemed print and keeps prez's stderr in the log.
 
 ## [2.14.5] - 2026-10-28
 
