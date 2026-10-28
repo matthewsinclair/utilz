@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-27 15:55Z
+heartbeat_at: 2026-10-28 05:11Z
 status: active
-focus: "2.14.5 to READY TO CUT today (hv AFK: push hard; molt-vc has the pen): 0122 landed and closed; 0119's two dc slices queued at the desk, ic's prez slice in code; then the final head's Mac twins and dry run; the kovacs twins wait for hv's approval"
+focus: "28 Oct: 2.14.5 resumes after the overnight restart: dc's 0119 light run (never granted) and landing are the last gate before the final head; then cc's Mac twins and dry run, READY TO CUT; the kovacs twins wait for hv"
 claims: []
 ---
 
