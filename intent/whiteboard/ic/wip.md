@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 07:02Z
+heartbeat_at: 2026-10-28 13:08Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct): holding on hv's hold; 2.14.5's work all landed; issue 0124 (AT05 under load) owned, for after the cut; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)"
+focus: "issue 0124 (prez AT05 under load): design first, read by vc, then the fix; every run booked through vc at molt-vc's desk; watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)"
 claims: [ISSUE:0118, ISSUE:0124]
 ---
 
