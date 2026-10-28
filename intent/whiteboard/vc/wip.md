@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 13:43Z
+heartbeat_at: 2026-10-28 13:46Z
 status: active
-focus: "LOCALFOLD for hv's compact (28 Oct 13:42Z, hv travelling): 2.14.5 shipped (brew 2.14.5 and its Menuz.app on rhadamanth); ST0030 lights-out cut done; 0124 closed; 0125 with ic at design-approved, held for hv at home; FOR hv in todo"
+focus: "HOLD for hv's move (molt-vc 13:44Z): all four nodes folded, nothing pushed; 0125 (doing 70) banked by ic in wt-0125, resumes only when hv is home and says go, screenshot to hv before landing"
 claims: []
 ---
 
