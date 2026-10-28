@@ -2128,10 +2128,10 @@
       "node": "vc",
       "kind": "doing",
       "seq": 69,
-      "text": "2.14.5 to ready-to-cut (hv, 27 Oct: push hard; molt-vc has the pen). vc reads each plan, design and bank before any code or run, books the smallest run that proves each change (decision 67), and checks each landing by its change. Landed and closed: 0116, 0121, 0115, 0117, 0120, 0122 (e6838359, closed af70665d). 0119: the Menuz rows (1164c444) and ic's prez slice (c8a429f6) landed and checked; dc's two bats slices (6b98551d, 64d15ec9) ran 28 Oct green but for one red that is 0120's stale test, now issue 0123 (fix 40c02677, its common_lib.bats run 01M60FHAW0Z7HXM7E51SBS629F queued first after hv's go). Then land-0119.sh 426c99419f43 (approved): apply, vc's check-2145-landing.sh 0119-dc-all --worktree, three commits (slice 1, slice 2 with 0119's sub-bullet, 0123), each checked, dc closes 0119 and 0123. Then vc names the final head: cc's Mac twins (approved scripts set-head-2145.sh, run-twins-2145-final.sh, fill-2145-head.sh 4cb52cbaf1ee), the dry run, READY TO CUT to molt-vc. The kovacs twins wait for hv's approval in kovacs-sysadm's session (molt-vc's combined message). Deferred: 0114 (decision 71), 0118 (decision 68). Menuz stays 0.4.7. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.",
+      "text": "2.14.5 READY TO CUT, sent to molt-vc for hv on 28 Oct (~/Devel/scratch/utilz-vc/ready-to-cut-2145.md b26b0d58df3b): code af5e4d534b31, every gate green there (the Mac twins, with prez's leg from its rerun alone; the kovacs twins, readback 6532b431ae71; the dry run, 23 suites, resolving 2.14.5 from 2.14.4). In it: 0116, 0121, 0115, 0120, 0117, 0119, 0122, 0123, each landed, checked by its change, and closed. Deferred: 0114 (decision 71), 0118 (decision 68), 0124 (prez AT05 under load, low, ic). Menuz stays 0.4.7. Utilz main is frozen to code commits until hv's cut (board commits only on hv's fold). The cut, tag, push, and app-sign, notarize and publish at the tag are hv's; app-sign with the tag checked out. After the cut: archive this, and ic takes 0124. Resume: ~/Devel/scratch/utilz-vc/RESUME.md.",
       "state": "live",
       "recorded_at": "2026-10-27T07:53:50.143Z",
-      "edited_at": "2026-10-28T05:27:02.403Z"
+      "edited_at": "2026-10-28T07:02:49.244Z"
     },
     {
       "node": "vc",

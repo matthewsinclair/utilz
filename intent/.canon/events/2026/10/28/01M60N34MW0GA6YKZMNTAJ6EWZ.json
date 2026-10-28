@@ -1,0 +1,16 @@
+{
+  "id": "01M60N34MW0GA6YKZMNTAJ6EWZ",
+  "ts": "2026-10-28T07:02:49.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 69,
+    "text": "2.14.5 READY TO CUT, sent to molt-vc for hv on 28 Oct (~/Devel/scratch/utilz-vc/ready-to-cut-2145.md b26b0d58df3b): code af5e4d534b31, every gate green there (the Mac twins, with prez's leg from its rerun alone; the kovacs twins, readback 6532b431ae71; the dry run, 23 suites, resolving 2.14.5 from 2.14.4). In it: 0116, 0121, 0115, 0120, 0117, 0119, 0122, 0123, each landed, checked by its change, and closed. Deferred: 0114 (decision 71), 0118 (decision 68), 0124 (prez AT05 under load, low, ic). Menuz stays 0.4.7. Utilz main is frozen to code commits until hv's cut (board commits only on hv's fold). The cut, tag, push, and app-sign, notarize and publish at the tag are hv's; app-sign with the tag checked out. After the cut: archive this, and ic takes 0124. Resume: ~/Devel/scratch/utilz-vc/RESUME.md."
+  }
+}
