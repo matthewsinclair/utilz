@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 05:11Z
+heartbeat_at: 2026-10-28 05:37Z
 status: active
-focus: "28 Oct: 2.14.5 resumes after the overnight restart: dc's 0119 light run (never granted) and landing are the last gate before the final head; then cc's Mac twins and dry run, READY TO CUT; the kovacs twins wait for hv"
+focus: "post-compact (28 Oct): holding for hv's go; then dc's 0123 run first, land-0119.sh's three commits, the final head's Mac twins and dry run, READY TO CUT"
 claims: []
 ---
 
