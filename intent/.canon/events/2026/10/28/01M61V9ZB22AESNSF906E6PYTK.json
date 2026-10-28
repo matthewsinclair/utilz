@@ -1,0 +1,16 @@
+{
+  "id": "01M61V9ZB22AESNSF906E6PYTK",
+  "ts": "2026-10-28T18:10:39.074Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 13,
+    "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): committed on ic-0125 in wt-0125 at 9418eabf (on 8b27e4ac), banked as bank-0125/0125-9418eabf.patch (492c6d12e4af). vc read runs/s0125-run.sh (810e32277eef) and runs/s0125-shots.sh (dacdcab09b55). Booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C, queued after devbin's turn; on molt-vc's GO run both and send END with the PNG path; hv sees it before any landing word. See bank-0125/RESUME-0125.md."
+  }
+}

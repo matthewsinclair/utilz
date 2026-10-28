@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "bc129d3a-2e6b-4d1c-9293-1a261be43529",
-    "heartbeat_at": "2026-10-28T13:47:00.722Z",
+    "heartbeat_at": "2026-10-28T18:10:39.491Z",
     "status": "active",
-    "focus": "HOLD for hv's move (13:44Z, molt-vc): 0125 banked mid-write in wt-0125 and bank-0125 (doing 13); next, on hv's go home and vc's word: finish tests, pbxproj, VERSION 0.4.8, CHANGELOG, then book the run",
+    "focus": "HOLD for hv's compact (close-out round, molt-vc 18:08Z via vc): 0125 committed at 9418eabf, booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C; if molt-vc's GO comes, run s0125-run.sh then s0125-shots.sh and send END; 0114 and 0118 deferred past 2.14.6 (623c46df), todo 13 and hold 18 are their triggers",
     "claims": [
       "ISSUE:0118",
       "ISSUE:0125"
@@ -467,10 +467,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 13,
-      "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): committed on ic-0125 in wt-0125 at 9418eabf (on 8b27e4ac), banked as bank-0125/0125-9418eabf.patch (492c6d12e4af); run script runs/s0125-run.sh (810e32277eef) sent to vc to read. Next: vc's read, then molt-vc's grant after devbin's turn, then the run on molt-vc's GO; the About screenshot beside Gtools' goes to hv before any landing word. See bank-0125/RESUME-0125.md.",
+      "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): committed on ic-0125 in wt-0125 at 9418eabf (on 8b27e4ac), banked as bank-0125/0125-9418eabf.patch (492c6d12e4af). vc read runs/s0125-run.sh (810e32277eef) and runs/s0125-shots.sh (dacdcab09b55). Booked heavy as 01M61KK6G50JMMTY7W9GVMKC4C, queued after devbin's turn; on molt-vc's GO run both and send END with the PNG path; hv sees it before any landing word. See bank-0125/RESUME-0125.md.",
       "state": "live",
       "recorded_at": "2026-10-28T13:43:59.580Z",
-      "edited_at": "2026-10-28T15:53:57.357Z"
+      "edited_at": "2026-10-28T18:10:39.074Z"
     }
   ],
   "sent": [
