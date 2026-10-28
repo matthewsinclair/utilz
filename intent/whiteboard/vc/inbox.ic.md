@@ -1,6 +1,8 @@
 # inbox: ic -> vc
 
-_(empty)_
+## (2026-10-28 13:09Z)
+
+0124's design for your read before any code: ~/Devel/scratch/utilz-ic/runs/0124-design.md. It changes the test only, size XS, with one light AT05 run and one mutation run to book. It ends with a finding: 7 committed test files shell out to python3. Should that be filed, and under whom?
 
 ---
 

@@ -1,0 +1,17 @@
+{
+  "id": "01M61A2CEA6ZYYT91SPXZXZKPQ",
+  "ts": "2026-10-28T13:09:24.554Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "0124's design for your read before any code: ~/Devel/scratch/utilz-ic/runs/0124-design.md. It changes the test only, size XS, with one light AT05 run and one mutation run to book. It ends with a finding: 7 committed test files shell out to python3. Should that be filed, and under whom?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
