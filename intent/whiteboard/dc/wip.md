@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-28 05:37Z
+heartbeat_at: 2026-10-28 05:56Z
 status: active
-focus: "0119: after hv's compact, 0123's rerun 01M60FHAW0Z7HXM7E51SBS629F waits on molt-vc's GO; then land-0119.sh apply, vc's check, commit, closes"
-claims: [ISSUE:0119, ISSUE:0123]
+focus: "0119 and 0123 closed (landed ec90ade9, 90e41534, af5e4d53; vc checked each); wt-0119 folded; free for vc's next word"
+claims: []
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-- issue 0119 (hv's narrowing, body v5 at 0bb4fce6, size M; owner dc) and issue 0123 (filed at eab2c8fe on vc's ruling: common_lib.bats:154 red on main since 0120; dc's fix): heavy green (01M5Z0GS7Q5ZXX2SRQZFND4N29); 0119's light run (01M5Z1XJ30YSSBNJFFDVHKKQNH, run.out bcf4dd4a9bd6) green but for 0123's not ok 149; 0123's fix 40c02677 on 64d15ec9 in wt-0119 (keep: unlanded), its run (~/Devel/scratch/utilz-dc/bank-0123/go-0123.sh, light 01M60FHAW0Z7HXM7E51SBS629F) queued first after hv's go; vc approved 0123 and land-0119.sh 426c99419f43; then WITH_CHANGELOG=1 land-0119.sh apply, vc's 0119-dc-all --worktree check, commit <sum> (slice 1, slice 2 with the sub-bullet, 0123), vc's checks by change, and the closes of 0119 (title narrowed, resolution naming the dropped clause and decision 67's dropped mutation) and 0123; ic's prez slice landed at c8a429f6; RESUME at ~/Devel/scratch/utilz-dc/RESUME.md; no push (edited)
+_(none)_
 
 ## TODO
 
