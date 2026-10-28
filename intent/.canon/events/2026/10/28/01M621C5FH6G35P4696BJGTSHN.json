@@ -1,0 +1,16 @@
+{
+  "id": "01M621C5FH6G35P4696BJGTSHN",
+  "ts": "2026-10-28T19:56:42.353Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 22,
+    "text": "hv's release rules: one next release carrying all not deferred; land one at a time on vc's word; desk twins, then kovacs, then the dry run, then hv's cut; hv keeps cuts, tags, pushes."
+  }
+}

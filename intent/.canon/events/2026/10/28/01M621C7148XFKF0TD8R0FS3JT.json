@@ -1,0 +1,16 @@
+{
+  "id": "01M621C7148XFKF0TD8R0FS3JT",
+  "ts": "2026-10-28T19:56:43.940Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 70,
+    "text": "0125 (Menuz About to Gtools' shape, ic): heavy 01M61KK6G50JMMTY7W9GVMKC4C queued for molt-vc's GO; screenshot to hv before the landing word."
+  }
+}

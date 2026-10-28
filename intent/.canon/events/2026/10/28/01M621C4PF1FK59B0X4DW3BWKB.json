@@ -1,0 +1,16 @@
+{
+  "id": "01M621C4PF1FK59B0X4DW3BWKB",
+  "ts": "2026-10-28T19:56:41.551Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Every host run books through Intent's slots on molt-vc's desk after vc reads its bytes; GO by name; START and END to molt-vc and vc; new bytes are a new booking."
+  }
+}

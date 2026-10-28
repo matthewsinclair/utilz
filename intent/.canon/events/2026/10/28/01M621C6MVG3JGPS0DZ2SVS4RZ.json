@@ -1,0 +1,16 @@
+{
+  "id": "01M621C6MVG3JGPS0DZ2SVS4RZ",
+  "ts": "2026-10-28T19:56:43.547Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 72,
+    "text": "hv, 28 Oct: 2.14.6 carries 0125 alone, cut once hv has seen the About screenshot; formula renderer B (tools/formula stays); 0114 and 0118 deferred, P3."
+  }
+}

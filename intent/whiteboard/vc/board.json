@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-28T18:24:40.095Z",
+    "heartbeat_at": "2026-10-28T19:56:44.201Z",
     "status": "active",
-    "focus": "HOLD after hv's close-out compact: 0125's heavy 01M61KK6G50JMMTY7W9GVMKC4C queued for molt-vc's GO, screenshot to hv before landing",
+    "focus": "HOLD: 0125's heavy queued for molt-vc's GO; screenshot to hv before landing.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -135,9 +135,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 1,
-      "text": "hv, 2026-09-14: every hv inbox and whiteboard item comes to vc for review and closeout, and after its compact cc takes its instructions from vc.",
+      "text": "hv, 14 Sep: every hv inbox and whiteboard item comes to vc for review and closeout; cc takes its instructions from vc.",
       "state": "live",
-      "recorded_at": "2026-09-14T12:14:41.277Z"
+      "recorded_at": "2026-09-14T12:14:41.277Z",
+      "edited_at": "2026-10-28T19:56:40.659Z"
     },
     {
       "node": "vc",
@@ -611,10 +612,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 4,
-      "text": "Reading prez's acceptance runs: AT01 asserts the in-crate target, so a run with CARGO_TARGET_DIR redirected reads AT01 red by construction; acceptance.sh:248 builds the tree it runs in, so a red on main runs the new suite in main's own tree; and AT20's window can read 0 wide under load, so re-run AT20 alone before calling it red.",
+      "text": "prez acceptance: AT01 reads red with CARGO_TARGET_DIR redirected; a red on main reruns in main's tree; rerun AT20 alone before calling it red.",
       "state": "live",
       "recorded_at": "2026-09-19T15:52:26.046Z",
-      "edited_at": "2026-10-20T18:45:31.106Z"
+      "edited_at": "2026-10-28T19:56:41.106Z"
     },
     {
       "node": "vc",
@@ -1460,10 +1461,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 17,
-      "text": "Host runs on this Mac and on kovacs, for every estate, book through Intent's slots on molt-vc's desk (hv's word; molt-vc took control at 13:19:49Z on 26 Oct), in the lanes heavy, cargo, bats, launchsvc and light, their capacities molt-vc's. Utilz's runs go through vc first. vc reads the run's bytes and names the command, its hashes, the expected result and the kill timeout. Only then does the session that will run it ask: intent estate slots ask heavy|light \"<what>\" --named tip=<sha>[,...] --node <node> (a negligible run asks with --lane none). It sends the id it prints, with the run's details, to molt-vc and vc. molt-vc grants the id into every lane the run holds (eg heavy,cargo,bats) and messages GO by name, which alone starts a run. START is intent estate slots start <id> --named <the same set> --node <node>; END is intent estate slots release <id> --result \"<one line>\" --node <node>. Each is also sent by message to molt-vc and vc until Part B's wait and watch land. A kovacs run's START and END come from kovacs-sysadm through molt-vc, and the asker adds --relayed. Heavy runs go one at a time; a light run shares a window only on molt-vc's grant, and a timing-like failure in it is rerun alone. Bytes that change after a grant send their new hash before the rerun. vc keeps its own count from the run's logs. The day's log is ~/Devel/scratch/utilz-vc/host-log-<date>.md. A run frees the heavy lane the moment its heavy part ends, and what remains re-asks as negligible (intent estate slots ask negligible \"<what>\" --lane none --named <set> --node <node>), as molt-vc ruled on 27 Oct for the cut's steps 6 to 11 and the app's notarise and publish. START must name its ask's own set: bytes that change after a grant are a new booking, so release the old ask with its result and ask again (--place-of keeps a place only for the same set).",
+      "text": "Every host run books through Intent's slots on molt-vc's desk after vc reads its bytes; GO by name; START and END to molt-vc and vc; new bytes are a new booking.",
       "state": "live",
       "recorded_at": "2026-10-18T20:06:14.599Z",
-      "edited_at": "2026-10-27T08:00:36.618Z"
+      "edited_at": "2026-10-28T19:56:41.551Z"
     },
     {
       "node": "vc",
@@ -1554,10 +1555,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 21,
-      "text": "kovacs is brew-only for Utilz and Intent (hv, 19 Oct): Utilz 2.14.4 from the tap since 27 Oct (with devbin 0.1.15, through kovacs-sysadm on molt-vc's relay; each kovacs-sysadm request costs hv an approval in its session, so molt-vc batches them), with no dev checkout and no link into one. While kovacs-sysadm is running, every read and change on kovacs goes through it, and when it is not, ssh is fine (hv, 26 Oct, narrowing the no-ssh rule of 25 Oct); never sudo in a probe, since hv has not ruled on it. Through kovacs-sysadm: send it the exact commands with the expected output, molt-vc books it, and vc re-tallies. A brew upgrade there runs as a dry run first, since a formula's dependencies can move too. A test leg lives in its own /var/tmp run dir, ships its own tree, and is removed once its logs are back. Its cargo legs put ~/.cargo/bin first (rustup stable 1.99.1, CI's toolchain, with clippy and rustfmt), since brew's rust comes first on PATH. Nothing for acceptance (xvfb, a browser, node) is installed. A fresh Homebrew 7 needs brew trust matthewsinclair/utilz between the tap and the install. kovacs-sysadm is reachable only over Remote Control, and it acts at hv's approval in its own session. kovacs-sysadm's shell is zsh: `command -v -a` fails there; use `whence -a`.",
+      "text": "kovacs is brew-only for Utilz; reads and changes go through kovacs-sysadm while it runs, batched by molt-vc; rustup stable 1.99.1 alone is CI's lint twin.",
       "state": "live",
       "recorded_at": "2026-10-19T07:43:06.800Z",
-      "edited_at": "2026-10-27T08:00:37.093Z"
+      "edited_at": "2026-10-28T19:56:41.953Z"
     },
     {
       "node": "vc",
@@ -1854,10 +1855,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 22,
-      "text": "hv's standing rules for Utilz work (19 and 20 Oct; the kovacs clause as hv's order of 25 Oct, decision 59, places it). Stack everything outstanding into the next release, with no small releases. Estimates in t-shirt sizes, never wall-clock. A landing is a local commit by path, one at a time into a primary holding no one else's hunks, on vc's word once vc has read the bytes and every booked run at the desk is green; the kovacs legs follow together after the desk work, on the bytes as landed, and a red there reopens its issue before the cut; hv keeps every cut, tag and push. Ready to cut means the final head passes a local twin of every CI job (tests.yml's Ubuntu loop, shellcheck 0.9.0 and Rust fmt and clippy on kovacs; the macOS suites, cargo, acceptance and the menuz app build here), then dc's dry run, so no CI job fails on a slip. A finished issue closes as soon as it lands and is checked; a red on CI or the menuz-app dispatch reopens it.",
+      "text": "hv's release rules: one next release carrying all not deferred; land one at a time on vc's word; desk twins, then kovacs, then the dry run, then hv's cut; hv keeps cuts, tags, pushes.",
       "state": "live",
       "recorded_at": "2026-10-20T18:45:29.279Z",
-      "edited_at": "2026-10-27T12:05:04.600Z"
+      "edited_at": "2026-10-28T19:56:42.353Z"
     },
     {
       "node": "vc",
@@ -1938,7 +1939,8 @@
       "kind": "decision",
       "seq": 55,
       "text": "hv, 22 Oct 2026, directly to vc, on the Rust toolchain for kovacs's lint twin: \"Why do we need both versions? Answer: we don't. Just use 1.99.1\". vc's reading. (1) kovacs keeps one toolchain, rustup's stable 1.99.1 (CI's newer line); the 1.99.0 kovacs-sysadm added on hv's earlier pick is uninstalled. (2) dc's rust-lint (fmt and clippy) on 1.99.1 counts as the twin of CI's Rust Lint job whichever line a CI run draws, so a clean lint there is green, with no rc 3 for a mismatch; this holds for 0101's K1 and for 2.14.2's final-head gate. (3) CI's own runs on main still read as they come; a red there reopens its issue.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:56:40.219Z",
       "recorded_at": "2026-10-22T21:32:03.480Z"
     },
     {
@@ -2010,7 +2012,8 @@
       "kind": "decision",
       "seq": 59,
       "text": "hv, 2026-10-25 (molt-vc 06:48Z, all VCs): one next release per project, carrying everything outstanding that is not deferred; no patch, interim or point releases before it. No user base but hv, so nothing is held back for compatibility or staging. The order is fixed: everything done, then everything tested at the desk, then the Linux artefacts checked on kovacs through kovacs-sysadm (a heavy, booked with molt-vc), then hv's cut. Anything left out is deferred on the record with hv's say; nothing drops out quietly.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:56:40.368Z",
       "recorded_at": "2026-10-25T06:49:15.521Z",
       "edited_at": "2026-10-27T08:00:37.550Z"
     },
@@ -2149,7 +2152,8 @@
       "kind": "decision",
       "seq": 66,
       "text": "vc, 27 Oct 2026, on 0118: its app-verify debug and release modes move into menuz, as a check menuz build makes on its own product (executable, LSUIElement, stamps), not dropped: U:607 (at 14103179) is the only built-bundle LSUIElement check. This decision's count-rule parts (0113's scope over prose, comments and test names; strings in code as 0119's) are withdrawn by hv's ruling of 27 Oct (decision 70).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:56:40.073Z",
       "recorded_at": "2026-10-27T08:34:32.663Z",
       "edited_at": "2026-10-27T10:55:34.671Z"
     },
@@ -2167,10 +2171,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 67,
-      "text": "vc, 27 Oct 2026, on hv's rule of 23 Sep (no yak-shaving; 'Just do enough to prove it works'), after hv balked at 0115's diagnostic of 12 Menuz builds (molt-vc refused slot 01M5Y8N7FNFDKXH4XVJ1SY77ZY at 08:51:07Z; the fault was vc's approval): every Utilz booking is the smallest run that proves its change, as molt-vc's desk now grants. 0115: doctor's own remedy run at the end of utilz menuz install and of the release steps, one direct check with the fakes, no real build. 0116: prettier --check on its two files, negligible. 0117: prez built, then the two dispatch suites under bash 3.2 and bash 5, no mutations (each check visibly fails on reading). 0113: no booked run (the worktree commit's gate, the scan rerun, vc's read of the diff; no hand lexers, no label fixtures). 0119: the touched files only. A mutation only where reading cannot show the new check fails: settled as the rule on 27 Oct (molt-vc withdrew its suggestion to drop red checks after gtools-vc showed they are cheap and caught a real false pass). Kovacs legs (0117's, 0119's) go to kovacs-sysadm in one message. The final head's twins before the cut stay.",
+      "text": "vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails.",
       "state": "live",
       "recorded_at": "2026-10-27T08:54:56.407Z",
-      "edited_at": "2026-10-27T09:57:22.711Z"
+      "edited_at": "2026-10-28T19:56:42.747Z"
     },
     {
       "node": "vc",
@@ -2186,9 +2190,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 68,
-      "text": "hv, 2026-10-27, directly to vc in vc's session, answering the four decisions vc had sent to molt-vc by 08:34Z: (1) 0118's order: Utilz's next release does not wait for devbin 0.1.16. 0118 rides the first Utilz release after 0.1.16 (devbin 0243) is cut and vendored, which is 2.14.5 only if 0.1.16 lands first; deferred on the record with hv's say. (2) A SHA256SUMS asset on every Utilz release, written by devbin's release attach once 0118 lands: accepted. (3) The smaller post-cut step changes under devbin's built-in macos (an interrupt exits 1; a Menuz.app.zip already attached with the same bytes reads as done; the stage under devbin/macos/Utilz-<sha12>; the notary zip named submission.zip; off macOS exit 2): all accepted. (4) The next release is 2.14.5; its CHANGELOG section was opened at ec2b53c7 with 0116's and 0121's lines, and each later landing carries its own line.",
+      "text": "hv, 27 Oct: 0118 rides the first release after devbin 0.1.16 is vendored; it moves app-verify into menuz build, adds SHA256SUMS on every release, and takes devbin's post-cut step changes.",
       "state": "live",
-      "recorded_at": "2026-10-27T09:37:10.586Z"
+      "recorded_at": "2026-10-27T09:37:10.586Z",
+      "edited_at": "2026-10-28T19:56:43.156Z"
     },
     {
       "node": "vc",
@@ -2205,7 +2210,8 @@
       "kind": "decision",
       "seq": 70,
       "text": "hv, 2026-10-27, directly to vc in vc's session, on the count rule, answering vc's question on 0113's 11,008 hits: \"This is _BONKERS_. All I said was don't write guards or tests that compare against arbitrary magic numbers. HOW THE HELL HAS THIS TURNED INTO SOMETHING BIGGER THAN BEN HUR?!\" and \"This should simply be a sweep to get rid of magic numbers in tests and a rule not to add any into the future. The end. What is going on?!\" vc's reading: the sweep is 0117 (the dispatch suites) and 0119 cut to the tests and guards outside them that compare against a written count (body set at 0bb4fce6); 0113 (prose, comments, test names) withdrawn (closed at 66cc534a); strings, comments, test input and test names are out. The rule for the future is hv's global AGENTS.md line, which hv OK'd narrowed in molt-vc's session (Molt-matts da71308): \"No magic numbers in tests or guards ... Prose, comments, docs and names are outside this rule.\" Utilz writes no copy. The over-reach was vc's: decision 66 scoped from the old wording without asking hv what it was for, and vc did not stop it as it grew.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:56:39.741Z",
       "recorded_at": "2026-10-27T10:55:34.341Z",
       "edited_at": "2026-10-27T11:11:06.557Z"
     },
@@ -2214,16 +2220,18 @@
       "kind": "decision",
       "seq": 71,
       "text": "molt-vc, with the pen, 27 Oct 2026, on vc's FOR hv: 2.14.5 does not wait for issue 0114. 0114 rides the first Utilz release after arca_swift tags a release carrying its issue 0003's fixes, deferred on the record (ic records it in 0114's body); hv can overrule on return. In the same message, hv's words through molt-vc: 'the compact IS STILL NEEDED' and 'I didn't say no compact. I just said push on.' hv ran Utilz's tests by hand on the Mac, 'ok', and nothing on kovacs, so the kovacs twins heavy stays Utilz's kovacs proof.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:56:39.915Z",
       "recorded_at": "2026-10-27T15:26:11.321Z"
     },
     {
       "node": "vc",
       "kind": "doing",
       "seq": 70,
-      "text": "0125 (Menuz's About window to Gtools' shape, hv's find 28 Oct, filed d355edb0): ic owns, claimed 8b27e4ac; vc approved design option A (MenuzMasthead gains {app} from Bundle.menuzVersion and {tree} from MenuzSourceTree; menuz-logo.png from icon_512, about.css 128px, about.md in Gtools' order, heading {name} {version}, help/menuz.md, Menuz 0.4.8, 2.14.6 CHANGELOG line). Next: ic's commit, patch and run hashes and booking to vc; menuz test then build --release; screenshot beside Gtools' shown to hv BEFORE the landing word; then hv cuts with bin/devbin release --patch --yes (ST0030), and brew upgrade utilz && utilz menuz install.",
+      "text": "0125 (Menuz About to Gtools' shape, ic): heavy 01M61KK6G50JMMTY7W9GVMKC4C queued for molt-vc's GO; screenshot to hv before the landing word.",
       "state": "live",
-      "recorded_at": "2026-10-28T13:43:02.094Z"
+      "recorded_at": "2026-10-28T13:43:02.094Z",
+      "edited_at": "2026-10-28T19:56:43.940Z"
     },
     {
       "node": "vc",
@@ -2238,9 +2246,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 72,
-      "text": "hv, 28 Oct 2026, directly to vc ('Ok, proceed.' on vc's rating of the open work): (1) the next release is 2.14.6, carrying 0125 alone, cut once hv has seen the About screenshot; (2) formula renderer B: keep tools/formula, devbin's bin/devbin formula stays off (cc's hold 50 is spent); (3) 0114 and 0118 stay deferred on their recorded triggers (arca_swift's tag; devbin 0.1.16 vendored), rated P3.",
+      "text": "hv, 28 Oct: 2.14.6 carries 0125 alone, cut once hv has seen the About screenshot; formula renderer B (tools/formula stays); 0114 and 0118 deferred, P3.",
       "state": "live",
-      "recorded_at": "2026-10-28T18:02:56.209Z"
+      "recorded_at": "2026-10-28T18:02:56.209Z",
+      "edited_at": "2026-10-28T19:56:43.547Z"
     }
   ],
   "sent": [

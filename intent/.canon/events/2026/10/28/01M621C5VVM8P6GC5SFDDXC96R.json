@@ -1,0 +1,16 @@
+{
+  "id": "01M621C5VVM8P6GC5SFDDXC96R",
+  "ts": "2026-10-28T19:56:42.747Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 67,
+    "text": "vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails."
+  }
+}
