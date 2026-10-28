@@ -467,9 +467,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 13,
-      "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): half-written in wt-0125 (ic-0125 on 8b27e4ac, uncommitted), banked as ~/Devel/scratch/utilz-ic/bank-0125/wip-0125.diff (f19ce1e765a0). What's left, in bank-0125/RESUME-0125.md: the tests, pbxproj, VERSION 0.4.8, CHANGELOG, then the commit, the run script and the booking. No run until vc's word after hv's compact; hv sees the screenshot before the landing.",
+      "text": "Issue 0125 (Menuz's About window in Gtools' shape, hv's find; option A approved by vc): committed on ic-0125 in wt-0125 at 9418eabf (on 8b27e4ac), banked as bank-0125/0125-9418eabf.patch (492c6d12e4af); run script runs/s0125-run.sh (810e32277eef) sent to vc to read. Next: vc's read, then molt-vc's grant after devbin's turn, then the run on molt-vc's GO; the About screenshot beside Gtools' goes to hv before any landing word. See bank-0125/RESUME-0125.md.",
       "state": "live",
-      "recorded_at": "2026-10-28T13:43:59.580Z"
+      "recorded_at": "2026-10-28T13:43:59.580Z",
+      "edited_at": "2026-10-28T15:53:57.357Z"
     }
   ],
   "sent": [
