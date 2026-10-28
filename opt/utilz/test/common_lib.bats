@@ -2,6 +2,7 @@
 # common_lib.bats - Tests for opt/utilz/lib/common.sh functions
 
 load "test_helper.bash"
+load "population_helper.bash"
 
 # Helper to run a function from common.sh
 run_common_function() {
@@ -447,6 +448,12 @@ doctor_issue_count() {
   printf '%s\n' "${n:-0}"
 }
 
+# The dependency lists run_doctor reads from each yaml, as the loop in
+# common.sh names them: a yaml doctor cannot read refuses every one.
+doctor_dependency_lists() {
+  sed -n 's/^ *for dep_list in \(.*\); do$/\1/p' "$UTILZ_HOME/opt/utilz/lib/common.sh"
+}
+
 @test "run_doctor names a yaml it cannot read, and still reaches its verdict (issue 0080)" {
   local home before
   home="$(make_fake_home)"
@@ -464,7 +471,7 @@ doctor_issue_count() {
 }
 
 @test "run_doctor names a yaml whose top level is not a map (issue 0080)" {
-  local home before
+  local home before lists
   home="$(make_fake_home)"
   run_common_strict "$home" run_doctor
   before=$(doctor_issue_count)
@@ -472,7 +479,9 @@ doctor_issue_count() {
 
   run_common_strict "$home" run_doctor
   assert_output_contains "beta: beta.yaml cannot be read, so neither of its dependency lists is checked: its top level is a list, not a map"
-  assert_output_contains "2 dependency list(s) not checked"
+  lists=$(doctor_dependency_lists | wc -w | tr -d ' ')
+  [[ "$lists" -gt 0 ]] || fail "no dependency list named by run_doctor's loop in common.sh -- the reader is wrong, not doctor"
+  assert_output_contains "$lists dependency list(s) not checked"
   assert_output_contains "Checking install integrity"
   [[ "$(doctor_issue_count)" -eq $((before + 1)) ]] ||
     fail "Expected $((before + 1)) issues, one more than the $before before beta's yaml. Actual output:\n$output"
@@ -1257,6 +1266,24 @@ _version_metadata_files() {
   ls "$UTILZ_HOME"/opt/*/*.yaml "$UTILZ_HOME"/opt/utilz/tmpl/metadata.tmpl 2>/dev/null
 }
 
+# THE POPULATION CONTROL, for both lists above. FILES, a list's output, holds
+# the path FORMAT makes for each utility population_helper.bash names and for
+# utilz, NAME standing for each, and every further PATH, all relative to
+# UTILZ_HOME; each one missing is named. A glob that matched nothing, or
+# narrowed, fails here rather than greening the checks after it.
+# Usage: _version_files_hold "$(_version_prose_files)" FORMAT [PATH...]
+_version_files_hold() {
+  local files="$1" fmt="$2" u p want=() missing=""
+  shift 2
+  for u in $(_utilities) utilz; do
+    want+=("${fmt//NAME/$u}")
+  done
+  for p in "${want[@]}" "$@"; do
+    grep -qxF "$UTILZ_HOME/$p" <<<"$files" || missing="$missing $p"
+  done
+  [ -z "$missing" ] || fail "missing:$missing -- the globs are wrong, not the tree"
+}
+
 # A LITERAL, IN EVERY FORM THESE FILES ACTUALLY USE. An optional quote and an
 # optional leading v are not hypothetical: `utilz_version: "^2.0.0"` sits two
 # lines below in every one of these yamls, so the quoted form is the one a
@@ -1279,9 +1306,15 @@ VERSION_LITERAL='"?v?[0-9]'
   # 1.1.0. Nothing reported either.
   local files literals present
   files=$(_version_prose_files | wc -l | tr -d ' ')
-  # COUNT CONTROL FIRST. If the globs ever match nothing, every assertion below
-  # is satisfied by an empty set and this test greens on a tree with no docs.
-  [ "$files" -gt 30 ] || fail "only $files prose files found; the globs are wrong, not the tree"
+  # THE POPULATION CONTROL FIRST. If the globs ever match nothing, every
+  # assertion below is satisfied by an empty set and this test greens on a tree
+  # with no docs. So the files hold every utility's help page by name, from
+  # population_helper.bash's population checked whole against bin's links, both
+  # templates, and a utility README at least, since not every utility has one.
+  assert_population_whole
+  _version_files_hold "$(_version_prose_files)" "help/NAME.md" opt/utilz/tmpl/help.tmpl opt/utilz/tmpl/README.tmpl
+  grep -q '/opt/[^/]*/README\.md$' <<<"$(_version_prose_files)" ||
+    fail "no utility README among the prose files; the globs are wrong, not the tree"
 
   literals=$(_version_prose_files | xargs grep -lE "^\*\*Version\*\*: *$VERSION_LITERAL" 2>/dev/null | wc -l | tr -d ' ')
   [ "$literals" -eq 0 ] || {
@@ -1300,9 +1333,12 @@ VERSION_LITERAL='"?v?[0-9]'
 @test "a utility's version has ONE home: its own VERSION file, or the file it cannot delete" {
   # hv's ruling, 2026-09-08: the framework's version is ./VERSION, every utility
   # carries its own, and there are no rogue literals anywhere.
-  local files literals checked util resolved missing=""
-  files=$(_version_metadata_files | wc -l | tr -d ' ')
-  [ "$files" -gt 14 ] || fail "only $files metadata files found; the globs are wrong, not the tree"
+  local literals util resolved missing=""
+  # THE POPULATION CONTROL FIRST: every utility's yaml by name, from
+  # population_helper.bash's population checked whole against bin's links, and
+  # the template that mints them.
+  assert_population_whole
+  _version_files_hold "$(_version_metadata_files)" "opt/NAME/NAME.yaml" opt/utilz/tmpl/metadata.tmpl
 
   # NO METADATA FILE RESTATES A VERSION -- including the template that mints
   # them. Every utility `utilz generate` scaffolded was born with a literal that
@@ -1323,13 +1359,10 @@ VERSION_LITERAL='"?v?[0-9]'
   run grep -c '^version_file: crate/Cargo.toml' "$UTILZ_HOME/opt/prez/prez.yaml"
   assert_success
 
-  # AND EVERY UTILITY STILL RESOLVES ONE, with a count control: without it an
-  # empty glob leaves `missing` empty and greens a tree with no metadata at all.
-  checked=0
-  for yaml in "$UTILZ_HOME"/opt/*/*.yaml; do
-    util=$(basename "$yaml" .yaml)
-    [ -d "$UTILZ_HOME/opt/$util" ] || continue
-    checked=$((checked + 1))
+  # AND EVERY UTILITY STILL RESOLVES ONE. The sweep takes the population the
+  # control above checked whole, so an empty glob cannot leave `missing` empty
+  # and green a tree with no metadata at all; utilz resolves one too.
+  for util in $(_utilities) utilz; do
     # A yaml that cannot be read resolves no version either: it is named with
     # the rest rather than ending the test at this read (issue 0081).
     resolved=$(bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; get_util_metadata '$util' '.version'" 2>/dev/null) || resolved=""
@@ -1337,7 +1370,6 @@ VERSION_LITERAL='"?v?[0-9]'
       ""|null) missing="$missing $util" ;;
     esac
   done
-  [ "$checked" -gt 14 ] || fail "only $checked utilities checked; the loop measured almost nothing"
   [ -z "$missing" ] || fail "these utilities resolve no version:$missing"
 }
 

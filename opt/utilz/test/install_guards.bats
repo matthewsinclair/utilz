@@ -12,10 +12,7 @@
 # is under test here is how the resulting tree BEHAVES.
 
 load "test_helper.bash"
-
-# The one roster of what an install offers; the counts below are read from
-# it, so a new utility is one word here, not a word and a number.
-GUARD_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2md prez retry stampz syncz todo xtrct)
+load "population_helper.bash"
 
 # `run --separate-stderr` below needs bats >= 1.5.0; without this declaration
 # bats warns BW02 on every run.
@@ -426,24 +423,26 @@ teardown_file() {
 # of version_file surviving a publish, and naming prez here would pass forever
 # the day a second utility defers its version the same way.
 @test "every installed utility answers --version, and none says version unknown" {
-  local link util
-  local checked=0
+  local link util missing=""
 
-  for link in "$GUARD_INSTALL"/bin/*; do
-    util=$(basename "$link")
-    [[ "$util" == "utilz" ]] && continue
+  # A loop that iterated nothing passes every assertion inside it. So the sweep
+  # takes population_helper.bash's population, checked whole against bin's
+  # links, and a utility whose link the install stops shipping is named rather
+  # than skipped.
+  assert_population_whole
+  for util in $(_utilities); do
+    link="$GUARD_INSTALL/bin/$util"
+    if [[ ! -L "$link" ]]; then
+      missing="$missing $util"
+      continue
+    fi
 
     run env -u UTILZ_HOME "$link" --version
     assert_success
     refute_output_contains "version unknown"
     refute_output_contains "missing"
-    checked=$((checked + 1))
   done
-
-  # A loop that iterated nothing passes every assertion inside it. The count is
-  # the control: it is not a constant, it falls if the install stops shipping
-  # links, and this test is worthless without it.
-  [ "$checked" -gt 1 ] || fail "only $checked utility link(s) checked -- the loop found nothing to assert on"
+  [[ -z "$missing" ]] || fail "the install ships no link for:$missing"
 }
 
 @test "AT12 / AC10 (ST0015): the pair form holds from a PUBLISHED install, and the install is the thing measured" {
@@ -475,7 +474,7 @@ teardown_file() {
   # links, in both invocation forms. The count control is not decoration: an
   # install that shipped three utilities would otherwise pass this silently.
   local u n=0 bad=0 a b
-  for u in "${GUARD_UTILITIES[@]}"; do
+  for u in $(_utilities); do
     [ -e "$GUARD_INSTALL/bin/$u" ] || continue
     n=$((n + 1))
     a=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1 | head -1)
@@ -483,7 +482,7 @@ teardown_file() {
     [[ "$a" == "utilz:$fw/$u:"* ]] || { echo "  $u (symlink form): $a"; bad=$((bad + 1)); }
     [ "$a" = "$b" ] || { echo "  $u: forms differ from the install"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq "${#GUARD_UTILITIES[@]}" ] || fail "the install offered $n utilities, expected ${#GUARD_UTILITIES[@]}"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad install-side version failures"
 }
 
@@ -511,7 +510,7 @@ teardown_file() {
   assert_output_contains "(opt, ${recorded:0:12})"
 
   local u n=0 bad=0 a b marker hf
-  for u in "${GUARD_UTILITIES[@]}"; do
+  for u in $(_utilities); do
     [ -e "$GUARD_INSTALL/bin/$u" ] || continue
     n=$((n + 1))
     hf="$GUARD_INSTALL/help/$u.md"
@@ -530,6 +529,6 @@ teardown_file() {
     printf '%s' "$a" | grep -qF "$marker" \
       || { echo "  $u: rendered the INLINE usage, not the curated file"; bad=$((bad + 1)); }
   done
-  [ "$n" -eq "${#GUARD_UTILITIES[@]}" ] || fail "the install offered $n utilities, expected ${#GUARD_UTILITIES[@]}"
+  assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad install-side --help failures"
 }

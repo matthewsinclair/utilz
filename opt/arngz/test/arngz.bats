@@ -1141,14 +1141,45 @@ machine_snapshot() {
 }
 
 # The doctor line for WHAT says STATUS, and the rest of it matches PATTERN, an
-# extended regex.
+# extended regex. Each line it finds is kept in DOCTOR_NAMED, for
+# assert_doctor_rows_named.
 doctor_says() {
-  local status="$1" what="$2" pattern="$3"
-  printf '%s\n' "$output" | grep -Eq "^$status +$what +$pattern" || {
+  local status="$1" what="$2" pattern="$3" line
+  line=$(printf '%s\n' "$output" | grep -E "^$status +$what +$pattern") || {
     echo "no line '$status $what $pattern' in:" >&2
     echo "$output" >&2
     return 1
   }
+  DOCTOR_NAMED="${DOCTOR_NAMED:-}$line"$'\n'
+}
+
+# Doctor's precondition rows, as the run printed them: each line that opens
+# with ok, FAIL or skip.
+doctor_rows() {
+  printf '%s\n' "$output" | grep -E '^(ok|FAIL|skip) ' || true
+}
+
+# Doctor printed no row this test has not named with doctor_says: a new
+# precondition names itself here, as a missing one does in doctor_says.
+assert_doctor_rows_named() {
+  local unnamed
+  unnamed=$(doctor_rows | grep -vxF -f <(printf '%s' "${DOCTOR_NAMED:-}") || true)
+  [ -z "$unnamed" ] || fail "doctor printed rows this test does not name:
+$unnamed"
+}
+
+# Doctor's summary line, its total read off the rows the run printed. With a
+# count, the preconditions the test made fail; with none, all of them hold.
+# Usage: assert_doctor_summary [FAILED]
+assert_doctor_summary() {
+  local rows
+  rows=$(doctor_rows | grep -c . || true)
+  [ "$rows" -gt 0 ] || fail "doctor printed no precondition row -- the reader is wrong, not doctor"
+  if [ $# -eq 0 ]; then
+    assert_output_contains "arngz doctor: all $rows preconditions hold"
+  else
+    assert_output_contains "arngz doctor: $1 of $rows preconditions do not hold"
+  fi
 }
 
 # stub_failing TOOL PATTERN: on the fixture machine's PATH, TOOL fails, saying
@@ -1191,8 +1222,8 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   doctor_says ok "separate spaces" "on \(unset: macOS's default\)$"
   doctor_says ok auto-rearrange "off$"
   doctor_says ok "Stage Manager" "off$"
-  [ "$(printf '%s\n' "$output" | grep -cE '^(ok|FAIL|skip) ')" -eq 7 ]
-  assert_output_contains "arngz doctor: all 7 preconditions hold"
+  assert_doctor_rows_named
+  assert_doctor_summary
 }
 
 @test "AT-06.1: doctor completes with no Hammerspoon at all, naming it as missing, and asks nothing" {
@@ -1207,7 +1238,7 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   doctor_says ok "separate spaces" "on"
   doctor_says ok auto-rearrange "off$"
   doctor_says ok "Stage Manager" "off$"
-  assert_output_contains "arngz doctor: 4 of 7 preconditions do not hold"
+  assert_doctor_summary 4
   [ $((SECONDS - start)) -lt 10 ]
 }
 
@@ -1257,7 +1288,7 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   assert_exit_code 1
   doctor_says ok IPC "Hammerspoon answered"
   doctor_says FAIL Accessibility "not granted to Hammerspoon; fix: System Settings > Privacy & Security > Accessibility: turn on Hammerspoon$"
-  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+  assert_doctor_summary 1
 }
 
 @test "AT-06.1: doctor asks the engine to observe, with hs's stdin from /dev/null, and leaves no temp dir" {
@@ -1305,7 +1336,7 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   run_arngz doctor
   assert_exit_code 1
   doctor_says FAIL "Stage Manager" "on; fix: System Settings > Desktop & Dock: turn off Stage Manager$"
-  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+  assert_doctor_summary 1
 
   # A domain with no preferences at all is unset too ("Domain ... not found").
   rm -rf "$FAKE_PREFS/com.apple.WindowManager"
@@ -1423,7 +1454,7 @@ IPC_LINE='require("hs.ipc") -- arngz (Utilz ST0026): IPC for the hs command-line
   doctor_says skip Accessibility "not checked: only Hammerspoon can say, and Hammerspoon was not asked$"
   # Every preference read needs a temp file too, so each says it could not.
   doctor_says FAIL auto-rearrange "unknown: could not make a temp file under $TMPDIR to read com.apple.dock mru-spaces with: "
-  assert_output_contains "arngz doctor: 5 of 7 preconditions do not hold"
+  assert_doctor_summary 5
   [ -f "$BATS_TEST_TMPDIR/cwd/sentinel" ]
 }
 
@@ -1501,7 +1532,7 @@ EOF
   assert_exit_code 1
   doctor_says ok IPC "Hammerspoon answered"
   doctor_says FAIL Accessibility "unknown: the engine's observe gave accessibility = '\(unreadable: .*cannot index array"
-  assert_output_contains "arngz doctor: 1 of 7 preconditions do not hold"
+  assert_doctor_summary 1
   [ -z "$(ls -A "$TMPDIR")" ]
 }
 
@@ -2127,14 +2158,14 @@ record_engine_tools() {
   assert_output_contains "fix: arngz init"
   refute_output_contains "hs tool"
   refute_output_contains "Accessibility"
-  assert_output_contains "arngz doctor: 1 of 1 preconditions do not hold"
+  assert_doctor_summary 1
 
   run_arngz init
   assert_success
   run_arngz doctor
   assert_success
   assert_output_contains "ok    catalogue"
-  assert_output_contains "arngz doctor: all 1 preconditions hold"
+  assert_doctor_summary
 }
 
 @test "on Linux, list, show, delete and current work as they do anywhere (issue 0083)" {
