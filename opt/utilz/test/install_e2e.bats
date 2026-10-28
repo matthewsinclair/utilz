@@ -14,6 +14,7 @@
 # case a copy cannot see, a path hardcoded to the real tree.
 
 load "test_helper.bash"
+load "population_helper.bash"
 
 setup_file() {
   # No commit this file makes signs with the user's key (issue 0082). The
@@ -134,9 +135,8 @@ teardown_file() {
   assert_output_contains "(opt, ${recorded:0:12})"
 }
 
-# The one roster of what an install carries. doctor's count below is read
-# from it, so a new utility is one word here, not a word and a number.
-E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2md prez retry stampz syncz todo xtrct)
+# What an install carries is population_helper.bash's population, checked
+# whole against bin's links, so a new utility needs no word here.
 
 @test "AC01: utilz list enumerates every utility from the install" {
   # Exercises each_utility plus a yaml read per utility, so it fails if the
@@ -145,7 +145,8 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
   assert_success
 
   local name
-  for name in "${E2E_UTILITIES[@]}"; do
+  assert_population_whole
+  for name in $(_utilities); do
     assert_output_contains "$name"
   done
 }
@@ -160,7 +161,8 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
   # asserting the checks that actually speak to AC01.
   assert_output_contains "All required directories present"
   assert_output_contains "bin/utilz exists and is executable"
-  assert_output_contains "Found ${#E2E_UTILITIES[@]} utilities, all properly configured"
+  assert_population_whole
+  assert_output_contains "Found $(_utility_links | grep -c .) utilities, all properly configured"
   assert_output_contains "All required dependencies installed"
 
   # And the only thing it found is the PATH.
@@ -205,7 +207,8 @@ E2E_UTILITIES=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2m
 
 @test "every utility's symlink arrived as a symlink, not as a dereferenced copy" {
   local name
-  for name in "${E2E_UTILITIES[@]}"; do
+  assert_population_whole
+  for name in $(_utilities); do
     [[ -L "$E2E_PREFIX/bin/$name" ]] || {
       echo "bin/$name is not a symlink in the install" >&2
       return 1

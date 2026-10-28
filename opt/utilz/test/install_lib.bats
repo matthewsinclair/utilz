@@ -7,6 +7,7 @@
 # matches the imagined shape and not the real one (design.md D2).
 
 load "test_helper.bash"
+load "population_helper.bash"
 
 # ============================================================================
 # THE OWNED SET (design.md D2)
@@ -16,26 +17,19 @@ load "test_helper.bash"
   run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
   assert_success
 
-  # The one roster here; the count is read from it, so a new utility is one
-  # word, not a word and a number. menuz (ST0027) joined on 2026-10-16.
-  local names=(arngz cleanz clipz cryptz expz gitz lnrel macoz mdagg menuz pdf2md prez retry stampz syncz todo xtrct)
-  local listed
-  listed=$(printf '%s\n' "$output" | grep -c '^bin/')
-  # Each utility's symlink + bin/utilz itself. bin/devbin and bin/.devbin/
-  # are vendored.
-  [[ "$listed" -eq $((${#names[@]} + 1)) ]] || {
-    echo "expected $((${#names[@]} + 1)) bin/ entries, got $listed" >&2
-    printf '%s\n' "$output" | grep '^bin/' >&2
+  # The bin/ entries are exactly each utility's symlink, from
+  # population_helper.bash's population checked whole against bin's links, and
+  # bin/utilz itself. bin/devbin and bin/.devbin/ are vendored. A missing or a
+  # stray entry is named by the diff.
+  assert_population_whole
+  local listed want
+  listed=$(printf '%s\n' "$output" | grep '^bin/' | LC_ALL=C sort)
+  want=$({ _utilities | sed 's#^#bin/#'; echo bin/utilz; } | LC_ALL=C sort)
+  [[ "$listed" == "$want" ]] || {
+    echo "the owned set's bin/ entries are not each utility's symlink and bin/utilz (< wanted, > listed):" >&2
+    diff <(printf '%s\n' "$want") <(printf '%s\n' "$listed") >&2
     return 1
   }
-
-  local name
-  for name in "${names[@]}"; do
-    printf '%s\n' "$output" | grep -qx "bin/$name" || {
-      echo "owned set is missing bin/$name" >&2
-      return 1
-    }
-  done
 }
 
 @test "utilz_runtime_set carries the runtime payload an inclusion list drops" {
