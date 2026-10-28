@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "95cbf84d-6362-4092-8f47-71e1348f1628",
-    "heartbeat_at": "2026-10-28T18:24:17.427Z",
+    "heartbeat_at": "2026-10-28T19:55:57.163Z",
     "status": "active",
-    "focus": "LOCALFOLD and HOLD for hv's close-out (28 Oct 18:08Z, molt-vc via vc), not released: nothing open on cc (hold 50 spent on ruling B); start nothing until vc or hv gives cc work",
+    "focus": "HOLD for hv's close-out, not released; start nothing until vc or hv gives cc work",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -648,10 +648,10 @@
       "node": "cc",
       "kind": "watchout",
       "seq": 6,
-      "text": "hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch.",
+      "text": "Fix devbin's release-core gaps in devbin, through vc; never patch the vendored copy.",
       "state": "live",
       "recorded_at": "2026-09-21T16:58:56.396Z",
-      "edited_at": "2026-10-20T18:45:21.893Z"
+      "edited_at": "2026-10-28T19:55:56.822Z"
     },
     {
       "node": "cc",
@@ -1566,7 +1566,8 @@
       "kind": "watchout",
       "seq": 18,
       "text": "board@4.0 (Intent 0612, since 22 Oct): commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); read live messages from intent wb show cc --json (.state live), since inbox views no longer mark a message handled; a running intent mcp server keeps the old code after a swap, so write through the CLI.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T19:55:56.398Z",
       "recorded_at": "2026-10-22T18:54:26.256Z",
       "edited_at": "2026-10-22T20:03:29.919Z"
     },

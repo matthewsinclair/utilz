@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 18:24Z
+heartbeat_at: 2026-10-28 19:55Z
 status: active
-focus: "LOCALFOLD and HOLD for hv's close-out (28 Oct 18:08Z, molt-vc via vc), not released: nothing open on cc (hold 50 spent on ruling B); start nothing until vc or hv gives cc work"
+focus: "HOLD for hv's close-out, not released; start nothing until vc or hv gives cc work"
 claims: []
 ---
 
@@ -25,8 +25,7 @@ _(none)_
 
 ## Watch-outs
 
-- hv's rule: a gap in devbin's vendored release core (bin/.devbin/lib/release*) is fixed in devbin, as a default with an override, through vc; never patch the vendored copy or add a Utilz-only branch. (edited)
-- board@4.0 (Intent 0612, since 22 Oct): commit exactly the paths a verb prints on wrote: lines (a re-rendered: line is another node's); read live messages from intent wb show cc --json (.state live), since inbox views no longer mark a message handled; a running intent mcp server keeps the old code after a swap, so write through the CLI. (edited)
+- Fix devbin's release-core gaps in devbin, through vc; never patch the vendored copy. (edited)
 
 ## Decisions
 
