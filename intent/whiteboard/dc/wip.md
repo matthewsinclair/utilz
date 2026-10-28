@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-28 13:08Z
+heartbeat_at: 2026-10-28 13:43Z
 status: active
-focus: "2.14.5 cut at 4c1fa5f1 (tag 2.14.5); hold lifted; nothing owed from dc; idle for the next ask"
+focus: "localfold for hv's compact (28 Oct 13:42Z, hv via vc), not released; holding until hv lifts the hold; nothing owed from dc"
 claims: []
 ---
 
