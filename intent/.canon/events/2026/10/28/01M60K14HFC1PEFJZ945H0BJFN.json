@@ -1,0 +1,15 @@
+{
+  "id": "01M60K14HFC1PEFJZ945H0BJFN",
+  "ts": "2026-10-28T06:26:46.448Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0124"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "prez AT05's collapsed-PDF check failed once under load and kept no defeat.err to say why"
+  }
+}

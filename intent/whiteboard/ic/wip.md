@@ -6,7 +6,7 @@ session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
 heartbeat_at: 2026-10-28 05:37Z
 status: active
 focus: "ic's 2.14.5 work is all landed (0119's Menuz rows at 1164c444, the prez slice at c8a429f6, both checked green by vc); watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)"
-claims: [ISSUE:0118]
+claims: [ISSUE:0118, ISSUE:0124]
 ---
 
 # Interface Claude (ic)

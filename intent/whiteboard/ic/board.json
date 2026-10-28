@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "ic's 2.14.5 work is all landed (0119's Menuz rows at 1164c444, the prez slice at c8a429f6, both checked green by vc); watching hold 18 (devbin 0.1.16) and todo 13 (arca_swift's tag)",
     "claims": [
-      "ISSUE:0118"
+      "ISSUE:0118",
+      "ISSUE:0124"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"

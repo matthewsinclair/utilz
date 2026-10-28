@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 124,
+  "slug": "prez-at05-s-collapsed-pdf-check-failed-once-unde",
+  "title": "prez AT05's collapsed-PDF check failed once under load and kept no defeat.err to say why",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-10-28",
+  "reporter": "Matthew Sinclair",
+  "body": "## What happened\n\nIn the Mac twins at af5e4d53 (`~/Devel/scratch/utilz-cc/2145-bank/final-af5e4d53/bats-prez.log` line 692), `opt/prez/crate/test/acceptance.sh` AT05 failed once on \"a collapsed PDF is reported, not shipped silently\": `'defeating one-slide-per-page' not found` in `defeat.err`. The machine's 5-minute load was about 50 at the time. The same AT05 passed in the rust leg's `--strict` run minutes earlier on the same tree.\n\nvc ran 20 lone defeat prints on a quieter machine (1-minute load about 12), with `~/Devel/scratch/utilz-vc/at05-trials.sh` and its output `at05-trials.out`. All 20 reported \"6 slides compiled but the PDF has 4 pages\". So under load, one print either came back with 6 pages, so nothing collapsed and nothing was warned, or it failed some other way. `defeat.err` went with `$WORK`, so which of the two it was is unknown.\n\n## Where\n\n`acceptance.sh` lines 457-462: `defeat.css` sets `break-after: auto !important; height: auto !important`, `prez pdf` writes `$WORK/defeat.pdf` with stderr to `$WORK/defeat.err`, and `present` greps for the warning.\n\n## Done when\n\n- AT05 keeps `defeat.err`, and the PDF's page count, when that check fails, so a failure says what the print did.\n- The defeat fixture collapses whatever the load, or the check reads the page count and says which case it saw (no collapse, or a collapse with no warning).\n\n## Placement\n\nAfter 2.14.5's cut. Nothing lands while the head is frozen at af5e4d53. Owner ic, filed on vc's word (28 Oct). Every run is booked through vc and molt-vc.\n"
+}
