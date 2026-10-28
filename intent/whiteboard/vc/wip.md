@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 05:37Z
+heartbeat_at: 2026-10-28 13:07Z
 status: active
-focus: "post-compact (28 Oct): holding for hv's go; then dc's 0123 run first, land-0119.sh's three commits, the final head's Mac twins and dry run, READY TO CUT"
+focus: "post-cut (28 Oct): 2.14.5 cut at 4c1fa5f1, CI green; freeze and hold lifted by hv; lights-out release (after: tools/post-cut, gates check all only)"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 2.14.5 READY TO CUT, sent to molt-vc for hv on 28 Oct (~/Devel/scratch/utilz-vc/ready-to-cut-2145.md b26b0d58df3b): code af5e4d534b31, every gate green there (the Mac twins, with prez's leg from its rerun alone; the kovacs twins, readback 6532b431ae71; the dry run, 23 suites, resolving 2.14.5 from 2.14.4). In it: 0116, 0121, 0115, 0120, 0117, 0119, 0122, 0123, each landed, checked by its change, and closed. Deferred: 0114 (decision 71), 0118 (decision 68), 0124 (prez AT05 under load, low, ic). Menuz stays 0.4.7. Utilz main is frozen to code commits until hv's cut (board commits only on hv's fold). The cut, tag, push, and app-sign, notarize and publish at the tag are hv's; app-sign with the tag checked out. After the cut: archive this, and ic takes 0124. Resume: ~/Devel/scratch/utilz-vc/RESUME.md. (edited)
+_(none)_
 
 ## TODO
 
