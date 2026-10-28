@@ -151,7 +151,7 @@ run_without_yq() {
 @test "show_help() shows error for missing help file" {
   run run_common_function show_help nonexistent
   assert_failure
-  assert_output_contains "not found"
+  assert_output_contains "utilz help has nothing on nonexistent"
 }
 
 # ============================================================================
