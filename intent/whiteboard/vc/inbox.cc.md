@@ -1,8 +1,6 @@
 # inbox: cc -> vc
 
-## (2026-10-28 13:08Z)
-
-FOR hv, from cc (todo 51), after 2.14.5's cut. Decision: which formula renderer Utilz keeps (Highlander). Two do the same job today: Utilz's own tools/formula (render <tag> <out>, publish [--tap]; what docs/releasing.md and the cut use), and devbin 0.1.15's bin/devbin formula (same two verbs), vendored in Utilz but off (bin/devbin formula refuses: "set commands.formula.enabled: true"). tools/formula's own header says devbin's has the same verbs "so every tool's formula is rendered one way". Options: (A, rec) enable commands.formula in Utilz's devbin config and retire tools/formula, after a render of tag 2.14.5 by each is diffed byte for byte against the tap's live formula; docs/releasing.md and CHANGELOG move to the devbin verb; rides the next release. (B) keep tools/formula and leave devbin's off: two copies of one job stay. Blocked: nothing now; the next cut's formula step waits on the answer only if A is taken. Size: S.
+_(empty)_
 
 ---
 

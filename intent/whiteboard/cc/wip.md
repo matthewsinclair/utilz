@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-28 18:03Z
+heartbeat_at: 2026-10-28 18:10Z
 status: active
-focus: "HOLD as vc says (28 Oct): hold 50 spent on hv's ruling B (vc decision 72: keep tools/formula, devbin's formula stays off); nothing open on cc; start nothing until vc or hv gives cc work"
+focus: "LOCALFOLD and HOLD for hv's close-out (28 Oct 18:08Z, molt-vc via vc), not released: nothing open on cc (hold 50 spent on ruling B); start nothing until vc or hv gives cc work"
 claims: []
 ---
 
