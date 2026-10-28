@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 13:07Z
+heartbeat_at: 2026-10-28 13:43Z
 status: active
-focus: "post-cut (28 Oct): 2.14.5 cut at 4c1fa5f1, CI green; freeze and hold lifted by hv; lights-out release (after: tools/post-cut, gates check all only)"
+focus: "LOCALFOLD for hv's compact (28 Oct 13:42Z, hv travelling): 2.14.5 shipped (brew 2.14.5 and its Menuz.app on rhadamanth); ST0030 lights-out cut done; 0124 closed; 0125 with ic at design-approved, held for hv at home; FOR hv in todo"
 claims: []
 ---
 
@@ -13,11 +13,11 @@ claims: []
 
 ## DOING
 
-_(none)_
+- 0125 (Menuz's About window to Gtools' shape, hv's find 28 Oct, filed d355edb0): ic owns, claimed 8b27e4ac; vc approved design option A (MenuzMasthead gains {app} from Bundle.menuzVersion and {tree} from MenuzSourceTree; menuz-logo.png from icon_512, about.css 128px, about.md in Gtools' order, heading {name} {version}, help/menuz.md, Menuz 0.4.8, 2.14.6 CHANGELOG line). Next: ic's commit, patch and run hashes and booking to vc; menuz test then build --release; screenshot beside Gtools' shown to hv BEFORE the landing word; then hv cuts with bin/devbin release --patch --yes (ST0030), and brew upgrade utilz && utilz menuz install.
 
 ## TODO
 
-_(none)_
+- FOR hv, open: (1) the next CHANGELOG section is opened as 2.14.6 (hv's number); (2) cc's todo 51, which formula renderer Utilz keeps: A (cc's rec) devbin's bin/devbin formula, retire tools/formula after a byte diff of 2.14.5's render against the tap, tools/post-cut's formula line moves with it; B keep tools/formula. cc's message stays live here until hv answers.
 
 ## Holds
 

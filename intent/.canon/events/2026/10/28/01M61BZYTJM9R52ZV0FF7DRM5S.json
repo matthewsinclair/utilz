@@ -1,0 +1,15 @@
+{
+  "id": "01M61BZYTJM9R52ZV0FF7DRM5S",
+  "ts": "2026-10-28T13:43:02.226Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "FOR hv, open: (1) the next CHANGELOG section is opened as 2.14.6 (hv's number); (2) cc's todo 51, which formula renderer Utilz keeps: A (cc's rec) devbin's bin/devbin formula, retire tools/formula after a byte diff of 2.14.5's render against the tap, tools/post-cut's formula line moves with it; B keep tools/formula. cc's message stays live here until hv answers."
+  }
+}

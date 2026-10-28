@@ -1,0 +1,15 @@
+{
+  "id": "01M61BZYPEFTMCYGT65M32ZJ12",
+  "ts": "2026-10-28T13:43:02.094Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0125 (Menuz's About window to Gtools' shape, hv's find 28 Oct, filed d355edb0): ic owns, claimed 8b27e4ac; vc approved design option A (MenuzMasthead gains {app} from Bundle.menuzVersion and {tree} from MenuzSourceTree; menuz-logo.png from icon_512, about.css 128px, about.md in Gtools' order, heading {name} {version}, help/menuz.md, Menuz 0.4.8, 2.14.6 CHANGELOG line). Next: ic's commit, patch and run hashes and booking to vc; menuz test then build --release; screenshot beside Gtools' shown to hv BEFORE the landing word; then hv cuts with bin/devbin release --patch --yes (ST0030), and brew upgrade utilz && utilz menuz install."
+  }
+}
