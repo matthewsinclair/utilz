@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 13:46Z
+heartbeat_at: 2026-10-28 15:49Z
 status: active
-focus: "HOLD for hv's move (molt-vc 13:44Z): all four nodes folded, nothing pushed; 0125 (doing 70) banked by ic in wt-0125, resumes only when hv is home and says go, screenshot to hv before landing"
+focus: "hv AFK, molt-vc has the pen (15:49Z): one thing at a time; next is 0125 on molt-vc's go"
 claims: []
 ---
 
