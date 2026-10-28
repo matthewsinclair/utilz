@@ -1814,8 +1814,17 @@
       "kind": "todo",
       "seq": 51,
       "text": "After 2.14.5's cut: the Highlander question for hv through vc. devbin 0.1.15 ships an opt-in bin/devbin formula (render, publish) doing tools/formula's job; Utilz keeps tools/formula until hv rules which one stays.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-28T13:08:59.651Z",
       "recorded_at": "2026-10-27T15:44:16.099Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 50,
+      "text": "Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap, for the next release.",
+      "state": "live",
+      "recorded_at": "2026-10-28T13:08:59.782Z"
     }
   ],
   "sent": [
@@ -3919,6 +3928,13 @@
       "fyi": false,
       "recorded_at": "2026-10-27T10:41:31.524Z",
       "archived_at": "2026-10-27T12:05:03.854Z"
+    },
+    {
+      "id": "01M61A1DRDS8DK4S8HK4Q6P5MX",
+      "recipient": "vc",
+      "body": "FOR hv, from cc (todo 51), after 2.14.5's cut. Decision: which formula renderer Utilz keeps (Highlander). Two do the same job today: Utilz's own tools/formula (render <tag> <out>, publish [--tap]; what docs/releasing.md and the cut use), and devbin 0.1.15's bin/devbin formula (same two verbs), vendored in Utilz but off (bin/devbin formula refuses: \"set commands.formula.enabled: true\"). tools/formula's own header says devbin's has the same verbs \"so every tool's formula is rendered one way\". Options: (A, rec) enable commands.formula in Utilz's devbin config and retire tools/formula, after a render of tag 2.14.5 by each is diffed byte for byte against the tap's live formula; docs/releasing.md and CHANGELOG move to the devbin verb; rides the next release. (B) keep tools/formula and leave devbin's off: two copies of one job stay. Blocked: nothing now; the next cut's formula step waits on the answer only if A is taken. Size: S.",
+      "fyi": false,
+      "recorded_at": "2026-10-28T13:08:53.133Z"
     }
   ],
   "handled": [
@@ -5226,6 +5242,11 @@
       "id": "01M5WCMV8ANETCGB4E0G8T7ZFS",
       "sender": "vc",
       "handled_at": "2026-10-26T18:03:38.246Z"
+    },
+    {
+      "id": "01M619Z39G24XZJ2Q2BFVBW921",
+      "sender": "vc",
+      "handled_at": "2026-10-28T13:08:59.521Z"
     }
   ]
 }

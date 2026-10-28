@@ -1,0 +1,15 @@
+{
+  "id": "01M61A1M86JRW63AQM77ANK61K",
+  "ts": "2026-10-28T13:08:59.782Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap, for the next release."
+  }
+}

@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-- After 2.14.5's cut: the Highlander question for hv through vc. devbin 0.1.15 ships an opt-in bin/devbin formula (render, publish) doing tools/formula's job; Utilz keeps tools/formula until hv rules which one stays.
+_(none)_
 
 ## Holds
 
-_(none)_
+- Until hv rules, through vc, on which formula renderer Utilz keeps (asked 28 Oct after the 2.14.5 cut: A, rec, enable devbin's bin/devbin formula and retire tools/formula after a byte diff of each one's 2.14.5 render against the tap; B, keep tools/formula). On A it goes back to TODO as the swap, for the next release.
 
 ## Watch-outs
 
