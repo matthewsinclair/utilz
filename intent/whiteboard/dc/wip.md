@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: cc8b3b66-d9a2-4894-80b2-d258f8d1f3ff
-heartbeat_at: 2026-10-28 05:56Z
+heartbeat_at: 2026-10-28 07:02Z
 status: active
-focus: "0119 and 0123 closed (landed ec90ade9, 90e41534, af5e4d53; vc checked each); wt-0119 folded; free for vc's next word"
+focus: "LOCALFOLD for hv's compact (28 Oct, hv's word via molt-vc and vc), holding: 0119 and 0123 landed and closed, nothing in 2.14.5's gate; after the compact, hold until hv lifts it"
 claims: []
 ---
 
