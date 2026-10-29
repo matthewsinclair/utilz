@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-29 18:37Z
+heartbeat_at: 2026-10-29 18:43Z
 status: active
-focus: "0118 with 0126 banked (ic-0118 0dd8c2db), waiting on vc's read before booking the light proof"
+focus: "0118 and 0126 landed at 511f47dc; waiting on vc's check by change, then close both"
 claims: [ISSUE:0118]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0118]
 
 ## DOING
 
-- 0118 with 0126: banked on ic-0118 at 0dd8c2db (base 8160810d, worktree tmp/ic-0118); vc reads it, then a light proof booked with molt-vc (macos.bats and menuz.bats, doctor probes); no push
+- 0118 with 0126: landed at 511f47dc (merge of ic-0118, bank tip 07a65b79), worktree removed; close both once vc checks the landing by its change; no push (edited)
 
 ## TODO
 
