@@ -1,12 +1,12 @@
 ---
-verblock: "29 Oct 2026:v1.4: matts - kovacs on 2.14.6"
+verblock: "29 Oct 2026:v1.5: matts - 2.14.6 installed everywhere"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- hv: 2.14.6 here: brew upgrade utilz and utilz menuz install.
+- None.
 
 ## TODO
 
