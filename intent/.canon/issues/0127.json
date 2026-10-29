@@ -3,9 +3,10 @@
   "number": 127,
   "slug": "menuz-about-the-source-tree-line-shows-the-full",
   "title": "Menuz About: the source tree line shows the full 40-character tree hash; shorten it to the commit's 8",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-10-29",
+  "closed": "2026-10-29",
   "reporter": "Matthew Sinclair",
   "body": "## What\n\nThe About window's source tree line prints the whole 40-character git tree hash, for example \"source tree 2c37f3f5cb9fd8e79fbe283326673ff7ebf2d692\" in 2.14.6's Menuz 0.4.8. The commit beside it, in the {app} line and on the menu's top row, is 8 characters. The long hash is hard to read and makes that line the widest in the window.\n\n## Where\n\nThe `{tree}` value in `native/macos/Menuz/Menuz/Services/Masthead.swift` (`.tree: return bundle.menuzSourceTree`, added by 0125) passes the MenuzSourceTree stamp through as it is. The stamp is written by `opt/menuz/menuz`. `Identity.commit` in MenuzKit already shapes the commit for the top row.\n\n## Fix\n\nShow `{tree}` at the commit's length (8 characters), keeping any `-dirty` suffix. Shorten it in the display, not in the stamp, since `menuz stamps` and its readers use the full value. IdentityRowTests' `tree` expectation follows.\n\n## Severity\n\nLow and cosmetic: the value is right, only long. hv's find, 29 Oct 2026, on the 2.14.6 About screenshot. Not started; for a later release.\n"
 }
