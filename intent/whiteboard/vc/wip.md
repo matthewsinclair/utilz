@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 19:14Z
+heartbeat_at: 2026-10-29 19:28Z
 status: active
-focus: "HOLD: 2.14.7 released and installed here (Menuz 0.4.9, notarised); kovacs via molt-vc; 0114 waits on arca_swift 0003."
+focus: "HOLD: 2.14.7 released and installed everywhere (rhadamanth, kovacs); 0114 waits on arca_swift 0003."
 claims: []
 ---
 
