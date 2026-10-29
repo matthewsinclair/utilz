@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.7] - unreleased
+
+### Fixed
+
+- **Menuz's About window shows the source tree at the commit's length** (issue 0127; found by hv). The source tree line printed the whole 40-character tree hash, the widest line in the window, beside an 8-character commit. It now shows the hash at the commit's length and keeps any `-dirty`. The stamp itself stays whole, so `menuz stamps` still prints the full value. menuz goes from 0.4.8 to 0.4.9.
+
 ## [2.14.6] - 2026-10-29
 
 ### Changed
