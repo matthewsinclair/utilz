@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-29 18:43Z
-status: active
-focus: "0118 and 0126 closed (landed 511f47dc); todo 13 still triggers 0114; nothing else of ic's open"
+heartbeat_at: 2026-10-29 19:54Z
+status: paused
+focus: "Released on hv's hard close (29 Oct): 0118 and 0126 closed and released in 2.14.7; todo 13 still triggers 0114"
 claims: []
 ---
 

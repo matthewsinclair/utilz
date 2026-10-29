@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "bc129d3a-2e6b-4d1c-9293-1a261be43529",
-    "heartbeat_at": "2026-10-29T18:43:53.821Z",
-    "status": "active",
-    "focus": "0118 and 0126 closed (landed 511f47dc); todo 13 still triggers 0114; nothing else of ic's open",
+    "heartbeat_at": "2026-10-29T19:54:28.859Z",
+    "status": "paused",
+    "focus": "Released on hv's hard close (29 Oct): 0118 and 0126 closed and released in 2.14.7; todo 13 still triggers 0114",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -2387,6 +2387,11 @@
       "id": "01M619Z39G24XZJ2Q2BFVBW924",
       "sender": "vc",
       "handled_at": "2026-10-28T13:08:08.287Z"
+    },
+    {
+      "id": "01M646RFW25E7Y3XEGB550Y6RE",
+      "sender": "vc",
+      "handled_at": "2026-10-29T19:54:28.543Z"
     }
   ]
 }
