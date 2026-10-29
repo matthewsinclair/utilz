@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 06:02Z
+heartbeat_at: 2026-10-29 13:30Z
 status: active
-focus: "HOLD: 2.14.6 (0125 at 457df766) waits on hv's suites, About check and cut; no push."
+focus: "HOLD after hv's cleanup fold (29 Oct): 2.14.6 out everywhere; 0114, 0118, 0126 and 0127 wait."
 claims: []
 ---
 
@@ -35,7 +35,6 @@ _(none)_
 - hv, 14 Sep: every hv inbox and whiteboard item comes to vc for review and closeout; cc takes its instructions from vc. (edited)
 - vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails. (edited)
 - hv, 27 Oct: 0118 rides the first release after devbin 0.1.16 is vendored; it moves app-verify into menuz build, adds SHA256SUMS on every release, and takes devbin's post-cut step changes. (edited)
-- hv, 28 Oct: 2.14.6 carries 0125 alone, cut once hv has seen the About screenshot; formula renderer B (tools/formula stays); 0114 and 0118 deferred, P3. (edited)
 
 ---
 
