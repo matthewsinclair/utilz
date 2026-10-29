@@ -1,0 +1,134 @@
+#!/usr/bin/env bash
+#
+# app-icons -- rasterise menuz's icon into Menuz.app's asset catalogue, or,
+# with --check, say whether what that needs is here.
+#
+#   bin/devbin macos app-icons         write AppIcon and MenuBarIcon
+#   bin/devbin macos app-icons-check   rsvg-convert, both SVGs, the catalogue
+#
+# Utilz's own half of bin/devbin macos (issue 0118): devbin's built-in signs,
+# notarises and publishes Menuz.app, and bin/.devbin/config.yaml declares
+# these two as its options, so they route here before any other word reaches
+# the built-in. Out of cmd/, where every executable is a command of its own,
+# and out of bin/, which is published. Ported from Intent's cmd_app_icons
+# (ST0027 WP-06, AC-06.3), so menuz's icon comes from the same rasteriser as
+# Intent's.
+#
+# Two sources, where Intent has one: menuz.svg is the app icon (the mark on
+# macOS's rounded square), and menuz-mark.svg is its silhouette, black on
+# transparent, for the menu bar's template image. The PNGs and Contents.json
+# files are tracked, so a build and CI need no rsvg-convert; this is run when
+# a source changes.
+#
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+INVOKE="${DEVBIN_INVOKE:-bin/devbin}"
+APP_DIR="$ROOT/native/macos/Menuz"
+APP_ASSETS="$APP_DIR/Menuz/Assets.xcassets"
+ICON_SVG="$APP_DIR/design/menuz.svg"
+MARK_SVG="$APP_DIR/design/menuz-mark.svg"
+
+die() {
+  printf 'macos: %s\n' "$*" >&2
+  exit 1
+}
+
+# One PNG of <svg> at <px> square. A non-zero rsvg-convert, or one that wrote
+# nothing, stops the run naming the size and the source.
+app_png() { # $1 svg, $2 px, $3 out
+  rsvg-convert -w "$2" -h "$2" "$1" -o "$3" || die "rsvg-convert failed at ${2}px for ${1#"$ROOT"/}"
+  [ -s "$3" ] || die "rsvg-convert wrote nothing at ${2}px for ${1#"$ROOT"/}"
+}
+
+app_appicon_contents() {
+  cat <<'JSON'
+{
+  "images" : [
+    { "idiom" : "mac", "scale" : "1x", "size" : "16x16", "filename" : "icon_16.png" },
+    { "idiom" : "mac", "scale" : "2x", "size" : "16x16", "filename" : "icon_32.png" },
+    { "idiom" : "mac", "scale" : "1x", "size" : "32x32", "filename" : "icon_32.png" },
+    { "idiom" : "mac", "scale" : "2x", "size" : "32x32", "filename" : "icon_64.png" },
+    { "idiom" : "mac", "scale" : "1x", "size" : "128x128", "filename" : "icon_128.png" },
+    { "idiom" : "mac", "scale" : "2x", "size" : "128x128", "filename" : "icon_256.png" },
+    { "idiom" : "mac", "scale" : "1x", "size" : "256x256", "filename" : "icon_256.png" },
+    { "idiom" : "mac", "scale" : "2x", "size" : "256x256", "filename" : "icon_512.png" },
+    { "idiom" : "mac", "scale" : "1x", "size" : "512x512", "filename" : "icon_512.png" },
+    { "idiom" : "mac", "scale" : "2x", "size" : "512x512", "filename" : "icon_1024.png" }
+  ],
+  "info" : { "author" : "xcode", "version" : 1 }
+}
+JSON
+}
+
+app_menubar_contents() {
+  cat <<'JSON'
+{
+  "images" : [
+    { "idiom" : "universal", "scale" : "1x", "filename" : "menubar_18.png" },
+    { "idiom" : "universal", "scale" : "2x", "filename" : "menubar_36.png" },
+    { "idiom" : "universal", "scale" : "3x", "filename" : "menubar_54.png" }
+  ],
+  "info" : { "author" : "xcode", "version" : 1 },
+  "properties" : { "template-rendering-intent" : "template" }
+}
+JSON
+}
+
+# Every precondition is checked before anything is written, so a refusal
+# leaves the catalogue as it was.
+app_icons() {
+  command -v rsvg-convert >/dev/null 2>&1 || die "rsvg-convert not found (brew install librsvg)"
+  local svg
+  for svg in "$ICON_SVG" "$MARK_SVG"; do
+    [ -f "$svg" ] || die "no SVG at ${svg#"$ROOT"/}"
+  done
+  local appset="$APP_ASSETS/AppIcon.appiconset" barset="$APP_ASSETS/MenuBarIcon.imageset" px
+  printf -- '-> rasterising %s and %s\n' "${ICON_SVG#"$ROOT"/}" "${MARK_SVG#"$ROOT"/}"
+  mkdir -p "$appset" "$barset"
+  printf '{\n  "info" : { "author" : "xcode", "version" : 1 }\n}\n' >"$APP_ASSETS/Contents.json"
+  for px in 16 32 64 128 256 512 1024; do app_png "$ICON_SVG" "$px" "$appset/icon_$px.png"; done
+  app_appicon_contents >"$appset/Contents.json"
+  for px in 18 36 54; do app_png "$MARK_SVG" "$px" "$barset/menubar_$px.png"; done
+  app_menubar_contents >"$barset/Contents.json"
+  printf 'wrote AppIcon (7 sizes) + MenuBarIcon (template, 3 scales) to %s\n' "${APP_ASSETS#"$ROOT"/}"
+}
+
+# What app-icons needs, and whether the catalogue is there. Exit 1 when the
+# toolchain or a source is missing; an absent catalogue is reported with the
+# command that makes it. The signing lines are the built-in's own doctor.
+app_icons_check() {
+  local ok=1 svg set
+  printf 'app project: %s\n' "${APP_DIR#"$ROOT"/}"
+  printf '\ntoolchain:\n'
+  if command -v rsvg-convert >/dev/null 2>&1; then
+    printf '  %-14s %s\n' rsvg-convert "$(command -v rsvg-convert)"
+  else
+    printf '  %-14s MISSING (brew install librsvg)\n' rsvg-convert
+    ok=0
+  fi
+  printf '\nsources:\n'
+  for svg in "$ICON_SVG" "$MARK_SVG"; do
+    if [ -f "$svg" ]; then
+      printf '  %-14s present\n' "$(basename "$svg")"
+    else
+      printf '  %-14s MISSING (%s)\n' "$(basename "$svg")" "${svg#"$ROOT"/}"
+      ok=0
+    fi
+  done
+  printf '\nassets:\n'
+  for set in AppIcon.appiconset MenuBarIcon.imageset; do
+    if [ -f "$APP_ASSETS/$set/Contents.json" ]; then
+      printf '  %-21s present\n' "$set"
+    else
+      printf '  %-21s absent (run: %s macos app-icons)\n' "$set" "$INVOKE"
+    fi
+  done
+  [ "$ok" = 1 ] || die "incomplete -- see MISSING above"
+}
+
+case "$*" in
+  "") app_icons ;;
+  --check) app_icons_check ;;
+  *) die "app-icons takes no arguments, got: $*" ;;
+esac

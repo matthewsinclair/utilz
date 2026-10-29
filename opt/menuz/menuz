@@ -27,7 +27,7 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
   fi
 fi
 
-# Launch Services' records, shared with bin/devbin macos (issue 0106):
+# Launch Services' records, from the lib menuz alone sources (issue 0106):
 # LSREGISTER, ls_cmd, ls_records and ls_drop.
 if [[ -f "$UTILZ_HOME/opt/menuz/lib/launch-services.sh" ]]; then
   # shellcheck source=SCRIPTDIR/lib/launch-services.sh
@@ -404,10 +404,10 @@ stamp_value() {
   printf '%s\n' "$1" | sed -n "s/^$2=//p"
 }
 
-# One string value of an Info.plist key, or nothing when the key is absent;
-# returns 1 when the plist cannot be read. A binary plist is converted with
-# plutil; an XML one is read as text, so this works with no plutil (Linux CI)
-# and needs no PlistBuddy.
+# One string value of an Info.plist key, true or false for a boolean one, or
+# nothing when the key is absent; returns 1 when the plist cannot be read. A
+# binary plist is converted with plutil; an XML one is read as text, so this
+# works with no plutil (Linux CI) and needs no PlistBuddy.
 plist_value() {
   local plist="$1" key="$2" xml
   [[ -f "$plist" ]] || return 1
@@ -419,6 +419,8 @@ plist_value() {
   fi
   printf '%s\n' "$xml" | awk -v key="$key" '
     found && /<string>/ { sub(/.*<string>/, ""); sub(/<\/string>.*/, ""); print; exit }
+    found && /<true\/>/ { print "true"; exit }
+    found && /<false\/>/ { print "false"; exit }
     { if (index($0, "<key>" key "</key>")) found = 1; else if (found && /<key>/) exit }
   '
 }
@@ -738,6 +740,24 @@ xcode_run() {
     tail -n 40 "$log"
     fail_step "xcodebuild $action ($config)" "its error lines and last 40 lines are above; the whole log is $log"
   fi
+  if [[ "$action" == build ]]; then check_product "$(product_bundle "$config")" "$stamps"; fi
+}
+
+# The product a build left, checked where it is made (issue 0118): its
+# executable is there, LSUIElement is true, so the app takes no Dock slot,
+# and it carries the stamps the build was given. Exit 1 naming each miss.
+check_product() {
+  local bundle="$1" want="$2" have name misses=""
+  [[ -d "$bundle" ]] || fail_step "the build's product check" "xcodebuild left no bundle at $bundle"
+  name="$(plist_value "$bundle/Contents/Info.plist" CFBundleExecutable)" ||
+    fail_step "the build's product check" "$bundle/Contents/Info.plist could not be read"
+  [[ -x "$bundle/Contents/MacOS/${name:-Menuz}" ]] || misses+=$'\n'"  no executable at $bundle/Contents/MacOS/${name:-Menuz}"
+  [[ "$(plist_value "$bundle/Contents/Info.plist" LSUIElement)" == true ]] ||
+    misses+=$'\n'"  LSUIElement is not true, so the app would take a Dock slot"
+  have="$(bundle_stamps "$bundle")" || fail_step "the build's product check" "$bundle/Contents/Info.plist could not be read"
+  [[ "$have" == "$want" ]] || misses+=$'\n'"  its stamps are not the build's:"$'\n'"$(diff <(printf '%s\n' "$want") <(printf '%s\n' "$have") | sed -n 's/^</    given  /p; s/^>/    carried/p')"
+  [[ -z "$misses" ]] || fail_step "the build's product check" "$bundle:$misses"
+  printf 'menuz: %s has its executable, LSUIElement true, and the stamps it was given\n' "$bundle"
 }
 
 cmd_build() {

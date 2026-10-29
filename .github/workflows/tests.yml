@@ -238,8 +238,9 @@ jobs:
         # roots, so it is named here or its scripts ship unlinted.
         #
         # bin/.devbin/cmd/ is the exception inside .devbin: devbin's manifest
-        # leaves cmd/ to the project, so its handlers are ours (bin/devbin
-        # macos, ST0027 WP-06) and are collected by a second find.
+        # leaves cmd/ to the project, so any handler there is ours, and is
+        # collected by a second find. It holds none since issue 0118 moved
+        # bin/devbin macos onto devbin's built-in.
         FILES=()
         while IFS= read -r s; do
           case "$s" in
@@ -513,7 +514,8 @@ jobs:
     # only (Gtools' gate, and the fleet's: issue 0046), so a push is never an
     # Xcode build. UNSIGNED, and it reads no secrets and attaches nothing:
     # signing, notarising and publishing the release asset are the
-    # maintainer's, on their machine (D12, bin/devbin macos). The shim's verbs
+    # maintainer's, on their machine (D12, devbin's built-in bin/devbin macos,
+    # issue 0118). The shim's verbs
     # are the one build path here as on a desk: build runs xcodegen when the
     # project is stale and xcodebuild with the products under XDG state; test
     # runs the scheme, MenuzKitTests and MenuzTests both. macos.bats runs in

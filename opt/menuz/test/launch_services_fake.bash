@@ -1,9 +1,9 @@
 # shellcheck shell=bash
 # launch_services_fake.bash - Launch Services' records, faked, for menuz.bats
-# and macos.bats (issue 0106)
+# (issue 0106)
 #
-# One fake lsregister, which both suites load, as menuz and bin/devbin macos
-# both source opt/menuz/lib/launch-services.sh. NO TEST REACHES THE REAL
+# One fake lsregister, for menuz, which sources
+# opt/menuz/lib/launch-services.sh. NO TEST REACHES THE REAL
 # LAUNCH SERVICES DATABASE: the records are a file.
 
 # write_lsregister_fake <dir>: an lsregister in <dir> whose records are the
