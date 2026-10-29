@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-29 13:30Z
+heartbeat_at: 2026-10-29 13:34Z
 status: active
 focus: "FOLDED and HOLD after hv's cleanup, not released; start nothing until vc or hv gives cc work"
 claims: []

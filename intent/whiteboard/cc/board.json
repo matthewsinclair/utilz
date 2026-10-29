@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "95cbf84d-6362-4092-8f47-71e1348f1628",
-    "heartbeat_at": "2026-10-29T13:30:44.993Z",
+    "heartbeat_at": "2026-10-29T13:34:58.158Z",
     "status": "active",
     "focus": "FOLDED and HOLD after hv's cleanup, not released; start nothing until vc or hv gives cc work",
     "claims": [],
