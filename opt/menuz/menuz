@@ -747,7 +747,7 @@ xcode_run() {
 # executable is there, LSUIElement is true, so the app takes no Dock slot,
 # and it carries the stamps the build was given. Exit 1 naming each miss.
 check_product() {
-  local bundle="$1" want="$2" have name misses=""
+  local bundle="$1" want="$2" have name misses="" w h
   [[ -d "$bundle" ]] || fail_step "the build's product check" "xcodebuild left no bundle at $bundle"
   name="$(plist_value "$bundle/Contents/Info.plist" CFBundleExecutable)" ||
     fail_step "the build's product check" "$bundle/Contents/Info.plist could not be read"
@@ -755,7 +755,13 @@ check_product() {
   [[ "$(plist_value "$bundle/Contents/Info.plist" LSUIElement)" == true ]] ||
     misses+=$'\n'"  LSUIElement is not true, so the app would take a Dock slot"
   have="$(bundle_stamps "$bundle")" || fail_step "the build's product check" "$bundle/Contents/Info.plist could not be read"
-  [[ "$have" == "$want" ]] || misses+=$'\n'"  its stamps are not the build's:"$'\n'"$(diff <(printf '%s\n' "$want") <(printf '%s\n' "$have") | sed -n 's/^</    given  /p; s/^>/    carried/p')"
+  # print_stamps' lines, one stamp each in one order, compared pairwise.
+  if [[ "$have" != "$want" ]]; then
+    misses+=$'\n'"  its stamps are not the build's:"
+    while IFS= read -r w && IFS= read -r h <&3; do
+      [[ "$w" == "$h" ]] || misses+=$'\n'"    given   $w"$'\n'"    carried $h"
+    done <<<"$want" 3<<<"$have"
+  fi
   [[ -z "$misses" ]] || fail_step "the build's product check" "$bundle:$misses"
   printf 'menuz: %s has its executable, LSUIElement true, and the stamps it was given\n' "$bundle"
 }
