@@ -1,0 +1,15 @@
+{
+  "id": "01M64F772SPKZSN8A95KS6WSE5",
+  "ts": "2026-10-29T18:37:09.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "0118 with 0126: banked on ic-0118 at 0dd8c2db (base 8160810d, worktree tmp/ic-0118); vc reads it, then a light proof booked with molt-vc (macos.bats and menuz.bats, doctor probes); no push"
+  }
+}

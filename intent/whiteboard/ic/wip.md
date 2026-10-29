@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-29 16:49Z
+heartbeat_at: 2026-10-29 18:37Z
 status: active
-focus: "HOLD: 0118 with 0126 waits on devbin v0.1.18 reaching brew (hold 18); map against v0.1.17 done, vc agreed"
+focus: "0118 with 0126 banked (ic-0118 0dd8c2db), waiting on vc's read before booking the light proof"
 claims: [ISSUE:0118]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:0118]
 
 ## DOING
 
-_(none)_
+- 0118 with 0126: banked on ic-0118 at 0dd8c2db (base 8160810d, worktree tmp/ic-0118); vc reads it, then a light proof booked with molt-vc (macos.bats and menuz.bats, doctor probes); no push
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (tag f084e101; molt-vc tells vc). The diff against v0.1.17 is done and the map holds (scratch 0118-map/MAP.md). Then vendor v0.1.18, delete U, add the app-icons option and menuz's build check, fix the post-cut comment; stage and tell vc; book only after vc reads it. (edited)
+_(none)_
 
 ## Watch-outs
 
