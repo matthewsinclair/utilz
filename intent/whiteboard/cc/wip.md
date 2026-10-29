@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 95cbf84d-6362-4092-8f47-71e1348f1628
-heartbeat_at: 2026-10-29 16:15Z
-status: active
-focus: "FOLDED and HOLD after hv's cleanup, not released; start nothing until vc or hv gives cc work"
+heartbeat_at: 2026-10-29 19:54Z
+status: paused
+focus: "Released at hv's hard close (29 Oct); 0127 landed and closed; nothing in flight"
 claims: []
 ---
 
