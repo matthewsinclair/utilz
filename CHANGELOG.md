@@ -23,7 +23,6 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 ### Fixed
 
 - **`bin/devbin macos store-creds` no longer puts a notary credential on a command line** (issue 0126). Utilz's handler stored each credential with `security add-generic-password ... -w <value>`, so any local process could read the app-specific password while the call ran. The built-in hands each value to `security`'s own prompt.
-
 - **Menuz's About window shows the source tree at the commit's length** (issue 0127; found by hv). The source tree line printed the whole 40-character tree hash, the widest line in the window, beside an 8-character commit. It now shows the hash at the commit's length and keeps any `-dirty`. The stamp itself stays whole, so `menuz stamps` still prints the full value. menuz goes from 0.4.8 to 0.4.9.
 
 ## [2.14.6] - 2026-10-29
