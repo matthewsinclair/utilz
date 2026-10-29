@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-28 19:56Z
+heartbeat_at: 2026-10-29 06:01Z
 status: active
-focus: "HOLD: 0125's heavy 01M61KK6G50JMMTY7W9GVMKC4C waits for molt-vc's GO; todo 13 and hold 18 trigger 0114 and 0118."
-claims: [ISSUE:0118, ISSUE:0125]
+focus: "HOLD: 0125 landed (457df766) and closed; todo 13 and hold 18 trigger 0114 and 0118."
+claims: [ISSUE:0118]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- Issue 0125 (Menuz's About window): heavy 01M61KK6G50JMMTY7W9GVMKC4C queued; on molt-vc's GO, run it and send END (bank-0125/RESUME-0125.md). (edited)
+_(none)_
 
 ## TODO
 
