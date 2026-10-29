@@ -1,5 +1,5 @@
 ---
-verblock: "29 Oct 2026:v1.7: matts - 0118 waits on devbin 0.1.18"
+verblock: "29 Oct 2026:v1.8: matts - 2.14.7 ready for hv's cut"
 ---
 
 # Work In Progress
@@ -11,4 +11,3 @@ verblock: "29 Oct 2026:v1.7: matts - 0118 waits on devbin 0.1.18"
 ## TODO
 
 - ic: issue 0114, once arca_swift tags its issue 0003's fixes.
-- ic: issue 0118, once devbin v0.1.18 is on brew and vendored; 0126 is fixed with it.
