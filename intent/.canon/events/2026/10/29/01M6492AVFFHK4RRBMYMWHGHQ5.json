@@ -1,0 +1,16 @@
+{
+  "id": "01M6492AVFFHK4RRBMYMWHGHQ5",
+  "ts": "2026-10-29T16:49:37.647Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 18,
+    "text": "Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (v0.1.17's candidate CI went red, so 0.1.18 is the first public release; molt-vc tells vc). Then diff the built-in macos and the libs it reaches between v0.1.17 and v0.1.18, tell vc whether the map (scratch 0118-map/MAP.md) holds, and only then vendor."
+  }
+}

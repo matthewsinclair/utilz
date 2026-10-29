@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
-heartbeat_at: 2026-10-29 16:11Z
+heartbeat_at: 2026-10-29 16:49Z
 status: active
-focus: "0118 with 0126 on hv's go (29 Oct): map against devbin v0.1.17 done and sent to vc; vendor and change once brew has v0.1.17; stage, tell vc, no push"
+focus: "HOLD: 0118 with 0126 waits on devbin v0.1.18 reaching brew (hold 18); map against v0.1.17 done, vc agreed"
 claims: [ISSUE:0118]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Issue 0118 holds until devbin 0.1.16 is vendored into Utilz (bin/.devbin/manifest.sha256 says devbin_version: 0.1.16 on main); then its body's Utilz side, design read by vc first. (edited)
+- Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (v0.1.17's candidate CI went red, so 0.1.18 is the first public release; molt-vc tells vc). Then diff the built-in macos and the libs it reaches between v0.1.17 and v0.1.18, tell vc whether the map (scratch 0118-map/MAP.md) holds, and only then vendor. (edited)
 
 ## Watch-outs
 
