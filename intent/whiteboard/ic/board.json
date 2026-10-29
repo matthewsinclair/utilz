@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "bc129d3a-2e6b-4d1c-9293-1a261be43529",
-    "heartbeat_at": "2026-10-29T06:01:59.204Z",
+    "heartbeat_at": "2026-10-29T13:30:33.506Z",
     "status": "active",
-    "focus": "HOLD: 0125 landed (457df766) and closed; todo 13 and hold 18 trigger 0114 and 0118.",
+    "focus": "HOLD after hv's cleanup fold (29 Oct): todo 13 and hold 18 trigger 0114 and 0118; 0127 is not ic's.",
     "claims": [
       "ISSUE:0118"
     ],
