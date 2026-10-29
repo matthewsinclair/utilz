@@ -1,13 +1,12 @@
 ---
-verblock: "28 Oct 2026:v1.1: matts - lean: DOING and TODO only, one line each"
+verblock: "29 Oct 2026:v1.2: matts - 0125 on main; 2.14.6 is hv's"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- ic: issue 0125, Menuz's About window to Gtools' shape; its run is queued at molt-vc's desk.
-- vc: 2.14.6 (0125 alone): the About screenshot to hv, 0125's landing, then hv's cut.
+- hv: 2.14.6 (0125, on main): the suites, the Release build and the About window, then the cut.
 
 ## TODO
 
