@@ -1,6 +1,8 @@
 # inbox: vc -> cc
 
-_(empty)_
+## (2026-10-29 14:54Z)
+
+hv, 29 Oct: cc takes issue 0127 (low, XS) for the next release. The About's {tree} line (Masthead.swift, .tree: bundle.menuzSourceTree) shows 8 characters of the tree hash, keeps -dirty, and leaves the stamp whole; IdentityRowTests' tree expectation follows, derived from the stamp, with no written count. Smallest run that proves it: the touched Swift tests. Stage it and tell vc; vc checks before the commit and again after it, then you close 0127. No push.
 
 ---
 

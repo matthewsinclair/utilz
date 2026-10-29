@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 13:35Z
+heartbeat_at: 2026-10-29 14:54Z
 status: active
-focus: "HOLD after hv's cleanup fold (29 Oct): 2.14.6 out everywhere; 0114, 0118, 0126 and 0127 wait."
+focus: "0127 is with cc (hv, 29 Oct); 0118 and 0126 wait on hv pushing and publishing devbin v0.1.17; 0114 waits on arca_swift 0003."
 claims: []
 ---
 
