@@ -1,9 +1,11 @@
-# The menu's top row and its About window (issue 0073), read by arca_swift's
-# ArcaMasthead. A copy in ${XDG_CONFIG_HOME:-~/.config}/menuz/ replaces this
-# one with no rebuild. {version} is the bundle's own; menuz gives {commit},
-# {kind} and {menu}.
-heading: "menuz {version}"
+# The menu's top row and its About window (issues 0073 and 0125), read by
+# arca_swift's ArcaMasthead, in Gtools' shape. A copy in
+# ${XDG_CONFIG_HOME:-~/.config}/menuz/ replaces this one with no rebuild.
+# {name} and {version} are the bundle's own; menuz gives {app}, {tree},
+# {commit}, {kind} and {menu}.
+heading: "{name} {version}"
 subheading: "{commit} · {kind}"
 icon: app
 about:
   body: about.md
+  css: about.css

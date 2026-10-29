@@ -210,7 +210,7 @@ menuz.yaml: menu[3].items[8].menuz = 'log': menu[3].items[6] places it already
 `menuz render` prints the menu as an outline, one entry per line, its labels realised: `# ` before a header, an item by its label, `✓ ` before the one an `each`'s `checked` names, a caption in parentheses, `---` for a separator, and a submenu as `Name >` with its entries indented two spaces under it. Its first two lines are the menu's top row, its heading and its second line as below, with the `---` the menu draws under them, so what `render` prints is what the menu shows. The app's own items come where the file places them, and the rest last.
 
 ```
-menuz 0.4.0
+Menuz 0.4.0
 3e731d3a · release
 ---
 Desks… >
@@ -248,22 +248,22 @@ The app's source and its xcodegen project live at `native/macos/Menuz/`. The app
 
 Each build stamps the app with five values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the commit's first eight characters; `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there; and `MENUZ_KIND`, `release` when the source stamp is clean and the commit carries the release tag that Utilz's root `VERSION` file names (a bare tag, `2.14.0`, never `v2.14.0`), and `dev` otherwise. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
 
-The menu's top row names the build from those stamps, `menuz <version>` in bold over a smaller `<commit> · <kind>`, with menuz's icon, in one of three forms:
+The menu's top row names the build from those stamps, `Menuz <version>` in bold over a smaller `<commit> · <kind>`, with menuz's icon, in one of three forms:
 
 ```
-menuz 0.4.0
+Menuz 0.4.0
 3e731d3a · release
 
-menuz 0.4.0
+Menuz 0.4.0
 3e731d3a · dev
 
-menuz 0.4.0
+Menuz 0.4.0
 dirty-3e731d3a · dev
 ```
 
 `dirty-` comes before the commit of a build from a dirty source tree, and the kind is `release` for a clean build of the release tag and `dev` for every other. The signed release asset is built at the tag from a clean tree, so a Homebrew install's app shows the first form; a build from a working tree, the development build included, shows `dev`.
 
-Choosing the row opens menuz's About window. The row and the window are arca_swift's masthead, read from a `masthead.yaml` and an `about.md` in the app's bundle each time the menu opens. A copy of either in `${XDG_CONFIG_HOME:-~/.config}/menuz/`, which `MENUZ_HOME` does not move, replaces the bundle's with no rebuild; one that fails its checks leaves the bundle's in use, the row's second line says what is wrong, and the log says it after `masthead: `. In them, `{version}` is the bundle's version, and menuz gives `{commit}`, `{kind}` and `{menu}`, the path of the menu file it reads.
+Choosing the row opens menuz's About window. The row and the window are arca_swift's masthead, read from a `masthead.yaml` and an `about.md` in the app's bundle each time the menu opens. A copy of either in `${XDG_CONFIG_HOME:-~/.config}/menuz/`, which `MENUZ_HOME` does not move, replaces the bundle's with no rebuild; one that fails its checks leaves the bundle's in use, the row's second line says what is wrong, and the log says it after `masthead: `. In them, `{name}` and `{version}` are the bundle's name and version, and menuz gives `{app}`, the version with its build and commit, `{tree}`, the source tree stamp, `{commit}`, `{kind}` and `{menu}`, the path of the menu file it reads. The bundle's About window shows menuz's logo, its name, a line on what it is, the version with its build and commit, the source tree, the menu file, what built it, the repository and the author, as Gtools' does.
 
 `menuz install` builds Release, quits every running copy, puts the new one at `~/Applications/Menuz.app`, where the other menu bar apps install, registers it with Launch Services, so it, and never a build product, is the one opened for menuz, and launches it with an empty environment but `HOME`, so the app reads your login shell's environment for itself rather than the caller's. The old copy is replaced only once the new one is whole beside it, and put back if the move fails. The installed copy, and only that copy, registers itself as a login item when it launches; `menuz status` reports it.
 

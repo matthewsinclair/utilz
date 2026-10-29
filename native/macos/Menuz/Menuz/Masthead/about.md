@@ -1,7 +1,12 @@
-# menuz
+![Menuz](menuz-logo.png)
 
-A menu of your own commands in the menu bar. menuz reads it from a YAML file, follows that file as you save it, and runs each command in your login shell.
+# Menuz
 
-- Your menu: {menu}
-- Help: `utilz help menuz` in a terminal
-- Part of [Utilz](https://github.com/matthewsinclair/utilz)
+A menu of your own commands in the menu bar, read from a YAML file you can edit while it runs.
+
+- {app}
+- source tree {tree}
+- menu file {menu}
+- Built by `utilz menuz build` from Utilz/native/macos/Menuz.
+- [github.com/matthewsinclair/utilz](https://github.com/matthewsinclair/utilz)
+- [Matthew Sinclair](https://matthewsinclair.com)

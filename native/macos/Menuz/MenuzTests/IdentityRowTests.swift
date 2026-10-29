@@ -43,13 +43,14 @@ struct IdentityRowTests {
     NSImage(size: NSSize(width: side, height: side), flipped: false) { _ in true }
   }
 
-  @Test("the row names the build from the shim's stamps: menuz and its version, over its commit and kind")
+  @Test("the row names the build from the bundle's stamps: its name and version, over its commit and kind")
   func stamped() throws {
     let row = masthead(under: scratchFolder())
     let info = Bundle.main.infoDictionary ?? [:]
     let version = try #require(info["CFBundleShortVersionString"] as? String)
     #expect(version.wholeMatch(of: #/\d+\.\d+\.\d+/#) != nil, "the shim stamped the version \(version)")
-    #expect(row.title == "menuz \(version)")
+    let name = try #require(info["CFBundleName"] as? String, "the bundle has no CFBundleName")
+    #expect(row.title == "\(name) \(version)")
     let kind = try #require(Bundle.main.menuzKind, "the shim stamped no MenuzKind")
     #expect(["release", "dev"].contains(kind), "MenuzKind was \(kind)")
     let subtitle = try #require(row.subtitle, "the row shows no subheading")
@@ -59,21 +60,23 @@ struct IdentityRowTests {
     #expect(row.isEnabled, "the row opens the About window")
   }
 
-  @Test("menuz gives the commit and the kind from the bundle's stamps, and the menu file it reads, its home as ~")
+  @Test("menuz gives the version line, source tree, commit and kind from the bundle's stamps, and the menu file, its home as ~")
   func values() throws {
-    #expect(MenuzMasthead.owned == ["commit", "kind", "menu"])
+    #expect(MenuzMasthead.owned == ["app", "tree", "commit", "kind", "menu"])
     let base = scratchFolder()
     defer { try? FileManager.default.removeItem(at: base) }
     let contents = base.appendingPathComponent("Stamped.bundle/Contents")
     try FileManager.default.createDirectory(at: contents, withIntermediateDirectories: true)
     let info: [String: Any] = [
-      "CFBundleShortVersionString": "0.4.0", "MenuzCommit": "3e731d3a", "MenuzSourceTree": "4f2c9a10-dirty",
-      "MenuzKind": "Release",
+      "CFBundleShortVersionString": "0.4.0", "CFBundleVersion": "7", "MenuzCommit": "3e731d3a",
+      "MenuzSourceTree": "4f2c9a10-dirty", "MenuzKind": "Release",
     ]
     let plist = try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
     try plist.write(to: contents.appendingPathComponent("Info.plist"))
     let stamped = try #require(Bundle(url: contents.deletingLastPathComponent()))
     #expect(MenuzMasthead.value("commit", bundle: stamped, menu: nil) == "dirty-3e731d3a")
+    #expect(MenuzMasthead.value("app", bundle: stamped, menu: nil) == "0.4.0 (build 7, 3e731d3a)")
+    #expect(MenuzMasthead.value("tree", bundle: stamped, menu: nil) == "4f2c9a10-dirty")
     #expect(MenuzMasthead.value("kind", bundle: stamped, menu: nil) == "dev")
     let home = NSHomeDirectory() + "/.config/menuz/menuz.yaml"
     #expect(MenuzMasthead.value("menu", bundle: stamped, menu: home) == "~/.config/menuz/menuz.yaml")

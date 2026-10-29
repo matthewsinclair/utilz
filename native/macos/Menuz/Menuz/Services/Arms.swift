@@ -187,4 +187,10 @@ extension Bundle {
   var menuzKind: String? {
     stamp("MenuzKind")
   }
+
+  /// The source tree stamp, as the About page's `{tree}` reads it (issue
+  /// 0125).
+  var menuzSourceTree: String? {
+    stamp("MenuzSourceTree")
+  }
 }

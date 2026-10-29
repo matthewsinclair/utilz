@@ -14,6 +14,10 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **A cut runs from the confirm to the tap with nobody at the terminal** (ST0030; harness and development only, no behaviour change). The release's one `after:` line, the new `tools/post-cut`, signs, notarises and attaches Menuz.app at the tag in a detached worktree, then publishes the formula to the tap, stopping at the first failure so the tap never gets ahead of the app; a re-run skips what is done. `bin/devbin release --patch --yes` is the whole cut. The release gate is `check all` alone: `test estate` runs before a cut, in the dry run and the twins, and is no longer run again inside it.
 - **prez's acceptance check of a collapsed PDF says why when it misses** (issue 0124; tests only). AT05 once missed prez's warning under load and kept nothing to say why. A miss now names which case it saw: the print failed, the theme did not collapse that print, or prez missed a collapse. It does so against the same deck's unthemed print and keeps prez's stderr in the log.
 
+### Fixed
+
+- **Menuz's About window has Gtools' shape** (issue 0125; found by hv). It had no logo, no build or source line and no author, unlike Gtools' and Intent's. It now shows Menuz's logo, its name and what it does, then the version with its build and commit, the source tree, the menu file, what built it, the repository and the author, as Gtools' does. The menu's top row reads the bundle's name, `Menuz 0.4.8` where it read `menuz 0.4.7`. A `masthead.yaml` of your own can name the two new values, `{app}` and `{tree}`. menuz goes from 0.4.7 to 0.4.8.
+
 ## [2.14.5] - 2026-10-28
 
 ### Fixed

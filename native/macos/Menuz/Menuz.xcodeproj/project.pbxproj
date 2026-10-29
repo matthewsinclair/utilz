@@ -15,6 +15,7 @@
 		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
 		4DA752B867A63455306A814A /* RealiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
+		62C965197DA12DC3512B59A3 /* about.css in Resources */ = {isa = PBXBuildFile; fileRef = AC16420CA18E009A87B27503 /* about.css */; };
 		647A99098E46609054F1591F /* MenuBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */; };
 		6484415C26A2D867238CFE46 /* LogWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A03E4B4D5385E44C58A57D5 /* LogWindow.swift */; };
 		66CA1635FB54568EC7D32863 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1D82D84E6BED41563E3D23 /* RunnerTests.swift */; };
@@ -33,6 +34,7 @@
 		C1E380F3B804FBD7849FBB13 /* NotifyArmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DA05166681483F5F74E57C /* NotifyArmTests.swift */; };
 		CFE42505FB7695CD09D90680 /* ParamForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775285512609F81F861F1415 /* ParamForm.swift */; };
 		DE9C0C3FA1666B973E9DB06C /* LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E028E7200976AF9A22C8E64 /* LoginItem.swift */; };
+		E14AFBCE513AF60251CDAC22 /* menuz-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9252D04493DFCC64CBA611A1 /* menuz-logo.png */; };
 		EAE4191C024DFE1B4BBE78F5 /* MenuzApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA910089979C343042FD394C /* MenuzApp.swift */; };
 		FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = E176BB28E1D45EFD0D08551C /* MenuzKit */; };
 		FFF21E0660FED3A4BCFABA1C /* masthead.yaml in Resources */ = {isa = PBXBuildFile; fileRef = 0BF896F68BAE84BD7E7B1E19 /* masthead.yaml */; };
@@ -72,7 +74,9 @@
 		7F4B5B698304EA469BFF20D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		86DE1B4857DABEF4761E634D /* Arms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arms.swift; sourceTree = "<group>"; };
 		8A82B2DADFCB97CEDA1B96BA /* MenuBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBuilder.swift; sourceTree = "<group>"; };
+		9252D04493DFCC64CBA611A1 /* menuz-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menuz-logo.png"; sourceTree = "<group>"; };
 		AA910089979C343042FD394C /* MenuzApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuzApp.swift; sourceTree = "<group>"; };
+		AC16420CA18E009A87B27503 /* about.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = about.css; sourceTree = "<group>"; };
 		C9CAAC271F6A8DE3D9BA5660 /* Notifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		CC872A43CC981BBFB298B49E /* IdentityRowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityRowTests.swift; sourceTree = "<group>"; };
 		D0DA05166681483F5F74E57C /* NotifyArmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotifyArmTests.swift; sourceTree = "<group>"; };
@@ -107,8 +111,10 @@
 		153B04875725DCFDDA95B077 /* Masthead */ = {
 			isa = PBXGroup;
 			children = (
+				AC16420CA18E009A87B27503 /* about.css */,
 				7CF7E8E8CA2418791548D6BA /* about.md */,
 				0BF896F68BAE84BD7E7B1E19 /* masthead.yaml */,
+				9252D04493DFCC64CBA611A1 /* menuz-logo.png */,
 			);
 			path = Masthead;
 			sourceTree = "<group>";
@@ -283,8 +289,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD12842F54990380D974DDDB /* Assets.xcassets in Resources */,
+				62C965197DA12DC3512B59A3 /* about.css in Resources */,
 				03EF739060268D6FB11F129C /* about.md in Resources */,
 				FFF21E0660FED3A4BCFABA1C /* masthead.yaml in Resources */,
+				E14AFBCE513AF60251CDAC22 /* menuz-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

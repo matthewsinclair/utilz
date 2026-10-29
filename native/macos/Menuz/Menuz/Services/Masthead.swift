@@ -5,16 +5,17 @@ import MenuzKit
 /// The menu's top row (issue 0073): arca_swift's MastheadRow, made here
 /// alone. It reads masthead.yaml and the About files from `menuz` under
 /// `environment`'s XDG_CONFIG_HOME, or ~/.config, before the bundle's, and
-/// asks for the values menuz owns at each open of its menu: the commit and
-/// the kind from the bundle's stamps, and the menu file the app reads now,
-/// which `menu` gives, so a Reload that moves it moves the About page's too.
+/// asks for the values menuz owns at each open of its menu: the version line
+/// and the source tree, under Gtools' names (issue 0125), the commit and the
+/// kind from the bundle's stamps, and the menu file the app reads now, which
+/// `menu` gives, so a Reload that moves it moves the About page's too.
 /// It is an NSMenuItem to the app, which needs nothing else of it, so the
 /// tests never import ArcaMasthead and the test bundle links no copy of its
 /// own.
 enum MenuzMasthead {
   /// Each value menuz gives, named once: `owned` and `value` both read it.
   enum Value: String, CaseIterable {
-    case commit, kind, menu
+    case app, tree, commit, kind, menu
   }
 
   static let owned = Set(Value.allCases.map(\.rawValue))
@@ -123,6 +124,8 @@ enum MenuzMasthead {
   static func value(_ name: String, bundle: Bundle, menu: String?) -> String? {
     guard let key = Value(rawValue: name) else { return nil }
     switch key {
+    case .app: return bundle.menuzVersion
+    case .tree: return bundle.menuzSourceTree
     case .commit: return bundle.menuzCommit
     case .kind: return Identity.kind(bundle.menuzKind)
     case .menu: return menu.map { ($0 as NSString).abbreviatingWithTildeInPath }
