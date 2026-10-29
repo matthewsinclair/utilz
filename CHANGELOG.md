@@ -9,7 +9,20 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.14.7] - unreleased
 
+### Changed
+
+- **Menuz.app is signed, notarised and attached by devbin's built-in `bin/devbin macos`** (issue 0118). Utilz kept its own `bin/.devbin/cmd/macos`, which shadowed the built-in totally, so the same release half had two homes. devbin 0.1.18, vendored here, signs an app that versions apart from its project, checks its commit and kind stamps against the tag, and drops every copy's Launch Services record on every way out. So Utilz's handler is gone, and `bin/.devbin/config.yaml` declares Menuz in a `macos:` block. What the steps do changes in small ways, as hv accepted on 27 Oct:
+  - an interrupt exits 1;
+  - a `Menuz.app.zip` already attached with the same bytes counts as attached, and one with other bytes is refused, never replaced;
+  - every release gets a `SHA256SUMS` asset, written over every asset and read back;
+  - the stage moves to `${XDG_STATE_HOME:-~/.local/state}/devbin/macos/`, one per checkout;
+  - off macOS the command exits 2.
+- **`bin/devbin macos app-icons` and `app-icons-check` stay Utilz's** (issue 0118). They run `tools/app-icons`, as declared options of the built-in, and neither is in `macos all`. `app-icons-check` holds the icon lines `macos doctor` printed; the built-in's `doctor` keeps the signing lines.
+- **`utilz menuz build` checks its own product** (issue 0118). `bin/devbin macos app-verify debug` and `release` checked a build product's executable and `LSUIElement`, and showed its stamps. Each build, `install`'s included, now checks those itself: the executable is there, `LSUIElement` is true, and the product carries the stamps the build was given. A miss is exit 1, naming it, and `install` replaces nothing. The built-in's `app-verify` checks the signed copy.
+
 ### Fixed
+
+- **`bin/devbin macos store-creds` no longer puts a notary credential on a command line** (issue 0126). Utilz's handler stored each credential with `security add-generic-password ... -w <value>`, so any local process could read the app-specific password while the call ran. The built-in hands each value to `security`'s own prompt.
 
 - **Menuz's About window shows the source tree at the commit's length** (issue 0127; found by hv). The source tree line printed the whole 40-character tree hash, the widest line in the window, beside an 8-character commit. It now shows the hash at the commit's length and keeps any `-dirty`. The stamp itself stays whole, so `menuz stamps` still prints the full value. menuz goes from 0.4.8 to 0.4.9.
 

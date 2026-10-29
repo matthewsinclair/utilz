@@ -1,21 +1,21 @@
 # shellcheck shell=bash
 #
-# launch-services.sh - Menuz's Launch Services records, for menuz and for
-# bin/devbin macos (issue 0106)
+# launch-services.sh - Menuz's Launch Services records, for menuz (issue 0106)
 #
-# Sourced, never run: by opt/menuz/menuz and by bin/.devbin/cmd/macos, so
-# lsregister's path, how it is found, how its record list is read and how a
-# drop is checked have one home. Only ~/Applications/Menuz.app stays
-# registered; every Menuz.app a build, app-sign, app-notarize, app-verify or
-# publish leaves under XDG state, or unpacks to prove a zip, has its record
-# dropped, so the bundle id never resolves to a build product.
+# Sourced, never run, by opt/menuz/menuz, so lsregister's path, how it is
+# found, how its record list is read and how a drop is checked have one home.
+# Only ~/Applications/Menuz.app stays registered; every Menuz.app a build or
+# an install leaves under XDG state has its record dropped, so the bundle id
+# never resolves to a build product. devbin's built-in macos drops the copies
+# it signs, notarises and publishes itself (issue 0118).
 #
 # These functions print and return; they say nothing on stderr and exit
 # nothing, so each caller says a failure in its own voice. bash 3.2 safe,
 # and safe under errexit: every command answers its own failure.
 
-# Menuz.app's bundle id: menuz's BUNDLE_ID and devbin macos's APP_BUNDLE_ID.
-# shellcheck disable=SC2034 # read by the two scripts that source this
+# Menuz.app's bundle id: menuz's BUNDLE_ID. bin/.devbin/config.yaml's
+# macos.bundle_id is a second copy, held equal by macos.bats (issue 0118).
+# shellcheck disable=SC2034 # read by menuz, which sources this
 MENUZ_BUNDLE_ID="com.matthewsinclair.utilz.menuz"
 
 # Launch Services' registrar, not on PATH on macOS.

@@ -546,12 +546,17 @@ run_src_menuz() {
 BUILD_ROOT_REL="menuz/build/macos"
 
 # Xcode and xcodegen present. xcodebuild -version answers; any other call
-# makes the product under SYMROOT/<configuration> from a template bundle of
-# version 0.1.0 and registers it with the fake Launch Services, by its
-# resolved path, as Xcode does (issue 0106), prints FAKE_XCODEBUILD_ERRORS
-# compiler error lines (default none) and a fatal one when there are any,
-# then 100 numbered lines, and exits FAKE_XCODEBUILD_RC (default 0).
-# xcodegen makes Menuz.xcodeproj where it runs.
+# makes the product under SYMROOT/<configuration> from a template bundle,
+# its Info.plist written as Xcode writes Menuz/Info.plist: the executable's
+# name, the stamps passed as build settings, and LSUIElement true. Each can
+# be made wrong for the build's product check (issue 0118): FAKE_PRODUCT_LSUI
+# (default true), FAKE_PRODUCT_COMMIT for MENUZ_COMMIT's value, and
+# FAKE_PRODUCT_NO_EXE=1 to leave no executable. It registers the product with
+# the fake Launch Services, by its resolved path, as Xcode does (issue 0106),
+# prints FAKE_XCODEBUILD_ERRORS compiler error lines (default none) and a
+# fatal one when there are any, then 100 numbered lines, and exits
+# FAKE_XCODEBUILD_RC (default 0). xcodegen makes Menuz.xcodeproj where it
+# runs.
 xcode_fakes() {
   make_app "$FAKES/template.app" 0.1.0
   fake xcodegen 'mkdir -p Menuz.xcodeproj'
@@ -560,9 +565,16 @@ if [[ "$1" == -version ]]; then
   printf "Xcode 27.1\nBuild version 27A9275\n"
   exit 0
 fi
-sym="" cfg="" prev=""
+sym="" cfg="" prev="" version="" build="" commit="" tree="" kind=""
 for a in "$@"; do
-  case "$a" in SYMROOT=*) sym="${a#SYMROOT=}" ;; esac
+  case "$a" in
+    SYMROOT=*) sym="${a#SYMROOT=}" ;;
+    MENUZ_VERSION=*) version="${a#*=}" ;;
+    MENUZ_BUILD=*) build="${a#*=}" ;;
+    MENUZ_COMMIT=*) commit="${a#*=}" ;;
+    MENUZ_SOURCE_TREE=*) tree="${a#*=}" ;;
+    MENUZ_KIND=*) kind="${a#*=}" ;;
+  esac
   if [[ "$prev" == -configuration ]]; then cfg="$a"; fi
   prev="$a"
 done
@@ -575,6 +587,30 @@ fi
 mkdir -p "${sym:?}/${cfg:?}"
 rm -rf "${sym:?}/${cfg:?}/Menuz.app"
 cp -R "'"$FAKES"'/template.app" "$sym/$cfg/Menuz.app"
+if [[ "${FAKE_PRODUCT_NO_EXE:-0}" == 1 ]]; then rm "$sym/$cfg/Menuz.app/Contents/MacOS/Menuz"; fi
+cat >"$sym/$cfg/Menuz.app/Contents/Info.plist" <<PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+	<key>CFBundleExecutable</key>
+	<string>Menuz</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.matthewsinclair.utilz.menuz</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$version</string>
+	<key>CFBundleVersion</key>
+	<string>$build</string>
+	<key>MenuzCommit</key>
+	<string>${FAKE_PRODUCT_COMMIT:-$commit}</string>
+	<key>MenuzSourceTree</key>
+	<string>$tree</string>
+	<key>MenuzKind</key>
+	<string>$kind</string>
+	<key>LSUIElement</key>
+	<${FAKE_PRODUCT_LSUI:-true}/>
+</dict>
+</plist>
+PLIST
 (cd "$sym/$cfg/Menuz.app" && pwd -P) >>"'"$FAKES"'/ls.records"
 seq 1 100 | sed "s/^/line /"
 exit "${FAKE_XCODEBUILD_RC:-0}"'
@@ -729,6 +765,54 @@ app_count() {
   assert_success
   [[ "$(xcodebuild_call)" == *" -configuration Release "* ]] || false
   [[ -x "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app/Contents/MacOS/Menuz" ]] || false
+}
+
+# --- issue 0118: the build checks its own product -----------------------------
+
+@test "issue 0118: build checks its product has its executable, LSUIElement true and the stamps it was given" {
+  source_home
+  xcode_fakes
+  run_src_menuz build --release
+  assert_success
+  assert_output_contains "$XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Release/Menuz.app has its executable, LSUIElement true, and the stamps it was given"
+}
+
+@test "issue 0118: a product with LSUIElement false fails the build, naming it" {
+  source_home
+  xcode_fakes
+  FAKE_PRODUCT_LSUI=false run_src_menuz build
+  assert_exit_code 1
+  assert_output_contains "the build's product check failed"
+  assert_output_contains "LSUIElement is not true, so the app would take a Dock slot"
+}
+
+@test "issue 0118: a product with no executable fails the build, naming the path" {
+  source_home
+  xcode_fakes
+  FAKE_PRODUCT_NO_EXE=1 run_src_menuz build
+  assert_exit_code 1
+  assert_output_contains "no executable at $XDG_STATE_HOME/$BUILD_ROOT_REL/Build/Products/Debug/Menuz.app/Contents/MacOS/Menuz"
+}
+
+@test "issue 0118: a product carrying a stamp it was not given fails the build, naming both values" {
+  source_home
+  xcode_fakes
+  FAKE_PRODUCT_COMMIT=feedface run_src_menuz build
+  assert_exit_code 1
+  assert_output_contains "its stamps are not the build's:"
+  assert_output_contains "given   MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short=8 HEAD)"
+  assert_output_contains "carried MENUZ_COMMIT=feedface"
+}
+
+@test "issue 0118: install's build is checked too, and a failed check installs nothing" {
+  source_home
+  xcode_fakes
+  launch_fakes
+  make_app "$INSTALLED" 0.0.9
+  FAKE_PRODUCT_LSUI=false run_src_menuz install
+  assert_exit_code 1
+  assert_output_contains "LSUIElement is not true"
+  grep -q '<string>0.0.9</string>' "$INSTALLED/Contents/Info.plist"
 }
 
 @test "AT-05.1: build --unsigned adds CODE_SIGNING_ALLOWED=NO" {
@@ -967,7 +1051,7 @@ app_count() {
   grep -qx "open -a $INSTALLED" "$FAKES/calls"
   grep -q "com.matthewsinclair.utilz.menuz" "$FAKES/osascript.args"
   # Replaced: the new bundle, and no sibling left behind.
-  grep -q '<string>0.1.0</string>' "$INSTALLED/Contents/Info.plist"
+  grep -q "<string>$(cat "$SRC/opt/menuz/VERSION")</string>" "$INSTALLED/Contents/Info.plist"
   [[ "$(app_count)" -eq 1 ]] || false
 }
 

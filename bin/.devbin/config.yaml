@@ -88,6 +88,41 @@ commands:
   # `bin/devbin release check`. Its declaration is the release: block below.
   release:
     enabled: true
+  # Menuz.app's release half is devbin's built-in macos, declared in the macos:
+  # block below (issue 0118). Rasterising its icon is Utilz's own, so it is a
+  # declared option, which routes before any word reaches the built-in, and
+  # its doctor lines are a check of their own. Both are out of `macos all`.
+  macos:
+    enabled: true
+    options:
+      app-icons:
+        summary: Rasterise menuz.svg and menuz-mark.svg into the asset catalogue
+        run: tools/app-icons
+        in_all: false
+      app-icons-check:
+        summary: rsvg-convert, both SVGs and the asset catalogue, for app-icons
+        run: tools/app-icons --check
+        in_all: false
+
+# Menuz.app, signed, notarised and attached to the release by the built-in
+# macos (issue 0118). Menuz versions apart from Utilz, from opt/menuz/VERSION,
+# so its commit stamp is what shows a copy is the tag's build, and its kind
+# stamp says the build was of the tag in a clean tree. It builds under XDG
+# state, outside the tree, because Launch Services registers bundles left
+# under ~/Devel (issue 0106). bundle_id is a second copy of
+# opt/menuz/lib/launch-services.sh's MENUZ_BUNDLE_ID, held equal by
+# macos.bats. keychain keeps the credentials where store-creds put them.
+macos:
+  app: ${XDG_STATE_HOME}/menuz/build/macos/Build/Products/Release/Menuz.app
+  build: bin/utilz menuz build --release
+  bundle_id: com.matthewsinclair.utilz.menuz
+  entitlements: native/macos/Menuz/Menuz/Menuz.entitlements
+  keychain: utilz.apple
+  version_from: opt/menuz/VERSION
+  commit_stamp: MenuzCommit
+  kind_stamp: MenuzKind
+  kind_value: release
+  build_root: ${XDG_STATE_HOME}/menuz/build/macos
 
 # The release core's declaration (ST0019 design D1): only what differs from the
 # defaults in lib/config.reference.yaml. commands.release.enabled above is what

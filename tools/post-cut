@@ -14,14 +14,16 @@
 # every new install a `menuz install` that fails until the asset arrives.
 #
 # A RE-RUN STARTS FROM THE TOP AND SKIPS WHAT IS DONE. The core's after step has
-# no postcondition, so a resumed cut runs this again; `macos publish` refuses a
-# release already holding Menuz.app.zip, so an attached asset skips the app
-# steps here, and `tools/formula publish` leaves a tap that already carries the
-# release as it is.
+# no postcondition, so a resumed cut runs this again. A release already holding
+# Menuz.app.zip skips the app steps here, since app-sign would build and sign a
+# new copy only for `macos publish` to find an asset there (issue 0118: one
+# with the same bytes counts as attached, one with other bytes is refused), and
+# `tools/formula publish` leaves a tap that already carries the release as it
+# is.
 #
 # THE APP STEPS RUN IN A DETACHED WORKTREE AT THE TAG, never the primary.
-# app-sign and publish refuse a tree whose HEAD is not the tag (issue 0103),
-# and during a cut a node's board commit can move the primary off it. The
+# app-sign refuses a tree whose HEAD is not the tag, and publish a copy whose
+# MenuzCommit is not the tag's (issue 0103), and during a cut a node's board commit can move the primary off it. The
 # worktree goes under the system's own temp dir: Launch Services registers
 # bundles under ~/Devel. It is removed on every way out, never with --force.
 #
