@@ -1,6 +1,6 @@
 # Utilz -- Session Entry Point
 
-**This file holds no state.** It says where to start. Current work, status, versions and history live in exactly one place each, and this file names them rather than summarising them -- a summary here becomes a third copy of the same narrative with a third value, and nothing reports the divergence.
+**This file holds no state.** It says where to start and names where each thing is kept.
 
 ## Start here, in this order
 

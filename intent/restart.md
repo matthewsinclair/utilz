@@ -1,10 +1,10 @@
 ---
-verblock: "29 Oct 2026:v1.52: matts - done.md retired; CHANGELOG and git are the record"
+verblock: "29 Oct 2026:v1.53: matts - leaner index line"
 ---
 
 # Restart Context
 
-An index. Git is the history: the long form this file carried to 28 Oct (rules, traps, internals, the fresh-checkout checklist) is `git show 6106bce6:intent/restart.md`.
+An index. Git is the history; the old long form is `git show 6106bce6:intent/restart.md`.
 
 | You want                             | Read                                                 |
 | ------------------------------------ | ---------------------------------------------------- |
