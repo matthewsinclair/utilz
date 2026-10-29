@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 16:15Z
+heartbeat_at: 2026-10-29 16:49Z
 status: active
-focus: "Tonight: 2.14.7 = 0127 + 0118 + 0126 (hv via molt-vc). cc: CHANGELOG and menuz 0.4.9; ic: 0118 once brew has devbin v0.1.17; vc: checks and hv's command list."
+focus: "Tonight: 2.14.7 = 0127 (landed) + 0118 + 0126; 0118 holds for devbin v0.1.18 on brew (0.1.17's CI red); hv's command list is staged with molt-vc."
 claims: []
 ---
 
