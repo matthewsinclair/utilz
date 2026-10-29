@@ -5,15 +5,15 @@ role: interface
 session_id: bc129d3a-2e6b-4d1c-9293-1a261be43529
 heartbeat_at: 2026-10-29 18:43Z
 status: active
-focus: "0118 and 0126 landed at 511f47dc; waiting on vc's check by change, then close both"
-claims: [ISSUE:0118]
+focus: "0118 and 0126 closed (landed 511f47dc); todo 13 still triggers 0114; nothing else of ic's open"
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- 0118 with 0126: landed at 511f47dc (merge of ic-0118, bank tip 07a65b79), worktree removed; close both once vc checks the landing by its change; no push (edited)
+_(none)_
 
 ## TODO
 
