@@ -1,12 +1,12 @@
 ---
-verblock: "29 Oct 2026:v1.3: matts - 2.14.6 released; 0127 queued"
+verblock: "29 Oct 2026:v1.4: matts - kovacs on 2.14.6"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- hv: 2.14.6 installs: brew upgrade utilz and utilz menuz install here; kovacs through kovacs-sysadm.
+- hv: 2.14.6 here: brew upgrade utilz and utilz menuz install.
 
 ## TODO
 
