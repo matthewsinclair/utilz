@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (v0.1.17's candidate CI went red, so 0.1.18 is the first public release; molt-vc tells vc). Then diff the built-in macos and the libs it reaches between v0.1.17 and v0.1.18, tell vc whether the map (scratch 0118-map/MAP.md) holds, and only then vendor. (edited)
+- Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (tag f084e101; molt-vc tells vc). The diff against v0.1.17 is done and the map holds (scratch 0118-map/MAP.md). Then vendor v0.1.18, delete U, add the app-icons option and menuz's build check, fix the post-cut comment; stage and tell vc; book only after vc reads it. (edited)
 
 ## Watch-outs
 

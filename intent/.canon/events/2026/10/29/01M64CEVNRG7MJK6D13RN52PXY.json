@@ -1,0 +1,16 @@
+{
+  "id": "01M64CEVNRG7MJK6D13RN52PXY",
+  "ts": "2026-10-29T17:48:53.816Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 18,
+    "text": "Issue 0118 (with 0126) holds until brew has devbin v0.1.18 (tag f084e101; molt-vc tells vc). The diff against v0.1.17 is done and the map holds (scratch 0118-map/MAP.md). Then vendor v0.1.18, delete U, add the app-icons option and menuz's build check, fix the post-cut comment; stage and tell vc; book only after vc reads it."
+  }
+}
