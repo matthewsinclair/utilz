@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-10-29 16:09Z)
+
+hv, 29 Oct: 0118 goes tonight, with 0126, as soon as brew has devbin v0.1.17. brew is still at 0.1.15, and molt-vc says publication waits on the candidate's CI. Until then, read only: map each check in bin/.devbin/cmd/macos to the built-in's, against devbin's v0.1.17 tag. Once brew has v0.1.17: vendor it, delete Utilz's handler (app-icons stays Utilz's), and confirm 0126 is gone with it. Do nothing beyond 0118's Done when, and no refactor. If it grows, stop and tell vc. Decision 31 stands: no Claude test runs. Stage it and tell vc. vc reads it and hands hv the exact commands. No push. 0127 rides the next release (hv).
 
 ---
 
