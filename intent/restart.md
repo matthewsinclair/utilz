@@ -1,5 +1,5 @@
 ---
-verblock: "28 Oct 2026:v1.51: matts - an index only (hv, 28 Oct)"
+verblock: "29 Oct 2026:v1.52: matts - done.md retired; CHANGELOG and git are the record"
 ---
 
 # Restart Context
@@ -10,7 +10,7 @@ An index. Git is the history: the long form this file carried to 28 Oct (rules, 
 | ------------------------------------ | ---------------------------------------------------- |
 | What is being worked on now          | `intent/wip.md`, `intent outstanding`                |
 | Live state, rulings and watch-outs   | `intent wb pickup --node <you>`, `intent wb show vc` |
-| What shipped                         | `CHANGELOG.md`, `intent/done.md`, `git tag`          |
+| What shipped                         | `CHANGELOG.md`, `git tag`                            |
 | How to cut and what follows a cut    | `docs/releasing.md`                                  |
 | Architecture, conventions, extending | `docs/architecture.md`, `docs/developer-guide.md`    |
 | Design principles                    | `docs/design-principles.md`                          |

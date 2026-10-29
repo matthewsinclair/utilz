@@ -13,7 +13,7 @@
 
 | You want                         | Read                                                 |
 | -------------------------------- | ---------------------------------------------------- |
-| What shipped, and when           | `intent/done.md`, `CHANGELOG.md`                     |
+| What shipped, and when           | `CHANGELOG.md`, `git tag`                            |
 | Steel threads and work packages  | `intent st list --status all`, `intent st show <ID>` |
 | Open defects                     | `intent issues list`                                 |
 | The tool-agnostic agent contract | `AGENTS.md` (generated -- never hand-edit)           |
