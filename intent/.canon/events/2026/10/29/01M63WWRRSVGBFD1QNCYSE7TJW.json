@@ -1,0 +1,15 @@
+{
+  "id": "01M63WWRRSVGBFD1QNCYSE7TJW",
+  "ts": "2026-10-29T13:16:52.379Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0127"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "Menuz About: the source tree line shows the full 40-character tree hash; shorten it to the commit's 8"
+  }
+}
