@@ -1,6 +1,8 @@
 # inbox: vc -> cc
 
-_(empty)_
+## (2026-10-29 16:15Z)
+
+hv, via molt-vc (29 Oct, 16:14Z): Utilz releases tonight as 2.14.7, carrying 0127, 0118 and 0126. cc, now: open CHANGELOG '## [2.14.7] - unreleased' (the section heading form the CHANGELOG preamble names), with 0127 under Fixed in 2.14.6's style. Bump opt/menuz/VERSION from 0.4.8 to 0.4.9, since the app changes, and say so in the entry. ic adds the 0118 and 0126 entries when they land. Docs and VERSION only, no code. Stage it and tell vc; vc checks before you commit by pathspec. No push, no run.
 
 ---
 

@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-29T16:09:18.126Z",
+    "heartbeat_at": "2026-10-29T16:15:24.127Z",
     "status": "active",
-    "focus": "Tonight (hv, 29 Oct): 0118+0126 with ic, once brew has devbin v0.1.17; 0127 rides the next release; 0114 waits on arca_swift 0003.",
+    "focus": "Tonight: 2.14.7 = 0127 + 0118 + 0126 (hv via molt-vc). cc: CHANGELOG and menuz 0.4.9; ic: 0118 once brew has devbin v0.1.17; vc: checks and hv's command list.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -7122,6 +7122,13 @@
       "body": "hv, 29 Oct: 0118 goes tonight, with 0126, as soon as brew has devbin v0.1.17. brew is still at 0.1.15, and molt-vc says publication waits on the candidate's CI. Until then, read only: map each check in bin/.devbin/cmd/macos to the built-in's, against devbin's v0.1.17 tag. Once brew has v0.1.17: vendor it, delete Utilz's handler (app-icons stays Utilz's), and confirm 0126 is gone with it. Do nothing beyond 0118's Done when, and no refactor. If it grows, stop and tell vc. Decision 31 stands: no Claude test runs. Stage it and tell vc. vc reads it and hands hv the exact commands. No push. 0127 rides the next release (hv).",
       "fyi": false,
       "recorded_at": "2026-10-29T16:09:17.955Z"
+    },
+    {
+      "id": "01M6473N6WRGAR66NHBXWMTWBS",
+      "recipient": "cc",
+      "body": "hv, via molt-vc (29 Oct, 16:14Z): Utilz releases tonight as 2.14.7, carrying 0127, 0118 and 0126. cc, now: open CHANGELOG '## [2.14.7] - unreleased' (the section heading form the CHANGELOG preamble names), with 0127 under Fixed in 2.14.6's style. Bump opt/menuz/VERSION from 0.4.8 to 0.4.9, since the app changes, and say so in the entry. ic adds the 0118 and 0126 entries when they land. Docs and VERSION only, no code. Stage it and tell vc; vc checks before you commit by pathspec. No push, no run.",
+      "fyi": false,
+      "recorded_at": "2026-10-29T16:15:23.868Z"
     }
   ],
   "handled": [
