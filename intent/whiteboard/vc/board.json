@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "e72c5928-afb3-41b5-be7f-8e2b9063615d",
-    "heartbeat_at": "2026-10-29T19:28:25.356Z",
+    "heartbeat_at": "2026-10-29T19:31:22.773Z",
     "status": "active",
-    "focus": "HOLD: 2.14.7 released and installed everywhere (rhadamanth, kovacs); 0114 waits on arca_swift 0003.",
+    "focus": "HOLD: 2.14.7 out everywhere; docs leaned (29 Oct); 0114 waits on arca_swift 0003.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -1855,10 +1855,10 @@
       "node": "vc",
       "kind": "watchout",
       "seq": 22,
-      "text": "hv's release rules: one next release carrying all not deferred; land one at a time on vc's word; desk twins, then kovacs, then the dry run, then hv's cut; hv keeps cuts, tags, pushes.",
+      "text": "hv's release rules: one release carries everything not deferred; land one change at a time on vc's word; hv runs the suites and the cut, no dry run; hv keeps cuts, tags and pushes.",
       "state": "live",
       "recorded_at": "2026-10-20T18:45:29.279Z",
-      "edited_at": "2026-10-28T19:56:42.353Z"
+      "edited_at": "2026-10-29T19:31:05.397Z"
     },
     {
       "node": "vc",
@@ -2191,7 +2191,8 @@
       "kind": "decision",
       "seq": 68,
       "text": "hv, 27 Oct: 0118 rides the first release after devbin 0.1.16 is vendored; it moves app-verify into menuz build, adds SHA256SUMS on every release, and takes devbin's post-cut step changes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-29T19:30:57.053Z",
       "recorded_at": "2026-10-27T09:37:10.586Z",
       "edited_at": "2026-10-28T19:56:43.156Z"
     },
@@ -7128,7 +7129,8 @@
       "recipient": "cc",
       "body": "hv, via molt-vc (29 Oct, 16:14Z): Utilz releases tonight as 2.14.7, carrying 0127, 0118 and 0126. cc, now: open CHANGELOG '## [2.14.7] - unreleased' (the section heading form the CHANGELOG preamble names), with 0127 under Fixed in 2.14.6's style. Bump opt/menuz/VERSION from 0.4.8 to 0.4.9, since the app changes, and say so in the entry. ic adds the 0118 and 0126 entries when they land. Docs and VERSION only, no code. Stage it and tell vc; vc checks before you commit by pathspec. No push, no run.",
       "fyi": false,
-      "recorded_at": "2026-10-29T16:15:23.868Z"
+      "recorded_at": "2026-10-29T16:15:23.868Z",
+      "archived_at": "2026-10-29T19:30:57.573Z"
     }
   ],
   "handled": [

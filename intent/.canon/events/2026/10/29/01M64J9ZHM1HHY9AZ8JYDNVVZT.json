@@ -1,0 +1,16 @@
+{
+  "id": "01M64J9ZHM1HHY9AZ8JYDNVVZT",
+  "ts": "2026-10-29T19:31:05.397Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 22,
+    "text": "hv's release rules: one release carries everything not deferred; land one change at a time on vc's word; hv runs the suites and the cut, no dry run; hv keeps cuts, tags and pushes."
+  }
+}

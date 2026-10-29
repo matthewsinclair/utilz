@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 19:28Z
+heartbeat_at: 2026-10-29 19:31Z
 status: active
-focus: "HOLD: 2.14.7 released and installed everywhere (rhadamanth, kovacs); 0114 waits on arca_swift 0003."
+focus: "HOLD: 2.14.7 out everywhere; docs leaned (29 Oct); 0114 waits on arca_swift 0003."
 claims: []
 ---
 
@@ -28,13 +28,12 @@ _(none)_
 - prez acceptance: AT01 reads red with CARGO_TARGET_DIR redirected; a red on main reruns in main's tree; rerun AT20 alone before calling it red. (edited)
 - Every host run books through Intent's slots on molt-vc's desk after vc reads its bytes; GO by name; START and END to molt-vc and vc; new bytes are a new booking. (edited)
 - kovacs is brew-only for Utilz; reads and changes go through kovacs-sysadm while it runs, batched by molt-vc; rustup stable 1.99.1 alone is CI's lint twin. (edited)
-- hv's release rules: one next release carrying all not deferred; land one at a time on vc's word; desk twins, then kovacs, then the dry run, then hv's cut; hv keeps cuts, tags, pushes. (edited)
+- hv's release rules: one release carries everything not deferred; land one change at a time on vc's word; hv runs the suites and the cut, no dry run; hv keeps cuts, tags and pushes. (edited)
 
 ## Decisions
 
 - hv, 14 Sep: every hv inbox and whiteboard item comes to vc for review and closeout; cc takes its instructions from vc. (edited)
 - vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails. (edited)
-- hv, 27 Oct: 0118 rides the first release after devbin 0.1.16 is vendored; it moves app-verify into menuz build, adds SHA256SUMS on every release, and takes devbin's post-cut step changes. (edited)
 
 ---
 
