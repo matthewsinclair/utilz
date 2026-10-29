@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-28 19:56Z
+heartbeat_at: 2026-10-29 06:02Z
 status: active
-focus: "HOLD: 0125's heavy queued for molt-vc's GO; screenshot to hv before landing."
+focus: "HOLD: 2.14.6 (0125 at 457df766) waits on hv's suites, About check and cut; no push."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- 0125 (Menuz About to Gtools' shape, ic): heavy 01M61KK6G50JMMTY7W9GVMKC4C queued for molt-vc's GO; screenshot to hv before the landing word. (edited)
+_(none)_
 
 ## TODO
 
