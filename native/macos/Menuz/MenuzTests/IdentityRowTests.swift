@@ -67,16 +67,21 @@ struct IdentityRowTests {
     defer { try? FileManager.default.removeItem(at: base) }
     let contents = base.appendingPathComponent("Stamped.bundle/Contents")
     try FileManager.default.createDirectory(at: contents, withIntermediateDirectories: true)
+    let commit = "3e731d3a"
+    let tree = "2c37f3f5cb9fd8e79fbe283326673ff7ebf2d692"
     let info: [String: Any] = [
-      "CFBundleShortVersionString": "0.4.0", "CFBundleVersion": "7", "MenuzCommit": "3e731d3a",
-      "MenuzSourceTree": "4f2c9a10-dirty", "MenuzKind": "Release",
+      "CFBundleShortVersionString": "0.4.0", "CFBundleVersion": "7", "MenuzCommit": commit,
+      "MenuzSourceTree": tree + "-dirty", "MenuzKind": "Release",
     ]
     let plist = try PropertyListSerialization.data(fromPropertyList: info, format: .xml, options: 0)
     try plist.write(to: contents.appendingPathComponent("Info.plist"))
     let stamped = try #require(Bundle(url: contents.deletingLastPathComponent()))
     #expect(MenuzMasthead.value("commit", bundle: stamped, menu: nil) == "dirty-3e731d3a")
     #expect(MenuzMasthead.value("app", bundle: stamped, menu: nil) == "0.4.0 (build 7, 3e731d3a)")
-    #expect(MenuzMasthead.value("tree", bundle: stamped, menu: nil) == "4f2c9a10-dirty")
+    #expect(
+      MenuzMasthead.value("tree", bundle: stamped, menu: nil)
+        == String(tree.prefix(commit.count)) + "-dirty",
+      "the tree is the stamp's hash at the commit's length, its -dirty kept")
     #expect(MenuzMasthead.value("kind", bundle: stamped, menu: nil) == "dev")
     let home = NSHomeDirectory() + "/.config/menuz/menuz.yaml"
     #expect(MenuzMasthead.value("menu", bundle: stamped, menu: home) == "~/.config/menuz/menuz.yaml")

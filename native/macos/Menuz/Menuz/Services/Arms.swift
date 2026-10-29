@@ -188,9 +188,9 @@ extension Bundle {
     stamp("MenuzKind")
   }
 
-  /// The source tree stamp, as the About page's `{tree}` reads it (issue
-  /// 0125).
+  /// The source tree stamp, as the About page's `{tree}` shows it (issues
+  /// 0125 and 0127).
   var menuzSourceTree: String? {
-    stamp("MenuzSourceTree")
+    Identity.tree(stamp("MenuzSourceTree"), commit: stamp("MenuzCommit"))
   }
 }
