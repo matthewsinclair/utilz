@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8cce9a6c-4b91-4d7e-b88e-3dc442a431e7
-heartbeat_at: 2026-10-30 13:25Z
+heartbeat_at: 2026-10-30 16:13Z
 status: active
-focus: "Woken by hv (30 Oct): inbox empty, nothing claimed; day plan to hv; start nothing until hv's instructions."
+focus: "Folded for hv's estate-wide compact (30 Oct): nothing claimed or in flight; holding for hv's or intent-vc's word"
 claims: []
 ---
 
@@ -25,10 +25,7 @@ _(none)_
 
 ## Watch-outs
 
-- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file; every run books through molt-vc's slots and runs only on its GO. (edited)
-- While kovacs-sysadm runs, every kovacs read or change goes through it; ssh only when it is not running; never sudo in a probe. (edited)
-- Commit exactly the wrote: paths a verb prints, never re-rendered:; read live messages from intent wb show dc --json. (edited)
-- A plain utilz on PATH may be brew's; call the tree's bin/utilz and log its version. (edited)
+- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. (edited)
 
 ## Decisions
 

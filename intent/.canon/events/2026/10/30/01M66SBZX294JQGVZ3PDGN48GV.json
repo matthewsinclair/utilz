@@ -1,0 +1,16 @@
+{
+  "id": "01M66SBZX294JQGVZ3PDGN48GV",
+  "ts": "2026-10-30T16:13:00.194Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file."
+  }
+}
