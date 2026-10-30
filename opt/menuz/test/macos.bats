@@ -32,9 +32,11 @@ setup_file() {
   SYSBIN="$BATS_FILE_TMPDIR/sysbin"
   mkdir -p "$SYSBIN"
   local dir f
+  # First link of a name wins. Where /bin is /usr/bin each name comes up
+  # twice, and -e is false for a dangling link, so -L too (issue 0129).
   for dir in /usr/bin /bin; do
     for f in "$dir"/*; do
-      [ -e "$SYSBIN/${f##*/}" ] || ln -s "$f" "$SYSBIN/${f##*/}"
+      [ -e "$SYSBIN/${f##*/}" ] || [ -L "$SYSBIN/${f##*/}" ] || ln -s "$f" "$SYSBIN/${f##*/}"
     done
   done
   rm -f "$SYSBIN/rsvg-convert"

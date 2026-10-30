@@ -1,0 +1,15 @@
+{
+  "id": "01M676C9QY61ASR8HH228ZRTMX",
+  "ts": "2026-10-30T20:00:21.759Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0129"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "menuz's macos.bats fails setup_file on ubuntu-26.04, whose /usr/bin holds a dangling link, so CI's Ubuntu leg is red"
+  }
+}
