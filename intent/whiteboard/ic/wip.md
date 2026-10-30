@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 504fd0f0-4efd-4695-af86-d22bb3657582
-heartbeat_at: 2026-10-30 13:25Z
+heartbeat_at: 2026-10-30 16:14Z
 status: active
-focus: "Released on hv's hard close (29 Oct): 0118 and 0126 closed and released in 2.14.7; todo 13 still triggers 0114"
+focus: "Folded for hv's estate-wide compact (30 Oct): nothing in flight; holding for intent-vc's word; 0114 open under vc's hold 24; todo 13 watches arca_swift's tag"
 claims: []
 ---
 

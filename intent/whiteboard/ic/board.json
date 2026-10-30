@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "504fd0f0-4efd-4695-af86-d22bb3657582",
-    "heartbeat_at": "2026-10-30T13:25:36.060Z",
+    "heartbeat_at": "2026-10-30T16:14:23.764Z",
     "status": "active",
-    "focus": "Released on hv's hard close (29 Oct): 0118 and 0126 closed and released in 2.14.7; todo 13 still triggers 0114",
+    "focus": "Folded for hv's estate-wide compact (30 Oct): nothing in flight; holding for intent-vc's word; 0114 open under vc's hold 24; todo 13 watches arca_swift's tag",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -2392,6 +2392,16 @@
       "id": "01M646RFW25E7Y3XEGB550Y6RE",
       "sender": "vc",
       "handled_at": "2026-10-29T19:54:28.543Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHR",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:14:23.622Z"
+    },
+    {
+      "id": "01M66HCATV8C77HFDRDJZT3QV4",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:14:23.622Z"
     }
   ]
 }
