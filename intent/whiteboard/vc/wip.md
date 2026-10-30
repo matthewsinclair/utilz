@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 13:53Z
+heartbeat_at: 2026-10-30 16:16Z
 status: active
-focus: "30 Oct: intent-vc has the pen (decision 73); Utilz's turn done, records only; hold 24 parks Utilz's open items for hv's return"
+focus: "30 Oct: folded for hv's estate-wide compact; intent-vc has the pen (decision 73); hold 24 parks Utilz's open items for hv"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 11 spent messages of 22 to 28 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear).
+- Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. dc's census of the Python outside its scope (at 3e3daeff, sent on hv's word, checked by vc): one-liners in prez acceptance.sh:137,143, todo.bats:88, arngz acceptance.sh:69,81 and menuz watcher-handrun.sh:52; a fontTools remedy at theme.rs:293 (test :795); docs that teach Python at developer-guide.md:604-660 and help/utilz.md:419-424; ensure_venv cited at prez/prez:15 and prez/README.md:36. Inside its scope but unnamed: AT14's python3 -m venv at install_guards.bats:206,218. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 11 spent messages of 22 to 28 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear). (edited)
 
 ## Watch-outs
 

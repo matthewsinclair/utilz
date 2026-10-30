@@ -1,0 +1,20 @@
+{
+  "id": "01M66SFSY6306F6AFGKGB2RQ50",
+  "ts": "2026-10-30T16:15:05.158Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHAIN START: vc's localfold for hv's estate-wide compact, on intent-vc's FLEET FOLD (hv's word, relayed by intent-vc at 16:07:22Z by its date -u). Until CHAIN END, vc commits only its own board (handled sent messages archived; hold 24's ST0029 line gains dc's Python census, checked by vc; focus) and intent/wip.md (DOING and TODO, the parked list once). Nothing pushed.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}

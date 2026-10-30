@@ -1,0 +1,20 @@
+{
+  "id": "01M66SJ4XMTEVM0JDQFMEZW02F",
+  "ts": "2026-10-30T16:16:21.940Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHAIN END: vc's localfold is this commit: its board (7 handled sent messages archived, 2 to cc, 2 to dc and 3 to ic, none to hv; hold 24's ST0029 line carries dc's Python census; focus) and intent/wip.md (DOING and TODO, the parked list once). Nothing pushed. vc holds for hv's compact.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
