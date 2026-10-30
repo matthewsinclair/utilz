@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8cce9a6c-4b91-4d7e-b88e-3dc442a431e7
-heartbeat_at: 2026-10-30 16:35Z
+heartbeat_at: 2026-10-30 18:23Z
 status: active
-focus: "Holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word (30 Oct); nothing claimed or in flight"
+focus: "Marked to market (30 Oct): landed: board commits only (e42cbc26, a4722c7a, 68d6516e); open: nothing claimed or in flight; parked: dc's Python census, in vc's hold 24 with ST0029; no banks; holding until hv's next word"
 claims: []
 ---
 
