@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 18:23Z
+heartbeat_at: 2026-10-30 19:08Z
 status: active
-focus: "Marked to market (30 Oct): all of cc's work is on main; open: nothing (no claim, worktree, stash or bank); parked: nothing of cc's (Utilz's parked items sit in vc's hold 24); holding for hv's next word"
+focus: "Localfolded for hv's compact (30 Oct): all of cc's work is on main, and nothing of cc's is open, parked or banked; no test or build; holding for hv's /compact, then for hv's next word"
 claims: []
 ---
 
