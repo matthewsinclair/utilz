@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 21:36Z
-status: active
-focus: "30 Oct: folded for hv's compact; 2.14.8 released at f2021ddc with 0128 and 0129, its tag CI green (hv: "It's done."); intent/wip.md waits for hv's word on the release's bookkeeping; hold 24 parks 0114, the macOS CI gap and hv's rulings"
+heartbeat_at: 2026-10-30 22:46Z
+status: paused
+focus: "30 Oct: closed on hv's word; 2.14.8 released at f2021ddc with 0128 and 0129; 0130 (690d505d, macOS CI's bash 5) on main, its proof hv's push and dispatch next time; every machine on brew's utilz 2.14.8, with Menuz.app 0.4.9 build 2416 on both Macs; hold 24 parks 0114 and hv's rulings"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. dc's census of the Python outside its scope (at 3e3daeff, sent on hv's word, checked by vc): one-liners in prez acceptance.sh:137,143, todo.bats:88, arngz acceptance.sh:69,81 and menuz watcher-handrun.sh:52; a fontTools remedy at theme.rs:293 (test :795); docs that teach Python at developer-guide.md:604-660 and help/utilz.md:419-424; ensure_venv cited at prez/prez:15 and prez/README.md:36. Inside its scope but unnamed: AT14's python3 -m venv at install_guards.bats:206,218. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 15 spent messages of 22 to 30 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear). (6) menuz's macos.bats on macOS CI: its 13 tests skip there ("devbin needs bash 5 and none is on PATH"), because tests.yml's macOS job installs no bash 5 (its brew install line, :134); so at 2.14.7's tag run 40935690642 and at 878994e8's dispatch run 41120955230; they run on Ubuntu (vc's rec: add bash to that brew install, XS). (edited)
+- Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. dc's census of the Python outside its scope (at 3e3daeff, sent on hv's word, checked by vc): one-liners in prez acceptance.sh:137,143, todo.bats:88, arngz acceptance.sh:69,81 and menuz watcher-handrun.sh:52; a fontTools remedy at theme.rs:293 (test :795); docs that teach Python at developer-guide.md:604-660 and help/utilz.md:419-424; ensure_venv cited at prez/prez:15 and prez/README.md:36. Inside its scope but unnamed: AT14's python3 -m venv at install_guards.bats:206,218. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 15 spent messages of 22 to 30 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear). (edited)
 
 ## Watch-outs
 
