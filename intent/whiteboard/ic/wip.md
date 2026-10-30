@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 504fd0f0-4efd-4695-af86-d22bb3657582
-heartbeat_at: 2026-10-30 16:36Z
+heartbeat_at: 2026-10-30 18:24Z
 status: active
-focus: "Holding on vc's hold 24 (30 Oct): no new work until hv's next word, and nothing from intent-vc's WINDOW START to its WINDOW END; 0114 OPEN (body leaned at ca6332f3); todo 13 watches arca_swift's tag"
+focus: "Mark to market (30 Oct): landed 0114's body (28cd2e5c, ca6332f3); open and parked: 0114, under vc's hold 24, blocked on arca_swift 0003, which no tag carries; todo 13 watches the tag; no claims, banks or uncommitted work; holding"
 claims: []
 ---
 
