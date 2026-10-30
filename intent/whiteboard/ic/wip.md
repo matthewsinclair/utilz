@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 504fd0f0-4efd-4695-af86-d22bb3657582
-heartbeat_at: 2026-10-30 21:44Z
-status: active
-focus: "Back from hv's compact after the fold (30 Oct): holding; hold 24 (6), bash for macOS CI, waits for hv's pick, and ic drafts nothing before it; nothing of ic's off main; parked: 0114, under hold 24, blocked on arca_swift 0003, which no tag carries (newest still 0.2.1); todo 13 watches the tag"
+heartbeat_at: 2026-10-30 22:38Z
+status: paused
+focus: "Closed for the night (30 Oct, on hv's word): 0130 landed at 690d505d, giving macos.bats a bash 5 kept off PATH on macOS CI (hold 24 (6), option (b)); its proof, hv's push and a dispatch, comes next time; nothing of ic's off main; parked: 0114, under hold 24, blocked on arca_swift 0003, which no tag carries (newest still 0.2.1); todo 13 watches the tag"
 claims: []
 ---
 
