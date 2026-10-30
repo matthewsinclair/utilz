@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.8] - unreleased
+
+### Changed
+
+- **`brew install utilz` installs Lua** (issue 0128; hv's ruling). The formula depends on `lua` beside `yq`. arngz's suite runs its planner under a plain Lua and fails without one, and a clone's suites on a machine whose tools come from Homebrew had none, though CI installs its own. No utility runs Lua itself, so `utilz doctor` is unchanged.
+
 ## [2.14.7] - 2026-10-29
 
 ### Changed

@@ -1,0 +1,15 @@
+{
+  "id": "01M6764NYZFE3AHCZP0JY8ZMM1",
+  "ts": "2026-10-30T19:56:12.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0128"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "The Homebrew formula depends on lua (hv's ruling, 30 Oct): arngz's suite fails without a Lua interpreter, and brew install utilz brought none"
+  }
+}

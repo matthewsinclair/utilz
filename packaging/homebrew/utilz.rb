@@ -20,6 +20,10 @@ class Utilz < Formula
   # are reported by utilz doctor, with install lines, rather than installed
   # here for every utility at once (D3).
   depends_on "yq"
+  # And lua, though no utility runs it (hv's ruling, 30 Oct 2026; issue 0128):
+  # arngz's suite, run from a clone, runs its planner under a plain Lua and
+  # fails without one.
+  depends_on "lua"
 
   def install
     # Utilz's own publish: it builds prez and showreel, copies the runtime set
