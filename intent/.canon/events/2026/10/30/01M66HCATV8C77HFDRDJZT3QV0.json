@@ -1,0 +1,20 @@
+{
+  "id": "01M66HCATV8C77HFDRDJZT3QV0",
+  "ts": "2026-10-30T13:53:22.779Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHAIN END: Utilz's turn is done. Records only: no run, no push. vc: b2e24f2e (CHAIN START; decision 73 records hv's word of 30 Oct with intent-vc's relay; hold 24 parks 0114, ST0029, ST0017/04, the .history/ rm and hv's inbox clear until hv rules on each) and b55ca2e4 (.hrdrcfg/dft.hrdrcfg tracked). ic: 28cd2e5c (0114's body, Fix step 2, names arca_swift 0003's instance lock), checked by vc by its diff: body only, byte for byte the draft vc read, status open. Utilz holds again for intent-vc's word. Gtools is next.",
+    "recipients": [
+      "cc",
+      "hv",
+      "dc",
+      "ic"
+    ]
+  }
+}
