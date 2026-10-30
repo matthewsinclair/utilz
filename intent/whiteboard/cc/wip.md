@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 16:10Z
+heartbeat_at: 2026-10-30 16:33Z
 status: active
-focus: "Folded for hv's estate-wide compact (30 Oct): nothing in flight; holding for intent-vc's word"
+focus: "Picked up after hv's estate-wide compact (30 Oct): nothing in flight; holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word"
 claims: []
 ---
 
