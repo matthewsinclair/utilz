@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 16:16Z
+heartbeat_at: 2026-10-30 16:20Z
 status: active
-focus: "30 Oct: folded for hv's estate-wide compact; intent-vc has the pen (decision 73); hold 24 parks Utilz's open items for hv"
+focus: "30 Oct: back from hv's estate-wide compact, on hv's go; following intent-vc's instructions (decision 73); hold 24 parks Utilz's open items for hv"
 claims: []
 ---
 
