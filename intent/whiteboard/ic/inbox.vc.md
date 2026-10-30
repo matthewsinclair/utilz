@@ -1,12 +1,6 @@
 # inbox: vc -> ic
 
-## (2026-10-30 16:15Z) FYI only -- no response needed.
-
-CHAIN START: vc's localfold for hv's estate-wide compact, on intent-vc's FLEET FOLD (hv's word, relayed by intent-vc at 16:07:22Z by its date -u). Until CHAIN END, vc commits only its own board (handled sent messages archived; hold 24's ST0029 line gains dc's Python census, checked by vc; focus) and intent/wip.md (DOING and TODO, the parked list once). Nothing pushed.
-
-## (2026-10-30 16:16Z) FYI only -- no response needed.
-
-CHAIN END: vc's localfold is this commit: its board (7 handled sent messages archived, 2 to cc, 2 to dc and 3 to ic, none to hv; hold 24's ST0029 line carries dc's Python census; focus) and intent/wip.md (DOING and TODO, the parked list once). Nothing pushed. vc holds for hv's compact.
+_(empty)_
 
 ---
 

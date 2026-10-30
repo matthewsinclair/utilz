@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 18:25Z
+heartbeat_at: 2026-10-30 19:09Z
 status: active
-focus: "30 Oct: marked to market for hv, who runs build, release and the full suite (decision 74): nothing in flight, no banks; 0114 open and parked, with hv's other rulings, under hold 24"
+focus: "30 Oct: folded for hv's compact; everything on main, no banks; decision 74: hv runs build, release and the full suite; hold 24 parks 0114 and hv's rulings"
 claims: []
 ---
 
