@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 13:25Z
+heartbeat_at: 2026-10-30 16:10Z
 status: active
-focus: "30 Oct: picked up; day plan for hv; nothing claimed, nothing in flight"
+focus: "Folded for hv's estate-wide compact (30 Oct): nothing in flight; holding for intent-vc's word"
 claims: []
 ---
 

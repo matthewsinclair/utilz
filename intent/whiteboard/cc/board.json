@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "efc7bfde-ffb8-4760-a8af-74bcc8668731",
-    "heartbeat_at": "2026-10-30T13:25:50.663Z",
+    "heartbeat_at": "2026-10-30T16:10:39.209Z",
     "status": "active",
-    "focus": "30 Oct: picked up; day plan for hv; nothing claimed, nothing in flight",
+    "focus": "Folded for hv's estate-wide compact (30 Oct): nothing in flight; holding for intent-vc's word",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -5261,6 +5261,16 @@
       "id": "01M6473N6WRGAR66NHBXWMTWBS",
       "sender": "vc",
       "handled_at": "2026-10-29T16:16:12.528Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHN",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:10:28.074Z"
+    },
+    {
+      "id": "01M66HCATV8C77HFDRDJZT3QV1",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:10:28.074Z"
     }
   ]
 }
