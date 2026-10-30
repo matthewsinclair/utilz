@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 19:09Z
+heartbeat_at: 2026-10-30 19:35Z
 status: active
-focus: "30 Oct: folded for hv's compact; everything on main, no banks; decision 74: hv runs build, release and the full suite; hold 24 parks 0114 and hv's rulings"
+focus: "30 Oct: back from hv's compact; holding for instructions; intent-vc's order: each pickup commits in chain order cc, dc, ic, then vc; decision 74: hv runs build, release and the full suite; hold 24 parks 0114 and hv's rulings"
 claims: []
 ---
 
