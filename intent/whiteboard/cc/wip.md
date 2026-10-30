@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 21:32Z
+heartbeat_at: 2026-10-30 21:43Z
 status: active
-focus: "Localfolded for hv's compact (30 Oct): all of cc's work is on main, and nothing of cc's is open, parked or banked; no test or build; holding for hv's /compact, then for hv's next word"
+focus: "Back from hv's second compact (30 Oct): all of cc's work is on main, and nothing of cc's is open, parked or banked; holding for instructions; no test or build"
 claims: []
 ---
 
