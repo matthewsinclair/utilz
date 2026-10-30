@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 16:33Z
+heartbeat_at: 2026-10-30 18:23Z
 status: active
-focus: "Picked up after hv's estate-wide compact (30 Oct): nothing in flight; holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word"
+focus: "Marked to market (30 Oct): all of cc's work is on main; open: nothing (no claim, worktree, stash or bank); parked: nothing of cc's (Utilz's parked items sit in vc's hold 24); holding for hv's next word"
 claims: []
 ---
 

@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "efc7bfde-ffb8-4760-a8af-74bcc8668731",
-    "heartbeat_at": "2026-10-30T16:33:14.525Z",
+    "heartbeat_at": "2026-10-30T18:23:10.692Z",
     "status": "active",
-    "focus": "Picked up after hv's estate-wide compact (30 Oct): nothing in flight; holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word",
+    "focus": "Marked to market (30 Oct): all of cc's work is on main; open: nothing (no claim, worktree, stash or bank); parked: nothing of cc's (Utilz's parked items sit in vc's hold 24); holding for hv's next word",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:17Z",
@@ -5271,6 +5271,16 @@
       "id": "01M66HCATV8C77HFDRDJZT3QV1",
       "sender": "vc",
       "handled_at": "2026-10-30T16:10:28.074Z"
+    },
+    {
+      "id": "01M66SFSY6306F6AFGKGB2RQ51",
+      "sender": "vc",
+      "handled_at": "2026-10-30T18:23:10.865Z"
+    },
+    {
+      "id": "01M66SJ4XMTEVM0JDQFMEZW02G",
+      "sender": "vc",
+      "handled_at": "2026-10-30T18:23:10.865Z"
     }
   ]
 }
