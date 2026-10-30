@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "00256155-6cf7-47de-b9c4-92f30f8a4428",
-    "heartbeat_at": "2026-10-30T16:20:54.827Z",
+    "heartbeat_at": "2026-10-30T18:25:10.239Z",
     "status": "active",
-    "focus": "30 Oct: back from hv's estate-wide compact, on hv's go; following intent-vc's instructions (decision 73); hold 24 parks Utilz's open items for hv",
+    "focus": "30 Oct: marked to market for hv, who runs build, release and the full suite (decision 74): nothing in flight, no banks; 0114 open and parked, with hv's other rulings, under hold 24",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2270,6 +2270,14 @@
       "state": "live",
       "recorded_at": "2026-10-30T13:50:07.707Z",
       "edited_at": "2026-10-30T16:15:05.900Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 74,
+      "text": "hv, 30 Oct, verbatim in intent-vc's session, relayed in its WINDOW START of 18:13Z by its date -u: \"Ok, you've gone down a yak shaving rabbit hole again. I'm take control of the build and release process. I want every Cladue to mark-to-market and check in everthing to head on main and then I will run the full test suite in each case manually.\" intent-vc's terms: hv controls build and release, and no Claude runs a test or a build, so no booking under watch-out 17 or decision 67 opens; each node marks its true state on its board, and vc in intent/wip.md; everything is checked in to HEAD on main by literal path through the gate, in chain order; a bank outside the tree stays banked, named, for hv's ruling; nothing is pushed.",
+      "state": "live",
+      "recorded_at": "2026-10-30T18:25:04.403Z"
     }
   ],
   "sent": [

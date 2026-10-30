@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
-heartbeat_at: 2026-10-30 16:20Z
+heartbeat_at: 2026-10-30 18:25Z
 status: active
-focus: "30 Oct: back from hv's estate-wide compact, on hv's go; following intent-vc's instructions (decision 73); hold 24 parks Utilz's open items for hv"
+focus: "30 Oct: marked to market for hv, who runs build, release and the full suite (decision 74): nothing in flight, no banks; 0114 open and parked, with hv's other rulings, under hold 24"
 claims: []
 ---
 
@@ -35,6 +35,7 @@ _(none)_
 - hv, 14 Sep: every hv inbox and whiteboard item comes to vc for review and closeout; cc takes its instructions from vc. (edited)
 - vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails. (edited)
 - hv, 30 Oct, first-hand in vc's session, with no stamp shown to vc. (1) Read between vc's clock reads of 13:25Z and 13:30Z: "I am putting intent-vc in charge of proceedings. Please follow instructions." (2) Read between vc's clock reads of 13:30Z and 13:33Z: "Ok, your job is to work with intent-vc, one project at a time, and clear out any remaining issues. We are not adding new functionality. We are not going looking for new things to do, we are closing issues and steel threads as and when we can. In this order: intent, utilz, gtools, laksa, comflab. Confalb is P4. Laksa is P3. Utils and Gtools are P2. Intent is P1. Devbin and Molt are already done and dusted, so you can leave those ones alone. If you find something other than a bug or an issue that can be fixed relatively easily and simply, or if something needs net new code, then just park it until I get back." Relayed by intent-vc, hv verbatim in its session, received 13:27Z by its date -u: "Ok, I'm putting you in charge of the whole fleet here tonight. You have the oen [pen]. Please let everyone else know and to hold for instructions." intent-vc took the estate desk at 13:34:43Z by its clock. Tonight every booking and every FOR hv: goes to intent-vc, and any hold naming molt-vc reads as intent-vc. intent-vc's order adds: one release per project, cut last, no patch releases; every cut and push is hv's, at hv's terminal. Peers read this decision at pickup; cc, dc and ic record no copy.
+- hv, 30 Oct, verbatim in intent-vc's session, relayed in its WINDOW START of 18:13Z by its date -u: "Ok, you've gone down a yak shaving rabbit hole again. I'm take control of the build and release process. I want every Cladue to mark-to-market and check in everthing to head on main and then I will run the full test suite in each case manually." intent-vc's terms: hv controls build and release, and no Claude runs a test or a build, so no booking under watch-out 17 or decision 67 opens; each node marks its true state on its board, and vc in intent/wip.md; everything is checked in to HEAD on main by literal path through the gate, in chain order; a bank outside the tree stays banked, named, for hv's ruling; nothing is pushed.
 
 ---
 

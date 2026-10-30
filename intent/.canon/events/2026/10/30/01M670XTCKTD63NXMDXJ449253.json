@@ -1,0 +1,15 @@
+{
+  "id": "01M670XTCKTD63NXMDXJ449253",
+  "ts": "2026-10-30T18:25:04.403Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 30 Oct, verbatim in intent-vc's session, relayed in its WINDOW START of 18:13Z by its date -u: \"Ok, you've gone down a yak shaving rabbit hole again. I'm take control of the build and release process. I want every Cladue to mark-to-market and check in everthing to head on main and then I will run the full test suite in each case manually.\" intent-vc's terms: hv controls build and release, and no Claude runs a test or a build, so no booking under watch-out 17 or decision 67 opens; each node marks its true state on its board, and vc in intent/wip.md; everything is checked in to HEAD on main by literal path through the gate, in chain order; a bank outside the tree stays banked, named, for hv's ruling; nothing is pushed."
+  }
+}
