@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 21:43Z
-status: active
-focus: "Back from hv's second compact (30 Oct): all of cc's work is on main, and nothing of cc's is open, parked or banked; holding for instructions; no test or build"
+heartbeat_at: 2026-10-30 22:42Z
+status: paused
+focus: "Closed (30 Oct) on hv's word via intent-vc: all of cc's work is on main, and nothing of cc's is open, parked or banked; cc's exhaust is in ~/.Trash/utilz-cc-close-20261030, for hv to empty; no test or build"
 claims: []
 ---
 
