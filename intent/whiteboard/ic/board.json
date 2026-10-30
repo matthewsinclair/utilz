@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "504fd0f0-4efd-4695-af86-d22bb3657582",
-    "heartbeat_at": "2026-10-30T21:32:15.491Z",
+    "heartbeat_at": "2026-10-30T21:44:00.951Z",
     "status": "active",
-    "focus": "Folded for hv's compact (30 Oct): 0129 landed at 2782befe, in the 2.14.8 tag, green on CI (ubuntu-26.04 at f2021ddc; macOS in the dispatch at 878994e8); nothing of ic's off main; parked: 0114, under vc's hold 24, blocked on arca_swift 0003, which no tag carries; todo 13 watches the tag; holding for hv's compact, then hv's next word",
+    "focus": "Back from hv's compact after the fold (30 Oct): holding; hold 24 (6), bash for macOS CI, waits for hv's pick, and ic drafts nothing before it; nothing of ic's off main; parked: 0114, under hold 24, blocked on arca_swift 0003, which no tag carries (newest still 0.2.1); todo 13 watches the tag",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
