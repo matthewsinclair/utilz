@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 504fd0f0-4efd-4695-af86-d22bb3657582
-heartbeat_at: 2026-10-30 19:09Z
+heartbeat_at: 2026-10-30 19:35Z
 status: active
-focus: "Folded for hv's compact (30 Oct): nothing of ic's off main; open and parked: 0114, under vc's hold 24, blocked on arca_swift 0003, which no tag carries; todo 13 watches the tag; holding for hv's compact, then hv's next word"
+focus: "Back from hv's compact (30 Oct): holding for instructions; open and parked: 0114, under vc's hold 24, blocked on arca_swift 0003, which no tag carries; todo 13 watches the tag; nothing of ic's off main"
 claims: []
 ---
 
