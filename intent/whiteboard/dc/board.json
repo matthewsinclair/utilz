@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "8cce9a6c-4b91-4d7e-b88e-3dc442a431e7",
-    "heartbeat_at": "2026-10-30T16:13:00.798Z",
+    "heartbeat_at": "2026-10-30T16:35:20.844Z",
     "status": "active",
-    "focus": "Folded for hv's estate-wide compact (30 Oct): nothing claimed or in flight; holding for hv's or intent-vc's word",
+    "focus": "Holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word (30 Oct); nothing claimed or in flight",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -3579,6 +3579,16 @@
       "id": "01M66HCATV8C77HFDRDJZT3QV3",
       "sender": "vc",
       "handled_at": "2026-10-30T16:12:59.900Z"
+    },
+    {
+      "id": "01M66SFSY6306F6AFGKGB2RQ53",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:35:20.997Z"
+    },
+    {
+      "id": "01M66SJ4XMTEVM0JDQFMEZW02J",
+      "sender": "vc",
+      "handled_at": "2026-10-30T16:35:20.997Z"
     }
   ]
 }

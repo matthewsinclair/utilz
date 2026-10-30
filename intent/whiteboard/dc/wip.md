@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8cce9a6c-4b91-4d7e-b88e-3dc442a431e7
-heartbeat_at: 2026-10-30 16:13Z
+heartbeat_at: 2026-10-30 16:35Z
 status: active
-focus: "Folded for hv's estate-wide compact (30 Oct): nothing claimed or in flight; holding for hv's or intent-vc's word"
+focus: "Holding every run, commit and store write until intent-vc's WINDOW END, then until hv's next word (30 Oct); nothing claimed or in flight"
 claims: []
 ---
 
