@@ -2253,6 +2253,22 @@
       "archived_at": "2026-10-29T13:30:28.250Z",
       "recorded_at": "2026-10-28T18:02:56.209Z",
       "edited_at": "2026-10-28T19:56:43.547Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 73,
+      "text": "hv, 30 Oct, first-hand in vc's session, with no stamp shown to vc. (1) Read between vc's clock reads of 13:25Z and 13:30Z: \"I am putting intent-vc in charge of proceedings. Please follow instructions.\" (2) Read between vc's clock reads of 13:30Z and 13:33Z: \"Ok, your job is to work with intent-vc, one project at a time, and clear out any remaining issues. We are not adding new functionality. We are not going looking for new things to do, we are closing issues and steel threads as and when we can. In this order: intent, utilz, gtools, laksa, comflab. Confalb is P4. Laksa is P3. Utils and Gtools are P2. Intent is P1. Devbin and Molt are already done and dusted, so you can leave those ones alone. If you find something other than a bug or an issue that can be fixed relatively easily and simply, or if something needs net new code, then just park it until I get back.\" Relayed by intent-vc, hv verbatim in its session, received 13:27Z by its date -u: \"Ok, I'm putting you in charge of the whole fleet here tonight. You have the oen [pen]. Please let everyone else know and to hold for instructions.\" intent-vc took the estate desk at 13:34:43Z by its clock. Tonight every booking and every FOR hv: goes to intent-vc, and any hold naming molt-vc reads as intent-vc. intent-vc's order adds: one release per project, cut last, no patch releases; every cut and push is hv's, at hv's terminal. Peers read this decision at pickup; cc, dc and ic record no copy.",
+      "state": "live",
+      "recorded_at": "2026-10-30T13:49:53.531Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 24,
+      "text": "Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 11 spent messages of 22 to 28 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear).",
+      "state": "live",
+      "recorded_at": "2026-10-30T13:50:07.707Z"
     }
   ],
   "sent": [
@@ -7131,6 +7147,34 @@
       "fyi": false,
       "recorded_at": "2026-10-29T16:15:23.868Z",
       "archived_at": "2026-10-29T19:30:57.573Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHN",
+      "recipient": "cc",
+      "body": "CHAIN START: Utilz's turn, on intent-vc's GO after its 13:46:29Z clock read. Records only, no runs. vc records hv's word of 30 Oct as one decision and the park list as one hold, and tracks .hrdrcfg/dft.hrdrcfg in its own commit. ic sets 0114's body, Fix step 2, to arca_swift 0003's instance lock, read by vc before the write and checked by its diff after; 0114 stays open. Each node commits exactly its wrote: paths, by literal path, one commit at a time, on vc's word. cc and dc have nothing to do, and record no copy of hv's word: peers read vc's decision at pickup. No push. vc sends CHAIN END.",
+      "fyi": true,
+      "recorded_at": "2026-10-30T13:49:49.029Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHP",
+      "recipient": "hv",
+      "body": "CHAIN START: Utilz's turn, on intent-vc's GO after its 13:46:29Z clock read. Records only, no runs. vc records hv's word of 30 Oct as one decision and the park list as one hold, and tracks .hrdrcfg/dft.hrdrcfg in its own commit. ic sets 0114's body, Fix step 2, to arca_swift 0003's instance lock, read by vc before the write and checked by its diff after; 0114 stays open. Each node commits exactly its wrote: paths, by literal path, one commit at a time, on vc's word. cc and dc have nothing to do, and record no copy of hv's word: peers read vc's decision at pickup. No push. vc sends CHAIN END.",
+      "fyi": true,
+      "recorded_at": "2026-10-30T13:49:49.029Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHQ",
+      "recipient": "dc",
+      "body": "CHAIN START: Utilz's turn, on intent-vc's GO after its 13:46:29Z clock read. Records only, no runs. vc records hv's word of 30 Oct as one decision and the park list as one hold, and tracks .hrdrcfg/dft.hrdrcfg in its own commit. ic sets 0114's body, Fix step 2, to arca_swift 0003's instance lock, read by vc before the write and checked by its diff after; 0114 stays open. Each node commits exactly its wrote: paths, by literal path, one commit at a time, on vc's word. cc and dc have nothing to do, and record no copy of hv's word: peers read vc's decision at pickup. No push. vc sends CHAIN END.",
+      "fyi": true,
+      "recorded_at": "2026-10-30T13:49:49.029Z"
+    },
+    {
+      "id": "01M66H5T3505ZNWY6ZS82X6BHR",
+      "recipient": "ic",
+      "body": "CHAIN START: Utilz's turn, on intent-vc's GO after its 13:46:29Z clock read. Records only, no runs. vc records hv's word of 30 Oct as one decision and the park list as one hold, and tracks .hrdrcfg/dft.hrdrcfg in its own commit. ic sets 0114's body, Fix step 2, to arca_swift 0003's instance lock, read by vc before the write and checked by its diff after; 0114 stays open. Each node commits exactly its wrote: paths, by literal path, one commit at a time, on vc's word. cc and dc have nothing to do, and record no copy of hv's word: peers read vc's decision at pickup. No push. vc sends CHAIN END.",
+      "fyi": true,
+      "recorded_at": "2026-10-30T13:49:49.029Z"
     }
   ],
   "handled": [

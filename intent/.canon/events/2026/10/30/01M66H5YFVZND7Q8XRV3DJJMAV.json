@@ -1,0 +1,15 @@
+{
+  "id": "01M66H5YFVZND7Q8XRV3DJJMAV",
+  "ts": "2026-10-30T13:49:53.531Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 30 Oct, first-hand in vc's session, with no stamp shown to vc. (1) Read between vc's clock reads of 13:25Z and 13:30Z: \"I am putting intent-vc in charge of proceedings. Please follow instructions.\" (2) Read between vc's clock reads of 13:30Z and 13:33Z: \"Ok, your job is to work with intent-vc, one project at a time, and clear out any remaining issues. We are not adding new functionality. We are not going looking for new things to do, we are closing issues and steel threads as and when we can. In this order: intent, utilz, gtools, laksa, comflab. Confalb is P4. Laksa is P3. Utils and Gtools are P2. Intent is P1. Devbin and Molt are already done and dusted, so you can leave those ones alone. If you find something other than a bug or an issue that can be fixed relatively easily and simply, or if something needs net new code, then just park it until I get back.\" Relayed by intent-vc, hv verbatim in its session, received 13:27Z by its date -u: \"Ok, I'm putting you in charge of the whole fleet here tonight. You have the oen [pen]. Please let everyone else know and to hold for instructions.\" intent-vc took the estate desk at 13:34:43Z by its clock. Tonight every booking and every FOR hv: goes to intent-vc, and any hold naming molt-vc reads as intent-vc. intent-vc's order adds: one release per project, cut last, no patch releases; every cut and push is hv's, at hv's terminal. Peers read this decision at pickup; cc, dc and ic record no copy."
+  }
+}

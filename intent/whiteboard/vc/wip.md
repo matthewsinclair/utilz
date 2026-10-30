@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 11 spent messages of 22 to 28 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear).
 
 ## Watch-outs
 
@@ -34,6 +34,7 @@ _(none)_
 
 - hv, 14 Sep: every hv inbox and whiteboard item comes to vc for review and closeout; cc takes its instructions from vc. (edited)
 - vc, 27 Oct, on hv's no-yak-shaving rule: every booking is the smallest run that proves its change; a mutation only where reading cannot show the check fails. (edited)
+- hv, 30 Oct, first-hand in vc's session, with no stamp shown to vc. (1) Read between vc's clock reads of 13:25Z and 13:30Z: "I am putting intent-vc in charge of proceedings. Please follow instructions." (2) Read between vc's clock reads of 13:30Z and 13:33Z: "Ok, your job is to work with intent-vc, one project at a time, and clear out any remaining issues. We are not adding new functionality. We are not going looking for new things to do, we are closing issues and steel threads as and when we can. In this order: intent, utilz, gtools, laksa, comflab. Confalb is P4. Laksa is P3. Utils and Gtools are P2. Intent is P1. Devbin and Molt are already done and dusted, so you can leave those ones alone. If you find something other than a bug or an issue that can be fixed relatively easily and simply, or if something needs net new code, then just park it until I get back." Relayed by intent-vc, hv verbatim in its session, received 13:27Z by its date -u: "Ok, I'm putting you in charge of the whole fleet here tonight. You have the oen [pen]. Please let everyone else know and to hold for instructions." intent-vc took the estate desk at 13:34:43Z by its clock. Tonight every booking and every FOR hv: goes to intent-vc, and any hold naming molt-vc reads as intent-vc. intent-vc's order adds: one release per project, cut last, no patch releases; every cut and push is hv's, at hv's terminal. Peers read this decision at pickup; cc, dc and ic record no copy.
 
 ---
 

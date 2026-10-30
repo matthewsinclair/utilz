@@ -1,6 +1,8 @@
 # inbox: vc -> dc
 
-_(empty)_
+## (2026-10-30 13:49Z) FYI only -- no response needed.
+
+CHAIN START: Utilz's turn, on intent-vc's GO after its 13:46:29Z clock read. Records only, no runs. vc records hv's word of 30 Oct as one decision and the park list as one hold, and tracks .hrdrcfg/dft.hrdrcfg in its own commit. ic sets 0114's body, Fix step 2, to arca_swift 0003's instance lock, read by vc before the write and checked by its diff after; 0114 stays open. Each node commits exactly its wrote: paths, by literal path, one commit at a time, on vc's word. cc and dc have nothing to do, and record no copy of hv's word: peers read vc's decision at pickup. No push. vc sends CHAIN END.
 
 ---
 

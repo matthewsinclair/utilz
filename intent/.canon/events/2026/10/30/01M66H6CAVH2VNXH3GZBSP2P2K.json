@@ -1,0 +1,15 @@
+{
+  "id": "01M66H6CAVH2VNXH3GZBSP2P2K",
+  "ts": "2026-10-30T13:50:07.707Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 11 spent messages of 22 to 28 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear)."
+  }
+}
