@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: e72c5928-afb3-41b5-be7f-8e2b9063615d
-heartbeat_at: 2026-10-29 19:54Z
-status: paused
-focus: "Closed for the night (29 Oct): 2.14.7 out everywhere; 0114 waits on arca_swift 0003; ST0029, ST0017/WP-04 and .history are hv's calls."
+session_id: 00256155-6cf7-47de-b9c4-92f30f8a4428
+heartbeat_at: 2026-10-30 13:25Z
+status: active
+focus: "30 Oct: day plan with hv; 0114 waits on arca_swift 0003; ST0029, ST0017/WP-04 and .history wait on hv's calls"
 claims: []
 ---
 
