@@ -15,7 +15,9 @@
 # where it is not installed.
 #
 # devbin itself needs bash 5 (it refuses 3.2 by name), so these tests run
-# under the first bash 5 on PATH, linked into the fakes. PATH is otherwise a
+# under UTILZ_TEST_BASH5 if it is bash 5, else the first bash 5 on PATH,
+# linked into the fakes. CI's macOS job sets it to a bash 5 kept off PATH,
+# so the other suites there stay on bash 3.2 (issue 0130). PATH is otherwise a
 # copy of /usr/bin and /bin without rsvg-convert, so "not installed" is real
 # on every machine.
 
@@ -26,7 +28,7 @@ setup_file() {
   BASH5=""
   while IFS= read -r b; do
     if "$b" -c '(( BASH_VERSINFO[0] >= 5 ))' 2>/dev/null; then BASH5="$b"; break; fi
-  done < <(type -ap bash)
+  done < <(printf '%s\n' "${UTILZ_TEST_BASH5:-}"; type -ap bash)
   export BASH5
   export ORIGINAL_PATH_FOR_RSVG="$PATH"
   SYSBIN="$BATS_FILE_TMPDIR/sysbin"

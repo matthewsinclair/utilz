@@ -1,0 +1,15 @@
+{
+  "id": "01M67F6WZFN573ZEK38K663THS",
+  "ts": "2026-10-30T22:34:42.032Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0130"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "macOS CI skips all 13 of menuz's macos.bats tests, because the runner has no bash 5 on PATH for devbin"
+  }
+}

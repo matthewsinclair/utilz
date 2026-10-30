@@ -134,6 +134,11 @@ jobs:
         brew install yq fileicon coreutils unison qpdf poppler lua
         yq --version
         fileicon --version || echo "fileicon installed"
+        # bash 5 for macos.bats (devbin refuses 3.2), unlinked so /usr/bin/env
+        # bash still finds /bin/bash 3.2 for every other suite (issue 0130)
+        brew install bash
+        brew unlink bash
+        echo "UTILZ_TEST_BASH5=$(brew --prefix bash)/bin/bash" >> "$GITHUB_ENV"
 
     - name: Set up Utilz
       run: |
@@ -156,6 +161,7 @@ jobs:
         utilz doctor || echo "Doctor found issues (non-blocking)"
         utilz list
         utilz version
+        echo "bash on PATH: $(command -v bash), $(bash -c 'echo "$BASH_VERSION"')"
 
     - name: Run tests
       run: |
