@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T14:13:44.758Z",
+    "heartbeat_at": "2026-10-31T14:15:30.860Z",
     "status": "active",
-    "focus": "31 Oct: hv's go on hold 24 (decision 79): ST0017/04 cancelled; the .history/ removal refused by the append-only guard and restored, back to hv; ST0029 resumes after the sweep with dc; hv's inbox clear is hv's own command; reviewing dc's ST0031/03 build; ST0031/01 holds for Devbin 0.1.19's sweep (decision 77).",
+    "focus": "31 Oct: folded for hv's second compact (hv's fold order through devbin-vc), then holding for hv's next go through devbin-vc. CI proved 0130 and 0131 at a21dde9c; ST0031/01's design stored, waiting for the 0.1.19 sweep; ST0031/03's design stored and its build banked by dc; hold 24 ruled (decision 79), .history/ back with hv. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2339,6 +2339,14 @@
       "text": "hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 14:12Z: 'Go with your recommendations on hold 24'. (2) ST0029, Retire Python, resumes after Devbin 0.1.19's sweep, owned by dc, widened to dc's census of the Python outside its scope (hold 24's text, archived with this decision, and ~/Devel/scratch/utilz-dc/python-census-20261030.txt), with xtrct's port byte-exact, since it feeds the Talga Rd accounting. (3) ST0017/04 is cancelled, with that reason on it. (4) git rm of the whiteboard's .history/ trees, 48 files, was refused by the pre-commit gate's append-only guard, since Intent's whiteboard protocol keeps .history/ append-only; vc restored all 48 from HEAD with nothing committed, withdraws the recommendation, and puts it back to hv: keep them (vc's rec), or remove them by hand past the gate, which is hv's alone. (5) vc's 15 spent messages in hv's inbox are cleared by hv's own '! intent wb clear vc --node hv', which vc then commits. 0114, hold 24's (1), stays parked on arca_swift's tag (ic's todo 13; intent/wip.md). Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-10-31T14:13:44.478Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 27,
+      "text": "For hv's second compact of 31 Oct (hv's fold order through devbin-vc: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc.",
+      "state": "live",
+      "recorded_at": "2026-10-31T14:15:30.725Z"
     }
   ],
   "sent": [

@@ -1,0 +1,15 @@
+{
+  "id": "01M6951JN5NMBD0XGP2A1XZ1V0",
+  "ts": "2026-10-31T14:15:30.725Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "For hv's second compact of 31 Oct (hv's fold order through devbin-vc: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc."
+  }
+}

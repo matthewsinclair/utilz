@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: d19162d2-e2cb-4e70-b65d-3298846a43b7
-heartbeat_at: 2026-10-31 14:13Z
+heartbeat_at: 2026-10-31 14:15Z
 status: active
-focus: "31 Oct: hv's go on hold 24 (decision 79): ST0017/04 cancelled; the .history/ removal refused by the append-only guard and restored, back to hv; ST0029 resumes after the sweep with dc; hv's inbox clear is hv's own command; reviewing dc's ST0031/03 build; ST0031/01 holds for Devbin 0.1.19's sweep (decision 77)."
+focus: "31 Oct: folded for hv's second compact (hv's fold order through devbin-vc), then holding for hv's next go through devbin-vc. CI proved 0130 and 0131 at a21dde9c; ST0031/01's design stored, waiting for the 0.1.19 sweep; ST0031/03's design stored and its build banked by dc; hold 24 ruled (decision 79), .history/ back with hv. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- For hv's second compact of 31 Oct (hv's fold order through devbin-vc: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc.
 
 ## Watch-outs
 
