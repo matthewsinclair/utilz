@@ -1,0 +1,16 @@
+{
+  "id": "01M693JWCAPMNZ2PYQATHZSQPZ",
+  "ts": "2026-10-31T13:50:00.587Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. One exception, on hv's go for ST0031/03: build_kind in opt/menuz/menuz and its tests in opt/menuz/test/menuz.bats. Every other menuz file stays out."
+  }
+}

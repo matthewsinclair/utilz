@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 13:00Z
+heartbeat_at: 2026-10-31 13:50Z
 status: active
-focus: "31 Oct: holding for the sweep (Devbin ST0011/09, then ST0031/01 on hv's go on devbin's release); ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) lands with the sweep's push; ST0029's Python census kept for hold 24 (2); 0131's exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty; reading ST0031/01 and ST0011/10's sweep to be ready; nothing booked or running"
-claims: []
+focus: "31 Oct: ST0031/03 on hv's go, under utilz-vc's review: menuz's build_kind to read the release stamp, not the tag; its design drafted in scratch first; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1), with ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, in wt-st0031-02) for the sweep's push; ST0029's census kept for hold 24 (2); 0131's exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty; nothing booked or running"
+claims: [ST0031/03]
 ---
 
 # DevX Claude (dc)
@@ -25,7 +25,7 @@ _(none)_
 
 ## Watch-outs
 
-- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. (edited)
+- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. One exception, on hv's go for ST0031/03: build_kind in opt/menuz/menuz and its tests in opt/menuz/test/menuz.bats. Every other menuz file stays out. (edited)
 
 ## Decisions
 
