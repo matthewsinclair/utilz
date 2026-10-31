@@ -1,12 +1,12 @@
 ---
-verblock: "31 Oct 2026:v1.15: matts - ST0031/01's design stored"
+verblock: "31 Oct 2026:v1.16: matts - ST0031/01's design final until the sweep"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- dc: ST0031/01's design, amended with devbin-vc's answers, for vc's check before it is stored again.
+- None.
 
 ## TODO
 
