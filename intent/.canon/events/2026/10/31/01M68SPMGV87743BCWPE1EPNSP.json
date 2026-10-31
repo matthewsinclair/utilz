@@ -1,0 +1,15 @@
+{
+  "id": "01M68SPMGV87743BCWPE1EPNSP",
+  "ts": "2026-10-31T10:57:17.852Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0031/02"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "CI tuning, banked for the sweep's push: HOMEBREW_NO_AUTO_UPDATE, clippy once, a cargo cache, test-linux's roster derived"
+  }
+}

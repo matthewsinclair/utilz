@@ -1,0 +1,15 @@
+{
+  "id": "01M68SPMCWJV9BM1F7DNBM9X4J",
+  "ts": "2026-10-31T10:57:17.724Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0031/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests"
+  }
+}

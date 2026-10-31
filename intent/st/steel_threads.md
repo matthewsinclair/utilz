@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                          | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
+| ST0031 | Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10                       | Triage    | 2026-10-31 |                      |
 | ST0029 | Retire Python from Utilz                                                                       | On Hold   | 2026-10-26 |                      |
 | ST0030 | Lights-out release: one command from cut to tap                                                | Completed | 2026-10-28 | 2026-10-28           |
 | ST0028 | arngz: a desk saved from live terminal windows fails to apply minutes later                    | Completed | 2026-10-16 | 2026-10-16           |

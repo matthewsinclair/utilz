@@ -1,0 +1,41 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0031",
+  "title": "Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10",
+  "slug": "release-through-devbin-s-reshaped-core-utilz-s-s",
+  "status": "triage",
+  "created": "2026-10-31",
+  "objective": "Utilz releases through devbin's reshaped release core (Devbin ST0011) and keeps nothing of its own that does the core's work: no CI poller, formula writer, tag reader, macOS stager or hand dispatch beside it. Devbin's ST0011/10 points here.",
+  "context": "devbin-vc holds hv's pen for Devbin's ST0011 (hv's word in utilz-vc's session, 31 Oct 2026; vc's decision 75). This thread takes effect after ST0011/10's vendor sweep, which waits for hv's go on devbin's release (ST0011/09). devbin-vc's list of what changes for Utilz, with its rulings of 31 Oct:\n\n- tools/ci-state, tools/post-cut and tools/formula retire into the core. install.sh's install_ci_state is a second CI reader, and it retires onto `bin/devbin ci-state`.\n- In bin/.devbin/config.yaml, gates: gains `test estate` as a recorded gate run in parallel, macos: stays, and after: becomes `formula publish`. The built-in formula publish takes over the ST0030 tap pull, which Devbin's cc has.\n- .github/workflows/tests.yml fires its macOS legs on candidate/ and loses its tag trigger. The hand dispatch and the dry run's `check all` stop. tools/test-estate and CI's menuz-app test build stay.\n- docs/releasing.md follows.\n- A risk: menuz gives MenuzKind=release only to a build of the tag (opt/menuz/menuz:632), but the core stages at the release commit, before the tag exists. menuz must read the stamp, not the tag.\n\ndc's inventory at 48c0ea54, checked by vc and sent to devbin-vc as (1) on 31 Oct, says what names each path and what duplicates the core. The five ci-state tests at opt/utilz/test/install_lib.bats:767-828 are ST0019's AT01 on AC-01.3, so removing them goes through `intent at` on ST0019. opt/utilz/test/formula.bats tests tools/formula whole. vc's (2), sent the same day, is the baseline for ST0011/15. Issue 0131 (CI's headless Chrome stalls) gets its fix separately from this thread.",
+  "body": "",
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests",
+      "scope": "M",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "CI tuning, banked for the sweep's push: HOMEBREW_NO_AUTO_UPDATE, clippy once, a cargo cache, test-linux's roster derived",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "menuz reads the release stamp, not the tag, for MenuzKind=release (menuz:632)",
+      "scope": "XS",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ]
+}
