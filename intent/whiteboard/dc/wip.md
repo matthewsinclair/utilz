@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 10:36Z
+heartbeat_at: 2026-10-31 10:46Z
 status: active
-focus: "31 Oct: picked up on hv's wake; holding for devbin-vc's instructions (it holds the estate pen, by estate status's control line), directly or through utilz-vc; nothing of dc's off main, claimed or in flight; no test, no build (vc decision 74)"
+focus: "31 Oct: devbin-vc's read-only survey for Devbin ST0011/10 sent to utilz-vc; holding for the sweep (Devbin ST0011/09, on hv's go); no edit, no test, no build"
 claims: []
 ---
 
