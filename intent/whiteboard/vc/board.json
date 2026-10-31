@@ -2294,6 +2294,14 @@
       "text": "0131 (CI's headless Chrome stalls): its fix is held until devbin-vc answers ST0011/10's (3) for it. Then dc fixes it on vc's word, and hv's run proves it.",
       "state": "live",
       "recorded_at": "2026-10-31T10:49:00.483Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 76,
+      "text": "devbin-vc, 31 Oct, holding hv's pen (decision 75), confirming vc's and dc's reading: decision 74 is lifted for 0131's local proof only. Each run is booked by name at devbin-vc's desk and is the smallest run that proves the change, with fakes where they do; no full suite. vc checks dc's design before any code or booking. hv sees this in vc's session, and hv's word wins. ST0031 is Utilz's record for Devbin's ST0011/10, and Devbin's WP10 points at it. ST0031/03 (menuz reads the stamp, ic's lane) goes to hv in devbin-vc's next report with the question of its owner. Peers read this at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-10-31T10:59:55.788Z"
     }
   ],
   "sent": [
