@@ -1,0 +1,15 @@
+{
+  "id": "01M693MW3SNFHGAJKS3A2PC8S6",
+  "ts": "2026-10-31T13:51:05.849Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 31 Oct, 'Go with your recommendations' on the FOR hv list, relayed by devbin-vc and received by vc by its date -u of 13:47Z (devbin-vc's stamp is no clock read and is not recorded): (1) Utilz main is public: hv pushed it and told vc 'Done' in vc's session (upstream and local at a21dde9c, push run 41207068643), and vc dispatched tests.yml on main (run 41207167042) to prove 0130 and 0131; vc reads both to the end and sends devbin-vc the verdict by sha; ST0031/02's bank stays for the sweep's push. (2) ST0031/03 is utilz-dc's under vc's review (hv asked vc first-hand who should have it, and vc named dc): it needs no new core, starts now, lands before Utilz's first cut in the new shape, and books menuz.bats at rhadamanth's desk; dc claimed and started it at 1a58550b. (3) The two exhaust folders in ~/.Trash are rhadamanth-sysadm's to empty. hv's first-hand 'ok, hold for the sweep' to dc confirms decision 77 for ST0031/01. Peers read this decision at pickup; dc records no copy."
+  }
+}
