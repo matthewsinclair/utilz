@@ -1,0 +1,15 @@
+{
+  "id": "01M68S7ET3SDDG5YBC9JVQV7XA",
+  "ts": "2026-10-31T10:49:00.483Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0131 (CI's headless Chrome stalls): its fix is held until devbin-vc answers ST0011/10's (3) for it. Then dc fixes it on vc's word, and hv's run proves it."
+  }
+}

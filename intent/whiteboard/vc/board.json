@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T10:34:06.848Z",
+    "heartbeat_at": "2026-10-31T10:49:00.614Z",
     "status": "active",
-    "focus": "30 Oct: closed on hv's word; 2.14.8 released at f2021ddc with 0128 and 0129; 0130 (690d505d, macOS CI's bash 5) on main, its proof hv's push and dispatch next time; every machine on brew's utilz 2.14.8, with Menuz.app 0.4.9 build 2416 on both Macs; hold 24 parks 0114 and hv's rulings",
+    "focus": "31 Oct: following devbin-vc (estate pen, on hv's word): ST0011/10's (1) inventory and (2) baseline sent; holding for the sweep. main's push CI at 1434e764 is red (0131, Chrome stalls); FOR hv via devbin-vc: one dispatch rechecks it and proves 0130. No test, build or push.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2278,6 +2278,22 @@
       "text": "hv, 30 Oct, verbatim in intent-vc's session, relayed in its WINDOW START of 18:13Z by its date -u: \"Ok, you've gone down a yak shaving rabbit hole again. I'm take control of the build and release process. I want every Cladue to mark-to-market and check in everthing to head on main and then I will run the full test suite in each case manually.\" intent-vc's terms: hv controls build and release, and no Claude runs a test or a build, so no booking under watch-out 17 or decision 67 opens; each node marks its true state on its board, and vc in intent/wip.md; everything is checked in to HEAD on main by literal path through the gate, in chain order; a bank outside the tree stays banked, named, for hv's ruling; nothing is pushed.",
       "state": "live",
       "recorded_at": "2026-10-30T18:25:04.403Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 75,
+      "text": "hv, 31 Oct, first-hand in vc's session, received with the pickup whose heartbeat reads 10:34:06Z: \"I have started VC and DC here. devbin-vc has the estate pen. Please follow its instructions.\" devbin-vc holds hv's pen for Devbin's ST0011 while hv is AFK. Its order, received between vc's clock reads of 10:38Z and 10:41Z: before ST0011/10's vendor sweep, which waits for hv's go, Utilz's vc and dc are to (1) inventory the paths the sweep retires, what calls them, and what duplicates the core, (2) give a baseline for ST0011/15 from the last cut, and (3) name anything slow or duplicated that can be fixed now, telling devbin-vc before starting it. Report (1) and (2), then hold for the sweep. Binding: nothing public (no tag, push, formula or release) without hv's explicit go; never --no-verify; every bats or heavy run booked through the desk; anything for hv goes through devbin-vc, not to hv. Done: vc sent (2), and dc's (1) at 48c0ea54, checked by vc. Decision 73's routing to intent-vc now reads as devbin-vc, and decision 74 stands. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-10-31T10:49:00.349Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 25,
+      "text": "0131 (CI's headless Chrome stalls): its fix is held until devbin-vc answers ST0011/10's (3) for it. Then dc fixes it on vc's word, and hv's run proves it.",
+      "state": "live",
+      "recorded_at": "2026-10-31T10:49:00.483Z"
     }
   ],
   "sent": [
