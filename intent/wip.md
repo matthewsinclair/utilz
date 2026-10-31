@@ -1,13 +1,12 @@
 ---
-verblock: "31 Oct 2026:v1.17: matts - main pushed; CI proof running; ST0031/03 to dc"
+verblock: "31 Oct 2026:v1.18: matts - 0130 and 0131 proven on CI; ST0031/03 building"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- vc: read main's push run and the tests.yml dispatch on a21dde9c to the end, every job, and send devbin-vc the verdict on 0130 and 0131 by sha.
-- dc: ST0031/03 (menuz reads the release stamp, not the tag), design first for vc's check; it lands before the first cut in the new shape.
+- dc: ST0031/03 (menuz reads the release stamp, not the tag), built in a worktree off main to its stored design, with menuz.bats booked at the desk once vc has read the bank; it lands before the first cut in the new shape.
 
 ## TODO
 
