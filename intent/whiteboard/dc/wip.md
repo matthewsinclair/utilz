@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 20:16Z
-status: active
-focus: "31 Oct: ST0031/03 landed at b8e527d8 and closed: AC-03.1 minted and satisfied by the booked run 01M697M3 (menuz.bats 138 ok, judged green by vc), WP done, claim released, its worktree removed; ST0027's AC-07.3 now points at the rule in help/menuz.md; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1), its criteria minted before its build, which re-reads build_kind against the vendored app-sign; ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push; ST0029 resumes after the sweep (vc decision 79); nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+heartbeat_at: 2026-10-31 21:13Z
+status: paused
+focus: "31 Oct, hard close for the day on hv's order (devbin decision 118): nothing of dc's open but held; ST0031/01 (design at 61af34e1) and /02 (CI bank st0031-02-v2.patch, 2e48c8e6 on d567e4b8, kept in wt-st0031-02) wait for devbin-vc's word that the sweep after 0.1.19 has landed, their criteria and objectives first; ST0029 follows (vc decision 79); nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
