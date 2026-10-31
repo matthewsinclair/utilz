@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 14:24Z
+heartbeat_at: 2026-10-31 14:42Z
 status: active
-focus: "31 Oct: folded for hv's compact (hold 32), then holding for hv's next go through devbin-vc; ST0031/03 claimed, its build banked (st0031-03-v1.patch, a2e9756e, on 9d7d9f6d, in wt-st0031-03) with its design revision and run wrapper in scratch, nothing run or booked; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1); ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push; ST0029 resumes after the sweep (vc decision 79), its census kept; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "31 Oct: ST0031/03 resumes on hv's go (vc decision 80), building vc's rulings on critic-shell's read in wt-st0031-03: the kind rule stated once in help/menuz.md with the other three pointing there, W2's three AT-07.3 tests, an empty VERSION's exit 1 and the tightened asserts; then one design revision, one re-bank on main's HEAD and the wrapper, to vc by sha256; nothing run or booked; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1); ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8) for the sweep's push; ST0029 resumes after the sweep (vc decision 79); nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/03]
 ---
 
@@ -21,11 +21,11 @@ _(none)_
 
 ## Holds
 
-- Holding for hv's compact (hv's fold order of 31 Oct, through devbin-vc and utilz-vc): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc
+_(none)_
 
 ## Watch-outs
 
-- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. One exception, on hv's go for ST0031/03: build_kind in opt/menuz/menuz and its tests in opt/menuz/test/menuz.bats. Every other menuz file stays out. (edited)
+- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. One exception, on hv's go for ST0031/03 (vc decision 80): build_kind in opt/menuz/menuz, its tests in opt/menuz/test/menuz.bats, and the kind rule's lines in help/menuz.md (:249, where it is stated once, and :264), with the pointers to it at docs/releasing.md:74 and in the comment at bin/.devbin/config.yaml:109-110. Every other menuz file stays out. (edited)
 
 ## Decisions
 

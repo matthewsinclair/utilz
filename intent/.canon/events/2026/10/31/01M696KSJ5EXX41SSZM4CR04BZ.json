@@ -1,0 +1,16 @@
+{
+  "id": "01M696KSJ5EXX41SSZM4CR04BZ",
+  "ts": "2026-10-31T14:42:56.197Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. One exception, on hv's go for ST0031/03 (vc decision 80): build_kind in opt/menuz/menuz, its tests in opt/menuz/test/menuz.bats, and the kind rule's lines in help/menuz.md (:249, where it is stated once, and :264), with the pointers to it at docs/releasing.md:74 and in the comment at bin/.devbin/config.yaml:109-110. Every other menuz file stays out."
+  }
+}
