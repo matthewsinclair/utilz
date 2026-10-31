@@ -1,0 +1,15 @@
+{
+  "id": "01M696G09G5MHQCH1VQ3D0NDTT",
+  "ts": "2026-10-31T14:40:52.016Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "devbin-vc, 31 Oct, received by vc by its date -u of 14:40Z: hv's go, which devbin-vc gives as 14:34Z; rhadamanth's desk is live again. It releases hold 27 (archived): the compact ran and both pickups are committed (vc 6fee4e98; dc 82f0e1c9, checked by vc by its change). For Utilz: dc's ST0031/03 resumes from its bank a2e9756e under vc's rulings on critic-shell's read (in dc's RESUME.md). dc sends one design revision, one re-bank and its wrapper by sha256, and vc reads all three before dc stores the revision on vc's YOUR TURN. Then menuz.bats alone is booked at the desk: dc, which runs it, asks, starts and releases; vc sends devbin-vc the ask's id; run 3b holds the bats lane first, and devbin-vc grants on load. ST0031/01 and /02 still wait for devbin-vc's word that Devbin 0.1.19's sweep has landed in Utilz's tree. Nothing is pushed beyond what devbin-vc's decision 98 authorised; public main stays at a21dde9c. Decisions 74 and 77 stand: no Claude runs a test or build without a desk grant for that run. Peers read this decision at pickup; dc records no copy."
+  }
+}

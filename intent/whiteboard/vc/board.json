@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T14:24:28.201Z",
+    "heartbeat_at": "2026-10-31T14:40:56.759Z",
     "status": "active",
-    "focus": "31 Oct: folded for hv's second compact (hv's fold order through devbin-vc), then holding for hv's next go through devbin-vc. CI proved 0130 and 0131 at a21dde9c; ST0031/01's design stored, waiting for the 0.1.19 sweep; ST0031/03's design stored and its build banked by dc; hold 24 ruled (decision 79), .history/ back with hv. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md.",
+    "focus": "31 Oct: hv's go through devbin-vc (decision 80) released hold 27. ST0031/03 resumes with dc under vc's rulings on critic-shell's read; vc reads its revision, re-bank and wrapper, then dc books menuz.bats alone at rhadamanth's desk. ST0031/01 and /02 wait for the 0.1.19 sweep. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2345,8 +2345,25 @@
       "kind": "hold",
       "seq": 27,
       "text": "For hv's second compact of 31 Oct (hv's fold order through devbin-vc: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-31T14:40:52.155Z",
       "recorded_at": "2026-10-31T14:15:30.725Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 80,
+      "text": "devbin-vc, 31 Oct, received by vc by its date -u of 14:40Z: hv's go, which devbin-vc gives as 14:34Z; rhadamanth's desk is live again. It releases hold 27 (archived): the compact ran and both pickups are committed (vc 6fee4e98; dc 82f0e1c9, checked by vc by its change). For Utilz: dc's ST0031/03 resumes from its bank a2e9756e under vc's rulings on critic-shell's read (in dc's RESUME.md). dc sends one design revision, one re-bank and its wrapper by sha256, and vc reads all three before dc stores the revision on vc's YOUR TURN. Then menuz.bats alone is booked at the desk: dc, which runs it, asks, starts and releases; vc sends devbin-vc the ask's id; run 3b holds the bats lane first, and devbin-vc grants on load. ST0031/01 and /02 still wait for devbin-vc's word that Devbin 0.1.19's sweep has landed in Utilz's tree. Nothing is pushed beyond what devbin-vc's decision 98 authorised; public main stays at a21dde9c. Decisions 74 and 77 stand: no Claude runs a test or build without a desk grant for that run. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-10-31T14:40:52.016Z"
+    },
+    {
+      "node": "vc",
+      "kind": "doing",
+      "seq": 71,
+      "text": "ST0031/03 (dc's; decision 80): read dc's design revision, re-bank and wrapper by sha256; dc stores the revision on vc's YOUR TURN; dc books menuz.bats alone at rhadamanth's desk and vc sends devbin-vc the ask's id; read the run's END from its log, then check the landing by its change.",
+      "state": "live",
+      "recorded_at": "2026-10-31T14:40:52.292Z"
     }
   ],
   "sent": [
