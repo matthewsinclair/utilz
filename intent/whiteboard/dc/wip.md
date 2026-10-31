@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 12:06Z
+heartbeat_at: 2026-10-31 12:47Z
 status: active
-focus: "31 Oct: issue 0131 done (filed afc08faa, landed 5d83dd93, proven by R1 and R2 at devbin-vc's desk, closed 5c06cd66; wt-0131 removed); ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) holds for the sweep's push; nothing booked or running; holding for the sweep"
+focus: "31 Oct: folded for hv's compact (hold 31); issue 0131 done (landed 5d83dd93, closed 5c06cd66, wt-0131 removed, its exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty); banked: ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push, and ST0029's Python census for hold 24 (2); nothing booked or running; not released; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (hv's order of 31 Oct, via devbin-vc at 12:43Z and utilz-vc): released once the compact has run, then /in-session with its pickup, then utilz-vc's word
 
 ## Watch-outs
 
