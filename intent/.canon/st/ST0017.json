@@ -42,7 +42,8 @@
       "seq": 4,
       "title": "Rust init and qr paths, graded against population 3",
       "scope": "S",
-      "status": "not-started",
+      "status": "cancelled",
+      "status_reason": "hv, 31 Oct, first-hand in utilz-vc's session: 'Go with your recommendations on hold 24'. vc's recommendation (3): cancel, since it never started and would be net new code (Rust init and qr paths, graded against population 3)",
       "objective": "",
       "body": "",
       "preamble": ""

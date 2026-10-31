@@ -1,0 +1,16 @@
+{
+  "id": "01M694XRCG3EWSX0BDH59NGWEE",
+  "ts": "2026-10-31T14:13:25.522Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.cancel",
+  "subject": {
+    "type": "wp",
+    "id": "ST0017/04"
+  },
+  "payload": {
+    "from": "not-started",
+    "reason": "hv, 31 Oct, first-hand in utilz-vc's session: 'Go with your recommendations on hold 24'. vc's recommendation (3): cancel, since it never started and would be net new code (Rust init and qr paths, graded against population 3)",
+    "to": "cancelled"
+  }
+}

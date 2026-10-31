@@ -1,0 +1,15 @@
+{
+  "id": "01M694YAWYBKWDGGAG2MDM7PF7",
+  "ts": "2026-10-31T14:13:44.478Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 14:12Z: 'Go with your recommendations on hold 24'. (2) ST0029, Retire Python, resumes after Devbin 0.1.19's sweep, owned by dc, widened to dc's census of the Python outside its scope (hold 24's text, archived with this decision, and ~/Devel/scratch/utilz-dc/python-census-20261030.txt), with xtrct's port byte-exact, since it feeds the Talga Rd accounting. (3) ST0017/04 is cancelled, with that reason on it. (4) git rm of the whiteboard's .history/ trees, 48 files, was refused by the pre-commit gate's append-only guard, since Intent's whiteboard protocol keeps .history/ append-only; vc restored all 48 from HEAD with nothing committed, withdraws the recommendation, and puts it back to hv: keep them (vc's rec), or remove them by hand past the gate, which is hv's alone. (5) vc's 15 spent messages in hv's inbox are cleared by hv's own '! intent wb clear vc --node hv', which vc then commits. 0114, hold 24's (1), stays parked on arca_swift's tag (ic's todo 13; intent/wip.md). Peers read this decision at pickup; dc records no copy."
+  }
+}

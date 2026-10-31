@@ -106,7 +106,7 @@ _(none)_
   - [x] 01: Workspace + artifact crate: the C3 consolidation, zero behaviour change to prez
   - [x] 02: Fidelity harness, red-proved against population 1 (Python both sides)
   - [x] 03: Rust build path: YAML, admission (C1), normalisation policy (C2), data-URI
-  - [ ] 04: Rust init and qr paths, graded against population 3
+  - [~] 04: Rust init and qr paths, graded against population 3
   - [x] 05: Command surface: shim dispatch, manifest, help, doctor, prez help amendment
   - [x] 06: Snorkeltoast side: point the prototype at the hoisted tool, move the house theme
 - [x] ST0018: prez: a fallback theme for decks that name none (PREZ_DEFAULT_THEME)
