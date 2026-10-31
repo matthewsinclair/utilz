@@ -9,6 +9,10 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.14.9] - unreleased
 
+### Changed
+
+- **A clean build at a release commit is stamped `release` before its tag exists** (ST0031/03). menuz stamped `release` only on a build of the tag. Devbin 0.1.19's cut builds and signs Menuz.app at the release commit and tags that commit only once its checks pass, so that app would have been stamped `dev` and refused by the cut's own kind check. menuz now reads the release commit as devbin's `app-sign` does, by the rule `utilz help menuz` states, which `docs/releasing.md` and the macos config's comment now point to. Between releases, with the tag on an earlier commit, a build is still `dev`. An empty root `VERSION`, which read as `dev`, is now exit 1 saying why, as a missing one already was.
+
 ### Fixed
 
 - **`prez pdf` no longer waits forever for a print, and never leaves one it refused** (issue 0131). `prez pdf` waited for Chrome with no deadline, reading its output on pipes that any process Chrome left behind could hold open, so a print on CI's macOS leg at 2.14.8's tag held its leg for 17 minutes until it was cancelled. Chrome's output now goes to a file, and a print still running after 120 s is killed and refused by name, with what Chrome said and the remedy: run it again. Chrome prints to `<name>.pdf.partial` beside the PDF, which takes the PDF's name only once the print has succeeded, so a refused print leaves no PDF and changes none already there. prez's acceptance suite and showreel's video suite take that remedy once for a stall, either a print past its deadline or a Chrome that stopped answering showreel, and print the first attempt's whole account first; a second stall fails.

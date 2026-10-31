@@ -617,31 +617,49 @@ build_stamps() {
   print_stamps "$version" "$count" "$commit" "$tree" "$kind"
 }
 
-# The build's kind for source stamp TREE, as Intent's build.rs decides its
-# own: release when TREE is clean and HEAD carries the release tag the root
-# VERSION file names (bare, 2.14.0, never v2.14.0), dev otherwise. The tags
-# are read with --points-at, which lists every tag whose commit is HEAD:
-# annotated, as the release core makes them, or lightweight. 1 with why on
-# stderr when VERSION or the tags cannot be read.
+# The build's kind for source stamp TREE, release or dev, by the rule
+# help/menuz.md states with the stamps, which reads the release commit as
+# devbin's app-sign does (Devbin ST0011 WP06). The tag is listed by name
+# first, so "no tag" stays apart from a git that cannot answer, and its
+# commit is read under refs/tags/, so a branch of the same name never
+# answers. Annotated or lightweight, the tag's commit is the one it peels
+# to. 1 with why on stderr when the root VERSION cannot be read or is empty,
+# the tags cannot be listed, the tag is not a commit, or HEAD cannot be read.
 build_kind() {
-  local tree="$1" release tags tag
+  local tree="$1" release listed tagged head
   if ! release="$(tr -d '[:space:]' <"$UTILZ_HOME/VERSION")"; then
     echo "menuz: $UTILZ_HOME/VERSION could not be read" >&2
     return 1
   fi
-  if ! tags="$(git -C "$UTILZ_HOME" tag --points-at HEAD)"; then
-    echo "menuz: git tag --points-at HEAD failed in $UTILZ_HOME" >&2
+  if [[ -z "$release" ]]; then
+    echo "menuz: $UTILZ_HOME/VERSION is empty, so it names no release tag" >&2
     return 1
   fi
-  if [[ -n "$release" && "$tree" != *-dirty ]]; then
-    while IFS= read -r tag; do
-      if [[ "$tag" == "$release" ]]; then
-        echo release
-        return 0
-      fi
-    done <<<"$tags"
+  if ! listed="$(git -C "$UTILZ_HOME" tag --list "$release")"; then
+    echo "menuz: git tag --list $release failed in $UTILZ_HOME" >&2
+    return 1
   fi
-  echo dev
+  if [[ "$tree" == *-dirty ]]; then
+    echo dev
+    return 0
+  fi
+  if [[ -z "$listed" ]]; then
+    echo release
+    return 0
+  fi
+  if ! tagged="$(git -C "$UTILZ_HOME" rev-parse --verify "refs/tags/$release^{commit}")"; then
+    echo "menuz: the commit of tag $release could not be read in $UTILZ_HOME" >&2
+    return 1
+  fi
+  if ! head="$(git -C "$UTILZ_HOME" rev-parse --verify HEAD)"; then
+    echo "menuz: HEAD could not be read in $UTILZ_HOME" >&2
+    return 1
+  fi
+  if [[ "$tagged" == "$head" ]]; then
+    echo release
+  else
+    echo dev
+  fi
 }
 
 # What xcodegen reads: project.yml's content and the set of file paths under

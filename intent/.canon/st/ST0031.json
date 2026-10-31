@@ -30,7 +30,7 @@
     },
     {
       "seq": 3,
-      "title": "menuz reads the release stamp, not the tag, for MenuzKind=release (menuz:632)",
+      "title": "menuz reads the release stamp, not the tag, for MenuzKind=release",
       "scope": "S",
       "status": "wip",
       "objective": "",

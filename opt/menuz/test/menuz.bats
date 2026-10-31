@@ -139,6 +139,17 @@ source_home() {
   git -C "$SRC" -c user.name=t -c user.email=t@t commit -qm fixture
 }
 
+# HEAD past a release, as every commit is from one release to the next stamp:
+# the root VERSION's tag on source_home's commit, then one commit more. With
+# no tag of the root VERSION, a source_home fixture is a release commit before
+# its tag, and builds as release (build_kind).
+past_release() {
+  git -C "$SRC" tag "$(cat "$SRC/VERSION")"
+  echo more >"$SRC/notes.txt"
+  git -C "$SRC" add notes.txt
+  git -C "$SRC" -c user.name=t -c user.email=t@t commit -qm later
+}
+
 run_src_menuz() {
   run env UTILZ_HOME="$SRC" "$SRC/opt/menuz/menuz" "$@"
 }
@@ -745,6 +756,7 @@ app_count() {
 
 @test "AT-05.1: build passes the five stamps as build settings" {
   source_home
+  past_release
   xcode_fakes
   run_src_menuz build
   assert_success
@@ -752,7 +764,7 @@ app_count() {
   call="$(xcodebuild_call)"
   commit="$(git -C "$SRC" rev-parse --short=8 HEAD)"
   [[ "$call" == *" MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION") "* ]] || false
-  [[ "$call" == *" MENUZ_BUILD=1 "* ]] || false
+  [[ "$call" == *" MENUZ_BUILD=$(git -C "$SRC" rev-list --count HEAD) "* ]] || false
   [[ "$call" == *" MENUZ_COMMIT=$commit "* ]] || false
   printf '%s\n' "$call" | grep -Eq ' MENUZ_SOURCE_TREE=[0-9a-f]{40}(-dirty)? '
   [[ "$call" == *" MENUZ_KIND=dev "* ]] || false
@@ -990,13 +1002,15 @@ app_count() {
 
 @test "AT-05.1: stamps prints what the next build stamps, one NAME=value a line" {
   source_home
+  past_release
   run_src_menuz stamps
   assert_success
-  local tree names
+  local tree names count
   tree="$(printf '%s\n' "$output" | sed -n 's/^MENUZ_SOURCE_TREE=//p')"
   [[ "$tree" =~ ^[0-9a-f]{40}$ ]] || false
   assert_output_contains "MENUZ_VERSION=$(cat "$SRC/opt/menuz/VERSION")"
-  assert_output_contains "MENUZ_BUILD=1"
+  count="$(git -C "$SRC" rev-list --count HEAD)"
+  printf '%s\n' "$output" | grep -qx "MENUZ_BUILD=$count"
   assert_output_contains "MENUZ_COMMIT=$(git -C "$SRC" rev-parse --short=8 HEAD)"
   assert_output_contains "MENUZ_KIND=dev"
   names="$(printf '%s\n' "$output" | sed -n 's/^\(MENUZ_[A-Z_]*\)=.*/\1/p' | sort)"
@@ -1562,7 +1576,10 @@ exec /bin/mv "$@"'
 # ============================================================================
 # AT-07.3 -- the fifth stamp and the eight-character commit (AC-07.3, WP-07).
 # The fixture repository's root VERSION is the real one; a test tags its
-# HEAD, or does not, and reads the kind from stamps and from build.
+# HEAD, puts HEAD past a release (past_release), or leaves the fixture with
+# no tag, a release commit before its tag, and reads the kind from stamps
+# and from build. One that removes or empties VERSION, fails git's tag
+# listing, or tags a tree reads the exit 1 and its why.
 # ============================================================================
 
 kind_stamp() {
@@ -1590,11 +1607,15 @@ kind_stamp() {
   [[ "$(kind_stamp)" == release ]] || false
 }
 
-@test "AT-07.3: the kind is dev when HEAD carries no tag" {
+@test "AT-07.3: the kind is release when no tag of the root VERSION exists yet, as at the release commit before its tag (Devbin ST0011 WP06)" {
   source_home
   run_src_menuz stamps
   assert_success
-  [[ "$(kind_stamp)" == dev ]] || false
+  [[ "$(kind_stamp)" == release ]] || false
+  xcode_fakes
+  run_src_menuz build
+  assert_success
+  [[ "$(xcodebuild_call)" == *" MENUZ_KIND=release "* ]] || false
 }
 
 @test "AT-07.3: the kind is dev when the source is dirty, though HEAD carries the tag" {
@@ -1607,20 +1628,42 @@ kind_stamp() {
   [[ "$(kind_stamp)" == dev ]] || false
 }
 
-@test "AT-07.3: the kind is dev when HEAD's tag is not the bare VERSION, or the tag is on an earlier commit" {
+@test "AT-07.3: the kind is dev when the source is dirty, though no tag of the root VERSION exists yet" {
+  source_home
+  echo 'print("changed")' >>"$SRC/native/macos/Menuz/Menuz/App.swift"
+  run_src_menuz stamps
+  assert_success
+  printf '%s\n' "$output" | grep -Eq '^MENUZ_SOURCE_TREE=[0-9a-f]{40}-dirty$'
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the kind is dev when the root VERSION's tag is on an earlier commit, as between releases" {
+  source_home
+  past_release
+  run_src_menuz stamps
+  assert_success
+  printf '%s\n' "$output" | grep -Eq '^MENUZ_SOURCE_TREE=[0-9a-f]{40}$'
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the kind is dev when HEAD's tags are not the bare VERSION, and the bare one is on an earlier commit" {
+  source_home
+  past_release
+  git -C "$SRC" tag "v$(cat "$SRC/VERSION")"
+  git -C "$SRC" tag 0.0.1
+  run_src_menuz stamps
+  assert_success
+  printf '%s\n' "$output" | grep -Eq '^MENUZ_SOURCE_TREE=[0-9a-f]{40}$'
+  [[ "$(kind_stamp)" == dev ]] || false
+}
+
+@test "AT-07.3: the kind is release when HEAD's only tags are not the bare VERSION, since no tag of the root VERSION exists yet" {
   source_home
   git -C "$SRC" tag "v$(cat "$SRC/VERSION")"
   git -C "$SRC" tag 0.0.1
   run_src_menuz stamps
   assert_success
-  [[ "$(kind_stamp)" == dev ]] || false
-  git -C "$SRC" tag "$(cat "$SRC/VERSION")"
-  echo more >"$SRC/notes.txt"
-  git -C "$SRC" add notes.txt
-  git -C "$SRC" -c user.name=t -c user.email=t@t commit -qm later
-  run_src_menuz stamps
-  assert_success
-  [[ "$(kind_stamp)" == dev ]] || false
+  [[ "$(kind_stamp)" == release ]] || false
 }
 
 @test "AT-07.3: the commit stamp is HEAD's first eight characters" {
@@ -1639,6 +1682,38 @@ kind_stamp() {
   run_src_menuz stamps
   assert_exit_code 1
   assert_output_contains "$SRC/VERSION"
+}
+
+@test "AT-07.3: with the root VERSION empty, stamps is exit 1 saying so" {
+  source_home
+  : >"$SRC/VERSION"
+  run_src_menuz stamps
+  assert_exit_code 1
+  assert_output_contains "menuz: $SRC/VERSION is empty, so it names no release tag"
+}
+
+@test "AT-07.3: a git that cannot list the tags is exit 1 saying so, never read as no tag" {
+  source_home
+  local real_git
+  real_git="$(command -v git)"
+  # git that fails the tag listing alone, and is the real git on every other call.
+  fake git '
+if [[ "$1" == -C && "$3" == tag && "$4" == --list ]]; then
+  echo "fatal: the tags cannot be listed" >&2
+  exit 128
+fi
+exec "'"$real_git"'" "$@"'
+  run_src_menuz stamps
+  assert_exit_code 1
+  assert_output_contains "menuz: git tag --list $(cat "$SRC/VERSION") failed in $SRC"
+}
+
+@test "AT-07.3: a root VERSION tag that is not a commit is exit 1 naming it" {
+  source_home
+  git -C "$SRC" tag "$(cat "$SRC/VERSION")" 'HEAD^{tree}'
+  run_src_menuz stamps
+  assert_exit_code 1
+  assert_output_contains "menuz: the commit of tag $(cat "$SRC/VERSION") could not be read in $SRC"
 }
 
 @test "AT-07.3: in an install, a bundle with no MenuzKind prints the stamp empty" {
