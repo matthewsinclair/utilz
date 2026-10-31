@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 13:50Z
+heartbeat_at: 2026-10-31 14:16Z
 status: active
-focus: "31 Oct: ST0031/03 on hv's go, under utilz-vc's review: menuz's build_kind to read the release stamp, not the tag; its design drafted in scratch first; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1), with ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, in wt-st0031-02) for the sweep's push; ST0029's census kept for hold 24 (2); 0131's exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty; nothing booked or running"
+focus: "31 Oct: folded for hv's compact (hold 32), then holding for hv's next go through devbin-vc; ST0031/03 claimed, its build banked (st0031-03-v1.patch, a2e9756e, on 9d7d9f6d, in wt-st0031-03) with its design revision and run wrapper in scratch, nothing run or booked; ST0031/01 holds for the 0.1.19 sweep (design stored at 61af34e1); ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push; ST0029 resumes after the sweep (vc decision 79), its census kept; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/03]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Holding for hv's compact (hv's fold order of 31 Oct, through devbin-vc and utilz-vc): released once the compact has run, /in-session's pickup is committed, and hv's next go comes through devbin-vc
 
 ## Watch-outs
 
