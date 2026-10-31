@@ -17,6 +17,11 @@
 // 0095): showreel's recording made a private directory and removed it on every
 // path, and `pdf` staged its HTML with a removal a failed print stepped past.
 //
+// **`partial` MOVED WHEN prez's `pdf` BECAME ITS SECOND IMPLEMENTATION** (issue
+// 0131): showreel's `video` wrote each video to a `.partial` and removed it on
+// every refusal, and `pdf` now prints the same way, so that a refused print
+// never leaves what reads as a PDF.
+//
 // **WHAT IS DELIBERATELY NOT HERE: data-URI INLINING.** It reads as the
 // obvious fourth member and it is not one. prez rewrites `<img src=...>` in
 // RENDERED HTML and leaves anything carrying a scheme alone, because a URL the
@@ -27,6 +32,7 @@
 
 pub mod base64;
 pub mod browser;
+pub mod partial;
 pub mod path;
 pub mod scratch;
 pub mod theme;

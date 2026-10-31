@@ -14,6 +14,7 @@
 //! algorithm below is standard and pinned by tests against known dates.
 
 use crate::config;
+use artifact::partial::PARTIAL;
 use artifact::Failure;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
@@ -492,15 +493,11 @@ fn same_name(a: &Path, b: &Path) -> bool {
 /// slot's video always is, and `.mov`, which `-o` may name (ST0021).
 pub const VIDEO_EXTENSIONS: [&str; 2] = ["mp4", "mov"];
 
-/// The extension of a recording not yet finished: ffmpeg writes to
-/// `<video>.partial`, and `video`'s sweep removes every one in `_out/` as what an
-/// interrupted recording left. The one home of that name, for `video`, which
-/// names and sweeps the partials, and `stem`'s checks (issue 0101).
-pub const PARTIAL: &str = "partial";
-
 /// Whether a name is a recording's partial, by its extension, as `video`'s sweep
 /// reads it: the one predicate for the sweep and for `stem`'s checks, so a
-/// pattern is refused for exactly what the sweep would remove (issue 0101).
+/// pattern is refused for exactly what the sweep would remove (issue 0101). The
+/// extension itself has its one home in `artifact::partial`, which prez's `pdf`
+/// names its partials by too (issue 0131).
 pub fn is_partial(name: &Path) -> bool {
   name.extension().is_some_and(|e| e == PARTIAL)
 }

@@ -274,6 +274,8 @@ A theme referencing anything outside the artifact -- `http://`, `https://`, a pr
 
 When the probe finds none, `pdf` refuses **naming every path it tried** -- so the fix is always in front of you. `present` falls back to the platform's opener instead, `open` on macOS and `xdg-open` elsewhere, with a warning that names it: the deck still presents, in a window with the browser's own chrome around it. With no opener on `PATH` either, `present` refuses with the same list of paths, says which opener it lacked, and exits 2.
 
+**A print has two minutes.** `pdf` waits up to 120 s for Chrome to finish. A print still running then is killed and refused, with what Chrome said and the remedy: run it again. Chrome prints to `<name>.pdf.partial` beside the PDF, which takes the PDF's name only once the print has succeeded, so a refused print leaves no PDF and changes none already there (issue 0131).
+
 `present` launches the window and exits. It does not stay resident, watch, or manage the browser.
 
 ---

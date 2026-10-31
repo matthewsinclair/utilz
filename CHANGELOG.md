@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.9] - unreleased
+
+### Fixed
+
+- **`prez pdf` no longer waits forever for a print, and never leaves one it refused** (issue 0131). `prez pdf` waited for Chrome with no deadline, reading its output on pipes that any process Chrome left behind could hold open, so a print on CI's macOS leg at 2.14.8's tag held its leg for 17 minutes until it was cancelled. Chrome's output now goes to a file, and a print still running after 120 s is killed and refused by name, with what Chrome said and the remedy: run it again. Chrome prints to `<name>.pdf.partial` beside the PDF, which takes the PDF's name only once the print has succeeded, so a refused print leaves no PDF and changes none already there. prez's acceptance suite and showreel's video suite take that remedy once for a stall, either a print past its deadline or a Chrome that stopped answering showreel, and print the first attempt's whole account first; a second stall fails.
+
 ## [2.14.8] - 2026-10-31
 
 ### Changed

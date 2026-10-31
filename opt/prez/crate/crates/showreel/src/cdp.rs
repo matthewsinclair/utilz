@@ -201,6 +201,9 @@ impl<W: Write> Session<W> {
         ),
         RETRY,
       )),
+      // The suites key on these words: a recording refused with them is made
+      // once more (lib/harness.sh, `stalled`; issue 0131), and video.sh's AT27
+      // reads them, so a change to them is a change there too.
       Err(RecvTimeoutError::Timeout) => Err(Failure::new(
         format!(
           "no reply from Chrome in {} s, during {}",

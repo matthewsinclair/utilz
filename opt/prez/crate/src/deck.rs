@@ -40,12 +40,15 @@ fn pdf(cmd: &Command) -> Result<(), Failure> {
   // a removal that fails is said, whether the print worked or not.
   let mut scratch = Scratch::new(Tool::Prez)?;
   let staged = scratch.path().join("deck.html");
+  // What Chrome says while it prints, kept beside the staged HTML so the same
+  // removal takes it (issue 0131).
+  let log = scratch.path().join("chrome.log");
 
   // The slide count travels so the printer can check what came back against
   // what went in -- the base print rules are order-protected, not
   // !important-proof (drive::verify_pagination).
   let printed = write(&staged, &compiled.artifact)
-    .and_then(|()| drive::print_to_pdf(&browser, &staged, &out, compiled.slides));
+    .and_then(|()| drive::print_to_pdf(&browser, &staged, &out, &log, compiled.slides));
   let left: Vec<String> = scratch.remove().into_iter().collect();
   match printed {
     Ok(warnings) => {

@@ -114,11 +114,41 @@ same() {
   else bad "$1: artifacts differ ($(wc -c <"$2" | tr -d ' ') vs $(wc -c <"$3" | tr -d ' ') bytes)"; fi
 }
 
-# renders <description> <cmd...> -- the invocation must SUCCEED
+# account <file> -- a refusal's whole account, indented under the check that
+# met it: the refusal, then what Chrome or ffmpeg said after it, which is the
+# part that says why. CI shows nothing of a run but the suite's output. A file
+# that is not there has no account to show, so sed's complaint about it is
+# dropped; the check that met the refusal has said what failed.
+account() { sed 's/^/        | /' "$1" 2>/dev/null; }
+
+# stalled <file> -- whether the refusal in <file> is a stall: prez's for a print
+# that outran its deadline, or showreel's for a Chrome that stopped answering
+# it (issue 0131). Each is the tool's own words (drive.rs, STALLED; cdp.rs, the
+# watchdog's message), anchored to the line the tool refuses on, so a stall
+# named in what Chrome said is not taken for one. Each tool's remedy for one
+# stall is to run it again, so the suites do that once, and a second stall
+# fails, as the remedy says it should be reported. A file that is not there
+# holds no stall, so grep's complaint about it is dropped.
+stalled() {
+  grep -q -E '^(prez|showreel): .*(did not finish printing|no reply from Chrome in)' "$1" 2>/dev/null
+}
+
+# retrying <what> <file> -- the one RETRY line, and the stalled attempt's whole
+# account after it, so the log says that it stalled before the second attempt.
+retrying() { printf '  RETRY %s, after a stall:\n' "$1"; account "$2"; }
+
+# renders <description> <cmd...> -- the invocation must SUCCEED. One stall is
+# run again (issue 0131), and a second attempt that fails as well shows its
+# whole account before the failure.
 renders() {
   local d="$1"; shift
-  if "$@" >/dev/null 2>"$WORK/renders.err"; then ok "$d (rendered)"
-  else bad "$d: refused -- $(head -1 "$WORK/renders.err")"; fi
+  if "$@" >/dev/null 2>"$WORK/renders.err"; then ok "$d (rendered)"; return; fi
+  if stalled "$WORK/renders.err"; then
+    retrying "$d" "$WORK/renders.err"
+    if "$@" >/dev/null 2>"$WORK/renders.err"; then ok "$d (rendered at the second attempt)"; return; fi
+    account "$WORK/renders.err"
+  fi
+  bad "$d: refused -- $(head -1 "$WORK/renders.err")"
 }
 
 # refuses <description> <cmd...> -- the invocation must FAIL, and its stderr is

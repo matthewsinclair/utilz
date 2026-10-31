@@ -136,8 +136,16 @@ procs_carrying() {
   grep -c -F -- "$1" "$WORK/ps.txt" || true
 }
 
+# The entries directly under a directory, one path a line, sorted. A directory
+# that is not there lists nothing, so find's complaint about it is dropped, and
+# so does one find cannot read. `forget` deletes by this listing, so that
+# deletes nothing: the stalled attempt's slot is left beside the retry's, and
+# AT29's count of what _out/ holds fails on it, rather than anything going
+# quietly.
+listing() { find "$1" -mindepth 1 -maxdepth 1 2>/dev/null | sort; }
+
 # How many entries a directory holds.
-entries() { find "$1" -mindepth 1 -maxdepth 1 2>/dev/null | grep -c ''; }
+entries() { listing "$1" | grep -c ''; }
 
 # Waits up to $2 seconds for no process to carry $1 and for directory $3 to be
 # empty, and says how long it took, or "never".
@@ -225,33 +233,31 @@ paced() {
   wait "$pid"
 }
 
-# Each recording is made once, by the first AT that asks for it, so any AT runs
-# on its own (video.sh AT24) and a full run records each only once. Returns the
-# recording's exit status.
-ensure() {
+# record <name> -- one attempt at the recording <name>, which returns its exit
+# status. `ensure` decides whether it is made, and whether it is made again.
+record() {
   local name="$1"
-  if [ ! -f "$WORK/$name.rc" ]; then
-    case "$name" in
-      one)
-        run_argv one --frames "$WORK/f-one"
-        "${RUN[@]}" >"$WORK/one.out" 2>"$WORK/one.err"
-        ;;
-      two)
-        run_argv two -o "$WORK/two.mp4" --frames "$WORK/f-two"
-        paced "$WORK/two.out" "$WORK/two.err" "${RUN[@]}"
-        ;;
-      three)
-        # A stale partial from an interrupted run, which this run must remove.
-        printf 'an interrupted encode\n' >"$WORK/three.mov.partial"
-        run_argv three -o "$WORK/three.mov"
-        "${RUN[@]}" >"$WORK/three.out" 2>"$WORK/three.err"
-        ;;
-      handle)
-        # ST0023: one socials page whose handle is 25 capitals, portrait. The
-        # default theme's system face is narrow, so the capitals are what make
-        # it wider than a 540 px page, as the display face did in issue 0045.
-        mkdir -p "$WORK/handle" "$WORK/tmp-handle"
-        cat >"$WORK/handle/showreel.yaml" <<'YAML'
+  case "$name" in
+    one)
+      run_argv one --frames "$WORK/f-one"
+      "${RUN[@]}" >"$WORK/one.out" 2>"$WORK/one.err"
+      ;;
+    two)
+      run_argv two -o "$WORK/two.mp4" --frames "$WORK/f-two"
+      paced "$WORK/two.out" "$WORK/two.err" "${RUN[@]}"
+      ;;
+    three)
+      # A stale partial from an interrupted run, which this run must remove.
+      printf 'an interrupted encode\n' >"$WORK/three.mov.partial"
+      run_argv three -o "$WORK/three.mov"
+      "${RUN[@]}" >"$WORK/three.out" 2>"$WORK/three.err"
+      ;;
+    handle)
+      # ST0023: one socials page whose handle is 25 capitals, portrait. The
+      # default theme's system face is narrow, so the capitals are what make
+      # it wider than a 540 px page, as the display face did in issue 0045.
+      mkdir -p "$WORK/handle" "$WORK/tmp-handle"
+      cat >"$WORK/handle/showreel.yaml" <<'YAML'
 showreel: {version: 1}
 artist: {handle: videotest, name: Video Test}
 theme: default
@@ -262,18 +268,18 @@ socials:
 segments:
   - {id: socials, type: socials, layout: each, headline: Follow, dwell: 2500ms, ease: 1200ms, transition: cut}
 YAML
-        RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-handle/" "$SHOWREEL" video "$WORK/handle" --browser "$CHROME" --fps "$FPS"
-          --aspect portrait -o "$WORK/handle.mp4" --frames "$WORK/f-handle")
-        "${RUN[@]}" >"$WORK/handle.out" 2>"$WORK/handle.err"
-        ;;
-      widehandle | oneword | zoned)
-        # ST0024, one reel recorded twice. Its first slide carries a 40-capital
-        # handle, which leaves a 1920-wide frame before 6.3's fit; its second
-        # carries a headline of the same word in a pane whose centred child
-        # grows with its content, which leaves a 1080-wide frame before 6.1's.
-        # Both are type only, so neither needs a picture.
-        mkdir -p "$WORK/$name" "$WORK/tmp-$name"
-        cat >"$WORK/$name/showreel.yaml" <<'YAML'
+      RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-handle/" "$SHOWREEL" video "$WORK/handle" --browser "$CHROME" --fps "$FPS"
+        --aspect portrait -o "$WORK/handle.mp4" --frames "$WORK/f-handle")
+      "${RUN[@]}" >"$WORK/handle.out" 2>"$WORK/handle.err"
+      ;;
+    widehandle | oneword | zoned)
+      # ST0024, one reel recorded twice. Its first slide carries a 40-capital
+      # handle, which leaves a 1920-wide frame before 6.3's fit; its second
+      # carries a headline of the same word in a pane whose centred child
+      # grows with its content, which leaves a 1080-wide frame before 6.1's.
+      # Both are type only, so neither needs a picture.
+      mkdir -p "$WORK/$name" "$WORK/tmp-$name"
+      cat >"$WORK/$name/showreel.yaml" <<'YAML'
 showreel: {version: 1}
 artist: {handle: videotest, name: Video Test}
 theme: default
@@ -285,39 +291,83 @@ segments:
   - {id: each, type: socials, layout: each, headline: Follow, dwell: 2500ms, ease: 1200ms, transition: cut}
   - {id: list, type: socials, layout: list, headline: FORBIDDENPLANETNOTTINGHAMSHIREANDBEYOND, dwell: 2500ms, ease: 1200ms, transition: cut}
 YAML
-        RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-$name/" "$SHOWREEL" video "$WORK/$name"
-          --browser "$CHROME" --fps "$FPS" -o "$WORK/$name.mp4" --frames "$WORK/f-$name")
-        [ "$name" = oneword ] && RUN+=(--aspect portrait)
-        # ST0024 6.2: the same reel again, inside the platform zone. Its
-        # control is `oneword`, the same frames without one.
-        [ "$name" = zoned ] && RUN+=(--aspect portrait --safe-zone social)
-        "${RUN[@]}" >"$WORK/$name.out" 2>"$WORK/$name.err"
-        ;;
-      tall)
-        # ST0022: the same reel, portrait. The target is the long edge.
-        run_argv tall -o "$WORK/tall.mp4" --aspect portrait --frames "$WORK/f-tall"
-        "${RUN[@]}" >"$WORK/tall.out" 2>"$WORK/tall.err"
-        ;;
-      fail)
-        # An ffmpeg that writes the start of its output, reads a little of the
-        # frames, and fails, as a full disk or a bad build does.
-        mkdir -p "$WORK/fakebin"
-        cat >"$WORK/fakebin/ffmpeg" <<'FAKE'
+      RUN=(/usr/bin/env "TMPDIR=$WORK/tmp-$name/" "$SHOWREEL" video "$WORK/$name"
+        --browser "$CHROME" --fps "$FPS" -o "$WORK/$name.mp4" --frames "$WORK/f-$name")
+      [ "$name" = oneword ] && RUN+=(--aspect portrait)
+      # ST0024 6.2: the same reel again, inside the platform zone. Its
+      # control is `oneword`, the same frames without one.
+      [ "$name" = zoned ] && RUN+=(--aspect portrait --safe-zone social)
+      "${RUN[@]}" >"$WORK/$name.out" 2>"$WORK/$name.err"
+      ;;
+    tall)
+      # ST0022: the same reel, portrait. The target is the long edge.
+      run_argv tall -o "$WORK/tall.mp4" --aspect portrait --frames "$WORK/f-tall"
+      "${RUN[@]}" >"$WORK/tall.out" 2>"$WORK/tall.err"
+      ;;
+    fail)
+      # An ffmpeg that writes the start of its output, reads a little of the
+      # frames, and fails, as a full disk or a bad build does.
+      mkdir -p "$WORK/fakebin"
+      cat >"$WORK/fakebin/ffmpeg" <<'FAKE'
 #!/bin/sh
 for last in "$@"; do :; done
 printf 'not a video' >"$last"
 head -c 1000 >/dev/null
 exit 1
 FAKE
-        chmod +x "$WORK/fakebin/ffmpeg"
-        run_argv fail -o "$WORK/fail.mp4" --frames "$WORK/f-fail"
-        PATH="$WORK/fakebin:$PATH" "${RUN[@]}" >"$WORK/fail.out" 2>"$WORK/fail.err"
-        ;;
+      chmod +x "$WORK/fakebin/ffmpeg"
+      run_argv fail -o "$WORK/fail.mp4" --frames "$WORK/f-fail"
+      PATH="$WORK/fakebin:$PATH" "${RUN[@]}" >"$WORK/fail.out" 2>"$WORK/fail.err"
+      ;;
+  esac
+}
+
+# forget <name> <listing> -- removes what a stalled attempt at <name> left, so
+# the next attempt starts from nothing: its frames, its video, its TMPDIR, and
+# each entry of the reel's _out/ that <listing>, taken before the first
+# attempt, does not hold. AT29 counts what _out/ holds. Nothing the listing
+# names outside _out/ is removed. The pause count needs nothing: `paced` writes
+# it whole at the end of every attempt. Fails when anything it should remove
+# is left, so that the recording is not made again on top of it.
+forget() {
+  local name="$1" before="$2" now entry left=0
+  rm -rf -- "$WORK/f-$name" "$WORK/tmp-$name" "$WORK/$name.mp4" "$WORK/$name.mov" || left=1
+  now=$(listing "$REEL/_out")
+  while IFS= read -r entry; do
+    [ -n "$entry" ] || continue
+    grep -qxF -- "$entry" <<<"$before" && continue
+    case "$entry" in
+      "$REEL/_out/"?*) rm -rf -- "$entry" || left=1 ;;
+      *) left=1 ;;
     esac
-    echo $? >"$WORK/$name.rc"
+  done <<<"$now"
+  return "$left"
+}
+
+# Each recording is made once, by the first AT that asks for it, so any AT runs
+# on its own (video.sh AT24) and a full run records each only once. Returns the
+# recording's exit status. A recording that stalls is made once more, from
+# nothing, as showreel's remedy says (issue 0131), and a second stall fails.
+ensure() {
+  local name="$1" before rc
+  if [ ! -f "$WORK/$name.rc" ]; then
+    before=$(listing "$REEL/_out")
+    record "$name"
+    rc=$?
+    if [ "$rc" -ne 0 ] && [ "$name" != fail ] && stalled "$WORK/$name.err"; then
+      retrying "the recording $name" "$WORK/$name.err"
+      if ! forget "$name" "$before"; then
+        bad "the stalled recording $name left what could not all be removed, so it was not made again"
+        echo "$rc" >"$WORK/$name.rc"
+        return "$rc"
+      fi
+      record "$name"
+      rc=$?
+    fi
+    echo "$rc" >"$WORK/$name.rc"
     # Shown once, where it first failed. `fail` is refused on purpose, and
     # AT31 reads its refusal.
-    if [ "$name" != fail ] && [ "$(cat "$WORK/$name.rc")" -ne 0 ]; then
+    if [ "$name" != fail ] && [ "$rc" -ne 0 ]; then
       shown "$name"
     fi
   fi
@@ -341,7 +391,7 @@ said() { head -1 "$WORK/$1.err" 2>/dev/null; }
 # and ffmpeg said after it, which is the part that says why. CI shows nothing
 # of a run but this suite's output, and its first Linux run failed every
 # recording with the why cut off after the first line.
-shown() { sed 's/^/        | /' "$WORK/$1.err" 2>/dev/null; }
+shown() { account "$WORK/$1.err"; }
 
 # Inside an AT: true when every tool is here. When one is missing the AT is
 # UNCHECKED, which --strict counts: never n/a, because a missing tool is not a

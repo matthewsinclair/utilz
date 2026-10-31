@@ -13,10 +13,37 @@
 use crate::html;
 use crate::Failure;
 use artifact::browser;
+use artifact::partial::{partial_of, remove_partial};
+use std::fs::File;
 use std::path::{Path, PathBuf};
-use std::process::{Command, Stdio};
+use std::process::{Child, Command, ExitStatus, Stdio};
+use std::time::{Duration, Instant};
 
-/// Print an artifact to PDF through headless Chrome.
+/// How long one print may take before Chrome is killed and the print refused
+/// (issue 0131).
+///
+/// **A PRINT CAN HANG, AND NOTHING ELSE BOUNDS IT.** On CI's macOS leg at
+/// 2.14.8's tag, AT21's first two prints took 1.9 s and 1.8 s, and its third
+/// never returned: the leg sat for 17 minutes until it was cancelled by hand.
+/// 120 s is sixty times that print, and far past the 5 s of page time
+/// `--virtual-time-budget` gives it.
+const PRINT_DEADLINE: Duration = Duration::from_secs(120);
+
+/// How long a killed Chrome has to be reaped before the refusal says it is
+/// still running. A killed process is gone in milliseconds unless it is stuck
+/// in the kernel, and then the refusal says so rather than wait on it.
+const REAP_GRACE: Duration = Duration::from_secs(5);
+
+/// How often a wait looks at Chrome.
+const POLL: Duration = Duration::from_millis(20);
+
+/// What a person does about a print that stalled. The suites do it once on
+/// their behalf, keyed on the words of the refusal that carries it
+/// (lib/harness.sh, `stalled`), so a change to them is a change there too.
+const STALLED: &str = "run it again; if it stalls twice, report it with Chrome's version";
+
+/// Print an artifact to PDF through headless Chrome, keeping what Chrome says
+/// in `log`.
 ///
 /// `slides` is what the compiler produced, and it is checked against what came
 /// back. See `verify_pagination` for why that check exists.
@@ -24,50 +51,104 @@ pub fn print_to_pdf(
   browser: &Path,
   artifact: &Path,
   out: &Path,
+  log: &Path,
   slides: usize,
 ) -> Result<Vec<String>, Failure> {
-  // --virtual-time-budget gives the page a moment to lay out and, when the deck
-  // opted into mermaid, to draw its diagrams. Without it a diagram-heavy deck
-  // prints its fences as empty boxes.
-  //
-  // Chrome's output is CAPTURED rather than inherited. Headless Chrome narrates
-  // ("86974 bytes written to file", allocator notices) and the user asked
-  // prez for a PDF, not for a browser's log. It is replayed in full when the
-  // print fails, which is the only moment it is worth reading -- quiet on
-  // success is not the same as discarded.
-  let result = Command::new(browser)
-    .arg("--headless")
-    .arg("--disable-gpu")
-    // Chrome's first-run experience is an interactive modal, and every launch
-    // here meets a profile it has never seen, so it fires every time. Refuse it
-    // rather than ask a human a question from inside a print pipeline.
-    .arg("--no-first-run")
-    .arg("--no-default-browser-check")
-    .arg("--no-pdf-header-footer")
-    .arg("--virtual-time-budget=5000")
-    .arg(format!("--print-to-pdf={}", out.display()))
-    .arg(browser::file_url(artifact))
-    .output()
-    .map_err(|e| {
-      Failure::new(
-        format!("could not run '{}': {e}", browser.display()),
-        "check the browser path, or name another with --browser",
-      )
-    })?;
+  print_within(browser, artifact, out, log, slides, PRINT_DEADLINE)
+}
 
-  if !result.status.success() {
+/// `print_to_pdf` with its deadline given, so a test can give a short one.
+///
+/// **A REFUSED PRINT NEVER TOUCHES `out`** (issue 0131). Chrome prints to
+/// `<out>.partial` beside it, which becomes `out` only when Chrome exits 0
+/// having written it, so what a refused print leaves can never be read as its
+/// PDF, by a person or by a suite's retry. showreel's videos work the same
+/// way: no partial ever looks finished.
+fn print_within(
+  browser: &Path,
+  artifact: &Path,
+  out: &Path,
+  log: &Path,
+  slides: usize,
+  deadline: Duration,
+) -> Result<Vec<String>, Failure> {
+  let partial = partial_of(out);
+  // A partial an interrupted run left is not this run's, and Chrome is not
+  // relied on to write over it.
+  if let Some(message) = remove_partial(&partial) {
+    return Err(Failure::new(
+      format!("{message}, which an earlier print left"),
+      "remove it by hand, and run it again",
+    ));
+  }
+  let printed = print_into(browser, artifact, out, &partial, log, deadline)
+    .and_then(|()| finish(&partial, out));
+  match printed {
+    Ok(()) => Ok(verify_pagination(out, slides)),
+    Err(mut failure) => {
+      if let Some(message) = remove_partial(&partial) {
+        failure.message = format!("{}\n  and {message}", failure.message);
+      }
+      Err(failure)
+    }
+  }
+}
+
+/// Puts a finished print where it was asked for, in one rename beside it, so
+/// `out` is the PDF it was or the whole new one, and never a part of one.
+fn finish(partial: &Path, out: &Path) -> Result<(), Failure> {
+  std::fs::rename(partial, out).map_err(|e| {
+    Failure::new(
+      format!(
+        "could not move the print from '{}' to '{}': {e}",
+        partial.display(),
+        out.display()
+      ),
+      "check the -o path is writable",
+    )
+  })
+}
+
+/// Runs Chrome's print of `artifact` into `partial`, and refuses unless Chrome
+/// exited 0 having written it. `out` is named in a refusal and never written.
+fn print_into(
+  browser: &Path,
+  artifact: &Path,
+  out: &Path,
+  partial: &Path,
+  log: &Path,
+  deadline: Duration,
+) -> Result<(), Failure> {
+  let mut chrome = launch(browser, artifact, partial, log)?;
+  let status = match wait_within(&mut chrome, deadline) {
+    Ok(Some(status)) => status,
+    Ok(None) => return Err(abandon(&mut chrome, browser, out, log, deadline)),
+    // The pid may no longer be Chrome's, so it is said and nothing is
+    // signalled, as showreel's ffmpeg does (video.rs, stop_ffmpeg).
+    Err(e) => {
+      return Err(Failure::new(
+        format!(
+          "could not ask whether '{}' had finished printing: {e}; it may still be running as pid {}, unsignalled:\n{}",
+          browser.display(),
+          chrome.id(),
+          said(log)
+        ),
+        "run it again",
+      ))
+    }
+  };
+  if !status.success() {
     return Err(Failure::new(
       format!(
-        "'{}' failed while printing (exit {}):\n{}{}",
+        "'{}' failed while printing (exit {}):\n{}",
         browser.display(),
-        code(&result.status),
-        String::from_utf8_lossy(&result.stdout),
-        String::from_utf8_lossy(&result.stderr)
+        code(&status),
+        said(log)
       ),
       "try opening the built .html in that browser to see what it objects to",
     ));
   }
-  if !out.is_file() {
+  if !partial.is_file() {
     // Chrome exits 0 having written nothing often enough that trusting the exit
     // code alone would report a success with no PDF behind it.
     return Err(Failure::new(
@@ -78,7 +159,129 @@ pub fn print_to_pdf(
       "check the -o path is writable, or try --browser with a different browser",
     ));
   }
-  Ok(verify_pagination(out, slides))
+  Ok(())
+}
+
+/// Starts Chrome's print of `artifact` into `pdf`, with its stdout and stderr
+/// both in `log`.
+///
+/// **CHROME'S OUTPUT GOES TO A FILE, NOT TO PIPES** (issue 0131). Headless
+/// Chrome narrates ("86974 bytes written to file", allocator notices) and the
+/// user asked prez for a PDF, not for a browser's log, so it is kept, and
+/// replayed in full only when the print fails, which is the only moment it is
+/// worth reading. It used to be captured on pipes, and a pipe is read to its
+/// end only once every process holding it has gone: a helper Chrome left
+/// behind held prez with it, and nothing bounded that wait. A file needs no
+/// reader, so the wait is on Chrome's main process alone.
+///
+/// **CHROME STAYS IN prez's PROCESS GROUP**, so Ctrl-C at the terminal reaches
+/// it as it reaches prez. In a group of its own, an interrupted print would
+/// leave Chrome running with nothing to bound it (critic-rust, on 0131's v1).
+fn launch(browser: &Path, artifact: &Path, pdf: &Path, log: &Path) -> Result<Child, Failure> {
+  let unwritable = |e: std::io::Error| {
+    Failure::new(
+      format!(
+        "could not open '{}' for the browser's output: {e}",
+        log.display()
+      ),
+      "check that the temporary directory is writable",
+    )
+  };
+  let stdout = File::create(log).map_err(unwritable)?;
+  let stderr = stdout.try_clone().map_err(unwritable)?;
+  // --virtual-time-budget gives the page a moment to lay out and, when the deck
+  // opted into mermaid, to draw its diagrams. Without it a diagram-heavy deck
+  // prints its fences as empty boxes.
+  Command::new(browser)
+    .arg("--headless")
+    .arg("--disable-gpu")
+    // Chrome's first-run experience is an interactive modal, and every launch
+    // here meets a profile it has never seen, so it fires every time. Refuse it
+    // rather than ask a human a question from inside a print pipeline.
+    .arg("--no-first-run")
+    .arg("--no-default-browser-check")
+    .arg("--no-pdf-header-footer")
+    .arg("--virtual-time-budget=5000")
+    .arg(format!("--print-to-pdf={}", pdf.display()))
+    .arg(browser::file_url(artifact))
+    .stdin(Stdio::null())
+    .stdout(stdout)
+    .stderr(stderr)
+    .spawn()
+    .map_err(|e| {
+      Failure::new(
+        format!("could not run '{}': {e}", browser.display()),
+        "check the browser path, or name another with --browser",
+      )
+    })
+}
+
+/// Waits up to `deadline` for `child` to exit, and returns how it exited, or
+/// `None` when it is still running: found running, and so not yet reaped.
+fn wait_within(child: &mut Child, deadline: Duration) -> std::io::Result<Option<ExitStatus>> {
+  let until = Instant::now() + deadline;
+  loop {
+    if let Some(status) = child.try_wait()? {
+      return Ok(Some(status));
+    }
+    if Instant::now() >= until {
+      return Ok(None);
+    }
+    std::thread::sleep(POLL);
+  }
+}
+
+/// Ends a print that outran its deadline, and refuses it, naming the deadline
+/// and the PDF, with what Chrome had said by then.
+///
+/// **CHROME IS KILLED WHILE IT IS UNREAPED**: found running at the deadline,
+/// its pid is still Chrome's, so the kill cannot reach another process (issue
+/// 0030's trap is a pid signalled after its reap). It is then reaped within
+/// `REAP_GRACE`, and the refusal says it is still running if the grace runs
+/// out: no wait here is unbounded. Only the main process is killed; a helper
+/// it started holds only the log, which nothing waits on.
+fn abandon(
+  chrome: &mut Child,
+  browser: &Path,
+  out: &Path,
+  log: &Path,
+  deadline: Duration,
+) -> Failure {
+  let mut also = Vec::new();
+  if let Err(e) = chrome.kill() {
+    also.push(format!("could not kill it: {e}"));
+  }
+  match wait_within(chrome, REAP_GRACE) {
+    Ok(Some(_)) => {}
+    Ok(None) => also.push(format!("it is still running as pid {}", chrome.id())),
+    Err(e) => also.push(format!(
+      "could not ask whether it had ended, and it may still be running as pid {}: {e}",
+      chrome.id()
+    )),
+  }
+  let mut message = format!(
+    "'{}' did not finish printing '{}' in {} s:\n{}",
+    browser.display(),
+    out.display(),
+    deadline.as_secs_f64(),
+    said(log)
+  );
+  for line in also {
+    message.push_str("\n  and ");
+    message.push_str(&line);
+  }
+  Failure::new(message, STALLED)
+}
+
+/// What Chrome wrote to its log, or why that cannot be read.
+fn said(log: &Path) -> String {
+  match std::fs::read(log) {
+    Ok(bytes) => String::from_utf8_lossy(&bytes).into_owned(),
+    Err(e) => format!(
+      "(its output could not be read from '{}': {e})",
+      log.display()
+    ),
+  }
 }
 
 /// Check that the PDF has one page per slide, and say so when it does not.
@@ -536,5 +739,193 @@ mod tests {
     let warnings = verify_pagination(&pdf, 6);
     assert_eq!(warnings.len(), 1);
     assert!(warnings[0].contains("unverified"), "{warnings:?}");
+  }
+
+  // ---- issue 0131: a print is bounded, and nothing of Chrome's holds it ----
+
+  /// A stand-in for Chrome: a shell script named `chrome` in `dir`.
+  fn fake_browser(dir: &Path, body: &str) -> PathBuf {
+    use std::os::unix::fs::PermissionsExt;
+    let path = dir.join("chrome");
+    std::fs::write(&path, format!("#!/bin/sh\n{body}\n")).unwrap();
+    std::fs::set_permissions(&path, std::fs::Permissions::from_mode(0o755)).unwrap();
+    path
+  }
+
+  /// Writes a one-page PDF where the fake was told to print.
+  const WRITES_THE_PDF: &str = r#"for a; do case "$a" in --print-to-pdf=*) out="${a#--print-to-pdf=}" ;; esac; done
+printf '<</Type /Page>>' >"$out""#;
+
+  /// Kills the process whose pid a fake wrote to `file`: what it left running.
+  fn kill_left(file: &Path) {
+    if let Ok(pid) = std::fs::read_to_string(file) {
+      let _ = Command::new("/bin/kill")
+        .args(["-KILL", pid.trim()])
+        .status();
+    }
+  }
+
+  /// Neither the PDF nor its partial is at `out`: what a refused print leaves.
+  fn assert_nothing_at(out: &Path) {
+    assert!(
+      !out.exists(),
+      "a refused print left a PDF at {}",
+      out.display()
+    );
+    assert!(
+      !partial_of(out).exists(),
+      "a refused print left its partial beside {}",
+      out.display()
+    );
+  }
+
+  #[test]
+  fn a_print_that_never_finishes_is_refused_at_its_deadline_and_chrome_killed() {
+    let dir = artifact::testing::TempDir::new("prez-drive", "stall");
+    let left = dir.join("left");
+    let out = dir.join("deck.pdf");
+    let chrome = fake_browser(
+      &dir,
+      &format!(
+        "echo 'still printing'\nsleep 30 &\necho $! >'{}'\nwait",
+        left.display()
+      ),
+    );
+    let deadline = Duration::from_secs(3);
+    let began = Instant::now();
+    let e = print_within(
+      &chrome,
+      &dir.join("deck.html"),
+      &out,
+      &dir.join("chrome.log"),
+      1,
+      deadline,
+    )
+    .unwrap_err();
+    let took = began.elapsed();
+    // Only Chrome's main process is killed, so the sleep it started is left,
+    // as a helper of Chrome's would be, and the test ends it.
+    kill_left(&left);
+    assert!(took < deadline + REAP_GRACE, "{took:?}");
+    assert!(
+      e.message.contains("did not finish printing"),
+      "{}",
+      e.message
+    );
+    assert!(
+      e.message.contains("still printing"),
+      "what Chrome said goes with the refusal: {}",
+      e.message
+    );
+    assert!(
+      !e.message.contains("still running"),
+      "the killed fake was not reaped within the grace: {}",
+      e.message
+    );
+    assert_eq!(e.remedy.as_deref(), Some(STALLED));
+    assert_nothing_at(&out);
+  }
+
+  #[test]
+  fn a_print_returns_when_chrome_exits_whatever_it_leaves_holding_its_output() {
+    let dir = artifact::testing::TempDir::new("prez-drive", "linger");
+    let left = dir.join("left");
+    let out = dir.join("deck.pdf");
+    // A partial an interrupted print left, which this print must not keep.
+    std::fs::write(partial_of(&out), b"an interrupted print").unwrap();
+    // The sleep inherits the fake's stdout and stderr and outlives it, as a
+    // helper of Chrome's can. On pipes, reading them to their end waited for it.
+    let chrome = fake_browser(
+      &dir,
+      &format!(
+        "{WRITES_THE_PDF}\nsleep 30 &\necho $! >'{}'",
+        left.display()
+      ),
+    );
+    let began = Instant::now();
+    let printed = print_within(
+      &chrome,
+      &dir.join("deck.html"),
+      &out,
+      &dir.join("chrome.log"),
+      1,
+      Duration::from_secs(20),
+    );
+    let took = began.elapsed();
+    kill_left(&left);
+    assert_eq!(printed.unwrap(), Vec::<String>::new());
+    assert!(
+      took < Duration::from_secs(10),
+      "the print waited {took:?} for what Chrome left behind"
+    );
+    assert_eq!(std::fs::read(&out).unwrap(), b"<</Type /Page>>");
+    assert!(!partial_of(&out).exists(), "the partial outlived the print");
+  }
+
+  #[test]
+  fn a_print_that_fails_is_refused_with_what_chrome_said() {
+    let dir = artifact::testing::TempDir::new("prez-drive", "fails");
+    let out = dir.join("deck.pdf");
+    let chrome = fake_browser(&dir, "echo 'cannot print this' >&2\nexit 1");
+    let e = print_within(
+      &chrome,
+      &dir.join("deck.html"),
+      &out,
+      &dir.join("chrome.log"),
+      1,
+      Duration::from_secs(20),
+    )
+    .unwrap_err();
+    assert!(
+      e.message.contains("failed while printing (exit 1)"),
+      "{}",
+      e.message
+    );
+    assert!(e.message.contains("cannot print this"), "{}", e.message);
+    assert_nothing_at(&out);
+  }
+
+  #[test]
+  fn a_print_refused_after_writing_its_pdf_leaves_no_pdf_and_no_partial() {
+    let dir = artifact::testing::TempDir::new("prez-drive", "refused");
+    let out = dir.join("deck.pdf");
+    let chrome = fake_browser(&dir, &format!("{WRITES_THE_PDF}\nexit 1"));
+    let e = print_within(
+      &chrome,
+      &dir.join("deck.html"),
+      &out,
+      &dir.join("chrome.log"),
+      1,
+      Duration::from_secs(20),
+    )
+    .unwrap_err();
+    assert!(
+      e.message.contains("failed while printing (exit 1)"),
+      "{}",
+      e.message
+    );
+    assert_nothing_at(&out);
+  }
+
+  #[test]
+  fn a_stale_partial_is_never_taken_for_a_print_that_wrote_nothing() {
+    let dir = artifact::testing::TempDir::new("prez-drive", "stale");
+    let out = dir.join("deck.pdf");
+    // A whole one-page PDF an interrupted print left: without its removal
+    // first, a Chrome that exits 0 having written nothing would see it
+    // renamed over `out` and counted as its own print.
+    std::fs::write(partial_of(&out), b"<</Type /Page>>").unwrap();
+    let chrome = fake_browser(&dir, "exit 0");
+    let e = print_within(
+      &chrome,
+      &dir.join("deck.html"),
+      &out,
+      &dir.join("chrome.log"),
+      1,
+      Duration::from_secs(20),
+    )
+    .unwrap_err();
+    assert!(e.message.contains("wrote no PDF"), "{}", e.message);
+    assert_nothing_at(&out);
   }
 }
