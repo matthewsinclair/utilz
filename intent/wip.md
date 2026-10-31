@@ -1,5 +1,5 @@
 ---
-verblock: "30 Oct 2026:v1.12: matts - globalfold at the close"
+verblock: "31 Oct 2026:v1.13: matts - ST0031 behind the sweep"
 ---
 
 # Work In Progress
@@ -10,7 +10,9 @@ verblock: "30 Oct 2026:v1.12: matts - globalfold at the close"
 
 ## TODO
 
-- hv: `gh workflow run tests.yml --repo matthewsinclair/utilz --ref main`, issue 0130's proof: Test on macOS runs macos.bats' 13 tests.
+- hv: push main, then `gh workflow run tests.yml --repo matthewsinclair/utilz --ref main`: CI's proof of 0130 (Test on macOS runs macos.bats) and of 0131 (prez's bounded print and the suites' one retry) on runners.
+- dc: ST0031/01, Utilz's side of Devbin ST0011/10's sweep, on hv's go on devbin's release; ST0031/02's bank lands with it.
+- hv: name ST0031/03's owner (menuz reads the release stamp, not the tag), in ic's lane.
 - ic: issue 0114, once arca_swift tags its issue 0003's fixes.
 - hv: rule on ST0029, Retire Python; vc's hold 24 lists the Python outside its scope.
 - hv: rule on cancelling ST0017/04.

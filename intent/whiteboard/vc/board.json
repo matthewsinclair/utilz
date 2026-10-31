@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T10:49:00.614Z",
+    "heartbeat_at": "2026-10-31T12:06:51.751Z",
     "status": "active",
-    "focus": "31 Oct: following devbin-vc (estate pen, on hv's word): ST0011/10's (1) inventory and (2) baseline sent; holding for the sweep. main's push CI at 1434e764 is red (0131, Chrome stalls); FOR hv via devbin-vc: one dispatch rechecks it and proves 0130. No test, build or push.",
+    "focus": "31 Oct, following devbin-vc (the estate pen, on hv's word): 0131 landed at 5d83dd93 and closed at 5c06cd66 on vc's checks, with R1 and R2 green; ST0011/10's (1) and (2) sent and ST0031 recorded; holding for the sweep. FOR hv through devbin-vc: push main, then one dispatch proves 0130 and 0131 on runners.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2292,7 +2292,8 @@
       "kind": "hold",
       "seq": 25,
       "text": "0131 (CI's headless Chrome stalls): its fix is held until devbin-vc answers ST0011/10's (3) for it. Then dc fixes it on vc's word, and hv's run proves it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-31T12:06:51.626Z",
       "recorded_at": "2026-10-31T10:49:00.483Z"
     },
     {
