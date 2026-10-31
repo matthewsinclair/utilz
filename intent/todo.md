@@ -15,7 +15,7 @@ _(none)_
 - [!] ST0029: Retire Python from Utilz
 - [?] ST0031: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
   - [ ] 01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
-  - [ ] 02: CI tuning, banked for the sweep's push: HOMEBREW_NO_AUTO_UPDATE, clippy once, a cargo cache, test-linux's roster derived
+  - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
   - [ ] 03: menuz reads the release stamp, not the tag, for MenuzKind=release (menuz:632)
 
 ## DONE
