@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 12:47Z
+heartbeat_at: 2026-10-31 12:54Z
 status: active
-focus: "31 Oct: folded for hv's compact (hold 31); issue 0131 done (landed 5d83dd93, closed 5c06cd66, wt-0131 removed, its exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty); banked: ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push, and ST0029's Python census for hold 24 (2); nothing booked or running; not released; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "31 Oct: back from hv's compact, pickup written; hold 31 stands until utilz-vc's word, under hv's estate hold; banked: ST0031/02's CI bank (st0031-02-v2.patch, 2e48c8e6, on d567e4b8, in wt-st0031-02) for the sweep's push, and ST0029's Python census for hold 24 (2); 0131's exhaust in ~/.Trash/utilz-dc-exhaust-20261031 for hv to empty; nothing booked or running; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
