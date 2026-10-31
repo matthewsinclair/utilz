@@ -1,0 +1,14 @@
+{
+  "id": "01M6989YVEXZ9SSE6NWKFHBF7V",
+  "ts": "2026-10-31T15:12:31.088Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-03.1"
+  },
+  "payload": {
+    "evidence": "landed at b8e527d8; desk run 01M697M3EPJDYFVJ40S2YAD0TW, menuz.bats 1..138, 138 ok, 0 skip, 0 not ok, log sha256 9a5b7b66, judged green by utilz-vc"
+  }
+}

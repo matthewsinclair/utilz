@@ -1,0 +1,14 @@
+{
+  "id": "01M6989ZACAVPE26TMX8CT4BXZ",
+  "ts": "2026-10-31T15:12:31.566Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0027/AC-07.3"
+  },
+  "payload": {
+    "text": "utilz menuz build and test pass five stamps as build settings: MENUZ_COMMIT is git rev-parse --short=8 HEAD, and MENUZ_KIND is release or dev by the rule help/menuz.md states with the stamps (since ST0031/03); Info.plist carries MenuzKind and project.yml defaults it to dev; stamps prints the five lines in a clone and reads MenuzKind from the installed bundle in a Homebrew install; status prints the eight-character commit; menuz.bats covers each answer of the kind against a fixture repository, and bats is green on kovacs."
+  }
+}
