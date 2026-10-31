@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T12:54:53.264Z",
+    "heartbeat_at": "2026-10-31T12:59:22.132Z",
     "status": "active",
-    "focus": "31 Oct: compacted on hv's order (via devbin-vc, 12:43Z); holding for devbin-vc's word (hold 26). 0131 closed at 5c06cd66; ST0031 waits for the sweep; FOR hv through devbin-vc: push main, then one dispatch proves 0130 and 0131 on runners. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md.",
+    "focus": "31 Oct: hv's first-hand 'Ok, crack on' after the compact released Utilz's compact holds (vc 26, dc 31); holding for the sweep at devbin-vc's desk, whose estate hold is its to read. 0131 closed at 5c06cd66; ST0031 waits for devbin's release; FOR hv through devbin-vc: push main (upstream still 1434e764, red), then one dispatch proves 0130 and 0131 on runners.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2311,7 +2311,8 @@
       "kind": "hold",
       "seq": 26,
       "text": "For hv's compact (hv's order via devbin-vc, 31 Oct 12:43Z: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and devbin-vc gives its word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-10-31T12:59:17.187Z",
       "recorded_at": "2026-10-31T12:46:10.800Z"
     }
   ],

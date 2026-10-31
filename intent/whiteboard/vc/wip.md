@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: d19162d2-e2cb-4e70-b65d-3298846a43b7
-heartbeat_at: 2026-10-31 12:54Z
+heartbeat_at: 2026-10-31 12:59Z
 status: active
-focus: "31 Oct: compacted on hv's order (via devbin-vc, 12:43Z); holding for devbin-vc's word (hold 26). 0131 closed at 5c06cd66; ST0031 waits for the sweep; FOR hv through devbin-vc: push main, then one dispatch proves 0130 and 0131 on runners. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md."
+focus: "31 Oct: hv's first-hand 'Ok, crack on' after the compact released Utilz's compact holds (vc 26, dc 31); holding for the sweep at devbin-vc's desk, whose estate hold is its to read. 0131 closed at 5c06cd66; ST0031 waits for devbin's release; FOR hv through devbin-vc: push main (upstream still 1434e764, red), then one dispatch proves 0130 and 0131 on runners."
 claims: []
 ---
 
@@ -22,7 +22,6 @@ _(none)_
 ## Holds
 
 - Parked for hv, until hv rules on each, on return (decision 73, hv's word of 30 Oct): (1) 0114, blocked on arca_swift issue 0003, which is open; its newest tag, 0.2.1, carries none of it. (2) ST0029, on hold since 26 Oct: net new code, a Rust spike for pdf2md and a zsh port of xtrct. dc's census of the Python outside its scope (at 3e3daeff, sent on hv's word, checked by vc): one-liners in prez acceptance.sh:137,143, todo.bats:88, arngz acceptance.sh:69,81 and menuz watcher-handrun.sh:52; a fontTools remedy at theme.rs:293 (test :795); docs that teach Python at developer-guide.md:604-660 and help/utilz.md:419-424; ensure_venv cited at prez/prez:15 and prez/README.md:36. Inside its scope but unnamed: AT14's python3 -m venv at install_guards.bats:206,218. (3) ST0017/04, not started: net new code, and cancelling it is hv's scope call (vc's rec: cancel). (4) git rm of the whiteboard .history/ trees, 48 tracked files (vc's rec: rm). (5) hv's inbox: vc's 15 spent messages of 22 to 30 Oct; the clear is hv's act, ! intent wb clear vc --node hv (vc's rec: clear). (edited)
-- For hv's compact (hv's order via devbin-vc, 31 Oct 12:43Z: bank, clear, localfold, compact, then hold): released once the compact has run, /in-session's pickup is committed, and devbin-vc gives its word.
 
 ## Watch-outs
 
