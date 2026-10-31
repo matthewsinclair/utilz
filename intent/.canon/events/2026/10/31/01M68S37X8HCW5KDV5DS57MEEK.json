@@ -1,0 +1,15 @@
+{
+  "id": "01M68S37X8HCW5KDV5DS57MEEK",
+  "ts": "2026-10-31T10:46:42.345Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0131"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "CI's Rust legs stall on headless Chrome: prez acceptance AT21 hung on macOS at 2.14.8's tag, and showreel AT23 and AT29 timed out at frame 0 on ubuntu at 1434e764"
+  }
+}
