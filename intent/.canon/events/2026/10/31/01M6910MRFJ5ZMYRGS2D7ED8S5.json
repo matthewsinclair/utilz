@@ -1,0 +1,15 @@
+{
+  "id": "01M6910MRFJ5ZMYRGS2D7ED8S5",
+  "ts": "2026-10-31T13:05:05.807Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "devbin-vc, 31 Oct, received by utilz-dc by its date -u of 13:03Z and relayed verbatim to vc: hv's 'Ok, crack on.' lifts the 12:43Z estate hold (devbin-vc decision 94; rhadamanth's desk hold released at 12:56Z). For Utilz: anything that needs no new core and nothing public may proceed; every bats or heavy run is booked at rhadamanth's desk (intent estate slots ask, devbin-vc grants), and decision 74 stands until a grant lifts it for that run, as 76 did; ST0031's sweep-dependent work waits until devbin-vc says Devbin 0.1.19's sweep has landed (Devbin's order of play: run 3, WP02, the full suite, WP09 at 0.1.19, then the sweep); the push of main, the dispatch for 0130 and 0131, and emptying dc's ~/.Trash/utilz-dc-exhaust-20261031 stay FOR hv with devbin-vc. Peers read this decision at pickup; dc records no copy."
+  }
+}

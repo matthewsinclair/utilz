@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "d19162d2-e2cb-4e70-b65d-3298846a43b7",
-    "heartbeat_at": "2026-10-31T12:59:22.132Z",
+    "heartbeat_at": "2026-10-31T13:05:15.568Z",
     "status": "active",
-    "focus": "31 Oct: hv's first-hand 'Ok, crack on' after the compact released Utilz's compact holds (vc 26, dc 31); holding for the sweep at devbin-vc's desk, whose estate hold is its to read. 0131 closed at 5c06cd66; ST0031 waits for devbin's release; FOR hv through devbin-vc: push main (upstream still 1434e764, red), then one dispatch proves 0130 and 0131 on runners.",
+    "focus": "31 Oct: hv's go ('Ok, crack on'; devbin-vc decision 94) lifted the estate hold; Utilz holds for Devbin 0.1.19's sweep on devbin-vc's word (vc decision 77), and dc drafts ST0031/01's design in scratch for vc's check. 0131 closed at 5c06cd66; FOR hv through devbin-vc: push main (upstream still 1434e764, red), then one dispatch proves 0130 and 0131 on runners.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2314,6 +2314,14 @@
       "state": "archived",
       "archived_at": "2026-10-31T12:59:17.187Z",
       "recorded_at": "2026-10-31T12:46:10.800Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 77,
+      "text": "devbin-vc, 31 Oct, received by utilz-dc by its date -u of 13:03Z and relayed verbatim to vc: hv's 'Ok, crack on.' lifts the 12:43Z estate hold (devbin-vc decision 94; rhadamanth's desk hold released at 12:56Z). For Utilz: anything that needs no new core and nothing public may proceed; every bats or heavy run is booked at rhadamanth's desk (intent estate slots ask, devbin-vc grants), and decision 74 stands until a grant lifts it for that run, as 76 did; ST0031's sweep-dependent work waits until devbin-vc says Devbin 0.1.19's sweep has landed (Devbin's order of play: run 3, WP02, the full suite, WP09 at 0.1.19, then the sweep); the push of main, the dispatch for 0130 and 0131, and emptying dc's ~/.Trash/utilz-dc-exhaust-20261031 stay FOR hv with devbin-vc. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-10-31T13:05:05.807Z"
     }
   ],
   "sent": [
