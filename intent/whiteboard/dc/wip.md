@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 9f71aabd-d8f0-4c4d-803b-d11c1bcf930c
-heartbeat_at: 2026-10-31 10:46Z
+heartbeat_at: 2026-10-31 11:28Z
 status: active
-focus: "31 Oct: devbin-vc's read-only survey for Devbin ST0011/10 sent to utilz-vc; holding for the sweep (Devbin ST0011/09, on hv's go); no edit, no test, no build"
+focus: "31 Oct, on devbin-vc's word under utilz-vc's check: 0131's fix coded in wt-0131 (base d567e4b8), its diff with vc for critic-rust and critic-shell, then R1 and R2 booked at devbin-vc's desk; ST0031/02's CI bank in wt-st0031-02 (base d567e4b8) with vc, for CI at the sweep's push; no run before vc's word"
 claims: []
 ---
 
