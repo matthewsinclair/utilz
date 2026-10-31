@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: d19162d2-e2cb-4e70-b65d-3298846a43b7
-heartbeat_at: 2026-10-31 14:40Z
+heartbeat_at: 2026-10-31 15:15Z
 status: active
-focus: "31 Oct: hv's go through devbin-vc (decision 80) released hold 27. ST0031/03 resumes with dc under vc's rulings on critic-shell's read; vc reads its revision, re-bank and wrapper, then dc books menuz.bats alone at rhadamanth's desk. ST0031/01 and /02 wait for the 0.1.19 sweep. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md."
+focus: "31 Oct: ST0031/03 landed at b8e527d8 and closed at 001b8c0d, both checked by vc by their change; hv's 'Keep them' on .history/ is decision 81. Holding for devbin-vc's word that the 0.1.19 sweep has landed: then ST0031/01 and /02 with dc, their criteria and objectives first. Resume state: ~/Devel/scratch/utilz-vc/RESUME.md."
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- ST0031/03 (dc's; decision 80): read dc's design revision, re-bank and wrapper by sha256; dc stores the revision on vc's YOUR TURN; dc books menuz.bats alone at rhadamanth's desk and vc sends devbin-vc the ask's id; read the run's END from its log, then check the landing by its change.
+_(none)_
 
 ## TODO
 
@@ -40,6 +40,7 @@ _(none)_
 - hv, 31 Oct, 'Go with your recommendations' on the FOR hv list, relayed by devbin-vc and received by vc by its date -u of 13:47Z (devbin-vc's stamp is no clock read and is not recorded): (1) Utilz main is public: hv pushed it and told vc 'Done' in vc's session (upstream and local at a21dde9c, push run 41207068643), and vc dispatched tests.yml on main (run 41207167042) to prove 0130 and 0131; vc reads both to the end and sends devbin-vc the verdict by sha; ST0031/02's bank stays for the sweep's push. (2) ST0031/03 is utilz-dc's under vc's review (hv asked vc first-hand who should have it, and vc named dc): it needs no new core, starts now, lands before Utilz's first cut in the new shape, and books menuz.bats at rhadamanth's desk; dc claimed and started it at 1a58550b. (3) The two exhaust folders in ~/.Trash are rhadamanth-sysadm's to empty. hv's first-hand 'ok, hold for the sweep' to dc confirms decision 77 for ST0031/01. Peers read this decision at pickup; dc records no copy.
 - hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 14:12Z: 'Go with your recommendations on hold 24'. (2) ST0029, Retire Python, resumes after Devbin 0.1.19's sweep, owned by dc, widened to dc's census of the Python outside its scope (hold 24's text, archived with this decision, and ~/Devel/scratch/utilz-dc/python-census-20261030.txt), with xtrct's port byte-exact, since it feeds the Talga Rd accounting. (3) ST0017/04 is cancelled, with that reason on it. (4) git rm of the whiteboard's .history/ trees, 48 files, was refused by the pre-commit gate's append-only guard, since Intent's whiteboard protocol keeps .history/ append-only; vc restored all 48 from HEAD with nothing committed, withdraws the recommendation, and puts it back to hv: keep them (vc's rec), or remove them by hand past the gate, which is hv's alone. (5) vc's 15 spent messages in hv's inbox are cleared by hv's own '! intent wb clear vc --node hv', which vc then commits. 0114, hold 24's (1), stays parked on arca_swift's tag (ic's todo 13; intent/wip.md). Peers read this decision at pickup; dc records no copy.
 - devbin-vc, 31 Oct, received by vc by its date -u of 14:40Z: hv's go, which devbin-vc gives as 14:34Z; rhadamanth's desk is live again. It releases hold 27 (archived): the compact ran and both pickups are committed (vc 6fee4e98; dc 82f0e1c9, checked by vc by its change). For Utilz: dc's ST0031/03 resumes from its bank a2e9756e under vc's rulings on critic-shell's read (in dc's RESUME.md). dc sends one design revision, one re-bank and its wrapper by sha256, and vc reads all three before dc stores the revision on vc's YOUR TURN. Then menuz.bats alone is booked at the desk: dc, which runs it, asks, starts and releases; vc sends devbin-vc the ask's id; run 3b holds the bats lane first, and devbin-vc grants on load. ST0031/01 and /02 still wait for devbin-vc's word that Devbin 0.1.19's sweep has landed in Utilz's tree. Nothing is pushed beyond what devbin-vc's decision 98 authorised; public main stays at a21dde9c. Decisions 74 and 77 stand: no Claude runs a test or build without a desk grant for that run. Peers read this decision at pickup; dc records no copy.
+- hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 15:14Z: 'Keep them', on the whiteboard's .history/ trees (decision 79's (4)). They stay, append-only, as Intent's whiteboard protocol and the pre-commit gate's guard keep them, and nothing is removed; the TODO leaves intent/wip.md. Peers read this decision at pickup; dc records no copy.
 
 ---
 

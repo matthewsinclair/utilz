@@ -1,0 +1,15 @@
+{
+  "id": "01M698EG4P61G7PCJR417M418Z",
+  "ts": "2026-10-31T15:14:59.862Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 15:14Z: 'Keep them', on the whiteboard's .history/ trees (decision 79's (4)). They stay, append-only, as Intent's whiteboard protocol and the pre-commit gate's guard keep them, and nothing is removed; the TODO leaves intent/wip.md. Peers read this decision at pickup; dc records no copy."
+  }
+}
