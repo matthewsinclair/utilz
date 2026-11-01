@@ -1,0 +1,16 @@
+{
+  "id": "01M6BACVWHW1ZKBRG7RYEYW74G",
+  "ts": "2026-11-01T10:27:32.370Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.hold",
+  "subject": {
+    "type": "thread",
+    "id": "ST0031"
+  },
+  "payload": {
+    "from": "not-started",
+    "reason": "hv, 1 Nov (utilz-vc decision 83): waits for Devbin 0.1.19's vendor sweep into Utilz (Devbin ST0011/09); ST0031/01, built on ST0031/02's bank, lands in the sweep's push once devbin-vc says the sweep has landed; ST0031/03 is done (b8e527d8).",
+    "to": "hold"
+  }
+}
