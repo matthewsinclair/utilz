@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 164c8030-9b91-4808-9e07-4075bb69b86d
-heartbeat_at: 2026-11-01 09:55Z
+heartbeat_at: 2026-11-01 11:05Z
 status: active
-focus: "1 Nov, picked up after hv's second compact (dc's second localfold wrote nothing): hv's yes (vc decision 83) starts dc's pre-sweep paper prep for ST0031 once the compact's pickup chain is committed: both WP objectives first, then AC-01.x and AC-02.x from the stored designs, whether intent ac descope takes the Completed ST0019 (from its help only), ST0031 on hold with the sweep as its reason, and ST0029's hold reason refreshed to decision 79; vc checks each write by its change before dc commits it; no source edit, no run, no new core; /01's build and /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup) wait for devbin-vc's word that 0.1.19's sweep has landed; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "1 Nov, picked up after hv's third compact: decision 83's prep is in (cc16d2f4 to b43ac3a5, each write checked by vc by its change), and dc holds within hv's word for the day (vc decision 82: ship ST0011, no new code, no new yaks); ST0031 and ST0029 are on hold for Devbin 0.1.19's vendor sweep; on devbin-vc's word that it has landed: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; no source edit, no run; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
