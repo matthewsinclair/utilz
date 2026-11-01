@@ -1,0 +1,15 @@
+{
+  "id": "01M6B4625B6SKXRNX27B2FDSJE",
+  "ts": "2026-11-01T08:38:57.963Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 1 Nov, in devbin-vc's TUI, relayed by devbin-vc (answered by its date -u read of 08:33Z): (1) utilz-vc pushes Utilz main, local then upstream, then dispatches tests.yml once, reads CI to the end and sends devbin-vc the verdict by sha. (2) menuz goes to 0.4.10 for 2.14.9: cc's hold 51 is released, cc makes the XS bump on vc's turn, and it rides the next push. ST0031's pre-sweep prep, utilz-ic's two board files and the three dated Trash folders wait for hv's return. Every run books at the desk as before. hv's word for the day: ship ST0011 (Devbin's), no new code and no new yaks. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}

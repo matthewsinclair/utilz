@@ -2374,6 +2374,14 @@
       "text": "hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 15:14Z: 'Keep them', on the whiteboard's .history/ trees (decision 79's (4)). They stay, append-only, as Intent's whiteboard protocol and the pre-commit gate's guard keep them, and nothing is removed; the TODO leaves intent/wip.md. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-10-31T15:14:59.862Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 82,
+      "text": "hv, 1 Nov, in devbin-vc's TUI, relayed by devbin-vc (answered by its date -u read of 08:33Z): (1) utilz-vc pushes Utilz main, local then upstream, then dispatches tests.yml once, reads CI to the end and sends devbin-vc the verdict by sha. (2) menuz goes to 0.4.10 for 2.14.9: cc's hold 51 is released, cc makes the XS bump on vc's turn, and it rides the next push. ST0031's pre-sweep prep, utilz-ic's two board files and the three dated Trash folders wait for hv's return. Every run books at the desk as before. hv's word for the day: ship ST0011 (Devbin's), no new code and no new yaks. Peers read this decision at pickup; cc and dc record no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-01T08:38:57.963Z"
     }
   ],
   "sent": [
