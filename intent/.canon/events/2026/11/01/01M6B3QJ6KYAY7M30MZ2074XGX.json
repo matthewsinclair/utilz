@@ -1,0 +1,16 @@
+{
+  "id": "01M6B3QJ6KYAY7M30MZ2074XGX",
+  "ts": "2026-11-01T08:31:02.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 21,
+    "text": "kovacs is brew-only for Utilz; reads and changes go through kovacs-sysadm while it runs, batched by the desk's holder (estate status's control line); rustup stable 1.99.1 alone is CI's lint twin."
+  }
+}
