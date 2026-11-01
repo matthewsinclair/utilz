@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 08:43Z
+heartbeat_at: 2026-11-01 09:48Z
 status: active
-focus: "1 Nov: hv ruled menuz to 0.4.10 for 2.14.9 (vc decision 82); the bump is cc's todo for vc's YOUR TURN after hv's push of main lands, so cc stays up; until then no tree write but cc's board; no claims, 0 live messages, nothing banked; no test or build (vc decision 74)"
+focus: "1 Nov: localfold for hv's compact (hv's word, in cc's window and via vc): menuz's 0.4.10 bump landed at cd34c3de, todo 52 archived; nothing of cc's open, parked or banked, no claims, 0 live messages; cc holds for the compact and the go after it; no test or build (vc decision 74)"
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-- menuz 0.4.9 to 0.4.10 for 2.14.9 (hv's ruling, vc decision 82): on vc's YOUR TURN, after hv's push of main lands, send READY with the two paths (opt/menuz/VERSION, and CHANGELOG.md, where ST0031/03's 2.14.9 entry ends 'menuz goes from 0.4.9 to 0.4.10.', as 0094's a2802b76 did), then one commit by literal path; no test or build (decision 74)
+_(none)_
 
 ## Holds
 
