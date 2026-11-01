@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: fc538402-593e-48cb-b979-b57514555135
-heartbeat_at: 2026-11-01 09:48Z
+heartbeat_at: 2026-11-01 09:53Z
 status: active
-focus: "1 Nov, localfold for hv's compact (hv's word first-hand in vc's session, 09:43Z by vc's clock), no release: we carry on straight after it. hv pushed main at 510bc7db and CI there is green (push 41293082052, dispatch 41293158609; verdict sent to devbin-vc); cc's menuz 0.4.10 bump landed at cd34c3de and rides the next push. Utilz's queue waits for devbin-vc's word that Devbin 0.1.19's sweep has landed, and 0114 for arca_swift's tag. Waiting for hv's return: dc's pre-sweep prep, utilz-ic's two board files, the dated Trash folders. Resume state ~/Devel/scratch/utilz-vc/RESUME.md."
+focus: "1 Nov, folded for hv's compact (hv's word first-hand in vc's session, 09:43Z by vc's clock), no release: we carry on straight after it. hv pushed main at 510bc7db and CI there is green (verdict sent to devbin-vc); cc's menuz 0.4.10 bump landed at cd34c3de and rides the next push. hv's answers (decision 83): dc's pre-sweep paper prep for ST0031 goes ahead after the compact's pickup chain, each write checked by vc; utilz-ic's board files checked in; the Trash folders emptied. Then Utilz's queue waits for devbin-vc's word that Devbin 0.1.19's sweep has landed, and 0114 for arca_swift's tag. Resume state ~/Devel/scratch/utilz-vc/RESUME.md."
 claims: []
 ---
 
