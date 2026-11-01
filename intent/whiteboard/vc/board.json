@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "fc538402-593e-48cb-b979-b57514555135",
-    "heartbeat_at": "2026-11-01T09:59:04.497Z",
+    "heartbeat_at": "2026-11-01T10:41:05.104Z",
     "status": "active",
-    "focus": "dc's pre-sweep paper prep for ST0031 (decision 83), each write READY, checked by vc by its change, then YOUR TURN; the pickup chain after hv's second compact is in (cc 1fef0d03, dc 395bd6f8, vc last); the rest waits for Devbin 0.1.19's sweep and arca_swift's tag, within hv's word for the day (decision 82)",
+    "focus": "Decision 83's prep landed (cc16d2f4 to b43ac3a5, each write checked by vc by its change); within hv's word for the day (decision 82) Utilz holds: ST0031/01, /02 and ST0029 wait for devbin-vc's word that Devbin 0.1.19's sweep has landed, and 0114 for arca_swift's tag; nothing pushed",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2388,9 +2388,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 83,
-      "text": "hv, 1 Nov, first-hand in vc's session after the fold, received by vc's date -u of 09:52Z: (1) 'yes' to dc's pre-sweep paper prep for ST0031: AC-01.x and AC-02.x from the stored designs, both WP objectives, whether intent ac descope takes the Completed ST0019 (from its help only), ST0031 on hold with the sweep as its reason, and ST0029's hold reason refreshed to decision 79; no source edit, no run, no new core; dc does it after the compact's pickup chain, and vc checks each write by its change before dc commits it. (2) On utilz-ic's two uncommitted board files, 'why not just check them in?': vc checked them in at 0a69189c, ic's own 06:26Z pickup unchanged (4b293208). (3) 'yes, do it': vc emptied the five dated Trash folders, each manifest read first, each read absent after. Peers read this decision at pickup; cc and dc record no copy.",
+      "text": "hv, 1 Nov, first-hand in vc's session after the fold, received by vc's date -u of 09:52Z: (1) 'yes' to dc's pre-sweep paper prep for ST0031: AC-01.x and AC-02.x from the stored designs, both WP objectives, whether intent ac descope takes the Completed ST0019 (from its help only), ST0031 on hold with the sweep as its reason, and ST0029's hold reason refreshed to decision 79; no source edit, no run, no new core; dc does it after the compact's pickup chain, and vc checks each write by its change before dc commits it. (2) On utilz-ic's two uncommitted board files, 'why not just check them in?': vc checked them in at 0a69189c, ic's own 06:26Z pickup unchanged (4b293208). (3) 'yes, do it': vc emptied the five dated Trash folders, each manifest read first, each read absent after. Done: (1), each write checked by vc by its change: the objectives at cc16d2f4; AC-01.1 to 01.4, AC-02.1 to 02.3 and /02's Proof at d9479c4c; /02's objective and Bank line at 71ad2477; ST0031 on hold at 2de84f19, by st triage first, since hold is declared only from not-started and wip; ST0029's reason at b43ac3a5, by resume, hold, then dehydrate, so ST0029 is off disk as before. The descope help does not settle a Completed thread, so the first run at the sweep does, and ST0019's AC-01.3 is written there, reworded, as AC-01.5. Peers read this decision at pickup; cc and dc record no copy.",
       "state": "live",
-      "recorded_at": "2026-11-01T09:53:28.881Z"
+      "recorded_at": "2026-11-01T09:53:28.881Z",
+      "edited_at": "2026-11-01T10:41:01.233Z"
     }
   ],
   "sent": [
