@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: fc538402-593e-48cb-b979-b57514555135
-heartbeat_at: 2026-11-01 06:32Z
+heartbeat_at: 2026-11-01 07:57Z
 status: active
-focus: "1 Nov: up after hv's hard close of 31 Oct (devbin decision 118); pickups committed in chain order, dc 66e0f132 and cc a7fc2934 checked by vc, vc last; utilz-ic left the estate after its 06:26Z pickup, so ic's two board files stay uncommitted, ic's to commit; Utilz's queue waits for devbin-vc's word that Devbin 0.1.19's sweep has landed (Devbin at v0.1.18), and 0114 waits for arca_swift's tag (0.2.1; 0003 open); holding for hv's instructions on the day plan; resume state ~/Devel/scratch/utilz-vc/RESUME.md."
+focus: "1 Nov localfold on hv's order via devbin-vc (07:53Z by its date -u), no release: holding for hv's /compact and the go after it. Utilz's queue waits for devbin-vc's word that Devbin 0.1.19's sweep has landed, and 0114 for arca_swift's tag. With hv, unanswered: push main plus one dispatch to prove ST0031/03 (b8e527d8) alone; dc's pre-sweep paper prep for ST0031; utilz-ic's uncommitted 1 Nov pickup. Resume state ~/Devel/scratch/utilz-vc/RESUME.md."
 claims: []
 ---
 
