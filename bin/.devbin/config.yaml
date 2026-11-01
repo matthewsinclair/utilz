@@ -132,8 +132,9 @@ macos:
 # without it -- no origin and two remotes (local, upstream). gates: check all
 # alone (hv, 28 Oct 2026, ST0030): the dry run and the twins run test estate
 # before a cut. after: tools/post-cut, one line, so Menuz.app and the tap
-# follow the cut and stop at the first failure (ST0030 D2). ci.query:
-# tools/ci-state, so step 11 gives a verdict instead of a skipped row.
+# follow the cut and stop at the first failure (ST0030 D2). No ci block: from
+# devbin 0.1.19 the core's built-in ci-state reads CI itself, on the
+# candidate's run of tests.yml, its default workflow.
 release:
   tag: "{version}"
   repo: matthewsinclair/utilz
@@ -141,5 +142,3 @@ release:
     - check all
   after:
     - tools/post-cut
-  ci:
-    query: tools/ci-state
