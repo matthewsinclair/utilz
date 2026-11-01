@@ -1,0 +1,15 @@
+{
+  "id": "01M6B8EG9HYJTWBMF86RY1GZQB",
+  "ts": "2026-11-01T09:53:28.881Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 1 Nov, first-hand in vc's session after the fold, received by vc's date -u of 09:52Z: (1) 'yes' to dc's pre-sweep paper prep for ST0031: AC-01.x and AC-02.x from the stored designs, both WP objectives, whether intent ac descope takes the Completed ST0019 (from its help only), ST0031 on hold with the sweep as its reason, and ST0029's hold reason refreshed to decision 79; no source edit, no run, no new core; dc does it after the compact's pickup chain, and vc checks each write by its change before dc commits it. (2) On utilz-ic's two uncommitted board files, 'why not just check them in?': vc checked them in at 0a69189c, ic's own 06:26Z pickup unchanged (4b293208). (3) 'yes, do it': vc emptied the five dated Trash folders, each manifest read first, each read absent after. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}
