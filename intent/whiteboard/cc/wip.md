@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- menuz's version for 2.14.9, until hv answers bump to 0.4.10 or keep 0.4.9 (put to hv in cc's day plan, 1 Nov): ST0031/03 (b8e527d8) changed opt/menuz/menuz with no bump, where 0094 bumped for a CLI-only change (a2802b76); cc's rec is the bump, XS, on vc's YOUR TURN
 
 ## Watch-outs
 

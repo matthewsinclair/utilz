@@ -1828,6 +1828,14 @@
       "archived_at": "2026-10-28T18:03:25.678Z",
       "recorded_at": "2026-10-28T13:08:59.782Z",
       "edited_at": "2026-10-28T13:11:23.067Z"
+    },
+    {
+      "node": "cc",
+      "kind": "hold",
+      "seq": 51,
+      "text": "menuz's version for 2.14.9, until hv answers bump to 0.4.10 or keep 0.4.9 (put to hv in cc's day plan, 1 Nov): ST0031/03 (b8e527d8) changed opt/menuz/menuz with no bump, where 0094 bumped for a CLI-only change (a2802b76); cc's rec is the bump, XS, on vc's YOUR TURN",
+      "state": "live",
+      "recorded_at": "2026-11-01T07:58:12.037Z"
     }
   ],
   "sent": [
