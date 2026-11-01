@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 11:04Z
+heartbeat_at: 2026-11-01 11:38Z
 status: active
-focus: "1 Nov: pickup after hv's third compact, on vc's chain: nothing of cc's open, parked or banked, no claims, 0 live messages, watch-out 6 live; cc holds for vc's word within hv's word for the day (ship ST0011, no new code, no new yaks; vc decision 82); no test or build (vc decision 74)"
+focus: "1 Nov: pickup after hv's fourth compact, on vc's chain: Utilz is parked until devbin-vc says Devbin 0.1.19's sweep has reached Utilz (vc decision 84), so cc stays still and moves only for something specific devbin-vc names this devbin release needs from Utilz; nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; no test or build (vc decision 74)"
 claims: []
 ---
 
