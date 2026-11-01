@@ -11,7 +11,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ### Changed
 
-- **A clean build at a release commit is stamped `release` before its tag exists** (ST0031/03). menuz stamped `release` only on a build of the tag. Devbin 0.1.19's cut builds and signs Menuz.app at the release commit and tags that commit only once its checks pass, so that app would have been stamped `dev` and refused by the cut's own kind check. menuz now reads the release commit as devbin's `app-sign` does, by the rule `utilz help menuz` states, which `docs/releasing.md` and the macos config's comment now point to. Between releases, with the tag on an earlier commit, a build is still `dev`. An empty root `VERSION`, which read as `dev`, is now exit 1 saying why, as a missing one already was.
+- **A clean build at a release commit is stamped `release` before its tag exists** (ST0031/03). menuz stamped `release` only on a build of the tag. Devbin 0.1.19's cut builds and signs Menuz.app at the release commit and tags that commit only once its checks pass, so that app would have been stamped `dev` and refused by the cut's own kind check. menuz now reads the release commit as devbin's `app-sign` does, by the rule `utilz help menuz` states, which `docs/releasing.md` and the macos config's comment now point to. Between releases, with the tag on an earlier commit, a build is still `dev`. An empty root `VERSION`, which read as `dev`, is now exit 1 saying why, as a missing one already was. menuz goes from 0.4.9 to 0.4.10.
 
 ### Fixed
 
