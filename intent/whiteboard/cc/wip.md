@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: efc7bfde-ffb8-4760-a8af-74bcc8668731
-heartbeat_at: 2026-10-30 22:42Z
-status: paused
-focus: "Closed (30 Oct) on hv's word via intent-vc: all of cc's work is on main, and nothing of cc's is open, parked or banked; cc's exhaust is in ~/.Trash/utilz-cc-close-20261030, for hv to empty; no test or build"
+session_id: 60293269-8140-445f-a3b9-6ff883acf95f
+heartbeat_at: 2026-11-01 06:30Z
+status: active
+focus: "1 Nov: booted after hv's hard close of 31 Oct; nothing of cc's open, parked or banked, no claims, 0 live messages; the 30 Oct exhaust folder is emptied; no assignment, so cc holds for hv's word on its day plan; no test or build (vc decision 74)"
 claims: []
 ---
 
