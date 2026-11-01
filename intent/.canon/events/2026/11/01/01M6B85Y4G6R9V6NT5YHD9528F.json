@@ -1,0 +1,16 @@
+{
+  "id": "01M6B85Y4G6R9V6NT5YHD9528F",
+  "ts": "2026-11-01T09:48:48.144Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 82,
+    "text": "hv, 1 Nov, in devbin-vc's TUI, relayed by devbin-vc (answered by its date -u read of 08:33Z): (1) utilz-vc pushes Utilz main, local then upstream, then dispatches tests.yml once, reads CI to the end and sends devbin-vc the verdict by sha. (2) menuz goes to 0.4.10 for 2.14.9: cc's hold 51 is released, cc makes the XS bump on vc's turn, and it rides the next push. ST0031's pre-sweep prep, utilz-ic's two board files and the three dated Trash folders wait for hv's return. Every run books at the desk as before. hv's word for the day: ship ST0011 (Devbin's), no new code and no new yaks. Done: (1) the classifier refused vc's push, so hv typed it in vc's session (both remotes at 510bc7db), and CI there is green (push 41293082052, dispatch 41293158609), verdict sent; (2) cc's bump landed at cd34c3de on vc's check. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}

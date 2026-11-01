@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "fc538402-593e-48cb-b979-b57514555135",
-    "heartbeat_at": "2026-11-01T09:30:18.725Z",
+    "heartbeat_at": "2026-11-01T09:48:48.350Z",
     "status": "active",
-    "focus": "1 Nov, hv's rulings (decision 82): hv pushed main to local and upstream at 510bc7db; vc dispatched tests.yml once (run 41293158609, beside the push's run 41293082052) and reads every job to the end against the last green at a21dde9c, verdict by sha to devbin-vc; then cc's menuz 0.4.10 bump on vc's turn, riding the next push. hv's word for the day: ship ST0011, no new code, no new yaks. Waiting for hv's return: dc's pre-sweep prep, utilz-ic's two board files, three dated Trash folders. Utilz's queue waits for Devbin 0.1.19's sweep, and 0114 for arca_swift's tag. Resume state ~/Devel/scratch/utilz-vc/RESUME.md.",
+    "focus": "1 Nov, localfold for hv's compact (hv's word first-hand in vc's session, 09:43Z by vc's clock), no release: we carry on straight after it. hv pushed main at 510bc7db and CI there is green (push 41293082052, dispatch 41293158609; verdict sent to devbin-vc); cc's menuz 0.4.10 bump landed at cd34c3de and rides the next push. Utilz's queue waits for devbin-vc's word that Devbin 0.1.19's sweep has landed, and 0114 for arca_swift's tag. Waiting for hv's return: dc's pre-sweep prep, utilz-ic's two board files, the dated Trash folders. Resume state ~/Devel/scratch/utilz-vc/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2379,9 +2379,10 @@
       "node": "vc",
       "kind": "decision",
       "seq": 82,
-      "text": "hv, 1 Nov, in devbin-vc's TUI, relayed by devbin-vc (answered by its date -u read of 08:33Z): (1) utilz-vc pushes Utilz main, local then upstream, then dispatches tests.yml once, reads CI to the end and sends devbin-vc the verdict by sha. (2) menuz goes to 0.4.10 for 2.14.9: cc's hold 51 is released, cc makes the XS bump on vc's turn, and it rides the next push. ST0031's pre-sweep prep, utilz-ic's two board files and the three dated Trash folders wait for hv's return. Every run books at the desk as before. hv's word for the day: ship ST0011 (Devbin's), no new code and no new yaks. Peers read this decision at pickup; cc and dc record no copy.",
+      "text": "hv, 1 Nov, in devbin-vc's TUI, relayed by devbin-vc (answered by its date -u read of 08:33Z): (1) utilz-vc pushes Utilz main, local then upstream, then dispatches tests.yml once, reads CI to the end and sends devbin-vc the verdict by sha. (2) menuz goes to 0.4.10 for 2.14.9: cc's hold 51 is released, cc makes the XS bump on vc's turn, and it rides the next push. ST0031's pre-sweep prep, utilz-ic's two board files and the three dated Trash folders wait for hv's return. Every run books at the desk as before. hv's word for the day: ship ST0011 (Devbin's), no new code and no new yaks. Done: (1) the classifier refused vc's push, so hv typed it in vc's session (both remotes at 510bc7db), and CI there is green (push 41293082052, dispatch 41293158609), verdict sent; (2) cc's bump landed at cd34c3de on vc's check. Peers read this decision at pickup; cc and dc record no copy.",
       "state": "live",
-      "recorded_at": "2026-11-01T08:38:57.963Z"
+      "recorded_at": "2026-11-01T08:38:57.963Z",
+      "edited_at": "2026-11-01T09:48:48.144Z"
     }
   ],
   "sent": [
