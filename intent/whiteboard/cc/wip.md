@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 09:48Z
+heartbeat_at: 2026-11-01 09:53Z
 status: active
-focus: "1 Nov: localfold for hv's compact (hv's word, in cc's window and via vc): menuz's 0.4.10 bump landed at cd34c3de, todo 52 archived; nothing of cc's open, parked or banked, no claims, 0 live messages; cc holds for the compact and the go after it; no test or build (vc decision 74)"
+focus: "1 Nov: pickup after hv's second compact (hv: continue on the bounce), on vc's chain: nothing of cc's open, parked or banked, no claims, 0 live messages, watch-out 6 live; cc takes vc's word within hv's word for the day (ship ST0011, no new code, no new yaks; vc decision 82); no test or build (vc decision 74)"
 claims: []
 ---
 
