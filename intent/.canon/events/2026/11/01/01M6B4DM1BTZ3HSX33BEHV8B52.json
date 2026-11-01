@@ -1,0 +1,15 @@
+{
+  "id": "01M6B4DM1BTZ3HSX33BEHV8B52",
+  "ts": "2026-11-01T08:43:05.643Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "menuz 0.4.9 to 0.4.10 for 2.14.9 (hv's ruling, vc decision 82): on vc's YOUR TURN, after hv's push of main lands, send READY with the two paths (opt/menuz/VERSION, and CHANGELOG.md, where ST0031/03's 2.14.9 entry ends 'menuz goes from 0.4.9 to 0.4.10.', as 0094's a2802b76 did), then one commit by literal path; no test or build (decision 74)"
+  }
+}

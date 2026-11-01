@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 08:31Z
+heartbeat_at: 2026-11-01 08:43Z
 status: active
-focus: "1 Nov: hv's go after the compact is in (via devbin-vc and vc); no claims, 0 live messages, nothing of cc's open or banked; hold 51 waits on hv's menuz answer for 2.14.9; cc holds for hv's word on its day plan; no test or build (vc decision 74)"
+focus: "1 Nov: hv ruled menuz to 0.4.10 for 2.14.9 (vc decision 82); the bump is cc's todo for vc's YOUR TURN after hv's push of main lands, so cc stays up; until then no tree write but cc's board; no claims, 0 live messages, nothing banked; no test or build (vc decision 74)"
 claims: []
 ---
 
@@ -17,11 +17,11 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- menuz 0.4.9 to 0.4.10 for 2.14.9 (hv's ruling, vc decision 82): on vc's YOUR TURN, after hv's push of main lands, send READY with the two paths (opt/menuz/VERSION, and CHANGELOG.md, where ST0031/03's 2.14.9 entry ends 'menuz goes from 0.4.9 to 0.4.10.', as 0094's a2802b76 did), then one commit by literal path; no test or build (decision 74)
 
 ## Holds
 
-- menuz's version for 2.14.9, until hv answers bump to 0.4.10 or keep 0.4.9 (put to hv in cc's day plan, 1 Nov): ST0031/03 (b8e527d8) changed opt/menuz/menuz with no bump, where 0094 bumped for a CLI-only change (a2802b76); cc's rec is the bump, XS, on vc's YOUR TURN
+_(none)_
 
 ## Watch-outs
 
