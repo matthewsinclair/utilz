@@ -1,0 +1,16 @@
+{
+  "id": "01M6BAG3SSAF80ZBVRWKGQ8DM1",
+  "ts": "2026-11-01T10:29:18.779Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.resume",
+  "subject": {
+    "type": "thread",
+    "id": "ST0029"
+  },
+  "payload": {
+    "from": "hold",
+    "reason": "",
+    "to": "wip"
+  }
+}

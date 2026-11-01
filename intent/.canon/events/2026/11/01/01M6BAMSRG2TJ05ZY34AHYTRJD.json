@@ -1,0 +1,16 @@
+{
+  "id": "01M6BAMSRG2TJ05ZY34AHYTRJD",
+  "ts": "2026-11-01T10:31:52.337Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.hold",
+  "subject": {
+    "type": "thread",
+    "id": "ST0029"
+  },
+  "payload": {
+    "from": "wip",
+    "reason": "hv, 31 Oct (utilz-vc decision 79): resumes after Devbin 0.1.19's vendor sweep, owned by dc, widened to dc's census of the Python outside its scope, with xtrct's port byte-exact, since it feeds the Talga Rd accounting.",
+    "to": "hold"
+  }
+}

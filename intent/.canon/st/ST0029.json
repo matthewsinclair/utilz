@@ -4,7 +4,7 @@
   "title": "Retire Python from Utilz",
   "slug": "retire-python-from-utilz",
   "status": "hold",
-  "status_reason": "hv, 26 Oct: deferred until needed; not a priority",
+  "status_reason": "hv, 31 Oct (utilz-vc decision 79): resumes after Devbin 0.1.19's vendor sweep, owned by dc, widened to dc's census of the Python outside its scope, with xtrct's port byte-exact, since it feeds the Talga Rd accounting.",
   "created": "2026-10-26",
   "objective": "Drop the tracked Python, opt/pdf2md/lib/pdf2md.py and opt/xtrct/lib/xtrct.py. pdf2md goes through a spike of off-the-shelf no-dependency Rust PDF-to-Markdown tools (pdfmd, unpdf, pdfly) against its fixtures; xtrct is ported to zsh with curl and jq, keeping its output exactly, since hv's Talga Rd accounting uses it; then the venv machinery comes out.",
   "context": "",
