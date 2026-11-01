@@ -25,7 +25,7 @@
       "scope": "S",
       "status": "not-started",
       "objective": "Utilz's rust job keeps its dependencies between runs and stops at 25 minutes, and both test jobs run one roster derived from `utilz list`: a cargo cache pinned by commit that holds dependencies only, never the workspace's own crates; `timeout-minutes: 25` (issue 0131's point 5), where GitHub's 360 is the only bound today; and `tools/ci-suites`, in place of test-linux's typed list and test-macos's own, so the next utility is tested on both legs. It is banked, and lands with ST0031/01 in the sweep's push, where CI proves it.",
-      "body": "## Measured\n\ndc, 31 Oct 2026, from runs 41127538028 (2.14.8's tag, both attempts), 41140741047 (main's push at 1434e764) and 41127529723 (main's push at f2021ddc), read through GitHub's jobs API and the job logs, and checked by utilz-vc where it sampled them.\n\n- **A green Rust leg takes 5.5 to 7.1 minutes on ubuntu and 11.1 on macOS.** The stalled macOS leg of issue 0131 held its leg for 22.9 minutes until it was cancelled by hand. tests.yml sets no `timeout-minutes`, so GitHub's 360 is the only bound.\n- **Each Rust leg compiles its dependencies twice**, once for `cargo build --release` and again for `cargo test --release`. The release build alone took 33.6 s on ubuntu and 62 s on macOS, and macOS's test build 64 s more. No workflow caches cargo's output.\n- **test-linux runs a roster typed into tests.yml**, while test-macos derives its own from `utilz list`. Today `bin/utilz list` names exactly the typed roster plus prez, so deriving changes nothing now and covers the next utility on both legs.\n- **Homebrew made no auto-update** before any install in either macOS job on the image macos-26-arm64 of 26 Oct (run 41127538028's Test on macOS and Rust (macos-latest)): its first output came 2.7 s, 0.5 s and 3.6 s after each install began.\n- **The clippy job takes 0.3 minutes.**\n\n## The change, as utilz-vc ruled on 31 Oct\n\n1. **A cargo cache in the rust job**: `Swatinem/rust-cache`, pinned by the commit its v2.9.2 tag names, 6323deb102c322ba6fcbdcafc7e3dddab59af2b6, with the version in a comment, `workspaces: opt/prez/crate -> target` and `key: ${{ matrix.os }}`. It keeps dependencies only, so the workspace's own crates always build fresh.\n2. **One roster**: `tools/ci-suites` runs `utilz test` for the dispatcher and for every utility `utilz list` names except prez, through the tree's `bin/utilz`, stopping at the first failure and refusing an empty list. Both test jobs call it. Its header holds why prez is the rust job's, corrected from test-macos's old comment: the rust job installs node 26, ffmpeg, poppler and a display for prez's suites, and the clippy job lints every crate.\n3. **`timeout-minutes: 25` on the rust job** (issue 0131's point 5), with the durations above in its comment.\n4. **Dropped**, by utilz-vc's rulings: `HOMEBREW_NO_AUTO_UPDATE`, measured as a no-op, since a line that changes nothing goes; and \"clippy once\", which saves seconds and no wall clock, while the clippy job lints every crate that `find opt/*/crate/Cargo.toml` discovers and AT09 lints prez's alone.\n\nFiles: .github/workflows/tests.yml; tools/ci-suites (new).\n\n## Bank\n\n`~/Devel/scratch/utilz-dc/st0031-02-v2.patch`, sha256 2e48c8e6b08b1b03a885f48965d912ee9b1b47a884d07b6c75f8302c9e420c69, on base d567e4b8, in the worktree `~/Devel/scratch/utilz-dc/wt-st0031-02`. It supersedes v1 (9d01da15). It lands with the sweep's push (ST0031/01, after Devbin ST0011/09), and CI proves it there.\n\n## Proof\n\nCI at the sweep's push, read from the jobs API and the logs, with no local run: both test jobs run every utility through `tools/ci-suites`, one `== <utility> ==` line each; the rust job's cache step restores nothing on that first run and saves; the next push restores it, and the legs' compile times fall; the rust job carries `timeout-minutes: 25`.\n",
+      "body": "## Measured\n\ndc, 31 Oct 2026, from runs 41127538028 (2.14.8's tag, both attempts), 41140741047 (main's push at 1434e764) and 41127529723 (main's push at f2021ddc), read through GitHub's jobs API and the job logs, and checked by utilz-vc where it sampled them.\n\n- **A green Rust leg takes 5.5 to 7.1 minutes on ubuntu and 11.1 on macOS.** The stalled macOS leg of issue 0131 held its leg for 22.9 minutes until it was cancelled by hand. tests.yml sets no `timeout-minutes`, so GitHub's 360 is the only bound.\n- **Each Rust leg compiles its dependencies twice**, once for `cargo build --release` and again for `cargo test --release`. The release build alone took 33.6 s on ubuntu and 62 s on macOS, and macOS's test build 64 s more. No workflow caches cargo's output.\n- **test-linux runs a roster typed into tests.yml**, while test-macos derives its own from `utilz list`. Today `bin/utilz list` names exactly the typed roster plus prez, so deriving changes nothing now and covers the next utility on both legs.\n- **Homebrew made no auto-update** before any install in either macOS job on the image macos-26-arm64 of 26 Oct (run 41127538028's Test on macOS and Rust (macos-latest)): its first output came 2.7 s, 0.5 s and 3.6 s after each install began.\n- **The clippy job takes 0.3 minutes.**\n\n## The change, as utilz-vc ruled on 31 Oct\n\n1. **A cargo cache in the rust job**: `Swatinem/rust-cache`, pinned by the commit its v2.9.2 tag names, 6323deb102c322ba6fcbdcafc7e3dddab59af2b6, with the version in a comment, `workspaces: opt/prez/crate -> target` and `key: ${{ matrix.os }}`. It keeps dependencies only, so the workspace's own crates always build fresh.\n2. **One roster**: `tools/ci-suites` runs `utilz test` for the dispatcher and for every utility `utilz list` names except prez, through the tree's `bin/utilz`, stopping at the first failure and refusing an empty list. Both test jobs call it. Its header holds why prez is the rust job's, corrected from test-macos's old comment: the rust job installs node 26, ffmpeg, poppler and a display for prez's suites, and the clippy job lints every crate.\n3. **`timeout-minutes: 25` on the rust job** (issue 0131's point 5), with the durations above in its comment.\n4. **Dropped**, by utilz-vc's rulings: `HOMEBREW_NO_AUTO_UPDATE`, measured as a no-op, since a line that changes nothing goes; and \"clippy once\", which saves seconds and no wall clock, while the clippy job lints every crate that `find opt/*/crate/Cargo.toml` discovers and AT09 lints prez's alone.\n\nFiles: .github/workflows/tests.yml; tools/ci-suites (new).\n\n## Bank\n\n`~/Devel/scratch/utilz-dc/st0031-02-v2.patch`, sha256 2e48c8e6b08b1b03a885f48965d912ee9b1b47a884d07b6c75f8302c9e420c69, on base d567e4b8, in the worktree `~/Devel/scratch/utilz-dc/wt-st0031-02`. It supersedes v1 (9d01da15). It lands with the sweep's push (ST0031/01, after Devbin ST0011/09), and CI proves it there.\n\n## Proof\n\nCI at the sweep's push, read from the jobs API and the logs, with no local run: test-linux runs every utility through `tools/ci-suites`, one `== <utility> ==` line each, as test-macos does at its first run after it, a `candidate/` push or a dispatch; the rust job's cache step restores nothing on that first run and saves; the next push that runs CI restores it, and the ubuntu leg's compile time falls; the macOS leg runs only on a `candidate/` push or a dispatch, and since GitHub restores a cache only from the run's own branch or the default branch, it restores only a cache that a dispatch on main saved; the rust job carries `timeout-minutes: 25`.\n",
       "preamble": ""
     },
     {
@@ -39,6 +39,62 @@
     }
   ],
   "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "The sweep's push carries the whole change, on ST0031/02's bank: tools/ci-state, tools/post-cut, tools/formula, install.sh's install_ci_state and install_ci_jobs, and the tests of each are gone; bin/.devbin/config.yaml gates the cut with `check all` then `test estate`, and its one after: command is `bin/devbin formula publish`; docs/releasing.md describes the cut in the new shape; and no tracked file outside bin/.devbin, CHANGELOG.md and intent/ names any of them.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "tests.yml fires on a push to `main` or `candidate/**`, with no `tags:` trigger, and runs its macOS jobs and the rust job's macOS leg only on a `candidate/` push or a dispatch: after the sweep a read-only `bin/devbin release check` passes in Utilz, its checker finding that the test matrix fires on `candidate/`, and CI at the sweep's push is green on every job the run starts.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "Before tools/formula and tools/ci-state go, the core gives Utilz the answers they give: `tools/formula render 2.14.8` and `bin/devbin formula render 2.14.8` are identical but for the header comment, and tools/ci-state and `bin/devbin ci-state`, each given the full sha, give the same verdict word on f2021ddc (green) and 1434e764 (failed), naming the same failed jobs on 1434e764.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "Utilz's first cut in the new shape goes through the core alone: its candidate's run fires every leg and its RELEASE seal names each one, Menuz.app.zip is attached before any after: command runs, and `bin/devbin formula publish` moves homebrew-utilz to the new tag over hv's ssh.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "The rust job caches cargo's dependencies, never the workspace's own crates: `Swatinem/rust-cache` pinned to 6323deb102c322ba6fcbdcafc7e3dddab59af2b6, the commit its v2.9.2 tag names, with the version in a comment, `workspaces: opt/prez/crate -> target` and `key: ${{ matrix.os }}`. Its ubuntu leg, the only one a push to main runs, restores nothing and saves at the sweep's push, then restores at the next push that runs CI, and its compile time falls. Its macOS leg runs only on a `candidate/` push or a dispatch, and its first run restores nothing and saves; since GitHub restores a cache only from the run's own branch or the default branch, a `candidate/` run's save is invisible to the next cut's branch, and the macOS leg restores only a cache that a dispatch on main saved.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-02.2",
+      "text": "The rust job carries `timeout-minutes: 25` (issue 0131's point 5), with the measured leg durations in its comment.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
+    {
+      "id": "AC-02.3",
+      "text": "Both test jobs run one roster, `tools/ci-suites`: `utilz test` for the dispatcher and for every utility `utilz list` names except prez, through the tree's bin/utilz, stopping at the first failure and refusing an empty list. test-linux's log at the sweep's push, and test-macos's at its first run after it, a `candidate/` push or a dispatch, each have one `== <utility> ==` line per utility.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    },
     {
       "id": "AC-03.1",
       "text": "menuz stamps MENUZ_KIND by the rule help/menuz.md states with the stamps, which reads the release commit as Devbin ST0011 WP06's app-sign does; menuz.bats pins each answer and each exit 1.",
