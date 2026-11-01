@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 164c8030-9b91-4808-9e07-4075bb69b86d
-heartbeat_at: 2026-11-01 06:27Z
+heartbeat_at: 2026-11-01 08:02Z
 status: active
-focus: "1 Nov, picked up after hv's hard close of 31 Oct (devbin decision 118): nothing of dc's open but held; ST0031/01 (design at 61af34e1) and /02 (CI bank st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02) wait for devbin-vc's word that the sweep after 0.1.19 has landed, their criteria and objectives first; ST0029 follows (vc decision 79); nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "1 Nov, picked up after hv's compact (dc's localfold wrote nothing): the hard close is lifted (devbin decision 119) and nothing of dc's is open but held; ST0031/01 (design at 61af34e1) and /02 (CI bank st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02) wait for devbin-vc's word that the sweep after 0.1.19 has landed, their criteria and objectives first; ST0029 follows (vc decision 79); dc's pre-sweep prep question is with hv; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
