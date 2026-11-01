@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 06:30Z
+heartbeat_at: 2026-11-01 08:01Z
 status: active
-focus: "1 Nov: booted after hv's hard close of 31 Oct; nothing of cc's open, parked or banked, no claims, 0 live messages; the 30 Oct exhaust folder is emptied; no assignment, so cc holds for hv's word on its day plan; no test or build (vc decision 74)"
+focus: "1 Nov: picked up after hv's compact (fold 70a3a911); no claims, 0 live messages, nothing of cc's open or banked; hold 51 waits on hv's menuz answer for 2.14.9; cc holds for hv's go and its word on cc's day plan; no test or build (vc decision 74)"
 claims: []
 ---
 
