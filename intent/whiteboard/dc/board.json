@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "164c8030-9b91-4808-9e07-4075bb69b86d",
-    "heartbeat_at": "2026-11-01T11:05:54.284Z",
+    "heartbeat_at": "2026-11-01T11:39:58.379Z",
     "status": "active",
-    "focus": "1 Nov, picked up after hv's third compact: decision 83's prep is in (cc16d2f4 to b43ac3a5, each write checked by vc by its change), and dc holds within hv's word for the day (vc decision 82: ship ST0011, no new code, no new yaks); ST0031 and ST0029 are on hold for Devbin 0.1.19's vendor sweep; on devbin-vc's word that it has landed: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; no source edit, no run; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
+    "focus": "1 Nov, picked up after hv's fourth compact: Utilz is parked on hv's word (vc decision 84) until Devbin 0.1.19 is cut and swept into the fleet, and dc stays still (no work, run, ask or push) unless devbin-vc names something specific this Devbin release needs from Utilz; ST0031 and ST0029 stay on hold for the sweep; on devbin-vc's word that it has reached Utilz: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
