@@ -1,0 +1,15 @@
+{
+  "id": "01M6DNMD0QY4X3MZ0DKRM26ZCS",
+  "ts": "2026-11-02T08:22:22.487Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2 Nov, first-hand in vc's session, on vc's plan for 2.14.9 (decision 86): \"Go with your recommendations.\" So (i) R2, bin/devbin release check, and R3, bin/devbin release --patch --dry-run, run before the cut, read-only, which lifts watch-out 22's \"no dry run\" for them; (ii) R1, the tools/post-cut 2.14.8 smoke, runs; (iii) the version is 2.14.9; (iv) hv pushes main before the cut, and vc reads its CI green first. ST0031/04 (utilz-dc, S: tests.yml on candidate/**, post-cut in 0.1.19's shape) goes ahead on vc's chain, every run booked at the desk, then hv's cut with the freeze. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}
