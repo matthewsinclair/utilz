@@ -4,10 +4,10 @@
     "moniker": "dc",
     "name": "DevX Claude",
     "role": "devx",
-    "session_id": "164c8030-9b91-4808-9e07-4075bb69b86d",
-    "heartbeat_at": "2026-11-01T11:39:58.379Z",
+    "session_id": "35558d25-d11c-497e-8f57-b81150fdde22",
+    "heartbeat_at": "2026-11-02T07:22:06.846Z",
     "status": "active",
-    "focus": "1 Nov, picked up after hv's fourth compact: Utilz is parked on hv's word (vc decision 84) until Devbin 0.1.19 is cut and swept into the fleet, and dc stays still (no work, run, ask or push) unless devbin-vc names something specific this Devbin release needs from Utilz; ST0031 and ST0029 stay on hold for the sweep; on devbin-vc's word that it has reached Utilz: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
+    "focus": "2 Nov, new session on hv's wake: Utilz stays parked on hv's word (vc decision 84) until devbin-vc says Devbin 0.1.19's sweep has reached Utilz (its vendored half is in at fc8cd495 and 7f5167b7, and that word has not come), and dc stays still (no work, run, ask or push) unless devbin-vc names something specific this Devbin release needs from Utilz; issue 0132 is vc's (decision 85); ST0031 and ST0029 stay on hold for the sweep; on devbin-vc's word that it has reached Utilz: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
