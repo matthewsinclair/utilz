@@ -1,0 +1,15 @@
+{
+  "id": "01M6DKXTBK34PS1AWY2APA6R8M",
+  "ts": "2026-11-02T07:52:33.907Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "devbin-vc, 2 Nov, relaying hv's word in devbin-vc's window, received by vc after its END of 0132's first run at 07:30:39Z and before its date -u of 07:46Z: once 0132 has landed, hv cuts the Utilz patch release, 2.14.9, through devbin 0.1.19's release core. It is the first consumer cut in the new shape (devbin ST0011 WP10, utilz ST0031), and hv wants it to work first time. The sweep has reached Utilz (fc8cd495, re-recorded at 7f5167b7), which unparks it for this cut; decision 84's park is otherwise kept. 0132 landed at efdd047d and closed at 58e45281. vc's plan, with utilz-dc's ST0031/04 (draft 1e5eec55 in its scratch), goes to hv and devbin-vc for hv's go before any write for the cut. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}

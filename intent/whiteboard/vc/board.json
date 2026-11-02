@@ -5,12 +5,10 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "9f6fe567-2634-4819-ae7b-6235ed238b14",
-    "heartbeat_at": "2026-11-02T07:18:28.643Z",
+    "heartbeat_at": "2026-11-02T07:52:44.423Z",
     "status": "active",
-    "focus": "2 Nov: issue 0132 on hv's first-hand word (decision 85), owned by vc: arngz apply and diff count an unseen entry against nothing; design in the issue at 8d05443d; tests red first, then the fix, critic reads, runs booked at rhadamanth's desk, and the landing on vc's check; the rest of Utilz stays parked under decision 84",
-    "claims": [
-      "ISSUE:0132"
-    ],
+    "focus": "2 Nov: 0132 fixed and closed on hv's word (efdd047d, 58e45281); next, 2.14.9's cut through devbin 0.1.19's core (decision 86): vc's plan, with utilz-dc's ST0031/04, goes to hv and devbin-vc for hv's go; every run books at the desk; the rest of Utilz stays parked under decision 84",
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
     "migrated_at": "2026-09-14T08:48:02.306Z"
@@ -2410,8 +2408,17 @@
       "kind": "decision",
       "seq": 85,
       "text": "hv, 2 Nov, first-hand in vc's session, received by vc's date -u of 07:14Z: \"I want that issue from rhadamanth-sysadm fixed now, please.\", and by 07:16Z: \"It needs its own issue, too.\", after hv's \"Finishing booting and then hold.\" at boot. rhadamanth-sysadm's report, made at hv's request, is issue 0132 (filed at 8d05443d): arngz apply exits 1 for an app running with no window to name, though nothing failed, and diff reads one as a difference. vc owns it, since no other Utilz node is live; the fix lands on main on vc's check and rides 2.14.9, and its runs book at rhadamanth's desk, decision 74 lifted only by that grant. The rest of Utilz stays parked under decision 84. Peers read this decision at pickup; cc and dc record no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-02T07:52:34.164Z",
       "recorded_at": "2026-11-02T07:18:20.688Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 86,
+      "text": "devbin-vc, 2 Nov, relaying hv's word in devbin-vc's window, received by vc after its END of 0132's first run at 07:30:39Z and before its date -u of 07:46Z: once 0132 has landed, hv cuts the Utilz patch release, 2.14.9, through devbin 0.1.19's release core. It is the first consumer cut in the new shape (devbin ST0011 WP10, utilz ST0031), and hv wants it to work first time. The sweep has reached Utilz (fc8cd495, re-recorded at 7f5167b7), which unparks it for this cut; decision 84's park is otherwise kept. 0132 landed at efdd047d and closed at 58e45281. vc's plan, with utilz-dc's ST0031/04 (draft 1e5eec55 in its scratch), goes to hv and devbin-vc for hv's go before any write for the cut. Peers read this decision at pickup; cc and dc record no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-02T07:52:33.907Z"
     }
   ],
   "sent": [
