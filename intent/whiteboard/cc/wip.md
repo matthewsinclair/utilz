@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 60293269-8140-445f-a3b9-6ff883acf95f
-heartbeat_at: 2026-11-01 11:38Z
+session_id: 78575f92-319e-4258-9750-0b66e4394bab
+heartbeat_at: 2026-11-02 08:23Z
 status: active
-focus: "1 Nov: pickup after hv's fourth compact, on vc's chain: Utilz is parked until devbin-vc says Devbin 0.1.19's sweep has reached Utilz (vc decision 84), so cc stays still and moves only for something specific devbin-vc names this devbin release needs from Utilz; nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; no test or build (vc decision 74)"
+focus: "2 Nov, new session on hv's wake: Utilz is unparked for 2.14.9's cut only (vc decisions 86 and 87): dc's ST0031/04 on vc's chain, R1 to R3 and hv's push of main, then hv's cut with the freeze; decision 84's park is otherwise kept, so cc stays still and moves only for what vc names cc for this cut; nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; no test or build (vc decision 74)"
 claims: []
 ---
 
