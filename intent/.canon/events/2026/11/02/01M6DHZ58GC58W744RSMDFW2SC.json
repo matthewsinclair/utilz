@@ -1,0 +1,15 @@
+{
+  "id": "01M6DHZ58GC58W744RSMDFW2SC",
+  "ts": "2026-11-02T07:18:20.688Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 2 Nov, first-hand in vc's session, received by vc's date -u of 07:14Z: \"I want that issue from rhadamanth-sysadm fixed now, please.\", and by 07:16Z: \"It needs its own issue, too.\", after hv's \"Finishing booting and then hold.\" at boot. rhadamanth-sysadm's report, made at hv's request, is issue 0132 (filed at 8d05443d): arngz apply exits 1 for an app running with no window to name, though nothing failed, and diff reads one as a difference. vc owns it, since no other Utilz node is live; the fix lands on main on vc's check and rides 2.14.9, and its runs book at rhadamanth's desk, decision 74 lifted only by that grant. The rest of Utilz stays parked under decision 84. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}

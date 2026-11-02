@@ -5,10 +5,12 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "9f6fe567-2634-4819-ae7b-6235ed238b14",
-    "heartbeat_at": "2026-11-02T07:08:35.471Z",
+    "heartbeat_at": "2026-11-02T07:18:28.643Z",
     "status": "active",
-    "focus": "2 Nov, new session, booted on hv's word to finish booting and then hold: Utilz stays parked under decision 84 (no run, desk ask, push or item for hv); Devbin 0.1.19 is released and swept into Utilz (fc8cd495, its source re-recorded from Homebrew's install at 7f5167b7), and devbin-vc's word that the sweep has reached Utilz is its todo 194, on hv's go; then ST0031 runs its design's order; rhadamanth-sysadm's report that arngz apply exits 1 on an unseen app is banked for hv to take up with vc",
-    "claims": [],
+    "focus": "2 Nov: issue 0132 on hv's first-hand word (decision 85), owned by vc: arngz apply and diff count an unseen entry against nothing; design in the issue at 8d05443d; tests red first, then the fix, critic reads, runs booked at rhadamanth's desk, and the landing on vc's check; the rest of Utilz stays parked under decision 84",
+    "claims": [
+      "ISSUE:0132"
+    ],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
     "migrated_at": "2026-09-14T08:48:02.306Z"
@@ -2402,6 +2404,14 @@
       "state": "live",
       "recorded_at": "2026-11-01T11:21:13.790Z",
       "edited_at": "2026-11-01T11:27:40.887Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 85,
+      "text": "hv, 2 Nov, first-hand in vc's session, received by vc's date -u of 07:14Z: \"I want that issue from rhadamanth-sysadm fixed now, please.\", and by 07:16Z: \"It needs its own issue, too.\", after hv's \"Finishing booting and then hold.\" at boot. rhadamanth-sysadm's report, made at hv's request, is issue 0132 (filed at 8d05443d): arngz apply exits 1 for an app running with no window to name, though nothing failed, and diff reads one as a difference. vc owns it, since no other Utilz node is live; the fix lands on main on vc's check and rides 2.14.9, and its runs book at rhadamanth's desk, decision 74 lifted only by that grant. The rest of Utilz stays parked under decision 84. Peers read this decision at pickup; cc and dc record no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-02T07:18:20.688Z"
     }
   ],
   "sent": [
