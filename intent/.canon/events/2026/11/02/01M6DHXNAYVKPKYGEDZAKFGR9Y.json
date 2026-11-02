@@ -1,0 +1,15 @@
+{
+  "id": "01M6DHXNAYVKPKYGEDZAKFGR9Y",
+  "ts": "2026-11-02T07:17:31.615Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0132"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "arngz apply exits 1 for an app running with no window to name, though nothing failed, and diff reads one as a difference"
+  }
+}
