@@ -558,10 +558,14 @@ function P.plan(desk, world, options)
       end
       -- Running, but no window took this entry: said, never left looking like
       -- an entry already in place. execute performs nothing for it; the report
-      -- names it as unseen (design.md, apply step 11).
+      -- names it as unseen (design.md, apply step 11). It is uncounted, said
+      -- and counted against no exit, since a running app with no window to
+      -- name has nothing to arrange; but not while a window read failed, since
+      -- the window not read may be this entry's. This is the one place that is
+      -- decided: P.apply_report and P.plan_exit read the mark (issue 0132).
       if took == 0 then
         windows[#windows + 1] = {
-          op = "unseen", bundle = bundle, path = e.path,
+          op = "unseen", bundle = bundle, path = e.path, uncounted = unread_note == "",
           reason = string.format("%s is running and no standard window of it on a desktop space%s could be named"
             .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)%s", bundle,
             a.window and (" matching " .. string.format("%q", a.window)) or "", unread_note),
@@ -978,10 +982,14 @@ local BLANKET = { phase = true }
 
 -- What apply says per desk entry (design.md, apply step 11), from the ops it
 -- planned and the results execute returned, each result carrying its op's
--- `op`, `path`, `bundle`, `status` and `reason`. A launch speaks for every
--- entry of its app. Returns the report lines and the exit code: 0 when every
--- entry is placed, 1 when any is skipped, unseen or failed, or when any op
--- failed whatever entry it served.
+-- `op`, `path`, `bundle`, `status` and `reason`, and an unseen op's
+-- `uncounted`. A launch speaks for every entry of its app. Returns the report
+-- lines and the exit code: 0 when every entry is placed or uncounted, 1 when
+-- any is anything else, or when any op failed whatever entry it served. An
+-- entry is uncounted when every result on it that is not done is an unseen
+-- that plan marked uncounted, and this apply launched nothing for it: a launch
+-- changed the machine, so an entry it served that was not placed counts
+-- (issue 0132). Each result is counted, not only the one the outcome shows.
 function P.apply_report(desk, results)
   local by_path, by_app, loose, blanket = {}, {}, {}, {}
   for _, r in ipairs(results or {}) do
@@ -1006,7 +1014,7 @@ function P.apply_report(desk, results)
   end
   for _, e in ipairs(ordered) do
     local launch = by_app[app_key(e.app.app)]
-    local outcome, why, moved = "placed", {}, false
+    local outcome, why, moved, counts = "placed", {}, false, false
     if launch and launch.status ~= "done" then
       outcome = launch.status
       why[#why + 1] = tostring(launch.reason)
@@ -1014,18 +1022,22 @@ function P.apply_report(desk, results)
     for _, r in ipairs(by_path[e.path] or {}) do
       if r.status == "done" then
         if r.op == "move" then moved = true end
-      elseif outcome == "placed" or r.status == "failed" then
-        outcome = r.status
-        why[#why + 1] = tostring(r.reason)
+      else
+        if not r.uncounted then counts = true end
+        if outcome == "placed" or r.status == "failed" then
+          outcome = r.status
+          why[#why + 1] = tostring(r.reason)
+        end
       end
     end
     if outcome == "placed" and #blanket > 0 then
       outcome = "failed"
       why[#why + 1] = "not finished: " .. table.concat(blanket, "; ")
+      counts = true
     end
     if outcome == "placed" then
       if launch then outcome = "launched and placed" elseif moved then outcome = "moved and placed" end
-    else
+    elseif counts or launch then
       code = 1
     end
     local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
@@ -1335,6 +1347,17 @@ function P.plan_report(ops)
   end
   if #lines == 0 then lines[1] = "no change: this machine already matches the desk" end
   return lines
+end
+
+-- diff's exit, from the plan (issue 0132): 1 when any op is one plan did not
+-- mark uncounted, so apply would change something or find an entry it cannot
+-- arrange; 0 when there is none. The engine's plan verb returns it and the
+-- CLI's cmd_diff passes it on, so the rule lives here, beside apply's.
+function P.plan_exit(ops)
+  for _, op in ipairs(ops or {}) do
+    if not op.uncounted then return 1 end
+  end
+  return 0
 end
 
 return P

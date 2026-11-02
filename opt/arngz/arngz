@@ -1459,9 +1459,9 @@ apply_options() {
 # apply (design.md "apply, in order"): validate, then either the engine's
 # plan printed (--dry-run, no apply request sent) or the preferences judged
 # and one apply request, whose report is printed and whose exit code is the
-# engine's: 0 every entry placed, 1 any skipped, unseen or failed. A refusal
-# before anything changed is 2. There is no --bind (D10, AC-05.6): it is
-# refused as the unknown option it is.
+# engine's: 0 every entry placed or uncounted (an unseen plan marked so, issue
+# 0132), 1 any other. A refusal before anything changed is 2. There is no
+# --bind (D10, AC-05.6): it is refused as the unknown option it is.
 cmd_apply() {
   local desk="" dry=0 no_launch=0 no_create=0 map name maps="" dir options rc code
   while [[ $# -gt 0 ]]; do
@@ -1552,19 +1552,25 @@ cmd_apply() {
 }
 
 # diff: what apply would do, one line per op with its reason, and nothing done.
-# The engine plans and never executes on this path. Exit 1 when apply would
-# change anything, 0 when it would not.
+# The engine plans and never executes on this path. The exit is the engine's,
+# from P.plan_exit in lib/plan.lua, as apply's is from P.apply_report: 1 when
+# apply would change anything or find an entry it cannot arrange, 0 when it
+# would not, with an unseen entry plan marked uncounted counting against
+# nothing (issue 0132). Nothing has changed here, so a plan that cannot be
+# printed, or whose exit is not 0 or 1, is refused, exit 2, its response kept.
 cmd_diff() {
-  local desk ops
+  local desk code
   desk="$(one_desk diff "$@")"
   validate_desk "$desk" || exit 2
   engine_call plan "$(desk_file "$desk")"
-  render_report "$ENGINE_RESPONSE"
-  ops="$(yq '.ops | length' "$ENGINE_RESPONSE")"
-  rm -rf -- "$ENGINE_DIR"
-  if [[ "$ops" -gt 0 ]]; then
-    exit 1
+  if ! render_report "$ENGINE_RESPONSE"; then
+    refuse "the engine's plan could not be printed (kept at $ENGINE_RESPONSE)"
   fi
+  if ! code="$(yq -r '.exit' "$ENGINE_RESPONSE" 2>&1)" || [[ "$code" != 0 && "$code" != 1 ]]; then
+    refuse "the engine's plan carries exit '$code', not 0 or 1 (kept at $ENGINE_RESPONSE)"
+  fi
+  rm -rf -- "$ENGINE_DIR"
+  exit "$code"
 }
 
 # discover: the arrangement on screen now, as a desk (WP-04). The engine

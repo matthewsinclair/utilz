@@ -276,6 +276,48 @@ do
     uerr or ops_text(uops))
 end
 
+-- Which unseen op counts (issue 0132): plan marks one uncounted only when no
+-- window read failed, since the window not read may be the entry's, and
+-- diff's exit, P.plan_exit, counts every op without the mark.
+do
+  -- diff's exit for these ops, or nil when plan cannot give one.
+  local function exit_of(ops)
+    local ok, c = pcall(P.plan_exit, ops)
+    if ok then return c end
+    return nil
+  end
+  local ops = P.plan(base_desk(), F.unseen_world(), {})
+  check("an app running with its window closed plans one unseen op, marked uncounted, and diff's exit is 0 (issue 0132)",
+    kinds(ops) == "unseen" and ops[1].uncounted == true and exit_of(ops) == 0,
+    ops_text(ops) .. ", exit " .. tostring(exit_of(ops)))
+  local failed_reads = {
+    { "a window that could not be read", function()
+      local w = F.unseen_world()
+      local windows = space(w, 1).windows
+      windows[#windows + 1] = { id = 104, named = false, read_error = "incorrect type 'nil'" }
+      return w
+    end },
+    { "a window id read that failed", function()
+      local w = F.unseen_world()
+      w.window_id_errors, w.window_id_error = 1, "axuielement gone"
+      return w
+    end },
+    { "the window filter failing", F.unseen_unread_world },
+  }
+  for _, case in ipairs(failed_reads) do
+    local cops = P.plan(base_desk(), case[2](), {})
+    check("an unseen op planned beside " .. case[1] .. " is counted, and diff's exit is 1 (issue 0132)",
+      kinds(cops) == "unseen" and cops[1].uncounted == false and exit_of(cops) == 1,
+      ops_text(cops) .. ", exit " .. tostring(exit_of(cops)))
+  end
+  local m = F.unseen_world()
+  space(m, 1).windows[1].frame = { x = 300, y = 100, w = 500, h = 400 }
+  local mops = P.plan(base_desk(), m, {})
+  check("an uncounted unseen op beside a place leaves diff's exit at 1 (issue 0132)",
+    kinds(mops) == "place,unseen" and exit_of(mops) == 1, ops_text(mops) .. ", exit " .. tostring(exit_of(mops)))
+  check("a plan with no op gives diff's exit 0 (issue 0132)", exit_of({}) == 0, "exit " .. tostring(exit_of({})))
+end
+
 -- What observe asks about, fresh: each of the desk's apps once, in desk order.
 do
   local d = base_desk()
@@ -829,8 +871,58 @@ do
   check("a done launch reads as launched and placed", code == 0 and string.find(lines[2], "launched and placed", 1, true) ~= nil, lines[2])
   lines, code = P.apply_report(d, { r("launch", "displays[0].spaces[0].apps[1]", "skipped", "not installed", "com.apple.Safari") })
   check("an app not installed is skipped, exit 1", code == 1 and string.find(lines[2], "skipped: not installed", 1, true) ~= nil, lines[2])
-  lines, code = P.apply_report(d, { r("unseen", "displays[0].spaces[0].apps[0]", "unseen", "no window") })
-  check("an entry no window matched is unseen, exit 1", code == 1 and string.find(lines[1], "unseen: no window", 1, true) ~= nil, lines[1])
+  -- An unseen result as execute returns it, with the mark plan set: uncounted
+  -- unless a window read failed when it was planned (issue 0132).
+  local function unseen(path, counted)
+    return { op = "unseen", path = path, status = "unseen", reason = "no window", uncounted = not counted }
+  end
+  local function said(c, ls) return "exit " .. tostring(c) .. ": " .. table.concat(ls, " | ") end
+  lines, code = P.apply_report(d, { unseen("displays[0].spaces[0].apps[0]") })
+  check("an entry no window matched, unseen and uncounted, is said and exits 0 (issue 0132)",
+    code == 0 and string.find(lines[1], "unseen: no window", 1, true) ~= nil, said(code, lines))
+  lines, code = P.apply_report(d, { unseen("displays[0].spaces[0].apps[0]", true) })
+  check("an unseen entry plan counted, since a window read failed, exits 1 (issue 0132)",
+    code == 1 and string.find(lines[1], "unseen: no window", 1, true) ~= nil, said(code, lines))
+  local refused = "the window refused its size"
+  local _, ahead = P.apply_report(d, { r("place", "displays[0].spaces[0].apps[0]", "failed", refused),
+    unseen("displays[0].spaces[1].apps[0]") })
+  local _, behind = P.apply_report(d, { unseen("displays[0].spaces[0].apps[0]"),
+    r("place", "displays[0].spaces[1].apps[0]", "failed", refused) })
+  check("a failed entry exits 1 before or after an uncounted unseen one (issue 0132)",
+    ahead == 1 and behind == 1, "before: exit " .. tostring(ahead) .. ", after: exit " .. tostring(behind))
+  lines, code = P.apply_report(d, { unseen("displays[0].spaces[0].apps[0]"),
+    r("not_launched", "displays[0].spaces[0].apps[0]", "skipped", "--no-launch") })
+  check("a skipped result after an uncounted unseen one on the same entry still exits 1 (issue 0132)",
+    code == 1, said(code, lines))
+  lines, code = P.apply_report(d, {
+    r("launch", "displays[0].spaces[0].apps[1]", "failed", "open -b exited 1: x", "com.apple.Safari"),
+    unseen("displays[0].spaces[0].apps[1]"),
+  })
+  check("an entry whose launch failed, then planned unseen, reads failed, exit 1 (issue 0132)",
+    code == 1 and string.find(lines[2], "failed: open -b exited 1: x", 1, true) ~= nil, said(code, lines))
+  lines, code = P.apply_report(d, {
+    r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari"),
+    unseen("displays[0].spaces[0].apps[1]"),
+  })
+  check("an entry whose app this apply launched, then found unseen, exits 1 (issue 0132)",
+    code == 1 and string.find(lines[2], "unseen: no window", 1, true) ~= nil, said(code, lines))
+  -- Every entry unseen and uncounted, as the planner gives them for the base
+  -- world with every window closed, beside a phase that failed.
+  local closed = base_world()
+  for _, sp in ipairs(closed.screens[1].spaces) do sp.windows = {} end
+  local every, premise = {}, true
+  for _, op in ipairs(P.plan(d, closed, {}) or {}) do
+    premise = premise and op.op == "unseen" and op.uncounted == true
+    every[#every + 1] = { op = op.op, path = op.path, bundle = op.bundle, status = "unseen", reason = op.reason,
+      uncounted = op.uncounted }
+  end
+  local entries = #every
+  every[#every + 1] = { op = "phase", phase = "organise", status = "failed", reason = "organise: boom" }
+  lines, code = P.apply_report(d, every)
+  premise = premise and entries > 0 and #lines == entries + 1
+  for i = 1, entries do premise = premise and string.find(lines[i], ": unseen: ", 1, true) ~= nil end
+  check("every entry unseen and uncounted cannot hide a failed phase: exit 1 (issue 0132)",
+    code == 1 and premise and lines[#lines] == "phase: failed: organise: boom", said(code, lines))
   lines, code = P.apply_report(d, {
     r("move", "displays[0].spaces[1].apps[0]", "failed", "the readback shows it on space 11"),
     r("place", "displays[0].spaces[1].apps[0]", "failed", "its move failed"),

@@ -189,6 +189,24 @@ function F.off_cell_world()
   return w
 end
 
+-- The base world with Safari still running and its window closed (issue
+-- 0132): the plan against the base desk is one unseen op and nothing else,
+-- which diff has to print and count against nothing.
+function F.unseen_world()
+  local w = F.base_world()
+  table.remove(w.screens[1].spaces[1].windows, 2)
+  return w
+end
+
+-- The unseen world while the window filter that names windows on other
+-- spaces failed (issue 0132): the plan is still one unseen op, but counted,
+-- since the window not read may be Safari's.
+function F.unseen_unread_world()
+  local w = F.unseen_world()
+  w.window_filter = "failed: no filter"
+  return w
+end
+
 -- What execute returned, for an apply against the base desk: every entry
 -- already in place, so nothing was done.
 function F.placed_results()
@@ -200,6 +218,18 @@ function F.launch_skipped_results()
   return {
     { op = "launch", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "skipped",
       reason = "not installed: Unable to find application" },
+  }
+end
+
+-- Safari running with no window to name (issue 0132): what execute returns
+-- for the plan's one unseen op, on which it does nothing, with the mark plan
+-- set. One entry unseen and uncounted, so exit 0.
+function F.unseen_results()
+  return {
+    { op = "unseen", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "unseen",
+      uncounted = true,
+      reason = "com.apple.Safari is running and no standard window of it on a desktop space could be named"
+        .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)" },
   }
 end
 

@@ -102,7 +102,7 @@ displays:
 5. Windows are moved to their spaces and placed on their cells, and every step is read back. Before apply takes a window by its title bar, it raises the window and checks, for up to 1 s, that a press there lands on that window's own bar. A window still covered by another app's window fails, naming that app. So does a window whose raise switched its display to another desktop, and a window whose frame does not follow the held pointer, which fails before any key is pressed.
 6. The mouse button, the pointer and the focus are given back. Focus goes back only to a window on a desktop that is still shown.
 
-The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed, 1 when any is not, and 2 when it refused before changing anything.
+The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed or unseen, 1 when any is skipped or failed, and 2 when it refused before changing anything. An unseen entry has nothing to arrange, so it is reported and counts against nothing, except when `apply` launched its app, or when a window could not be read at that moment, since it may have been the entry's: then the entry counts as not placed.
 
 - **Displays.** A desk display that matches no screen, or more than one, is refused, with every candidate screen named. `--map <name>=<uuid>` binds the desk display called `<name>` to the screen with that UUID, for this run only.
 - **A display just attached.** macOS records the order of each display's desktops, and for a display that has just attached it may not have yet. A display with one desktop needs no order, but takes no new desktop until macOS has recorded it. So for a display of two or more desktops whose order macOS has not recorded, and for an apply that would add a desktop to a display of one that it has not recorded, arngz refuses, exit 2, before anything changes, and says to wait, then run it again.
@@ -134,7 +134,7 @@ When the record cannot be written, the `apply` or `discover` that tried says so 
 
 ### diff
 
-`diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. It exits 0 when this machine already matches the desk, and 1 when it does not. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
+`diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. It exits 0 when this machine already matches the desk, and 1 when it does not. An `unseen` entry, an app running with no window to match, is printed and counts against nothing, as in `apply`'s report, unless a window could not be read just then. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
 
 ### doctor and init
 
@@ -238,7 +238,7 @@ arngz current                 # the desk applied or saved last
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering.
 
 ---

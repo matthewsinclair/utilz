@@ -769,6 +769,37 @@ engine_response() {
   assert_output_contains "no change: this machine already matches the desk"
 }
 
+@test "0132: diff prints an app running with no window to name, and exits 0 when nothing else would change" {
+  local response
+  response="$(engine_response plan unseen_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_success
+  assert_output_contains "unseen com.apple.Safari (displays[0].spaces[0].apps[1]): com.apple.Safari is running and no standard window of it"
+}
+
+@test "0132: diff counts an unseen entry planned while a window read failed, exit 1" {
+  local response
+  response="$(engine_response plan unseen_unread_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_exit_code 1
+  assert_output_contains "unseen com.apple.Safari (displays[0].spaces[0].apps[1]):"
+  assert_output_contains "the window filter that names windows on other spaces failed: no filter"
+}
+
+@test "0132: diff refuses a plan whose exit is not 0 or 1, exit 2, its response kept" {
+  local response="$BATS_TEST_TMPDIR/no-exit.json"
+  printf '%s\n' '{"status":"ok","verb":"plan","ops":[],"report":["no change: this machine already matches the desk"]}' >"$response"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine's plan carries exit 'null', not 0 or 1 (kept at "
+}
+
 @test "AT-04.4: diff refuses a desk the validator refuses before asking the engine" {
   fake_hs ok "$FIXTURES/responses/discover.json"
   catalogue
@@ -838,6 +869,16 @@ apply_response() {
   run_arngz apply zeop1
   assert_exit_code 1
   assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): skipped: not installed"
+}
+
+@test "0132: an app running with no window to name is reported unseen, and apply exits 0" {
+  local response
+  response="$(apply_response unseen_results)"
+  apply_machine scheduled "$response"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): unseen: com.apple.Safari is running and no standard window of it"
+  assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
 }
 
 @test "AT-05.3: apply waits for a scheduled answer past the hs call, on its own deadline" {

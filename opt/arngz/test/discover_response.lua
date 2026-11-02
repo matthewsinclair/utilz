@@ -62,7 +62,7 @@ if verb == "discover" then
 elseif verb == "plan" then
   local ops, err, fix = P.plan(F[arg[5]](), F[arg[4]](), {})
   if ops then
-    response = { status = "ok", verb = "plan", ops = ops, report = P.plan_report(ops) }
+    response = { status = "ok", verb = "plan", ops = ops, report = P.plan_report(ops), exit = P.plan_exit(ops) }
   else
     response = { status = "error", kind = "refused", verb = "plan", error = err, fix = fix }
   end

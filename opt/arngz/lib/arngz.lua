@@ -964,6 +964,8 @@ function M.execute(ops, ctx)
     r.index = i
     r.path = op.path
     r.bundle = op.bundle
+    -- An unseen op's mark, which plan set and apply's report reads (issue 0132).
+    r.uncounted = op.uncounted
     results[#results + 1] = r
   end
   return results
@@ -1334,7 +1336,7 @@ local VERBS = {
     if type(desk) ~= "table" then refuse("plan needs the desk") end
     local ops, err, fix = plan_settled(desk, M.observe(P.desk_bundles(desk)), options)
     if not ops then refuse(err, fix) end
-    return { ops = ops, report = P.plan_report(ops) }
+    return { ops = ops, report = P.plan_report(ops), exit = P.plan_exit(ops) }
   end,
 }
 
