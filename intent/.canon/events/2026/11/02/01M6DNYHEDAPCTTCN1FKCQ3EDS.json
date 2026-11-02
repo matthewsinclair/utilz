@@ -1,0 +1,14 @@
+{
+  "id": "01M6DNYHEDAPCTTCN1FKCQ3EDS",
+  "ts": "2026-11-02T08:27:54.702Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-01.2"
+  },
+  "payload": {
+    "reason": "carried by ST0031/04's AC-04.1"
+  }
+}

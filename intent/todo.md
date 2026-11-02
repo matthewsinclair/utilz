@@ -8,15 +8,15 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
-_(none)_
+- [-] ST0031: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
+  - [ ] 01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
+  - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
+  - [x] 03: menuz reads the release stamp, not the tag, for MenuzKind=release
+  - [ ] 04: 2.14.9's cut in 0.1.19's shape: tests.yml on candidate/**, post-cut publishes and pulls only
 
 ## TODO
 
 - [!] ST0029: Retire Python from Utilz
-- [!] ST0031: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
-  - [ ] 01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
-  - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
-  - [x] 03: menuz reads the release stamp, not the tag, for MenuzKind=release
 
 ## DONE
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M6DNX5PBRN0TAMWRPKNE5AVK",
+  "ts": "2026-11-02T08:27:09.900Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0031/04"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "2.14.9's cut in 0.1.19's shape: tests.yml on candidate/**, post-cut publishes and pulls only"
+  }
+}

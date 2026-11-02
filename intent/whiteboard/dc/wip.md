@@ -2,11 +2,11 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 35558d25-d11c-497e-8f57-b81150fdde22
-heartbeat_at: 2026-11-02 07:22Z
+session_id: 0682839a-d7dc-4fc4-b180-fc4ce6aa2c6b
+heartbeat_at: 2026-11-02 08:26Z
 status: active
-focus: "2 Nov, new session on hv's wake: Utilz stays parked on hv's word (vc decision 84) until devbin-vc says Devbin 0.1.19's sweep has reached Utilz (its vendored half is in at fc8cd495 and 7f5167b7, and that word has not come), and dc stays still (no work, run, ask or push) unless devbin-vc names something specific this Devbin release needs from Utilz; issue 0132 is vc's (decision 85); ST0031 and ST0029 stay on hold for the sweep; on devbin-vc's word that it has reached Utilz: st resume ST0031, the two booked probes, ST0019's AC-01.3 descoped to ST0031 and written there as AC-01.5, /01's build on /02's CI bank (st0031-02-v2.patch, 2e48c8e6 on d567e4b8, re-read intact in wt-st0031-02 at this pickup), and then ST0029; nothing pushed; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: []
+focus: "2 Nov, new session on hv's wake: ST0031/04 is dc's (vc decision 87, hv's go on vc's 2.14.9 plan), S, on draft v2 (1e5eec55); step 1, the records (st resume ST0031, wp new, objective and body set, rescope S, claim, AC-04.1 and AC-04.2, AC-01.2 withdrawn as carried by AC-04.1), goes READY to vc and is committed on its word; step 2, U1 (tests.yml on candidate/**) and U2 (post-cut attaches the leg's app, publishes the formula and pulls the tap), one READY after critic-shell's read, checked by vc by change; step 3, R1 tools/post-cut 2.14.8, R2 release check and R3 release --patch --dry-run, each booked at the desk, R2's and R3's outputs to devbin-vc and vc; then hv pushes main, vc reads its CI green, and hv cuts 2.14.9 with the freeze; decision 84's park otherwise kept, so /01's build, /02's bank and ST0029 wait until after the cut; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: [ST0031/04]
 ---
 
 # DevX Claude (dc)
