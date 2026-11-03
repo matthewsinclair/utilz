@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 9f6fe567-2634-4819-ae7b-6235ed238b14
-heartbeat_at: 2026-11-02 09:00Z
+session_id: d1e7838c-dba6-4c8f-b702-6ad8b20859f8
+heartbeat_at: 2026-11-03 07:05Z
 status: active
-focus: "2 Nov: folded for hv's move, on hv's word first-hand in vc's session, with no release: 0132 done (efdd047d, 58e45281); 2.14.9's cut stands on decision 87, ST0031/04's records in at c475fae3, and dc's step 2 (U1, U2, the prez line), R1 to R3 at the desk, hv's push and the cut wait for the pickup after the move; resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "3 Nov: picked up after hv's move and holding on hv's word first-hand in vc's session, tracking updates only, no work on anything: 2.14.9's cut still stands on decision 87, with dc's step 2 (U1, U2, the prez line), R1 to R3 at the desk, hv's push and the cut waiting for hv's word; kovacs-sysadm's Linux-leg finding (arngz's lua test dependency is declared only in CI's apt line, so utilz doctor is silent without lua) is banked for hv, unfiled and unchecked, in ~/Devel/scratch/utilz-vc/inbound-20261103-kovacs-sysadm-arngz-lua-dep.md; resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
