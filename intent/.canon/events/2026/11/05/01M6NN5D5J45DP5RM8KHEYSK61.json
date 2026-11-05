@@ -1,0 +1,15 @@
+{
+  "id": "01M6NN5D5J45DP5RM8KHEYSK61",
+  "ts": "2026-11-05T10:48:06.578Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 3 Nov, first-hand in vc's session, received by vc's date -u of 11:29Z, on vc's two recommendations at boot: \"Go with your recommendations.\" and \"Sure, but not today. Bank this and get ready for a close. We're not doing anything here on this repo today.\" So (1) 2.14.9's path (decision 87) does not resume today: it waits for devbin-vc, which holds all devbin work today, since R2's and R3's outputs and the CI verdict on hv's push go to it; (2) kovacs-sysadm's Linux-leg finding (arngz's lua test dependency is declared only in CI's apt line, so utilz doctor is silent on a host without lua; banked in ~/Devel/scratch/utilz-vc/inbound-20261103-kovacs-sysadm-arngz-lua-dep.md) is filed by vc as a low issue once Utilz resumes, deferred past 2.14.9 by name (watch-out 22), and fixed after the cut. Nothing is done on Utilz on 3 Nov, and vc closes for the day. Peers read this decision at pickup; cc and dc record no copy."
+  }
+}
