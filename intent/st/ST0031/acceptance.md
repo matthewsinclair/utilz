@@ -30,7 +30,7 @@ title: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
 
 - AC-03.1 (non-test) menuz stamps MENUZ_KIND by the rule help/menuz.md states with the stamps, which reads the release commit as Devbin ST0011 WP06's app-sign does; menuz.bats pins each answer and each exit 1. -- evidence: landed at b8e527d8; desk run 01M697M3EPJDYFVJ40S2YAD0TW, menuz.bats 1..138, 138 ok, 0 skip, 0 not ok, log sha256 9a5b7b66, judged green by utilz-vc -- satisfied: yes
 
-### WP-04 -- 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only (status: Not Started)
+### WP-04 -- 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only (status: WIP)
 
 - AC-04.1 (non-test) tests.yml fires on a push to `main` or `candidate/**`, with no `tags:` trigger, and runs test-macos, menuz-app and the rust job's macOS leg only on a `candidate/` push or a dispatch. A read-only `bin/devbin release check` reads the trigger with no finding, and 2.14.9's candidate run is green on every job it starts. -- satisfied: no
 - AC-04.2 (non-test) tools/post-cut, the one after: line, attaches the Menuz.app the cut's macos leg signed and notarised at the release commit, through `bin/devbin macos publish` at the project root, and builds and signs nothing. It then publishes the formula and pulls this machine's tap, stopping at the first failure. 2.14.9's after row is done, its release carries Menuz.app.zip and SHA256SUMS, and homebrew-utilz names 2.14.9. -- satisfied: no
@@ -49,7 +49,7 @@ _(no tests in this group)_
 
 _(no tests in this group)_
 
-### WP-04 -- 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only (status: Not Started)
+### WP-04 -- 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only (status: WIP)
 
 _(no tests in this group)_
 
