@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 0682839a-d7dc-4fc4-b180-fc4ce6aa2c6b
-heartbeat_at: 2026-11-02 08:26Z
+session_id: fb114a20-9b7c-452d-baca-597bb3418fa9
+heartbeat_at: 2026-11-05 10:47Z
 status: active
-focus: "2 Nov, new session on hv's wake: ST0031/04 is dc's (vc decision 87, hv's go on vc's 2.14.9 plan), S, on draft v2 (1e5eec55); step 1, the records (st resume ST0031, wp new, objective and body set, rescope S, claim, AC-04.1 and AC-04.2, AC-01.2 withdrawn as carried by AC-04.1), goes READY to vc and is committed on its word; step 2, U1 (tests.yml on candidate/**) and U2 (post-cut attaches the leg's app, publishes the formula and pulls the tap), one READY after critic-shell's read, checked by vc by change; step 3, R1 tools/post-cut 2.14.8, R2 release check and R3 release --patch --dry-run, each booked at the desk, R2's and R3's outputs to devbin-vc and vc; then hv pushes main, vc reads its CI green, and hv cuts 2.14.9 with the freeze; decision 84's park otherwise kept, so /01's build, /02's bank and ST0029 wait until after the cut; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "5 Nov, new session on hv's wake: booted and holding for hv's instructions. ST0031/04 stays dc's (vc decision 87), S: step 1, the records, landed at c475fae3; step 2, U1 (tests.yml on candidate/**) and U2 (post-cut attaches the leg's app, publishes the formula and pulls the tap), is not started, and its design reads Devbin 0.1.19, while devbin-vc swept 0.1.20 in at 7a6a06a7, so its anchors and section 1's four trip points need a re-read against 0.1.20 before any edit; 2.14.9's path waits for devbin-vc (hv's word of 3 Nov), through which hv coordinates all activity today; decision 84's park otherwise kept, so /01's build, /02's bank and ST0029 wait until after the cut; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/04]
 ---
 
