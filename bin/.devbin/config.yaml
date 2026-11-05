@@ -111,13 +111,13 @@ commands:
 # state, outside the tree, because Launch Services registers bundles left
 # under ~/Devel (issue 0106). bundle_id is a second copy of
 # opt/menuz/lib/launch-services.sh's MENUZ_BUNDLE_ID, held equal by
-# macos.bats. keychain keeps the credentials where store-creds put them.
+# macos.bats. Notarisation reads the one notarytool keychain profile that
+# store-creds saves, macos.notary_profile, left at its default (devbin).
 macos:
   app: ${XDG_STATE_HOME}/menuz/build/macos/Build/Products/Release/Menuz.app
   build: bin/utilz menuz build --release
   bundle_id: com.matthewsinclair.utilz.menuz
   entitlements: native/macos/Menuz/Menuz/Menuz.entitlements
-  keychain: utilz.apple
   version_from: opt/menuz/VERSION
   commit_stamp: MenuzCommit
   kind_stamp: MenuzKind
