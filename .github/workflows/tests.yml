@@ -2,15 +2,18 @@ name: Utilz Tests
 
 on:
   push:
-    branches: [ main ]
-    # Both tag forms: this project's tags are BARE from 2.7.0 on (hv's ruling
-    # at that tag), and the older ones carry a v. Nothing downstream reads the
-    # tag's text -- the macOS gates below test `github.ref_type` -- so the form
-    # cannot silently exclude a release.
-    tags: ['v[0-9]*', '[0-9]*']
-    # A push that only moves the whiteboard is not a code change. Path filters
-    # are NOT evaluated for a tag push (GitHub's own rule), so this can never
-    # suppress a release run.
+    branches: [ main, 'candidate/**' ]
+    # A release's candidate: Devbin's cut pushes the release commit to
+    # candidate/<tag> and reads CI on it before anything is tagged, and the
+    # macOS jobs below run on it. NO TAG STARTS A RUN: the tag is pushed only
+    # once the candidate is green, on the commit it names, so a run of its own
+    # would test a commit already proven (ST0031/04).
+    #
+    # A push that only moves the whiteboard is not a code change. A candidate
+    # is a branch push, so GitHub evaluates these filters for it too, and the
+    # release commit changes VERSION and CHANGELOG.md, outside both trees: they
+    # never suppress a candidate's run, as the cut's pre-flight asks of
+    # bin/devbin ci-state --fires before it pushes.
     paths-ignore:
       - 'intent/whiteboard/**'
       # BOTH PATHS OR NEITHER (devbin#0110): GitHub skips a push only when EVERY
@@ -108,11 +111,11 @@ jobs:
   test-macos:
     name: Test on macOS
     runs-on: macos-latest
-    # macOS on a release tag or a manual run, never on every push (hv's fleet
-    # ruling of 2026-09-22, uniform across the fleet whatever a repository's
-    # visibility: issue 0046). `ref_type` never reads the tag's text, so a bare
-    # tag runs it exactly as a v-prefixed one does.
-    if: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+    # macOS on a candidate push or a manual run, never on every push (hv's
+    # fleet ruling of 2026-09-22, uniform across the fleet whatever a
+    # repository's visibility: issue 0046). The candidate is the release
+    # commit, which the cut pushes to candidate/<tag> before it tags.
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/candidate/') }}
 
     steps:
     - uses: actions/checkout@v7.0.1
@@ -238,8 +241,8 @@ jobs:
         # working if devbin is ever vendored somewhere other than bin/.
         #
         # tools/ is collected beside bin and opt (ST0019 WP-01). It holds the
-        # maintainer's release tools, eg tools/ci-state, the release core's
-        # ci.query, and lives outside bin/ because bin/ is published. A new
+        # maintainer's release tools, eg tools/post-cut, the release core's
+        # after: line, and lives outside bin/ because bin/ is published. A new
         # top-level directory is invisible to a collector that names its
         # roots, so it is named here or its scripts ship unlinted.
         #
@@ -282,7 +285,7 @@ jobs:
         # The same gate as test-macos, in the matrix rather than in a job-level
         # `if`, because an `if` drops the WHOLE job and this one must keep its
         # Ubuntu leg on every push (issue 0046).
-        os: ${{ fromJSON((github.ref_type == 'tag' || github.event_name == 'workflow_dispatch') && '["ubuntu-latest","macos-latest"]' || '["ubuntu-latest"]') }}
+        os: ${{ fromJSON((github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/candidate/')) && '["ubuntu-latest","macos-latest"]' || '["ubuntu-latest"]') }}
 
     steps:
     - uses: actions/checkout@v7.0.1
@@ -516,10 +519,10 @@ jobs:
 
   menuz-app:
     name: menuz app (macOS)
-    # Menuz.app built and tested by Xcode, on a release tag or a manual run
-    # only (Gtools' gate, and the fleet's: issue 0046), so a push is never an
-    # Xcode build. UNSIGNED, and it reads no secrets and attaches nothing:
-    # signing, notarising and publishing the release asset are the
+    # Menuz.app built and tested by Xcode, on a candidate push or a manual run
+    # only (Gtools' gate, and the fleet's: issue 0046), so a push to main is
+    # never an Xcode build. UNSIGNED, and it reads no secrets and attaches
+    # nothing: signing, notarising and publishing the release asset are the
     # maintainer's, on their machine (D12, devbin's built-in bin/devbin macos,
     # issue 0118). The shim's verbs
     # are the one build path here as on a desk: build runs xcodegen when the
@@ -531,7 +534,7 @@ jobs:
     # xcode-27 image, a preview on macOS 27, with 27.1 named: the image's
     # default moves, and on an image without 27.1 xcodebuild -version fails.
     runs-on: xcode-27
-    if: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/candidate/') }}
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
 
@@ -595,7 +598,7 @@ jobs:
       SHELLCHECK: ${{ needs.shellcheck.result }}
       RUST: ${{ needs.rust.result }}
       CLIPPY: ${{ needs.clippy.result }}
-      MACOS_REQUIRED: ${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+      MACOS_REQUIRED: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/candidate/') }}
 
     steps:
     - name: Summary
@@ -620,10 +623,10 @@ jobs:
         required "rust"       "$RUST"
         required "clippy"     "$CLIPPY"
 
-        # macOS runs on a release tag or a manual run only, so a SKIP is the
-        # expected outcome on a push and a failure on a tag. Without this the
-        # whole run goes red on every push, and it does so on the NEXT push
-        # rather than on the commit that gated the legs.
+        # macOS runs on a candidate push or a manual run only, so a SKIP is
+        # the expected outcome on a push to main and a failure on a candidate.
+        # Without this the whole run goes red on every push, and it does so on
+        # the NEXT push rather than on the commit that gated the legs.
         # menuz-app runs on the same condition, so it is judged the same way.
         macos_leg() {
           case "$MACOS_REQUIRED:$2" in

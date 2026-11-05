@@ -1,31 +1,37 @@
 #!/usr/bin/env bash
 #
 # post-cut -- everything after a Utilz cut, in order, stopping at the first
-# failure: Menuz.app signed, notarised and attached at the tag, then the
-# formula published to the tap, then this machine's clone of the tap pulled
-# (ST0030; docs/releasing.md).
+# failure: the Menuz.app the cut's macos leg signed and notarised at the
+# release commit attached at the tag, then the formula published to the tap,
+# then this machine's clone of the tap pulled (ST0030, ST0031/04;
+# docs/releasing.md).
 #
 #   tools/post-cut [<tag>]   <tag> defaults to the top-level VERSION at HEAD
 #
 # It is the release core's one `after:` line (bin/.devbin/config.yaml), so
 # `bin/devbin release --patch --yes` runs from cut to tap with nobody at the
-# terminal. ONE LINE, NOT FOUR: the core runs every after: line even when one
+# terminal. ONE LINE, NOT SEVERAL: the core runs every after: line even when one
 # before it failed, and a formula pushed before Menuz.app.zip is attached gives
 # every new install a `menuz install` that fails until the asset arrives.
 #
 # A RE-RUN STARTS FROM THE TOP AND SKIPS WHAT IS DONE. The core's after step has
-# no postcondition, so a resumed cut runs this again. A release already holding
-# Menuz.app.zip skips the app steps here, since app-sign would build and sign a
-# new copy only for `macos publish` to find an asset there (issue 0118: one
-# with the same bytes counts as attached, one with other bytes is refused), and
+# no postcondition, so a resumed cut runs this again. A release whose
+# Menuz.app.zip and SHA256SUMS are both uploaded skips the publish here, since
+# `macos publish` would only find the asset there (issue 0118: one with the
+# same bytes counts as attached, one with other bytes is refused), and
 # `tools/formula publish` leaves a tap that already carries the release as it
 # is.
 #
-# THE APP STEPS RUN IN A DETACHED WORKTREE AT THE TAG, never the primary.
-# app-sign refuses a tree whose HEAD is not the tag, and publish a copy whose
-# MenuzCommit is not the tag's (issue 0103), and during a cut a node's board commit can move the primary off it. The
-# worktree goes under the system's own temp dir: Launch Services registers
-# bundles under ~/Devel. It is removed on every way out, never with --force.
+# NOTHING IS BUILT OR SIGNED HERE. The cut's macos leg signs and notarises the
+# app at the release commit, in this checkout's stage, and `macos publish`
+# attaches that copy from the primary. It reads the tag's commit, never HEAD,
+# and refuses a staged copy signed at any other commit, or one whose
+# MenuzCommit is not the tag's (issue 0103), so a node's board commit that
+# moves the primary past the tag cannot make it ship another build. It attaches
+# to the release this tree's version names, so that must be the tag. A stage
+# that is gone, or another commit's, gets publish's own remedy: sign again in a
+# tree at the tag and publish from there, since the stage is one per checkout,
+# then run this again, which finds the asset uploaded and skips the publish.
 #
 # It lives in tools/, not bin/, because bin/ is published.
 #
@@ -49,9 +55,10 @@ usage() {
   cat <<EOF
 usage: tools/post-cut [<tag>]
 
-  Sign, notarise and attach Menuz.app at <tag>, then publish the formula to
-  the tap, stopping at the first failure. <tag> defaults to the top-level
-  VERSION at HEAD, and must be the newest release. A re-run skips what is done.
+  Attach the Menuz.app the cut signed at <tag>, then publish the formula to
+  the tap and pull this machine's clone of it, stopping at the first failure.
+  <tag> defaults to the top-level VERSION at HEAD, and must be the newest
+  release. A re-run skips what is done.
 EOF
 }
 
@@ -63,7 +70,7 @@ case "${1:-}" in
 esac
 [[ $# -le 1 ]] || { usage >&2; exit 2; }
 [[ "$(uname -s)" == "Darwin" ]] || {
-  printf 'post-cut: Menuz.app is signed and notarised on macOS only; this is %s\n' "$(uname -s)" >&2
+  printf 'post-cut: Menuz.app is published from the stage the cut signed, on macOS only; this is %s\n' "$(uname -s)" >&2
   exit 2
 }
 
@@ -74,30 +81,37 @@ tag="${tag%$'\n'}"
   die "'$tag' is not an annotated tag in $root, so it is not a release"
 commit="$(git rev-parse --verify "$tag^{commit}")" || die "cannot read the commit '$tag' names"
 # tools/formula publish publishes the newest release, whatever it is asked, so
-# an older tag here would sign one release and publish another's formula.
+# an older tag here would attach one release's app, publish another's formula.
 newest="$(git tag --list | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -t. -k1,1n -k2,2n -k3,3n | tail -1)" ||
   die "cannot read which tags in $root name a release"
 [[ "$tag" == "$newest" ]] ||
   die "'$tag' is not the newest release ($newest), and the formula step publishes the newest"
 
-assets="$(gh release view "$tag" -R "$REPO" --json assets --jq '.assets[].name')" ||
+# The asset names GitHub lists in the state uploaded, the state devbin reads
+# (release_object_assets in bin/.devbin/lib/release.steps). devbin's attach
+# writes SHA256SUMS last, so an attach that stopped part way leaves Menuz.app.zip
+# or SHA256SUMS absent or not uploaded, and the publish is not skipped. That
+# holds while this attach is the first to write SHA256SUMS on the release: a
+# declared macos.binaries has the cut's bin-publish write one earlier, so read
+# this check again then. Whether SHA256SUMS names the zip at its digest is not
+# read here.
+assets="$(gh release view "$tag" -R "$REPO" --json assets --jq '.assets[] | select(.state == "uploaded") | .name')" ||
   die "GitHub has no release object for $tag, or it cannot be read; nothing was done"
 
 say "utilz $tag at ${commit:0:12}"
-if printf '%s\n' "$assets" | grep -qxF "$ASSET"; then
-  say "the release already carries $ASSET, so the app steps are skipped"
+if printf '%s\n' "$assets" | grep -qxF "$ASSET" && printf '%s\n' "$assets" | grep -qxF SHA256SUMS; then
+  say "the release already carries $ASSET and SHA256SUMS, uploaded, so the publish is skipped"
 else
-  wt="$(getconf DARWIN_USER_TEMP_DIR)utilz-post-cut-$tag"
-  [[ ! -e "$wt" ]] ||
-    die "$wt is left from an earlier run; read it, then remove it with git worktree remove, and run this again"
-  git worktree add -q --detach "$wt" "$tag" || die "cannot make a worktree at $tag in $wt"
-  # shellcheck disable=SC2064 # the path is fixed now, and quoted for the trap
-  trap "git -C $(printf '%q' "$root") worktree remove $(printf '%q' "$wt") || printf 'post-cut: LEFT: %s\n' $(printf '%q' "$wt") >&2" EXIT
-  for step in app-sign app-notarize publish; do
-    say "macos $step"
-    (cd "$wt" && bin/devbin macos "$step") ||
-      die "macos $step failed at $tag; nothing after it ran. Fix the cause and run tools/post-cut $tag"
-  done
+  # The copy the cut's macos leg signed at the release commit, in this
+  # checkout's stage: publish refuses one signed at any other commit. It
+  # attaches to the release this tree's version names, which devbin's own
+  # reader prints (bin/devbin version show), so that must be $tag.
+  version="$(bin/devbin version show)" || die "bin/devbin version show could not read this tree's version; nothing was published"
+  [[ "$version" == "$tag" ]] ||
+    die "this tree's version is $version, and macos publish attaches to the release it names, not $tag; run this from a tree whose version is $tag"
+  say "macos publish"
+  bin/devbin macos publish ||
+    die "macos publish failed at $tag, so the formula is not published. Fix what it names (a copy it has you sign again in a tree at the tag is published from that tree), then run tools/post-cut $tag"
 fi
 
 say "formula publish"

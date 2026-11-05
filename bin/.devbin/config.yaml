@@ -49,9 +49,10 @@ commands:
         summary: Every suite, as a release runs them
         # tools/test-estate, not bin/utilz test directly: it re-execs the
         # dispatcher with /bin first on PATH, so bats and every suite run under
-        # the bash 3.2.57 macOS ships. hv's uniform CI ruling moved the macOS
-        # legs to tags and manual runs, and this is the 3.2 run that stood
-        # between a green tree and a tag (issue 0051).
+        # the bash 3.2.57 macOS ships. hv's uniform CI ruling took the macOS
+        # legs off every push, to a release's candidate push and manual runs,
+        # and this is the 3.2 run that stood between a green tree and a tag
+        # (issue 0051).
         run: tools/test-estate
         grammar: generic
         log: ESTATE
@@ -131,10 +132,14 @@ macos:
 # tag: bare, hv's ruling at 2.7.0. repo: declared because the core refuses
 # without it -- no origin and two remotes (local, upstream). gates: check all
 # alone (hv, 28 Oct 2026, ST0030): the dry run and the twins run test estate
-# before a cut. after: tools/post-cut, one line, so Menuz.app and the tap
-# follow the cut and stop at the first failure (ST0030 D2). No ci block: from
-# devbin 0.1.19 the core's built-in ci-state reads CI itself, on the
-# candidate's run of tests.yml, its default workflow.
+# before a cut. after: tools/post-cut, one line, since the core runs every
+# after: command even past a failure: it attaches the Menuz.app the cut's
+# macos leg signed, then publishes the formula and pulls the tap, stopping at
+# the first failure (ST0030 D2, ST0031/04). No formula: key, so the core's
+# formula step, which runs before after:, cannot put the formula on the tap
+# ahead of the app. No ci block: from devbin 0.1.19 the core's built-in
+# ci-state reads CI itself, on the candidate's run of tests.yml, its default
+# workflow.
 release:
   tag: "{version}"
   repo: matthewsinclair/utilz

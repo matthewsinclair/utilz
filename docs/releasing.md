@@ -56,20 +56,20 @@ release: stopped at step 1 (resolve). This run tagged nothing and pushed nothing
 
 ## After the cut: Menuz.app
 
-menuz's app ships as a release asset, `Menuz.app.zip`, beside the tag's source. The release core attaches no files: step 9 makes the release object with a title and notes only. So once step 9 has made it, hv signs, notarises and attaches the app on this machine, through devbin's built-in `bin/devbin macos` (ST0027 D12, as Intent signs `Intent.app`), which `bin/.devbin/config.yaml`'s `macos:` block declares for Menuz (issue 0118). CI builds the app unsigned and reads no secrets.
+menuz's app ships as a release asset, `Menuz.app.zip`, beside the tag's source. The cut's macOS leg signs and notarises it at the release commit, on this machine, through devbin's built-in `bin/devbin macos` (ST0027 D12, as Intent signs `Intent.app`), which `bin/.devbin/config.yaml`'s `macos:` block declares for Menuz (issue 0118). The release core attaches no app: its object step makes the release object, and `tools/post-cut` attaches the copy the leg signed (below). CI builds the app unsigned and reads no secrets.
 
-**Once per machine**, hv stores the notary credentials in the login keychain:
+**Once on each Mac that cuts**, hv stores the notary profile in the login keychain:
 
 ```bash
-bin/devbin macos store-creds   # interactive: Apple ID, app-specific password, team id
-bin/devbin macos doctor        # each credential PRESENT or MISSING, the identity counted, a test-sign
+bin/devbin macos store-creds   # interactive: notarytool store-credentials, under the profile devbin
+bin/devbin macos doctor        # the profile PRESENT, the Developer ID identities counted with their team, a test-sign
 ```
 
-Nothing is written to this repository, and nothing prints a value. `store-creds` runs in a terminal only, and each value is typed at `security`'s own prompt, so none reaches a command line (issue 0126). The keychain prefix is `utilz.apple`, as `macos.keychain` declares.
+`store-creds` runs `notarytool store-credentials` under the profile `macos.notary_profile` names, `devbin` by default, and every notarisation submits under it. It runs in a terminal only, refusing a stdin that is not one. notarytool asks for an App Store Connect API key path, left empty, then the Apple ID, the app-specific password and the team id, each typed at its own prompt, so none reaches a command line (issue 0126), checks them with Apple and saves the profile. Nothing is written to this repository, and nothing prints a value. `doctor` names each Developer ID identity's team, and `macos.team` is declared only where it counts more than one. The `utilz.apple` items an earlier devbin read stay in the keychain, unread.
 
-**After every cut, `tools/post-cut` runs the three steps below and then the formula's publish, in order, stopping at the first failure** (ST0030). It is the release core's one `after:` line, so the cut runs it; by hand it is `tools/post-cut [<tag>]`, the tag defaulting to the top-level `VERSION` at HEAD, and refusing any tag but the newest release. It runs the three steps in a detached worktree at the tag under the system's temp dir, never under `~/Devel`, where Launch Services registers bundles, and removes it on every way out. A re-run starts from the top and skips what is done: a release already carrying `Menuz.app.zip` skips the app steps, and a tap already carrying the release is left as it is. It is one `after:` line, not four, because the core runs every `after:` line even when one before it failed.
+**After every cut, `tools/post-cut` attaches the app the cut's macOS leg signed, with `macos publish` (step 3 below), then publishes the formula and pulls this machine's tap, in order, stopping at the first failure** (ST0030, ST0031/04). It is the release core's one `after:` line, so the cut runs it; by hand it is `tools/post-cut [<tag>]`, the tag defaulting to the top-level `VERSION` at HEAD, and refusing any tag but the newest release. It builds and signs nothing. A re-run starts from the top and skips what is done: a release already carrying `Menuz.app.zip` and `SHA256SUMS`, both uploaded, skips the publish, and a tap already carrying the release is left as it is. It is one `after:` line, not several, because the core runs every `after:` line even when one before it failed. `release.formula` stays undeclared, so the core's own formula step, which runs before `after:`, cannot put the formula on the tap ahead of the app.
 
-`app-sign` refuses a tree whose HEAD is not the tag, and `publish` a copy whose `MenuzCommit` is not the tag's (issue 0103), which is why `post-cut` uses a worktree even during a cut, when the primary is at the tag: a node's board commit would move it. A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
+The leg signs in the primary at the release commit, the commit the tag then names, and `publish` reads the tag's commit, never HEAD: it refuses a staged copy signed at any other commit, and one whose `MenuzCommit` is not the tag's (issue 0103). So a node's board commit that moves the primary past the tag cannot make it ship another build, and `post-cut` needs no worktree. A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
 
 Menuz versions apart from Utilz, from `opt/menuz/VERSION`, so a copy's version cannot show it is the tag's build. Its `MenuzCommit` stamp does: it must be 8 to 40 lowercase hex characters and begin the commit the tag names, with the tag in the tree. Its `MenuzKind` must be `release`, which menuz stamps by the rule `help/menuz.md` states with the stamps.
 
@@ -96,7 +96,7 @@ Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its 
 
 ### After every cut
 
-`tools/post-cut` publishes Menuz.app's asset first (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives, and then publishes the formula to the tap with `tools/formula publish`. Nothing is committed in this repository: the template does not change from one release to the next.
+`tools/post-cut` attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives, and then publishes the formula to the tap with `tools/formula publish`. Nothing is committed in this repository: the template does not change from one release to the next.
 
 Then hv:
 
