@@ -2435,6 +2435,22 @@
       "text": "hv, 3 Nov, first-hand in vc's session, received by vc's date -u of 11:29Z, on vc's two recommendations at boot: \"Go with your recommendations.\" and \"Sure, but not today. Bank this and get ready for a close. We're not doing anything here on this repo today.\" So (1) 2.14.9's path (decision 87) does not resume today: it waits for devbin-vc, which holds all devbin work today, since R2's and R3's outputs and the CI verdict on hv's push go to it; (2) kovacs-sysadm's Linux-leg finding (arngz's lua test dependency is declared only in CI's apt line, so utilz doctor is silent on a host without lua; banked in ~/Devel/scratch/utilz-vc/inbound-20261103-kovacs-sysadm-arngz-lua-dep.md) is filed by vc as a low issue once Utilz resumes, deferred past 2.14.9 by name (watch-out 22), and fixed after the cut. Nothing is done on Utilz on 3 Nov, and vc closes for the day. Peers read this decision at pickup; cc and dc record no copy.",
       "state": "live",
       "recorded_at": "2026-11-05T10:48:06.578Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 89,
+      "text": "devbin-vc, 5 Nov, relaying hv's word in devbin-vc's window (given before devbin-vc's date -u of 10:32Z), received by vc over the socket after its pickup's heartbeat of 2026-11-05T10:45:38.025Z and before decision 88's event at 10:48:06.578Z: hv gave the go for devbin's consumer pass, Utilz first (devbin decision 144), so 2.14.9's cut through Devbin 0.1.20's core (devbin ST0011 WP10, Utilz ST0031/04) resumes from where hv parked it on 3 Nov (decision 88). For this turn hv runs utilz-vc, utilz-dc and devbin-vc alone (devbin decision 141), so utilz-cc stays down, and the pickup chain is dc then vc. vc reports to devbin-vc, and devbin-vc reports to hv. devbin-vc holds the desk and grants every run, reads each run's driver before its grant, and checks U1's four macOS sites against devbin's own candidate-ref conditions. The close-out's one-off rules hold for this turn: each fix runs its own arms, red at the base and green at the fix, and the cut is the one full test, with each tree-scan file run whole once before it. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-05T11:00:12.079Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 90,
+      "text": "hv, 5 Nov, first-hand in vc's session, received by vc's date -u of 11:00Z: \"Go with your recommendations.\" on vc's revised plan for 2.14.9 under Devbin 0.1.20 (~/Devel/scratch/utilz-vc/plan-20261105.md). So (1) the plan goes to devbin-vc, and its order stands: vc records decision 89, sends the plan, and files kovacs-sysadm's Linux-leg finding low, deferred past 2.14.9 (decision 88); hv runs bin/devbin macos store-creds in a terminal, then bin/devbin macos doctor, on each Mac that cuts; dc writes ST0031/04's design v3 against 0.1.20, read only, then its records on vc's check; R2 runs at the base as U1's red arm; step 2 lands as one READY (U1; U2 with docs/releasing.md's store-creds paragraph, and macos.team if doctor counts more than one Developer ID identity; the CHANGELOG lines); then R2 at the fix, R1, R3 and the tree-scan files (common_lib.bats, arngz.bats, macos.bats and what the pin sweep adds), each booked on devbin's desk; then hv's push with CI read by sha, and hv's cut with the freeze. (2) U2 keeps formula publish and the tap pull, and release.formula stays undeclared, so the dry run and the cut print 'formula skipped'. (3) macos.binaries is not in 2.14.9. (4) U2's proof is critic-shell, the gate's shellcheck, R1 and the cut, with no new bats arm; it has no arm red at the base, a departure from the close-out rules named to devbin-vc. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-05T11:00:12.243Z"
     }
   ],
   "sent": [

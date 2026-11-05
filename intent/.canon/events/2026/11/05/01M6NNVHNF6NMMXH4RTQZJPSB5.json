@@ -1,0 +1,15 @@
+{
+  "id": "01M6NNVHNF6NMMXH4RTQZJPSB5",
+  "ts": "2026-11-05T11:00:12.079Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "devbin-vc, 5 Nov, relaying hv's word in devbin-vc's window (given before devbin-vc's date -u of 10:32Z), received by vc over the socket after its pickup's heartbeat of 2026-11-05T10:45:38.025Z and before decision 88's event at 10:48:06.578Z: hv gave the go for devbin's consumer pass, Utilz first (devbin decision 144), so 2.14.9's cut through Devbin 0.1.20's core (devbin ST0011 WP10, Utilz ST0031/04) resumes from where hv parked it on 3 Nov (decision 88). For this turn hv runs utilz-vc, utilz-dc and devbin-vc alone (devbin decision 141), so utilz-cc stays down, and the pickup chain is dc then vc. vc reports to devbin-vc, and devbin-vc reports to hv. devbin-vc holds the desk and grants every run, reads each run's driver before its grant, and checks U1's four macOS sites against devbin's own candidate-ref conditions. The close-out's one-off rules hold for this turn: each fix runs its own arms, red at the base and green at the fix, and the cut is the one full test, with each tree-scan file run whole once before it. Peers read this decision at pickup; dc records no copy."
+  }
+}

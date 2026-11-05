@@ -1,0 +1,15 @@
+{
+  "id": "01M6NNVHTJRY0JRB0EK5CCABK4",
+  "ts": "2026-11-05T11:00:12.243Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 5 Nov, first-hand in vc's session, received by vc's date -u of 11:00Z: \"Go with your recommendations.\" on vc's revised plan for 2.14.9 under Devbin 0.1.20 (~/Devel/scratch/utilz-vc/plan-20261105.md). So (1) the plan goes to devbin-vc, and its order stands: vc records decision 89, sends the plan, and files kovacs-sysadm's Linux-leg finding low, deferred past 2.14.9 (decision 88); hv runs bin/devbin macos store-creds in a terminal, then bin/devbin macos doctor, on each Mac that cuts; dc writes ST0031/04's design v3 against 0.1.20, read only, then its records on vc's check; R2 runs at the base as U1's red arm; step 2 lands as one READY (U1; U2 with docs/releasing.md's store-creds paragraph, and macos.team if doctor counts more than one Developer ID identity; the CHANGELOG lines); then R2 at the fix, R1, R3 and the tree-scan files (common_lib.bats, arngz.bats, macos.bats and what the pin sweep adds), each booked on devbin's desk; then hv's push with CI read by sha, and hv's cut with the freeze. (2) U2 keeps formula publish and the tap pull, and release.formula stays undeclared, so the dry run and the cut print 'formula skipped'. (3) macos.binaries is not in 2.14.9. (4) U2's proof is critic-shell, the gate's shellcheck, R1 and the cut, with no new bats arm; it has no arm red at the base, a departure from the close-out rules named to devbin-vc. Peers read this decision at pickup; dc records no copy."
+  }
+}
