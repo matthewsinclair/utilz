@@ -1,0 +1,15 @@
+{
+  "id": "01M6NXDZFW1QHE1T9YQJHCAR2H",
+  "ts": "2026-11-05T13:12:36.092Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 5 Nov, in vc's session: critic-shell's six findings in tools/post-cut that predate ST0031/04's diff are deferred past 2.14.9, into ST0031/01's re-plan, where post-cut and tools/formula retire into Devbin's core and the copies go with them. hv asked what they were, vc listed them with its rec to defer, and hv pushed main with the push lines vc had given for \"defer\"; vc then said it read the push as that deferral and would record it, and hv answered \"Ah, ok. I read the above. Carry on.\" The six: IN-AG-HIGHLANDER-001, post-cut's newest-tag check a copy of tools/formula's newest_release_tag (critical, the only one with risk, which cannot fire while the copies agree); IN-SH-CODE-006, a third die() across tools/ and tag_commit copied inline; IN-SH-CODE-005, git cat-file's stderr discarded and git log's status lost inside say; IN-AG-HIGHLANDER-001, the ASSET literal beside devbin's macos.asset default. critic-shell's report: ~/Devel/scratch/utilz-dc/st0031-prep/critic-shell-post-cut-r1.md (5b3ce942). Peers read this decision at pickup; dc records no copy."
+  }
+}

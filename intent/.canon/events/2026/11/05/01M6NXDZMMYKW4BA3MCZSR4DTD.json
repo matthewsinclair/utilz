@@ -1,0 +1,15 @@
+{
+  "id": "01M6NXDZMMYKW4BA3MCZSR4DTD",
+  "ts": "2026-11-05T13:12:36.244Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 5 Nov, first-hand in vc's session: \"Let's localfold and hold across utilz-* please. Then hold on the bounce.\" So utilz-vc and utilz-dc localfold, with no release, commit on vc's chain (dc, then vc), and hold; after hv's bounce each boots, writes its pickup, commits it on vc's chain, and holds for hv's word. Where 2.14.9 stands: ST0031/04's records (c475fae3, a15bc811) and step 2 (195b1c91, U1 tests.yml on candidate/**, U2 post-cut publishes and pulls only) have landed; R2 red at the base and green at the fix, R1, R3 (the dry run) and the tree-scan files are green on devbin-vc's desk; hv pushed main to both remotes at 195b1c91, and CI there is green (run 42028263538), the verdict sent to devbin-vc. hv's go for the cut was granted at 12:44:53Z, then revoked by devbin-vc at 13:09Z, before the cut started, for AE's image build run 4 on hv's word; vc's re-ask (01M6NX9YTSY7BQRVT77TWMFV2S) is withdrawn by this word, so the cut waits for hv's word after the bounce, re-asked fresh, and starts only once a check finds nothing outside intent/ moved since 195b1c91. Decision 88 (2) is settled without a filing: kovacs-sysadm's Linux-leg finding is issue 0128's ground (the same 30 Oct leg; lua a formula dependency since 2.14.8; doctor and arngz.yaml unchanged on hv's ruling there), and hv, told so, asked for no filing. Peers read this decision at pickup; dc records no copy."
+  }
+}
