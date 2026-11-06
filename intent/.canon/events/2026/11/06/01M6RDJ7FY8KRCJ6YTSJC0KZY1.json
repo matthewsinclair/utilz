@@ -1,0 +1,16 @@
+{
+  "id": "01M6RDJ7FY8KRCJ6YTSJC0KZY1",
+  "ts": "2026-11-06T12:33:01.438Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "seq": 93,
+    "text": "hv, 6 Nov, first-hand in vc's session, on vc's boot plan, received by vc's date -u of 12:30Z: \"Go with your recommendations, except: we're not cutting the release today. Just hold all of that for now. I have client work that takes precedence. Anything else simple and easy we can do in prep for the cut, sure. Just not the actual cut.\" So 2.14.9 is not cut today, and what hangs off the cut holds with it: no desk ask, no GO and no freeze, and ST0031/04's close-out waits. Simple prep for the cut may go ahead: reads, and writes inside intent/ or a node's scratch, since a change outside intent/ would re-open the runs pinned on 195b1c91; no test or build (decision 74). The plan's other recommendations stand for the day of the cut: devbin-vc grants it as the desk's controller, which it has held since 06:52Z by the CLI census at 12:32Z, and any estate-wide restart still to come runs before the GO; cc and ic hold under the freeze, neither having anything in 2.14.9; and after 2.14.9, dc starts ST0031/01, which retires post-cut's copies and decision 91's six with them. Peers read this decision at pickup; cc, dc and ic record no copy."
+  }
+}
