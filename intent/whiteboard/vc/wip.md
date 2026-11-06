@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 94a506af-cdce-4d36-9fbf-de90cd715fc3
-heartbeat_at: 2026-11-05 16:53Z
-status: paused
-focus: "5 Nov, after hv's compact, holding on hv's word (decision 92): 2.14.9's cut through Devbin 0.1.20's core waits for hv's word, re-asked fresh on devbin-vc's desk once a check finds nothing outside intent/ moved since 195b1c91; ST0031/04's records (c475fae3, a15bc811) and step 2 (195b1c91) have landed; R2 red at the base and green at the fix, R1, R3 and the tree-scan files green on the desk; CI green on 195b1c91 (run 42028263538), the verdict with devbin-vc; the cut's grant was revoked for AE's run 4 and its re-ask denied on hv's fold word; the six pre-existing post-cut findings deferred to ST0031/01 (decision 91); this pickup committed after dc's, on vc's chain, then vc holds for hv's word; resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
+session_id: 40be296d-abe9-49ae-b13e-85348f4288b5
+heartbeat_at: 2026-11-06 05:47Z
+status: active
+focus: "6 Nov, new session on hv's wake, holding for hv's instructions, no release: 2.14.9's cut through Devbin 0.1.20's core waits for hv's word, re-asked fresh on devbin-vc's desk; nothing outside intent/ has moved since 195b1c91 (read at d8ec1ddc); ST0031/04's records (c475fae3, a15bc811) and step 2 (195b1c91) have landed; R2 red at the base and green at the fix, R1, R3 and the tree-scan files green on the desk; CI green on 195b1c91 (run 42028263538); the six pre-existing post-cut findings deferred to ST0031/01 (decision 91); the wake's pickups commit on vc's chain, vc's last; resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
