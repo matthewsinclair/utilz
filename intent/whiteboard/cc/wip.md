@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 78575f92-319e-4258-9750-0b66e4394bab
-heartbeat_at: 2026-11-02 08:23Z
+session_id: f6bdc192-e655-43d6-a420-8de7f4a3f23a
+heartbeat_at: 2026-11-06 05:46Z
 status: active
-focus: "2 Nov, new session on hv's wake: Utilz is unparked for 2.14.9's cut only (vc decisions 86 and 87): dc's ST0031/04 on vc's chain, R1 to R3 and hv's push of main, then hv's cut with the freeze; decision 84's park is otherwise kept, so cc stays still and moves only for what vc names cc for this cut; nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; no test or build (vc decision 74)"
+focus: "6 Nov, new session on hv's wake, holding for hv's instructions, no release: nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; 2.14.9's cut stays parked for hv's word (vc decision 92), dc's ST0031/04 waiting on it, and decision 84's park is otherwise kept (decision 86); this pickup is committed on vc's YOUR TURN; no test or build (vc decision 74)"
 claims: []
 ---
 
