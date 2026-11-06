@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "40be296d-abe9-49ae-b13e-85348f4288b5",
-    "heartbeat_at": "2026-11-06T12:31:26.031Z",
+    "heartbeat_at": "2026-11-06T13:41:19.807Z",
     "status": "active",
-    "focus": "6 Nov, holding on hv's word (decision 93): 2.14.9 is not cut today, hv's client work first; simple prep for the cut only, reads and writes inside intent/ or scratch, no test or build; the cut waits for hv's word, then a fresh ask on the desk, granted by devbin-vc; nothing outside intent/ has moved since 195b1c91; ST0031/04's records and step 2 landed (195b1c91), R1 to R3 and the tree-scan files green, CI green on 195b1c91 (run 42028263538); the six pre-existing post-cut findings deferred to ST0031/01 (decision 91); resume state in ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "6 Nov, folded for hv's compact (decision 94), no release, then holding on decision 93: 2.14.9 is not cut today; simple prep only, reads and writes inside intent/ or scratch, no test or build; the cut waits for hv's word, then a fresh ask granted by devbin-vc; hv's dispatch of tests.yml at 195b1c91 (run 42227268608) is read by ci-tap.sh into ~/Devel/scratch/utilz-vc/ci-20261106/; nothing outside intent/ has moved since 195b1c91; after the compact the pickups commit on vc's chain, vc's last; resume state in ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2479,6 +2479,14 @@
       "state": "live",
       "recorded_at": "2026-11-06T12:31:17.892Z",
       "edited_at": "2026-11-06T12:33:01.438Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 94,
+      "text": "hv, 6 Nov, first-hand in vc's session, received by vc's date -u of 13:40Z: \"...I mean bank, fold, and compact! Across the board. Please do that now and then it's time to travel.\" So vc, dc, cc and ic each bank their resume state in scratch and localfold, with no release, committing on vc's chain in BACK order with vc last; then hv compacts each. After the compact each node runs /in-session, writes its pickup, sends vc BACK, commits it on vc's YOUR TURN, and holds on decision 93: no cut, simple prep only. Just before this word, hv dispatched tests.yml on main at 195b1c91 (run 42227268608), the macOS CI vc offered as prep for the cut; vc reads it to its end with ci-tap.sh into ~/Devel/scratch/utilz-vc/ci-20261106/. Peers read this decision at pickup; cc, dc and ic record no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-06T13:41:00.830Z"
     }
   ],
   "sent": [

@@ -1,0 +1,15 @@
+{
+  "id": "01M6RHEQ8XKD29EXHJPXQDSERB",
+  "ts": "2026-11-06T13:41:00.830Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 6 Nov, first-hand in vc's session, received by vc's date -u of 13:40Z: \"...I mean bank, fold, and compact! Across the board. Please do that now and then it's time to travel.\" So vc, dc, cc and ic each bank their resume state in scratch and localfold, with no release, committing on vc's chain in BACK order with vc last; then hv compacts each. After the compact each node runs /in-session, writes its pickup, sends vc BACK, commits it on vc's YOUR TURN, and holds on decision 93: no cut, simple prep only. Just before this word, hv dispatched tests.yml on main at 195b1c91 (run 42227268608), the macOS CI vc offered as prep for the cut; vc reads it to its end with ci-tap.sh into ~/Devel/scratch/utilz-vc/ci-20261106/. Peers read this decision at pickup; cc, dc and ic record no copy."
+  }
+}
