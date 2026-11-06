@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: f6bdc192-e655-43d6-a420-8de7f4a3f23a
-heartbeat_at: 2026-11-06 05:46Z
+heartbeat_at: 2026-11-06 13:44Z
 status: active
-focus: "6 Nov, new session on hv's wake, holding for hv's instructions, no release: nothing of cc's open or banked, no claims, 0 live messages, watch-out 6 live; 2.14.9's cut stays parked for hv's word (vc decision 92), dc's ST0031/04 waiting on it, and decision 84's park is otherwise kept (decision 86); this pickup is committed on vc's YOUR TURN; no test or build (vc decision 74)"
+focus: "6 Nov, localfold for hv's compact (vc decision 94), no release; holding on vc decision 93: no cut of 2.14.9 today, simple prep only, nothing asked of cc; nothing of cc's open or banked, no claims, 0 live messages, nothing sent unarchived, watch-out 6 live; this fold and the pickup after the compact are committed on vc's YOUR TURN; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: []
 ---
 
