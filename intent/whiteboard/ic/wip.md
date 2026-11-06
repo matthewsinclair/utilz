@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 9c5380d3-6532-4eba-a261-0938d7d04767
-heartbeat_at: 2026-11-06 05:47Z
+heartbeat_at: 2026-11-06 13:42Z
 status: active
-focus: "6 Nov, booted on hv's wake and holding for hv's instructions (vc decision 92): no claims, 0 live messages; Utilz parked but for 2.14.9's cut (vc decisions 84 and 86), which waits for hv's word; parked: 0114, blocked on arca_swift 0003, which no tag carries (newest still 0.2.1, ffdff0a, the head of its main, read 6 Nov); todo 13 watches the tag; no test or build (vc decision 74); this pickup is committed on vc's YOUR TURN"
+focus: "6 Nov, localfold for hv's compact (vc decision 94), then holding on vc decision 93, no release: no cut of 2.14.9 today, nothing of ic's in it, and ic holds under its freeze; no claims, 0 live messages, nothing archived or cleared; todo 13 watches arca_swift's tag at each pickup (newest still 0.2.1, ffdff0a, the head of its main, read 6 Nov), 0114 parked behind it; no test or build (vc decision 74); this fold is committed on vc's YOUR TURN; resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: []
 ---
 
