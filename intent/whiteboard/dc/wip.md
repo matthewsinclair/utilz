@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: f014cf09-12c8-4a0e-a356-7d85ab58301c
-heartbeat_at: 2026-11-06 05:45Z
+heartbeat_at: 2026-11-06 13:42Z
 status: active
-focus: "6 Nov, new session on hv's wake, holding for hv's instructions, no release: ST0031/04 is dc's and WIP, its records at c475fae3 and a15bc811 and step 2, U1 and U2, landed at 195b1c91; R2 red at the base and green at the fix, R3, the tree-scan files and R1 all green on devbin's desk; hv pushed main and CI on 195b1c91 is green; nothing outside intent/ has moved since 195b1c91; the cut of 2.14.9 has not started and is re-asked fresh on hv's word, with the freeze from its GO; then AC-04.1 and AC-04.2, wp done and unclaim, on vc's check; critic-shell's six findings that predate the diff are deferred past 2.14.9 into ST0031/01's re-plan (vc decision 91); this pickup is committed on vc's YOUR TURN, then dc holds for hv's word; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "6 Nov, localfold for hv's compact (vc decision 94), no release, holding on vc decision 93: no cut of 2.14.9 today, hv's client work first. ST0031/04 is dc's and WIP: its records at c475fae3 and a15bc811 and step 2, U1 and U2, landed at 195b1c91; R2 red at the base and green at the fix, R3, the tree-scan files and R1 all green on devbin's desk; hv pushed main and CI on 195b1c91 is green; nothing outside intent/ has moved since 195b1c91. On the cut's day devbin-vc takes the desk and grants hv's cut, with the freeze from its GO; then AC-04.1 and AC-04.2, wp done and unclaim, on vc's check; then dc starts ST0031/01, which retires post-cut's copies and decision 91's six findings with them. After hv's compact the pickup is committed on vc's YOUR TURN, then dc holds on decision 93; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/04]
 ---
 
