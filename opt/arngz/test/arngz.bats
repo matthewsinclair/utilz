@@ -881,11 +881,19 @@ apply_response() {
   assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
 }
 
+# The answer comes FAKE_HS_DELAY after the hs call, later than the hs call's
+# own deadline, so only apply's deadline can be what waits for it. The hs
+# deadline must still leave the fake room to start its writer: the CLI counts
+# it in bash's whole SECONDS, so 1 s is anywhere from 0 to 1 s, and a fake
+# killed before it starts the writer leaves nothing to answer. With a 1 s hs
+# deadline this arm waited out apply's 600 s default under load (R-full at
+# 0342aee6). So 4 s for hs, the answer 2 s after that, and apply's own
+# deadline at 20 s, so a red costs 20 s, not 600.
 @test "AT-05.3: apply waits for a scheduled answer past the hs call, on its own deadline" {
   local response
   response="$(apply_response placed_results)"
   apply_machine scheduled "$response"
-  export FAKE_HS_DELAY=2 ARNGZ_HS_TIMEOUT=1
+  export FAKE_HS_DELAY=6 ARNGZ_HS_TIMEOUT=4 ARNGZ_APPLY_TIMEOUT=20
   run_arngz apply zeop1
   assert_success
   assert_output_contains ": placed"
