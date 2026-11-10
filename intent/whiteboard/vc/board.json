@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "65f915fc-9b70-40c4-8be5-b6db4ca91d96",
-    "heartbeat_at": "2026-11-10T13:49:15.398Z",
+    "heartbeat_at": "2026-11-10T17:40:13.889Z",
     "status": "active",
-    "focus": "10 Nov 13:41Z, localfolded for hv's compact on hv's word (\"Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move.\", vc decision 101), dc first at ccedffa1 and vc last; no release, status active. ON THE BOUNCE: /in-session and the pickup, then HOLD and start nothing until hv's move. ST0032 is vc's and claimed. Fifteen of its sixteen test rows are mutation-proven (PDY9E2); AT-03.2 was not, and vc first recorded it as if it were, corrected at 79487479, its AC-03.2 withdrawn on hv's word (decision 100). The contract is blocked only on 12 citation findings, because ST0026's and ST0028's tests share these files under the same numbers; NEXT after the move, under decision 98, vc writes `AT-xx.y (ST0032)` comments beside the fifteen live rows' arms, renaming nothing, checked by dc. Then ONE full suite run at that head, the cut's own and hv's, and hv names the cut's head. dc's ST0033 is landed at d7047f70 with its records at 76cf5873 and passes 6 of 6; ST0033, 0136 and 0137 close after the cut's run proves them. Still open after the cut: AC-01.4 and AC-01.5 (the live path), AC-04.10, AC-05.4 (the menu), and Lua 5.4, which nothing today ran. Do not run anything (decision 74). Resume in ~/Devel/scratch/utilz-vc/RESUME.md; PDY9E2's evidence banked in ~/Devel/scratch/utilz-vc/pdy9e2/.",
+    "focus": "10 Nov 17:40Z: 2.14.9 RELEASED and verified (decision 103); freeze lifted. NEXT: close ST0033/0136/0137 with dc; check 0133/0134/0135; ST0032 stays open on AC-01.4/01.5, 04.10, 05.4; land dc/0133b (ST0034, 0138) once devbin-vc's run reads green; hv to rule on ST0029's parked branch. Resume in ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [
       "ST0032"
     ],
@@ -2561,6 +2561,14 @@
       "text": "hv, 10 Nov, FIRST-HAND in vc's session, received after vc's date -u of 15:53Z: hv pasted the message hv gave devbin-vc (EOP: estate-geodica, papillon-*, agentic-engineering-*; DEVBIN: devbin-vc managing the desk; UTILZ: utilz-*; sysadms rhadamanth, gyges and kovacs available: \"Please liase with the respective VCs to crack on and get things done. I'm keen to get: UTILZ and INTENT ready for a release. Then a patch for DEVBIN if necessary.\"), then: \"I'll be afk for a while. devbin-vc has the pen. Please cooperate with it and corale any Claudes you are managing accordingly.\" This is hv's MOVE that ends decision 101's hold. So the order under decision 98 resumes: vc's comment-only id annotations on ST0032's fifteen live rows, checked by utilz-dc and committed; then the cut's full run at that head, booked at the desk through devbin-vc; then R2, R1 and R3 again; hv names the cut's head. devbin-vc holds hv's pen while hv is AFK: questions for hv go through it. vc sent devbin-vc the open items, the runs and two questions for hv (the cut's head; who runs the full suite). Note: at 15:53Z the estate's control line read NO CONTROLLER, so asks queue until devbin-vc takes control. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-11-10T15:54:42.438Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 103,
+      "text": "hv, 10 Nov, first-hand in vc's session after decision 102: UTILZ 2.14.9 IS RELEASED. (1) \"Can you push it? I'm AFK right now.\" vc pushed main c2ac7cec to both remotes after R-full, R1, R2 and R3 had all read green at that head. (2) hv typed \"! cd ~/Devel/prj/Utilz && bin/devbin release --patch --yes\" and vc ran it. The cut stamped 1401e7b3 and stopped at the macos leg because there was no notary keychain profile. hv stored the credentials with bin/devbin macos store-creds, doctor read PRESENT, and hv resumed the cut with bin/devbin release v2.14.9 --yes. The core ended at 17:38:26Z and the log is tmp/release/20261110-1735.RELEASE.out. vc verified it at 17:39Z from the remotes: upstream tag 2.14.9 (fe9dac48) peels to 1401e7b3; the release is published with Menuz.app.zip, stapled and accepted by Gatekeeper as Notarized Developer ID, plus SHA256SUMS; candidate CI run 42859750695 succeeded on all eight jobs, macOS included; the tap is at 2.14.9; candidate/2.14.9 has been deleted. END was sent to devbin-vc and utilz-dc, and the freeze is lifted. (3) ST0029 (Retire Python) is parked: \"Today is not the day to retire it\", relayed by devbin-vc. dc's records on dc/st0029 (a251bc60) stay on the branch until hv rules. (4) GREEN_AT_BASE, devbin-vc's reading of hv's 5 Nov rule: no planted faults beyond a guard's own single red case. A new arm that passes at the base is named in advance in a GREEN_AT_BASE list with a claim column, so vc's mutant phases for ST0034 were refused. NEXT: close ST0033, 0136 and 0137, which the cut's run proved; check whether 0133, 0134 and 0135 can close; ST0032 stays open on AC-01.4/01.5, AC-04.10 and AC-05.4; land dc/0133b (ST0034, issue 0138) once devbin-vc's run of it reads green. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-10T17:40:13.605Z"
     }
   ],
   "sent": [
