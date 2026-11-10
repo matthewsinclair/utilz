@@ -380,6 +380,14 @@ local function exec_create_space(op, ctx)
   -- count, which is what the retry budget is actually buying. A call that
   -- returned nil made nothing and may honestly be tried again, which is run
   -- 35's case and the one 0135 was raised for.
+  --
+  -- ONE HOLE IS LEFT OPEN ON PURPOSE, so it is not mistaken for an oversight:
+  -- a call that returns nil and nonetheless creates a desktop leaves `made`
+  -- nil, so the next attempt creates again. Closing it needs a count read
+  -- before the first create, which still races, and treating a nil return as
+  -- a single attempt would give up run 35's retry, the case this issue was
+  -- raised for. The overshoot arm below makes it visible instead of silent:
+  -- attempt 2's readback sees before + 2 and says so by name.
   local made, why
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
     if not made then
@@ -393,6 +401,14 @@ local function exec_create_space(op, ctx)
       -- asked for, and the report has to say so rather than hide it in a
       -- readback.
       error(string.format("the desktops went from %d to %d, more than the one asked for", before, now), 0)
+    end
+    -- Two different facts, and in the lag case the first is the likelier of
+    -- them: a call that reported making a space whose registration never
+    -- caught up, and a call that did nothing at all. `why` is nil once the
+    -- call has succeeded, so the generic words would assert the opposite of
+    -- what Hammerspoon said.
+    if made then
+      error("it reported making a space and the desktop list never caught up", 0)
     end
     error(tostring(why or "it changed nothing"), 0)
   end, function()
@@ -408,13 +424,16 @@ local function exec_create_space(op, ctx)
   local after = user_space_count(op.screen)
   local reason = string.format("creating a space did not take (%s); user spaces %d before, %s after",
     tostring(res), before, after and tostring(after) or "a count that could not be read")
-  -- Bind the rest of the run when nothing was made, and when the count cannot
-  -- be read at all: both are causes that last, and leaving the unreadable case
-  -- out let the same failure be reported once per op, which is what this
-  -- suppression exists to stop. A count that moved by some other amount is
-  -- this op's failure alone: saying "already failed" for every later space on
-  -- the display would assert a failure that did not happen.
-  if after == nil or after == before then
+  -- Bind the rest of the run only for a cause that lasts: nothing made, or a
+  -- count that cannot be read at all. The `made` test is the point -- a call
+  -- that DID report a space, whose registration simply never caught up inside
+  -- the budget, has not shown that the display is unusable, and binding on it
+  -- would refuse every later space there with "already failed" although one
+  -- was created and only com.apple.spaces was slow. That is the same defect
+  -- this function had on the ok-true path two commits ago, by the other door.
+  -- A count that moved by some other amount is likewise this op's failure
+  -- alone, said rather than held against the rest of the run.
+  if after == nil or (after == before and not made) then
     ctx.space_failed[op.screen] = reason
   end
   return { status = "failed", reason = reason }
