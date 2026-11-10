@@ -2534,6 +2534,14 @@
       "state": "live",
       "recorded_at": "2026-11-10T13:17:16.203Z",
       "edited_at": "2026-11-10T13:25:00.031Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 100,
+      "text": "hv, 10 Nov, FIRST-HAND in vc's session, received by vc's date -u of 13:37Z, choosing vc's recommended option to the question of how ST0032's AC-03.2 is settled: \"Withdraw, reason on record\". So AC-03.2, which says a failed space creation's message carries no fixed outer phrase in front of its reason, is WITHDRAWN rather than proven by a new test. The claim is TRUE by reading -- at d7047f70, where arngz.lua is byte-identical to 5d7bfe37, the phrase \"creating a space did not take (%s)\" no longer occurs as a format string, its one occurrence being the comment at line 426 that records why it was removed -- and it is withdrawn because it is test-backed, no test proves it, and no ac verb lets a test-backed criterion be satisfied by reading. A message's wording has no state, no effect and no order, which puts it on the side of the line hv ruled on this morning where reading suffices, so a test for a wording change does not delay the cut. THE ROUTE IF REGRESSION PROTECTION IS EVER WANTED, recorded so it is not lost: utilz-dc's prefix check in engine_test.lua, asserting that each create_space reason STARTS with its inner fact. That pins the claim itself rather than one phrase, and dc evaluated it green on the current wording and red on aa81c461's reverted one. WHY THIS CAME TO HV AT ALL: vc had recorded AT-03.2, the test row over AC-03.2, as mutation-proven by PDY9E2's M03, and it was not. M03 reddened two other checks, and AT-03.2's cited arm, plan_test.lua:1014, passed under all ten plan mutants. That check pins AC-03.2's premise, that apply_report prefixes every loose line with the op, and not its claim. vc corrected the row at 79487479 and told hv that 15 of ST0032's 16 tests are mutation-proven, not 16. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-10T13:37:28.314Z"
     }
   ],
   "sent": [

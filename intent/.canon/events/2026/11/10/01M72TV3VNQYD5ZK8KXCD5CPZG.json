@@ -1,0 +1,14 @@
+{
+  "id": "01M72TV3VNQYD5ZK8KXCD5CPZG",
+  "ts": "2026-11-10T13:37:28.438Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-03.2"
+  },
+  "payload": {
+    "reason": "Withdrawn on hv's word of 10 Nov, first-hand in vc's session (vc decision 100). The claim is TRUE by reading: at d7047f70, where opt/arngz/lib/arngz.lua is byte-identical to 5d7bfe37, the fixed outer phrase \"creating a space did not take (%s)\" no longer occurs as a format string anywhere in arngz.lua; its one occurrence is the comment at line 426 recording why it was removed. It is withdrawn rather than satisfied because it is test-backed and no test proves it: no arm in ST0032 or ST0033 asserts it, ST0033's driver checks reasons by substring, which passes with or without a wrapper, and AT-03.2's cited check, plan_test.lua:1014, pins only the premise that apply_report prefixes every loose line with the op. A message wording has no state, no effect and no order, so by the line hv ruled on this morning reading is the proportionate proof. If regression protection is ever wanted, the route is utilz-dc's prefix check in engine_test.lua: assert that each create_space reason STARTS with its inner fact, which pins the claim itself rather than one phrase, and which dc evaluated green on the current wording and red on the reverted one."
+  }
+}
