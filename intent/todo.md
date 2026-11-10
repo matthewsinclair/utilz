@@ -16,7 +16,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 - [-] ST0032: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
   - [-] 01: 0133: apply counts a window held at the app's own size as placed
   - [-] 02: 0134: discover leaves out a window lying mostly off its display
-  - [ ] 03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
+  - [-] 03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
   - [ ] 04: Desk auto-selection: a pure detect, arngz which and arngz auto
   - [ ] 05: The menu, the help and the CHANGELOG
 

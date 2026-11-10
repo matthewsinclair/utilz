@@ -34,6 +34,11 @@ local POLL_SECONDS = 0.25
 -- How long launch waits for an app's first window (design.md, apply step 8).
 M.LAUNCH_TIMEOUT = 20
 
+-- How many times a space creation is tried before it is given up on
+-- (issue 0135). The Dock can be momentarily unable to serve Mission Control
+-- data, and one attempt made that a failure.
+M.CREATE_SPACE_TRIES = 4
+
 -- ---------------------------------------------------------------- helpers
 
 local function utc_now() return os.date("!%Y-%m-%dT%H:%M:%SZ") end
@@ -81,12 +86,17 @@ local function own_id(bundle)
 end
 
 -- f() tried up to `times` times, a fifth of a second apart (never after the
--- last): true and its value, or false and the last error.
-local function attempts(times, f)
+-- last): true and its value, or false and the last error. `stop`, when given,
+-- is asked about an error and ends the attempts at once when it answers true,
+-- for a failure that waiting cannot put right (issue 0135). The retry rule
+-- keeps one home: a caller that must not retry says so here rather than
+-- writing a loop of its own.
+local function attempts(times, f, stop)
   local ok, value
   for i = 1, times do
     ok, value = pcall(f)
     if ok then return true, value end
+    if stop and stop(value) then return false, value end
     if i < times then hs.timer.usleep(200000) end
   end
   return false, value
@@ -338,20 +348,42 @@ local function user_space_count(uuid)
   return n
 end
 
-local function exec_create_space(op)
+local function exec_create_space(op, ctx)
+  -- A cause that lasts the whole run is said once per display, not once per
+  -- op: run 35 of hv's log asked for seven spaces and reported the same Dock
+  -- failure seven times (issue 0135). The state is the run's, as ctx.unmoved is.
+  ctx.space_failed = ctx.space_failed or {}
+  local said = ctx.space_failed[op.screen]
+  if said then
+    return { status = "failed", reason = string.format(
+      "creating a space on this display already failed and was not tried again (%s)", said) }
+  end
   local before, berr = user_space_count(op.screen)
   if not before then return { status = "failed", reason = "could not count the desktops before: " .. berr } end
-  local ok, err = hs.spaces.addSpaceToScreen(op.screen, true)
+  -- attempts retries a THROWN error and addSpaceToScreen signals by returning
+  -- nil, so the call is wrapped to raise. error(..., 0) keeps the reason as
+  -- Hammerspoon gave it: level 0 adds no file:line prefix, which would
+  -- otherwise reach the report. Whether waiting could put the failure right is
+  -- plan's to say, not this function's.
+  local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
+    local made, why = hs.spaces.addSpaceToScreen(op.screen, true)
+    if not made then error(tostring(why), 0) end
+    return made
+  end, function(why) return P.space_error_kind(why) == "gone" end)
+  local shown = ok and tostring(res) or "nil"
+  local because = (not ok) and (" (" .. tostring(res) .. ")") or ""
   local after, aerr = user_space_count(op.screen)
   if not after then
     return { status = "failed", reason = string.format("addSpaceToScreen returned %s; could not read back: %s",
-      tostring(ok), aerr) }
+      shown, aerr) }
   end
   if ok and after == before + 1 then
     return { status = "done", readback = { user_spaces = after } }
   end
-  return { status = "failed", reason = string.format("addSpaceToScreen returned %s%s; user spaces %d before, %d after",
-    tostring(ok), err and (" (" .. tostring(err) .. ")") or "", before, after) }
+  local reason = string.format("addSpaceToScreen returned %s%s; user spaces %d before, %d after",
+    shown, because, before, after)
+  ctx.space_failed[op.screen] = reason
+  return { status = "failed", reason = reason }
 end
 
 -- A window plan could claim (named, standard, not minimized): what a launch

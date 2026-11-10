@@ -1160,6 +1160,26 @@ do
     entry_for(off_desk, "com.apple.Safari") ~= nil)
 end
 
+-- --------------------------------------------- space creation (issue 0135)
+
+print("space creation")
+do
+  -- Hammerspoon's own strings, taken from runs 35 and 32 of hv's menuz log
+  -- rather than invented, since the classifier matches on them.
+  check("a Dock that could not serve Mission Control data is worth waiting for",
+    P.space_error_kind("unable to get Mission Control data from the Dock") == "transient")
+  check("a display the plan named and which is gone cannot be retried into existence",
+    P.space_error_kind("no display with specified id found") == "gone")
+  -- The deliberate default, which is the whole reason this is a function and
+  -- not an inline comparison: the cheap mistake is to wait.
+  check("an unrecognised reason is transient, as are an empty one and none at all",
+    P.space_error_kind("something new from a later macOS") == "transient"
+      and P.space_error_kind("") == "transient"
+      and P.space_error_kind(nil) == "transient")
+  check("the match does not depend on the case Hammerspoon used",
+    P.space_error_kind("No Display With Specified Id Found") == "gone")
+end
+
 -- One app on two displays, and one title inside another.
 do
   local world = F.two_display_world()

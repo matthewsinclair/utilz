@@ -2,7 +2,7 @@
 wp_id: WP-03
 title: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display

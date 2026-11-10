@@ -1151,6 +1151,22 @@ end
 -- the window's CENTRE: a window is on the display its middle is on, which
 -- needs no measurement snap does not already make and has no arguable
 -- boundary, as a percentage of overlap would.
+-- Whether a space creation that failed is worth trying again (issue 0135).
+-- Hammerspoon's addSpaceToScreen signals failure by returning nil with a
+-- reason, and the reasons differ in kind: the Dock being momentarily unable to
+-- serve Mission Control data passes, while a display the plan named and which
+-- is no longer there cannot be retried into existence.
+--
+-- An unrecognised reason is TRANSIENT on purpose. Treating an unknown
+-- transient as permanent fails a run that would have come right on its own,
+-- while treating an unknown permanent as transient costs the retry budget and
+-- then reports the same thing. The cheap mistake is the one to make.
+function P.space_error_kind(why)
+  local text = string.lower(tostring(why or ""))
+  if string.find(text, "no display with specified id found", 1, true) then return "gone" end
+  return "transient"
+end
+
 function P.mostly_off(frame, screen_frame)
   if not frame or not screen_frame then return false end
   local cx = frame.x + frame.w / 2
