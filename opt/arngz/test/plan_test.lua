@@ -90,6 +90,7 @@ do
   -- so these cases follow it if it ever changes.
   local slack, over = P.FRAME_SLACK, P.FRAME_SLACK + 1
   local at = function(x, y, w, h) return { x = x, y = y, w = w, h = h } end
+  -- AT-01.2 (ST0032): origins_agree, through the frames_agree check below.
   check("origins_agree: the same origin, whatever the sizes",
     P.origins_agree(at(900, 40, 375, 667), at(900, 40, 450, 545)))
   check("origins_agree: within the slack on each axis, and not past it",
@@ -108,6 +109,7 @@ do
       and not P.frames_agree(nil, at(900, 40, 450, 545))
       and not P.frames_agree(at(900, 40, 450, 545), nil))
   -- Appgate SDP's own numbers, from hv's menuz log at run 70, not invented.
+  -- AT-01.1 (ST0032): the four place_outcome checks below.
   check("place_outcome: a window at its origin at a size the app enforces is own_size",
     P.place_outcome(at(900, 40, 375, 667), at(900, 40, 450, 545)) == "own_size")
   check("place_outcome: a window that took the frame it was given is placed",
@@ -121,6 +123,7 @@ do
 
   -- issue 0134: a window is on the display its centre is on.
   local screen = at(0, 25, 1200, 800)
+  -- AT-02.1 (ST0032): the mostly_off checks below.
   check("mostly_off: a window wholly inside its display is not off it",
     not P.mostly_off(at(0, 25, 600, 800), screen))
   check("mostly_off: a window hanging over an edge with its centre still inside is not off it",
@@ -1022,6 +1025,7 @@ do
   -- AT-03.2's split is why there is no arm for the engine side.
   local own = "placed at the app's own size, 375x667"
   lines, code = P.apply_report(d, { r("place", "displays[0].spaces[0].apps[0]", "done", nil, nil, own) })
+  -- AT-01.3 (ST0032), its first check.
   check("a placed entry with a note says it in brackets and exits 0",
     code == 0 and lines[1] == "com.apple.mail (displays[0].spaces[0].apps[0]): placed (" .. own .. ")", lines[1])
   -- The byte-identical guard: with no note, the line must end where it did.
@@ -1033,6 +1037,7 @@ do
     r("place", "displays[0].spaces[0].apps[0]", "done", nil, nil, own),
     r("place", "displays[0].spaces[1].apps[0]", "failed", "the readback shows it elsewhere"),
   })
+  -- AT-01.3 (ST0032), its second check.
   check("a note beside a failed entry still exits 1, and both are said",
     code == 1 and string.find(lines[1], own, 1, true) ~= nil
       and string.find(lines[3], "failed: the readback shows it elsewhere", 1, true) ~= nil,
@@ -1156,6 +1161,7 @@ do
   local w = base_world()
   w.screens[1].spaces[1].windows[1].frame = { x = -1920, y = 25, w = 600, h = 800 }
   local off_desk, off_notes = P.desk_from_world(w, { name = "t" })
+  -- AT-02.2 (ST0032)
   check("a window lying mostly off its display is not recorded at all",
     entry_for(off_desk, "com.apple.mail") == nil, render(entry_for(off_desk, "com.apple.mail")))
   check("and discover says why, rather than snapping it into the edge cell",
@@ -1173,6 +1179,7 @@ do
   -- rather than invented, since the classifier matches on them.
   check("a Dock that could not serve Mission Control data is worth waiting for",
     P.space_error_kind("unable to get Mission Control data from the Dock") == "transient")
+  -- AT-03.1 (ST0032)
   check("a display the plan named and which is gone cannot be retried into existence",
     P.space_error_kind("no display with specified id found") == "gone")
   -- The deliberate default, which is the whole reason this is a function and
@@ -1218,6 +1225,7 @@ do
   local two_screens = named("homere", desk_of("U-LAP", "U-BIG"))
 
   local name, kind = P.detect({ laptop_only }, world_of("U-LAP"))
+  -- AT-04.3 (ST0032)
   check("one desk covering the one screen present is the desk", name == "rhad" and kind == "one",
     tostring(name) .. "/" .. tostring(kind))
 
@@ -1232,6 +1240,7 @@ do
   local report, both
   local two_world = world_of("U-LAP", "U-BIG")
   name, kind, report = P.detect({ laptop_only, two_screens }, two_world)
+  -- AT-04.2 (ST0032)
   check("a desk describing fewer screens than are present does not win",
     name == "homere" and kind == "one", tostring(name) .. "/" .. tostring(kind))
   check("and the report says how many of the screens present it described",
@@ -1253,6 +1262,7 @@ do
     tostring(name) .. "/" .. tostring(kind) .. " " .. table.concat(report, " | "))
 
   name, kind = P.detect(both, two_world, { current = "zeopit" })
+  -- AT-04.4 (ST0032)
   check("and the current desk decides when it is one of them",
     name == "zeopit" and kind == "current", tostring(name) .. "/" .. tostring(kind))
   name, kind = P.detect(both, two_world, { current = "rhad" })
@@ -1262,6 +1272,7 @@ do
   -- A desk whose display matches nothing keeps match_displays' own words,
   -- rather than detect inventing a second vocabulary for the same fact.
   name, kind, report = P.detect({ named("hockenbury", desk_of("U-GONE")) }, world_of("U-LAP"))
+  -- AT-04.5 (ST0032)
   check("a desk whose display matches no screen is reported in the matching's own words",
     name == nil and kind == "none" and reported(report, "matches no screen"),
     table.concat(report, " | "))
@@ -1271,6 +1282,7 @@ do
   -- The exact cover is a count, so 0 == 0 would make a desk with no displays
   -- fit a world with no screens and be answered as the desk. Held out
   -- explicitly rather than left to the arithmetic.
+  -- AT-04.1 (ST0032): the 0 == 0 guard.
   check("a desk with no displays does not fit a world with no screens",
     select(2, P.detect({ named("empty", { displays = {} }) }, world_of())) == "none")
 end

@@ -2154,6 +2154,7 @@ record_engine_tools() {
   assert_output '["macos"]'
 }
 
+# AT-04.9 (ST0032)
 @test "on Linux, apply, a bare desk, diff, discover and init --yes refuse by name before any defaults or hs call (issue 0083)" {
   machine
   hammerspoon_installed
@@ -2283,6 +2284,7 @@ which_apply_fixture() {
   assert_output "zeop1"
 }
 
+# AT-04.6 (ST0032)
 @test "ST0032/04: which exits 1 when no desk fits, and says what to do about it" {
   which_fixture which-none.json
   run_arngz which
@@ -2305,6 +2307,7 @@ which_apply_fixture() {
   assert_output_contains "which takes no arguments"
 }
 
+# AT-04.8 (ST0032)
 @test "ST0032/04: which is read as a verb, not as the name of a desk to apply" {
   which_fixture which-one.json
   run_arngz which
@@ -2351,6 +2354,7 @@ which_apply_fixture() {
   assert_output_contains "nothing moved"
 }
 
+# AT-04.7 (ST0032)
 @test "ST0032/04: auto refuses a --default that is not a desk before it reads the screens" {
   which_fixture which-one.json
   run_arngz auto --default nosuchdesk
