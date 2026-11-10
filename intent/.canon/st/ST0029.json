@@ -3,11 +3,83 @@
   "id": "ST0029",
   "title": "Retire Python from Utilz",
   "slug": "retire-python-from-utilz",
-  "status": "hold",
-  "status_reason": "hv, 31 Oct (utilz-vc decision 79): resumes after Devbin 0.1.19's vendor sweep, owned by dc, widened to dc's census of the Python outside its scope, with xtrct's port byte-exact, since it feeds the Talga Rd accounting.",
+  "status": "wip",
   "created": "2026-10-26",
   "objective": "Drop the tracked Python, opt/pdf2md/lib/pdf2md.py and opt/xtrct/lib/xtrct.py. pdf2md goes through a spike of off-the-shelf no-dependency Rust PDF-to-Markdown tools (pdfmd, unpdf, pdfly) against its fixtures; xtrct is ported to zsh with curl and jq, keeping its output exactly, since hv's Talga Rd accounting uses it; then the venv machinery comes out.",
   "context": "",
   "body": "",
-  "preamble": ""
+  "preamble": "",
+  "wps": [
+    {
+      "seq": 1,
+      "title": "xtrct goldens from the current Python",
+      "scope": "S",
+      "status": "wip",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 2,
+      "title": "xtrct ported to zsh, curl and jq, byte-exact",
+      "scope": "M",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 3,
+      "title": "pdf2md spike: off-the-shelf Rust tools",
+      "scope": "M",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 4,
+      "title": "pdf2md replacement",
+      "scope": "L",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 5,
+      "title": "The venv machinery out",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 6,
+      "title": "The census sweep: Python outside the two backends",
+      "scope": "S",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    },
+    {
+      "seq": 7,
+      "title": "A guard against tracked Python",
+      "scope": "XS",
+      "status": "not-started",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0029 design: Retire Python from Utilz\n\n## What this thread removes\n\nAt 1401e7b3 the tracked Python is two backends and a scatter of one-liners:\n\n- `opt/xtrct/lib/xtrct.py`, 332 lines. It does schema-driven extraction through the anthropic SDK. hv's Talga Rd accounting uses it, so its port must be BYTE-EXACT (vc decision 79).\n- `opt/pdf2md/lib/pdf2md.py`, 503 lines. It is a pdfplumber port of jzillmann's pdf-to-markdown, and xtrct shells out to it for every `.pdf` input.\n- The venv machinery that serves both: `ensure_venv` in common.sh, the two `requirements.txt` files, the `python3` dependency in each manifest, CI's `python3-venv`, `.gitignore`'s `opt/*/lib/.venv/`, install.sh's `.venv` exclusion, and install_guards.bats's AT14.\n- The census of Python outside that scope, dc's of 30 Oct, re-swept at 1401e7b3:\n  - prez's `acceptance.sh:137,143`;\n  - `todo.bats:88`;\n  - arngz's `acceptance.sh:69,81`;\n  - menuz's `watcher-handrun.sh:52`;\n  - the fontTools remedy at `theme.rs:293` (asserted at `:795`);\n  - `docs/developer-guide.md:605-660` and `help/utilz.md:419-424`, which teach Python;\n  - `prez/prez:15` and `prez/README.md:36`, which cite `ensure_venv`.\n\n  One item is NEW since the census: `install_guards.bats:206,218` runs `python3 -m venv`.\n\nNot in scope: `bin/.devbin`, which is Devbin's vendored core, and prose that names Python without running it.\n\n## Rulings this design rests on\n\nThey go to hv through devbin-vc, with vc agreeing to each recommendation. Until they are answered, nothing changes pdf2md's behaviour.\n\n- D1. Replacing pdf2md changes its markdown, and so changes what xtrct sends for a PDF. A byte-exact pdf2md would need pdfminer's layout analysis re-implemented, with nothing to guarantee it. Recommended: xtrct is byte-exact from the document text onward, and pdf2md's change is proven on hv's own Talga Rd PDFs, old xtrct against new, in a run hv makes.\n- D2. The port is written in zsh with curl and jq. Its risk is number formatting across jq versions, which the goldens settle on both CI legs. The fallback is bespoke Rust.\n- D3. Byte-exact covers:\n  - stdout and the exit status on every path;\n  - the request's model, max_tokens, system text and user text;\n  - xtrct's own stderr lines.\n\n  It does not cover the SDK's wording after `Error: API call failed:`, or its retry timing.\n\n## xtrct's contract, read from xtrct.py\n\nThese are what the port must reproduce, and each is a golden in WP01.\n\n1. **Reading the document.** It is read in text mode with universal newlines, so CRLF and a lone CR each become LF. This applies to the file and to stdin alike. Stdin that is blank after a strip is an error. A path ending `.pdf` (any case) goes through `$UTILZ_HOME/bin/pdf2md`, or `pdf2md` on PATH when UTILZ_HOME is unset. `--verbose` counts characters in code points.\n2. **The schema.** It is loaded as JSON and must hold `fields`. It goes into the prompt as `json.dumps(fields, indent=2)` with ensure_ascii TRUE: anything outside ASCII becomes `\\uXXXX`, with surrogate pairs above the BMP, and floats print in Python's repr. `description` defaults to \"Document\".\n3. **The request.** It goes out with the system prompt verbatim, the user prompt verbatim, `max_tokens` 4096, and the model from `--model`, defaulting to claude-haiku-4-5-20251001. The answer is the text of the first content block.\n4. **Extracting the JSON.** It takes the first match of the pattern from three backticks, optional `json`, whitespace, an optional newline, through the next three backticks, non-greedy, DOTALL, and strips it. With no fence it takes the whole text, stripped. Python's `json.loads` keeps the last of duplicate keys and accepts NaN and Infinity.\n5. **json format.** `json.dumps(indent=2, ensure_ascii=False)` plus a newline:\n   - Separators are `,` and `: `.\n   - An empty list or object prints as `[]` or `{}`.\n   - A control character below 0x20 is escaped: `\\n`, `\\r`, `\\t`, `\\b` and `\\f` by name, the rest as `\\u00XX`. DEL is not escaped, though jq escapes it.\n   - An int prints as written, and a float in repr: `1234.50` becomes `1234.5`, `100.0` stays `100.0`, and `1e16` becomes `1e+16`.\n6. **csv format.** It uses Python's csv writer with `\\r\\n` line ends and minimal quoting. A field is quoted when it holds `,`, `\"`, `\\r` or `\\n`, and an embedded quote is doubled. The values are written this way:\n   - Each scalar is a `key,value` row, and None prints as empty.\n   - An empty list is skipped.\n   - A list writes an empty row, then a header row (the first item's keys, or the field name for a list of scalars), then the rows, with a missing key printing empty.\n   - A row holding one empty field prints `\"\"`.\n   - A value goes through `str()`, so a bool prints `True` or `False` and a nested dict or list prints in Python repr (quote choice included).\n7. **table format.**\n   - Each scalar prints as `  key  value`, with the key left-justified to the longest key, None printing empty and anything else through `str()`.\n   - Each non-empty list then prints a blank line and `  key:`.\n   - A list of dicts prints as a header and a dashes line, both indented four spaces, then each row joined by two spaces with every cell justified to its column's widest value. Cells go through `str(item.get(h, \"\"))`, so None prints `None` here, unlike csv.\n   - A list of scalars prints `    - item`.\n   - The output ends with one newline.\n8. **Failures.** A non-dict top-level value under csv or table, or a non-dict item after a dict first item, ends in a Python traceback and exit 1. The port reproduces the exit status and gives a clean message instead, since the traceback text is not part of the contract (D3).\n\n## The work packages\n\n- **WP01, xtrct goldens (S).** A harness that is Claude-only and never committed imports xtrct.py with a stub `anthropic` module. It records the request (system, user, model, max_tokens) and replays canned responses. Its output goes to `opt/xtrct/test/fixtures/golden/`, with one file each for the response, the json, csv and table outputs, and the request. The corpus spans every branch in the contract above. It runs once, booked through devbin-vc with a pinned driver.\n- **WP02, the xtrct port (M).** `opt/xtrct/xtrct` in zsh:\n  - The argument parsing matches argparse's own errors and exit 2.\n  - The pure formatting core is jq, `opt/xtrct/lib/xtrct.jq`.\n  - The request is made through curl: anthropic-version 2023-06-01, ANTHROPIC_BASE_URL honoured, retrying on 408, 429 and 5xx.\n\n  Bats runs a fake curl on PATH and compares every golden byte for byte on both CI legs. Each branch of the core is proven red under its own mutation. The live tier stays gated on the key.\n- **WP03, the pdf2md spike (M).** It tries pdfmd, unpdf and pdfly against the fixtures, asking of each whether it needs no dependency, its licence, and the quality of its output. hv runs his own PDFs, and the outcome is a pick or bespoke Rust. Nothing changes pdf2md's behaviour before D1.\n- **WP04, the pdf2md replacement (S to L).** It is set by WP03.\n- **WP05, the venv machinery out (S).** It includes install.sh's `.venv` exclusion: it is kept for one release so stale venvs in existing installs are not reported as drift, or it is replaced by a migration that removes them, decided in that WP. AT14 goes with it.\n- **WP06, the census sweep (S).**\n  - prez's `pages_in` and `paper_of` move to pdfinfo, which poppler provides and AT21 already needs.\n  - todo.bats moves to awk.\n  - arngz's acceptance.sh moves to jq. It is vc's file and is proven by hv's hand-run.\n  - menuz's watcher-handrun.sh is ic's file, so the change is coordinated with ic.\n  - theme.rs's remedy names `woff2_compress`, which is borderline and hv's ruling.\n  - The two docs are rewritten with zsh and Rust examples, and prez's two `ensure_venv` citations are retired.\n- **WP07, the guard (XS).** A test fails on any tracked `.py` file, python shebang or python one-liner. It is scoped by `git ls-files`, so an untracked scratch harness can never trip it and a committed one always does. It is derived from the tree, with no counts.\n\nThe order is WP01 and WP02, with WP06 alongside, then WP03 and WP04, then WP05 and WP07. Overall it is L. Nothing lands on main until 2.14.9's cut has ended.\n",
+      "bytes": 8221,
+      "sha256": "419fa2be859b5e1f420bb950b97c9fcb2593e05cc1ae9ccad6eeb4f2cef532e3"
+    }
+  ]
 }

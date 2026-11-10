@@ -1,0 +1,15 @@
+{
+  "id": "01M736QP5PSCWE25ZQMD2G8ER5",
+  "ts": "2026-11-10T17:05:19.031Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0029/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "xtrct goldens from the current Python"
+  }
+}

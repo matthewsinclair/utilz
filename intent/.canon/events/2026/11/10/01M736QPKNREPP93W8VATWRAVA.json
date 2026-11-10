@@ -1,0 +1,15 @@
+{
+  "id": "01M736QPKNREPP93W8VATWRAVA",
+  "ts": "2026-11-10T17:05:19.478Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0029/06"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The census sweep: Python outside the two backends"
+  }
+}

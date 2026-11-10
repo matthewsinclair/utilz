@@ -8,6 +8,14 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## DOING
 
+- [-] ST0029: Retire Python from Utilz
+  - [-] 01: xtrct goldens from the current Python
+  - [ ] 02: xtrct ported to zsh, curl and jq, byte-exact
+  - [ ] 03: pdf2md spike: off-the-shelf Rust tools
+  - [ ] 04: pdf2md replacement
+  - [ ] 05: The venv machinery out
+  - [ ] 06: The census sweep: Python outside the two backends
+  - [ ] 07: A guard against tracked Python
 - [-] ST0031: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
   - [ ] 01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
   - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
@@ -22,7 +30,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## TODO
 
-- [!] ST0029: Retire Python from Utilz
 - [?] ST0033: A test surface for arngz's engine, starting with exec_create_space
   - [-] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
 
