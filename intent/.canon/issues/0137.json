@@ -1,0 +1,11 @@
+{
+  "schema": "intent/issue@3.0",
+  "number": 137,
+  "slug": "lua-bin-picks-an-interpreter-with-command-v-whic",
+  "title": "lua_bin picks an interpreter with command -v, which names a non-executable file",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-10",
+  "reporter": "Matthew Sinclair",
+  "body": "## What\n\n`lua_bin()` in `opt/utilz/test/test_helper.bash` picks the interpreter the project's Lua suites run under by testing each candidate with `command -v`:\n\n```\nfor b in lua5.4 lua luajit; do\n  if command -v \"$b\" >/dev/null 2>&1; then\n    command -v \"$b\"\n    return 0\n  fi\ndone\n```\n\n`command -v` names a file that is present but **not executable**, which this project has already been bitten by and recorded: a non-executable hit is reported as found, and the caller then runs it and gets exit 126 or 127, which reads as the test failing rather than as the interpreter never having run.\n\n## Measured\n\nFound by `utilz-dc` on 10 Nov 2026 while moving this function out of `opt/arngz/test/arngz.bats` into the shared helper for ST0033, and reported to `utilz-vc`. dc deliberately kept the body identical, so the move is provable by diff, rather than smuggling a hardening into a move. That was the right call and it is why this is a separate issue.\n\nTwo suites now depend on this function: `arngz.bats`'s `AT-03.2` for `plan_test.lua`, and `engine.bats`'s `AT-01.2` for `engine_test.lua`.\n\n## Fix\n\nTest that the candidate is executable, not merely present, and keep the existing contract that no interpreter is a failure rather than a skip. Read 126 and 127 from a candidate as \"never ran\" rather than as a failing suite.\n\n`opt/utilz/test/test_helper.bash` already has an uncommitted change in the tree from the move, so this fix costs one suite re-run rather than a second.\n"
+}

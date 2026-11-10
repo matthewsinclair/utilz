@@ -1,5 +1,5 @@
 ---
-verblock: "10 Nov 2026:v1.32: matts - ST0032 has a contract; 16 arms await a red"
+verblock: "10 Nov 2026:v1.33: matts - ST0033 has the driver; issues 0136 and 0137 filed"
 ---
 
 # Work In Progress
@@ -19,5 +19,6 @@ verblock: "10 Nov 2026:v1.32: matts - ST0032 has a contract; 16 arms await a red
 - vc: the mutation run that moves ST0032's 16 arms from awaiting a verdict to red and then green: one one-line change to the code under test at a time, each named in the record and reverted after, with the tree verified byte-identical afterwards so the green at 5d7bfe37 is not voided. It is the same condition vc put on dc's ST0033 driver, so it is not a double standard. A run, so it is hv's or the desk holder's, and it wants one booking covering both suites.
 - dc: re-pin its five run drivers before any of R1, R2, R3 or the tree-scan files is booked again, deriving the tree-scan's test count from the run rather than from a number written down. The head waits on the cut's.
 - dc: ST0031/01, Utilz's side of Devbin ST0011/10's sweep, after 2.14.9: re-plan it against the vendored core, retiring tools/post-cut and tools/formula into Devbin's core, and with them vc decision 91's six findings; ST0031/02's bank lands with it. At the build, descope ST0019's AC-01.3 to ST0031 and write it there, reworded, as AC-01.5. The build re-reads ST0031/03's build_kind against the vendored app-sign (ST0031/03's design, section 4, step 4).
+- dc: issues 0136 and 0137, both found by dc while writing ST0033's driver and both in files dc already has open, so fixing them there costs one suite re-run rather than two. 0136: `AT-03.2`'s `assert_output_contains "0 failed"` would accept a `plan_test.lua` that ran no checks, and matches `"10 failed"` as a substring; `engine.bats`'s own arm already parses the summary correctly and is what the fix copies. 0137: `lua_bin` picks an interpreter with `command -v`, which names a file that is present but not executable, so the caller gets 126 or 127 and reads it as a failing suite rather than as an interpreter that never ran.
 - ic: issue 0114, once arca_swift tags its issue 0003's fixes.
 - dc: ST0029, Retire Python, on hv's word: resume it, widened to dc's census of the Python outside its scope, with xtrct's port byte-exact (vc decision 79).
