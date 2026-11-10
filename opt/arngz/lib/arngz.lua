@@ -1363,6 +1363,19 @@ local VERBS = {
     local world = M.observe()
     return { world = world }
   end,
+  -- which: the desk the screens present are (ST0032/04). options.desks, a
+  -- list of { name, desk } in the catalogue's order, and options.current.
+  -- It answers ok even when no desk fits, rather than refusing: the exit code
+  -- is the CLI's to choose and arngz keeps every exit there, and a refusal
+  -- would collapse "none fits" and "several fit" into one kind. M.observe is
+  -- reused whole, though only the screens are needed, because world.screens
+  -- has one builder and a second could drift from what match_displays expects.
+  which = function(_, options)
+    local world = M.observe()
+    local name, kind, report, candidates =
+      P.detect(options.desks or {}, world, { current = options.current })
+    return { desk = name, kind = kind, candidates = candidates, report = report }
+  end,
   -- discover: the world as a desk (WP-04). options.grid, options.name.
   discover = function(_, options)
     local world = M.observe()

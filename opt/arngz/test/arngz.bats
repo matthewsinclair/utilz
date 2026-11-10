@@ -2225,3 +2225,127 @@ record_engine_tools() {
   assert_success
   assert_output_contains "deleted"
 }
+
+# ============================================================================
+# ST0032/04 -- which and auto: the desk the screens present are
+# ============================================================================
+
+# The catalogue first, then the fake hs: both set XDG_CONFIG_HOME to the same
+# path, so the desk catalogue() wrote is the one which_options reads.
+which_fixture() {
+  catalogue
+  fake_hs ok "$FIXTURES/responses/$1"
+}
+
+@test "ST0032/04: which names the desk the screens present are, on stdout, and exits 0" {
+  which_fixture which-one.json
+  run_arngz which
+  assert_success
+  assert_output_contains "zeop1"
+}
+
+@test "ST0032/04: which asks the engine for which, carrying every desk in the catalogue and no desk argument" {
+  which_fixture which-one.json
+  run_arngz which
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "which"
+  # The desks travel in the options, because the catalogue's layout is the
+  # CLI's to know and the engine is handed data.
+  run yq -r '.options.desks[0].name' "$FAKE_HS_LOG/request.json"
+  assert_output "zeop1"
+  run yq -r '.options.desks[0].desk.desk' "$FAKE_HS_LOG/request.json"
+  assert_output "zeop1"
+}
+
+@test "ST0032/04: which exits 1 when no desk fits, and says what to do about it" {
+  which_fixture which-none.json
+  run_arngz which
+  assert_exit_code 1
+  assert_output_contains "no desk fits the screens present"
+  assert_output_contains "discover --save"
+}
+
+@test "ST0032/04: which exits 2 when several desks fit and none is the current one" {
+  which_fixture which-several.json
+  run_arngz which
+  assert_exit_code 2
+  assert_output_contains "more than one desk fits"
+}
+
+@test "ST0032/04: which takes no arguments" {
+  which_fixture which-one.json
+  run_arngz which zeop1
+  assert_exit_code 2
+  assert_output_contains "which takes no arguments"
+}
+
+@test "ST0032/04: which is read as a verb, not as the name of a desk to apply" {
+  which_fixture which-one.json
+  run_arngz which
+  # The fallthrough would have asked the engine to apply a desk called which.
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  refute_output_contains "apply"
+}
+
+@test "ST0032/04: auto hands the desk it found to apply, rather than applying it itself" {
+  which_fixture which-one.json
+  run_arngz auto
+  # auto makes two engine calls, and the fake serves one canned response, so
+  # the apply leg's own answer is not what is checked here: the request the
+  # fake last recorded is, which proves auto delegated to apply by name.
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "apply"
+  run yq -r '.desk.desk' "$FAKE_HS_LOG/request.json"
+  assert_output "zeop1"
+}
+
+@test "ST0032/04: auto falls back to --default when no desk fits, and says that it did" {
+  which_fixture which-none.json
+  run_arngz auto --default zeop1
+  assert_output_contains "no desk fits the screens present: falling back to 'zeop1'"
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "apply"
+}
+
+@test "ST0032/04: auto with no desk fitting and no --default moves nothing, exit 1" {
+  which_fixture which-none.json
+  run_arngz auto
+  assert_exit_code 1
+  assert_output_contains "no --default was given: nothing moved"
+}
+
+@test "ST0032/04: auto moves nothing when several desks fit, exit 2" {
+  which_fixture which-several.json
+  run_arngz auto
+  assert_exit_code 2
+  assert_output_contains "nothing moved"
+}
+
+@test "ST0032/04: auto refuses a --default that is not a desk before it reads the screens" {
+  which_fixture which-one.json
+  run_arngz auto --default nosuchdesk
+  assert_exit_code 2
+  assert_output_contains "no such desk"
+  # Refused before the engine was asked anything, so a typo costs no observe.
+  [ ! -f "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "ST0032/04: auto refuses a --default named like a verb, and --default with no value" {
+  which_fixture which-one.json
+  run_arngz auto --default apply
+  assert_exit_code 2
+  assert_output_contains "may not be named like a verb"
+  run_arngz auto --default
+  assert_exit_code 2
+  assert_output_contains "--default takes a desk name"
+}
+
+@test "ST0032/04: a desk may not be named which or auto" {
+  catalogue
+  run_arngz discover --save which
+  assert_exit_code 2
+  assert_output_contains "may not be named like a verb"
+  run_arngz discover --save auto
+  assert_exit_code 2
+  assert_output_contains "may not be named like a verb"
+}

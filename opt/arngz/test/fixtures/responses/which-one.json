@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "verb": "which",
+  "desk": "zeop1",
+  "kind": "one",
+  "candidates": [ "zeop1" ],
+  "report": [
+    "FIXTURE-WHICH-ONE zeop1: fits"
+  ]
+}

@@ -26,7 +26,7 @@ fi
 # Every verb. A desk may not take one of these names (design.md, the
 # validator's seventh condition; AC-05.7), because `arngz <desk>` is apply and
 # a desk called `list` could never be applied that way.
-ARNGZ_VERBS="apply discover diff list show delete current init doctor"
+ARNGZ_VERBS="apply discover diff list show delete current which auto init doctor"
 
 # What needs macOS, in the words of the one refusal (issue 0083): the engine
 # verbs refuse by name off macOS, and init and doctor say it there without
@@ -67,6 +67,9 @@ VERBS:
   show <desk>                the desk, validated, as stored
   delete <desk>              remove a desk from the catalogue
   current                    the desk applied or saved last, while it is in the catalogue
+  which                      the desk the screens present are, and change nothing
+                             (0 names one, 1 none fits, 2 the question has no one answer)
+  auto [--default <desk>]    apply the desk the screens present are, or the default
   init [--yes]               create the catalogue, and report what Hammerspoon needs
   doctor                     every precondition, each with its state
 
@@ -1644,6 +1647,143 @@ cmd_discover() {
   rm -rf "$dir"
 }
 
+# The options which and auto send the engine: every desk in the catalogue, in
+# the catalogue's order, and the current desk's name where there is one, so the
+# engine can say which desk the screens present are. The desks go in the
+# options rather than the engine reading them, because the catalogue's layout
+# is the CLI's to know and the engine is given data.
+which_options() {
+  local options="$1" name file current rc=0 count
+  printf '{"desks":[]}\n' >"$options"
+  current="$(read_current)" || rc=$?
+  if [[ $rc -eq 0 && -n "$current" ]]; then
+    C="$current" yq -i -o json '.current = strenv(C)' "$options"
+  fi
+  while IFS= read -r name; do
+    file="$(desk_file "$name")"
+    [[ -f "$file" ]] || continue
+    if ! N="$name" F="$file" yq -i -o json \
+      '.desks += [{"name": strenv(N), "desk": load(strenv(F))}]' "$options"; then
+      refuse "desk '$name' ($file) could not be read as YAML (arngz show $name names why)"
+    fi
+  done < <(catalogue_desks)
+  count="$(yq -r '.desks | length' "$options")"
+  if [[ "$count" == "0" ]]; then
+    refuse "no desks in $(catalogue_dir) (arngz discover --save <desk> records one)"
+  fi
+}
+
+# which: the desk the screens present are, on stdout, with nothing changed.
+# The report goes to stderr, so a caller reading stdout gets the name alone.
+#
+# Exit 0 names one desk, 1 when none fits, and 2 when the question has no one
+# answer -- several fit and none is the current one, or the engine refused --
+# which keeps arngz's meaning for 2, refused and nothing done.
+#
+# It needs the engine, because only Hammerspoon can say which screens are
+# there. That is why it is not `current`, which reads one file and is cheap
+# enough for a menu label realised at every menu open; which is not, and
+# belongs in a run or a parameter default.
+cmd_which() {
+  if [[ $# -gt 0 ]]; then
+    refuse "which takes no arguments: '$1'"
+  fi
+  local dir options rc=0 kind name
+  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-which.XXXXXX")"
+  options="$dir/options.json"
+  which_options "$options"
+  engine_ask which "" "$options" || rc=$?
+  if [[ $rc -ne 0 ]]; then
+    rm -rf -- "$dir"
+    engine_refuse
+  fi
+  kind="$(yq -r '.kind' "$ENGINE_RESPONSE")"
+  name="$(yq -r '.desk // ""' "$ENGINE_RESPONSE")"
+  render_report "$ENGINE_RESPONSE" >&2
+  rm -rf -- "$ENGINE_DIR" "$dir"
+  case "$kind" in
+    one | current)
+      printf '%s\n' "$name"
+      ;;
+    none)
+      info "no desk fits the screens present (arngz discover --save <desk> records one for here)"
+      exit 1
+      ;;
+    several)
+      info "more than one desk fits the screens present, and none is the current one"
+      exit 2
+      ;;
+    *)
+      refuse "the engine answered which with a kind arngz does not know: '$kind'"
+      ;;
+  esac
+}
+
+# auto: the desk the screens present are, applied. A coordinator and nothing
+# more -- it asks which, then hands the name to apply -- so apply's report, its
+# readbacks and its exit status are apply's, and nothing about applying a desk
+# is written down twice.
+cmd_auto() {
+  local default="" dir options rc=0 kind name reason
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --default)
+        if [[ $# -lt 2 ]]; then refuse "--default takes a desk name"; fi
+        default="$2"
+        shift 2
+        ;;
+      --default=*) default="${1#--default=}"; shift ;;
+      *) refuse "unknown option for auto: '$1'" ;;
+    esac
+  done
+  # A typo in --default is refused before the engine is asked, so it costs no
+  # reading of the screens.
+  if [[ -n "$default" ]]; then
+    if reason="$(desk_name_refusal "$default")"; then
+      refuse "--default: $reason"
+    fi
+    if [[ ! -f "$(desk_file "$default")" ]]; then
+      refuse "--default '$default': no such desk (arngz list names the desks there are)"
+    fi
+  fi
+  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-auto.XXXXXX")"
+  options="$dir/options.json"
+  which_options "$options"
+  engine_ask which "" "$options" || rc=$?
+  if [[ $rc -ne 0 ]]; then
+    rm -rf -- "$dir"
+    engine_refuse
+  fi
+  kind="$(yq -r '.kind' "$ENGINE_RESPONSE")"
+  name="$(yq -r '.desk // ""' "$ENGINE_RESPONSE")"
+  render_report "$ENGINE_RESPONSE" >&2
+  rm -rf -- "$ENGINE_DIR" "$dir"
+  case "$kind" in
+    one | current)
+      info "the screens present are desk '$name'"
+      cmd_apply "$name"
+      ;;
+    none)
+      if [[ -z "$default" ]]; then
+        info "no desk fits the screens present, and no --default was given: nothing moved"
+        exit 1
+      fi
+      # Said rather than silent: a fallback arranges windows for a site the
+      # desk was not recorded at, and a laptop-only default moves them onto
+      # the laptop even with monitors plugged in.
+      info "no desk fits the screens present: falling back to '$default'"
+      cmd_apply "$default"
+      ;;
+    several)
+      info "more than one desk fits the screens present, and none is the current one: nothing moved"
+      exit 2
+      ;;
+    *)
+      refuse "the engine answered which with a kind arngz does not know: '$kind'"
+      ;;
+  esac
+}
+
 # doctor: every precondition the engine's verbs need, each named with its
 # state and, where it does not hold, what fixes it; exit 1 when any does not.
 # It reads the machine itself, and asks Hammerspoon only what only Hammerspoon
@@ -1771,6 +1911,10 @@ main() {
     show) cmd_show "$@" ;;
     delete) cmd_delete "$@" ;;
     current) cmd_current "$@" ;;
+    # Before the fallthrough below, which would otherwise read these as the
+    # names of desks to apply.
+    which) cmd_which "$@" ;;
+    auto) cmd_auto "$@" ;;
     init) cmd_init "$@" ;;
     apply) cmd_apply "$@" ;;
     diff) cmd_diff "$@" ;;

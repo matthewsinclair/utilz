@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "verb": "which",
+  "desk": null,
+  "kind": "none",
+  "candidates": [],
+  "report": [
+    "FIXTURE-WHICH-NONE zeop1: it describes 1 of the 2 screen(s) present",
+    "FIXTURE-WHICH-NONE no desk fits the 2 screen(s) present"
+  ]
+}

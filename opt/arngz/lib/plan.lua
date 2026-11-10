@@ -216,6 +216,63 @@ function P.match_displays(desk, world, options)
   return matched
 end
 
+-- Which desk the screens in front of you are (ST0032/04). PURE, like the
+-- matching it is built on.
+--
+-- A desk FITS when match_displays binds each of its displays to a screen and
+-- every screen present is bound: an exact cover. match_displays already
+-- refuses a world where two of a desk's displays would take the same screen,
+-- so its binding is injective, and the second half of the cover is a count.
+-- The count is not an optimisation: without it a desk describing the laptop
+-- alone fits everywhere, because its one display matches the laptop screen
+-- whatever else is plugged in.
+--
+-- `desks` is a list of { name = <string>, desk = <table> } in the catalogue's
+-- order, so the answer never depends on table iteration order.
+-- `options.current` names the desk in use, which decides when several fit:
+-- a site with two desks describing the same screens should go on doing what it
+-- is doing rather than refuse.
+--
+-- Returns the desk's name or nil, the kind, the report lines, and the names
+-- that fit. The kinds are "one" (exactly one fits), "current" (several fit and
+-- the current one is among them), "several" (several fit and none is current)
+-- and "none". --map is deliberately not passed on: it is apply's manual
+-- override of one display, and detecting where you are is not the place for it.
+function P.detect(desks, world, options)
+  options = options or {}
+  local screens = (world and world.screens) or {}
+  local present = #screens
+  local report, fits = {}, {}
+  for _, entry in ipairs(desks or {}) do
+    local name = tostring(entry.name)
+    local matched, why = P.match_displays(entry.desk or {}, world or { screens = {} })
+    if not matched then
+      report[#report + 1] = string.format("%s: %s", name, tostring(why))
+    elseif #matched ~= present then
+      report[#report + 1] = string.format("%s: it describes %d of the %d screen(s) present",
+        name, #matched, present)
+    else
+      fits[#fits + 1] = name
+      report[#report + 1] = string.format("%s: fits", name)
+    end
+  end
+  if #fits == 1 then return fits[1], "one", report, fits end
+  if #fits == 0 then
+    report[#report + 1] = string.format("no desk fits the %d screen(s) present", present)
+    return nil, "none", report, fits
+  end
+  for _, name in ipairs(fits) do
+    if name == options.current then
+      report[#report + 1] = string.format("%d desks fit (%s), and the current one is among them: %s",
+        #fits, table.concat(fits, ", "), name)
+      return name, "current", report, fits
+    end
+  end
+  report[#report + 1] = string.format("%d desks fit and none is the current one: %s",
+    #fits, table.concat(fits, ", "))
+  return nil, "several", report, fits
+end
+
 -- ------------------------------------------------------------- planning
 
 -- The user (desktop) spaces of a screen, in Mission Control order. A desk's

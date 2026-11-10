@@ -1180,6 +1180,83 @@ do
     P.space_error_kind("No Display With Specified Id Found") == "gone")
 end
 
+-- ------------------------------------- which desk the screens are (ST0032/04)
+
+print("detect")
+do
+  -- Desks and worlds bound by uuid, which is match_displays' first and
+  -- simplest route, so these cases test detect's rule and not the matching's.
+  local function desk_of(...)
+    local displays = {}
+    for _, u in ipairs({ ... }) do
+      displays[#displays + 1] = { name = u, match = { uuid = u } }
+    end
+    return { displays = displays }
+  end
+  -- A frame on every screen because candidates_text, which a refusal builds,
+  -- asks size_of for one and size_of indexes full_frame or frame.
+  local function world_of(...)
+    local screens = {}
+    for _, u in ipairs({ ... }) do
+      screens[#screens + 1] = { uuid = u, name = u, position = "main",
+        frame = { x = 0, y = 0, w = 1200, h = 800 } }
+    end
+    return { screens = screens }
+  end
+  local function named(name, desk) return { name = name, desk = desk } end
+  local function reported(report, text)
+    for _, l in ipairs(report or {}) do if string.find(l, text, 1, true) then return true end end
+    return false
+  end
+
+  local laptop_only = named("rhad", desk_of("U-LAP"))
+  local two_screens = named("homere", desk_of("U-LAP", "U-BIG"))
+
+  local name, kind = P.detect({ laptop_only }, world_of("U-LAP"))
+  check("one desk covering the one screen present is the desk", name == "rhad" and kind == "one",
+    tostring(name) .. "/" .. tostring(kind))
+
+  -- THE RULE THIS WHOLE FEATURE TURNS ON. match_displays binds rhad's one
+  -- display to the laptop whatever else is plugged in, so without the count
+  -- rhad would be the answer at every site. It describes 1 of the 2 screens
+  -- here, so it does not fit and homere does.
+  local report
+  name, kind, report = P.detect({ laptop_only, two_screens }, world_of("U-LAP", "U-BIG"))
+  check("a desk describing fewer screens than are present does not win",
+    name == "homere" and kind == "one", tostring(name) .. "/" .. tostring(kind))
+  check("and the report says how many of the screens present it described",
+    reported(report, "rhad: it describes 1 of the 2 screen(s) present"), table.concat(report, " | "))
+
+  name, kind, report = P.detect({ laptop_only }, world_of("U-LAP", "U-BIG"))
+  check("no desk covering the screens present is none, with a reason",
+    name == nil and kind == "none" and reported(report, "no desk fits the 2 screen(s) present"),
+    tostring(name) .. "/" .. tostring(kind) .. " " .. table.concat(report, " | "))
+
+  local twin = named("zeopit", desk_of("U-LAP", "U-BIG"))
+  local fits
+  name, kind, report, fits = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"))
+  check("two desks describing the same screens is several, naming both, and picks neither",
+    name == nil and kind == "several" and #fits == 2 and reported(report, "homere, zeopit"),
+    tostring(name) .. "/" .. tostring(kind) .. " " .. table.concat(report, " | "))
+
+  name, kind = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"), { current = "zeopit" })
+  check("and the current desk decides when it is one of them",
+    name == "zeopit" and kind == "current", tostring(name) .. "/" .. tostring(kind))
+  name, kind = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"), { current = "rhad" })
+  check("a current desk that does not fit decides nothing",
+    name == nil and kind == "several", tostring(name) .. "/" .. tostring(kind))
+
+  -- A desk whose display matches nothing keeps match_displays' own words,
+  -- rather than detect inventing a second vocabulary for the same fact.
+  name, kind, report = P.detect({ named("hockenbury", desk_of("U-GONE")) }, world_of("U-LAP"))
+  check("a desk whose display matches no screen is reported in the matching's own words",
+    name == nil and kind == "none" and reported(report, "matches no screen"),
+    table.concat(report, " | "))
+
+  check("no desks at all is none, not an error",
+    select(2, P.detect({}, world_of("U-LAP"))) == "none")
+end
+
 -- One app on two displays, and one title inside another.
 do
   local world = F.two_display_world()
