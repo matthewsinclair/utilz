@@ -1,0 +1,14 @@
+{
+  "id": "01M72KFRJVCRZX16DE8TXF0455",
+  "ts": "2026-11-10T11:28:56.412Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0033/AC-01.3"
+  },
+  "payload": {
+    "text": "Every arm is proven by a one-line mutation that makes that arm go red, applied one at a time and each named in the work package with the defect it recreates. The mutation is applied to a COPY of opt/arngz/lib, never to the tree's arngz.lua: the driver takes the engine's path as its argument and finds plan.lua beside it, so a copy is driven exactly as the real one is, an interrupted run cannot leave the engine mutated, and proving the arms cannot disturb the green at 5d7bfe37. arngz.lua's sha256 is recorded before and after and is identical. An arm that cannot be made to go red is reported as not an arm rather than kept."
+  }
+}

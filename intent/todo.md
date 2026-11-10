@@ -23,6 +23,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 ## TODO
 
 - [!] ST0029: Retire Python from Utilz
+- [?] ST0033: A test surface for arngz's engine, starting with exec_create_space
+  - [-] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
 
 ## DONE
 

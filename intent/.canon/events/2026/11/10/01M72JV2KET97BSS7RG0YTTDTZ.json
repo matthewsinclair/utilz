@@ -1,0 +1,15 @@
+{
+  "id": "01M72JV2KET97BSS7RG0YTTDTZ",
+  "ts": "2026-11-10T11:17:38.543Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0033/01"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The create_space driver: an injected hs, every reporting path, each arm proven by mutation"
+  }
+}
