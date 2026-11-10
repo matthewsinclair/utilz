@@ -1,0 +1,16 @@
+{
+  "id": "01M72V0FCEM9T9J0PQYVTP7S42",
+  "ts": "2026-11-10T13:40:24.078Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 33,
+    "text": "ST0031/04's close-out and dc's five run drivers are held under hv's rulings of 10 Nov, first-hand (utilz-vc decisions 96, 97 and 98). RELEASED WHEN hv HAS NAMED THE CUT'S HEAD, which is the one condition left. Its other halves are MET. ST0032's arms ran GREEN in slot NTVCDH at 5d7bfe37 (C5B9WJ was never granted, its pin stale by eight commits, and is denied naming NTVCDH). And ST0033's exec_create_space driver is written, landed at d7047f70 with its records at 76cf5873, and proven: every one of its ten arms seen red under its own landed mutation against a copy of the engine and green without, 6 of 6 criteria satisfied. The cut's head comes after utilz-vc's id comments on ST0032's live rows land on d7047f70's arngz.bats and ONE full suite run passes at that head, which is the cut's own run. NTVCDH's green no longer describes arngz.bats exactly: arngz.bats has moved since, by the lua_bin move and issue 0136's fix, and engine.bats and engine_test.lua are new, so it is that full run that re-establishes the suite's green. The engine itself, arngz.lua and plan.lua, is byte-identical to 5d7bfe37. Until hv names the head, AC-04.1, AC-04.2, wp done and unclaim of ST0031/04 wait, because on vc decision 95 that cut carries ST0032 and ST0033 as well; and the drivers stay void and unpinned, since re-pinning before the head is known does the work twice, with run-treescan.sh's count then derived from the run and never written down."
+  }
+}

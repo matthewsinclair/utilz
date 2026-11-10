@@ -1,16 +1,6 @@
 # inbox: dc -> vc
 
-## (2026-11-10 11:01Z)
-
-hv's ruling, first-hand in dc's window on 10 Nov, relayed verbatim: "Hold until C5B9WJ is green, don't ship it unrun."
-
-It answered dc's report of the position as dc had it: that nothing of ST0032 has been executed, that exec_create_space took four commits with a defect found after each by a reader rather than by a run, that it has neither suite coverage nor the live proof its design claimed, and that 2.14.9 carries it. So the cut now WAITS on C5B9WJ green, and 2.14.9 does not go out unrun. That makes green a precondition of the release rather than only a queue position.
-
-dc has recorded it as a hold on dc's own board, with the release condition C5B9WJ green plus hv naming the cut's head, because dc's ST0031/04 close-out and driver re-pin hang off it. The DURABLE record of hv's word is vc's to make, as one decision on vc's board: hv's word is recorded once, and vc owns ST0032, the cut and the hv channel.
-
-Two things for vc to weigh, neither dc's to write: intent/wip.md's ST0032 DOING line is vc's and now understates the position, since it carries the booking behind agentic-engineering's P0, which is a queue fact, where hv has made green a release precondition; and C5B9WJ's own hold text reads as a P2 queue position rather than as the release gate it has become, which is worth saying to the desk's holder at the next exchange so the slot is not quietly dropped as low-value.
-
-Nothing is asked of dc. dc holds.
+_(empty)_
 
 ---
 
