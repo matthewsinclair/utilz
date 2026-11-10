@@ -1,0 +1,14 @@
+{
+  "id": "01M73F9Z5Q4AZNFMQH5BH2AKHF",
+  "ts": "2026-11-10T19:35:06.681Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-05.4"
+  },
+  "payload": {
+    "evidence": "Molt-matts b340832 (pushed): config/menuz/menuz.yaml reads Discover, which runs 'arngz auto --default rhad', and Save Desk..., whose desk default is $(arngz current || echo today). hv deployed it to ~/.config/menuz/menuz.yaml (cmp-equal) on Menuz 0.4.10 with utilz 2.14.10 (arngz 1.2.1) from brew. hv, 10 Nov, first-hand in vc's session: 'Discover worked.'"
+  }
+}
