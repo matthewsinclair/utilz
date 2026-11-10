@@ -43,7 +43,7 @@ Where 2.14.9 stood when this thread opened: ST0031/04's records and step 2 lande
 
 ## Who is writing this, and what cannot be run
 
-**utilz-dc is down.** ST0031/04 is dc's claimed WIP and its close-out was waiting on the cut this thread now moves. hv directed that all of this be done "now in this session", and utilz-vc is the only Utilz node up, so **vc is writing the code here rather than checking dc's**, which is a departure from vc's advisory role and is recorded so the authorship is not misread later. The work still wants a second read: either dc when it comes up, or `critic-lua` and `critic-shell` on the diff.
+**utilz-dc was down when this thread was planned, and came up later the same day.** ST0031/04 is dc's claimed WIP and its close-out was waiting on the cut this thread now moves. hv directed that all of this be done "now in this session", and utilz-vc is the only Utilz node up, so **vc is writing the code here rather than checking dc's**, which is a departure from vc's advisory role and is recorded so the authorship is not misread later. The work still wants a second read: either dc when it comes up, or `critic-lua` and `critic-shell` on the diff.
 
 **vc decision 74 stands: no Claude runs a test or a build, and hv runs the suites.** Every host run books through Intent's slots at the desk, which `agentic-engineering-vc` holds, with AE's 0.3.x on total focus by hv's own word this morning. So this thread can write and land its code and its designs, and its red and green arms, the tree-scan files and the re-run of R1, R2 and R3 need either hv's own run or a desk grant. That is the one thing "all fixed in this session" cannot include on its own.
 
@@ -60,6 +60,16 @@ Where 2.14.9 stood when this thread opened: ST0031/04's records and step 2 lande
 - Today's `Discover` wrote `zeophq.yaml` into Molt-matts' working tree, where it sits modified and uncommitted.
 - `hockenbury` still carries two `SET-ON-SITE` placeholder monitors from Molt-matts 0f7b487, so it matches no screen and `apply hockenbury` exits 2 until a `discover` on site replaces them. That exit 2 is by design and is the other half of hv's "depending on where I am".
 - Molt-matts 9adb5ae dropped Appgate from every desk on 2 Nov, and every later `discover` re-records it. WP01 is what makes that harmless.
+
+## How the review actually went, which is the thread's own measurement
+
+utilz-dc came up on hv's word partway through and read the whole thread: `plan.lua`, `arngz.lua`, `opt/arngz/arngz`, `arngz.bats`, `plan_test.lua`, the three fixtures, the help, the CHANGELOG, the README, this thread's `design.md` and the Design sections of all three issues, across every commit. `critic-lua` and `critic-shell` read the code before it.
+
+What that produced, and it is why the thread is worth trusting at all given nothing has been executed: **four real defects, one regression, and five drift items in documents rather than code.** critic-lua found the retry wrapping a creating call and a suppression bound on a succeeding path. critic-shell found the platform gate never learning the two new verbs, an unwrap-or-default on the desk name, a test of vc's that could not go red, and two more of vc's that would have run against the host's real `defaults`. utilz-dc found that vc's first fix to the retry was **worse** than what it replaced, then that the second still bound the run when a space had been made, then that the release-facing CHANGELOG and help described behaviour that had been removed as a defect, then that `acceptance.sh` could not match the line WP01 exists to print, then that `apply` and `diff` now disagree about that window.
+
+**Every defect in `exec_create_space` was found by a reader after the commit, never by the reading its design offered as the proof** — twice while vc knew the function was under suspicion. `exec_place`, designed and proved under the same words on the same day, had four readings and none. That contrast is this thread's most useful output and is written up in `design.md`; the sharper form of it is utilz-dc's, after dc corrected its own first account.
+
+The code here is vc's and the second read is dc's. ST0031/04 remains dc's and untouched.
 
 ## Work Packages
 

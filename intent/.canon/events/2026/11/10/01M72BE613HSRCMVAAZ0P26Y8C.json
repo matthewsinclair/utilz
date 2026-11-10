@@ -1,0 +1,16 @@
+{
+  "id": "01M72BE613HSRCMVAAZ0P26Y8C",
+  "ts": "2026-11-10T09:08:16.035Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 17,
+    "text": "Every host run books through Intent's slots on the desk after vc reads its bytes; the desk's holder is estate status's control line, READ IT RATHER THAN ASSUMING (agentic-engineering-vc since 10 Nov, devbin-vc before it, and it has changed under vc twice without notice); GO by name; START and END to the holder and vc; new bytes are a new booking, and a grant records only the lane, so a head that has moved since the ask is confirmed to the holder in the exchange that grants it."
+  }
+}
