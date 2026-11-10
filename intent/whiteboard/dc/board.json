@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "199c662d-af7a-475e-963f-5c098ad5f4fa",
-    "heartbeat_at": "2026-11-10T19:31:51.909Z",
-    "status": "active",
-    "focus": "10 Nov, ST0034 / issue 0138 CLOSED on vc decision 107 (28b8a381): AC-01.6 satisfied on hv's live homere run (rc=0, Appgate in place at its own size; zeophq's saved layout absent), WP01 and ST0034 done, 0138 closed, both unclaimed. Released in 2.14.10. No claims. ST0029 parked on dc/st0029 (a251bc60), records on main. TODOs on intent/wip.md (vc): the shim's latent parsed yq captures, and a cap on the 18 scheduled arms' 600 s default. Watch-out 3 live. No test or build (decision 74). Holding until hv's move. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
+    "heartbeat_at": "2026-11-10T19:39:39.569Z",
+    "status": "paused",
+    "focus": "10 Nov, CLOSED FOR THE NIGHT on hv's word (vc, after decision 107). ST0034 / issue 0138 closed at e3e9fa5d, released in 2.14.10. No claims. Open for later: ST0029 parked on dc/st0029 (a251bc60), records on main; vc's TODOs on intent/wip.md (the shim's latent parsed yq captures; a cap on the 18 scheduled arms' 600 s default); wt-st0031-02 to check at the next fold. Watch-out 3 live. No test or build (decision 74). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
