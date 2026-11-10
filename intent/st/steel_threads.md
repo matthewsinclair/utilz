@@ -4,6 +4,7 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                                | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
+| ST0034 | arngz remembers a size the app enforces                                                              | WIP       | 2026-11-10 |                      |
 | ST0032 | arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0 | WIP       | 2026-11-10 |                      |
 | ST0031 | Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10                             | WIP       | 2026-10-31 |                      |
 | ST0029 | Retire Python from Utilz                                                                             | WIP       | 2026-10-26 |                      |

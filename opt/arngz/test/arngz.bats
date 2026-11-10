@@ -2387,3 +2387,107 @@ which_apply_fixture() {
   assert_exit_code 2
   assert_output_contains "may not be named like a verb"
 }
+
+# ============================================================================
+# ST0034 -- the sizes apps hold their windows at (issue 0138)
+# ============================================================================
+
+# The records file, under this test's own XDG_STATE_HOME.
+own_sizes_at() {
+  printf '%s/arngz/own-sizes\n' "$XDG_STATE_HOME"
+}
+
+# AT-01.5 (ST0034)
+@test "0138: diff passes the recorded own sizes to the engine and reads a window at one as no change, exit 0" {
+  local response file
+  response="$(engine_response plan own_size_world base_desk own_size_records)"
+  fake_hs ok "$response"
+  catalogue
+  file="$(own_sizes_at)"
+  mkdir -p "${file%/*}"
+  printf '[{"bundle":"com.apple.safari","want":{"w":600,"h":800},"size":{"w":375,"h":667}}]\n' >"$file"
+  run_arngz diff zeop1
+  assert_success
+  assert_output_contains "no change: this machine already matches the desk"
+  assert_output_contains "window 102 in place at the app's own size, 375x667"
+  # A valid file is read as one: no word of it being unreadable or not a list,
+  # which a stderr warning captured with yq's shape once caused (ST0034).
+  refute_output_contains "sizes apps hold their windows at"
+  run yq -r '.options.own_sizes[0].bundle + " " + (.options.own_sizes[0].size.w | tostring)' "$FAKE_HS_LOG/request.json"
+  assert_output "com.apple.safari 375"
+}
+
+# AT-01.5 (ST0034)
+@test "0138: with no own-sizes record, diff passes none and says nothing of it" {
+  local response
+  response="$(engine_response plan base_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_success
+  refute_output_contains "sizes apps hold"
+  run yq -r '.options | has("own_sizes")' "$FAKE_HS_LOG/request.json"
+  assert_output "false"
+}
+
+# AT-01.5 (ST0034)
+@test "0138: an own-sizes record that is not a list is said once and used as none" {
+  local response file said
+  response="$(engine_response plan base_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  file="$(own_sizes_at)"
+  mkdir -p "${file%/*}"
+  printf '{"bundle":"com.apple.safari"}\n' >"$file"
+  run_arngz diff zeop1
+  assert_success
+  said="$(printf '%s\n' "$output" | grep -c "is not a list" || true)"
+  [ "$said" = 1 ] || fail "the unreadable record was said $said times, not once: $output"
+  run yq -r '.options | has("own_sizes")' "$FAKE_HS_LOG/request.json"
+  assert_output "false"
+}
+
+# AT-01.5 (ST0034)
+@test "0138: apply writes the records the engine returns when they changed, and passes the old ones in" {
+  local response file
+  response="$(engine_response apply own_size_results base_desk "")"
+  apply_machine scheduled "$response"
+  file="$(own_sizes_at)"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): placed (in place at the app's own size, 375x667)"
+  [ -f "$file" ] || fail "apply wrote no record at $file"
+  run yq -r '.[0].bundle + " " + (.[0].want.w | tostring) + " " + (.[0].size.w | tostring)' "$file"
+  assert_output "com.apple.safari 600 375"
+  run ls -A "${file%/*}"
+  refute_output_contains "own-sizes."
+}
+
+# AT-01.5 (ST0034)
+@test "0138: apply clears a record the engine says the app let go of" {
+  local response file
+  response="$(engine_response apply own_size_let_go_results base_desk own_size_records)"
+  apply_machine scheduled "$response"
+  file="$(own_sizes_at)"
+  mkdir -p "${file%/*}"
+  printf '[{"bundle":"com.apple.safari","want":{"w":600,"h":800},"size":{"w":375,"h":667}}]\n' >"$file"
+  run_arngz apply zeop1
+  assert_success
+  run yq -r 'length' "$file"
+  assert_output "0"
+}
+
+# AT-01.5 (ST0034)
+@test "0138: apply leaves the record untouched when the engine says nothing changed" {
+  local response file before
+  response="$(engine_response apply placed_results base_desk "")"
+  apply_machine scheduled "$response"
+  file="$(own_sizes_at)"
+  mkdir -p "${file%/*}"
+  # Spaced as no writer here spaces it, so a rewrite of the same list shows.
+  printf '[ ]\n' >"$file"
+  before="$(shasum -a 256 "$file")"
+  run_arngz apply zeop1
+  assert_success
+  [ "$(shasum -a 256 "$file")" = "$before" ] || fail "apply rewrote a record that had not changed"
+}

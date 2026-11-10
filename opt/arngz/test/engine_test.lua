@@ -268,5 +268,58 @@ do
     tostring(log.add[SCREEN]) .. " / " .. tostring(log.add[OTHER]))
 end
 
+
+-- ------------------------------------------------------------- recheck (ST0034)
+
+-- A recheck is executed as a place: shown, setFrame, a readback. Its fake
+-- answers exactly what exec_place reaches for when the window's desktop is
+-- the one shown: three hs.spaces readers, hs.window.get and the sleep. The
+-- window takes `takes` whatever frame it is given, which is how an app that
+-- holds its own size answers.
+local function fake_place_hs(takes)
+  local set = {}
+  local window = {
+    setFrame = function(_, frame) set[#set + 1] = frame end,
+    frame = function() return takes end,
+  }
+  return {
+    spaces = {
+      windowSpaces = function() return { 1 } end,
+      spaceDisplay = function() return "SCREEN-A" end,
+      activeSpaceOnScreen = function() return 1 end,
+    },
+    window = { get = function() return window end },
+    timer = { usleep = function() end },
+  }, set
+end
+
+-- AT-01.4 (ST0034)
+do
+  local CELL = { x = 600, y = 25, w = 600, h = 800 }
+  local op = { op = "recheck", window = 102, frame = CELL, path = "displays[0].spaces[0].apps[1]",
+    bundle = "com.apple.Safari", size = { w = 375, h = 667 }, reason = "r" }
+  local fake, set = fake_place_hs({ x = 600, y = 25, w = 375, h = 667 })
+  _G.hs = fake
+  local ok, results = pcall(M.execute, { op }, { unmoved = {} })
+  local r = ok and results and results[1] or {}
+  check("recheck: it is executed, by one setFrame to the cell's frame", #set == 1 and set[1] == CELL,
+    ok and tostring(#set) or tostring(results))
+  check("recheck: an app still holding its size is done, noted as in place", r.status == "done"
+    and r.note == "in place at the app's own size, 375x667", tostring(r.status) .. " / " .. tostring(r.note or r.reason))
+  check("recheck: its result carries the frame it wanted", r.want == CELL, tostring(r.want))
+  local recs = P.own_sizes_after and P.own_sizes_after({}, results or {}) or nil
+  check("recheck: and the merge reads that result as the record it is",
+    recs and #recs == 1 and recs[1].size.w == 375 and recs[1].want.w == 600, recs and tostring(#recs) or "no merge")
+  fake = fake_place_hs(CELL)
+  _G.hs = fake
+  ok, results = pcall(M.execute, { op }, { unmoved = {} })
+  r = ok and results and results[1] or {}
+  check("recheck: an app that no longer holds its size is placed, with no note", r.status == "done" and r.note == nil,
+    tostring(r.status) .. " / " .. tostring(r.note))
+  recs = P.own_sizes_after and P.own_sizes_after({ { bundle = "com.apple.safari", want = { w = 600, h = 800 },
+    size = { w = 375, h = 667 } } }, results or {}) or nil
+  check("recheck: and its result clears the record", recs and #recs == 0, recs and tostring(#recs) or "no merge")
+end
+
 print(string.format("engine_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

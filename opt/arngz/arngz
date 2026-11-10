@@ -245,6 +245,76 @@ forget_current() {
 }
 
 # ============================================================================
+# SIZES APPS HOLD THEIR WINDOWS AT (ST0034, issue 0138)
+# ============================================================================
+
+# The sizes apps were read back holding their windows at, which plan reads so
+# that diff takes such a window as in place and apply rechecks it. State, not
+# configuration, beside the current desk. The engine decides every change to
+# them (P.own_sizes_after); the CLI only carries them in and writes them out.
+own_sizes_file() {
+  printf '%s/arngz/own-sizes\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+
+# Put the records into the engine's OPTIONS file as .own_sizes. No file is no
+# records. A file that is not a JSON list is said once and used as no
+# records, never as a reason to refuse: the worst it costs is a window placed
+# that need not have been. An empty object is how an empty list can come back
+# from the engine, and is no records too.
+#
+# The shape is parsed, so it is read from yq's stdout alone, with the output
+# format named: yq 4.54 warns on stderr when -p comes without -o, and that
+# warning, captured with the shape, once made every valid file "not a list"
+# (ST0034's design.md). yq's stderr is said only when yq fails.
+own_sizes_into() {
+  local options="$1" file shape why err
+  file="$(own_sizes_file)"
+  [[ -e "$file" ]] || return 0
+  err="${options%/*}/own-sizes.err"
+  if ! shape="$(yq -r -p json -o yaml '(type) + " " + (length | tostring)' "$file" 2>"$err")"; then
+    warn "arngz: the sizes apps hold their windows at, $file, cannot be read, so none is used: $(cat -- "$err" 2>/dev/null)"
+    return 0
+  fi
+  case "$shape" in
+    '!!seq '*) ;;
+    '!!map 0') return 0 ;;
+    *)
+      warn "arngz: the sizes apps hold their windows at, $file, is not a list ($shape), so none is used"
+      return 0
+      ;;
+  esac
+  if ! why="$(F="$file" yq -i -o json '.own_sizes = load(strenv(F))' "$options" 2>&1)"; then
+    warn "arngz: could not pass the sizes apps hold their windows at, $file, to the engine, so none is used: $why"
+  fi
+  return 0
+}
+
+# Write the records apply's RESPONSE carries, when the engine says they
+# changed, beside the file and moved over it as record_current writes. A
+# record that cannot be written is said, and apply keeps its own exit.
+record_own_sizes() {
+  local response="$1" changed file tmp why err
+  # Parsed, so from yq's stdout alone, as own_sizes_into reads its shape.
+  err="${response%/*}/own-sizes-changed.err"
+  if ! changed="$(yq -r '.own_sizes_changed // false' "$response" 2>"$err")"; then
+    warn "arngz: could not read whether the sizes apps hold their windows at changed: $(cat -- "$err" 2>/dev/null)"
+    return 0
+  fi
+  [[ "$changed" == true ]] || return 0
+  file="$(own_sizes_file)"
+  tmp="$file.$$"
+  if [[ -d "$file" ]]; then
+    warn "arngz: could not record the sizes apps hold their windows at: $file is a directory"
+    return 0
+  fi
+  if why="$({ mkdir -p -- "${file%/*}" && yq -o json '.own_sizes' "$response" >"$tmp" && mv -f -- "$tmp" "$file"; } 2>&1)"; then
+    return 0
+  fi
+  if [[ -e "$tmp" ]]; then rm -f -- "$tmp" || :; fi
+  warn "arngz: could not record the sizes apps hold their windows at in $file: ${why:-no reason given}"
+}
+
+# ============================================================================
 # THE VALIDATOR
 # ============================================================================
 
@@ -1491,8 +1561,10 @@ apply_prefs() {
 }
 
 # apply's options as the engine reads them, in a fresh temp dir whose path
-# it prints: no_launch and no_create from 1 or 0, and map from MAPS, one
-# name=uuid per line. Refuses by name when the dir or the file cannot be made.
+# it prints: no_launch and no_create from 1 or 0, map from MAPS, one
+# name=uuid per line, and own_sizes, the sizes apps hold their windows at
+# (ST0034). Refuses by name when the dir or the file cannot be made. diff
+# sends the same options with nothing set, as apply --dry-run does.
 apply_options() {
   local no_launch="$1" no_create="$2" maps="$3" dir options why map
   if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-apply.XXXXXX" 2>&1)"; then
@@ -1512,6 +1584,7 @@ apply_options() {
       fi
     fi
   done <<<"$maps"
+  own_sizes_into "$options"
   printf '%s\n' "$dir"
 }
 
@@ -1582,6 +1655,7 @@ cmd_apply() {
     # The engine answered, and not with a refusal: its own failure may come
     # after windows moved, so this is never "nothing changed".
     record_current "$desk"
+    record_own_sizes "$ENGINE_RESPONSE"
     error "arngz: $ENGINE_ERROR; its response is kept at $ENGINE_RESPONSE; fix: $ENGINE_FIX"
     exit 1
   fi
@@ -1598,6 +1672,7 @@ cmd_apply() {
   # From here apply has run: a failure to say how it went is exit 1, with the
   # response kept, never "nothing changed".
   record_current "$desk"
+  record_own_sizes "$ENGINE_RESPONSE"
   if ! render_report "$ENGINE_RESPONSE"; then
     error "arngz: apply ran, and its report could not be printed; its response is kept at $ENGINE_RESPONSE"
     exit 1
@@ -1618,10 +1693,17 @@ cmd_apply() {
 # nothing (issue 0132). Nothing has changed here, so a plan that cannot be
 # printed, or whose exit is not 0 or 1, is refused, exit 2, its response kept.
 cmd_diff() {
-  local desk code
+  local desk code dir rc=0
   desk="$(one_desk diff "$@")"
   validate_desk "$desk" || exit 2
-  engine_call plan "$(desk_file "$desk")"
+  # The options apply --dry-run sends, so the two plan alike: above all the
+  # sizes apps hold their windows at, without which diff and apply disagree
+  # about such a window (issue 0138).
+  dir="$(apply_options 0 0 "")" || exit 2
+  engine_ask plan "$(desk_file "$desk")" "$dir/options.json" || rc=$?
+  # Its options are gone whatever the engine said, before a refusal ends diff.
+  rm -rf -- "$dir"
+  if [[ $rc -ne 0 ]]; then engine_refuse; fi
   if ! render_report "$ENGINE_RESPONSE"; then
     refuse "the engine's plan could not be printed (kept at $ENGINE_RESPONSE)"
   fi

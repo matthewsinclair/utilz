@@ -390,6 +390,89 @@ local function app_key(bundle)
 end
 P.app_key = app_key
 
+-- ------------------------------------------------------------- own sizes
+
+-- A size an app holds its window at, remembered (ST0034, issue 0138). apply
+-- reads a place back as own_size when the window went to its cells' origin at
+-- a size the app enforces; the record says so for the next plan, which then
+-- rechecks the window rather than placing it, so diff reads it as in place.
+-- A record is { bundle = app_key, want = { w, h }, size = { w, h } }: the
+-- cells' size the desk wanted and the size the app held. The records are
+-- state the CLI keeps; plan only reads them, and P.own_sizes_after is the one
+-- place they change.
+
+-- What a window at its app's own size is said to be: "placed" when apply
+-- has just put it there, "in place" when it already was. One helper, so the
+-- diff line, the apply note and the engine's readback cannot drift apart.
+-- A record as P.own_sizes_after writes it. The file is the CLI's and a person
+-- can edit it, so a record of any other shape is passed over, never read.
+local function is_size(s) return type(s) == "table" and type(s.w) == "number" and type(s.h) == "number" end
+local function is_record(r)
+  return type(r) == "table" and type(r.bundle) == "string" and is_size(r.want) and is_size(r.size)
+end
+
+function P.own_size_note(said, size)
+  return string.format("%s at the app's own size, %sx%s", said, round(size.w), round(size.h))
+end
+
+-- Whether a record says BUNDLE's app holds a window wanted at WANT at the
+-- size GOT. Both sizes compare through P.sizes_agree, so the slack keeps its
+-- one home (ST0032's AC-01.2).
+function P.own_size_match(records, bundle, want, got)
+  local key = app_key(bundle)
+  for _, r in ipairs(records or {}) do
+    if is_record(r) and r.bundle == key and P.sizes_agree(r.want, want) and P.sizes_agree(r.size, got) then
+      return true
+    end
+  end
+  return false
+end
+
+-- The records after a run, from the records before and the run's results:
+-- a place or recheck read back as own_size adds the record for its bundle and
+-- wanted size, replacing one that agrees; one read back as placed removes it,
+-- because the app no longer holds its own size; anything else changes
+-- nothing. The outcome is P.place_outcome's, from the result's readback and
+-- the frame it wanted, never a second reading of the frames. Returns the new
+-- records, in a fresh list, and whether they differ from the old, so the CLI
+-- writes the file only when they do. Merging the same results twice gives
+-- the same records.
+local PLACING = { place = true, recheck = true }
+P.PLACING = PLACING
+
+function P.own_sizes_after(records, results)
+  local out, changed = {}, false
+  for _, r in ipairs(records or {}) do out[#out + 1] = r end
+  local function find(key, want)
+    for i, r in ipairs(out) do
+      if is_record(r) and r.bundle == key and P.sizes_agree(r.want, want) then return i end
+    end
+    return nil
+  end
+  for _, res in ipairs(results or {}) do
+    local got = res.readback and res.readback.frame
+    if PLACING[res.op] and res.status == "done" and got and res.want then
+      local key, outcome = app_key(res.bundle), P.place_outcome(got, res.want)
+      local at = find(key, res.want)
+      if outcome == "own_size" then
+        local record = { bundle = key, want = { w = round(res.want.w), h = round(res.want.h) },
+          size = { w = round(got.w), h = round(got.h) } }
+        if not at then
+          out[#out + 1] = record
+          changed = true
+        elseif not P.sizes_agree(out[at].size, record.size) then
+          out[at] = record
+          changed = true
+        end
+      elseif outcome == "placed" and at then
+        table.remove(out, at)
+        changed = true
+      end
+    end
+  end
+  return out, changed
+end
+
 local function running_set(world)
   local set = {}
   for _, b in ipairs(world.apps_running or {}) do set[app_key(b)] = true end
@@ -634,8 +717,16 @@ function P.plan(desk, world, options)
               }
             end
             if moving or not P.frames_agree(w.frame, frame) then
+              -- At its cells' origin at a size its app is recorded as holding
+              -- (ST0034): in place, but rechecked rather than left alone, so an
+              -- app that stops holding its size is re-sized and its record
+              -- cleared. Never for a window being moved: a window on the wrong
+              -- space is placed whatever is recorded.
+              local held = not moving and P.origins_agree(w.frame, frame)
+                and P.own_size_match(options.own_sizes, bundle, frame, w.frame)
               windows[#windows + 1] = {
-                op = "place", window = w.id, frame = frame, path = e.path, bundle = bundle,
+                op = held and "recheck" or "place", window = w.id, frame = frame, path = e.path, bundle = bundle,
+                size = held and { w = w.frame.w, h = w.frame.h } or nil,
                 reason = string.format("%s %q to %s on display %s", bundle, w.title or "", a.layout,
                   tostring(desk.displays[e.display].name)),
               }
@@ -1042,7 +1133,7 @@ function P.needs_hand(ops, world)
   local listed = P.listings(world)
   for _, op in ipairs(ops or {}) do
     if op.op == "move" then return true end
-    if op.op == "place" and listed[op.window] and not listed[op.window].shown then return true end
+    if PLACING[op.op] and listed[op.window] and not listed[op.window].shown then return true end
   end
   return false
 end
@@ -1479,26 +1570,39 @@ local DESCRIBE = {
   unmovable = function(op) return "not moving window " .. tostring(op.window) end,
   no_space = function(op) return "no space for window " .. tostring(op.window) end,
   pending = function(op) return "after the new space, window " .. tostring(op.window) end,
+  recheck = function(op) return "window " .. tostring(op.window) .. " " .. P.own_size_note("in place", op.size) end,
 }
 
+-- Ops that leave the machine as it is: a recheck finds a window already in
+-- place at its app's own size (ST0034). diff says each one after the rest,
+-- and neither reads it as a change, so a desk whose only differences are
+-- recorded own sizes reads "no change" and exits 0.
+local IN_PLACE = { recheck = true }
+
+local function plan_line(op)
+  local describe = DESCRIBE[op.op]
+  local what = describe and describe(op) or tostring(op.op)
+  return string.format("%s%s: %s", what, op.path and (" (" .. op.path .. ")") or "", tostring(op.reason))
+end
+
 function P.plan_report(ops)
-  local lines = {}
+  local lines, in_place = {}, {}
   for _, op in ipairs(ops or {}) do
-    local describe = DESCRIBE[op.op]
-    local what = describe and describe(op) or tostring(op.op)
-    lines[#lines + 1] = string.format("%s%s: %s", what, op.path and (" (" .. op.path .. ")") or "", tostring(op.reason))
+    if IN_PLACE[op.op] then in_place[#in_place + 1] = plan_line(op) else lines[#lines + 1] = plan_line(op) end
   end
   if #lines == 0 then lines[1] = "no change: this machine already matches the desk" end
+  for _, line in ipairs(in_place) do lines[#lines + 1] = line end
   return lines
 end
 
 -- diff's exit, from the plan (issue 0132): 1 when any op is one plan did not
 -- mark uncounted, so apply would change something or find an entry it cannot
--- arrange; 0 when there is none. The engine's plan verb returns it and the
--- CLI's cmd_diff passes it on, so the rule lives here, beside apply's.
+-- arrange; 0 when there is none, a recheck being in place (ST0034). The
+-- engine's plan verb returns it and the CLI's cmd_diff passes it on, so the
+-- rule lives here, beside apply's.
 function P.plan_exit(ops)
   for _, op in ipairs(ops or {}) do
-    if not op.uncounted then return 1 end
+    if not op.uncounted and not IN_PLACE[op.op] then return 1 end
   end
   return 0
 end

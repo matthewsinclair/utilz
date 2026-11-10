@@ -1,0 +1,15 @@
+{
+  "id": "01M7376R4A7ZPPAPMG0CQH46FA",
+  "ts": "2026-11-10T17:13:32.555Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.relate",
+  "subject": {
+    "type": "thread",
+    "id": "ST0034"
+  },
+  "payload": {
+    "note": "ST0032 shipped 0133's own_size outcome in 2.14.9 and left diff disagreeing; this thread makes them agree in 2.14.10, and its live acceptance unblocks ST0032's AC-01.4 and AC-01.5",
+    "target": "ST0032"
+  }
+}

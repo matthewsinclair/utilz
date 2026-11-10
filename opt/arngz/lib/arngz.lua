@@ -497,7 +497,7 @@ local function exec_place(op, ctx)
     return { status = "done", readback = { frame = got } }
   elseif outcome == "own_size" then
     return { status = "done", readback = { frame = got },
-      note = string.format("placed at the app's own size, %sx%s", P.round(got.w), P.round(got.h)) }
+      note = P.own_size_note(op.op == "recheck" and "in place" or "placed", got) }
   end
   return { status = "failed", readback = { frame = got }, reason = string.format(
     "setFrame returned, and the window took %s, not %s,%s %sx%s (an app may fix its size or snap it)",
@@ -1039,7 +1039,10 @@ end
 -- Ops that ask for nothing to be done, and the status the report gives them.
 local REPORT_ONLY = { unseen = "unseen", not_launched = "skipped", gone = "failed", unmovable = "failed", no_space = "failed" }
 
-local EXEC = { create_space = exec_create_space, launch = exec_launch, move = exec_move, place = exec_place }
+-- A recheck is a place (ST0034): the same gesture and readback, so an app that
+-- stops holding its own size is re-sized, and its result clears the record.
+local EXEC = { create_space = exec_create_space, launch = exec_launch, move = exec_move, place = exec_place,
+  recheck = exec_place }
 
 -- Perform each op in order and read back after each one (D14). Nothing is
 -- reported done that the readback does not show. ctx carries the hand, the
@@ -1063,6 +1066,9 @@ function M.execute(ops, ctx)
     r.index = i
     r.path = op.path
     r.bundle = op.bundle
+    -- The frame a place or recheck wanted, which P.own_sizes_after reads the
+    -- readback against (ST0034).
+    if P.PLACING[op.op] then r.want = op.frame end
     -- An unseen op's mark, which plan set and apply's report reads (issue 0132).
     r.uncounted = op.uncounted
     results[#results + 1] = r
@@ -1280,6 +1286,7 @@ function PHASE.replan(job)
   job.options = {
     no_create = true, after_create = #job.creates > 0, user_no_create = job.request_options.no_create,
     no_launch = job.request_options.no_launch, map = job.request_options.map,
+    own_sizes = job.request_options.own_sizes,
     launched = job.ctx.launched, running_before = P.running_set(job.ctx.world_before),
   }
   local nxt, err = plan_then(job, "organise_start")
@@ -1319,7 +1326,9 @@ function PHASE.finish(job)
     final = nil
   end
   local lines, code = P.apply_report(job.desk, job.results)
-  job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final })
+  local own_sizes, changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
+  job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
+    own_sizes = own_sizes, own_sizes_changed = changed })
 end
 
 -- The error response for a verb that raised: refused (nothing changed) or a
@@ -1336,6 +1345,8 @@ end
 local function failed_after_change(job, err)
   local out = error_response("apply", err)
   out.results = job.results
+  -- What it read back still counts: the CLI keeps the records it returns.
+  out.own_sizes, out.own_sizes_changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
   return out
 end
 
@@ -1391,7 +1402,8 @@ function M.start_apply(desk, options, respond)
   options = options or {}
   local job = {
     desk = desk, request_options = options, results = {},
-    options = { no_create = options.no_create, no_launch = options.no_launch, map = options.map },
+    options = { no_create = options.no_create, no_launch = options.no_launch, map = options.map,
+      own_sizes = options.own_sizes },
     deadlines = {}, observed = {}, observe_errors = {}, changed = false,
   }
   -- Answered once: a second answer would write over the first.

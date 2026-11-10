@@ -1,0 +1,149 @@
+{
+  "schema": "intent/thread@3.0",
+  "id": "ST0034",
+  "title": "arngz remembers a size the app enforces",
+  "slug": "arngz-remembers-a-size-the-app-enforces",
+  "status": "wip",
+  "created": "2026-11-10",
+  "objective": "Make `arngz diff` and `arngz apply` agree about a window its app holds at its own size (issue 0138, 0133's follow-up). apply remembers each `own_size` outcome in a state file. diff reads a window whose origin agrees and whose size matches the record as in place, so it says \"no change\". apply re-checks that window on every run, so an app that stops enforcing its size is re-sized and the record clears.",
+  "context": "2.14.9 (ST0032, issue 0133) taught apply that a window at its cells' origin at a size the app enforces is placed, but left the planner and diff unchanged, so the two disagree on hv's zeophq, which holds Appgate SDP. That disagreement blocks ST0032's AC-01.4 and AC-01.5, the live path.\n\nThe design is utilz-vc's (~/Devel/scratch/utilz-vc/0133b/design.md), amended by utilz-dc's critical read and agreed by vc on 10 Nov. vc had a `placed` readback clear the record, but nothing could ever produce that readback, because the record suppresses the only op that would. So the record sealed itself, and an app that stopped enforcing would never be re-sized. The amendment is a `recheck` op, which diff reads as in place and apply executes. That retires the question of whether a record should expire, and replaces it with hv's note-level question: is one setFrame and 150 ms per recorded window per apply acceptable? vc's default is yes.\n\nThis is a new thread rather than a WP under ST0032, so ST0032 stays exactly what 2.14.9 shipped. It is related to ST0032 and is utilz-dc's.",
+  "body": "",
+  "preamble": "",
+  "related": [
+    {
+      "id": "ST0032",
+      "note": "ST0032 shipped 0133's own_size outcome in 2.14.9 and left diff disagreeing; this thread makes them agree in 2.14.10, and its live acceptance unblocks ST0032's AC-01.4 and AC-01.5"
+    }
+  ],
+  "wps": [
+    {
+      "seq": 1,
+      "title": "plan, engine and shim: remember an enforced size, and recheck it",
+      "scope": "M",
+      "status": "wip",
+      "objective": "",
+      "body": "",
+      "preamble": ""
+    }
+  ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "P.plan emits recheck, not place, for a window that is not moving, whose origin agrees with its cell and whose size matches a record for its bundle and wanted size; and emits place when the origin differs, the size matches neither record nor cell, or the record is for another bundle or wanted size, every comparison through P.origins_agree and P.sizes_agree.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "P.plan_exit and plan_report read a recheck as in place, saying \"in place at the app's own size, WxH\" from one helper that apply_report uses too, so diff reads no change for a desk whose only difference is a recorded own size.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "P.own_sizes_after merges a run's results into the records: an own_size readback of a place or recheck adds or replaces the record for its bundle and wanted size, a placed readback removes it, anything else leaves the records as they were, records for other keys are untouched, and merging the same results twice gives the same records.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "The engine executes a recheck as it does a place, by setFrame and readback, and its response carries the records P.own_sizes_after returns.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.5",
+      "text": "The shim passes the own-sizes file's records to diff and apply, treats a missing file as no records and an unreadable or malformed one as no records said once on stderr, and apply writes the records the engine returns atomically and only when they changed.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.6",
+      "text": "Live, on hv's machine: arngz apply zeophq then arngz diff zeophq reads no change with Appgate SDP present, which makes acceptance.sh apply zeophq passable for ST0032's AC-01.4 and AC-01.5.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied"
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT-01.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "green",
+      "note": "to write: the planner arms; red at 1401e7b3, where options.own_sizes and the recheck op do not exist. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+    },
+    {
+      "id": "AT-01.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "green",
+      "note": "to write: plan_exit and plan_report arms; red at the base, where recheck is unknown. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+    },
+    {
+      "id": "AT-01.3",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "green",
+      "note": "to write: the merge arms; red at the base, where P.own_sizes_after does not exist. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+    },
+    {
+      "id": "AT-01.4",
+      "kind": "test",
+      "file": "opt/arngz/test/engine_test.lua",
+      "covers": [
+        "AC-01.4"
+      ],
+      "status": "green",
+      "note": "to write: an injected-hs arm (ST0033's surface); red at the base, where the engine has no recheck. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+    },
+    {
+      "id": "AT-01.5",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-01.5"
+      ],
+      "status": "green",
+      "note": "to write: shim arms against a fake engine; red at the base, where the shim reads no own-sizes file. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+    },
+    {
+      "id": "AT-01.6",
+      "kind": "non-test",
+      "prose": "hv runs arngz apply zeophq then arngz diff zeophq with Appgate SDP present, and diff reads no change",
+      "covers": [
+        "AC-01.6"
+      ],
+      "status": "n-a",
+      "note": "hv's live run, after the code lands and 2.14.10 is in hv's hands"
+    }
+  ],
+  "attachments": [
+    {
+      "path": "design.md",
+      "text": "# ST0034 design: arngz remembers a size the app enforces\n\nutilz-vc's design (10 Nov, read at 1401e7b3), amended by utilz-dc's critical read and agreed by vc the same day. Issue 0138. It is for 2.14.10.\n\n## The defect\n\nSee issue 0138. `P.plan` emits a `place` op whenever `not P.frames_agree(w.frame, frame)` (plan.lua:636). A window its app holds at its own size can never agree, so diff never reads \"no change\" after a clean apply, and every apply re-places the window.\n\n## Options (vc)\n\n1. **Remember the outcome. CHOSEN.** The state lives at `${XDG_STATE_HOME:-~/.local/state}/arngz/own-sizes`, beside `current` (arngz:190, the precedent: state, not configuration, so not the catalogue).\n2. **The desk records the enforced size.** Rejected. apply would have to write hv's desk files, which are configuration under hv's version control in Molt-matts.\n3. **diff says \"may be the app's own size\" whenever only the size differs.** Rejected. diff would still never read \"no change\", and a genuinely mis-sized window would read the same as Appgate.\n\n## THE AMENDMENT: a record must not seal itself (dc)\n\nvc's draft had P.plan emit no op for a recorded window and had a `placed` readback clear the record. But a readback only comes from executing a place. The record suppresses the only op that could clear it, so once written it would never clear. An app that stops enforcing (Appgate after an update) would stay at its old size, and diff would say \"in place\" forever. A false record written by the fixed 150 ms readback catching a resize mid-animation would last forever too.\n\nSo P.plan emits a distinct op, `recheck`, for a window whose origin agrees and whose size matches a record:\n\n- **diff and `P.plan_exit`** read `recheck` as in place. plan_report says \"in place at the app's own size, WxH\", so diff reads \"no change\".\n- **apply** executes it exactly as a place, through `exec_place`. An `own_size` readback keeps the record and reports quietly as in place, not as a change. A `placed` readback clears the record and reports \"placed\". A failed readback is a failure, as for any place.\n\nA record therefore needs no expiry. The cost is one setFrame and 150 ms per recorded window per apply. vc's default is that this is acceptable, and it goes to hv as a note, not a blocker.\n\n## The record\n\n- **Key and value.** The key is the bundle id and the wanted size (the cell's w x h). The value is the enforced size read back.\n- **Matching.** A window matches when its origin agrees with the cell, the wanted size agrees with the key, and its size agrees with the value. Every comparison goes through `P.origins_agree` and `P.sizes_agree`, so the slack keeps its one home (ST0032's AC-01.2).\n- **Only when not moving.** A record is consulted only when the window is not moving. A window on the wrong space, or at the wrong origin, is moved and placed whatever is recorded.\n- **The shared-key case, named.** Two entries of one bundle in cells of the same size share a record. A resizable second window sitting at exactly the enforced size would read as in place, which is acceptable.\n\n## Where each part lives (PFIC)\n\n- **plan.lua (pure).**\n  - `P.own_size_match(own_sizes, bundle, want, got)` decides whether a window matches a record.\n  - `P.plan` takes `options.own_sizes` and emits `recheck` where it applies.\n  - `P.own_sizes_after(records, results)` is the merge. An `own_size` readback of a place or recheck adds or replaces the record for its bundle and wanted size. A `placed` readback removes it. Anything else leaves the records as they were. The merge is idempotent.\n  - plan_report, apply_report and `P.plan_exit` learn `recheck`, with the \"in place at the app's own size\" wording coming from one helper.\n- **arngz.lua (engine).** `exec_place` serves `recheck` too: same gesture, same readback. The response carries the merged records from `P.own_sizes_after`.\n- **arngz (shim).**\n  - diff and apply read the file and pass its records to the engine request. A missing file means no records. An unreadable or malformed file is said once on stderr and treated as no records (No Silent Errors).\n  - apply writes the records the engine returns, atomically (tmp then mv), and only when they changed. It holds no merge logic of its own.\n  - **A value the shim parses comes from yq's stdout alone (found by WP01's booked run, 10 Nov).** The first cut read the file's shape with `yq -r -p json '...' 2>&1`. yq 4.54 prints a WARN on stderr whenever `-p` is given without `-o` (\"yq default output is now 'auto'\"), so the captured shape read \"time=... level=WARN ...\\n!!seq 1\", no shape matched, and every valid record file was said to be \"not a list\" and used as none. The fix would never have applied on a current yq. Arm 159 caught it only at its request-side read, because its output checks are `_contains` checks and the fake engine's canned plan does not depend on the request. So the shape read names its output format (`-o yaml`), which silences that warning. It also takes stderr apart from stdout, so a warning a later yq adds cannot poison a parsed value again: stderr is said only when yq fails. Arm 159 also refutes the \"not a list\" warning, so the fault cannot hide behind a `_contains` again. Found in this thread's own fix, so recorded here and not filed as an issue.\n\n## Tests, red at the base (1401e7b3) and green at the fix\n\n- **plan_test.lua.**\n  - origin agrees and the size matches the record -> `recheck`;\n  - size equals the cell -> no op (as today);\n  - size differs from both -> `place`;\n  - origin differs -> `place` whatever is recorded;\n  - moving -> move and place whatever is recorded;\n  - a record for another bundle or another wanted size -> `place`;\n  - plan_exit and plan_report read `recheck` as in place;\n  - `own_sizes_after`: own_size adds, placed removes, failed leaves, idempotent, other keys untouched.\n- **engine_test.lua (ST0033's injected hs).** A `recheck` op is executed as a setFrame with a readback, and the response carries the merged records.\n- **arngz.bats (fake engine).** diff reads \"no change\" for a desk whose only difference is a recorded own size. apply writes the returned records atomically. An unreadable file is said once and treated as none.\n\nEach new arm is red at the base, reasoned where the function it calls does not exist there and proven by mutation where it does.\n\n## Acceptance (live, hv's)\n\n`arngz apply zeophq` then `arngz diff zeophq` reads \"no change\" with Appgate present. That makes `acceptance.sh apply zeophq` passable, which unblocks ST0032's AC-01.4 and AC-01.5.\n",
+      "bytes": 6542,
+      "sha256": "f8d358e39e67e523f360a41488cc27784e8df5f5dea625fd20deb6cc53a124af"
+    }
+  ]
+}

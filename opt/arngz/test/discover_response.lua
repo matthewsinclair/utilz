@@ -3,8 +3,11 @@
 -- as JSON for the fake hs to hand back (ST0026 AT-04.1, AT-04.4).
 --
 -- Usage: <lua> discover_response.lua <plan.lua> <worlds.lua> discover <world> [<grid>] [<name>]
---        <lua> discover_response.lua <plan.lua> <worlds.lua> plan <world> <desk>
---        <lua> discover_response.lua <plan.lua> <worlds.lua> apply <results> <desk>
+--        <lua> discover_response.lua <plan.lua> <worlds.lua> plan <world> <desk> [<records>]
+--        <lua> discover_response.lua <plan.lua> <worlds.lua> apply <results> <desk> [<records>]
+--
+-- <records> names the sizes apps hold their windows at, as the CLI passes them
+-- (ST0034): plan reads them, and apply answers with them merged.
 --
 -- <world>, <desk> and <results> name functions in worlds.lua (eg
 -- discover_world, base_world, base_desk, launch_skipped_results). An apply
@@ -60,7 +63,8 @@ if verb == "discover" then
     response = { status = "error", kind = "refused", verb = "discover", error = notes, fix = fix }
   end
 elseif verb == "plan" then
-  local ops, err, fix = P.plan(F[arg[5]](), F[arg[4]](), {})
+  local records = arg[6] and arg[6] ~= "" and F[arg[6]]() or nil
+  local ops, err, fix = P.plan(F[arg[5]](), F[arg[4]](), { own_sizes = records })
   if ops then
     response = { status = "ok", verb = "plan", ops = ops, report = P.plan_report(ops), exit = P.plan_exit(ops) }
   else
@@ -69,7 +73,11 @@ elseif verb == "plan" then
 elseif verb == "apply" then
   local results = F[arg[4]]()
   local report, code = P.apply_report(F[arg[5]](), results)
+  local records = arg[6] and arg[6] ~= "" and F[arg[6]]() or {}
   response = { status = "ok", verb = "apply", results = results, report = report, exit = code }
+  -- Only where the plan.lua under test has the merge: a plan.lua from before
+  -- ST0034 answers as the engine of its day did.
+  if P.own_sizes_after then response.own_sizes, response.own_sizes_changed = P.own_sizes_after(records, results) end
 else
   error("verb is discover, plan or apply, not " .. tostring(verb))
 end

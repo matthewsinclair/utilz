@@ -233,4 +233,33 @@ function F.unseen_results()
   }
 end
 
+-- ST0034, issue 0138: Safari's window at its cells' origin, held by its app at
+-- 375x667 (Appgate's measured size) against a 600x800 cell; the record that
+-- says its app holds it so; what execute returns when a recheck reads it back
+-- still held; and what it returns when the app has let go and it took the cell.
+function F.own_size_world()
+  local w = F.base_world()
+  w.screens[1].spaces[1].windows[2].frame = { x = 600, y = 25, w = 375, h = 667 }
+  return w
+end
+
+function F.own_size_records()
+  return { { bundle = "com.apple.safari", want = { w = 600, h = 800 }, size = { w = 375, h = 667 } } }
+end
+
+function F.own_size_results()
+  return {
+    { op = "recheck", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "done",
+      want = { x = 600, y = 25, w = 600, h = 800 }, readback = { frame = { x = 600, y = 25, w = 375, h = 667 } },
+      note = "in place at the app's own size, 375x667" },
+  }
+end
+
+function F.own_size_let_go_results()
+  return {
+    { op = "recheck", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "done",
+      want = { x = 600, y = 25, w = 600, h = 800 }, readback = { frame = { x = 600, y = 25, w = 600, h = 800 } } },
+  }
+end
+
 return F

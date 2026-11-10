@@ -1457,5 +1457,122 @@ do
     report[1])
 end
 
+
+-- ------------------------------------------------------------- own sizes (ST0034)
+
+-- A size an app holds its window at, remembered (issue 0138). Safari's window
+-- (102) is wanted in a 600x800 cell at 600,25; here its app holds it at
+-- 375x667, Appgate's measured size. Each arm calls through `own`, so at the
+-- base, where none of these functions exists, every arm fails on its own
+-- rather than the first one ending the run.
+print("own sizes")
+local function own(name, ...)
+  if type(P[name]) ~= "function" then return nil, "P." .. name .. " does not exist" end
+  local ok, a, b = pcall(P[name], ...)
+  if not ok then return nil, tostring(a) end
+  return a, b
+end
+local CELL = { x = 600, y = 25, w = 600, h = 800 }
+local HELD = { w = 375, h = 667 }
+local function held_world(frame)
+  local w = base_world()
+  space(w, 1).windows[2].frame = frame or { x = 600, y = 25, w = 375, h = 667 }
+  return w
+end
+local function record(bundle, want, size)
+  return { bundle = bundle or "com.apple.safari", want = want or { w = 600, h = 800 }, size = size or { w = 375, h = 667 } }
+end
+local function plan_with(world, records)
+  local ok, ops = pcall(P.plan, base_desk(), world, { own_sizes = records })
+  if not ok then return nil end
+  return ops
+end
+
+-- AT-01.1 (ST0034)
+do
+  local ops = plan_with(held_world(), nil)
+  check("own sizes: with no record, a window at its app's size is placed, as today", kinds(ops) == "place", ops_text(ops))
+  ops = plan_with(held_world(), { record() })
+  check("own sizes: at its cells' origin at a recorded size, it is rechecked, not placed",
+    kinds(ops) == "recheck", ops_text(ops))
+  local op = ops and ops[1]
+  check("own sizes: the recheck carries the cell's frame and the size the window is at",
+    op and op.window == 102 and op.frame and op.frame.w == CELL.w and op.frame.h == CELL.h
+      and op.size and op.size.w == HELD.w and op.size.h == HELD.h, ops_text(ops))
+  ops = plan_with(held_world({ x = 600, y = 25, w = 376, h = 666 }), { record() })
+  check("own sizes: a size within the slack of the record is rechecked", kinds(ops) == "recheck", ops_text(ops))
+  ops = plan_with(held_world({ x = 600, y = 25, w = 400, h = 600 }), { record() })
+  check("own sizes: a size matching neither the record nor the cell is placed", kinds(ops) == "place", ops_text(ops))
+  ops = plan_with(held_world({ x = 650, y = 25, w = 375, h = 667 }), { record() })
+  check("own sizes: away from its cells' origin it is placed whatever is recorded", kinds(ops) == "place", ops_text(ops))
+  ops = plan_with(held_world(), { record("com.example.other") })
+  check("own sizes: a record for another app is not this one's", kinds(ops) == "place", ops_text(ops))
+  ops = plan_with(held_world(), { record(nil, { w = 500, h = 800 }) })
+  check("own sizes: a record for another cell size is not this one's", kinds(ops) == "place", ops_text(ops))
+  ops = plan_with(held_world(), { { bundle = "com.apple.safari", size = { w = 375, h = 667 } } })
+  check("own sizes: a record of the wrong shape is passed over, not read", kinds(ops) == "place", ops_text(ops))
+  local w = held_world()
+  local safari = table.remove(space(w, 1).windows, 2)
+  table.insert(space(w, 2).windows, safari)
+  ops = plan_with(w, { record() })
+  check("own sizes: a window on the wrong space is moved and placed whatever is recorded",
+    kinds(ops) == "move,place", ops_text(ops))
+  check("own sizes: a recheck of a window on a desktop not shown needs the hand, as a place does",
+    P.needs_hand({ { op = "recheck", window = 103 } }, base_world()) == true)
+end
+
+-- AT-01.2 (ST0034)
+do
+  local note = own("own_size_note", "in place", { w = 375.4, h = 667 })
+  check("own sizes: the note says the size, rounded", note == "in place at the app's own size, 375x667", tostring(note))
+  local ops = plan_with(held_world(), { record() }) or {}
+  check("own sizes: diff exits 0 when the only op is a recheck", P.plan_exit(ops) == 0, ops_text(ops))
+  local mixed = plan_with(held_world(), { record() }) or {}
+  mixed[#mixed + 1] = { op = "place", window = 101, frame = CELL, reason = "r" }
+  check("own sizes: and 1 when anything else would change", P.plan_exit(mixed) == 1, ops_text(mixed))
+  local lines = P.plan_report(ops)
+  check("own sizes: diff reads no change first, then the window in place at its app's own size",
+    #lines == 2 and lines[1] == "no change: this machine already matches the desk"
+      and string.find(lines[2] or "", "window 102 in place at the app's own size, 375x667 (displays[0].spaces[0].apps[1]): ", 1, true) == 1,
+    table.concat(lines, " | "))
+  local report, code = P.apply_report(base_desk(), { { op = "recheck", path = "displays[0].spaces[0].apps[1]",
+    bundle = "com.apple.Safari", status = "done", note = note } })
+  check("own sizes: apply says a rechecked window is placed, noting its app's own size, and exits 0",
+    code == 0 and string.find(report[2] or "", "): placed (in place at the app's own size, 375x667)", 1, true) ~= nil,
+    table.concat(report or {}, " | "))
+end
+
+-- AT-01.3 (ST0034)
+do
+  local function result(op, status, got)
+    return { op = op, bundle = "com.apple.Safari", status = status, want = { x = 600, y = 25, w = 600, h = 800 },
+      readback = { frame = got } }
+  end
+  local AT_OWN = { x = 600, y = 25, w = 375, h = 667 }
+  local recs, changed = own("own_sizes_after", {}, { result("place", "done", AT_OWN) })
+  check("own sizes: an own_size readback adds its record, keyed on the app however it is spelt",
+    recs and #recs == 1 and recs[1].bundle == "com.apple.safari" and recs[1].want.w == 600 and recs[1].size.w == 375
+      and changed == true, render(recs))
+  recs, changed = own("own_sizes_after", { record() }, { result("recheck", "done", CELL) })
+  check("own sizes: a placed readback removes it, the app no longer holding its size",
+    recs and #recs == 0 and changed == true, render(recs))
+  -- Each read back at the held size, so only the gate under test keeps it out.
+  recs, changed = own("own_sizes_after", {}, { result("recheck", "failed", AT_OWN) })
+  check("own sizes: a failed result leaves the records as they were", recs and #recs == 0 and changed == false, render(recs))
+  recs, changed = own("own_sizes_after", {}, { result("move", "done", AT_OWN) })
+  check("own sizes: a result that is not a place or recheck changes nothing", recs and #recs == 0 and changed == false, render(recs))
+  recs, changed = own("own_sizes_after", { record(nil, nil, { w = 400, h = 700 }) }, { result("place", "done", AT_OWN) })
+  check("own sizes: a new size for the same app and cell replaces the old one",
+    recs and #recs == 1 and recs[1].size.w == 375 and changed == true, render(recs))
+  local other = record("com.example.other", { w = 100, h = 100 }, { w = 50, h = 50 })
+  recs = own("own_sizes_after", { other }, { result("place", "done", AT_OWN) })
+  check("own sizes: records for other apps are kept untouched",
+    recs and #recs == 2 and recs[1] == other, render(recs))
+  local once = own("own_sizes_after", {}, { result("place", "done", AT_OWN) })
+  local twice, again = own("own_sizes_after", once, { result("place", "done", AT_OWN) })
+  check("own sizes: merging the same results twice gives the same records, unchanged",
+    twice and #twice == 1 and again == false, render(twice))
+end
+
 print(string.format("plan_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)
