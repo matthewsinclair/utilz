@@ -55,11 +55,36 @@ function P.cell_frame(screen_frame, grid, cell)
   return { x = round(x0), y = round(y0), w = round(x1) - round(x0), h = round(y1) - round(y0) }
 end
 
-function P.frames_agree(a, b, slack)
+-- Whether two frames agree, by origin, by size, and by both. Split because
+-- apply has to tell a window that went where it was put but kept its own size
+-- from one that went somewhere else (issue 0133), and the slack has one home:
+-- frames_agree is the other two, so the three cannot drift apart.
+function P.origins_agree(a, b, slack)
   slack = slack or P.FRAME_SLACK
   if not a or not b then return false end
   return math.abs(a.x - b.x) <= slack and math.abs(a.y - b.y) <= slack
-    and math.abs(a.w - b.w) <= slack and math.abs(a.h - b.h) <= slack
+end
+
+function P.sizes_agree(a, b, slack)
+  slack = slack or P.FRAME_SLACK
+  if not a or not b then return false end
+  return math.abs(a.w - b.w) <= slack and math.abs(a.h - b.h) <= slack
+end
+
+function P.frames_agree(a, b, slack)
+  return P.origins_agree(a, b, slack) and P.sizes_agree(a, b, slack)
+end
+
+-- What a place readback means (issue 0133): the window is where the desk put
+-- it and the right size; or where the desk put it at a size the app enforces,
+-- which is as well placed as it can be and is not a failure; or somewhere
+-- else, which is. The order matters: a window whose origin is wrong is failed
+-- whatever its size, because a window in the wrong place is a real failure and
+-- that is the one thing this must not swallow.
+function P.place_outcome(got, want, slack)
+  if P.frames_agree(got, want, slack) then return "placed" end
+  if P.origins_agree(got, want, slack) then return "own_size" end
+  return "failed"
 end
 
 -- Where a screen sits relative to the primary one (D6 as amended by hv,
@@ -982,8 +1007,9 @@ local BLANKET = { phase = true }
 
 -- What apply says per desk entry (design.md, apply step 11), from the ops it
 -- planned and the results execute returned, each result carrying its op's
--- `op`, `path`, `bundle`, `status` and `reason`, and an unseen op's
--- `uncounted`. A launch speaks for every entry of its app. Returns the report
+-- `op`, `path`, `bundle`, `status` and `reason`, an unseen op's `uncounted`,
+-- and a done result's `note`, said in brackets after the outcome and counting
+-- against nothing. A launch speaks for every entry of its app. Returns the report
 -- lines and the exit code: 0 when every entry is placed or uncounted, 1 when
 -- any is anything else, or when any op failed whatever entry it served. An
 -- entry is uncounted when every result on it that is not done is an unseen
@@ -1015,6 +1041,12 @@ function P.apply_report(desk, results)
   for _, e in ipairs(ordered) do
     local launch = by_app[app_key(e.app.app)]
     local outcome, why, moved, counts = "placed", {}, false, false
+    -- What a done result had worth saying: said, and counting against
+    -- nothing, which is a loose result's `note` status on an entry that was
+    -- placed (issue 0133's window held at the app's own size). Kept apart from
+    -- `why`, which is the account of something that went wrong: merging them
+    -- would make a placed entry read as a failure to anything parsing a line.
+    local notes = {}
     if launch and launch.status ~= "done" then
       outcome = launch.status
       why[#why + 1] = tostring(launch.reason)
@@ -1022,6 +1054,7 @@ function P.apply_report(desk, results)
     for _, r in ipairs(by_path[e.path] or {}) do
       if r.status == "done" then
         if r.op == "move" then moved = true end
+        if r.note then notes[#notes + 1] = tostring(r.note) end
       else
         if not r.uncounted then counts = true end
         if outcome == "placed" or r.status == "failed" then
@@ -1041,8 +1074,9 @@ function P.apply_report(desk, results)
       code = 1
     end
     local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
-    lines[#lines + 1] = string.format("%s (%s): %s%s", name, e.path, outcome,
-      (#why > 0) and (": " .. table.concat(why, "; ")) or "")
+    lines[#lines + 1] = string.format("%s (%s): %s%s%s", name, e.path, outcome,
+      (#why > 0) and (": " .. table.concat(why, "; ")) or "",
+      (#notes > 0) and (" (" .. table.concat(notes, "; ") .. ")") or "")
   end
   -- A note is said and counts against nothing: something apply left as it
   -- found it on purpose, such as focus on a desktop no longer shown.

@@ -397,8 +397,16 @@ local function exec_place(op, ctx)
   w:setFrame(op.frame, 0)
   hs.timer.usleep(150000)
   local got = rect(w:frame())
-  if P.frames_agree(got, op.frame) then
+  -- What the readback means is plan's to decide, not this function's
+  -- (issue 0133): an app that fixes its own window size cannot fill the cells
+  -- the desk gives it, and a window that went where it was put at a size the
+  -- app enforces is as well placed as it can be.
+  local outcome = P.place_outcome(got, op.frame)
+  if outcome == "placed" then
     return { status = "done", readback = { frame = got } }
+  elseif outcome == "own_size" then
+    return { status = "done", readback = { frame = got },
+      note = string.format("placed at the app's own size, %sx%s", P.round(got.w), P.round(got.h)) }
   end
   return { status = "failed", readback = { frame = got }, reason = string.format(
     "setFrame returned, and the window took %s, not %s,%s %sx%s (an app may fix its size or snap it)",

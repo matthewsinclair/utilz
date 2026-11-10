@@ -84,6 +84,40 @@ do
     p1 == "above-right" and p2 == "above-left", tostring(p1) .. ", " .. tostring(p2))
   check("position: a screen over the primary is named overlapping",
     P.position({ x = 100, y = 100, w = 600, h = 400 }, primary) == "overlapping")
+
+  -- issue 0133: an app that fixes its own window size cannot fill the cells a
+  -- desk gives it. The slack is read from P.FRAME_SLACK, never written here,
+  -- so these cases follow it if it ever changes.
+  local slack, over = P.FRAME_SLACK, P.FRAME_SLACK + 1
+  local at = function(x, y, w, h) return { x = x, y = y, w = w, h = h } end
+  check("origins_agree: the same origin, whatever the sizes",
+    P.origins_agree(at(900, 40, 375, 667), at(900, 40, 450, 545)))
+  check("origins_agree: within the slack on each axis, and not past it",
+    P.origins_agree(at(900 + slack, 40 - slack, 10, 10), at(900, 40, 10, 10))
+      and not P.origins_agree(at(900 + over, 40, 10, 10), at(900, 40, 10, 10))
+      and not P.origins_agree(at(900, 40 + over, 10, 10), at(900, 40, 10, 10)))
+  check("sizes_agree: the same size at different origins, and not past the slack",
+    P.sizes_agree(at(0, 0, 450, 545), at(900, 40, 450, 545))
+      and not P.sizes_agree(at(0, 0, 450 + over, 545), at(0, 0, 450, 545)))
+  -- The regression guard on splitting frames_agree into the two: it must keep
+  -- every answer it gave before, which is both halves and nothing else.
+  check("frames_agree is still both halves, and nothing less",
+    P.frames_agree(at(900, 40, 450, 545), at(900, 40, 450, 545))
+      and not P.frames_agree(at(900, 40, 375, 667), at(900, 40, 450, 545))
+      and not P.frames_agree(at(0, 40, 450, 545), at(900, 40, 450, 545))
+      and not P.frames_agree(nil, at(900, 40, 450, 545))
+      and not P.frames_agree(at(900, 40, 450, 545), nil))
+  -- Appgate SDP's own numbers, from hv's menuz log at run 70, not invented.
+  check("place_outcome: a window at its origin at a size the app enforces is own_size",
+    P.place_outcome(at(900, 40, 375, 667), at(900, 40, 450, 545)) == "own_size")
+  check("place_outcome: a window that took the frame it was given is placed",
+    P.place_outcome(at(900, 40, 450, 545), at(900, 40, 450, 545)) == "placed")
+  -- The one thing this must not swallow: a window of the right size in the
+  -- wrong place is a failure, not a size the app chose.
+  check("place_outcome: the right size at the wrong origin is failed",
+    P.place_outcome(at(0, 40, 450, 545), at(1920, 40, 450, 545)) == "failed")
+  check("place_outcome: a frame that could not be read is failed",
+    P.place_outcome(nil, at(900, 40, 450, 545)) == "failed")
 end
 
 -- ------------------------------------------------------------- the planner
@@ -859,7 +893,9 @@ end
 print("report")
 do
   local d = base_desk()
-  local function r(op, path, status, reason, bundle) return { op = op, path = path, status = status, reason = reason, bundle = bundle } end
+  local function r(op, path, status, reason, bundle, note)
+    return { op = op, path = path, status = status, reason = reason, bundle = bundle, note = note }
+  end
   local lines, code = P.apply_report(d, {})
   check("every entry placed exits 0, one line per entry", code == 0 and #lines == 3 and string.find(lines[1], ": placed$") ~= nil,
     table.concat(lines, " | "))
@@ -955,6 +991,25 @@ do
   lines, code = P.apply_report(d, { r("create_space", "displays[0].spaces[2]", "failed", "addSpaceToScreen returned false") })
   check("a failed op that serves no one entry is its own line, and lifts the exit",
     code == 1 and #lines == 4 and string.find(lines[4], "create_space", 1, true) ~= nil, lines[4])
+
+  -- issue 0133: a window held at the app's own size is placed, and says so.
+  local own = "placed at the app's own size, 375x667"
+  lines, code = P.apply_report(d, { r("place", "displays[0].spaces[0].apps[0]", "done", nil, nil, own) })
+  check("a placed entry with a note says it in brackets and exits 0",
+    code == 0 and lines[1] == "com.apple.mail (displays[0].spaces[0].apps[0]): placed (" .. own .. ")", lines[1])
+  -- The byte-identical guard: with no note, the line must end where it did.
+  lines, code = P.apply_report(d, { r("place", "displays[0].spaces[0].apps[0]", "done") })
+  check("a placed entry with no note is unchanged, ending at the outcome",
+    code == 0 and string.find(lines[1], ": placed$") ~= nil, lines[1])
+  -- A note must not mask a failure elsewhere on the desk.
+  lines, code = P.apply_report(d, {
+    r("place", "displays[0].spaces[0].apps[0]", "done", nil, nil, own),
+    r("place", "displays[0].spaces[1].apps[0]", "failed", "the readback shows it elsewhere"),
+  })
+  check("a note beside a failed entry still exits 1, and both are said",
+    code == 1 and string.find(lines[1], own, 1, true) ~= nil
+      and string.find(lines[3], "failed: the readback shows it elsewhere", 1, true) ~= nil,
+    table.concat(lines, " | "))
 end
 
 -- ------------------------------------------------------------- discover
