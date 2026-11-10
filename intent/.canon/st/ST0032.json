@@ -154,8 +154,9 @@
       "text": "A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count. Engine code in exec_create_space: no suite reaches it and acceptance.sh cannot, so reading is its only proof today.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied",
-        "note": "Waits on dc's driver for exec_create_space (hv's ruling of 10 Nov, vc decision 97, utilz-dc's new thread). This is one of the four reporting paths that took a commit each, and it is unreachable by the arms and by acceptance.sh alike. Descope it to that thread once it exists."
+        "is": "descoped",
+        "to": "ST0033",
+        "by": "vc"
       }
     },
     {
@@ -163,8 +164,9 @@
       "text": "When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator. Engine code: reading is its only proof today.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied",
-        "note": "Waits on dc's driver (vc decision 97). The overshoot from n to more than n+1 is one of the two paths a real machine cannot produce to order, which is precisely why an injected hs is the right surface and a live run is not."
+        "is": "descoped",
+        "to": "ST0033",
+        "by": "vc"
       }
     },
     {
@@ -172,8 +174,9 @@
       "text": "A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown. Engine code: reading is its only proof today.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied",
-        "note": "Waits on dc's driver (vc decision 97). The vanished-display stop was the subject of the third fix-forward, where the final-failure path never consulted `made`."
+        "is": "descoped",
+        "to": "ST0033",
+        "by": "vc"
       }
     },
     {

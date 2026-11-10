@@ -32,9 +32,9 @@ title: arngz: a desk picked from the monitors present, and the three defects tha
 
 - AC-03.1 P.space_error_kind reads a vanished display as gone and anything else as transient, with an unrecognised reason defaulting to transient deliberately. -- satisfied: no (computed)
 - AC-03.2 The create_space failure line carries no fixed outer phrase restating the op, because apply_report already prefixes every loose line with the op and the status. -- satisfied: no (computed)
-- AC-03.3 (non-test) A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count. Engine code in exec_create_space: no suite reaches it and acceptance.sh cannot, so reading is its only proof today. -- satisfied: no
-- AC-03.4 (non-test) When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator. Engine code: reading is its only proof today. -- satisfied: no
-- AC-03.5 (non-test) A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown. Engine code: reading is its only proof today. -- satisfied: no
+- AC-03.3 (non-test) A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count. Engine code in exec_create_space: no suite reaches it and acceptance.sh cannot, so reading is its only proof today. -- DESCOPED to ST0033 by vc
+- AC-03.4 (non-test) When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator. Engine code: reading is its only proof today. -- DESCOPED to ST0033 by vc
+- AC-03.5 (non-test) A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown. Engine code: reading is its only proof today. -- DESCOPED to ST0033 by vc
 
 ### WP-04 -- Desk auto-selection: a pure detect, arngz which and arngz auto (status: WIP)
 
