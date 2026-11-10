@@ -1,0 +1,15 @@
+{
+  "id": "01M721X11T951ZEMT5QFB74YP8",
+  "ts": "2026-11-10T06:21:36.699Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST0032/04"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "Desk auto-selection: a pure detect, arngz which and arngz auto"
+  }
+}
