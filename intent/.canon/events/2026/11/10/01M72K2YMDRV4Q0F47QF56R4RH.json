@@ -1,0 +1,14 @@
+{
+  "id": "01M72K2YMDRV4Q0F47QF56R4RH",
+  "ts": "2026-11-10T11:21:56.622Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-05.4"
+  },
+  "payload": {
+    "note": "Not done, and not a Utilz file. The menu is Molt-matts config/menuz/menuz.yaml and it lands only after `utilz use dev` puts this checkout on the machine hv uses, because Discover runs the new `auto`. Ordering, not difficulty."
+  }
+}

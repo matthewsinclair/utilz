@@ -1,0 +1,15 @@
+{
+  "id": "01M72JV6ZY5PWAYG06CBREBBSM",
+  "ts": "2026-11-10T11:17:43.039Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.relate",
+  "subject": {
+    "type": "thread",
+    "id": "ST0033"
+  },
+  "payload": {
+    "note": "ST0033 builds the proof surface for the engine code ST0032 changed: ST0032's three fixes to exec_create_space were each found defective by a reader after landing, four commits in all, and its arms (plan_test, arngz.bats) cannot reach the engine at all. hv ruled on 10 Nov that the driver is written before 2.14.9's cut.",
+    "target": "ST0032"
+  }
+}

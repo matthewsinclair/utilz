@@ -1,0 +1,14 @@
+{
+  "id": "01M72K2Y4G29YNVEJ9SRJ83RNV",
+  "ts": "2026-11-10T11:21:56.113Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-03.3"
+  },
+  "payload": {
+    "note": "Waits on dc's driver for exec_create_space (hv's ruling of 10 Nov, vc decision 97, utilz-dc's new thread). This is one of the four reporting paths that took a commit each, and it is unreachable by the arms and by acceptance.sh alike. Descope it to that thread once it exists."
+  }
+}

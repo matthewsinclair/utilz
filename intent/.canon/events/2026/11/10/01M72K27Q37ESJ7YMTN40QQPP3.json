@@ -1,0 +1,14 @@
+{
+  "id": "01M72K27Q37ESJ7YMTN40QQPP3",
+  "ts": "2026-11-10T11:21:33.156Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-05.2"
+  },
+  "payload": {
+    "evidence": "CHANGELOG.md's unreleased section: the Added entry for ST0032/04 ending 'arngz goes from 1.1.3 to 1.2.0', and Fixed entries for issues 0133, 0134 and 0135. opt/arngz/VERSION reads 1.2.0."
+  }
+}

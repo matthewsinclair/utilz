@@ -1,0 +1,14 @@
+{
+  "id": "01M72K2XWHETVYTW7FDHNGTVVX",
+  "ts": "2026-11-10T11:21:55.859Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-01.4"
+  },
+  "payload": {
+    "note": "Waits on the live path. exec_place is engine code no suite reaches; its only proof today is reading, plus acceptance.sh's apply mode, which has never been run on this machine. Four readings by three readers found no defect in it, which is the other half of what this thread measured."
+  }
+}

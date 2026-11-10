@@ -1,0 +1,14 @@
+{
+  "id": "01M72K273REN5SHS8JZJTPZ9S0",
+  "ts": "2026-11-10T11:21:32.538Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-02.3"
+  },
+  "payload": {
+    "text": "WP02's refusal has one home and the documents describe it rather than duplicating it: the sentence lives in plan.lua, plan_test.lua asserts that literal, and help/arngz.md and the CHANGELOG describe the same behaviour in consistent terms (the usable area, the window's centre, and the middle rule) without carrying a second copy of the sentence that could drift from it."
+  }
+}

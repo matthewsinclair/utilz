@@ -1,0 +1,14 @@
+{
+  "id": "01M72K27K8NQF592N210Q25KH6",
+  "ts": "2026-11-10T11:21:33.034Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-05.1"
+  },
+  "payload": {
+    "evidence": "help/arngz.md:142 for the which and auto section with the 0, 1 and 2 exits; :109 for WP01's own-size note; :130 for WP02's refusal; :111 for WP03's retry, its once-per-display rule and the overshoot. All four read."
+  }
+}

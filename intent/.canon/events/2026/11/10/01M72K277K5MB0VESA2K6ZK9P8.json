@@ -1,0 +1,14 @@
+{
+  "id": "01M72K277K5MB0VESA2K6ZK9P8",
+  "ts": "2026-11-10T11:21:32.660Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-05.2"
+  },
+  "payload": {
+    "text": "CHANGELOG.md's unreleased section carries one Added entry for the feature and one Fixed entry each for issues 0133, 0134 and 0135, and arngz's own version moves once for THIS THREAD, 1.1.3 to 1.2.0. It is not once for the release: issue 0132 moved it 1.1.2 to 1.1.3 earlier in the same unreleased section, which is correct because that was separate work."
+  }
+}

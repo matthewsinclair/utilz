@@ -1,0 +1,14 @@
+{
+  "id": "01M72K27BF9648JYSRP9TA8M2W",
+  "ts": "2026-11-10T11:21:32.784Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-01.6"
+  },
+  "payload": {
+    "evidence": "help/arngz.md:110 states it as a known limitation with the reason; CHANGELOG.md's issue 0133 entry carries it under 'Known limitation, and new in this release'; intent/issues/0133.md's design states it in four places. Verified by reading all three, not from the design's claim to have recorded it."
+  }
+}

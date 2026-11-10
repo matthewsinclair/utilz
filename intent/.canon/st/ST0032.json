@@ -56,6 +56,406 @@
       "preamble": ""
     }
   ],
+  "criteria": [
+    {
+      "id": "AC-01.1",
+      "text": "P.place_outcome answers in three ways and only three: placed when origin and size both agree within the slack, own_size when the origin agrees and the size does not, failed otherwise, including when the frame could not be read.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.2",
+      "text": "The slack rule has one home: P.frames_agree is P.origins_agree and P.sizes_agree together and nothing less, so no caller re-implements either half.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.3",
+      "text": "apply's report renders a done result's note in brackets after the outcome, and renders byte-identically to before when there is no note.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.4",
+      "text": "exec_place maps each of P.place_outcome's three answers to its own report, so a window an app holds at its own size reports placed with a note naming the size rather than failed. Engine code: no suite reaches it, and its only live proof is acceptance.sh's apply mode.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Waits on the live path. exec_place is engine code no suite reaches; its only proof today is reading, plus acceptance.sh's apply mode, which has never been run on this machine. Four readings by three readers found no defect in it, which is the other half of what this thread measured."
+      }
+    },
+    {
+      "id": "AC-01.5",
+      "text": "acceptance.sh's placed-count patterns match a placed line that carries a note, so a desk holding an app that enforces its own window size does not read as a harness failure caused by the fix working.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Waits on the live path. The fix landed at aa81c461 and the three patterns were exercised against five real rendered lines, but acceptance.sh itself has not been run. Note that its apply mode cannot pass on hv's own desk while AC-01.6's limitation stands, because zeophq holds Appgate; it wants a desk with no app that enforces its own window size."
+      }
+    },
+    {
+      "id": "AC-01.6",
+      "text": "The divergence WP01 creates, that apply and diff disagree about a window an app holds at its own size, is recorded where a reader meets the limitation before meeting the contradiction: in issue 0133's design, in help's apply paragraph and in the CHANGELOG entry.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "help/arngz.md:110 states it as a known limitation with the reason; CHANGELOG.md's issue 0133 entry carries it under 'Known limitation, and new in this release'; intent/issues/0133.md's design states it in four places. Verified by reading all three, not from the design's claim to have recorded it."
+      }
+    },
+    {
+      "id": "AC-02.1",
+      "text": "P.mostly_off is true exactly when the window's centre lies outside the screen's usable area, with the interval half-open: a centre on the near edge is inside, a centre on the far edge is outside, and nothing to compare is not off it.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.2",
+      "text": "desk_from_world leaves out a window lying mostly off its display and says so in a note naming the display, rather than saving a desk that cannot be applied.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-02.3",
+      "text": "WP02's refusal has one home and the documents describe it rather than duplicating it: the sentence lives in plan.lua, plan_test.lua asserts that literal, and help/arngz.md and the CHANGELOG describe the same behaviour in consistent terms (the usable area, the window's centre, and the middle rule) without carrying a second copy of the sentence that could drift from it.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "plan.lua:1421 holds the sentence; plan_test.lua asserts that literal twice; help/arngz.md:130 describes it with the pronoun adapted; CHANGELOG.md's 0134 entry describes the middle rule and the usable area without a second copy. Verified by reading each; vc's first grep pattern gave a false negative on help by matching 'this display' where help correctly reads 'its display'."
+      }
+    },
+    {
+      "id": "AC-03.1",
+      "text": "P.space_error_kind reads a vanished display as gone and anything else as transient, with an unrecognised reason defaulting to transient deliberately.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.2",
+      "text": "The create_space failure line carries no fixed outer phrase restating the op, because apply_report already prefixes every loose line with the op and the status.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-03.3",
+      "text": "A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count. Engine code in exec_create_space: no suite reaches it and acceptance.sh cannot, so reading is its only proof today.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Waits on dc's driver for exec_create_space (hv's ruling of 10 Nov, vc decision 97, utilz-dc's new thread). This is one of the four reporting paths that took a commit each, and it is unreachable by the arms and by acceptance.sh alike. Descope it to that thread once it exists."
+      }
+    },
+    {
+      "id": "AC-03.4",
+      "text": "When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator. Engine code: reading is its only proof today.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Waits on dc's driver (vc decision 97). The overshoot from n to more than n+1 is one of the two paths a real machine cannot produce to order, which is precisely why an injected hs is the right surface and a live run is not."
+      }
+    },
+    {
+      "id": "AC-03.5",
+      "text": "A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown. Engine code: reading is its only proof today.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Waits on dc's driver (vc decision 97). The vanished-display stop was the subject of the third fix-forward, where the final-failure path never consulted `made`."
+      }
+    },
+    {
+      "id": "AC-04.1",
+      "text": "A desk fits the screens present when P.match_displays binds every one of its displays and the number matched equals the number of screens in the world, compared against the world's own screen count and never against a number written down.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.2",
+      "text": "The laptop-only desk does not win at a two-screen site: with a one-display desk and a two-display desk in the catalogue and two screens present, detect names the two-display desk and reports the other as describing one of the two screens present.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.3",
+      "text": "P.detect has one return shape, name then kind then report then candidates, with name nil unless a desk was chosen and kind one of exactly four values: one, current, several, none.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.4",
+      "text": "When several desks fit and options.current names one of them, detect returns that desk with kind current, so a site described by two desks keeps doing what it is doing rather than refusing.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.5",
+      "text": "A desk whose display matches no screen is reported with P.match_displays's own refusal text, so the reason is given in the words arngz already uses.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.6",
+      "text": "arngz which prints the one desk that fits and exits 0, exits 1 with a per-desk report when none fits, and exits 2 when the question could not be answered.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.7",
+      "text": "arngz auto --default applies the default when nothing fits and says in the notice that it is a fallback, naming both that nothing matched and what it chose; and it refuses a --default that is not in the catalogue before any engine call, so a typo costs no observe.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.8",
+      "text": "arngz which and arngz auto are dispatched before the fallthrough that treats an unknown verb as a desk name, so neither is read as a desk.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.9",
+      "text": "The platform refusal table covers every verb the CLI declares as an engine verb, and fails rather than passing silently when a declared verb is left unexercised.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-04.10",
+      "text": "VERBS.which observes once and passes P.detect's kind through untouched, so a response never asserts that one desk fits when several fitted and the current one decided. Engine code: reading is its only proof today.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Reading is its only proof today. VERBS.which is three lines of coordination over a pure function, and the kind passthrough was wrong in the design's own sketch until 7d92de7f while the code was right throughout. The code was read; the sketch is what had to be corrected."
+      }
+    },
+    {
+      "id": "AC-05.1",
+      "text": "help/arngz.md documents which and auto beside the other verbs with their exit codes, and its apply and discover paragraphs carry WP01's own-size note, WP02's refusal and WP03's retry and once-per-display rule.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "help/arngz.md:142 for the which and auto section with the 0, 1 and 2 exits; :109 for WP01's own-size note; :130 for WP02's refusal; :111 for WP03's retry, its once-per-display rule and the overshoot. All four read."
+      }
+    },
+    {
+      "id": "AC-05.2",
+      "text": "CHANGELOG.md's unreleased section carries one Added entry for the feature and one Fixed entry each for issues 0133, 0134 and 0135, and arngz's own version moves once for THIS THREAD, 1.1.3 to 1.2.0. It is not once for the release: issue 0132 moved it 1.1.2 to 1.1.3 earlier in the same unreleased section, which is correct because that was separate work.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "CHANGELOG.md's unreleased section: the Added entry for ST0032/04 ending 'arngz goes from 1.1.3 to 1.2.0', and Fixed entries for issues 0133, 0134 and 0135. opt/arngz/VERSION reads 1.2.0."
+      }
+    },
+    {
+      "id": "AC-05.3",
+      "text": "README.md's list of arngz verbs includes the two new ones.",
+      "kind": "non-test",
+      "state": {
+        "is": "satisfied",
+        "evidence": "README.md:72 and :121 both list arngz's verbs as apply, diff, discover, which and auto; there is no verb table that omits them."
+      }
+    },
+    {
+      "id": "AC-05.4",
+      "text": "The menuz menu reads Discover, which runs arngz auto --default, and Save Desk..., whose parameter default stays arngz current rather than arngz which. It is Molt-matts configuration, not a Utilz file, and it lands only after the arngz change is live on the machine.",
+      "kind": "non-test",
+      "state": {
+        "is": "unsatisfied",
+        "note": "Not done, and not a Utilz file. The menu is Molt-matts config/menuz/menuz.yaml and it lands only after `utilz use dev` puts this checkout on the machine hv uses, because Discover runs the new `auto`. Ordering, not difficulty."
+      }
+    }
+  ],
+  "tests": [
+    {
+      "id": "AT-01.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.1"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-01.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.2"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-01.3",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-01.3"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-02.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-02.1"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-02.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-02.2"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-03.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-03.1"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-03.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-03.2"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.1",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-04.1"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.2",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-04.2"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.3",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-04.3"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.4",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-04.4"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.5",
+      "kind": "test",
+      "file": "opt/arngz/test/plan_test.lua",
+      "covers": [
+        "AC-04.5"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.6",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-04.6"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.7",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-04.7"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.8",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-04.8"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    },
+    {
+      "id": "AT-04.9",
+      "kind": "test",
+      "file": "opt/arngz/test/arngz.bats",
+      "covers": [
+        "AC-04.9"
+      ],
+      "status": "to-write",
+      "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's."
+    }
+  ],
   "attachments": [
     {
       "path": "design.md",
