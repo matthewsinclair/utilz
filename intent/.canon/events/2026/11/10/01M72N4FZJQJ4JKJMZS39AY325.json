@@ -1,0 +1,14 @@
+{
+  "id": "01M72N4FZJQJ4JKJMZS39AY325",
+  "ts": "2026-11-10T11:57:44.307Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0033/AC-01.3"
+  },
+  "payload": {
+    "evidence": "AT-01.3's prose, and the two slot records it names: estate slot YYCYT8 (four arms with a recorded defect) and CQXAX4 (the six with none), each slot's result text carrying its mutations, the arm each reddened, and arngz.lua's sha256 either side"
+  }
+}

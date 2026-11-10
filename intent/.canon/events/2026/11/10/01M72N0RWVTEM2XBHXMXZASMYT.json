@@ -1,0 +1,14 @@
+{
+  "id": "01M72N0RWVTEM2XBHXMXZASMYT",
+  "ts": "2026-11-10T11:55:42.364Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0033/AC-01.3"
+  },
+  "payload": {
+    "text": "Every arm is reddened by at least one LANDED one-line mutation, applied alone, each named in this thread's acceptance record against the arm it reddens and the defect it recreates. Not one mutation per arm: one mutation can redden several, and a mutation reddening exactly one arm and a mutation reddening eight are both correct results about different arms. Each mutation is applied to a COPY of opt/arngz/lib, never to the tree's arngz.lua, so an interrupted run cannot leave the engine mutated and proving the arms cannot disturb the green at 5d7bfe37; the driver takes the engine's path as its argument and finds plan.lua beside it, so a copy is driven exactly as the real one is. Each mutation is PROVEN TO HAVE LANDED, on exactly one line, before anything is run, because a mutation that silently failed to apply would leave its arm passing and read as 'this arm cannot go red', which is the opposite conclusion. Both engine files' sha256 are recorded either side and are unchanged. An arm that cannot be made to go red is reported as not an arm rather than kept."
+  }
+}
