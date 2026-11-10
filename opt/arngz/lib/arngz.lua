@@ -422,7 +422,13 @@ local function exec_create_space(op, ctx)
     return { status = "done", readback = { user_spaces = res } }
   end
   local after = user_space_count(op.screen)
-  local reason = string.format("creating a space did not take (%s); user spaces %d before, %s after",
+  -- No fixed outer phrase. apply_report prefixes every loose line with the op
+  -- and the status, `create_space (<path>): failed:`, so "creating a space did
+  -- not take" repeated what the reader already had twice -- and contradicted
+  -- the inner fact on two of its four paths, where the call reported making a
+  -- space, and where the desktops overshot. The inner clause is the only part
+  -- carrying information, so it stands on its own.
+  local reason = string.format("%s; user spaces %d before, %s after",
     tostring(res), before, after and tostring(after) or "a count that could not be read")
   -- Bind the rest of the run only for a cause that lasts: nothing made, or a
   -- count that cannot be read at all. The `made` test is the point -- a call
