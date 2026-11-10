@@ -1,0 +1,14 @@
+{
+  "id": "01M73F3N8Z8NR5EFXEQCKF1J2T",
+  "ts": "2026-11-10T19:31:39.937Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0034/AC-01.6"
+  },
+  "payload": {
+    "evidence": "vc decision 107 (28b8a381): hv's live run on 10 Nov 2026, desk homere standing in for zeophq (zeophq's saved 22E1W-above layout absent). arngz apply homere placed com.appgate.sdp in place at the app's own size, 375x667; arngz diff homere; echo rc=$? read the three unseen lines (Finder, Ivory, Console, not 0138's) and 'window 96 in place at the app's own size, 375x667 (displays[0].spaces[4].apps[1])', a recheck not a change, rc=0"
+  }
+}

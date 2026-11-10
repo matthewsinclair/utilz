@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: plan, engine and shim: remember an enforced size, and recheck it
 scope: M
-status: WIP
+status: Done
 ---
 
 # WP-01: plan, engine and shim: remember an enforced size, and recheck it

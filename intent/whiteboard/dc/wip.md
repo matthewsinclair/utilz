@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 199c662d-af7a-475e-963f-5c098ad5f4fa
-heartbeat_at: 2026-11-10 19:26Z
+heartbeat_at: 2026-11-10 19:31Z
 status: active
-focus: "10 Nov, folded for hv's compact after 2.14.10 (vc decision 105; tag at 4553a289). ST0034 / issue 0138 is RELEASED in 2.14.10: arngz records a size an app enforces in $XDG_STATE_HOME/arngz/own-sizes and rechecks it, so diff and apply agree (landed 20abb0dd, version 0342aee6, AT-05.3's harness race fixed at 104efca0). ST0034, WP01 and ISSUE:0138 stay open and claimed on AC-01.6 only, hv's live run: arngz apply zeophq then arngz diff zeophq reads no change with Appgate present; on hv's word, satisfy AC-01.6, wp done, st done, close 0138, unclaim. wt-0133b and dc/0133b removed at this fold. ST0029 parked on dc/st0029 (a251bc60), records on main. TODOs on intent/wip.md (vc): the shim's latent parsed yq captures, and a cap on the 18 scheduled arms' 600 s default. Watch-out 3 live. No test or build (decision 74). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST0034/01, ISSUE:0138]
+focus: "10 Nov, ST0034 / issue 0138 CLOSED on vc decision 107 (28b8a381): AC-01.6 satisfied on hv's live homere run (rc=0, Appgate in place at its own size; zeophq's saved layout absent), WP01 and ST0034 done, 0138 closed, both unclaimed. Released in 2.14.10. No claims. ST0029 parked on dc/st0029 (a251bc60), records on main. TODOs on intent/wip.md (vc): the shim's latent parsed yq captures, and a cap on the 18 scheduled arms' 600 s default. Watch-out 3 live. No test or build (decision 74). Holding until hv's move. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: []
 ---
 
 # DevX Claude (dc)

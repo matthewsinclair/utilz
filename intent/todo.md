@@ -27,8 +27,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [x] 03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
   - [-] 04: Desk auto-selection: a pure detect, arngz which and arngz auto
   - [-] 05: The menu, the help and the CHANGELOG
-- [-] ST0034: arngz remembers a size the app enforces
-  - [-] 01: plan, engine and shim: remember an enforced size, and recheck it
 
 ## TODO
 
@@ -171,6 +169,8 @@ _(none)_
   - [x] 02: post-cut pulls this machine's tap
 - [x] ST0033: A test surface for arngz's engine, starting with exec_create_space
   - [x] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
+- [x] ST0034: arngz remembers a size the app enforces
+  - [x] 01: plan, engine and shim: remember an enforced size, and recheck it
 
 ---
 

@@ -3,8 +3,9 @@
   "id": "ST0034",
   "title": "arngz remembers a size the app enforces",
   "slug": "arngz-remembers-a-size-the-app-enforces",
-  "status": "wip",
+  "status": "completed",
   "created": "2026-11-10",
+  "completed": "2026-11-10",
   "objective": "Make `arngz diff` and `arngz apply` agree about a window its app holds at its own size (issue 0138, 0133's follow-up). apply remembers each `own_size` outcome in a state file. diff reads a window whose origin agrees and whose size matches the record as in place, so it says \"no change\". apply re-checks that window on every run, so an app that stops enforcing its size is re-sized and the record clears.",
   "context": "2.14.9 (ST0032, issue 0133) taught apply that a window at its cells' origin at a size the app enforces is placed, but left the planner and diff unchanged, so the two disagree on hv's zeophq, which holds Appgate SDP. That disagreement blocks ST0032's AC-01.4 and AC-01.5, the live path.\n\nThe design is utilz-vc's (~/Devel/scratch/utilz-vc/0133b/design.md), amended by utilz-dc's critical read and agreed by vc on 10 Nov. vc had a `placed` readback clear the record, but nothing could ever produce that readback, because the record suppresses the only op that would. So the record sealed itself, and an app that stopped enforcing would never be re-sized. The amendment is a `recheck` op, which diff reads as in place and apply executes. That retires the question of whether a record should expire, and replaces it with hv's note-level question: is one setFrame and 150 ms per recorded window per apply acceptable? vc's default is yes.\n\nThis is a new thread rather than a WP under ST0032, so ST0032 stays exactly what 2.14.9 shipped. It is related to ST0032 and is utilz-dc's.",
   "body": "",
@@ -20,7 +21,7 @@
       "seq": 1,
       "title": "plan, engine and shim: remember an enforced size, and recheck it",
       "scope": "M",
-      "status": "wip",
+      "status": "done",
       "objective": "",
       "body": "",
       "preamble": ""
@@ -72,7 +73,8 @@
       "text": "Live, on hv's machine: arngz apply zeophq then arngz diff zeophq reads no change with Appgate SDP present, which makes acceptance.sh apply zeophq passable for ST0032's AC-01.4 and AC-01.5.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied"
+        "is": "satisfied",
+        "evidence": "vc decision 107 (28b8a381): hv's live run on 10 Nov 2026, desk homere standing in for zeophq (zeophq's saved 22E1W-above layout absent). arngz apply homere placed com.appgate.sdp in place at the app's own size, 375x667; arngz diff homere; echo rc=$? read the three unseen lines (Finder, Ivory, Console, not 0138's) and 'window 96 in place at the app's own size, 375x667 (displays[0].spaces[4].apps[1])', a recheck not a change, rc=0"
       }
     }
   ],

@@ -3,9 +3,10 @@
   "number": 138,
   "slug": "arngz-diff-and-apply-disagree-about-a-window-its",
   "title": "arngz diff and apply disagree about a window its app holds at its own size",
-  "status": "open",
+  "status": "closed",
   "severity": "medium",
   "created": "2026-11-10",
+  "closed": "2026-11-10",
   "reporter": "Matthew Sinclair",
   "body": "## The defect\n\n2.14.9 counts a window that reached its cells' origin at a size its app enforces as placed: `P.place_outcome` returns `own_size` (plan.lua:84), and apply reports \"placed at the app's own size\". `diff` and the planner were not changed. `P.plan` emits a `place` op whenever `not P.frames_agree(w.frame, frame)` (plan.lua:636). So, straight after a clean apply of a desk holding Appgate SDP (375x667 against cells of 450x545):\n\n- `arngz apply <desk>` exits 0 and reports the window placed at the app's own size, 375x667;\n- `arngz diff <desk>` still says apply would place it, so diff never reads \"no change\";\n- every later `apply` re-places it and reports the note again.\n\nThe planner cannot tell an enforced size from a window someone resized, because the world it reads holds the frame and nothing about what the app will accept. Issue 0133 recorded this as its known limitation rather than fixing it. It blocks ST0032's AC-01.4 and AC-01.5, the live path, because hv's zeophq holds Appgate.\n\nFound by utilz-dc reading ST0032 on 10 Nov, and filed when its fix was planned for 2.14.10. The fix is ST0034's.\n"
 }

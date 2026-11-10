@@ -1,9 +1,9 @@
 ---
 st_id: ST0034
 title: arngz remembers a size the app enforces
-status: WIP
+status: Completed
 created: 2026-11-10
-completed:
+completed: 2026-11-10
 ---
 
 # ST0034: arngz remembers a size the app enforces
@@ -24,7 +24,7 @@ This is a new thread rather than a WP under ST0032, so ST0032 stays exactly what
 
 | WP    | Title                                                            | Size | Status |
 | ----- | ---------------------------------------------------------------- | ---- | ------ |
-| WP-01 | plan, engine and shim: remember an enforced size, and recheck it | M    | WIP    |
+| WP-01 | plan, engine and shim: remember an enforced size, and recheck it | M    | Done   |
 
 ## Acceptance
 
