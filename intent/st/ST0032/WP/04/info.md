@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: Desk auto-selection: a pure detect, arngz which and arngz auto
 scope: M
-status: WIP
+status: Done
 ---
 
 # WP-04: Desk auto-selection: a pure detect, arngz which and arngz auto

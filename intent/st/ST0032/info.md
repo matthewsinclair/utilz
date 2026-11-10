@@ -1,9 +1,9 @@
 ---
 st_id: ST0032
 title: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
-status: WIP
+status: Completed
 created: 2026-11-10
-completed:
+completed: 2026-11-10
 ---
 
 # ST0032: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
@@ -88,11 +88,11 @@ The contract, the AT notes and vc's decisions 95 to 101 carry the detail. This s
 
 | WP    | Title                                                                                       | Size | Status |
 | ----- | ------------------------------------------------------------------------------------------- | ---- | ------ |
-| WP-01 | 0133: apply counts a window held at the app's own size as placed                            | S    | WIP    |
+| WP-01 | 0133: apply counts a window held at the app's own size as placed                            | S    | Done   |
 | WP-02 | 0134: discover leaves out a window lying mostly off its display                             | S    | Done   |
 | WP-03 | 0135: create_space retries, reports a persisting cause once, and refuses a vanished display | S    | Done   |
-| WP-04 | Desk auto-selection: a pure detect, arngz which and arngz auto                              | M    | WIP    |
-| WP-05 | The menu, the help and the CHANGELOG                                                        | XS   | WIP    |
+| WP-04 | Desk auto-selection: a pure detect, arngz which and arngz auto                              | M    | Done   |
+| WP-05 | The menu, the help and the CHANGELOG                                                        | XS   | Done   |
 
 ## Acceptance
 

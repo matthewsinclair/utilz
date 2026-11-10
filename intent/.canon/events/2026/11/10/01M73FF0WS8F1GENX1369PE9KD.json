@@ -1,0 +1,14 @@
+{
+  "id": "01M73FF0WS8F1GENX1369PE9KD",
+  "ts": "2026-11-10T19:37:52.282Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-01.5"
+  },
+  "payload": {
+    "evidence": "hv's live run on 10 Nov, first-hand in vc's session: 'opt/arngz/test/acceptance.sh apply homere' through the tree's bin/utilz at 95f8c9e7. Both placed-count patterns counted Appgate's noted line 'placed (in place at the app's own size, 375x667)'. First apply: exit 0, 18 of 20. Second apply: exit 0, 19 of 20, 1 at an app's own size. Each shortfall is an app arngz reports unseen (Ivory, plus Console in the first apply), and the before-apply red is a desk that was not scrambled. None is the noted line."
+  }
+}

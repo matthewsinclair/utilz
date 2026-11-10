@@ -21,12 +21,6 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
   - [x] 03: menuz reads the release stamp, not the tag, for MenuzKind=release
   - [x] 04: 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only
-- [-] ST0032: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
-  - [-] 01: 0133: apply counts a window held at the app's own size as placed
-  - [x] 02: 0134: discover leaves out a window lying mostly off its display
-  - [x] 03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
-  - [-] 04: Desk auto-selection: a pure detect, arngz which and arngz auto
-  - [-] 05: The menu, the help and the CHANGELOG
 
 ## TODO
 
@@ -167,6 +161,12 @@ _(none)_
 - [x] ST0030: Lights-out release: one command from cut to tap
   - [x] 01: tools/post-cut, the release config and the docs
   - [x] 02: post-cut pulls this machine's tap
+- [x] ST0032: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
+  - [x] 01: 0133: apply counts a window held at the app's own size as placed
+  - [x] 02: 0134: discover leaves out a window lying mostly off its display
+  - [x] 03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
+  - [x] 04: Desk auto-selection: a pure detect, arngz which and arngz auto
+  - [x] 05: The menu, the help and the CHANGELOG
 - [x] ST0033: A test surface for arngz's engine, starting with exec_create_space
   - [x] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
 - [x] ST0034: arngz remembers a size the app enforces

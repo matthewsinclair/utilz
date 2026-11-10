@@ -2,7 +2,7 @@
 wp_id: WP-05
 title: The menu, the help and the CHANGELOG
 scope: XS
-status: WIP
+status: Done
 ---
 
 # WP-05: The menu, the help and the CHANGELOG

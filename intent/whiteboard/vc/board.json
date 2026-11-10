@@ -8,9 +8,7 @@
     "heartbeat_at": "2026-11-10T19:27:53.671Z",
     "status": "active",
     "focus": "10 Nov, localfolded for hv's compact (decision 106) after Utilz 2.14.9 and 2.14.10 both released and verified (decisions 103, 105); main 8e4f082f is pushed only to 84092742. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain, then HOLD until hv's move. Open: ST0034/0138 on AC-01.6 (hv's live zeophq run); ST0032 on AC-01.4/01.5, AC-04.10 and AC-05.4 (menu live, waiting on hv's click of Discover). Resume in ~/Devel/scratch/utilz-vc/RESUME.md",
-    "claims": [
-      "ST0032"
-    ],
+    "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
     "migrated_at": "2026-09-14T08:48:02.306Z"

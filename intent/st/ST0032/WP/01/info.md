@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: 0133: apply counts a window held at the app's own size as placed
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: 0133: apply counts a window held at the app's own size as placed
