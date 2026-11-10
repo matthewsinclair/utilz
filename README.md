@@ -69,7 +69,7 @@ brew links the dispatcher and every utility into its own `bin` (`$(brew --prefix
 
 A clone of this repository is for working on Utilz itself: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
 
-**Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's apply, diff and discover need macOS and Hammerspoon, while its list, show, delete and current work anywhere. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
+**Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's apply, diff, discover, which and auto need macOS and Hammerspoon, while its list, show, delete and current work anywhere. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
 
 **Do NOT export `UTILZ_HOME`.** The dispatcher works out which tree it belongs
 to from its own location, following the symlink chain from `$0` and taking the
@@ -118,7 +118,7 @@ Both methods work identically.
 
 Named window arrangements across displays and spaces, on macOS. A desk is a YAML file in arngz's catalogue that says, for each display and each space on it, which apps live there and where on a grid their windows sit. `arngz discover` records the arrangement on screen now as a desk, and `arngz <desk>` puts the windows back. Hammerspoon is the engine: `arngz init --yes` connects it, and `arngz doctor` checks every precondition.
 
-**Platform**: apply, diff, discover and `init --yes` need macOS and Hammerspoon; list, show, delete and current work on Linux too.
+**Platform**: apply, diff, discover, which, auto and `init --yes` need macOS and Hammerspoon; list, show, delete and current work on Linux too.
 
 **`apply` takes the pointer.** macOS has no working call to move a window to another space, so apply moves each window the way a person does, by its title bar. Keep your hands off the mouse and keyboard while it runs; moving the pointer stops it.
 
@@ -138,6 +138,11 @@ arngz delete old
 
 # The desk applied or saved last
 arngz current
+
+# Which desk the screens in front of you are, and applying it without naming it
+arngz which
+arngz auto
+arngz auto --default rhad
 
 # What apply would change, then do it
 arngz diff work

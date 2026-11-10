@@ -22,6 +22,8 @@ arngz list
 arngz show <desk>
 arngz delete <desk>
 arngz current
+arngz which
+arngz auto [--default <desk>]
 arngz init [--yes]
 arngz doctor
 arngz --help | -h
@@ -104,6 +106,9 @@ displays:
 
 The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed or unseen, 1 when any is skipped or failed, and 2 when it refused before changing anything. An unseen entry has nothing to arrange, so it is reported and counts against nothing, except when `apply` launched its app, or when a window could not be read at that moment, since it may have been the entry's: then the entry counts as not placed.
 
+- **An app that fixes its own window size** cannot fill the cells the desk gives it. A window that reached the origin the desk put it at, at a size the app enforces, is `placed`, and the report says so in brackets after the outcome: `placed (placed at the app's own size, 375x667)`. It is as well placed as it can be, so it counts against nothing. A window that reached the wrong origin is `failed` whatever its size.
+- **Creating a space** is tried up to four times, a fifth of a second apart, because the Dock can be momentarily unable to serve Mission Control data. A cause that lasts is said once for the display, not once for every space the desk asks for, and the later ones say they were not tried again. A display the plan named and which is no longer there is not retried, since waiting cannot bring it back.
+
 - **Displays.** A desk display that matches no screen, or more than one, is refused, with every candidate screen named. `--map <name>=<uuid>` binds the desk display called `<name>` to the screen with that UUID, for this run only.
 - **A display just attached.** macOS records the order of each display's desktops, and for a display that has just attached it may not have yet. A display with one desktop needs no order, but takes no new desktop until macOS has recorded it. So for a display of two or more desktops whose order macOS has not recorded, and for an apply that would add a desktop to a display of one that it has not recorded, arngz refuses, exit 2, before anything changes, and says to wait, then run it again.
 - **Full-screen windows** are left alone. A full-screen window is a space of its own, and takes no ordinal on its display.
@@ -121,6 +126,7 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 - **A full-screen window** is recorded as `layout: fullscreen`, under the desktop before its space.
 - **An app with more than one window** gets a `window` pattern on each, made from the window's title, because an entry with no pattern takes every window of its app. The pattern is the title without what leads it up to the first letter or digit (a glyph a terminal puts in front, a shell's `-`), escaped and anchored at neither end, so `◑ utilz-dc` gives `utilz%-dc` and still matches when the glyph changes. Where that would also match another window of the app, discover anchors it at its end, then uses the exact title. The report names every window it pinned and the pattern it wrote; tighten or loosen one in the desk if its title will move.
 - **Not recorded, and said**: minimized windows, windows on every space, Hammerspoon's own windows, windows Accessibility could not name (counted per space), and the Dock's app bindings, which a desk does not hold.
+- **A window lying mostly off its display** is not recorded either, and the report says so with its centre and the display. A window is on the display its middle is on; one parked on a monitor the desk does not describe would otherwise be snapped into the edge cell, which the next `apply` then fails because that cell is narrower than the app will go. A window hanging over an edge with its middle still on the display is recorded as it always was, with its misfit.
 
 The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given, and makes it the current desk. Either way, the desk is checked by the validator first.
 
@@ -131,6 +137,20 @@ The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml
 `current` prints nothing and exits 1 when no desk is recorded, or when the recorded desk has since left the catalogue, so `$(arngz current)` is empty then. A record that exists and cannot be read is said by name, and exits 1 too. It reads one file and asks Hammerspoon nothing, so it is quick enough to run at every open of a menu.
 
 When the record cannot be written, the `apply` or `discover` that tried says so on stderr and keeps its own exit. The record then still names the desk before, so `current` lags behind that apply until the next one that records.
+
+### which and auto
+
+`which` prints the name of the desk the screens in front of you are, and changes nothing. A desk fits when each of its displays matches a distinct screen **and** every screen present is matched. Both halves matter: a desk that describes the laptop alone matches the laptop screen whatever else is plugged in, so without the second half it would be the answer at every site. The report, on stderr, names every desk and why it did or did not fit, so the name alone comes back on stdout.
+
+It exits 0 and prints the name when one desk fits; 1 when none does; and 2 when the question has no one answer, which is more than one desk fitting with none of them current, or the engine refusing. When several fit and one of them is the current desk, that one is the answer, because a site with two desks describing the same screens should go on doing what it is doing.
+
+`which` asks Hammerspoon which screens are there, so unlike `current` it is not cheap enough to run at every open of a menu. Use it in what a menu item runs, or in a parameter's default, not in a label.
+
+`auto` applies the desk `which` found, and is otherwise `apply`: its report, its readbacks and its exit are apply's.
+
+- **`--default <desk>`** is applied when no desk fits, and the run says that it fell back and to what. Without it, nothing moves and `auto` exits 1, saying to save a desk for here. A `--default` that names no desk, or one named like a verb, is refused before Hammerspoon is asked anything, so a typo costs nothing.
+- **A default moves windows for a site its desk was not recorded at.** A laptop-only default puts the apps on the laptop screen even with monitors plugged in, which is worth knowing before choosing one.
+- **More than one desk fitting** stops `auto` too: nothing moves and it exits 2, naming them.
 
 ### diff
 
@@ -172,6 +192,8 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `show <desk>`   | the desk, validated, exactly as stored                                                  | 0, or 2                |
 | `delete <desk>` | remove the desk's file, naming it; a desk that no longer validates can still be deleted | 0, or 2                |
 | `current`       | the desk applied or saved last; nothing and exit 1 when none is recorded or it is gone  | 0, or 1 if none        |
+| `which`         | the desk the screens present are, and change nothing                                    | 0 one, 1 none, 2       |
+| `auto`          | apply the desk the screens present are, or `--default` when none fits                   | as apply, 1, or 2      |
 | `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, 1, or 2             |
 | `doctor`        | every precondition, each with its state, and what fixes each one that does not hold     | 0, or 1 if any fails   |
 
@@ -238,8 +260,8 @@ arngz current                 # the desk applied or saved last
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made.
-- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
+- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering. For `which` and `auto` it is also the question having no one answer: more than one desk fits the screens present and none of them is the current desk, so `auto` moves nothing.
 
 ---
 
