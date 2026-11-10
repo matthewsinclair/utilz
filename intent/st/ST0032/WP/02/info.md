@@ -2,14 +2,14 @@
 wp_id: WP-02
 title: 0134: discover leaves out a window lying mostly off its display
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-02: 0134: discover leaves out a window lying mostly off its display
 
 ## Objective
 
-_(not yet written)_
+Fix issue 0134: arngz discover leaves out a window lying mostly off its display, instead of clamping it into the edge cell and saving a desk entry that cannot apply.
 
 ## Acceptance
 

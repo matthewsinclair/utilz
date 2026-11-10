@@ -23,8 +23,8 @@
       "seq": 2,
       "title": "0134: discover leaves out a window lying mostly off its display",
       "scope": "S",
-      "status": "wip",
-      "objective": "",
+      "status": "done",
+      "objective": "Fix issue 0134: arngz discover leaves out a window lying mostly off its display, instead of clamping it into the edge cell and saving a desk entry that cannot apply.",
       "body": "",
       "preamble": ""
     },
@@ -32,8 +32,8 @@
       "seq": 3,
       "title": "0135: create_space retries, reports a persisting cause once, and refuses a vanished display",
       "scope": "S",
-      "status": "wip",
-      "objective": "",
+      "status": "done",
+      "objective": "Fix issue 0135: create_space retries, so a cause that persists is reported once rather than once per op and cascaded to every window that needs the space, and refuses a value that cannot work.",
       "body": "",
       "preamble": ""
     },

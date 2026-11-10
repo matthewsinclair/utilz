@@ -2,14 +2,14 @@
 wp_id: WP-03
 title: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-03: 0135: create_space retries, reports a persisting cause once, and refuses a vanished display
 
 ## Objective
 
-_(not yet written)_
+Fix issue 0135: create_space retries, so a cause that persists is reported once rather than once per op and cascaded to every window that needs the space, and refuses a value that cannot work.
 
 ## Acceptance
 
