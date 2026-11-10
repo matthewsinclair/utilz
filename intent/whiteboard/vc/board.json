@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "65f915fc-9b70-40c4-8be5-b6db4ca91d96",
-    "heartbeat_at": "2026-11-10T13:43:16.456Z",
+    "heartbeat_at": "2026-11-10T13:49:15.398Z",
     "status": "active",
     "focus": "10 Nov 13:41Z, localfolded for hv's compact on hv's word (\"Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move.\", vc decision 101), dc first at ccedffa1 and vc last; no release, status active. ON THE BOUNCE: /in-session and the pickup, then HOLD and start nothing until hv's move. ST0032 is vc's and claimed. Fifteen of its sixteen test rows are mutation-proven (PDY9E2); AT-03.2 was not, and vc first recorded it as if it were, corrected at 79487479, its AC-03.2 withdrawn on hv's word (decision 100). The contract is blocked only on 12 citation findings, because ST0026's and ST0028's tests share these files under the same numbers; NEXT after the move, under decision 98, vc writes `AT-xx.y (ST0032)` comments beside the fifteen live rows' arms, renaming nothing, checked by dc. Then ONE full suite run at that head, the cut's own and hv's, and hv names the cut's head. dc's ST0033 is landed at d7047f70 with its records at 76cf5873 and passes 6 of 6; ST0033, 0136 and 0137 close after the cut's run proves them. Still open after the cut: AC-01.4 and AC-01.5 (the live path), AC-04.10, AC-05.4 (the menu), and Lua 5.4, which nothing today ran. Do not run anything (decision 74). Resume in ~/Devel/scratch/utilz-vc/RESUME.md; PDY9E2's evidence banked in ~/Devel/scratch/utilz-vc/pdy9e2/.",
     "claims": [
