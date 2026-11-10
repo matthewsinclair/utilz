@@ -1,0 +1,14 @@
+{
+  "id": "01M72KXT386N7DE4B0W8RT7E6V",
+  "ts": "2026-11-10T11:36:36.713Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0033/AC-01.2"
+  },
+  "payload": {
+    "reason": "Subsumed by ST0032's AC-03.3, which utilz-vc is descoping to ST0033 in the same exchange and which came first, is written per-defect, and is what issue 0135 actually requires: a creation reporting no space is retried up to CREATE_SPACE_TRIES while one reporting a space is attempted once. Keeping both would assert the same requirement twice on one thread. The call-count assertions beyond AC-03.3's scope, that nothing is created when the count cannot be read first and that a bound display adds no further calls, moved into AC-01.1 rather than being lost."
+  }
+}

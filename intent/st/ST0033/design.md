@@ -62,6 +62,8 @@ That is the better door anyway, and not a workaround:
 
 Two notes that matter for the arms. `P.is_user_space` is `space_type == "user"` (`plan.lua:286`), so the fake's `spaceType` must answer with that exact string or every count reads zero. `P.space_error_kind` returns `"gone"` only for a reason containing "no display with specified id found" (`plan.lua:1219`), so the vanished-display arm must use that literal text, and it reads it from `plan.lua` rather than writing it down twice.
 
+**Four is complete for THIS path, not for the engine**, and the distinction is the fake's own limit rather than a detail. `exec_create_space` reaches `addSpaceToScreen` directly, `spacesForScreen` and `spaceType` through `user_space_count`, and `usleep` through `attempts`. Nothing on that path calls `now()`, whose `hs.timer.absoluteTime` the fake does NOT provide: those calls are all in the launch and wait paths, at `arngz.lua:578`, `:619`, `:688`, `:1137`, `:1147` and `:1189`. So the fake is complete for an op list of `create_space` alone, and an arm that ever included a `place` or `launch` op would fail on a nil `absoluteTime` rather than report anything. That is the right failure, since it is loud, but it means the fake's completeness is a property of the op kinds the arms use and has to be re-established if they widen. Found by utilz-vc while checking this premise rather than taking it.
+
 ## The arms
 
 Nine arms, driving `M.execute({{ op = "create_space", screen = <uuid> }}, ctx)`. Each scripts the count sequence the fake will answer with, which is the thing a real machine cannot be asked to do.
@@ -92,6 +94,7 @@ utilz-vc's condition, and it is the day's other lesson: a driver written against
 | the stop predicate returns `false`                            | `arngz.lua:418` | 6                    | the vanished display retried four times |
 
 An arm that cannot be made to go red is not an arm, and gets reported as such rather than quietly kept.
+
 ## What this does NOT cover, said plainly
 
 - **The rest of the engine.** `exec_place`, `exec_move` and `exec_launch` are untouched by this thread. `exec_place` is the one that measurably does not need it.
@@ -110,6 +113,7 @@ The runner copies `plan_test.lua` exactly rather than inventing a second idiom (
 **One existing file does move, and it is a Highlander fix rather than a convenience.** `lua_bin()`, which decides which interpreter the project's Lua suites run under, was defined inside `arngz.bats`. With a second Lua suite it would have to exist in two places, so it moves to `opt/utilz/test/test_helper.bash`, which both suites already load and which already owns `command_exists` and `require_command`. The move is body-for-body identical, so it is provable by diff rather than by reading. The consequence is stated rather than left to be discovered: `arngz.bats` is now one deletion different from the file the arms ran, so its 158 arms want re-running, which a cut does anyway. The engine itself is untouched: `arngz.lua` and `plan.lua` are byte-identical to the green.
 
 **The green's real path set.** The check dc added to vc's green this morning was "nothing outside `intent/` has moved", which was the right check for a tree that was only gaining records. The durable form names what the arms actually read: `opt/arngz/lib/plan.lua`, `opt/arngz/lib/arngz.lua`, `opt/arngz/test/plan_test.lua`, `opt/arngz/test/arngz.bats` and `opt/arngz/arngz`. Those are what must not move for a green to go on describing the code it was taken on, and it is the same lesson as pinning a run to its paths rather than to HEAD.
+
 ## Rules of the road
 
 - `IN-AG-HIGHLANDER-001`: one runner idiom, copied from `plan_test.lua`; one fake `hs`, in one place; the "gone" literal read from `plan.lua` rather than restated.
