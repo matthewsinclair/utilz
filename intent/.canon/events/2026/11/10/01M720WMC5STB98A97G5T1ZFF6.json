@@ -1,0 +1,15 @@
+{
+  "id": "01M720WMC5STB98A97G5T1ZFF6",
+  "ts": "2026-11-10T06:03:55.142Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0133"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "arngz apply counts a fixed-size window that reached its origin as failed, and no apply has ever exited 0"
+  }
+}

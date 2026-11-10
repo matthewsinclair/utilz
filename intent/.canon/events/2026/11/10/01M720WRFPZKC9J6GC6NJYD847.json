@@ -1,0 +1,15 @@
+{
+  "id": "01M720WRFPZKC9J6GC6NJYD847",
+  "ts": "2026-11-10T06:03:59.351Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "0134"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "arngz discover clamps a window lying off its display into the edge cell, saving a desk entry that cannot apply"
+  }
+}
