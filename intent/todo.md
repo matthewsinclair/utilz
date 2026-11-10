@@ -20,7 +20,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
   - [ ] 01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
   - [ ] 02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
   - [x] 03: menuz reads the release stamp, not the tag, for MenuzKind=release
-  - [-] 04: 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only
+  - [x] 04: 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only
 - [-] ST0032: arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0
   - [-] 01: 0133: apply counts a window held at the app's own size as placed
   - [-] 02: 0134: discover leaves out a window lying mostly off its display
@@ -30,8 +30,7 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 
 ## TODO
 
-- [?] ST0033: A test surface for arngz's engine, starting with exec_create_space
-  - [-] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
+_(none)_
 
 ## DONE
 
@@ -168,6 +167,8 @@ A DOING / TODO / DONE view, projected from steel-thread and work-package status:
 - [x] ST0030: Lights-out release: one command from cut to tap
   - [x] 01: tools/post-cut, the release config and the docs
   - [x] 02: post-cut pulls this machine's tap
+- [x] ST0033: A test surface for arngz's engine, starting with exec_create_space
+  - [x] 01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
 
 ---
 

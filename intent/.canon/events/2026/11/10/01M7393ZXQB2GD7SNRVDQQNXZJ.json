@@ -1,0 +1,14 @@
+{
+  "id": "01M7393ZXQB2GD7SNRVDQQNXZJ",
+  "ts": "2026-11-10T17:46:59.385Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-04.2"
+  },
+  "payload": {
+    "evidence": "2.14.9's cut, after row done ('1 command(s) ran': tools/post-cut); release 2.14.9 carries the notarised Menuz.app.zip and SHA256SUMS, and the tap reads 2.14.9, read from the remotes by utilz-vc, decision 103 (065f3659)"
+  }
+}

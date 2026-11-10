@@ -4,10 +4,10 @@ An index of every steel thread in the project. A steel thread is a self-containe
 
 | ID     | Title                                                                                                | Status    | Created    | Completed            |
 | ------ | ---------------------------------------------------------------------------------------------------- | --------- | ---------- | -------------------- |
-| ST0033 | A test surface for arngz's engine, starting with exec_create_space                                   | Triage    | 2026-11-10 |                      |
 | ST0032 | arngz: a desk picked from the monitors present, and the three defects that stop apply ever exiting 0 | WIP       | 2026-11-10 |                      |
 | ST0031 | Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10                             | WIP       | 2026-10-31 |                      |
 | ST0029 | Retire Python from Utilz                                                                             | WIP       | 2026-10-26 |                      |
+| ST0033 | A test surface for arngz's engine, starting with exec_create_space                                   | Completed | 2026-11-10 | 2026-11-10           |
 | ST0030 | Lights-out release: one command from cut to tap                                                      | Completed | 2026-10-28 | 2026-10-28           |
 | ST0028 | arngz: a desk saved from live terminal windows fails to apply minutes later                          | Completed | 2026-10-16 | 2026-10-16           |
 | ST0027 | menuz: a macOS menu bar app whose menu is a YAML file of commands to run                             | Completed | 2026-10-16 | 2026-10-17           |

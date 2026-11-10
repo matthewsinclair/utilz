@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: The create_space driver: an injected hs, every reporting path, each arm proven by mutation
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-01: The create_space driver: an injected hs, every reporting path, each arm proven by mutation

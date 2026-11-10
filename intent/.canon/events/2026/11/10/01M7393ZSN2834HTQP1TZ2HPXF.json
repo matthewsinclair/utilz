@@ -1,0 +1,14 @@
+{
+  "id": "01M7393ZSN2834HTQP1TZ2HPXF",
+  "ts": "2026-11-10T17:46:59.255Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-04.1"
+  },
+  "payload": {
+    "evidence": "R2 at af87684f, ~/Devel/scratch/utilz-dc/runs/r2-fix-20261110T161704Z.log: 'r2-fix: exit 0 ... the trigger fires, no finding' (bin/devbin release check, read-only), with .github/ unchanged to 1401e7b3 (vc's check); and 2.14.9's candidate CI run 42859750695 at 1401e7b3, green on all eight jobs, macOS included (vc decision 103)"
+  }
+}

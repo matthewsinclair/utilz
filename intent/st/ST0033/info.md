@@ -1,9 +1,9 @@
 ---
 st_id: ST0033
 title: A test surface for arngz's engine, starting with exec_create_space
-status: Triage
+status: Completed
 created: 2026-11-10
-completed:
+completed: 2026-11-10
 ---
 
 # ST0033: A test surface for arngz's engine, starting with exec_create_space
@@ -30,7 +30,7 @@ hv ruled twice on 10 Nov 2026, first-hand in dc's window: "Hold until C5B9WJ is 
 
 | WP    | Title                                                                                      | Size | Status |
 | ----- | ------------------------------------------------------------------------------------------ | ---- | ------ |
-| WP-01 | The create_space driver: an injected hs, every reporting path, each arm proven by mutation | S    | WIP    |
+| WP-01 | The create_space driver: an injected hs, every reporting path, each arm proven by mutation | S    | Done   |
 
 ## Acceptance
 

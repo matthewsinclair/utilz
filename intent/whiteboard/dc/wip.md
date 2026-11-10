@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 199c662d-af7a-475e-963f-5c098ad5f4fa
-heartbeat_at: 2026-11-10 17:39Z
+heartbeat_at: 2026-11-10 17:47Z
 status: active
-focus: "10 Nov, back from hv's compact and HOLDING for hv's move (hv, first-hand in utilz-vc's session at 13:38Z: "Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move", vc decision 101): status active, starting nothing until the move. When it comes, the order resumes with utilz-vc's READY for its id comments on ST0032's fifteen live rows, which dc checks by change; then ONE full suite run at that head, the cut's own and hv's; then hv names the cut's head, which releases hold 33. ST0033 is LANDED (source d7047f70, records 76cf5873) and reads 6 of 6 PASS, every one of its ten arms seen red under its own mutation against a copy of the engine and then green; issues 0136 and 0137 are folded in and proven in bats in slot 3K676R. ST0033, 0136 and 0137 stay open and claimed and close together after the cut's run proves them, on utilz-vc's ruling at the fold, and NOT on the bounce: both fixes live in test_helper.bash, which 35 suites load and only 2 have run against. Claims: ST0031/04, ST0033/01, ISSUE:0136, ISSUE:0137. Drivers void and unpinned until the head is named. Watch-out 3 live. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST0031/04, ST0033/01, ISSUE:0136, ISSUE:0137]
+focus: "10 Nov, after 2.14.9's END (vc decision 103): ST0033, 0136 and 0137 closed on the cut's full run; ST0031/04 done (AC-04.1 by R2 and candidate run 42859750695, AC-04.2 by decision 103); ST0029's records landed on main at 20d85e18 (decision 104), the work itself parked. NOW: ST0034 (issue 0138, arngz remembers a size the app enforces), records at 3dedfa8b and code uncommitted on dc/0133b in ~/Devel/scratch/utilz-dc/wt-0133b. Its booked run is red on one arm of dc's, 159 (diff's request-side read of own_sizes is empty); a yq-only probe is booked with devbin-vc to say whether the fix or the arm is wrong. Arm 63 read as load-sensitive. No READY until the whole driver re-runs green. Claims ST0034/01, ISSUE:0138. Watch-out 3 live. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: [ST0034/01, ISSUE:0138]
 ---
 
 # DevX Claude (dc)
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0031/04's close-out and dc's five run drivers are held under hv's rulings of 10 Nov, first-hand (utilz-vc decisions 96, 97 and 98). RELEASED WHEN hv HAS NAMED THE CUT'S HEAD, which is the one condition left. Its other halves are MET. ST0032's arms ran GREEN in slot NTVCDH at 5d7bfe37 (C5B9WJ was never granted, its pin stale by eight commits, and is denied naming NTVCDH). And ST0033's exec_create_space driver is written, landed at d7047f70 with its records at 76cf5873, and proven: every one of its ten arms seen red under its own landed mutation against a copy of the engine and green without, 6 of 6 criteria satisfied. The cut's head comes after utilz-vc's id comments on ST0032's live rows land on d7047f70's arngz.bats and ONE full suite run passes at that head, which is the cut's own run. NTVCDH's green no longer describes arngz.bats exactly: arngz.bats has moved since, by the lua_bin move and issue 0136's fix, and engine.bats and engine_test.lua are new, so it is that full run that re-establishes the suite's green. The engine itself, arngz.lua and plan.lua, is byte-identical to 5d7bfe37. Until hv names the head, AC-04.1, AC-04.2, wp done and unclaim of ST0031/04 wait, because on vc decision 95 that cut carries ST0032 and ST0033 as well; and the drivers stay void and unpinned, since re-pinning before the head is known does the work twice, with run-treescan.sh's count then derived from the run and never written down. (edited)
+_(none)_
 
 ## Watch-outs
 

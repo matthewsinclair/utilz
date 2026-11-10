@@ -13,7 +13,7 @@ title: A test surface for arngz's engine, starting with exec_create_space
 
 ## Acceptance Criteria
 
-### WP-01 -- The create_space driver: an injected hs, every reporting path, each arm proven by mutation (status: WIP)
+### WP-01 -- The create_space driver: an injected hs, every reporting path, each arm proven by mutation (status: Done)
 
 - AC-01.1 The four reporting behaviours of create_space that issues 0133, 0134 and 0135 never named, each asserted on the function's own ACCOUNT of what it did rather than on its arithmetic: a creation that reported a space and whose readback never caught up does NOT bind the display for the rest of the run, because a call that made a space has not shown the display unusable; a readback that cannot be read at all is reported as the count failing BEFORE the create and nothing is created; a display already bound is refused with the cause quoted rather than tried again; and a bound display does not bind its neighbour, the binding being per-display and not per-run. ST0032's AC-03.3, AC-03.4 and AC-03.5 carry the three the issues did name and are descoped here by utilz-vc, so each behaviour is asserted once. -- satisfied: yes (computed)
 - AC-01.2 The creating call's COUNT is asserted, not just its outcome: addSpaceToScreen is called exactly once when it reported a space however long the readback lags, exactly once when the display is gone, M.CREATE_SPACE_TRIES times when nothing was made, and never when the count could not be read before. The budget and the sleep count are read from the module rather than written down. -- WITHDRAWN: Subsumed by ST0032's AC-03.3, which utilz-vc is descoping to ST0033 in the same exchange and which came first, is written per-defect, and is what issue 0135 actually requires: a creation reporting no space is retried up to CREATE_SPACE_TRIES while one reporting a space is attempted once. Keeping both would assert the same requirement twice on one thread. The call-count assertions beyond AC-03.3's scope, that nothing is created when the count cannot be read first and that a bound display adds no further calls, moved into AC-01.1 rather than being lost. (by utilz-dc)
@@ -25,7 +25,7 @@ title: A test surface for arngz's engine, starting with exec_create_space
 
 ## Acceptance Tests
 
-### WP-01 -- The create_space driver: an injected hs, every reporting path, each arm proven by mutation (status: WIP)
+### WP-01 -- The create_space driver: an injected hs, every reporting path, each arm proven by mutation (status: Done)
 
 - AT-01.1 `opt/arngz/test/engine_test.lua` -- covers AC-01.1, AC-01.5, AC-01.6, AC-01.7 -- status: green -- The driver: an injected hs under plain lua, ten arms over create_space's reporting paths and call counts. Covers AC-01.1's four behaviours and AC-01.5, AC-01.6 and AC-01.7, which are ST0032's AC-03.3, AC-03.4 and AC-03.5 recreated here verbatim: descope records the move on the source thread and creates nothing on the destination, so they had to be written rather than transferred. AC-01.2 was withdrawn as subsumed by AC-01.5, which now exists on the same thread, so that withdrawal reads correctly.
 

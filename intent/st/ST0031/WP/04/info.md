@@ -2,7 +2,7 @@
 wp_id: WP-04
 title: 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-04: 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only

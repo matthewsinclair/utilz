@@ -31,7 +31,7 @@ dc's inventory at 48c0ea54, checked by vc and sent to devbin-vc as (1) on 31 Oct
 | WP-01 | Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests               | M    | Not Started |
 | WP-02 | CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job | S    | Not Started |
 | WP-03 | menuz reads the release stamp, not the tag, for MenuzKind=release                                                 | S    | Done        |
-| WP-04 | 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only                      | S    | WIP         |
+| WP-04 | 2.14.9's cut in 0.1.20's shape: tests.yml on candidate/**, post-cut publishes and pulls only                      | S    | Done        |
 
 ## Acceptance
 
