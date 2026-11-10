@@ -194,16 +194,13 @@ apply_check() {
   [[ -n "$desk" ]] || die "usage: $0 apply <desk>"
   echo "AT-05.4 (AC-05.4) -- apply $desk after a scramble by hand (hands off: this takes the pointer)"
   arngz diff "$desk"
-  # PRECONDITION, and it is not checked here: this mode wants a desk with no
-  # app that enforces its own window size. plan decides a place op with
-  # `moving or not frames_agree(...)` (plan.lua:636), and for such a window
-  # frames_agree can never be true, so diff reports a difference on every run
-  # for ever -- issue 0133's known limitation. On such a desk this check
-  # passes whether or not the scramble happened, so it proves nothing, and the
-  # one at the end of this function can never pass at all. Both are left
-  # strict rather than relaxed, because they are load-bearing for every other
-  # desk; the desk is the thing to choose. hv's zeophq holds Appgate, which is
-  # exactly that case.
+  # PRECONDITIONS, and they are not checked here: the desk's windows were
+  # scrambled by hand, so diff has something to do, and every app the desk
+  # names has a standard window on a desktop space, since arngz reports an app
+  # running with none as unseen, which the counts below do not take as placed.
+  # A window an app holds at its own size no longer counts against this mode:
+  # since issue 0138 (2.14.10) arngz records that size and diff reads such a
+  # window as in place, a recheck rather than a change.
   if [[ $RC -eq 1 ]]; then ok "before apply, diff finds something to do (the scramble is real)"; else bad "before apply, diff finds something to do (exit $RC)"; fi
   local entries placed noted
   entries="$("$ARNGZ" arngz show "$desk" | yq '[.displays[].spaces[].apps[]] | length')" ||
@@ -227,11 +224,8 @@ apply_check() {
     bad "every entry placed ($placed of $entries)"
   fi
   arngz diff "$desk"
-  # Cannot pass on a desk holding an app that enforces its own window size:
-  # see the precondition above. apply reports that window `placed` and exits 0,
-  # correctly, while diff from the same state still reports a difference, so
-  # the two disagree about the identical window. That divergence is new in
-  # 2.14.9 and is issue 0133's recorded limitation, not a fault in this check.
+  # A window held at its app's own size reads here as in place, not as a
+  # difference, since issue 0138: apply and diff agree about it.
   if [[ $RC -eq 0 ]]; then ok "diff after apply finds nothing to do (a fresh observe)"; else bad "diff after apply finds nothing to do (exit $RC)"; fi
   arngz apply "$desk"
   # The note is allowed here too, and still excludes a move or a launch, which
