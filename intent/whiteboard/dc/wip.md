@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 199c662d-af7a-475e-963f-5c098ad5f4fa
-heartbeat_at: 2026-11-10 17:47Z
+heartbeat_at: 2026-11-10 19:24Z
 status: active
-focus: "10 Nov, after 2.14.9's END (vc decision 103): ST0033, 0136 and 0137 closed on the cut's full run; ST0031/04 done (AC-04.1 by R2 and candidate run 42859750695, AC-04.2 by decision 103); ST0029's records landed on main at 20d85e18 (decision 104), the work itself parked. NOW: ST0034 (issue 0138, arngz remembers a size the app enforces), records at 3dedfa8b and code uncommitted on dc/0133b in ~/Devel/scratch/utilz-dc/wt-0133b. Its booked run is red on one arm of dc's, 159 (diff's request-side read of own_sizes is empty); a yq-only probe is booked with devbin-vc to say whether the fix or the arm is wrong. Arm 63 read as load-sensitive. No READY until the whole driver re-runs green. Claims ST0034/01, ISSUE:0138. Watch-out 3 live. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "10 Nov, folded for hv's compact after 2.14.10 (vc decision 105; tag at 4553a289). ST0034 / issue 0138 is RELEASED in 2.14.10: arngz records a size an app enforces in $XDG_STATE_HOME/arngz/own-sizes and rechecks it, so diff and apply agree (landed 20abb0dd, version 0342aee6, AT-05.3's harness race fixed at 104efca0). ST0034, WP01 and ISSUE:0138 stay open and claimed on AC-01.6 only, hv's live run: arngz apply zeophq then arngz diff zeophq reads no change with Appgate present; on hv's word, satisfy AC-01.6, wp done, st done, close 0138, unclaim. wt-0133b and dc/0133b removed at this fold. ST0029 parked on dc/st0029 (a251bc60), records on main. TODOs on intent/wip.md (vc): the shim's latent parsed yq captures, and a cap on the 18 scheduled arms' 600 s default. Watch-out 3 live. No test or build (decision 74). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0034/01, ISSUE:0138]
 ---
 
