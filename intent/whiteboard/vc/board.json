@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "65f915fc-9b70-40c4-8be5-b6db4ca91d96",
-    "heartbeat_at": "2026-11-10T17:40:13.889Z",
+    "heartbeat_at": "2026-11-10T19:26:11.749Z",
     "status": "active",
-    "focus": "10 Nov 17:40Z: 2.14.9 RELEASED and verified (decision 103); freeze lifted. NEXT: close ST0033/0136/0137 with dc; check 0133/0134/0135; ST0032 stays open on AC-01.4/01.5, 04.10, 05.4; land dc/0133b (ST0034, 0138) once devbin-vc's run reads green; hv to rule on ST0029's parked branch. Resume in ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "10 Nov, localfolded for hv's compact (decision 106) after Utilz 2.14.9 and 2.14.10 both released and verified (decisions 103, 105); main 8e4f082f is pushed only to 84092742. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain, then HOLD until hv's move. Open: ST0034/0138 on AC-01.6 (hv's live zeophq run); ST0032 on AC-01.4/01.5, AC-04.10 and AC-05.4 (menu live, waiting on hv's click of Discover). Resume in ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [
       "ST0032"
     ],
@@ -2585,6 +2585,14 @@
       "text": "hv, 10 Nov, first-hand in vc's session: \"I want that done tonight.\" UTILZ 2.14.10 IS RELEASED, carrying ST0034 (issue 0138: arngz records the size an app enforces and rechecks it, so diff and apply agree; arngz 1.2.1). Landed at 20abb0dd, with its version note at 0342aee6 and arm 63's harness fix at 104efca0. Each was checked by vc by change. The proof: ST0034's driver ALL PASS (09d003e3); R-full at 0342aee6 with 17 of 18 rc 0, arngz's one red being arm 63, a race between the fake hs and a 1s deadline that predates ST0034; and arngz's suite at 104efca0, 165 of 165 (1635b4fc). The cut, release commit 4553a289, took three runs. (1) From vc's shell it stopped at macos: vc's shell cannot read hv's keychain. (2) hv's resume read the cancelled CI run that run 1 left behind: Devbin's ci-state takes the worst run at the commit, a defect devbin-vc confirmed from source and is filing. (3) hv deleted that run and resumed again from hv's own terminal, and the cut completed at 19:02:48Z. vc verified it at 19:03Z from the remotes: tag 2.14.10 (d83b1f5f) peels to 4553a289; the release has a notarised Menuz.app.zip and SHA256SUMS; candidate CI run 42877918756 succeeded on all eight jobs; the tap is at 2.14.10. Freeze lifted. A cut's macOS leg must run in hv's own terminal, not through a Claude's shell. Still open: ST0034/WP01 and issue 0138, on AC-01.6, hv's live zeophq run. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-11-10T19:03:24.619Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 106,
+      "text": "hv, 10 Nov, first-hand in vc's session after 2.14.10's release: \"If we're done here, then lets localfold+compact across utilz-* then hold on the bounce.\" utilz-dc had already folded at 8e4f082f (checked by vc, 8bd2ccdf), so vc folds last, cc and ic having been down since 6 Nov. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain (dc's BACK, then YOUR TURN), then HOLD: start nothing until hv's move. Open for hv's move: ST0034/WP01 and 0138 on AC-01.6, hv's live zeophq run; ST0032 on AC-01.4/01.5 (the live path), AC-04.10, and AC-05.4 (the menu, live in Menuz 0.4.10 from Molt-matts b340832, satisfied once hv has clicked Discover on a real desk); and the TODOs on intent/wip.md. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-10T19:26:11.461Z"
     }
   ],
   "sent": [

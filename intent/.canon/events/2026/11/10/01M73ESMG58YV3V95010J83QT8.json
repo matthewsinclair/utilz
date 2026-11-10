@@ -1,0 +1,15 @@
+{
+  "id": "01M73ESMG58YV3V95010J83QT8",
+  "ts": "2026-11-10T19:26:11.461Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 10 Nov, first-hand in vc's session after 2.14.10's release: \"If we're done here, then lets localfold+compact across utilz-* then hold on the bounce.\" utilz-dc had already folded at 8e4f082f (checked by vc, 8bd2ccdf), so vc folds last, cc and ic having been down since 6 Nov. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain (dc's BACK, then YOUR TURN), then HOLD: start nothing until hv's move. Open for hv's move: ST0034/WP01 and 0138 on AC-01.6, hv's live zeophq run; ST0032 on AC-01.4/01.5 (the live path), AC-04.10, and AC-05.4 (the menu, live in Menuz 0.4.10 from Molt-matts b340832, satisfied once hv has clicked Discover on a real desk); and the TODOs on intent/wip.md. Peers read this decision at pickup; dc records no copy."
+  }
+}
