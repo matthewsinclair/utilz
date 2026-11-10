@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 199c662d-af7a-475e-963f-5c098ad5f4fa
-heartbeat_at: 2026-11-10 13:50Z
+heartbeat_at: 2026-11-10 17:39Z
 status: active
 focus: "10 Nov, back from hv's compact and HOLDING for hv's move (hv, first-hand in utilz-vc's session at 13:38Z: "Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move", vc decision 101): status active, starting nothing until the move. When it comes, the order resumes with utilz-vc's READY for its id comments on ST0032's fifteen live rows, which dc checks by change; then ONE full suite run at that head, the cut's own and hv's; then hv names the cut's head, which releases hold 33. ST0033 is LANDED (source d7047f70, records 76cf5873) and reads 6 of 6 PASS, every one of its ten arms seen red under its own mutation against a copy of the engine and then green; issues 0136 and 0137 are folded in and proven in bats in slot 3K676R. ST0033, 0136 and 0137 stay open and claimed and close together after the cut's run proves them, on utilz-vc's ruling at the fold, and NOT on the bounce: both fixes live in test_helper.bash, which 35 suites load and only 2 have run against. Claims: ST0031/04, ST0033/01, ISSUE:0136, ISSUE:0137. Drivers void and unpinned until the head is named. Watch-out 3 live. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/04, ST0033/01, ISSUE:0136, ISSUE:0137]
