@@ -1,9 +1,8 @@
 {
   "status": "ok",
   "verb": "which",
-  "desk": null,
   "kind": "several",
-  "candidates": [ "zeop1", "zeop2" ],
+  "candidates": ["zeop1", "zeop2"],
   "report": [
     "FIXTURE-WHICH-SEVERAL 2 desks fit and none is the current one: zeop1, zeop2"
   ]

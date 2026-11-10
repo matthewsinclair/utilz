@@ -1015,6 +1015,11 @@ do
     code == 1 and #lines == 4 and string.find(lines[4], "create_space", 1, true) ~= nil, lines[4])
 
   -- issue 0133: a window held at the app's own size is placed, and says so.
+  -- WHAT THIS DOES NOT PIN: the note's wording and its numbers are the
+  -- engine's, built in exec_place, which loads only under Hammerspoon. These
+  -- checks supply the note and prove apply_report renders it and counts it
+  -- against nothing; they would stay green if the engine's wording changed.
+  -- AT-03.2's split is why there is no arm for the engine side.
   local own = "placed at the app's own size, 375x667"
   lines, code = P.apply_report(d, { r("place", "displays[0].spaces[0].apps[0]", "done", nil, nil, own) })
   check("a placed entry with a note says it in brackets and exits 0",
@@ -1144,7 +1149,7 @@ do
   local on_desk, on_notes = P.desk_from_world(base_world(), { name = "t" })
   check("a window on its display is still recorded, and nothing is said about it",
     entry_for(on_desk, "com.apple.mail") ~= nil
-      and not has_note(on_notes, "lies mostly off this display"))
+      and not has_note(on_notes, "lies mostly outside this display"))
   -- Run 69's case: a window 1920 points left of the display's origin, which
   -- snap_axis would clamp into the edge cell, and which the next apply then
   -- fails because the cell is narrower than the app will go.
@@ -1154,7 +1159,7 @@ do
   check("a window lying mostly off its display is not recorded at all",
     entry_for(off_desk, "com.apple.mail") == nil, render(entry_for(off_desk, "com.apple.mail")))
   check("and discover says why, rather than snapping it into the edge cell",
-    has_note(off_notes, "is not recorded: it lies mostly off this display"),
+    has_note(off_notes, "is not recorded: it lies mostly outside this display's usable area"),
     notes_text(off_notes))
   check("the window that stayed on the display is still recorded beside it",
     entry_for(off_desk, "com.apple.Safari") ~= nil)
@@ -1204,8 +1209,8 @@ do
     return { screens = screens }
   end
   local function named(name, desk) return { name = name, desk = desk } end
-  local function reported(report, text)
-    for _, l in ipairs(report or {}) do if string.find(l, text, 1, true) then return true end end
+  local function reported(lines, text)
+    for _, l in ipairs(lines or {}) do if string.find(l, text, 1, true) then return true end end
     return false
   end
 
@@ -1218,31 +1223,39 @@ do
 
   -- THE RULE THIS WHOLE FEATURE TURNS ON. match_displays binds rhad's one
   -- display to the laptop whatever else is plugged in, so without the count
-  -- rhad would be the answer at every site. It describes 1 of the 2 screens
-  -- here, so it does not fit and homere does.
-  local report
-  name, kind, report = P.detect({ laptop_only, two_screens }, world_of("U-LAP", "U-BIG"))
+  -- rhad would be the answer at every site. It describes one of the two
+  -- screens here, so it does not fit and homere does.
+  --
+  -- Every expected number below is derived from the fixture it counts, never
+  -- written down: the world and the desk lists are held in locals and their
+  -- lengths build the expected text.
+  local report, both
+  local two_world = world_of("U-LAP", "U-BIG")
+  name, kind, report = P.detect({ laptop_only, two_screens }, two_world)
   check("a desk describing fewer screens than are present does not win",
     name == "homere" and kind == "one", tostring(name) .. "/" .. tostring(kind))
   check("and the report says how many of the screens present it described",
-    reported(report, "rhad: it describes 1 of the 2 screen(s) present"), table.concat(report, " | "))
+    reported(report, string.format("rhad: it describes %d of the %d screen(s) present",
+      #laptop_only.desk.displays, #two_world.screens)), table.concat(report, " | "))
 
-  name, kind, report = P.detect({ laptop_only }, world_of("U-LAP", "U-BIG"))
+  name, kind, report = P.detect({ laptop_only }, two_world)
   check("no desk covering the screens present is none, with a reason",
-    name == nil and kind == "none" and reported(report, "no desk fits the 2 screen(s) present"),
+    name == nil and kind == "none"
+      and reported(report, string.format("no desk fits the %d screen(s) present", #two_world.screens)),
     tostring(name) .. "/" .. tostring(kind) .. " " .. table.concat(report, " | "))
 
   local twin = named("zeopit", desk_of("U-LAP", "U-BIG"))
   local fits
-  name, kind, report, fits = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"))
+  both = { two_screens, twin }
+  name, kind, report, fits = P.detect(both, two_world)
   check("two desks describing the same screens is several, naming both, and picks neither",
-    name == nil and kind == "several" and #fits == 2 and reported(report, "homere, zeopit"),
+    name == nil and kind == "several" and #fits == #both and reported(report, "homere, zeopit"),
     tostring(name) .. "/" .. tostring(kind) .. " " .. table.concat(report, " | "))
 
-  name, kind = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"), { current = "zeopit" })
+  name, kind = P.detect(both, two_world, { current = "zeopit" })
   check("and the current desk decides when it is one of them",
     name == "zeopit" and kind == "current", tostring(name) .. "/" .. tostring(kind))
-  name, kind = P.detect({ two_screens, twin }, world_of("U-LAP", "U-BIG"), { current = "rhad" })
+  name, kind = P.detect(both, two_world, { current = "rhad" })
   check("a current desk that does not fit decides nothing",
     name == nil and kind == "several", tostring(name) .. "/" .. tostring(kind))
 
@@ -1255,6 +1268,11 @@ do
 
   check("no desks at all is none, not an error",
     select(2, P.detect({}, world_of("U-LAP"))) == "none")
+  -- The exact cover is a count, so 0 == 0 would make a desk with no displays
+  -- fit a world with no screens and be answered as the desk. Held out
+  -- explicitly rather than left to the arithmetic.
+  check("a desk with no displays does not fit a world with no screens",
+    select(2, P.detect({ named("empty", { displays = {} }) }, world_of())) == "none")
 end
 
 -- One app on two displays, and one title inside another.

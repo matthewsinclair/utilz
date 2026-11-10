@@ -91,12 +91,22 @@ assert_refusal() {
 # AT-02.1 -- dispatched, declared, listed (AC-02.1)
 # ============================================================================
 
+# A space-separated list the script declares, read from the script itself, so
+# no test here carries its own copy of a list the code owns. ST0032/04 added
+# two verbs and four of the five copies of "which verbs are there" went stale.
+arngz_list() {
+  sed -n "s/^$1=\"\\(.*\\)\"\$/\\1/p" "$UTILZ_HOME/opt/arngz/arngz"
+}
+
 @test "AT-02.1: utilz arngz is dispatched and its help names every verb and flag" {
   run_utilz arngz --help
   assert_success
   local word
-  for word in apply discover diff list show delete current init doctor \
-    --dry-run --no-launch --no-create --map --save --force --yes; do
+  local -a verbs
+  read -r -a verbs <<<"$(arngz_list ARNGZ_VERBS)"
+  [ "${#verbs[@]}" -gt 0 ] || fail "ARNGZ_VERBS could not be read from the script"
+  for word in "${verbs[@]}" \
+    --dry-run --no-launch --no-create --map --save --force --yes --default; do
     assert_output_contains "$word"
   done
   # No --bind in v1 (D10, AC-05.6): help does not offer what apply refuses.
@@ -357,7 +367,10 @@ EOF
 @test "AT-02.3: a desk named like a verb is refused, by show and by apply" {
   catalogue
   local verb
-  for verb in apply discover diff list show delete current init doctor; do
+  local -a verbs
+  read -r -a verbs <<<"$(arngz_list ARNGZ_VERBS)"
+  [ "${#verbs[@]}" -gt 0 ] || fail "ARNGZ_VERBS could not be read from the script"
+  for verb in "${verbs[@]}"; do
     minimal_desk "$verb"
     run_arngz show "$verb"
     assert_refusal "$verb" "desk name" "$verb"
@@ -2135,7 +2148,7 @@ current_record() {
 # init makes the catalogue alone, doctor checks the catalogue alone, and the
 # catalogue verbs work as they do anywhere.
 
-ENGINE_OFF_LINUX="arngz's engine (apply, diff, discover and init --yes) needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+ENGINE_OFF_LINUX="arngz's engine (apply, diff, discover, which, auto and init --yes) needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
 
 # Recorders for every tool an engine verb reaches first, first on PATH: each
 # call is written to $BATS_TEST_TMPDIR/calls, which a refusal leaves unwritten.
@@ -2160,8 +2173,12 @@ record_engine_tools() {
   catalogue
   record_engine_tools
   stub_platform Linux
-  local args verb
-  for args in "apply zeop1" "zeop1" "diff zeop1" "discover" "init --yes"; do
+  local args verb checked=""
+  # The table stays, because each verb needs different words after it, but it
+  # is checked against ARNGZ_ENGINE_VERBS below: a verb added to the gate's
+  # list and not to this table fails here rather than going unexercised, which
+  # is how ST0032/04's two verbs would have shipped refusing as "arngz apply".
+  for args in "apply zeop1" "zeop1" "diff zeop1" "discover" "which" "auto" "init --yes"; do
     verb="arngz $args"
     verb="${verb% zeop1}"
     if [[ "$args" == zeop1 ]]; then
@@ -2171,6 +2188,17 @@ record_engine_tools() {
     run_arngz $args
     assert_exit_code 2
     assert_output_contains "$verb needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+    checked="$checked ${args%% *}"
+  done
+  local engine_verb
+  local -a engine_verbs
+  read -r -a engine_verbs <<<"$(arngz_list ARNGZ_ENGINE_VERBS)"
+  [ "${#engine_verbs[@]}" -gt 0 ] || fail "ARNGZ_ENGINE_VERBS could not be read from the script"
+  for engine_verb in "${engine_verbs[@]}"; do
+    case " $checked " in
+      *" $engine_verb "*) ;;
+      *) fail "ARNGZ_ENGINE_VERBS names $engine_verb and this test does not exercise it" ;;
+    esac
   done
   [ ! -e "$BATS_TEST_TMPDIR/calls" ] || fail "an engine tool was called: $(cat "$BATS_TEST_TMPDIR/calls")"
   [ -z "$(ls -A "$FAKE_HS_LOG")" ] || fail "the fake hs was called: $(ls "$FAKE_HS_LOG")"
@@ -2237,6 +2265,17 @@ which_fixture() {
   fake_hs ok "$FIXTURES/responses/$1"
 }
 
+# For the tests that reach cmd_apply through auto: the whole fixture machine,
+# so apply_prefs reads the stub defaults rather than the host's. With
+# which_fixture alone, fake_hs installs an hs and narrows nothing else, so
+# apply_prefs refuses exit 2 on any Mac with Automatically rearrange Spaces on
+# (macOS's default) and fails outright on Linux where defaults is absent --
+# both for a reason that has nothing to do with the subject, and both against
+# this file's promise that nothing here reaches the real machine.
+which_apply_fixture() {
+  apply_machine ok "$FIXTURES/responses/$1"
+}
+
 @test "ST0032/04: which names the desk the screens present are, on stdout, and exits 0" {
   which_fixture which-one.json
   run_arngz which
@@ -2282,13 +2321,17 @@ which_fixture() {
 @test "ST0032/04: which is read as a verb, not as the name of a desk to apply" {
   which_fixture which-one.json
   run_arngz which
-  # The fallthrough would have asked the engine to apply a desk called which.
+  # Positively, not by refuting "apply". Without the which) arm, cmd_apply
+  # which is refused by desk_name_refusal before any request is written, so
+  # the file would be missing, yq would error, and a refutation would hold in
+  # both shapes -- green whether the defect is there or not.
+  [ -f "$FAKE_HS_LOG/request.json" ] || fail "no request was written: $output"
   run yq -r '.verb' "$FAKE_HS_LOG/request.json"
-  refute_output_contains "apply"
+  assert_output "which"
 }
 
 @test "ST0032/04: auto hands the desk it found to apply, rather than applying it itself" {
-  which_fixture which-one.json
+  which_apply_fixture which-one.json
   run_arngz auto
   # auto makes two engine calls, and the fake serves one canned response, so
   # the apply leg's own answer is not what is checked here: the request the
@@ -2300,7 +2343,7 @@ which_fixture() {
 }
 
 @test "ST0032/04: auto falls back to --default when no desk fits, and says that it did" {
-  which_fixture which-none.json
+  which_apply_fixture which-none.json
   run_arngz auto --default zeop1
   assert_output_contains "no desk fits the screens present: falling back to 'zeop1'"
   run yq -r '.verb' "$FAKE_HS_LOG/request.json"
@@ -2341,7 +2384,11 @@ which_fixture() {
 }
 
 @test "ST0032/04: a desk may not be named which or auto" {
-  catalogue
+  # fake_hs as well as the catalogue, for the RED path: the name refusal fires
+  # before any engine call, so the green path reaches nothing, but if that
+  # refusal ever stopped firing this test would run discover for real against
+  # the host's screens. AT-04.3 sets fake_hs for the same shape.
+  which_fixture which-one.json
   run_arngz discover --save which
   assert_exit_code 2
   assert_output_contains "may not be named like a verb"

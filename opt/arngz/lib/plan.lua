@@ -248,7 +248,12 @@ function P.detect(desks, world, options)
     local matched, why = P.match_displays(entry.desk or {}, world or { screens = {} })
     if not matched then
       report[#report + 1] = string.format("%s: %s", name, tostring(why))
-    elseif #matched ~= present then
+    elseif present == 0 or #matched ~= present then
+      -- present == 0 is held out so the count cannot pass by 0 == 0: a desk
+      -- with no displays would otherwise fit a world with no screens and be
+      -- answered as the desk. Unreachable while observe always returns a
+      -- screen and the validator requires a display, so this is the edge
+      -- guarded rather than a case seen.
       report[#report + 1] = string.format("%s: it describes %d of the %d screen(s) present",
         name, #matched, present)
     else
@@ -1201,13 +1206,6 @@ function P.snap(frame, screen_frame, grid)
   return string.format("%d,%d %dx%d", x, y, w, h), round(math.max(mx, my)), px or py
 end
 
--- Whether a window lies mostly off the display it was found on (issue 0134).
--- snap_axis clamps a start left of the origin to cell 0 and forces the end a
--- cell past it, which is right for a window that really is on the display and
--- records a window that is not as occupying the edge cell. The threshold is
--- the window's CENTRE: a window is on the display its middle is on, which
--- needs no measurement snap does not already make and has no arguable
--- boundary, as a percentage of overlap would.
 -- Whether a space creation that failed is worth trying again (issue 0135).
 -- Hammerspoon's addSpaceToScreen signals failure by returning nil with a
 -- reason, and the reasons differ in kind: the Dock being momentarily unable to
@@ -1224,6 +1222,18 @@ function P.space_error_kind(why)
   return "transient"
 end
 
+-- Whether a window lies mostly off the display it was found on (issue 0134).
+-- snap_axis clamps a start left of the origin to cell 0 and forces the end a
+-- cell past it, which is right for a window that really is on the display and
+-- records a window that is not as occupying the edge cell. The threshold is
+-- the window's CENTRE: a window is on the display its middle is on, which
+-- needs no measurement snap does not already make and has no arguable
+-- boundary, as a percentage of overlap would.
+--
+-- The frame given is the screen's USABLE area, as P.snap's is, so the measure
+-- excludes the menu bar and the Dock rather than the whole panel. Every
+-- caller passes the same frame to both, so the two agree; what the report
+-- says has to be worded for the usable area and not for the display.
 function P.mostly_off(frame, screen_frame)
   if not frame or not screen_frame then return false end
   local cx = frame.x + frame.w / 2
@@ -1408,8 +1418,8 @@ function P.desk_from_world(world, options)
             -- A desk records only what it can place: snapping this would put
             -- it in the edge cell, and the next apply would fail it there
             -- (issue 0134).
-            note("%s desktop %d: a window of %s is not recorded: it lies mostly off this display"
-              .. " (its centre is %d,%d and the display is %d,%d %dx%d)", label, si, w.bundle,
+            note("%s desktop %d: a window of %s is not recorded: it lies mostly outside this display's"
+              .. " usable area (its centre is %d,%d and that area is %d,%d %dx%d)", label, si, w.bundle,
               round(w.frame.x + w.frame.w / 2), round(w.frame.y + w.frame.h / 2),
               round(s.frame.x), round(s.frame.y), round(s.frame.w), round(s.frame.h))
             app = nil

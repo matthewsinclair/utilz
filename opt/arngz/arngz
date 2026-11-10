@@ -28,12 +28,58 @@ fi
 # a desk called `list` could never be applied that way.
 ARNGZ_VERBS="apply discover diff list show delete current which auto init doctor"
 
+# Whether WORD is one of the space-separated words in LIST.
+in_list() {
+  local word="$1" list="$2"
+  case " $list " in
+    *" $word "*) return 0 ;;
+  esac
+  return 1
+}
+# "a, b and c" from a space-separated LIST, so a sentence naming verbs is
+# rendered from the list the code tests against and cannot drift from it. The
+# list is read into an array rather than split at the call, so the caller
+# quotes it and nothing here relies on word splitting.
+#
+# LAST, when given, is appended as the final item, for an item of more than one
+# word: `init --yes` added after the phrase instead would read "... which and
+# auto and init --yes", with the conjunction twice.
+verb_phrase() {
+  local out="" i=0 count word
+  local -a words
+  read -r -a words <<<"$1"
+  if [[ -n "${2:-}" ]]; then
+    words[${#words[@]}]="$2"
+  fi
+  count=${#words[@]}
+  for word in "${words[@]}"; do
+    i=$((i + 1))
+    if [[ $i -eq 1 ]]; then
+      out="$word"
+    elif [[ $i -eq $count ]]; then
+      out="$out and $word"
+    else
+      out="$out, $word"
+    fi
+  done
+  printf '%s' "$out"
+}
+
 # What needs macOS, in the words of the one refusal (issue 0083): the engine
 # verbs refuse by name off macOS, and init and doctor say it there without
 # refusing, since the catalogue verbs work anywhere.
-ARNGZ_ENGINE="arngz's engine (apply, diff, discover and init --yes)"
+#
+# THESE TWO LISTS ARE THE ONE RECORD of which verbs need the engine. The
+# platform gate in main() tests against them and the two sentences below are
+# rendered from them, because ST0032/04 added two verbs to the dispatch and not
+# to the gate, and both then refused off macOS under the name `arngz apply`.
+# A list written out in prose cannot be checked against the gate; one the gate
+# reads cannot disagree with it.
+ARNGZ_ENGINE_VERBS="apply diff discover which auto"
+ARNGZ_CATALOGUE_VERBS="list show delete current"
+ARNGZ_ENGINE="arngz's engine ($(verb_phrase "$ARNGZ_ENGINE_VERBS" "init --yes"))"
 ARNGZ_ENGINE_NEEDS="macOS and Hammerspoon"
-ARNGZ_WORKS_HERE="arngz list, show, delete and current work here"
+ARNGZ_WORKS_HERE="arngz $(verb_phrase "$ARNGZ_CATALOGUE_VERBS") work here"
 
 # Refuse engine verb <what> off macOS, in the one refusal's words.
 refuse_engine_off_macos() {
@@ -1652,25 +1698,72 @@ cmd_discover() {
 # engine can say which desk the screens present are. The desks go in the
 # options rather than the engine reading them, because the catalogue's layout
 # is the CLI's to know and the engine is given data.
+#
+# It makes and prints its own temp dir and removes it before every refusal, as
+# apply_options does: a helper that refused while its caller owned the dir left
+# one behind on four paths, and there is no trap in this file to catch them.
 which_options() {
-  local options="$1" name file current rc=0 count
-  printf '{"desks":[]}\n' >"$options"
+  local dir options names current name file why rc=0 count=0
+  if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-which.XXXXXX" 2>&1)"; then
+    refuse "which: could not make a temp dir under ${TMPDIR:-/tmp} for its options: $dir"
+  fi
+  options="$dir/options.json"
+  names="$dir/names"
+  if ! why="$({ printf '{"desks":[]}\n' >"$options"; } 2>&1)"; then
+    rm -rf -- "$dir"
+    refuse "which: could not write its options to $options: $why"
+  fi
+  # The listing goes to a file and its status is checked. Through a process
+  # substitution the status is unobtainable, not even in PIPESTATUS, so a
+  # listing that died part-way would read as an empty catalogue and which
+  # would answer from a partial one -- where one desk can fit because the
+  # desk that would also have fitted was never listed.
+  if ! why="$(catalogue_desks 2>&1 >"$names")"; then
+    rm -rf -- "$dir"
+    refuse "which: could not read the catalogue at $(catalogue_dir): $why"
+  fi
   current="$(read_current)" || rc=$?
   if [[ $rc -eq 0 && -n "$current" ]]; then
-    C="$current" yq -i -o json '.current = strenv(C)' "$options"
+    if ! why="$(C="$current" yq -i -o json '.current = strenv(C)' "$options" 2>&1)"; then
+      rm -rf -- "$dir"
+      refuse "which: could not write the current desk to $options: $why"
+    fi
   fi
   while IFS= read -r name; do
+    [[ -n "$name" ]] || continue
+    # Judged by the one place a desk NAME is judged. A catalogue file whose
+    # name apply would refuse must not be named back by the engine, printed by
+    # which, or handed to apply by auto, where a leading `-` would be read as
+    # an option. cmd_list judges the same names for the same reason.
+    if why="$(desk_name_refusal "$name")"; then
+      warn "arngz: $(desk_file "$name") is not offered: $why"
+      continue
+    fi
     file="$(desk_file "$name")"
     [[ -f "$file" ]] || continue
-    if ! N="$name" F="$file" yq -i -o json \
-      '.desks += [{"name": strenv(N), "desk": load(strenv(F))}]' "$options"; then
-      refuse "desk '$name' ($file) could not be read as YAML (arngz show $name names why)"
+    if ! why="$(N="$name" F="$file" yq -i -o json \
+      '.desks += [{"name": strenv(N), "desk": load(strenv(F))}]' "$options" 2>&1)"; then
+      rm -rf -- "$dir"
+      refuse "desk '$name' ($file) could not be read as YAML: $why (arngz show $name names why)"
     fi
-  done < <(catalogue_desks)
-  count="$(yq -r '.desks | length' "$options")"
-  if [[ "$count" == "0" ]]; then
-    refuse "no desks in $(catalogue_dir) (arngz discover --save <desk> records one)"
+    count=$((count + 1))
+  done <"$names"
+  if [[ $count -eq 0 ]]; then
+    rm -rf -- "$dir"
+    refuse "no desks in $(catalogue_dir) that could be offered (arngz discover --save <desk> records one)"
   fi
+  printf '%s\n' "$dir"
+}
+
+# The engine's which answer: its kind and the desk it named, tab separated,
+# each read with yq's own words kept on a failure. The response is left where
+# it is, so a refusal can name it for a look.
+which_answer() {
+  local out
+  if ! out="$(yq -r '[(.kind // ""), (.desk // "")] | @tsv' "$ENGINE_RESPONSE" 2>&1)"; then
+    refuse "could not read the engine's answer at $ENGINE_RESPONSE: $out"
+  fi
+  printf '%s\n' "$out"
 }
 
 # which: the desk the screens present are, on stdout, with nothing changed.
@@ -1688,33 +1781,40 @@ cmd_which() {
   if [[ $# -gt 0 ]]; then
     refuse "which takes no arguments: '$1'"
   fi
-  local dir options rc=0 kind name
-  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-which.XXXXXX")"
-  options="$dir/options.json"
-  which_options "$options"
-  engine_ask which "" "$options" || rc=$?
+  local dir rc=0 kind name answer
+  dir="$(which_options)"
+  engine_ask which "" "$dir/options.json" || rc=$?
   if [[ $rc -ne 0 ]]; then
     rm -rf -- "$dir"
     engine_refuse
   fi
-  kind="$(yq -r '.kind' "$ENGINE_RESPONSE")"
-  name="$(yq -r '.desk // ""' "$ENGINE_RESPONSE")"
+  answer="$(which_answer)"
+  IFS=$'\t' read -r kind name <<<"$answer"
   render_report "$ENGINE_RESPONSE" >&2
-  rm -rf -- "$ENGINE_DIR" "$dir"
+  # The response is removed only where it has been understood: a refusal below
+  # names it, so it has to still be there to be read.
   case "$kind" in
     one | current)
+      # A kind that names one desk must name one: an empty name here would
+      # print a blank line and exit 0, against which's own contract.
+      if [[ -z "$name" ]]; then
+        refuse "the engine answered '$kind' and named no desk (kept at $ENGINE_RESPONSE)"
+      fi
+      rm -rf -- "$ENGINE_DIR" "$dir"
       printf '%s\n' "$name"
       ;;
     none)
+      rm -rf -- "$ENGINE_DIR" "$dir"
       info "no desk fits the screens present (arngz discover --save <desk> records one for here)"
       exit 1
       ;;
     several)
+      rm -rf -- "$ENGINE_DIR" "$dir"
       info "more than one desk fits the screens present, and none is the current one"
       exit 2
       ;;
     *)
-      refuse "the engine answered which with a kind arngz does not know: '$kind'"
+      refuse "the engine answered which with a kind arngz does not know: '$kind' (kept at $ENGINE_RESPONSE)"
       ;;
   esac
 }
@@ -1724,7 +1824,7 @@ cmd_which() {
 # readbacks and its exit status are apply's, and nothing about applying a desk
 # is written down twice.
 cmd_auto() {
-  local default="" dir options rc=0 kind name reason
+  local default="" dir rc=0 kind name answer reason
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --default)
@@ -1746,24 +1846,28 @@ cmd_auto() {
       refuse "--default '$default': no such desk (arngz list names the desks there are)"
     fi
   fi
-  dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-auto.XXXXXX")"
-  options="$dir/options.json"
-  which_options "$options"
-  engine_ask which "" "$options" || rc=$?
+  dir="$(which_options)"
+  engine_ask which "" "$dir/options.json" || rc=$?
   if [[ $rc -ne 0 ]]; then
     rm -rf -- "$dir"
     engine_refuse
   fi
-  kind="$(yq -r '.kind' "$ENGINE_RESPONSE")"
-  name="$(yq -r '.desk // ""' "$ENGINE_RESPONSE")"
+  answer="$(which_answer)"
+  IFS=$'\t' read -r kind name <<<"$answer"
   render_report "$ENGINE_RESPONSE" >&2
-  rm -rf -- "$ENGINE_DIR" "$dir"
   case "$kind" in
     one | current)
+      # As in which: a kind that names one desk must name one, or apply would
+      # be handed an empty desk name and refuse in its own words instead.
+      if [[ -z "$name" ]]; then
+        refuse "the engine answered '$kind' and named no desk (kept at $ENGINE_RESPONSE)"
+      fi
+      rm -rf -- "$ENGINE_DIR" "$dir"
       info "the screens present are desk '$name'"
       cmd_apply "$name"
       ;;
     none)
+      rm -rf -- "$ENGINE_DIR" "$dir"
       if [[ -z "$default" ]]; then
         info "no desk fits the screens present, and no --default was given: nothing moved"
         exit 1
@@ -1775,11 +1879,12 @@ cmd_auto() {
       cmd_apply "$default"
       ;;
     several)
+      rm -rf -- "$ENGINE_DIR" "$dir"
       info "more than one desk fits the screens present, and none is the current one: nothing moved"
       exit 2
       ;;
     *)
-      refuse "the engine answered which with a kind arngz does not know: '$kind'"
+      refuse "the engine answered which with a kind arngz does not know: '$kind' (kept at $ENGINE_RESPONSE)"
       ;;
   esac
 }
@@ -1882,22 +1987,23 @@ main() {
   shift
   # Off macOS the engine verbs refuse by name before anything else, the read
   # of Hammerspoon's entry included (issue 0083). A bare desk is apply.
-  case "$verb" in
-    apply | diff | discover)
-      refuse_engine_off_macos "arngz $verb"
-      ;;
-    init)
-      for arg in "$@"; do
-        if [[ "$arg" == --yes ]]; then
-          refuse_engine_off_macos "arngz init --yes"
-        fi
-      done
-      ;;
-    -* | list | show | delete | current | doctor) ;;
-    *)
-      refuse_engine_off_macos "arngz apply"
-      ;;
-  esac
+  # Tested against ARNGZ_ENGINE_VERBS and ARNGZ_CATALOGUE_VERBS, never against
+  # a list written out here: a verb in the dispatch and not in those lists
+  # would refuse under another verb's name, which is what ST0032/04 did.
+  if in_list "$verb" "$ARNGZ_ENGINE_VERBS"; then
+    refuse_engine_off_macos "arngz $verb"
+  elif [[ "$verb" == init ]]; then
+    for arg in "$@"; do
+      if [[ "$arg" == --yes ]]; then
+        refuse_engine_off_macos "arngz init --yes"
+      fi
+    done
+  elif [[ "$verb" == -* ]] || in_list "$verb" "$ARNGZ_CATALOGUE_VERBS doctor"; then
+    :
+  else
+    # Everything left is a bare desk name, which is apply.
+    refuse_engine_off_macos "arngz apply"
+  fi
   # current reads one file at every menu open that asks it, and needs no
   # engine, so it skips the read of Hammerspoon's entry, as help does.
   if [[ "$verb" != -h && "$verb" != --help && "$verb" != current ]]; then

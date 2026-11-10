@@ -359,30 +359,42 @@ local function exec_create_space(op, ctx)
       "creating a space on this display already failed and was not tried again (%s)", said) }
   end
   local before, berr = user_space_count(op.screen)
-  if not before then return { status = "failed", reason = "could not count the desktops before: " .. berr } end
-  -- attempts retries a THROWN error and addSpaceToScreen signals by returning
-  -- nil, so the call is wrapped to raise. error(..., 0) keeps the reason as
-  -- Hammerspoon gave it: level 0 adds no file:line prefix, which would
-  -- otherwise reach the report. Whether waiting could put the failure right is
-  -- plan's to say, not this function's.
+  if not before then
+    local reason = "could not count the desktops before: " .. berr
+    ctx.space_failed[op.screen] = reason
+    return { status = "failed", reason = reason }
+  end
+  -- attempts retries a THROWN error and this call signals by returning nil, so
+  -- it is wrapped to raise. error(..., 0) keeps the reason as Hammerspoon gave
+  -- it: level 0 adds no file:line prefix, which would otherwise reach the
+  -- report. Whether waiting could put a failure right is plan's to say.
+  --
+  -- THE READBACK DECIDES, NOT THE RETURN. addSpaceToScreen creates a desktop,
+  -- so an attempt that failed while nonetheless creating one must never be
+  -- repeated: retrying on the return value alone could make four desktops
+  -- where one was asked for, and the count then disagrees with every one of
+  -- them unaccounted for. A count that has reached before + 1 is a success
+  -- whatever the call said.
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
-    local made, why = hs.spaces.addSpaceToScreen(op.screen, true)
-    if not made then error(tostring(why), 0) end
-    return made
+    local _, why = hs.spaces.addSpaceToScreen(op.screen, true)
+    local now, nerr = user_space_count(op.screen)
+    if not now then error("could not count the desktops back: " .. tostring(nerr), 0) end
+    if now >= before + 1 then return now end
+    error(tostring(why or "it changed nothing"), 0)
   end, function(why) return P.space_error_kind(why) == "gone" end)
-  local shown = ok and tostring(res) or "nil"
-  local because = (not ok) and (" (" .. tostring(res) .. ")") or ""
-  local after, aerr = user_space_count(op.screen)
-  if not after then
-    return { status = "failed", reason = string.format("addSpaceToScreen returned %s; could not read back: %s",
-      shown, aerr) }
+  if ok then
+    return { status = "done", readback = { user_spaces = res } }
   end
-  if ok and after == before + 1 then
-    return { status = "done", readback = { user_spaces = after } }
+  local after = user_space_count(op.screen)
+  local reason = string.format("creating a space did not take (%s); user spaces %d before, %s after",
+    tostring(res), before, after and tostring(after) or "a count that could not be read")
+  -- Bind the rest of the run only when nothing was made. A count that moved by
+  -- some other amount is this op's failure alone: saying "already failed" for
+  -- every later space on the display would assert a failure that did not
+  -- happen and leave the desk short of desktops.
+  if after == before then
+    ctx.space_failed[op.screen] = reason
   end
-  local reason = string.format("addSpaceToScreen returned %s%s; user spaces %d before, %d after",
-    shown, because, before, after)
-  ctx.space_failed[op.screen] = reason
   return { status = "failed", reason = reason }
 end
 
