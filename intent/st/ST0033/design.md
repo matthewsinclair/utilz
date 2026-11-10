@@ -88,10 +88,10 @@ utilz-vc's condition, and it is the day's other lesson: a driver written against
 
 | Mutation, applied to the copy                                | Line            | Arm that must go red | The defect it recreates                 |
 | ------------------------------------------------------------ | --------------- | -------------------- | --------------------------------------- |
-| `(after == before and not made)` becomes `(after == before)`  | `arngz.lua:445` | 3                    | `bf6e5f08`, found by dc and critic-lua  |
-| the `if not made then` guard around the create is removed     | `arngz.lua:393` | 2                    | `fa0a7b58`, the regression dc found     |
-| the `now > before + 1` branch is removed                      | `arngz.lua:398` | 4                    | the overshoot going unreported          |
-| the stop predicate returns `false`                            | `arngz.lua:418` | 6                    | the vanished display retried four times |
+| `(after == before and not made)` becomes `(after == before)`  |  `arngz.lua:442` | 3                    | `bf6e5f08`, found by dc and critic-lua  |
+| the `if not made then` guard becomes `if true then`            | `arngz.lua:393` | 2                    | `fa0a7b58`, the regression dc found     |
+| the `now > before + 1` branch is removed                      |  `arngz.lua:399` | 4                    | the overshoot going unreported          |
+| the stop predicate returns `false`                            |  `arngz.lua:419` | 6                    | the vanished display retried four times |
 
 An arm that cannot be made to go red is not an arm, and gets reported as such rather than quietly kept.
 

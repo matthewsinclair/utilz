@@ -60,6 +60,30 @@
       "state": {
         "is": "computed"
       }
+    },
+    {
+      "id": "AC-01.5",
+      "text": "A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.6",
+      "text": "When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
+    },
+    {
+      "id": "AC-01.7",
+      "text": "A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown.",
+      "kind": "test",
+      "state": {
+        "is": "computed"
+      }
     }
   ],
   "tests": [
@@ -68,10 +92,13 @@
       "kind": "test",
       "file": "opt/arngz/test/engine_test.lua",
       "covers": [
-        "AC-01.1"
+        "AC-01.1",
+        "AC-01.5",
+        "AC-01.6",
+        "AC-01.7"
       ],
       "status": "to-write",
-      "note": "The driver: an injected hs under plain lua, ten arms over create_space's reporting paths and call counts. Covers AC-01.1 now and will be re-cited to cover ST0032's AC-03.3, AC-03.4 and AC-03.5 once utilz-vc has descoped them here. Starts to-write; proven by mutation under AC-01.3 before it is marked anything else."
+      "note": "The driver: an injected hs under plain lua, ten arms over create_space's reporting paths and call counts. Covers AC-01.1's four behaviours and AC-01.5, AC-01.6 and AC-01.7, which are ST0032's AC-03.3, AC-03.4 and AC-03.5 recreated here verbatim: descope records the move on the source thread and creates nothing on the destination, so they had to be written rather than transferred. AC-01.2 was withdrawn as subsumed by AC-01.5, which now exists on the same thread, so that withdrawal reads correctly."
     },
     {
       "id": "AT-01.2",
