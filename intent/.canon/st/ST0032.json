@@ -86,8 +86,8 @@
       "text": "exec_place maps each of P.place_outcome's three answers to its own report, so a window an app holds at its own size reports placed with a note naming the size rather than failed. Engine code: no suite reaches it, and its only live proof is acceptance.sh's apply mode.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied",
-        "note": "Waits on the live path. exec_place is engine code no suite reaches; its only proof today is reading, plus acceptance.sh's apply mode, which has never been run on this machine. Four readings by three readers found no defect in it, which is the other half of what this thread measured."
+        "is": "satisfied",
+        "evidence": "Live, on utilz 2.14.10 from brew (arngz 1.2.1): hv's 'arngz apply homere' reported com.appgate.sdp as 'placed (in place at the app's own size, 375x667)', not failed. That is exec_place's own-size answer mapped to its own report. hv's output was relayed by utilz-dc on 10 Nov, and hv's own 'arngz diff homere' in vc's session read the same window 96 in place at 375x667, rc=0 (vc decision 107)."
       }
     },
     {
@@ -257,8 +257,8 @@
       "text": "VERBS.which observes once and passes P.detect's kind through untouched, so a response never asserts that one desk fits when several fitted and the current one decided. Engine code: reading is its only proof today.",
       "kind": "non-test",
       "state": {
-        "is": "unsatisfied",
-        "note": "Reading is its only proof today. VERBS.which is three lines of coordination over a pure function, and the kind passthrough was wrong in the design's own sketch until 7d92de7f while the code was right throughout. The code was read; the sketch is what had to be corrected."
+        "is": "satisfied",
+        "evidence": "By reading, the proof this AC names: VERBS.which observes once and passes P.detect's kind through untouched (the sketch was corrected at 7d92de7f; the code was right throughout). Live, on utilz 2.14.10: 'arngz which' named homere as the one desk that fits, and hv's Discover ('arngz auto --default rhad') worked, first-hand in vc's session on 10 Nov."
       }
     },
     {

@@ -1,0 +1,14 @@
+{
+  "id": "01M73FAKGQ30JM7WYQ8735J6RW",
+  "ts": "2026-11-10T19:35:27.512Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0032/AC-04.10"
+  },
+  "payload": {
+    "evidence": "By reading, the proof this AC names: VERBS.which observes once and passes P.detect's kind through untouched (the sketch was corrected at 7d92de7f; the code was right throughout). Live, on utilz 2.14.10: 'arngz which' named homere as the one desk that fits, and hv's Discover ('arngz auto --default rhad') worked, first-hand in vc's session on 10 Nov."
+  }
+}
