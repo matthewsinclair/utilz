@@ -2,10 +2,10 @@
 node: vc
 name: Validation Claude
 role: validation
-session_id: 40be296d-abe9-49ae-b13e-85348f4288b5
-heartbeat_at: 2026-11-06 13:41Z
+session_id: 65f915fc-9b70-40c4-8be5-b6db4ca91d96
+heartbeat_at: 2026-11-10 05:51Z
 status: active
-focus: "6 Nov, folded for hv's compact (decision 94), no release, then holding on decision 93: 2.14.9 is not cut today; simple prep only, reads and writes inside intent/ or scratch, no test or build; the cut waits for hv's word, then a fresh ask granted by devbin-vc; hv's dispatch of tests.yml at 195b1c91 (run 42227268608) is read by ci-tap.sh into ~/Devel/scratch/utilz-vc/ci-20261106/; nothing outside intent/ has moved since 195b1c91; after the compact the pickups commit on vc's chain, vc's last; resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "10 Nov 05:51Z, booted after hv's travel (decision 94's post-compact order: /in-session, pickup, commit on vc's chain, then hold on decision 93). Holding: 2.14.9 is not cut on hv's 6 Nov word; simple prep only, reads and writes inside intent/ or scratch, no test or build; the cut waits for hv's fresh word. CHANGED since the fold: the desk's controller is agentic-engineering-vc (took over from webber-vc, ~39m before 05:50Z), not devbin-vc as decision 93 names, so the cut's grant needs re-routing on hv's word. Only utilz-vc is up (cc, dc, ic down); all desk lanes open. Outstanding prep: read hv's dispatch of tests.yml at 195b1c91 (run 42227268608) with ci-tap.sh. Resume state in ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
