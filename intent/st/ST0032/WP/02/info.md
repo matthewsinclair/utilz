@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: 0134: discover leaves out a window lying mostly off its display
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: 0134: discover leaves out a window lying mostly off its display

@@ -1144,6 +1144,21 @@ function P.snap(frame, screen_frame, grid)
   return string.format("%d,%d %dx%d", x, y, w, h), round(math.max(mx, my)), px or py
 end
 
+-- Whether a window lies mostly off the display it was found on (issue 0134).
+-- snap_axis clamps a start left of the origin to cell 0 and forces the end a
+-- cell past it, which is right for a window that really is on the display and
+-- records a window that is not as occupying the edge cell. The threshold is
+-- the window's CENTRE: a window is on the display its middle is on, which
+-- needs no measurement snap does not already make and has no arguable
+-- boundary, as a percentage of overlap would.
+function P.mostly_off(frame, screen_frame)
+  if not frame or not screen_frame then return false end
+  local cx = frame.x + frame.w / 2
+  local cy = frame.y + frame.h / 2
+  return cx < screen_frame.x or cx >= screen_frame.x + screen_frame.w
+    or cy < screen_frame.y or cy >= screen_frame.y + screen_frame.h
+end
+
 -- The bundle ids discover never records: Hammerspoon's own windows are the
 -- engine, not the arrangement.
 -- Keyed by app_key.
@@ -1316,6 +1331,15 @@ function P.desk_from_world(world, options)
         if app then
           if e.fullscreen then
             app.layout = "fullscreen"
+          elseif P.mostly_off(w.frame, s.frame) then
+            -- A desk records only what it can place: snapping this would put
+            -- it in the edge cell, and the next apply would fail it there
+            -- (issue 0134).
+            note("%s desktop %d: a window of %s is not recorded: it lies mostly off this display"
+              .. " (its centre is %d,%d and the display is %d,%d %dx%d)", label, si, w.bundle,
+              round(w.frame.x + w.frame.w / 2), round(w.frame.y + w.frame.h / 2),
+              round(s.frame.x), round(s.frame.y), round(s.frame.w), round(s.frame.h))
+            app = nil
           else
             local layout, misfit, partial = P.snap(w.frame, s.frame, grid)
             app.layout = layout
@@ -1325,8 +1349,10 @@ function P.desk_from_world(world, options)
                 w.title or "", layout, misfit)
             end
           end
-          app.title = w.title
-          apps[#apps + 1] = app
+          if app then
+            app.title = w.title
+            apps[#apps + 1] = app
+          end
         end
       end
       sort_apps(apps)

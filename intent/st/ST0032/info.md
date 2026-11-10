@@ -66,7 +66,7 @@ Where 2.14.9 stood when this thread opened: ST0031/04's records and step 2 lande
 | WP    | Title                                                                                       | Size | Status      |
 | ----- | ------------------------------------------------------------------------------------------- | ---- | ----------- |
 | WP-01 | 0133: apply counts a window held at the app's own size as placed                            | S    | WIP         |
-| WP-02 | 0134: discover leaves out a window lying mostly off its display                             | S    | Not Started |
+| WP-02 | 0134: discover leaves out a window lying mostly off its display                             | S    | WIP         |
 | WP-03 | 0135: create_space retries, reports a persisting cause once, and refuses a vanished display | S    | Not Started |
 | WP-04 | Desk auto-selection: a pure detect, arngz which and arngz auto                              | M    | Not Started |
 | WP-05 | The menu, the help and the CHANGELOG                                                        | XS   | Not Started |

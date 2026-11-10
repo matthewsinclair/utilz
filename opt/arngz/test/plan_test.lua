@@ -118,6 +118,28 @@ do
     P.place_outcome(at(0, 40, 450, 545), at(1920, 40, 450, 545)) == "failed")
   check("place_outcome: a frame that could not be read is failed",
     P.place_outcome(nil, at(900, 40, 450, 545)) == "failed")
+
+  -- issue 0134: a window is on the display its centre is on.
+  local screen = at(0, 25, 1200, 800)
+  check("mostly_off: a window wholly inside its display is not off it",
+    not P.mostly_off(at(0, 25, 600, 800), screen))
+  check("mostly_off: a window hanging over an edge with its centre still inside is not off it",
+    not P.mostly_off(at(-100, 25, 600, 800), screen))
+  -- Run 69's case: 1920 points left of the origin, which is where homere's
+  -- left monitor sits.
+  check("mostly_off: left, right, above and below are each off it",
+    P.mostly_off(at(-1920, 25, 600, 800), screen)
+      and P.mostly_off(at(1200, 25, 600, 800), screen)
+      and P.mostly_off(at(0, -1080, 600, 800), screen)
+      and P.mostly_off(at(0, 825, 600, 800), screen))
+  -- The boundary is half open, as a screen's extent is: a centre exactly on
+  -- the far edge belongs to the next display, not this one.
+  check("mostly_off: a window whose centre sits exactly on the far edge is off it",
+    P.mostly_off(at(screen.x + screen.w - 1, 25, 2, 2), screen))
+  check("mostly_off: a window whose centre sits exactly on the near edge is not off it",
+    not P.mostly_off(at(screen.x - 1, 25, 2, 2), screen))
+  check("mostly_off: nothing to compare is not off it",
+    not P.mostly_off(nil, screen) and not P.mostly_off(at(0, 0, 1, 1), nil))
 end
 
 -- ------------------------------------------------------------- the planner
@@ -1103,6 +1125,39 @@ do
     #d3.spaces == 1 and #d3.spaces[1].apps == 0)
   check("the discovered desk plans against its own world with nothing but snapping places",
     only_places(desk, world))
+end
+
+-- ------------------------------------------------- off-display windows (issue 0134)
+
+print("off-display windows")
+do
+  local function entry_for(d, bundle)
+    for _, disp in ipairs(d and d.displays or {}) do
+      for _, sp in ipairs(disp.spaces or {}) do
+        for _, a in ipairs(sp.apps or {}) do if a.app == bundle then return a end end
+      end
+    end
+  end
+  -- The control: where the base world puts it, mail is on its display and is
+  -- recorded exactly as it always was. Without this, a predicate that excluded
+  -- everything would pass the check below.
+  local on_desk, on_notes = P.desk_from_world(base_world(), { name = "t" })
+  check("a window on its display is still recorded, and nothing is said about it",
+    entry_for(on_desk, "com.apple.mail") ~= nil
+      and not has_note(on_notes, "lies mostly off this display"))
+  -- Run 69's case: a window 1920 points left of the display's origin, which
+  -- snap_axis would clamp into the edge cell, and which the next apply then
+  -- fails because the cell is narrower than the app will go.
+  local w = base_world()
+  w.screens[1].spaces[1].windows[1].frame = { x = -1920, y = 25, w = 600, h = 800 }
+  local off_desk, off_notes = P.desk_from_world(w, { name = "t" })
+  check("a window lying mostly off its display is not recorded at all",
+    entry_for(off_desk, "com.apple.mail") == nil, render(entry_for(off_desk, "com.apple.mail")))
+  check("and discover says why, rather than snapping it into the edge cell",
+    has_note(off_notes, "is not recorded: it lies mostly off this display"),
+    notes_text(off_notes))
+  check("the window that stayed on the display is still recorded beside it",
+    entry_for(off_desk, "com.apple.Safari") ~= nil)
 end
 
 -- One app on two displays, and one title inside another.
