@@ -369,30 +369,52 @@ local function exec_create_space(op, ctx)
   -- it: level 0 adds no file:line prefix, which would otherwise reach the
   -- report. Whether waiting could put a failure right is plan's to say.
   --
-  -- THE READBACK DECIDES, NOT THE RETURN. addSpaceToScreen creates a desktop,
-  -- so an attempt that failed while nonetheless creating one must never be
-  -- repeated: retrying on the return value alone could make four desktops
-  -- where one was asked for, and the count then disagrees with every one of
-  -- them unaccounted for. A count that has reached before + 1 is a success
-  -- whatever the call said.
+  -- A CALL THAT REPORTED A SPACE IS NEVER MADE AGAIN. addSpaceToScreen creates
+  -- a desktop, and com.apple.spaces LAGS behind it: user_space_count reads
+  -- spacesForScreen, the same list spaces_agree waits on and the one the
+  -- created phase exists to let catch up. So a count read in the same breath
+  -- as the creation cannot be the trigger for another creation -- a lagging
+  -- list would make a second, a third and a fourth desktop for one op, and
+  -- report done with the extras unaccounted for. `made` is captured, so once
+  -- the call has returned a space the remaining attempts only re-read the
+  -- count, which is what the retry budget is actually buying. A call that
+  -- returned nil made nothing and may honestly be tried again, which is run
+  -- 35's case and the one 0135 was raised for.
+  local made, why
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
-    local _, why = hs.spaces.addSpaceToScreen(op.screen, true)
+    if not made then
+      made, why = hs.spaces.addSpaceToScreen(op.screen, true)
+    end
     local now, nerr = user_space_count(op.screen)
     if not now then error("could not count the desktops back: " .. tostring(nerr), 0) end
-    if now >= before + 1 then return now end
+    if now == before + 1 then return now end
+    if now > before + 1 then
+      -- Not a success to be reported done: something made desktops nobody
+      -- asked for, and the report has to say so rather than hide it in a
+      -- readback.
+      error(string.format("the desktops went from %d to %d, more than the one asked for", before, now), 0)
+    end
     error(tostring(why or "it changed nothing"), 0)
-  end, function(why) return P.space_error_kind(why) == "gone" end)
+  end, function()
+    -- Asked about the CALL's own reason, not about whatever was thrown: a
+    -- display that has gone in a way that also breaks spacesForScreen throws
+    -- the count's error, and reading that as transient would retry a vanished
+    -- display four times, which is the third thing 0135 set out to stop.
+    return not made and why ~= nil and P.space_error_kind(why) == "gone"
+  end)
   if ok then
     return { status = "done", readback = { user_spaces = res } }
   end
   local after = user_space_count(op.screen)
   local reason = string.format("creating a space did not take (%s); user spaces %d before, %s after",
     tostring(res), before, after and tostring(after) or "a count that could not be read")
-  -- Bind the rest of the run only when nothing was made. A count that moved by
-  -- some other amount is this op's failure alone: saying "already failed" for
-  -- every later space on the display would assert a failure that did not
-  -- happen and leave the desk short of desktops.
-  if after == before then
+  -- Bind the rest of the run when nothing was made, and when the count cannot
+  -- be read at all: both are causes that last, and leaving the unreadable case
+  -- out let the same failure be reported once per op, which is what this
+  -- suppression exists to stop. A count that moved by some other amount is
+  -- this op's failure alone: saying "already failed" for every later space on
+  -- the display would assert a failure that did not happen.
+  if after == nil or after == before then
     ctx.space_failed[op.screen] = reason
   end
   return { status = "failed", reason = reason }

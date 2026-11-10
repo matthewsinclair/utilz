@@ -77,18 +77,28 @@ verb_phrase() {
 # reads cannot disagree with it.
 ARNGZ_ENGINE_VERBS="apply diff discover which auto"
 ARNGZ_CATALOGUE_VERBS="list show delete current"
-ARNGZ_ENGINE="arngz's engine ($(verb_phrase "$ARNGZ_ENGINE_VERBS" "init --yes"))"
 ARNGZ_ENGINE_NEEDS="macOS and Hammerspoon"
-ARNGZ_WORKS_HERE="arngz $(verb_phrase "$ARNGZ_CATALOGUE_VERBS") work here"
+
+# The two sentences, rendered where they are used and not at every load. As
+# assignments they were two command substitutions every invocation paid for,
+# `arngz current` included -- and current is in the load_hammerspoon skip list
+# precisely because a menu label realises it at every menu open, which is the
+# same reason `which` may not go in a label. Only the refusal paths pay now.
+arngz_engine_words() {
+  printf "arngz's engine (%s)" "$(verb_phrase "$ARNGZ_ENGINE_VERBS" "init --yes")"
+}
+arngz_works_here() {
+  printf 'arngz %s work here' "$(verb_phrase "$ARNGZ_CATALOGUE_VERBS")"
+}
 
 # Refuse engine verb <what> off macOS, in the one refusal's words.
 refuse_engine_off_macos() {
-  refuse_off_macos "$1" "$ARNGZ_ENGINE_NEEDS" "$ARNGZ_WORKS_HERE"
+  refuse_off_macos "$1" "$ARNGZ_ENGINE_NEEDS" "$(arngz_works_here)"
 }
 
 # The one line init and doctor say off macOS, without refusing.
 engine_not_here_line() {
-  platform_refusal_words "$ARNGZ_ENGINE" "$ARNGZ_ENGINE_NEEDS" "$ARNGZ_WORKS_HERE"
+  platform_refusal_words "$(arngz_engine_words)" "$ARNGZ_ENGINE_NEEDS" "$(arngz_works_here)"
 }
 
 # ============================================================================
