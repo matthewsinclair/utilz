@@ -1,0 +1,15 @@
+{
+  "id": "01M738XFJMEQSB0HK4E11FDVJD",
+  "ts": "2026-11-10T17:43:26.037Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 10 Nov, first-hand in vc's session, received by vc's date -u of 17:43Z, answering vc's two open questions after decision 103. (1) \"main\": ST0029's parked records on dc/st0029 (a251bc60, records only, one commit off 1401e7b3) land on main. dc lands them by cherry-pick, without rewriting a landed commit, and vc checks the landing by change. The landing settles only where the records live. The work itself stays parked for this session, since hv's earlier \"not a priority today\" stands and no code starts. (2) \"yes\": ST0034's cost of about 150 ms per apply per recorded window is accepted, so 0133b's design stands as written. Peers read this decision at pickup; dc records no copy."
+  }
+}

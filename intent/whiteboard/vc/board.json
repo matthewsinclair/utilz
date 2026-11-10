@@ -2569,6 +2569,14 @@
       "text": "hv, 10 Nov, first-hand in vc's session after decision 102: UTILZ 2.14.9 IS RELEASED. (1) \"Can you push it? I'm AFK right now.\" vc pushed main c2ac7cec to both remotes after R-full, R1, R2 and R3 had all read green at that head. (2) hv typed \"! cd ~/Devel/prj/Utilz && bin/devbin release --patch --yes\" and vc ran it. The cut stamped 1401e7b3 and stopped at the macos leg because there was no notary keychain profile. hv stored the credentials with bin/devbin macos store-creds, doctor read PRESENT, and hv resumed the cut with bin/devbin release v2.14.9 --yes. The core ended at 17:38:26Z and the log is tmp/release/20261110-1735.RELEASE.out. vc verified it at 17:39Z from the remotes: upstream tag 2.14.9 (fe9dac48) peels to 1401e7b3; the release is published with Menuz.app.zip, stapled and accepted by Gatekeeper as Notarized Developer ID, plus SHA256SUMS; candidate CI run 42859750695 succeeded on all eight jobs, macOS included; the tap is at 2.14.9; candidate/2.14.9 has been deleted. END was sent to devbin-vc and utilz-dc, and the freeze is lifted. (3) ST0029 (Retire Python) is parked: \"Today is not the day to retire it\", relayed by devbin-vc. dc's records on dc/st0029 (a251bc60) stay on the branch until hv rules. (4) GREEN_AT_BASE, devbin-vc's reading of hv's 5 Nov rule: no planted faults beyond a guard's own single red case. A new arm that passes at the base is named in advance in a GREEN_AT_BASE list with a claim column, so vc's mutant phases for ST0034 were refused. NEXT: close ST0033, 0136 and 0137, which the cut's run proved; check whether 0133, 0134 and 0135 can close; ST0032 stays open on AC-01.4/01.5, AC-04.10 and AC-05.4; land dc/0133b (ST0034, issue 0138) once devbin-vc's run of it reads green. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-11-10T17:40:13.605Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 104,
+      "text": "hv, 10 Nov, first-hand in vc's session, received by vc's date -u of 17:43Z, answering vc's two open questions after decision 103. (1) \"main\": ST0029's parked records on dc/st0029 (a251bc60, records only, one commit off 1401e7b3) land on main. dc lands them by cherry-pick, without rewriting a landed commit, and vc checks the landing by change. The landing settles only where the records live. The work itself stays parked for this session, since hv's earlier \"not a priority today\" stands and no code starts. (2) \"yes\": ST0034's cost of about 150 ms per apply per recorded window is accepted, so 0133b's design stands as written. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-10T17:43:26.037Z"
     }
   ],
   "sent": [
