@@ -7,7 +7,7 @@ verblock: "10 Nov 2026:v1.42: matts - after 2.14.10's cut"
 ## DOING
 
 - dc: ST0034 (issue 0138), released in 2.14.10; WP01, the thread and 0138 stay open on AC-01.6, hv's live run on zeophq. dc removes wt-0133b and dc/0133b at its next fold.
-- vc: ST0032, arngz's exit-code defects (issues 0133, 0134, 0135) and the desk picked from the monitors present. Still open: AC-01.4 and AC-01.5, the live path; AC-04.10, which rests on reading; and AC-05.4, the menu in Molt-matts. Check whether 0133, 0134 and 0135 can close on what 2.14.9 proved.
+- vc: ST0032, arngz's exit-code defects (issues 0133, 0134, 0135) and the desk picked from the monitors present. Still open: AC-01.4 and AC-01.5, the live path; AC-04.10, which rests on reading; and AC-05.4, the menu in Molt-matts. 0134 and 0135 are closed; 0133 waits on AC-01.4 and AC-01.5.
 
 ## TODO
 
