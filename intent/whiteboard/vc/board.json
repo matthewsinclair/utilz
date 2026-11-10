@@ -2577,6 +2577,14 @@
       "text": "hv, 10 Nov, first-hand in vc's session, received by vc's date -u of 17:43Z, answering vc's two open questions after decision 103. (1) \"main\": ST0029's parked records on dc/st0029 (a251bc60, records only, one commit off 1401e7b3) land on main. dc lands them by cherry-pick, without rewriting a landed commit, and vc checks the landing by change. The landing settles only where the records live. The work itself stays parked for this session, since hv's earlier \"not a priority today\" stands and no code starts. (2) \"yes\": ST0034's cost of about 150 ms per apply per recorded window is accepted, so 0133b's design stands as written. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-11-10T17:43:26.037Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 105,
+      "text": "hv, 10 Nov, first-hand in vc's session: \"I want that done tonight.\" UTILZ 2.14.10 IS RELEASED, carrying ST0034 (issue 0138: arngz records the size an app enforces and rechecks it, so diff and apply agree; arngz 1.2.1). Landed at 20abb0dd, with its version note at 0342aee6 and arm 63's harness fix at 104efca0. Each was checked by vc by change. The proof: ST0034's driver ALL PASS (09d003e3); R-full at 0342aee6 with 17 of 18 rc 0, arngz's one red being arm 63, a race between the fake hs and a 1s deadline that predates ST0034; and arngz's suite at 104efca0, 165 of 165 (1635b4fc). The cut, release commit 4553a289, took three runs. (1) From vc's shell it stopped at macos: vc's shell cannot read hv's keychain. (2) hv's resume read the cancelled CI run that run 1 left behind: Devbin's ci-state takes the worst run at the commit, a defect devbin-vc confirmed from source and is filing. (3) hv deleted that run and resumed again from hv's own terminal, and the cut completed at 19:02:48Z. vc verified it at 19:03Z from the remotes: tag 2.14.10 (d83b1f5f) peels to 4553a289; the release has a notarised Menuz.app.zip and SHA256SUMS; candidate CI run 42877918756 succeeded on all eight jobs; the tap is at 2.14.10. Freeze lifted. A cut's macOS leg must run in hv's own terminal, not through a Claude's shell. Still open: ST0034/WP01 and issue 0138, on AC-01.6, hv's live zeophq run. Peers read this decision at pickup; dc records no copy.",
+      "state": "live",
+      "recorded_at": "2026-11-10T19:03:24.619Z"
     }
   ],
   "sent": [
