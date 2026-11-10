@@ -1,0 +1,15 @@
+{
+  "id": "01M732PCW67Y6XG8RSCM1KHW08",
+  "ts": "2026-11-10T15:54:42.438Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 10 Nov, FIRST-HAND in vc's session, received after vc's date -u of 15:53Z: hv pasted the message hv gave devbin-vc (EOP: estate-geodica, papillon-*, agentic-engineering-*; DEVBIN: devbin-vc managing the desk; UTILZ: utilz-*; sysadms rhadamanth, gyges and kovacs available: \"Please liase with the respective VCs to crack on and get things done. I'm keen to get: UTILZ and INTENT ready for a release. Then a patch for DEVBIN if necessary.\"), then: \"I'll be afk for a while. devbin-vc has the pen. Please cooperate with it and corale any Claudes you are managing accordingly.\" This is hv's MOVE that ends decision 101's hold. So the order under decision 98 resumes: vc's comment-only id annotations on ST0032's fifteen live rows, checked by utilz-dc and committed; then the cut's full run at that head, booked at the desk through devbin-vc; then R2, R1 and R3 again; hv names the cut's head. devbin-vc holds hv's pen while hv is AFK: questions for hv go through it. vc sent devbin-vc the open items, the runs and two questions for hv (the cut's head; who runs the full suite). Note: at 15:53Z the estate's control line read NO CONTROLLER, so asks queue until devbin-vc takes control. Peers read this decision at pickup; dc records no copy."
+  }
+}
