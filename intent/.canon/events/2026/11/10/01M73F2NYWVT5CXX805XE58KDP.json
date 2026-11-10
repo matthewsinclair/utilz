@@ -1,0 +1,15 @@
+{
+  "id": "01M73F2NYWVT5CXX805XE58KDP",
+  "ts": "2026-11-10T19:31:07.868Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 10 Nov, first-hand in vc's session: on ST0034 AC-01.6, hv ran 'arngz diff homere; echo rc=$?' after 'arngz apply homere', in answer to vc's recommendation (a), which was conditional on rc=0. It read rc=0. Appgate read 'window 96 in place at the app's own size, 375x667', a recheck that is not a change. Three unseen lines (Finder, Ivory, Console: running with no standard window) are not 0138's. zeophq could not be applied, because its saved monitor layout is absent. vc reads hv running the deciding line as taking (a): homere stands in for zeophq as AC-01.6's evidence, and hv can correct that here. dc then satisfies AC-01.6, wp done ST0034/01, st done ST0034, closes 0138 and unclaims, all on vc's chain."
+  }
+}

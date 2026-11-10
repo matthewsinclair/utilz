@@ -2593,6 +2593,14 @@
       "text": "hv, 10 Nov, first-hand in vc's session after 2.14.10's release: \"If we're done here, then lets localfold+compact across utilz-* then hold on the bounce.\" utilz-dc had already folded at 8e4f082f (checked by vc, 8bd2ccdf), so vc folds last, cc and ic having been down since 6 Nov. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain (dc's BACK, then YOUR TURN), then HOLD: start nothing until hv's move. Open for hv's move: ST0034/WP01 and 0138 on AC-01.6, hv's live zeophq run; ST0032 on AC-01.4/01.5 (the live path), AC-04.10, and AC-05.4 (the menu, live in Menuz 0.4.10 from Molt-matts b340832, satisfied once hv has clicked Discover on a real desk); and the TODOs on intent/wip.md. Peers read this decision at pickup; dc records no copy.",
       "state": "live",
       "recorded_at": "2026-11-10T19:26:11.461Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 107,
+      "text": "hv, 10 Nov, first-hand in vc's session: on ST0034 AC-01.6, hv ran 'arngz diff homere; echo rc=$?' after 'arngz apply homere', in answer to vc's recommendation (a), which was conditional on rc=0. It read rc=0. Appgate read 'window 96 in place at the app's own size, 375x667', a recheck that is not a change. Three unseen lines (Finder, Ivory, Console: running with no standard window) are not 0138's. zeophq could not be applied, because its saved monitor layout is absent. vc reads hv running the deciding line as taking (a): homere stands in for zeophq as AC-01.6's evidence, and hv can correct that here. dc then satisfies AC-01.6, wp done ST0034/01, st done ST0034, closes 0138 and unclaims, all on vc's chain.",
+      "state": "live",
+      "recorded_at": "2026-11-10T19:31:07.868Z"
     }
   ],
   "sent": [
