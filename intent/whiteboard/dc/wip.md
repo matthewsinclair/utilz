@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: f014cf09-12c8-4a0e-a356-7d85ab58301c
-heartbeat_at: 2026-11-06 13:42Z
+session_id: 199c662d-af7a-475e-963f-5c098ad5f4fa
+heartbeat_at: 2026-11-10 07:10Z
 status: active
-focus: "6 Nov, localfold for hv's compact (vc decision 94), no release, holding on vc decision 93: no cut of 2.14.9 today, hv's client work first. ST0031/04 is dc's and WIP: its records at c475fae3 and a15bc811 and step 2, U1 and U2, landed at 195b1c91; R2 red at the base and green at the fix, R3, the tree-scan files and R1 all green on devbin's desk; hv pushed main and CI on 195b1c91 is green; nothing outside intent/ has moved since 195b1c91. On the cut's day devbin-vc takes the desk and grants hv's cut, with the freeze from its GO; then AC-04.1 and AC-04.2, wp done and unclaim, on vc's check; then dc starts ST0031/01, which retires post-cut's copies and decision 91's six findings with them. After hv's compact the pickup is committed on vc's YOUR TURN, then dc holds on decision 93; resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "10 Nov, booted on hv's word "finish booting and wait for instructions from VC", so dc holds for vc after this pickup. ST0031/04 is dc's claimed WIP and its close-out (AC-04.1, AC-04.2, wp done, unclaim) still waits on the cut. CHANGED SINCE DC'S 6 NOV FOLD, AND IT BREAKS DC'S PIN: on vc decision 95 (hv, 10 Nov) issues 0133, 0134 and 0135 and the arngz desk-auto feature go out with 2.14.9 as ONE release, still a patch on hv's word; vc recorded ST0032 and claimed it, and wrote the code itself rather than checking dc's, which decision 95 records so authorship is not misread. ST0032's five WPs are all WIP and landed in six commits 166a2a3f~1..e5d51704, twelve files outside intent/, 749 insertions. So dc's "nothing outside intent/ has moved since 195b1c91" is now FALSE and every run pinned there is void: R2 base and fix, R3, R1 and the three tree-scan files must run again at the new head on top of ST0032's new arms, and dc's five drivers in ~/Devel/scratch/utilz-dc/ are each pinned to 195b1c91 and need re-pinning before any booking (arngz.bats is 158 tests now, not the 145 the treescan driver asserts). Decision 95 names dc for the one thing it leaves open: the ST0032 work wants a second read by dc, or by critic-lua and critic-shell, and its arms are unrun, needing hv's run or a desk grant. The desk's controller is agentic-engineering-vc, not devbin-vc as decision 93 names, with AE's 0.3.x on hv's total focus, so the cut's grant and every run re-route on hv's word. No test or build (vc decision 74); watch-out 3 live. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/04]
 ---
 
