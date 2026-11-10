@@ -1,0 +1,15 @@
+{
+  "id": "01M72TZZYY7BGQ15GZ4NC31ZF3",
+  "ts": "2026-11-10T13:40:08.286Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 10 Nov, FIRST-HAND in vc's session, received by vc's date -u of 13:38Z: \"Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move.\" So every live Utilz node localfolds now -- vc and utilz-dc, since cc and ic have been down since their 6 Nov folds -- with dc first and vc last on vc's chain, and hv then compacts. A compact does not end a session, so status stays active and nobody releases. ON THE BOUNCE: /in-session and the pickup, committed on vc's chain, and then HOLD. Start nothing until hv's move: not vc's id comments on ST0032's fifteen live test rows, not a booking, not a run. If the move restarts these sessions, the session scratchpad under /private/tmp may be gone, so vc banked everything that matters under ~/Devel/scratch/utilz-vc/, including PDY9E2's mutation kit and every per-mutant output with a manifest, which are the evidence for ST0032's fifteen green tests. THE ORDER STILL PENDING after the hold, under decision 98: vc's comment-only id annotations on ST0032, checked by dc and committed; then one full suite run at that head, which is the cut's own and hv's; then hv names the cut's head. This decision is executed when the bounce's pickup is committed and hv has given the move; until then the hold is live state. Peers read this decision at pickup; dc records no copy."
+  }
+}
