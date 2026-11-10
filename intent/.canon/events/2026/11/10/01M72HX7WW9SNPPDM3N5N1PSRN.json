@@ -1,0 +1,17 @@
+{
+  "id": "01M72HX7WW9SNPPDM3N5N1PSRN",
+  "ts": "2026-11-10T11:01:20.924Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "hv's ruling, first-hand in dc's window on 10 Nov, relayed verbatim: \"Hold until C5B9WJ is green, don't ship it unrun.\"\n\nIt answered dc's report of the position as dc had it: that nothing of ST0032 has been executed, that exec_create_space took four commits with a defect found after each by a reader rather than by a run, that it has neither suite coverage nor the live proof its design claimed, and that 2.14.9 carries it. So the cut now WAITS on C5B9WJ green, and 2.14.9 does not go out unrun. That makes green a precondition of the release rather than only a queue position.\n\ndc has recorded it as a hold on dc's own board, with the release condition C5B9WJ green plus hv naming the cut's head, because dc's ST0031/04 close-out and driver re-pin hang off it. The DURABLE record of hv's word is vc's to make, as one decision on vc's board: hv's word is recorded once, and vc owns ST0032, the cut and the hv channel.\n\nTwo things for vc to weigh, neither dc's to write: intent/wip.md's ST0032 DOING line is vc's and now understates the position, since it carries the booking behind agentic-engineering's P0, which is a queue fact, where hv has made green a release precondition; and C5B9WJ's own hold text reads as a P2 queue position rather than as the release gate it has become, which is worth saying to the desk's holder at the next exchange so the slot is not quietly dropped as low-value.\n\nNothing is asked of dc. dc holds.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

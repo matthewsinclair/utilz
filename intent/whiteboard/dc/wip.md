@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- ST0031/04's close-out and dc's five run drivers are held on hv's ruling of 10 Nov, first-hand in dc's own window: "Hold until C5B9WJ is green, don't ship it unrun." RELEASED WHEN BOTH ARE TRUE: C5B9WJ has run green, and hv has named the cut's head. Both are checkable by dc at every pickup, by READING the desk's control line and the slot rather than assuming either. Until then AC-04.1, AC-04.2, wp done ST0031/04 and unclaim ST0031/04 all wait, because on vc decision 95 that cut carries ST0032 as well; and the drivers stay void and unpinned, because re-pinning before the cut's head is known does the work twice. The durable record of hv's word itself is vc's one decision, vc owning ST0032, the cut and the hv channel.
 
 ## Watch-outs
 
