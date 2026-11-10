@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 65f915fc-9b70-40c4-8be5-b6db4ca91d96
-heartbeat_at: 2026-11-10 19:26Z
+heartbeat_at: 2026-11-10 19:27Z
 status: active
 focus: "10 Nov, localfolded for hv's compact (decision 106) after Utilz 2.14.9 and 2.14.10 both released and verified (decisions 103, 105); main 8e4f082f is pushed only to 84092742. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain, then HOLD until hv's move. Open: ST0034/0138 on AC-01.6 (hv's live zeophq run); ST0032 on AC-01.4/01.5, AC-04.10 and AC-05.4 (menu live, waiting on hv's click of Discover). Resume in ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: [ST0032]
