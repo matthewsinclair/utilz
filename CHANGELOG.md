@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.14.10] - unreleased
+
+### Fixed
+
+- **`arngz diff` and `arngz apply` agree about a window its app holds at its own size** (issue 0138, ST0034). 2.14.9 made `apply` count such a window as placed, and named the limit it left: `diff` still reported the window as a difference, so the two disagreed about the identical window, `diff` never read "no change" on a desk holding one, and every later `apply` placed it again. arngz now remembers. When `apply` reads a window back at its cells' origin at a size its app enforces, it records the app, the cells' size and the size held in `$XDG_STATE_HOME/arngz/own-sizes` (state beside the current desk, not configuration; the desk is untouched). The next plan, for a window at its cells' origin at that recorded size, rechecks it rather than placing it: `diff` reads it as in place, `no change: this machine already matches the desk` first and then `window N in place at the app's own size, WxH`, and exits 0; `apply` still sets the window's frame and reads it back, about 150 ms per apply for each recorded window, so an app that stops holding its size is re-sized and its record is cleared rather than trusted for ever. A window at the wrong origin or on the wrong space is placed whatever is recorded. A record file that is not a list is said once and used as none. arngz goes from 1.2.0 to 1.2.1.
+
 ## [2.14.9] - 2026-11-10
 
 ### Added
