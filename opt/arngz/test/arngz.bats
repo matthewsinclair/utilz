@@ -540,19 +540,6 @@ fake_hs() {
 # AT-03.2 -- the pure planner, under plain Lua (AC-03.2)
 # ============================================================================
 
-# lua5.4 on the CI legs, luajit on hv's machine. NO INTERPRETER IS A FAILURE,
-# never a skip: every leg that runs this suite installs one.
-lua_bin() {
-  local b
-  for b in lua5.4 lua luajit; do
-    if command -v "$b" >/dev/null 2>&1; then
-      command -v "$b"
-      return 0
-    fi
-  done
-  return 1
-}
-
 @test "AT-03.2: plan is pure: plan.lua makes no Hammerspoon, io, os or require call" {
   local plan="$UTILZ_HOME/opt/arngz/lib/plan.lua" impure='(^|[^A-Za-z0-9_])(hs|io|os)\.|require[ (]'
   [ -f "$plan" ]
@@ -569,7 +556,7 @@ lua_bin() {
   run "$lua" "$UTILZ_HOME/opt/arngz/test/plan_test.lua" "$UTILZ_HOME/opt/arngz/lib/plan.lua"
   echo "$output"
   assert_success
-  assert_output_contains "0 failed"
+  assert_lua_suite_summary plan_test
 }
 
 # ============================================================================

@@ -602,6 +602,71 @@ require_command() {
   fi
 }
 
+# WHICHEVER LUA IS PRESENT, decided in ONE place (ST0033). Two bats files now
+# drive Lua suites -- arngz.bats runs plan_test.lua and engine.bats runs
+# engine_test.lua -- and a second copy of this loop would be two places
+# deciding which interpreter the project's Lua tests run under, which is the
+# Highlander rule's own case. Moved here from arngz.bats body for body,
+# which made the move provable by diff, and then hardened for issue 0137
+# below, so the body is no longer the one that moved.
+#
+# lua5.4 on the CI legs, luajit on hv's machine; a developer box may carry only
+# `lua`. It prints the interpreter's path, and returns 1 when none is installed,
+# so the caller fails with its own message instead of skipping silently: a skip
+# here would let a Lua suite report success having run nothing.
+#
+# A CANDIDATE MUST BE EXECUTABLE, NOT MERELY PRESENT (issue 0137). command -v
+# names a file that exists but cannot run when nothing executable of that name
+# is on PATH, and a suite run under it fails with 126, which reads as a failing
+# test rather than as an interpreter that never ran. So each candidate is
+# resolved and then tested with -x. A builtin or a function prints a bare name,
+# which -x would wrongly reject, hence the `!= /*` arm; none of these three is.
+# Usage: lua="$(lua_bin)" || fail "no Lua interpreter (lua5.4, lua or luajit) on PATH"
+lua_bin() {
+  local b p
+  for b in lua5.4 lua luajit; do
+    p="$(command -v "$b" 2>/dev/null)" || continue
+    if [[ "$p" != /* || -x "$p" ]]; then
+      printf '%s\n' "$p"
+      return 0
+    fi
+  done
+  return 1
+}
+
+# A LUA SUITE'S SUMMARY, JUDGED IN ONE PLACE (ST0033, issue 0136). Both Lua
+# drivers, plan_test.lua and engine_test.lua, end by printing
+#   <label>: <N> passed, <M> failed
+# and calling os.exit(failed == 0 and 0 or 1). A bats arm runs one with `run`,
+# asserts success, and then calls this. It requires the summary line to be
+# present, the failures to be none, and the passes to be more than none.
+#
+# WHY IT PARSES RATHER THAN MATCHES. The LIVE gap is a driver that ran no checks
+# at all: it prints "<label>: 0 passed, 0 failed" and exits 0, which
+# assert_success accepts and so does a plain "0 failed" match, so the suite
+# would go green having proved nothing. "0 failed" is also a substring of
+# "10 failed", but that is LATENT rather than live: the drivers exit nonzero on
+# any failure, so under exit 0 the summary always reads "0 failed". Parsing the
+# numbers closes the live gap, and keeps the latent one closed if a driver ever
+# stops exiting nonzero on failure.
+#
+# Neither number is written down: the failures are checked against none, which
+# is "everything that ran passed", and the passes only against having happened.
+# It is one place so that two suites cannot judge their summaries two ways. The
+# label goes into a grep and a sed pattern, so it must be a plain identifier
+# such as plan_test or engine_test: no regex metacharacter and no slash.
+# Usage: run "$lua" <driver> <lib>; assert_success; assert_lua_suite_summary plan_test
+assert_lua_suite_summary() {
+  local label="$1"
+  local summary passed failed
+  summary="$(printf '%s\n' "$output" | grep -E "^${label}: [0-9]+ passed, [0-9]+ failed\$")"
+  [ -n "$summary" ] || fail "the driver printed no summary line of its own: $output"
+  passed="$(printf '%s' "$summary" | sed -E "s/^${label}: ([0-9]+) passed.*\$/\\1/")"
+  failed="$(printf '%s' "$summary" | sed -E 's/^.* ([0-9]+) failed$/\1/')"
+  [ "$failed" -eq 0 ] || fail "$failed arm(s) failed; see the output above"
+  [ "$passed" -gt 0 ] || fail "the driver ran no arms at all, so its exit 0 proves nothing"
+}
+
 # A PATH THAT LACKS ONE TOOL (issue 0084). A test of a missing tool's refusal
 # used to skip wherever the tool was installed, which was every machine that
 # ran it, so no refusal it was written for ever ran. PATH order cannot hide a
