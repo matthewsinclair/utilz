@@ -1,0 +1,15 @@
+{
+  "id": "01M81WBB33FAV8T2PQD1P2QCPW",
+  "ts": "2026-11-22T15:00:16.102Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I59c806c709bb2eb1"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "Utilz carries its own copy of devbin's dev/opt/brew (utilz install, utilz use, its manifest); adopt devbin#0326's bin/devbin install and bin/devbin use"
+  }
+}
