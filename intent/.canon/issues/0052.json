@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 52,
+  "schema": "intent/issue@4.0",
+  "id": "0052",
   "slug": "a-release-sha-now-carries-two-ci-runs-and-instal",
   "title": "A release sha now carries two CI runs and install_ci_state reads only one of them",
   "status": "closed",

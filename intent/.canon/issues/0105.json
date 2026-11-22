@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 105,
+  "schema": "intent/issue@4.0",
+  "id": "0105",
   "slug": "utilz-s-docs-and-messages-present-a-checkout-or",
   "title": "Utilz's docs and messages present a checkout or opt install as the user's install, against dev, opt, brew",
   "status": "closed",

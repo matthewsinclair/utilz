@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0003: syncz --bidi mode and --confirm enhancement\n\n## Tasks\n\n- [x] Implement --bidi mode (code complete)\n- [x] Implement --confirm optional argument (code complete)\n- [x] Fix stale version assertion in existing tests\n- [x] Write BATS tests for --bidi mode (17 tests)\n- [x] Write BATS tests for --confirm optional argument (4 tests)\n- [x] Fix detect_orphans empty array bash 3.2 bug\n- [x] Fix --confirm yes --delete not deleting on macOS rsync\n- [x] Verify all 66 tests pass\n- [x] Update help/syncz.md\n- [x] Update CHANGELOG.md\n- [x] Update README.md syncz section\n- [x] Update opt/syncz/README.md\n- [x] Bump VERSION and docs/index.md to 1.2.1\n- [x] Update intent/wip.md\n- [x] Final verification (tests, doctor, help rendering)\n\n## Dependencies\n\n- Implementation code was completed in prior session\n- Tests and documentation completed in this session\n",
+  "bytes": 862,
+  "sha256": "98739bf7cfb396ce60f54a9ecdcca4a80121895508ef85f3a24b5634d5b9f03a"
+}

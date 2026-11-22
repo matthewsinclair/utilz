@@ -1,0 +1,10 @@
+{
+  "id": "AT16",
+  "kind": "test",
+  "file": "opt/utilz/test/relink.bats",
+  "covers": [
+    "AC20"
+  ],
+  "status": "green",
+  "note": "Run the verb against a fixture bin/ holding both link shapes -- absolute-to-own-name, and the relative-to-dispatcher shape ~/.local/bin/prez actually has. Assert: every link now resolves into the named tree; the odd-shaped one still dispatches; the verb REPORTS what it changed; a link pointing at neither tree is left untouched and reported as skipped. Then assert install and upgrade with no verb change NOTHING in that directory -- the AC11 half. One leg without the other proves only that something moved."
+}

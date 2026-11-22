@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "P.space_error_kind reads a vanished display as gone and anything else as transient, with an unrecognised reason defaulting to transient deliberately.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

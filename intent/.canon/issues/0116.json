@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 116,
+  "schema": "intent/issue@4.0",
+  "id": "0116",
   "slug": "readme-and-help-do-not-name-use-brew-s-refusal-w",
   "title": "README and help do not name `use brew`'s refusal when it cannot finish a name's check",
   "status": "closed",

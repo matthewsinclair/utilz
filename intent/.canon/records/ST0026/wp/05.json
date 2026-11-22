@@ -1,0 +1,9 @@
+{
+  "id": "05",
+  "title": "apply",
+  "scope": "S",
+  "status": "done",
+  "objective": "`apply`, in the order the design gives: preconditions, validate, observe, match displays (UUID, then name and size, then position, `--map` to override), plan, `--dry-run` stops with the ops printed, create missing spaces, launch and wait, re-observe, move then place with a readback after each op, `--bind` only if WP-01 allowed it, final observe, and the per-app report with exit 0, 1 or 2. Matching, planning and the report are tested from fixtures through the fake `hs`; the execute half is the hand-run acceptance on hv's machine, recorded as such. The shorthand `utilz arngz <desk>` lands here.",
+  "body": "",
+  "preamble": ""
+}

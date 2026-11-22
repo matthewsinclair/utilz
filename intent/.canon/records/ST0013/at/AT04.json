@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "PREPEND, NOT REPLACE, AC01 clause (c) -- and the word prepend is the whole assertion. Three legs. (1) with `PREZ_THEME_PATH=<envdir>` set and `--theme-path=<flagdir>` given, a name present ONLY in envdir still resolves: the flag COMPOSES with the env rather than replacing it, and a replace implementation passes any test that only ever sets one of the two. (2) a name present in BOTH resolves from flagdir, which is what prepend means as against append. (3) repeated `--theme-path` is LAST-WINS, ruled 8 Sep on ccs Q2: every other value flag in `args.rs` is last-wins and a second rule for this one would be a special case nobody can predict. Red-first: no `--theme-path` exists at 6e02020, so all three legs fail at argument parsing. Leg 1 is the one that matters -- it is the only leg an accidental replace cannot pass.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

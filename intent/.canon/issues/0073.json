@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 73,
+  "schema": "intent/issue@4.0",
+  "id": "0073",
   "slug": "menuz-adopts-arcamasthead-the-identity-row-and-a",
   "title": "menuz adopts ArcaMasthead: the identity row and an About window",
   "status": "closed",

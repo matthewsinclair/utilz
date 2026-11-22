@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 86,
+  "schema": "intent/issue@4.0",
+  "id": "0086",
   "slug": "menuz-s-run-id-store-can-be-seen-empty-while-it",
   "title": "menuz's run-id store can be seen empty while it is being created, and a second run then gets no id",
   "status": "closed",

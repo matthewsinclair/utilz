@@ -1,0 +1,10 @@
+{
+  "id": "AT07",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC08"
+  ],
+  "status": "green",
+  "note": "Three assertions: pdftotext still finds the page own text; it does NOT find the recipient contiguously; and the implementation header carries the deters-does-not-protect sentence. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0."
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 103,
+  "schema": "intent/issue@4.0",
+  "id": "0103",
   "slug": "macos-publish-ships-a-menuz-app-built-off-the-re",
   "title": "macos publish ships a Menuz.app built off the release tag: app-sign builds whatever HEAD is, and publish checks only the bundle id and version",
   "status": "closed",

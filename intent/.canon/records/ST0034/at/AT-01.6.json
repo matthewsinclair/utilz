@@ -1,0 +1,10 @@
+{
+  "id": "AT-01.6",
+  "kind": "non-test",
+  "prose": "hv runs arngz apply zeophq then arngz diff zeophq with Appgate SDP present, and diff reads no change",
+  "covers": [
+    "AC-01.6"
+  ],
+  "status": "n-a",
+  "note": "hv's live run, after the code lands and 2.14.10 is in hv's hands"
+}

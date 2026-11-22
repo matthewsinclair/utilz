@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.2",
+  "text": "tests.yml fires on a push to `main` or `candidate/**`, with no `tags:` trigger, and runs its macOS jobs and the rust job's macOS leg only on a `candidate/` push or a dispatch: after the sweep a read-only `bin/devbin release check` passes in Utilz, its checker finding that the test matrix fires on `candidate/`, and CI at the sweep's push is green on every job the run starts.",
+  "kind": "non-test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "carried by ST0031/04's AC-04.1"
+  }
+}

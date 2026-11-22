@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 3,
+  "schema": "intent/issue@4.0",
+  "id": "0003",
   "slug": "utilz-dispatcher-rejects-version-help-and-h-at",
   "title": "utilz dispatcher rejects --version, --help and -h at its own top level",
   "status": "closed",

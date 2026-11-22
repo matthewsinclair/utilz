@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.4",
+  "text": "Every image is decoded before every screenshot. The first captured frame of a slide that arrives by `cut` has its photo's own mean colour within 6/255, never a partial draw or the ground.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

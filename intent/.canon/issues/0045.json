@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 45,
+  "schema": "intent/issue@4.0",
+  "id": "0045",
   "slug": "showreel-at-9-16-a-long-socials-handle-overflows",
   "title": "showreel: at 9:16 a long socials handle overflows the frame instead of fitting its width",
   "status": "closed",

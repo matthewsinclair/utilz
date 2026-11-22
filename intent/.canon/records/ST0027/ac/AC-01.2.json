@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.2",
+  "text": "The example menuz.yaml in design.md is final, its params typed as D4 rules, and is the one menuz init writes; swift is a declared language of the project (intent lang init swift) and critic-swift is the review for native/macos/Menuz.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "vc, 16 Oct 2026 at 04a331d: opt/menuz/lib/example.yaml is design.md's yaml block byte for byte (diff empty; cc's 4e34217 carried a 'type: string' line the five types do not allow, removed at 04a331d), menuz init writes it (AT-02.2 green), swift is a declared language (intent lang init swift, 16 Oct) and critic-swift reviews native/macos/Menuz"
+  }
+}

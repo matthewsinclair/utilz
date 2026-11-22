@@ -1,0 +1,9 @@
+{
+  "id": "AC-07.4",
+  "text": "help/menuz.md names the identity row and its three forms, the fifth stamp and the kind's rule, and the CHANGELOG's menuz entry for 2.14.0 names the row; bin/devbin check all is green; the menuz-app job is green on a dispatch of tests.yml at the landed SHA, so the Swift builds under Xcode 16.4 as well as 27.1.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "menuz-app dispatch run 39011202584 green on main at 0238962 (Menuz source unchanged since 90afe01; the RunnerTests flake fix 0f0868e green in cc's window too); bin/devbin check all green at b1ce021, transcript tmp/vc-st0026/st0027/wp07/check-all-b1ce021.txt; help/menuz.md and CHANGELOG.md carry the row and the five stamps (5f151ab)"
+  }
+}

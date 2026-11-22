@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.3",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/WrapperTests.swift",
+  "covers": [
+    "AC-04.3"
+  ],
+  "status": "green",
+  "note": "The real wrapper through zsh with a fixture log: the start, [id] prefixes on stdout and stderr, the end line's code and duration parsed as ISO 8601 UTC against LogLine's format, the cwd as written (~, a variable, an unenterable one at 126), a secret used and absent from the log; the app's start, cancelled and quit lines are RunTests.swift"
+}

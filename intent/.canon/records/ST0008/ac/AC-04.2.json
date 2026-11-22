@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.2",
+  "text": "`done --flush` clears the DONE bucket without archiving; it is confirm-guarded and proceeds non-interactively with `--force`/`--just-do-it`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

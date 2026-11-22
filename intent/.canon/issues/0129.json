@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 129,
+  "schema": "intent/issue@4.0",
+  "id": "0129",
   "slug": "menuz-s-macos-bats-fails-setup-file-on-ubuntu-26",
   "title": "menuz's macos.bats fails setup_file on ubuntu-26.04, whose /usr/bin holds a dangling link, so CI's Ubuntu leg is red",
   "status": "closed",

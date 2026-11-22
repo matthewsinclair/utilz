@@ -1,0 +1,6 @@
+{
+  "path": "impl.md",
+  "text": "# Implementation - ST0003: Add --bidi to syncz\n\n## Implementation\n\n[Notes on implementation details, decisions, challenges, and their resolutions]\n\n## Code Examples\n\n[Key code snippets and examples]\n\n## Technical Details\n\n[Specific technical details and considerations]\n\n## Challenges & Solutions\n\n[Challenges encountered during implementation and how they were resolved]\n",
+  "bytes": 372,
+  "sha256": "bf2f4587b615b4f44e75aaad48b42b82c3f62d233049224f6ed55b4cf0af8e03"
+}

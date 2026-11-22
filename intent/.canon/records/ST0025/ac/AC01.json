@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "A PDF whose pages differ in size is stamped rather than refused: every page carries the stamp rendered for its own size, every page keeps its own MediaBox, and the page count is unchanged.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "id": "AT-00.1",
+  "kind": "test",
+  "covers": [
+    "AC-00.1"
+  ],
+  "status": "green",
+  "note": "(14/14 suites, 41 tests in `common_lib.bats`, 2026-07-29)",
+  "legacy": {
+    "raw": "Full suite via `utilz test"
+  }
+}

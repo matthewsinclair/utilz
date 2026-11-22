@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "The app is an xcodegen project at native/macos/Menuz in the siblings' shape (Swift 6, macOS 14, LSUIElement, the test-host guard; signed and notarised with Developer ID on release as Intent's is, D7) with Yams as its one package; --validate and --render run without a menu bar and exit 0 or 2 with every finding named, and --version prints the stamped version.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "Publishing into a Utilz SOURCE tree is refused, whatever the source. The predicate is a property of the TARGET, never src-equals-dst: devbin's guard compared the two and a vendored copy landed in their dev tree past it on 2026-09-07.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

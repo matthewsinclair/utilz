@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "The validator refuses each of the design's seven conditions (an unknown key; a grid not WxH; a layout neither x,y wxh inside the grid nor fullscreen; two displays with one name; a match with neither uuid nor name; the same app twice on one display without a window pattern on each; a verb as a desk name), naming the desk, the path and the value, and accepts the design's example desk unchanged.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

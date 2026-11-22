@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "The sweep's push carries the whole change, on ST0031/02's bank: tools/ci-state, tools/post-cut, tools/formula, install.sh's install_ci_state and install_ci_jobs, and the tests of each are gone; bin/.devbin/config.yaml gates the cut with `check all` then `test estate`, and its one after: command is `bin/devbin formula publish`; docs/releasing.md describes the cut in the new shape; and no tracked file outside bin/.devbin, CHANGELOG.md and intent/ names any of them.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT-06.1",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzTests/NotifyArmTests.swift",
+  "covers": [
+    "AC-06.1"
+  ],
+  "status": "green",
+  "note": "Hosted, with a fake centre: the --notify arm granted (notice posted, exit 0); off in System Settings, refused or by the centre's error with the status denied (the setting named, exit 1); not yet allowed, refused or by the centre's error with the status not determined (the alert and the setting named, exit 1); a failed add and any other error (the centre's words, exit 1); the deadline; and the launch's lines from Notices.authorise: granted, denied, not yet allowed, the error, and the asking line past a 0.3 s deadline before the answer. The wrapper's call of \"$MENUZ_EXEC\" --notify in place of osascript, its line logged under the run id, a refusal at exit 1 and a missing executable at 127 with the run's code untouched, is native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/WrapperTests.swift; the lines themselves are native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/NoticeTests.swift. At b7e07a3: 22 hosted tests in 7 suites, 113 in 15 (xcodebuild test, 17 Oct 21:01Z)."
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 122,
+  "schema": "intent/issue@4.0",
+  "id": "0122",
   "slug": "docs-releasing-md-does-not-say-that-publish-and",
   "title": "docs/releasing.md does not say that publish and menuz install drop every record left under menuz's build root (issue 0115's drops)",
   "status": "closed",

@@ -1,0 +1,6 @@
+{
+  "path": "impl.md",
+  "text": "# Implementation - ST0005: pdf2md - PDF to Markdown Converter\n\n## Implementation\n\nTo be filled in during implementation.\n\n## Key Implementation Notes\n\n### pdfplumber text extraction\n\nUse `page.chars` to get individual characters with position/font data, then cluster into words/lines. Alternatively, `page.extract_words()` may provide a useful starting point but check that it includes font metadata.\n\n### Y-tolerance for line grouping\n\nCharacters within ~2px of Y-position should be considered the same line. The exact tolerance may need tuning based on real PDFs.\n\n### Font size mode calculation\n\nUse `collections.Counter` to find the most common font size across all characters in the document. This is the \"body text\" size; anything larger is a heading candidate.\n\n## Challenges & Solutions\n\nTo be filled in during implementation.\n",
+  "bytes": 835,
+  "sha256": "6ab3856113ee4b6e5748e459fc95ec2d69ffb9bda02ec9c4c5530e99c8133a1a"
+}

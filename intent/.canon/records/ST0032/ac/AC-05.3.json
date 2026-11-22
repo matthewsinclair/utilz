@@ -1,0 +1,9 @@
+{
+  "id": "AC-05.3",
+  "text": "README.md's list of arngz verbs includes the two new ones.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "README.md:72 and :121 both list arngz's verbs as apply, diff, discover, which and auto; there is no verb table that omits them."
+  }
+}

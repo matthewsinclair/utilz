@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.4",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/WrapperTests.swift",
+  "covers": [
+    "AC-04.4"
+  ],
+  "status": "green",
+  "note": "The notice through a fake MENUZ_EXEC on a fixture path, the app's own --notify arm since WP-06 (D13; WP-04's fake osascript measured nothing real: the real one posted nothing on hv's macOS 27): failure on a non-zero exit with the label and the code, always on every end with the last output line, never none; the item's notify over the file's is RunTests.swift; the arm's posting and its lines are AT-06.1."
+}

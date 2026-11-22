@@ -1,0 +1,10 @@
+{
+  "id": "AT18",
+  "kind": "test",
+  "file": "opt/prez/crate/src/drive.rs",
+  "covers": [
+    "AC19"
+  ],
+  "status": "green",
+  "note": "ARGV LAYER ONLY, which is what this row now cites after the 2026-08-29 split. Instrument: the unit tests under drive.rs's \"AT18's argv half\" header, plus three assertions inside AT06's block (launched at the deck's aspect, no flag that Chrome silently ignores, --window overrides the default). cargo test --release: 128 passed, 0 failed. AC19 does NOT follow from this alone -- AT20 carries the browser layer and is unwritten, so the window that actually appears remains unmeasured. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
+}

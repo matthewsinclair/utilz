@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.5",
+  "text": "An unknown `<id>` errors with a clear message and non-zero exit (no silent no-op).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

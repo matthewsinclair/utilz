@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.4",
+  "text": "diff <desk> prints the ops apply would run, exits 1 when any exist and 0 when none, and sends no execute request.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

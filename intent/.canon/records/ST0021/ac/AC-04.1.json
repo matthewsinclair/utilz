@@ -1,0 +1,9 @@
+{
+  "id": "AC-04.1",
+  "text": "CI records video on both legs. The workflow installs ffmpeg on ubuntu-latest and macos-latest, `video.sh` runs with `--strict`, and its output names the Chrome and the ffmpeg it used. A leg missing either is `unchecked`, never `not_applicable`.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "CI run 35507688287 on 2f4bd2b, completed success, 20 Sep: https://github.com/matthewsinclair/utilz/actions/runs/35507688287 . Rust (ubuntu-latest), job 106070152962: the workflow installed ffmpeg, and video.sh --strict passed 10 of 10 (failed 0, skipped 0), naming 'browser resolved to /usr/bin/google-chrome' and 'ffmpeg resolved to /usr/bin/ffmpeg (ffmpeg version 6.1.1-3ubuntu5)', with Chrome's singleton socket in the recording's scratch directory, a failure mid-recording after 2 frames, an interrupt settling in 1 s, and a stall refused 'no reply from Chrome in 30 s, during frame 6: screenshot'. Rust (macos-latest), job 106070152815: the same 10 of 10, naming /Applications/Google Chrome.app and ffmpeg 9.0.1, with acceptance 14 of 14 and theme-addressing 20 of 20. Nothing was unchecked on either leg, and no AT was not_applicable in video.sh."
+  }
+}

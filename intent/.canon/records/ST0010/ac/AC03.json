@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "Notes stripped: the demo deck's notes comment carries a distinctive sentinel string and that sentinel appears nowhere in the built artifact (grep on the demo build proves it). Stripping is a REMOVAL wherever a notes comment appears on a depth-zero line, mid-line included, not a whole-line rule; a notes comment INSIDE a code fence is author content and is shown, so the grep targets the sentinel payload, never the literal notes: token. (Carried from _tools AC04.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

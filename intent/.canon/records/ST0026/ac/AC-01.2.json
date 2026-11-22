@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.2",
+  "text": "That section is resolved to one outcome, A, B, C or D, and names which apply flags exist as a result, --bind in particular.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "intent/st/ST0026/design.md, Standing after these (eeeab48): outcome D taken, D21; --bind does not exist in v1"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "`start <id>` moves the item to DOING as `[-]` (bottom by default, top with `--top`).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

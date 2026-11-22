@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 94,
+  "schema": "intent/issue@4.0",
+  "id": "0094",
   "slug": "menuz-status-says-the-source-is-unknown-on-a-hom",
   "title": "menuz status says the source is unknown on a Homebrew install",
   "status": "closed",

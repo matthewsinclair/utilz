@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 28,
+  "schema": "intent/issue@4.0",
+  "id": "0028",
   "slug": "install-e2e-s-setup-file-swallows-a-refused-comm",
   "title": "install_e2e's setup_file swallows a refused commit, so it surfaces later as a misleading dirty-tree refusal",
   "status": "closed",

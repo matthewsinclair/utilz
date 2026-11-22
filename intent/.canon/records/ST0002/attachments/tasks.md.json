@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0002: Syncz - a simple directory-to-directory syncer\n\n## Status\n\nCOMPLETE - All tasks done. See [done.md](done.md) for completed task list.\n\n## Optional Future Enhancements\n\n- [ ] `--log` flag to write sync log to file\n- [ ] `--filter-from` to read exclude patterns from file\n- [ ] `--checksum` mode for content-based comparison instead of timestamp\n- [ ] `--stats` flag to show detailed transfer statistics\n",
+  "bytes": 420,
+  "sha256": "6e3e4bd0b83da2650b4f547348ff491081953efc2c30189b8ffcfde2a9a99c3d"
+}

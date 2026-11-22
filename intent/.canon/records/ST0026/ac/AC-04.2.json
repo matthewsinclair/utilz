@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.2",
+  "text": "Snapping: a window 3 px off a cell edge is recorded at that cell with the misfit noted beside the layout; a window spanning half a cell is reported rather than silently rounded.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

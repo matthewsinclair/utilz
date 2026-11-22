@@ -1,0 +1,8 @@
+{
+  "id": "AC-07.5",
+  "text": "Hand run on hv's machine, recorded as such: the installed copy at ~/Applications/Menuz.app, built from main after the landing, opens its menu on 'menuz 0.1.0 (<eight-character commit>) dev' as the first greyed row, and the same line is the first of utilz menuz render and of the installed binary's --render; after the cut, the signed release asset's --render says the row with no suffix.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

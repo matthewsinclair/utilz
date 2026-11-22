@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 42,
+  "schema": "intent/issue@4.0",
+  "id": "0042",
   "slug": "install-e2e-s-cp-a-of-a-live-checkout-can-tear-a",
   "title": "install_e2e's cp -a of a live checkout can tear, and the append-only guard then refuses the fixture commit",
   "status": "closed",

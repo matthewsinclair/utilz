@@ -1,0 +1,8 @@
+{
+  "id": "AC07",
+  "text": "STAMP-MANIFEST.txt records the recipient, the date carried in the mark, the stamp time read from date -u, the source directory, and for every file stamped its page count and its sha256 before and after. This is the audit trail that makes a run attributable and an in-place run recoverable by re-copying rather than by trusting a backup nobody made.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 118,
+  "schema": "intent/issue@4.0",
+  "id": "0118",
   "slug": "utilz-s-bin-devbin-cmd-macos-duplicates-the-app",
   "title": "Utilz's bin/.devbin/cmd/macos duplicates the app half devbin ships as its built-in macos: converge on the built-in once devbin's next release carries every check Utilz's handler makes",
   "status": "closed",

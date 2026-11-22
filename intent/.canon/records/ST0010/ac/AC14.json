@@ -1,0 +1,8 @@
+{
+  "id": "AC14",
+  "text": "Announce-on-resolve: when a theme NAME resolves from PREZ_THEME_PATH rather than the built-ins, the build says so on stderr, naming the directory it came from -- local-wins shadowing stays visible, and under --theme-path a user with two directories can always answer which one won.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

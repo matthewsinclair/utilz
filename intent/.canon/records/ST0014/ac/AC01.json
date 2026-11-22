@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "`utilz install` publishes a runnable install to the configured prefix, and the installed tree RUNS with the source tree absent. Devbin's install tree is deliberately not runnable (D33); ours inverts that, so the test is that the install works when the source is moved aside, not merely that files arrived.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

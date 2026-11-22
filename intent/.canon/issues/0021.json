@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 21,
+  "schema": "intent/issue@4.0",
+  "id": "0021",
   "slug": "glow-s-notty-stylesheet-has-no-bold-so-redirecte",
   "title": "glow's notty stylesheet has no bold, so REDIRECTED help output keeps its ** markers -- not a Utilz defect, and invisible at a terminal",
   "status": "closed",

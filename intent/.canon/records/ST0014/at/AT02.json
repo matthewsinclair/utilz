@@ -1,0 +1,10 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/utilz/test/install.bats",
+  "covers": [
+    "AC02"
+  ],
+  "status": "green",
+  "note": "Publish from a tree with one uncommitted change: refused. Then repeat with every flag the verb accepts, including --force, and assert each is still refused. A gate with an escape hatch is not a gate."
+}

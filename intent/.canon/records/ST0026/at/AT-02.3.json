@@ -1,0 +1,10 @@
+{
+  "id": "AT-02.3",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-02.3"
+  ],
+  "status": "green",
+  "note": "The validator's seven refusals, each naming desk, file, path and value with exit 2, the design's example desk accepted unchanged, and AC-05.7's verb-name refusal by show and by apply. RED at 16 Oct: every limb failed against the generated stub. GREEN at 16 Oct: 27/27 under bash 5 and 3.2, the example desk accepted byte-identical to design.md's; estate 22/22 suites."
+}

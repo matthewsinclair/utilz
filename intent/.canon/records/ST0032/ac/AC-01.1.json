@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "P.place_outcome answers in three ways and only three: placed when origin and size both agree within the slack, own_size when the origin agrees and the size does not, failed otherwise, including when the frame could not be read.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

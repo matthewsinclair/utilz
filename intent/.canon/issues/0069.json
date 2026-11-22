@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 69,
+  "schema": "intent/issue@4.0",
+  "id": "0069",
   "slug": "menuz-s-own-items-sit-in-a-fixed-tail-the-menu-f",
   "title": "menuz's own items sit in a fixed tail the menu file cannot place, and no line divides the version row from the menu",
   "status": "closed",

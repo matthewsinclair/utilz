@@ -1,0 +1,8 @@
+{
+  "id": "AC-08.2",
+  "text": "On a mutating command whose target file's frontmatter `generator:` names a different tool (eg `intent todo`), utilz refuses with a clear error and non-zero exit -- but only when BOTH `command -v intent` succeeds AND the file's own directory tree contains a valid Intent project (`intent/.config/config.json`, walking upward from the file's directory). On refusal the file is left byte-unchanged and no history file is created.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

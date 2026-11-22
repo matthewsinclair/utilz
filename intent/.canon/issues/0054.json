@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 54,
+  "schema": "intent/issue@4.0",
+  "id": "0054",
   "slug": "two-recordings-of-one-reel-by-one-build-can-diff",
   "title": "Two recordings of one reel by one build can differ by a single anti-aliased pixel",
   "status": "closed",

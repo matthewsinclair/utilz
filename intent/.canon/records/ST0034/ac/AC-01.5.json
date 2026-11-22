@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "The shim passes the own-sizes file's records to diff and apply, treats a missing file as no records and an unreadable or malformed one as no records said once on stderr, and apply writes the records the engine returns atomically and only when they changed.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

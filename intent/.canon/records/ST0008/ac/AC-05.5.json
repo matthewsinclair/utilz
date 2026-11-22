@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.5",
+  "text": "`edit` opens the resolved file in `$VISUAL` (else `$EDITOR`, else `vi`) and runs `sync` on exit; with none resolvable it errors clearly.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

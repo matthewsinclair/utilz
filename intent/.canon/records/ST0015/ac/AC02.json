@@ -1,0 +1,8 @@
+{
+  "id": "AC02",
+  "text": "For every utility, '<util> --version' and 'utilz <util> --version' produce BYTE-IDENTICAL output. The form-disagreement IS the defect: measured 8 Sep before any edit, 'todo' answered on the symlink path and printed 'Unknown command: --version' via the dispatcher, and 'prez' answered BOTH ways but differently ('prez v2.0.0' against 'prez 2.0.0'). An AT exercising one invocation form cannot see either failure, so this row is not covered by any test that does not run both forms and diff them.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

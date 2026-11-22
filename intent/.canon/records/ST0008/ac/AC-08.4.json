@@ -1,0 +1,8 @@
+{
+  "id": "AC-08.4",
+  "text": "With Intent absent, utilz never fails or emits an Intent-related message on account of the guard, even for a foreign-marked file inside an Intent project tree (the `command -v intent` gate short-circuits to proceed).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

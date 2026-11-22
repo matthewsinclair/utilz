@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.5",
+  "text": "A desk whose display matches no screen is reported with P.match_displays's own refusal text, so the reason is given in the words arngz already uses.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

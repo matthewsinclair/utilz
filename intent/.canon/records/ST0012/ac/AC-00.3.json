@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.3",
+  "text": "THE ROUND TRIP IS MEASURED, NOT ASSUMED. dehydrate followed by hydrate returns every removed file byte for byte, compared by checksum against a baseline taken before the removal. Asserted from a real run on a real thread, never from the verb's success message -- this estate has already been bitten by intent sync --to-store reporting 'store replaced from the canon extract' while reverting the edit, so a verb's own report of success is not evidence about the disk.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Measured 7 Sep on a git clone of this repo at 6608d3d, in the scratchpad, so nothing in the working tree was at risk. Baseline sha256 of all 9 ST0011 files taken; intent st dehydrate ST0011 removed all 9; intent st hydrate ST0011 restored 9; the two checksum manifests diff clean and git status over intent/st/ST0011 is empty. Both nets checked, not one."
+  }
+}

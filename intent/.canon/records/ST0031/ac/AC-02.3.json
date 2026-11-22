@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "Both test jobs run one roster, `tools/ci-suites`: `utilz test` for the dispatcher and for every utility `utilz list` names except prez, through the tree's bin/utilz, stopping at the first failure and refusing an empty list. test-linux's log at the sweep's push, and test-macos's at its first run after it, a `candidate/` push or a dispatch, each have one `== <utility> ==` line per utility.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

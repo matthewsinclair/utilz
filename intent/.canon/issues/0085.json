@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 85,
+  "schema": "intent/issue@4.0",
+  "id": "0085",
   "slug": "doctor-checks-a-dependency-entry-written-as-a-ba",
   "title": "doctor checks a dependency entry written as a bare string as a dependency with no name, and never names the entry's fault",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.1",
+  "text": "A desk fits the screens present when P.match_displays binds every one of its displays and the number matched equals the number of screens in the world, compared against the world's own screen count and never against a number written down.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

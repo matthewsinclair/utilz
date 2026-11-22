@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 77,
+  "schema": "intent/issue@4.0",
+  "id": "0077",
   "slug": "arngz-refuses-a-screen-whose-one-space-com-apple",
   "title": "arngz refuses a screen whose one space com.apple.spaces has not recorded yet, as just after a display attaches, and its fix line names nothing to do",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "Mid-transition frames sit on the player's own curve. On the known-colour fixture, each mid-fade frame's mean colour equals the incoming colour times the CSS `ease-in` progress at the frame's scheduled time, over the black ground, within 6/255 per channel. Expected values come from the player's CSS and the dwell schedule, never from a recording.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

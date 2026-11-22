@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 78,
+  "schema": "intent/issue@4.0",
+  "id": "0078",
   "slug": "menuz-realises-labels-ticks-and-defaults-with-it",
   "title": "menuz realises labels, ticks and defaults with its own bin/ behind the login PATH, while runs put it first, so the two run different binaries",
   "status": "closed",

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 102,
+  "schema": "intent/issue@4.0",
+  "id": "0102",
   "slug": "menuz-s-log-window-leaves-plain-a-realise-that-p",
   "title": "menuz's log window leaves plain six kinds of line that say something did not happen: a realise, the top row, the login item, the login shell, the menu bar mark and notifications",
   "status": "closed",

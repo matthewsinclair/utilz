@@ -1,0 +1,9 @@
+{
+  "id": "02",
+  "title": "Desk config, validator and the catalogue verbs",
+  "scope": "S",
+  "status": "done",
+  "objective": "The utility's skeleton and the desk catalogue. `utilz generate arngz` scaffolds `opt/arngz/`, `bin/arngz` and `help/arngz.md`; `arngz.yaml` declares the dependencies doctor reports. The desk schema from the design, its validator (one function, every refusal naming desk, path and value), and the file-backed verbs: `list`, `show`, `delete`, and the catalogue half of `init`. The bats suite runs on every CI leg with `XDG_CONFIG_HOME` pointed at fixtures. No Hammerspoon call yet.",
+  "body": "",
+  "preamble": ""
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 135,
+  "schema": "intent/issue@4.0",
+  "id": "0135",
   "slug": "arngz-apply-makes-one-attempt-to-create-a-space",
   "title": "arngz apply makes one attempt to create a space, so a cause that persists is reported once per op and cascades to every window needing it",
   "status": "closed",

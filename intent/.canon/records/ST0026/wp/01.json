@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "Spike: space moves and Dock bindings on macOS 27",
+  "scope": "S",
+  "status": "done",
+  "objective": "Measure, on hv's machine, the two things the design cannot assume: whether Hammerspoon can move a window to another space on macOS 27 (same display and across displays, with a readback after each move), and whether a Dock app-binding written to `com.apple.spaces` takes after a Dock restart. The spike script and runbook exist (dc, 16 Oct); this package runs them with hv, records the JSON results and hv's notes in the design under \"The open input\", and resolves that section to one outcome. Nothing is built here.",
+  "body": "",
+  "preamble": ""
+}

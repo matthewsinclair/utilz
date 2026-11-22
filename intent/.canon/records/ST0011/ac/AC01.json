@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "Portability and dependency posture: a stamp run drives no browser and makes no network request. The only external tools are qpdf and poppler (pdfinfo; pdftoppm in the test path), both declared in stampz.yaml so utilz doctor checks them without a second registration. The stamp page is generated as PDF directly, so no font, stylesheet or script is fetched at run time. This is the criterion the promotion exists for: the Lamplight reference needed Chrome at a hardcoded macOS path and a Google Fonts CDN, and could therefore run on one platform, online, and nowhere else.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

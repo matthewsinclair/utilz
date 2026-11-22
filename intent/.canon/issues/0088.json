@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 88,
+  "schema": "intent/issue@4.0",
+  "id": "0088",
   "slug": "version-dispatch-bats-own-teardown-replaces-test",
   "title": "version_dispatch.bats' own teardown() replaces test_helper's, so each of its tests leaves its temp dir in TMPDIR",
   "status": "closed",

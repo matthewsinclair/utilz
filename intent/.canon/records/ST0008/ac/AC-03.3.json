@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.3",
+  "text": "`count` prints the item count per bucket.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

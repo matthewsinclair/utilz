@@ -1,0 +1,8 @@
+{
+  "id": "AC-07.2",
+  "text": "The app's menu opens with that row as its first item, disabled, in the bold 13 pt system font, read from Bundle.main's CFBundleShortVersionString, MenuzCommit, MenuzSourceTree and MenuzKind, ahead of the refusals, the file's entries and the tail; --render prints the same line first, so utilz menuz render shows what the menu shows; a hosted test in MenuzTests reads the builder's first item under the stamps utilz menuz test passes.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

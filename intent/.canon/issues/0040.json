@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 40,
+  "schema": "intent/issue@4.0",
+  "id": "0040",
   "slug": "the-prez-crate-s-black-box-suites-each-carry-a-c",
   "title": "The prez crate's black-box suites each carry a copy of one test harness",
   "status": "closed",

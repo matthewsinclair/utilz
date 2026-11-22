@@ -1,0 +1,10 @@
+{
+  "id": "AT09",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "No browser and no network during a stamp run, plus the yaml declares qpdf and poppler. Assert on the artifact and the process, never on a comment. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. Also asserts every declared dep is a real command name, after `poppler` proved to be a package name doctor could not resolve."
+}

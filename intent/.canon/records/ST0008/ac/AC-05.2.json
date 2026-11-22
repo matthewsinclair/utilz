@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.2",
+  "text": "`sync` tolerates hand-entered lines -- missing number, stray leading `- `, `[x]foo` with no space -- normalizing and renumbering them.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 70,
+  "schema": "intent/issue@4.0",
+  "id": "0070",
   "slug": "arngz-keeps-no-record-of-the-desk-applied-last-s",
   "title": "arngz keeps no record of the desk applied last, so nothing can say which desk is current",
   "status": "closed",

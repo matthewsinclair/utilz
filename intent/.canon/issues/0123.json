@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 123,
+  "schema": "intent/issue@4.0",
+  "id": "0123",
   "slug": "common-lib-bats-154-still-expects-show-help-s-ol",
   "title": "common_lib.bats:154 still expects show_help's old \"not found\" for a name that is no utility: 0120 changed that message and missed this test",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "Discover's report names every window it pinned, with its title and the pattern written.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

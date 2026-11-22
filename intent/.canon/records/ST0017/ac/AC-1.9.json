@@ -1,0 +1,9 @@
+{
+  "id": "AC-1.9",
+  "text": "Both cargo test call sites pass --workspace and --no-fail-fast, so the population comes from the manifest's members rather than a filesystem walk. An enumeration can fail to see a member; --workspace cannot.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Verified by vc at e0dd357: common.sh:855 and tests.yml:284 both carry --workspace --no-fail-fast. Measured before the fix: the estate's own command built 1 executable where --workspace builds 2, so artifact's 12 tests would never have run."
+  }
+}

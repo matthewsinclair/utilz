@@ -1,0 +1,8 @@
+{
+  "id": "02",
+  "title": "WP/02: Bash Wrapper with Venv & API Key Check",
+  "status": "done",
+  "objective": "Replace generated bash boilerplate with a venv-aware wrapper that checks for ANTHROPIC_API_KEY, detects PDF input requiring pdf2md, manages venv, and execs into the Python engine.",
+  "body": "## Tasks\n\n- [x] Fast path for `--help` / `--version` (before venv setup)\n- [x] Check `ANTHROPIC_API_KEY` is set (fail-fast before venv creation)\n- [x] Check `pdf2md` availability when `.pdf` input detected\n- [x] Implement `ensure_venv()` same pattern as pdf2md\n- [x] Export `UTILZ_HOME` so Python can locate `pdf2md` binary\n- [x] Exec into `$VENV_DIR/bin/python3 \"$LIB_DIR/xtrct.py\" \"$@\"`\n\n## Design\n\n```\nxtrct [args]\n  ├─ --help / --version → handled immediately (no venv needed)\n  └─ anything else\n      ├─ check ANTHROPIC_API_KEY is set\n      ├─ if .pdf input detected, check pdf2md is available\n      ├─ check python3 available\n      ├─ ensure_venv() → create lib/.venv/ if missing\n      ├─ export UTILZ_HOME\n      └─ exec $VENV_DIR/bin/python3 lib/xtrct.py \"$@\"\n```\n\n## Verification\n\n```bash\n# Clear errors for missing API key\nunset ANTHROPIC_API_KEY && xtrct sample.md --schema schema.json\n\n# Clear errors for missing pdf2md on .pdf input\nxtrct input.pdf --schema schema.json  # when pdf2md not in PATH\n```",
+  "preamble": ""
+}

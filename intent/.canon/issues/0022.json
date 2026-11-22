@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 22,
+  "schema": "intent/issue@4.0",
+  "id": "0022",
   "slug": "showreel-check-prints-a-build-time-constant-besi",
   "title": "showreel check prints a build-time constant beside a config fact, and the subtraction is false",
   "status": "closed",

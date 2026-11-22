@@ -1,0 +1,10 @@
+{
+  "id": "AT-05.2",
+  "kind": "test",
+  "file": "opt/menuz/test/install-handrun.sh",
+  "covers": [
+    "AC-05.2"
+  ],
+  "status": "green",
+  "note": "vc, 17 Oct, Mac16,6, macOS 27.0.1 (26A434), Xcode 27.1 (27A9275). First install at d117591 (21:08:48Z to 21:09:10Z): xcodegen, Release xcodebuild, the dev copy (pid 7432) quit, ~/Applications/Menuz.app installed and launched; the copy logged 'login item not found: left as it is', status and doctor read the login item not found (the defect fixed at 3e731d3: a bundle just put in place answers notFound, which now registers). Second install at 3e731d3 (21:14:45Z to 21:14:51Z): the copy logged 'registered as a login item' one second after launch; the read half at 21:2xZ (tmp/vc-st0026/st0027/ac052-handrun-3e731d3.txt): version 0.1.0 (build 1168, 3e731d3), signed Apple Development under team 76BQL8L47U, status installed/use installed/running pid 32328/login item enabled/source current, exit 0; doctor eight ok, exit 0; --login-item enabled. The menu after a logout and login is hv's keypress, to be confirmed by hv (AC-05.2 as reworded under decision 20)."
+}

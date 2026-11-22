@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 84,
+  "schema": "intent/issue@4.0",
+  "id": "0084",
   "slug": "tests-of-a-missing-tool-s-refusal-skip-wherever",
   "title": "Tests of a missing tool's refusal skip wherever the tool is installed, which is every machine that runs them, so the refusal is never tested",
   "status": "closed",

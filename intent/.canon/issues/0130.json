@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 130,
+  "schema": "intent/issue@4.0",
+  "id": "0130",
   "slug": "macos-ci-skips-all-13-of-menuz-s-macos-bats-test",
   "title": "macOS CI skips all 13 of menuz's macos.bats tests, because the runner has no bash 5 on PATH for devbin",
   "status": "closed",

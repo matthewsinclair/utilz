@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "`next` prints the next open item (DOING first, then TODO); `next <n>` prints the next `n`; default 1.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

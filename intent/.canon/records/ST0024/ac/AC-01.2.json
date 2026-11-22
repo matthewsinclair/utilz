@@ -1,0 +1,10 @@
+{
+  "id": "AC-01.2",
+  "text": "At 16:9 a headline is untouched: its size is the size it has with the fit off. This is hv's Q5 answer, and it is the row that fails first if Q5 is ever reversed",
+  "kind": "test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Q5 WAS REVERSED, which is what this row existed to catch. It asserted hv's first answer, that a headline is untouched at 16:9; hv ruled (b) on 2026-09-22 after the probe measured that answer's premise as false (a headline in a pane does not break mid-word at 16:9, it runs off both edges). Re-minted as AC-01.10 with the rule that replaced it, rather than edited in place, so the record carries the reversal",
+    "by": "cc"
+  }
+}

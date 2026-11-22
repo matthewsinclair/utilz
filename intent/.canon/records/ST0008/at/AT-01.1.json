@@ -1,0 +1,11 @@
+{
+  "id": "AT-01.1",
+  "kind": "test",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::list creates a template file with frontmatter and buckets]"
+  }
+}

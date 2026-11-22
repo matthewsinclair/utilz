@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 50,
+  "schema": "intent/issue@4.0",
+  "id": "0050",
   "slug": "two-of-hoist-rebase-sh-s-postconditions-cannot-p",
   "title": "Two of hoist-rebase.sh's postconditions cannot pass: the code they name moved and the checks did not follow",
   "status": "closed",

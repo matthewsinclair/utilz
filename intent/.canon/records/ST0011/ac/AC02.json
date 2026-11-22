@@ -1,0 +1,8 @@
+{
+  "id": "AC02",
+  "text": "The mark is visible on a light page AND on a near-black page at the shipped defaults (mid-grey 0.5 at 30% opacity), measured as the count of pixels differing from the unstamped render of the same page. MEASURED IN THE CENTRE BAND THE ROTATED LINE CROSSES, never whole-page: a whole-page count reported the underlay build (which must be invisible) as visible at 0.30%, because a one-pixel rasteriser seam down the page edge put a delta of exactly 83 on 468 of 469 rows. A threshold tuned above that seam is a number that drifts with the renderer; cropping excludes it by construction.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

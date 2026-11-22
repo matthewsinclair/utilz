@@ -1,0 +1,8 @@
+{
+  "id": "AC04",
+  "text": "Font size is derived from the recipient length, never configured: fs = 0.85 * width / (n * 0.74 * cos 30), floored at 8pt. A 3-character and a 60-character recipient both produce a mark whose rendered extent stays inside the page box. The 0.74 constant is the mono advance plus tracking and is exact by construction under base-14 Courier, whose advance is 0.600 em for every glyph; under a downloaded font it was true only when the download succeeded.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

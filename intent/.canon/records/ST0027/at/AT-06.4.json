@@ -1,0 +1,10 @@
+{
+  "id": "AT-06.4",
+  "kind": "test",
+  "file": "opt/menuz/test/notice-handrun.sh",
+  "covers": [
+    "AC-06.4"
+  ],
+  "status": "green",
+  "note": "vc, 17 Oct, Mac16,6, macOS 27.0.1 (26A434), Xcode 27.1 (27A9275). PASSED at 04:48Z against the installed copy ~/Applications/Menuz.app, 0.1.0 build 1168 (3e731d3, every notice fix landed), after hv allowed menuz under System Settings > Notifications (tmp/vc-st0026/st0027/ac064-handrun-3e731d3-allowed.txt): the placement line logged at launch with the position key removed, 'notifications: granted' the same second, '[1] notice posted' for exit 3 while the app ran, '[2] notice posted' for notify: always with the last line, nothing for run 3's exit 0, '[4] notice posted' after the 'quit; runs still going: 4' line (the arm posting with the app gone), zero not-yet-allowed lines, the key written back as 700; the mark on hv's bar with no icon: line. Earlier attempts, kept: c77cc76 at 20:34Z (no launch line, every notice refused; usernoted's log showed macOS 27's alert presented and withdrawn when the run quit the app, D13 corrected) and 2b66d3f-fix at 21:02Z (the placement line logged, the launch line denied naming the setting, each arm the off-in-settings line). Unmeasured: a second in-process request while the alert is up (cc's review point 7)."
+}

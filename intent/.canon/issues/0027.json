@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 27,
+  "schema": "intent/issue@4.0",
+  "id": "0027",
   "slug": "prez-at09-checks-only-the-root-package-s-src-so",
   "title": "prez AT09 checks only the root package's src/, so the workspace members' sources are unguarded",
   "status": "closed",

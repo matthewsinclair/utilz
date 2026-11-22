@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 138,
+  "schema": "intent/issue@4.0",
+  "id": "0138",
   "slug": "arngz-diff-and-apply-disagree-about-a-window-its",
   "title": "arngz diff and apply disagree about a window its app holds at its own size",
   "status": "closed",

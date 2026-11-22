@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0004: xtrct - Semantic Data Extraction\n\n## Tasks\n\n- [x] Scaffold utility with `utilz generate xtrct \"Schema-driven semantic data extraction\"`\n- [x] Add `lib/` directory with `requirements.txt` (anthropic)\n- [x] Implement `lib/xtrct.py` -- CLI arg parsing, prompt construction, API call, output formatting\n- [x] Update bash wrapper to manage venv, check ANTHROPIC_API_KEY, exec Python\n- [x] Add test fixtures (sample.md + sample_schema.json)\n- [x] Write BATS tests (8 tier-1 + 4 tier-2 = 12 tests)\n- [x] Verify --format json/csv/table outputs\n- [x] Verify stdin piping works\n\n## Dependencies\n\n- Depends on ST0005 (pdf2md) for PDF input handling\n- Requires `ANTHROPIC_API_KEY` environment variable\n",
+  "bytes": 708,
+  "sha256": "9f25888cc26779f8294c7601fc98b880f3939fe31a709da995f760f32bbc7872"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "AC-05.1",
+  "text": "help/arngz.md documents which and auto beside the other verbs with their exit codes, and its apply and discover paragraphs carry WP01's own-size note, WP02's refusal and WP03's retry and once-per-display rule.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "help/arngz.md:142 for the which and auto section with the 0, 1 and 2 exits; :109 for WP01's own-size note; :130 for WP02's refusal; :111 for WP03's retry, its once-per-display rule and the overshoot. All four read."
+  }
+}

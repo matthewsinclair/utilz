@@ -1,0 +1,10 @@
+{
+  "id": "AT33",
+  "kind": "test",
+  "file": "opt/prez/crate/crates/showreel/src/deliver.rs",
+  "covers": [
+    "AC-03.5"
+  ],
+  "status": "green",
+  "note": "Red first, 19 Sep: a_pruned_slot_takes_its_video_with_it_and_the_warning_counts_video_megabytes, written in deliver.rs before prune knew of videos, fails: --keep 1 over three slots dropped only r-001.showreel.html and r-002.showreel.html, leaving both videos; cargo test exit 101. Green, WP-03, 19 Sep: prune takes each slot's files (deliver::slot_files, the HTML with any .mp4 or .mov beside it), so --keep 1 over three slots drops two whole slots, and six slots with 1 MB videos warn of 6 MB; the workspace passes 333 tests, and clippy -D warnings and rustfmt are clean."
+}

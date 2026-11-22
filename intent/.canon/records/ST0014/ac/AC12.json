@@ -1,0 +1,9 @@
+{
+  "id": "AC12",
+  "text": "An installed utilz can be told apart from a source utilz AT THE PROMPT, reporting which tree it is and the commit it was cut from. Without this the two-tree arrangement is invisible in exactly the situation it exists for: a person debugging behaviour cannot tell which copy produced it.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "utilz version names the tree and the commit at the prompt. Verified by vc 8 Sep in a clean login shell: the install answers 'installed at /Users/matts/Devel/opt/utilz (1679024)' and the source answers 'source at /Users/matts/Devel/prj/Utilz'. Before ST0014 both printed 'utilz v2.5.0' and nothing else."
+  }
+}

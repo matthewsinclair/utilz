@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 51,
+  "schema": "intent/issue@4.0",
+  "id": "0051",
   "slug": "after-the-uniform-ci-ruling-nothing-runs-the-sui",
   "title": "After the uniform CI ruling, nothing runs the suite under bash 3.2 before a tag is pushed",
   "status": "closed",

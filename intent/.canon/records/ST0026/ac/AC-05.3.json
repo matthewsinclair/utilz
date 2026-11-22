@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.3",
+  "text": "The report and exit codes: every app placed exits 0; an app not installed is reported as skipped, exit 1; a window matching no pattern is reported as unseen, exit 1; a move whose readback disagreed with its return value is reported as failed, exit 1; a refusal before anything changed exits 2.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

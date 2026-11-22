@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 20,
+  "schema": "intent/issue@4.0",
+  "id": "0020",
   "slug": "source-citations-in-contract-text-have-no-check",
   "title": "source citations in contract text have no check, and four of eight were stale",
   "status": "closed",

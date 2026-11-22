@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.2",
+  "text": "The change is bash 3.2 safe -- `each_utility`, `require_yq`, `get_util_metadata` (both version paths), `doctor`, `list`, and the yq-absent path all behave correctly under `/bin/bash 3.2.57` with `set -euo pipefail`.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "design.md Architecture, hand-run 2026-07-29"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT07",
+  "kind": "non-test",
+  "prose": "By hand: the portrait fixture with no zone, recorded by the pre-thread binary and by the built one, compared frame for frame",
+  "covers": [
+    "AC-02.6"
+  ],
+  "status": "n-a",
+  "note": "The same two recordings at --aspect portrait, 75 frames each, compared with cmp: 0 frames differ between the pre-thread binary and the built one"
+}

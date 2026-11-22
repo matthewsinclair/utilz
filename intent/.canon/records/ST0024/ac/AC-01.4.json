@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "A fitted line in a grid track it shares with siblings is measured against its own SHARE of that track, not against the row's width nor against its own grown box, proven on a points slide and a crawl row with a long word at both orientations (design D2b)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

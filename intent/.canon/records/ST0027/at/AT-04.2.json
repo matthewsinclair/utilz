@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.2",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzTests/RunnerTests.swift",
+  "covers": [
+    "AC-04.2"
+  ],
+  "status": "green",
+  "note": "Hosted: the wrapper spawned in its own session (getsid differs), ids distinct under two takers on one O_EXLOCK store, runs going until ended, the app's writer and a spawned appender interleaving with none lost; the environment and the inner zsh -ilc with bin/ first are RunTests.swift and WrapperTests.swift; Quit leaving a run going measured in vc's hand run at 9dde810"
+}

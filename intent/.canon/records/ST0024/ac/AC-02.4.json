@@ -1,0 +1,10 @@
+{
+  "id": "AC-02.4",
+  "text": "THE CONTROL: with no zone, a portrait recording is byte-identical, frame for frame, to the same recording made before this thread",
+  "kind": "test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Re-minted as AC-02.6, a non-test row, for the same reason as AC-01.8",
+    "by": "cc"
+  }
+}

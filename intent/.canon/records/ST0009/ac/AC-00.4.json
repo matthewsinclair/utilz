@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.4",
+  "text": "`VERSION` and `CHANGELOG.md` record 2.4.0, on the grounds that `yq` moving from optional to required is user-visible behaviour change.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "`VERSION` = 2.4.0, CHANGELOG `## [2.4.0]`"
+  }
+}

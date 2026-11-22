@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 15,
+  "schema": "intent/issue@4.0",
+  "id": "0015",
   "slug": "prez-strip-comments-truncates-at-a-inside-a-stri",
   "title": "prez strip_comments truncates at a '/*' inside a string, so refuse_external never sees the rest of the theme",
   "status": "closed",

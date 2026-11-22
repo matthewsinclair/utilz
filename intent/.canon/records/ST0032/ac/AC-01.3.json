@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "apply's report renders a done result's note in brackets after the outcome, and renders byte-identically to before when there is no note.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "PREZ_DEFAULT_THEME resolves exactly as --theme does: on PREZ_THEME_PATH extended by --theme-path, then among the built-ins, never against the working directory. An unknown name gets the unknown-theme refusal, exit 2, its no theme '<name>' prefix unchanged and listing the built-ins and every directory searched, plus one line naming PREZ_DEFAULT_THEME as where the name came from. A path-shaped value is refused naming the variable. Answers: the fallback name resolves on the same search path, with the same refusals, as --theme; and a fallback naming an unknown theme gets the usual refusal listing the search path.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

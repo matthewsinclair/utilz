@@ -1,0 +1,9 @@
+{
+  "id": "AT03",
+  "kind": "non-test",
+  "prose": "vc reads one frame per segment type from the 9:16 recording of 001 and judges each legible and inside the safe area",
+  "covers": [
+    "AC-01.3"
+  ],
+  "status": "n-a"
+}

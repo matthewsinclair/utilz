@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 128,
+  "schema": "intent/issue@4.0",
+  "id": "0128",
   "slug": "the-homebrew-formula-depends-on-lua-hv-s-ruling",
   "title": "The Homebrew formula depends on lua (hv's ruling, 30 Oct): arngz's suite fails without a Lua interpreter, and brew install utilz brought none",
   "status": "closed",

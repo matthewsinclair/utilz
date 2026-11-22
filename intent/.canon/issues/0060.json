@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 60,
+  "schema": "intent/issue@4.0",
+  "id": "0060",
   "slug": "the-pre-commit-formatter-gate-checks-markdown-on",
   "title": "The pre-commit formatter gate checks markdown only: Rust is declared and rustfmt-enforced everywhere except at commit time, on a stale bash-only premise",
   "status": "closed",

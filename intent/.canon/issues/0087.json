@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 87,
+  "schema": "intent/issue@4.0",
+  "id": "0087",
   "slug": "utilz-doctor-s-5-7-calls-every-utility-properly",
   "title": "utilz doctor's [5/7] calls every utility properly configured having read no yaml, for a utility with none and when yq is missing",
   "status": "closed",

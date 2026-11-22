@@ -1,0 +1,10 @@
+{
+  "id": "AC-03.5",
+  "text": "A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown. Engine code: reading is its only proof today.",
+  "kind": "non-test",
+  "state": {
+    "is": "descoped",
+    "to": "ST0033",
+    "by": "vc"
+  }
+}

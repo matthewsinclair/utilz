@@ -1,0 +1,9 @@
+{
+  "id": "AC-03.4",
+  "text": "Lua is a declared language of the project, critic-lua is clean on the module, and CI's Linux legs install lua5.4.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "intent/.config/config.json declares lua (intent lang init lua, 16 Oct 2026); .github/workflows/tests.yml installs lua5.4 (apt, Linux) and lua (brew, macOS), asserted by arngz.bats AT-03.4; critic-lua agent review of opt/arngz/lib/plan.lua, opt/arngz/lib/arngz.lua and opt/arngz/test/plan_test.lua clean at its fourth pass (0 critical, 0 warning, 12 rules active). NOTE: check all's headless Lua critic armed 0 of 7 rules, so the agent review is the review."
+  }
+}

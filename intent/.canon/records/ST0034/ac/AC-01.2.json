@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "P.plan_exit and plan_report read a recheck as in place, saying \"in place at the app's own size, WxH\" from one helper that apply_report uses too, so diff reads no change for a desk whose only difference is a recorded own size.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT13",
+  "kind": "test",
+  "file": "opt/utilz/test/install_guards.bats",
+  "covers": [
+    "AC13"
+  ],
+  "status": "green",
+  "note": "utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/."
+}

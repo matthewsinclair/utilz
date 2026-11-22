@@ -1,0 +1,9 @@
+{
+  "id": "AC-3.12",
+  "text": "The offline scan never ends in silence: a theme the scanner cannot read to the end is REFUSED by name, not scanned in part. The instance is an unterminated /*, which a browser comments out to end of file and the old scanner truncated at, so anything after it reached the artifact unexamined. It is a SEPARATE row from AC-3.5 because it refuses a population AC-3.5 has no interest in -- a malformed theme carrying no external reference at all -- and a user can hit it with a theme that was building yesterday. Two arms, both red-proved: the refusal fires and names the line the comment opens on; AND a stray quote does not switch comment stripping off for the rest of the file, because a fix whose failure mode is file-wide would reopen 0015 one character wide. Raised by cc in its own commit rather than slipped in, and ruled by vc 2026-09-09.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "cd0412d: artifact/theme.rs, two tests, both arms and both discriminating. an_unterminated_comment_is_refused_rather_than_ending_the_scan_in_silence asserts 'never closed' AND 'line 2'; an_unclosed_string_does_not_swallow_the_rest_of_the_theme puts an unclosed string on line 1, a real comment on line 2 and the reference on line 3, and asserts 'line 3', which holds only if the line-2 comment was still stripped. Verified by vc 2026-09-09: both pass under cargo test --release -p artifact (16 passed, 0 failed). Neither is trivially true -- against the replaced implementation the scan returned early with NO error, so unwrap_err panics in both, which is the same discrimination cc's red-proof measured by running it (E8 rc=0 to rc=2, injection application proved with grep -c protocol_relative_site = 0)."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "A deck that names its own theme, by theme: or by theme-file:, is dressed by the deck's theme whatever PREZ_DEFAULT_THEME holds. Answers: a deck with theme: X plus fallback Y gives X. The theme-file: half is an EXTENSION beyond the request, stated and labelled as one in design.md.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

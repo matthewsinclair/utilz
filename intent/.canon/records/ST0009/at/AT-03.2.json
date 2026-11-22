@@ -1,0 +1,12 @@
+{
+  "id": "AT-03.2",
+  "kind": "test",
+  "covers": [
+    "AC-03.1"
+  ],
+  "status": "green",
+  "note": "(red at HEAD). Asserts against a fake home reporting `VERSION` 7.3.1 and expects `^7.0.0`, so it proves derivation; asserting `^2.0.0` against the real VERSION would pass even with the floor still hardcoded.",
+  "legacy": {
+    "raw": "generate stamps a utilz_version floor matching VERSION's major"
+  }
+}

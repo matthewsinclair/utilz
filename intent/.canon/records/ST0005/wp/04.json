@@ -1,0 +1,8 @@
+{
+  "id": "04",
+  "title": "WP/04: Tests & Test Fixture",
+  "status": "done",
+  "objective": "Generate a deterministic test PDF fixture and write comprehensive BATS tests (~15 tests) covering both bash wrapper behavior and Python conversion accuracy.",
+  "body": "## Tasks\n\n- [x] Generate test PDF fixture at `opt/pdf2md/test/fixtures/sample.pdf` using fpdf2\n- [x] Fixture contains: 2 pages, heading, body text, list items, page footer\n- [x] Commit output PDF only (not generator script)\n- [x] Write `opt/pdf2md/test/pdf2md.bats` with ~15 tests\n\n## Test Tiers\n\n### Always run (no python3 required)\n\n- `--help` shows help\n- `--version` shows version\n- Unknown option shows error\n- No args shows usage\n- Nonexistent file shows error\n- Non-PDF file shows error\n\n### Require python3\n\n- Converts sample PDF to markdown\n- `-o` writes output file\n- Detects headings in output\n- Detects list items in output\n- `--pages` limits output to specified pages\n- `--verbose` shows progress on stderr\n\n## Verification\n\n```bash\nutilz test pdf2md   # All tests pass\n```",
+  "preamble": ""
+}

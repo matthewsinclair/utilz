@@ -1,0 +1,9 @@
+{
+  "id": "AT02",
+  "kind": "non-test",
+  "prose": "vc read look-0045.png: the whole handle on one line, about 3% clear each side, legible",
+  "covers": [
+    "AC-01.2"
+  ],
+  "status": "n-a"
+}

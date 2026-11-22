@@ -1,0 +1,8 @@
+{
+  "id": "AC-06.1",
+  "text": "`--json` emits a valid object `{title, doing[], todo[], done[], done_watermark}` parseable by `jq`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

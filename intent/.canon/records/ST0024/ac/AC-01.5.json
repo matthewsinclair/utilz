@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "Every fitted rule declares its floor once: every fitted selector carries a --fit-floor its clamp reads, and no floor is written in both the stylesheet and the script",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

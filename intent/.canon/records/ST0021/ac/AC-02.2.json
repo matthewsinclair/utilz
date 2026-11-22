@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "Frames are anchored on the reel's own start. Every frame i >= 1 is taken at page time `t0 + i x 1000/fps` within 0.5 ms, where `t0` is the page time at which the player showed its first slide, and its slide index is the one the dwell schedule puts there. Frame 0 is taken when the load finishes, and the report says how late.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC10",
+  "text": "Framework integration on the repo conventions: bin/stampz is a symlink to utilz and dispatches, stampz --help and stampz --version answer, utilz list shows the utility with its description, and utilz doctor checks the dependencies declared in stampz.yaml. Scaffolded with utilz generate so the utilz_version floor is derived from the framework VERSION rather than hardcoded.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

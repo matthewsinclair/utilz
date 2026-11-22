@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "At portrait, a headline whose longest word is wider than its room is drawn on ONE line inside that room, never below the floor its own rule declares, and wraps at the floor rather than leaving the frame",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

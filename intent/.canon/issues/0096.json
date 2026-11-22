@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 96,
+  "schema": "intent/issue@4.0",
+  "id": "0096",
   "slug": "showreel-video-says-nothing-when-it-cannot-remov",
   "title": "showreel video says nothing when it cannot remove its .partial or stop an abandoned ffmpeg, and one of its tests leaves its directory on a failure",
   "status": "closed",

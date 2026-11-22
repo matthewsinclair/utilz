@@ -1,0 +1,11 @@
+{
+  "id": "AT-04.3",
+  "kind": "test",
+  "covers": [
+    "AC-04.3"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::custom history pattern is honoured]"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 83,
+  "schema": "intent/issue@4.0",
+  "id": "0083",
   "slug": "utilz-on-linux-the-formula-drops-depends-on-maco",
   "title": "Utilz on Linux: the formula drops depends_on :macos, each macOS-only part refuses by name, and utilz doctor says what is not available here",
   "status": "closed",

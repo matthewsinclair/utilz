@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.1",
+  "text": "`done --prune` prepends the DONE block to the history file (path from frontmatter `history:`, `YYYYMMDD` expanded to today UTC, resolved relative to the todo.md directory, dirs created), strips the positional number to `[x] <text>`, removes the items from `todo.md`, and stamps `## DONE:<now-UTC>`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

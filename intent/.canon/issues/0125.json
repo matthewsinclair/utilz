@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 125,
+  "schema": "intent/issue@4.0",
+  "id": "0125",
   "slug": "menuz-s-about-window-has-no-icon-build-source-or",
   "title": "Menuz's About window has no icon, build, source or links, unlike Gtools' and Intent's",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "validate and render run the app's --validate and --render arms on menuz.yaml or a given file and pass their output and exit code through, proven with a fake Menuz binary on PATH; with no app built or installed they refuse by name, exit 2; status reports installed (~/Applications/Menuz.app), running, login item, source-current and which build use selects (dev or installed), without Xcode present.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

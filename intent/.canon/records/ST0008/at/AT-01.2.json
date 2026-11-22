@@ -1,0 +1,11 @@
+{
+  "id": "AT-01.2",
+  "kind": "test",
+  "covers": [
+    "AC-01.2"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::add appends to bottom; add --top prepends]"
+  }
+}

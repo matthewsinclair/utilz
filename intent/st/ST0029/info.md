@@ -18,19 +18,11 @@ _(not yet written)_
 
 ## Work Packages
 
-| WP    | Title                                             | Size | Status      |
-| ----- | ------------------------------------------------- | ---- | ----------- |
-| WP-01 | xtrct goldens from the current Python             | S    | WIP         |
-| WP-02 | xtrct ported to zsh, curl and jq, byte-exact      | M    | Not Started |
-| WP-03 | pdf2md spike: off-the-shelf Rust tools            | M    | Not Started |
-| WP-04 | pdf2md replacement                                | L    | Not Started |
-| WP-05 | The venv machinery out                            | S    | Not Started |
-| WP-06 | The census sweep: Python outside the two backends | S    | Not Started |
-| WP-07 | A guard against tracked Python                    | XS   | Not Started |
+Each work package is a record of its own: `intent wp list ST0029` lists them, and `intent wp show ST0029/<id>` shows one. A realised package's cover is `WP/<id>/info.md` beside this file. This cover carries the thread's own fields only.
 
 ## Acceptance
 
-Acceptance Criteria and Acceptance Tests are RENDERED into `acceptance.md`, which is a GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in this thread's model, and the verbs write it: `intent ac new` and `intent at new` mint a row, `intent ac edit` and `intent at edit` reword or re-cite one, and `intent ac satisfy|unsatisfy|descope|rescope|withdraw|reinstate` and `intent at green|red|na` move its state. This cover never restates them.
+Acceptance criteria and tests are records of their own: `intent ac list ST0029` and `intent at list ST0029` list them, and `intent ac gate ST0029` says whether the contract passes. `acceptance.md` beside this file is a GENERATED VIEW of them, and a row authored there is discarded by the next sync. The verbs write the contract: `intent ac new` and `intent at new` mint a row, `intent ac edit` and `intent at edit` reword or re-cite one, and `intent ac satisfy|unsatisfy|descope|rescope|withdraw|reinstate` and `intent at green|red|na` move its state. This cover never restates them.
 
 ---
 

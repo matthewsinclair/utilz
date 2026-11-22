@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 37,
+  "schema": "intent/issue@4.0",
+  "id": "0037",
   "slug": "utilz-doctor-splits-its-report-across-stdout-and",
   "title": "utilz doctor splits its report across stdout and stderr, so a saved or paged report loses every verdict",
   "status": "closed",

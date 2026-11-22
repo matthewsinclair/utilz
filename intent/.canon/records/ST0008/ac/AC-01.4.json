@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "File-location precedence: `--file <path>` wins; `-g`/`--global` resolves `${XDG_CONFIG_HOME:-$HOME/.config}/utilz/todo/todo.md`; default is `./todo.md`; `--file` with `-g` errors non-zero.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

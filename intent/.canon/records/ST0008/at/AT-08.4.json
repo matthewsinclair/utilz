@@ -1,0 +1,11 @@
+{
+  "id": "AT-08.4",
+  "kind": "test",
+  "covers": [
+    "AC-08.3"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::foreign file outside an Intent project is taken over and re-stamped]"
+  }
+}

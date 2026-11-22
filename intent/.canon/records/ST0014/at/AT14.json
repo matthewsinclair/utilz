@@ -1,0 +1,10 @@
+{
+  "id": "AT14",
+  "kind": "test",
+  "file": "opt/utilz/test/install_guards.bats",
+  "covers": [
+    "AC18"
+  ],
+  "status": "green",
+  "note": "Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent."
+}

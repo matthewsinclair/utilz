@@ -1,0 +1,10 @@
+{
+  "id": "AT03",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC04"
+  ],
+  "status": "green",
+  "note": "Three-character and sixty-character recipients; asserts the rendered mark stays inside the page box in both. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. Extended with the wide-page case; red-first proven: the width-only solve reddens it."
+}

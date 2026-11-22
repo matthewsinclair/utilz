@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.2",
+  "text": "CANON IS THE SOURCE AND A REALISED FILE IS A VIEW. Before a thread's files are removed, intent/.canon/st/<ID>.json must hold that thread whole -- objective, context, work packages, criteria, tests and attachments -- so dehydration discards a rendering and never the only copy. This is the precondition that makes the other two worth having: if canon were partial, a byte-perfect round trip would only prove the renderer is deterministic about the half it still has.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Read 7 Sep from intent/.canon/st/ST0011.json, the thread about to be dehydrated: objective 1275 chars, context 15069 chars, 6 work packages, 11 criteria, 10 tests, 1 attachment -- the whole thread, against 9 rendered files on disk holding no field canon lacks."
+  }
+}

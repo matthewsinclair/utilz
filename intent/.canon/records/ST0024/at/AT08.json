@@ -1,0 +1,9 @@
+{
+  "id": "AT08",
+  "kind": "non-test",
+  "prose": "vc reads one frame per segment type from a 9:16 recording of Snorkeltoast 001, with the zone and without it",
+  "covers": [
+    "AC-02.5"
+  ],
+  "status": "n-a"
+}

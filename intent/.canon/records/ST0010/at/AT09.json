@@ -1,0 +1,10 @@
+{
+  "id": "AT09",
+  "kind": "test",
+  "file": "opt/prez/crate/test/acceptance.sh",
+  "covers": [
+    "AC09"
+  ],
+  "status": "green",
+  "note": "RED-FIRST OBSERVED HERE for the widened check. AT09's path assertion required a leading quote and so saw string literals only; a real client path sat in a deck.rs comment, green, for as long as the check existed. Widened at fdf161a to the whole of src, comments included, and proven in both directions: 0 files clean, 1 with an injected violation, 0 again on restore. Green under acceptance.sh --strict with real Chrome, 0 skipped. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
+}

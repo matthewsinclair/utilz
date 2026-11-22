@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.1",
+  "text": "apply --dry-run sends no execute request, prints every op with its reason, and exits 0.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

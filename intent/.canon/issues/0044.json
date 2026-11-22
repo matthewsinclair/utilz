@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 44,
+  "schema": "intent/issue@4.0",
+  "id": "0044",
   "slug": "install-and-upgrade-announce-an-enclosing-reposi",
   "title": "install and upgrade announce an enclosing repository's commit for a source tree that is not a repository",
   "status": "closed",

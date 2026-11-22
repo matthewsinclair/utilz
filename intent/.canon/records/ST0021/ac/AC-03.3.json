@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.3",
+  "text": "No partial file ever looks finished. The encode writes `<name>.partial` and renames it only after ffmpeg exits 0 and ffprobe's frame count equals the plan. A failing ffmpeg leaves neither the video nor the partial, and a stale partial is removed by the next run.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "A utility created by `utilz generate` is stamped with a `utilz_version` whose major matches the major in `VERSION` -- no hardcoded floor.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

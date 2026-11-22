@@ -1,0 +1,10 @@
+{
+  "id": "AT14",
+  "kind": "test",
+  "file": "opt/prez/crate/test/acceptance.sh",
+  "covers": [
+    "AC15"
+  ],
+  "status": "to-write",
+  "note": "MOVED TO ST0013/AT01 on 2026-09-07 with the criterion it covers. Left on this thread as the record that the test was planned here and did not simply vanish; it is to-write, the AC it covers is descoped, and the gate counts neither. Do not write it here -- ST0013 owns it."
+}

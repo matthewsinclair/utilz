@@ -1,0 +1,8 @@
+{
+  "id": "AC06",
+  "text": "A PDF whose pages carry more than one geometry is REFUSED, naming how many distinct sizes were found, rather than stamped at the first size. Stamping them all at one size clips the rest, and a clipped page still looks stamped. Deferred rather than solved: qpdf --overlay --repeat=1 applies one stamp page to every page, so per-page variation is real work and is named in the design as deferred.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

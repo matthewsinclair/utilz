@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 98,
+  "schema": "intent/issue@4.0",
+  "id": "0098",
   "slug": "showreel-build-takes-an-out-it-cannot-read-as-em",
   "title": "showreel build takes an _out/ it cannot read as empty and can overwrite a delivered revision, and prune leaves behind a video it cannot check",
   "status": "closed",

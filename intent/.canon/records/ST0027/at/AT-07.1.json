@@ -1,0 +1,10 @@
+{
+  "id": "AT-07.1",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/IdentityTests.swift",
+  "covers": [
+    "AC-07.1"
+  ],
+  "status": "green",
+  "note": "Identity.line over release (no suffix), dev, dirty- before the commit, unknown for a nil or empty stamp; landed at 90afe01"
+}

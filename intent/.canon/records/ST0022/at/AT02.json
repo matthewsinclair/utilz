@@ -1,0 +1,10 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/prez/crate/crates/showreel/src/aspect.rs",
+  "covers": [
+    "AC-01.2"
+  ],
+  "status": "green",
+  "note": "passed 2026-09-21: cargo test -p showreel 173 passed; video.sh AT01 AT30 PASS"
+}

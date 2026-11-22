@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 41,
+  "schema": "intent/issue@4.0",
+  "id": "0041",
   "slug": "doctor-honours-no-optional-dependency-that-a-uti",
   "title": "doctor honours no optional dependency that a utility declares",
   "status": "closed",

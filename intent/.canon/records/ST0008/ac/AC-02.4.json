@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.4",
+  "text": "`toggle <id>` flips done <-> not-done from the item's current glyph.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

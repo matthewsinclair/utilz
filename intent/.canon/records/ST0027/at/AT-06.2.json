@@ -1,0 +1,10 @@
+{
+  "id": "AT-06.2",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/NoticeTests.swift",
+  "covers": [
+    "AC-06.2"
+  ],
+  "status": "green",
+  "note": "Placement.line under a UserDefaults suite the test owns: the line given with no 'NSStatusItem Preferred Position Item-0' and withheld with one; no position is seeded anywhere in the app. The line logged at launch with the key removed, and the post once granted, is the app, measured in vc's AC-06.4 hand run at b7e07a3 (the line at 21:02:28Z, logged before the centre answered)."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "utilz arngz is dispatched by bin/utilz; opt/arngz/arngz.yaml declares yq, Hammerspoon and the hs tool as dependencies; utilz doctor reports each of them; utilz list shows arngz.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

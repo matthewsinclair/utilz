@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "Consumers that accumulate into arrays (`run_doctor`, `run_tests`) still see their accumulated values after the loop -- ie the process-substitution contract holds, not a pipe.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

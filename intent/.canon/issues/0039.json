@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 39,
+  "schema": "intent/issue@4.0",
+  "id": "0039",
   "slug": "install-sh-s-comment-says-the-source-tree-row-is",
   "title": "install.sh's comment says the source-tree row is resolved physically, and the code resolves it logically",
   "status": "closed",

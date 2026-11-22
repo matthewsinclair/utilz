@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.4",
+  "text": "exec_place maps each of P.place_outcome's three answers to its own report, so a window an app holds at its own size reports placed with a note naming the size rather than failed. Engine code: no suite reaches it, and its only live proof is acceptance.sh's apply mode.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Live, on utilz 2.14.10 from brew (arngz 1.2.1): hv's 'arngz apply homere' reported com.appgate.sdp as 'placed (in place at the app's own size, 375x667)', not failed. That is exec_place's own-size answer mapped to its own report. hv's output was relayed by utilz-dc on 10 Nov, and hv's own 'arngz diff homere' in vc's session read the same window 96 in place at 375x667, rc=0 (vc decision 107)."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.7",
+  "text": "A vanished display stops the retry rather than being retried, decided by the creating call's own reason and not by whatever was thrown.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "A file whose per-page geometry cannot be read is still refused by name, and a probe that reads nothing is a refusal rather than a pass.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

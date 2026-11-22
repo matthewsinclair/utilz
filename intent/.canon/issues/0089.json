@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 89,
+  "schema": "intent/issue@4.0",
+  "id": "0089",
   "slug": "artifact-s-on-path-takes-a-file-on-path-that-is",
   "title": "artifact's on_path takes a file on PATH that is not executable, where PATH lookup passes over it",
   "status": "closed",

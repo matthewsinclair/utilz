@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.7",
+  "text": "Fitted lines matching one rule under one parent share the smallest size any of them needs, so a row of points or a strapline's lines are never drawn at two sizes",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

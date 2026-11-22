@@ -1,0 +1,9 @@
+{
+  "id": "AC-6.2",
+  "text": "The prototype is committed in the Snorkeltoast repo BEFORE WP-06 pulls it, so the hoist cites a real source commit on both sides. It was untracked there -- showreel, player.html, themes/, README.md and HOIST.md all outside git -- so a pull without this creates a provenance gap rather than inheriting one.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Snorkeltoast repo commit f593de8, verified by vc 2026-09-09: carries showreel, player.html, themes/default, themes/popupart (fonts + favicon), README.md, HOIST.md. player.html confirmed UNMODIFIED -- the reduced-motion block at :388 holds only .slide img and .wipe, .crawl appears zero times in it, so the defect is present and deliberately unfixed. The hoist now cites a real source commit at both ends."
+  }
+}

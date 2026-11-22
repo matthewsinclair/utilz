@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 80,
+  "schema": "intent/issue@4.0",
+  "id": "0080",
   "slug": "silent-exits-of-0053-s-class-cleanz-detrope-past",
   "title": "Silent exits of 0053's class: cleanz --detrope past 64 KiB of matches, and utilz doctor, integration commands and emacs doctor at a yaml yq cannot read",
   "status": "closed",

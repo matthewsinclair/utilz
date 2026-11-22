@@ -1,0 +1,10 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "note": "passed 2026-09-21: cargo test -p showreel 173 passed; video.sh AT01 AT30 PASS"
+}

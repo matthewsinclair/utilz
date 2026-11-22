@@ -1,0 +1,9 @@
+{
+  "id": "AC-04.1",
+  "text": "tests.yml fires on a push to `main` or `candidate/**`, with no `tags:` trigger, and runs test-macos, menuz-app and the rust job's macOS leg only on a `candidate/` push or a dispatch. A read-only `bin/devbin release check` reads the trigger with no finding, and 2.14.9's candidate run is green on every job it starts.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "R2 at af87684f, ~/Devel/scratch/utilz-dc/runs/r2-fix-20261110T161704Z.log: 'r2-fix: exit 0 ... the trigger fires, no finding' (bin/devbin release check, read-only), with .github/ unchanged to 1401e7b3 (vc's check); and 2.14.9's candidate CI run 42859750695 at 1401e7b3, green on all eight jobs, macOS included (vc decision 103)"
+  }
+}

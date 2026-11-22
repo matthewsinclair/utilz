@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 71,
+  "schema": "intent/issue@4.0",
+  "id": "0071",
   "slug": "menuz-cannot-fill-a-form-s-default-from-the-shel",
   "title": "menuz cannot fill a form's default from the shell or tick an item, so Discover… cannot offer the current desk",
   "status": "closed",

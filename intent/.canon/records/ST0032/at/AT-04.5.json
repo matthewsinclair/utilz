@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.5",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua",
+  "covers": [
+    "AC-04.5"
+  ],
+  "status": "green",
+  "note": "Awaiting a verdict deliberately. The arm landed with its work package and ran GREEN once, at head 5d7bfe37 in slot NTVCDH on 10 Nov, counted off the run's own output. It has never been seen RED and no mutation has ever been applied to it, so what is proven is that it passes against working code, not that it can fail against broken code. Three of this thread's own tests were found by critic-shell in exactly that state, one of which could not go red at all. The verdict moves to red and then green on a mutation run, one one-line change to the code under test at a time, named in the record and reverted after. That is a run, so it is hv's or the desk holder's. RED, PROVEN BY MUTATION in slot PDY9E2 on 10 Nov: M10 (plan.lua:204, match_displays' refusal reworded) landed on exactly one line, verified by comparing the line's prior content and not by matching a pattern, and reddened \"a desk whose display matches no screen is reported in the matching's own words\" ALONE. The mutation was applied to a disposable copy, never to the tree: both subjects are byte-identical to the pin after the run. GREEN: in the same run's control, against the unmutated files, plan_test read 240 passed 0 failed and arngz.bats read its own TAP plan 1..158 with 158 ok and no not ok, both exit 0, every count derived from the run. So this arm is now known to pass against working code AND to fail against broken code, which the 5d7bfe37 green alone could not establish."
+}

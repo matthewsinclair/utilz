@@ -1,0 +1,9 @@
+{
+  "id": "02",
+  "title": "0134: discover leaves out a window lying mostly off its display",
+  "scope": "S",
+  "status": "done",
+  "objective": "Fix issue 0134: arngz discover leaves out a window lying mostly off its display, instead of clamping it into the edge cell and saving a desk entry that cannot apply.",
+  "body": "",
+  "preamble": ""
+}

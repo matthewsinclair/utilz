@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "The default name is checked as a flag's or the deck's name is: with refuse set, PREZ_DEFAULT_THEME naming a theme that two directories define is refused, and the refusal says the name came from PREZ_DEFAULT_THEME. Red-first: HEAD builds it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

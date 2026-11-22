@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "P.mostly_off is true exactly when the window's centre lies outside the screen's usable area, with the interval half-open: a centre on the near edge is inside, a centre on the far edge is outside, and nothing to compare is not off it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

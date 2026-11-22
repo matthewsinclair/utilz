@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.6",
+  "text": "arngz which prints the one desk that fits and exits 0, exits 1 with a per-desk report when none fits, and exits 2 when the question could not be answered.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

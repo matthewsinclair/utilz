@@ -1,0 +1,10 @@
+{
+  "id": "AT-01.1",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "note": "to write, red first"
+}

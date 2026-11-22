@@ -1,0 +1,8 @@
+{
+  "id": "AC-07.1",
+  "text": "MenuzKit has one formatter for the identity row, Identity.line(version:commit:tree:kind:), pure: it renders 'menuz <version> (<commit>)', puts 'dirty-' before the commit when the source-tree stamp ends -dirty, adds ' dev' after the parentheses unless the kind is 'release', and renders a stamp absent from the plist as 'unknown'; MenuzKitTests covers every form.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

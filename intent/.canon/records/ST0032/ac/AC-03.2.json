@@ -1,0 +1,9 @@
+{
+  "id": "AC-03.2",
+  "text": "The create_space failure line carries no fixed outer phrase restating the op, because apply_report already prefixes every loose line with the op and the status.",
+  "kind": "test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Withdrawn on hv's word of 10 Nov, first-hand in vc's session (vc decision 100). The claim is TRUE by reading: at d7047f70, where opt/arngz/lib/arngz.lua is byte-identical to 5d7bfe37, the fixed outer phrase \"creating a space did not take (%s)\" no longer occurs as a format string anywhere in arngz.lua; its one occurrence is the comment at line 426 recording why it was removed. It is withdrawn rather than satisfied because it is test-backed and no test proves it: no arm in ST0032 or ST0033 asserts it, ST0033's driver checks reasons by substring, which passes with or without a wrapper, and AT-03.2's cited check, plan_test.lua:1014, pins only the premise that apply_report prefixes every loose line with the op. A message wording has no state, no effect and no order, so by the line hv ruled on this morning reading is the proportionate proof. If regression protection is ever wanted, the route is utilz-dc's prefix check in engine_test.lua: assert that each create_space reason STARTS with its inner fact, which pins the claim itself rather than one phrase, and which dc evaluated green on the current wording and red on the reverted one."
+  }
+}

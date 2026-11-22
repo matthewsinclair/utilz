@@ -1,0 +1,12 @@
+{
+  "id": "AT-02.4",
+  "kind": "test",
+  "covers": [
+    "AC-02.4"
+  ],
+  "status": "green",
+  "note": "the old code returned 0 with empty output) -- (red at HEAD -- the old code returned 0 with empty output)",
+  "legacy": {
+    "raw": "get_util_metadata() returns non-zero for a missing yaml file"
+  }
+}

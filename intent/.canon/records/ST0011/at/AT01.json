@@ -1,0 +1,10 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC02"
+  ],
+  "status": "green",
+  "note": "Renders light and dark fixtures with pdftoppm before and after stamping, counts differing pixels in the centre band only. Must be written red-first against an unstamped output. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. Red-first proven: swapping --overlay for --underlay reddens both pages."
+}

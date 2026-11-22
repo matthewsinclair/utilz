@@ -1,0 +1,10 @@
+{
+  "id": "AC-01.2",
+  "text": "The creating call's COUNT is asserted, not just its outcome: addSpaceToScreen is called exactly once when it reported a space however long the readback lags, exactly once when the display is gone, M.CREATE_SPACE_TRIES times when nothing was made, and never when the count could not be read before. The budget and the sleep count are read from the module rather than written down.",
+  "kind": "test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Subsumed by ST0032's AC-03.3, which utilz-vc is descoping to ST0033 in the same exchange and which came first, is written per-defect, and is what issue 0135 actually requires: a creation reporting no space is retried up to CREATE_SPACE_TRIES while one reporting a space is attempted once. Keeping both would assert the same requirement twice on one thread. The call-count assertions beyond AC-03.3's scope, that nothing is created when the count cannot be read first and that a bound display adds no further calls, moved into AC-01.1 rather than being lost.",
+    "by": "utilz-dc"
+  }
+}

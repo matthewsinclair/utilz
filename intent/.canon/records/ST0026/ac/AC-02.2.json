@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "The catalogue is ${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/. list prints each desk with its display and app counts; show prints a validated desk; delete removes one by name; init creates the directory. A desk that does not exist is refused by name, exit 2.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

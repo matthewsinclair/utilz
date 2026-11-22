@@ -1,0 +1,10 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "Carried from ST0010/AT14 at hv's 7 Sep re-scope, still to-write and still GENUINELY red-first: --theme=NAME must resolve identically from two working directories, one of them containing a ./NAME/ directory. It is RED against the pinned binary today, because path.exists() is tried first and wins. It goes green only when the split lands.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

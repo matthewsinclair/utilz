@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.5",
+  "text": "Hand run on hv's machine, recorded as such: an app in the desk that is not running is launched and placed within the timeout, and with --no-launch it is reported instead.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC05",
+  "text": "Page count survives the overlay. The count reported by pdfinfo on the output equals the count on the input, and a mismatch is a refusal that names both numbers, not a warning. Cheap, and it catches a class of silent corruption that leaves a file which opens.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

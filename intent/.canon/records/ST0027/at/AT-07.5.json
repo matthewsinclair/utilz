@@ -1,0 +1,10 @@
+{
+  "id": "AT-07.5",
+  "kind": "test",
+  "file": "opt/menuz/test/install-handrun.sh",
+  "covers": [
+    "AC-07.5"
+  ],
+  "status": "green",
+  "note": "Hand run 17 Oct 06:08Z on hv's Mac (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1): utilz menuz install at 90afe01 built Release (build 1200), replaced ~/Applications/Menuz.app and launched it; the installed binary's --render first line and utilz menuz render's first line both read \"menuz 0.1.0 (90afe018) dev\"; stamps CFBundleShortVersionString 0.1.0, MenuzCommit 90afe018, MenuzSourceTree clean, MenuzKind dev; identity row shape yes, login item enabled, running from ~/Applications. Transcript tmp/vc-st0026/st0027/wp07/ac075-handrun-90afe01.txt. The release asset's row without the dev suffix is read after the 2.14.0 cut."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT35",
+  "kind": "test",
+  "file": "opt/prez/crate/crates/artifact/src/browser.rs",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "note": "Red first, 19 Sep: the two discovery tests, written in artifact::browser before the code moved, failed to compile with 4 errors (find, APP_PATHS and PATH_NAMES not found); cargo test exit 101. Green, WP-01, 19 Sep, under bash 3.2.57: the two tests pass in artifact::browser (artifact 30 tests, prez 137, 302 in the workspace, as at ST0020's verdict), clippy -D warnings and rustfmt are clean, and utilz test prez passes all 4 suites, with acceptance.sh 14 of 14 on a real browser found by the moved finder."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "Before tools/formula and tools/ci-state go, the core gives Utilz the answers they give: `tools/formula render 2.14.8` and `bin/devbin formula render 2.14.8` are identical but for the header comment, and tools/ci-state and `bin/devbin ci-state`, each given the full sha, give the same verdict word on f2021ddc (green) and 1434e764 (failed), naming the same failed jobs on 1434e764.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

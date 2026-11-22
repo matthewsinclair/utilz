@@ -1,0 +1,8 @@
+{
+  "id": "AC12",
+  "text": "The shim: opt/prez/prez is bash, shellcheck-clean inside the blocking gate, and does resolve-ensure-exec only -- rebuilds when the binary is missing or older than any crate source (Cargo.*, src/, themes/, assets/), refuses without cargo BEFORE any build attempt naming the install remedy, and execs the binary with no presentation logic of its own. The dispatcher is untouched: zero changes to bin/utilz.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

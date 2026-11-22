@@ -1,0 +1,10 @@
+{
+  "id": "AT08",
+  "kind": "test",
+  "file": "opt/utilz/test/install_lib.bats",
+  "covers": [
+    "AC07"
+  ],
+  "status": "green",
+  "note": "Verified by vc 8 Sep against the real install: manifest header carries utilz-version 2.5.0 and source-commit d3142a7, which is an ancestor of main; 111 file/link rows; install_manifest_check returns rc 0, so every recorded checksum matches the shipped bytes. The commit-describes-the-shipped-bytes leg holds by construction here because AC02's dirty gate refused anything else -- the install announced 'clean, d3142a7' before writing. The refusal leg itself is exercised in cc's install.bats, which passes."
+}

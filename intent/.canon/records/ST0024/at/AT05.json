@@ -1,0 +1,10 @@
+{
+  "id": "AT05",
+  "kind": "test",
+  "file": "opt/prez/crate/crates/showreel/src/zone.rs",
+  "covers": [
+    "AC-02.1"
+  ],
+  "status": "green",
+  "note": "The names in any case, every refusal, the landscape refusal, and safe_zone: read and refused at config parse. RED by construction: zone.rs did not exist, and every test in it named a type the crate had no path to. GREEN: cargo test -p showreel 179 passed, 0 failed, up from 176"
+}

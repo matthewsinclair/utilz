@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 35,
+  "schema": "intent/issue@4.0",
+  "id": "0035",
   "slug": "prez-at09-s-estate-tripwire-does-not-match-gtool",
   "title": "prez AT09's estate tripwire does not match Gtools, so a prez source naming its consumer passes",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-06.3",
+  "text": "The app carries an icon drawn as native/macos/Menuz/design/menuz.svg, rasterised with its silhouette menuz-mark.svg by bin/devbin macos app-icons (rsvg-convert, refusing by name without it) into the tracked Assets.xcassets (AppIcon at the seven macOS sizes, MenuBarIcon as a template at three scales), named by project.yml, so the built bundle has its icon and NSImage(named: MenuBarIcon) loads; MenuSpec.icon is nil without icon: and the status item then shows the mark, an SF Symbol when icon: names one (D8 stands); the example's icon: line is a comment and opt/menuz/lib/example.yaml follows design.md's block byte for byte.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

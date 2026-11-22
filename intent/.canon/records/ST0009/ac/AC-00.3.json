@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.3",
+  "text": "`docs/architecture.md`, `help/utilz.md`, and `README.md` describe the as-built: one YAML parser, one `bin/` walker, `yq` required. No prose survives describing `get_util_metadata` as a utility-facing API, `yq` as mdagg-specific, or `^1.0.0` as the generated floor.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "doc diff in the landing commit"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT07",
+  "kind": "test",
+  "file": "opt/utilz/test/common_lib.bats",
+  "covers": [
+    "AC03"
+  ],
+  "status": "green",
+  "note": "THE DRIVER DISCOVERS AND REFUSES, tested as behaviour rather than by reading the source. Three legs against a fixture crate carrying a `test/` directory. (1) TWO executable `.sh` suites present: BOTH run, and the summary counts both -- today only a file named exactly `acceptance.sh` runs, so this is red-first and it is the leg that would have caught the whole defect. (2) a `.sh` present and NOT executable: the driver REFUSES, loudly, and the run fails. It must not skip it. This is `common.sh:919-923` generalised from one filename to a set, and it is the leg the obvious fix drops -- \"glob and run each executable one\" silently ignores the non-executable and hands back a green. (3) NO `.sh` at all: skipped, as today, with no failure, because a crate with no black-box suite is not a defect. PROVE LEG 1 BITES by removing the second suite and watching the count fall; a discovery test that never saw the count change is asserting on a number it cannot distinguish from a constant.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

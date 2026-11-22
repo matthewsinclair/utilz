@@ -1,5 +1,5 @@
 {
-  "schema": "intent/thread@3.0",
+  "schema": "intent/thread@4.0",
   "id": "ST0004",
   "title": "xtrct - Semantic Data Extraction",
   "status": "completed",
@@ -13,68 +13,6 @@
     {
       "id": "ST0005",
       "note": "`pdf2md` -- this utility depends on pdf2md for handling PDF input"
-    }
-  ],
-  "wps": [
-    {
-      "seq": 1,
-      "title": "WP/01: Scaffold & Metadata",
-      "status": "done",
-      "objective": "Bootstrap the xtrct utility using `utilz generate`, set up the Python project structure with lib/ directory, requirements.txt, update metadata with python3 and optional pdf2md dependencies, and create test fixtures.",
-      "body": "## Tasks\n\n- [x] Run `utilz generate xtrct \"Schema-driven semantic data extraction\" \"Matthew Sinclair\"`\n- [x] Create `opt/xtrct/lib/` directory\n- [x] Create `opt/xtrct/lib/requirements.txt` with anthropic>=0.39.0\n- [x] Update `opt/xtrct/xtrct.yaml` with python3 dep and pdf2md optional dep\n- [x] Create `opt/xtrct/test/fixtures/sample.md` (mock invoice markdown)\n- [x] Create `opt/xtrct/test/fixtures/sample_schema.json` (invoice extraction schema)\n- [x] Verify: `xtrct --help`, `xtrct --version`, `utilz list` shows xtrct\n\n## Verification\n\n```bash\nxtrct --help      # Shows help\nxtrct --version   # Shows version\nutilz list        # Lists xtrct\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 2,
-      "title": "WP/02: Bash Wrapper with Venv & API Key Check",
-      "status": "done",
-      "objective": "Replace generated bash boilerplate with a venv-aware wrapper that checks for ANTHROPIC_API_KEY, detects PDF input requiring pdf2md, manages venv, and execs into the Python engine.",
-      "body": "## Tasks\n\n- [x] Fast path for `--help` / `--version` (before venv setup)\n- [x] Check `ANTHROPIC_API_KEY` is set (fail-fast before venv creation)\n- [x] Check `pdf2md` availability when `.pdf` input detected\n- [x] Implement `ensure_venv()` same pattern as pdf2md\n- [x] Export `UTILZ_HOME` so Python can locate `pdf2md` binary\n- [x] Exec into `$VENV_DIR/bin/python3 \"$LIB_DIR/xtrct.py\" \"$@\"`\n\n## Design\n\n```\nxtrct [args]\n  ├─ --help / --version → handled immediately (no venv needed)\n  └─ anything else\n      ├─ check ANTHROPIC_API_KEY is set\n      ├─ if .pdf input detected, check pdf2md is available\n      ├─ check python3 available\n      ├─ ensure_venv() → create lib/.venv/ if missing\n      ├─ export UTILZ_HOME\n      └─ exec $VENV_DIR/bin/python3 lib/xtrct.py \"$@\"\n```\n\n## Verification\n\n```bash\n# Clear errors for missing API key\nunset ANTHROPIC_API_KEY && xtrct sample.md --schema schema.json\n\n# Clear errors for missing pdf2md on .pdf input\nxtrct input.pdf --schema schema.json  # when pdf2md not in PATH\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 3,
-      "title": "WP/03: Python Extraction Engine",
-      "status": "done",
-      "objective": "Implement `opt/xtrct/lib/xtrct.py` — the semantic data extraction engine that uses Claude API to extract structured data from documents according to a JSON schema.",
-      "body": "## Pipeline\n\n```\nInput (file/stdin) → detect format (.pdf → pdf2md, else read directly)\n  → read schema JSON → construct prompt (system + user)\n  → call Claude API (anthropic SDK) → strip code fences → parse JSON\n  → output as json/csv/table\n```\n\n## Tasks\n\n- [x] Document reading: stdin support, `.pdf` shells out to `$UTILZ_HOME/bin/pdf2md`\n- [x] Prompt construction: system prompt enforces precision/no-hallucination\n- [x] JSON extraction: strip markdown fences before `json.loads()`\n- [x] Output formats: `json` (pretty-print), `csv` (key/value rows), `table` (aligned columns)\n- [x] Model: default `claude-sonnet-4-5-20250929`, configurable via `--model`\n- [x] `--verbose`: token usage stats to stderr\n\n## Verification\n\n```bash\nxtrct fixtures/sample.md --schema fixtures/sample_schema.json  # Returns valid JSON\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 4,
-      "title": "WP/04: Tests",
-      "status": "done",
-      "objective": "Write comprehensive BATS tests (~12 tests) in two tiers: tier 1 always runs (no API key needed), tier 2 requires ANTHROPIC_API_KEY and is skipped in CI.",
-      "body": "## Test Tiers\n\n### Tier 1 (always run)\n\n- `--help` shows help\n- `--version` shows version\n- Unknown option shows error\n- Missing `--schema` shows error\n- Missing `ANTHROPIC_API_KEY` shows error\n- Nonexistent input file shows error\n- Nonexistent schema file shows error\n- `.pdf` input without pdf2md available shows error\n\n### Tier 2 (skip without API key)\n\n- Extract from sample.md produces valid JSON\n- `--format csv` produces CSV output\n- `--format table` produces table output\n- Stdin piping works\n\n## Guard\n\n```bash\n[[ -z \"${ANTHROPIC_API_KEY:-}\" ]] && skip \"ANTHROPIC_API_KEY not set\"\n```\n\n## Verification\n\n```bash\nutilz test xtrct   # Tier 1 always passes; tier 2 passes locally with API key\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 5,
-      "title": "WP/05: Documentation, CI & Release",
-      "status": "done",
-      "objective": "Write full help documentation, update project README, CI workflow, CHANGELOG, and VERSION for the v1.3.0 release covering both pdf2md and xtrct utilities.",
-      "body": "## Tasks\n\n- [x] Write `help/xtrct.md` with schema format docs, examples, env vars\n- [x] Update `opt/xtrct/README.md` with developer docs\n- [x] Update `.github/workflows/tests.yml`: add `xtrct` to Linux test loop (tier 1 only)\n- [x] Update `README.md`: add xtrct to utility table\n- [x] Update `CHANGELOG.md`: add 1.3.0 release entry for both utilities\n- [x] Update `VERSION` to 1.3.0\n\n## Verification\n\n```bash\nutilz help xtrct   # Renders help\nutilz list         # Shows xtrct with description\n# CI passes\n# CHANGELOG has both utilities documented\n```",
-      "preamble": ""
-    }
-  ],
-  "attachments": [
-    {
-      "path": "design.md",
-      "text": "# Design - ST0004: xtrct - Semantic Data Extraction\n\n## Approach\n\nBuild a thin Python CLI that:\n\n1. Reads a document (markdown/text from file or stdin; PDF via pdf2md)\n2. Reads a JSON schema template\n3. Constructs a prompt with schema + document content\n4. Calls Claude API and parses the JSON response\n5. Outputs in the requested format (json, csv, table)\n\nThe heavy lifting is done by Claude -- the utility is mostly prompt engineering + I/O.\n\n## Design Decisions\n\n### Schema-driven (not hardcoded fields)\n\n- The schema is a separate JSON file, not baked into the tool\n- Makes `xtrct` generic -- works for any document type\n- The `description` fields in the schema are the key -- they tell Claude what to look for semantically\n- No need for regex, XPath, or positional extraction rules\n\n### Stdin support for composability\n\n- When no file arg is given, reads from stdin\n- Enables: `pdf2md invoice.pdf | xtrct --schema schema.json`\n- Also enables: `cat document.md | xtrct --schema schema.json`\n\n### PDF handling via pdf2md (not built-in)\n\n- When given a `.pdf` file, shells out to `pdf2md` to convert first\n- Keeps xtrct focused on extraction, not PDF parsing\n- If `pdf2md` isn't installed, gives a clear error message\n\n### Default to Sonnet\n\n- `claude-sonnet-4-5-20250929` is fast and capable enough for structured extraction\n- `--model` flag allows upgrading to Opus for complex documents\n- Keeps API costs low for routine use\n\n## Architecture\n\n```\nInput (file or stdin)\n    |\n    v\nDetect format:\n  .pdf -> shell out to pdf2md -> get markdown\n  .md/.txt/stdin -> read directly\n    |\n    v\nRead schema template (JSON)\n    |\n    v\nConstruct prompt:\n  System: \"You are a document data extractor. Extract data according to the schema.\"\n  User: schema + document content\n  Response format: JSON\n    |\n    v\nCall Claude API (anthropic SDK)\n    |\n    v\nParse JSON response, validate structure\n    |\n    v\nOutput in requested format:\n  json -> pretty-print JSON\n  csv -> flatten to CSV rows\n  table -> formatted table\n```\n\n### Prompt Design\n\nSystem prompt:\n\n```\nYou are a precise document data extractor. Given a document and a schema,\nextract the requested data and return it as JSON. Only include data that\nis explicitly present in the document. Use null for fields that cannot\nbe determined. Do not invent or hallucinate data.\n```\n\nUser message:\n\n```\n## Schema\n\n{schema JSON}\n\n## Document\n\n{document content}\n\nExtract the data according to the schema above. Return only valid JSON.\n```\n\n## Alternatives Considered\n\n### Using OpenAI API instead\n\n- Claude is better at structured extraction and following schemas\n- We already have ANTHROPIC_API_KEY in the environment\n- Consistent with the rest of the tooling\n\n### Building extraction rules (regex/position-based)\n\n- Brittle -- breaks when document format changes\n- Requires per-document-type rule writing\n- Claude handles format variation naturally\n\n### Using function calling / tool_use for structured output\n\n- Could use Claude's tool_use feature to enforce JSON schema\n- Adds complexity, and simple prompting works well for this use case\n- Worth revisiting if output quality is inconsistent\n",
-      "bytes": 3143,
-      "sha256": "ef6a45d1db64cb499094e00e5e3884f26e1d3e1939f0f8c92866189892745f8c"
-    },
-    {
-      "path": "impl.md",
-      "text": "# Implementation - ST0004: xtrct - Semantic Data Extraction\n\n## Implementation\n\nTo be filled in during implementation.\n\n## Key Implementation Notes\n\n### Anthropic SDK usage\n\n```python\nimport anthropic\n\nclient = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var\nmessage = client.messages.create(\n    model=model,\n    max_tokens=4096,\n    system=system_prompt,\n    messages=[{\"role\": \"user\", \"content\": user_content}]\n)\nresult = message.content[0].text\n```\n\n### JSON extraction from response\n\nClaude may wrap JSON in markdown code fences. Strip them before parsing:\n\n````python\ntext = result.strip()\nif text.startswith(\"```\"):\n    text = text.split(\"\\n\", 1)[1]  # remove first line\n    text = text.rsplit(\"```\", 1)[0]  # remove last fence\njson.loads(text)\n````\n\n### CSV output for nested data\n\nFor schemas with arrays (like line_items), flatten by repeating top-level fields per array row, or output the array as a separate CSV section.\n\n## Challenges & Solutions\n\nTo be filled in during implementation.\n",
-      "bytes": 1008,
-      "sha256": "b07ef9e4975f79126d97436ced31b740f463357092d1fa30293726390c1d1136"
-    },
-    {
-      "path": "tasks.md",
-      "text": "# Tasks - ST0004: xtrct - Semantic Data Extraction\n\n## Tasks\n\n- [x] Scaffold utility with `utilz generate xtrct \"Schema-driven semantic data extraction\"`\n- [x] Add `lib/` directory with `requirements.txt` (anthropic)\n- [x] Implement `lib/xtrct.py` -- CLI arg parsing, prompt construction, API call, output formatting\n- [x] Update bash wrapper to manage venv, check ANTHROPIC_API_KEY, exec Python\n- [x] Add test fixtures (sample.md + sample_schema.json)\n- [x] Write BATS tests (8 tier-1 + 4 tier-2 = 12 tests)\n- [x] Verify --format json/csv/table outputs\n- [x] Verify stdin piping works\n\n## Dependencies\n\n- Depends on ST0005 (pdf2md) for PDF input handling\n- Requires `ANTHROPIC_API_KEY` environment variable\n",
-      "bytes": 708,
-      "sha256": "9f25888cc26779f8294c7601fc98b880f3939fe31a709da995f760f32bbc7872"
     }
   ]
 }

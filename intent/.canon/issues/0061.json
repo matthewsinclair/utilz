@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 61,
+  "schema": "intent/issue@4.0",
+  "id": "0061",
   "slug": "ci-s-chmod-glob-opt-test-is-a-character-class-no",
   "title": "CI's chmod glob opt/*/[!test]* is a character class, not a word: it silently skips expz, stampz, syncz and todo, and is dead code besides",
   "status": "closed",

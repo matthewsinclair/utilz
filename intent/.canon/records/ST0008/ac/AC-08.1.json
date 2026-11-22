@@ -1,0 +1,8 @@
+{
+  "id": "AC-08.1",
+  "text": "Every `todo.md` utilz writes carries `generator: utilz todo` in its YAML frontmatter (alongside `title:`/`history:`); the stamp is unconditional -- independent of whether Intent is installed or the file is in an Intent project.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

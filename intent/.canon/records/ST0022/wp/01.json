@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "The aspect flag and key, the size rule, and a 9:16 reel that reads",
+  "scope": "S",
+  "status": "done",
+  "objective": "The aspect type, its parse and the size rule in a pure `aspect.rs`, and the key and flag that feed it. It is done when a 9:16 recording of a real reel reads in every segment type, as design D5 describes.",
+  "body": "",
+  "preamble": ""
+}

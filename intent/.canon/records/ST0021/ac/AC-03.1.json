@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "`showreel video <dir>` builds the reel into the next `_out/` slot exactly as `build` does, and writes the video beside it in the same slot, with `.html` swapped for `.mp4`. An explicit `-o` writes the video there, outside the rotation, and keeps no HTML.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

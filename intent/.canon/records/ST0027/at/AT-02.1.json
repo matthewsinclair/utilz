@@ -1,0 +1,10 @@
+{
+  "id": "AT-02.1",
+  "kind": "test",
+  "file": "opt/menuz/test/menuz.bats",
+  "covers": [
+    "AC-02.1"
+  ],
+  "status": "green",
+  "note": "opt/menuz/test/menuz.bats, 7 tests marked AT-02.1: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: menuz.bats 38/38 under bash 5.3.20 and 3.2.57, the dispatch suites (help_dispatch 8/8 on the primary checkout where prez is built, version_dispatch 11/11, dispatcher 28/28), utilz list shows menuz, menuz --help renders 84 lines, VERSION 0.1.0 is the one home (utilz menuz --version prints utilz:2.13.0/menuz:0.1.0), shellcheck clean."
+}

@@ -1,0 +1,9 @@
+{
+  "id": "AC-02.6",
+  "text": "`opt/utilz/utilz.yaml` declares `yq` under `dependencies:` with an install hint, and doctor check 6 walks `utilz` itself so that declaration is actually read.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "check 6 with yq off PATH emits \"yq is not installed\", then \"Missing dependencies: yq\" / \"yq (required by utilz)\" / \"Install: brew install yq\""
+  }
+}

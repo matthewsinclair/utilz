@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.7",
+  "text": "arngz auto --default applies the default when nothing fits and says in the notice that it is a fallback, naming both that nothing matched and what it chose; and it refuses a --default that is not in the catalogue before any engine call, so a typo costs no observe.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

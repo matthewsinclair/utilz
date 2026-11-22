@@ -1,0 +1,8 @@
+{
+  "id": "AC11",
+  "text": "install and upgrade write nothing a person authored and nothing outside the prefix. In particular the ~/.local/bin PATH symlinks are NEVER relinked implicitly -- that is mutating hv's environment and needs a verb or flag they typed.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

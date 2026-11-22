@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.9",
+  "text": "The platform refusal table covers every verb the CLI declares as an engine verb, and fails rather than passing silently when a declared verb is left unexercised.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

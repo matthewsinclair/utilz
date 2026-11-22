@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 5,
+  "schema": "intent/issue@4.0",
+  "id": "0005",
   "slug": "utilz-doctor-path-check-false-negatives-a-symlink",
   "title": "utilz doctor PATH check false-negatives a symlink-on-PATH install",
   "status": "closed",

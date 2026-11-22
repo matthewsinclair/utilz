@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 100,
+  "schema": "intent/issue@4.0",
+  "id": "0100",
   "slug": "showreel-video-puts-a-slot-s-video-over-a-file-a",
   "title": "showreel video puts a slot's video over a file already at its name, so a video whose HTML was deleted is replaced with nothing said",
   "status": "closed",

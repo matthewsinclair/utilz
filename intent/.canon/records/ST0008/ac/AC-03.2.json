@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.2",
+  "text": "`doing`, `todo`, and bare `done` print their respective buckets.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

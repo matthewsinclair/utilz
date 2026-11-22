@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 92,
+  "schema": "intent/issue@4.0",
+  "id": "0092",
   "slug": "artifact-s-theme-tests-leave-9-temp-dirs-behind",
   "title": "artifact's theme tests leave 9 temp dirs behind in TMPDIR on every run",
   "status": "closed",

@@ -1,0 +1,10 @@
+{
+  "id": "AT-02.3",
+  "kind": "test",
+  "file": "opt/menuz/test/menuz.bats",
+  "covers": [
+    "AC-02.3"
+  ],
+  "status": "green",
+  "note": "opt/menuz/test/menuz.bats, 17 tests marked AT-02.3: verified by vc on 4e34217 in a detached worktree, 16 Oct 2026: validate with no app built or installed refused by name, exit 2, naming both paths looked at (~/Applications/Menuz.app and the XDG dev build); status without Xcode printed use installed (default), running no, login item unknown with the reason, source unknown with the reason, exit 1; 38/38 under both bashes."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "Two recordings of one reel, the second slowed in real time, write byte-identical PNG frames. The bytes compared are the captured PNGs, before the encode, because H.264 output need not match across encoder builds.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

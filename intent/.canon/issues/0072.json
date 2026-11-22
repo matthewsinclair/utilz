@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 72,
+  "schema": "intent/issue@4.0",
+  "id": "0072",
   "slug": "menuz-s-log-opens-the-run-log-in-console-app-men",
   "title": "menuz's Log opens the run log in Console.app; menuz should adopt ArcaLogConsole instead",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "utilz menuz is dispatched by bin/utilz; opt/menuz/menuz.yaml declares the utility with opt/menuz/VERSION as the one home of its version; utilz list shows menuz; utilz doctor reports xcodegen and xcodebuild only when native/macos/Menuz is present, as it reports cargo only when a crate is.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

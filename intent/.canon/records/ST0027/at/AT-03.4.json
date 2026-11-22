@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.4",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/RealiseTests.swift",
+  "covers": [
+    "AC-03.4"
+  ],
+  "status": "green",
+  "note": "Dynamic vs literal, one script for every label and each, the framed parse, the script run through zsh, the merge keeping last values; the asynchronous open and the cap are the app's Realiser and Shell (the cap's kill of the whole tree measured by cc, 0 strays in five trials); vc's --render at 805ed42 realised the example through the login shell"
+}

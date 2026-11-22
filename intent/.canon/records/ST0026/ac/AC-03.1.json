@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.1",
+  "text": "The IPC contract: the CLI writes a request file holding exactly {verb, desk, options}, runs hs -c with a dofile of the module and the request path, and renders exactly the response file's report, proven through a fake hs on PATH. An hs that is absent, that times out, or that writes no response is refused by name, exit 2.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "The four reporting behaviours of create_space that issues 0133, 0134 and 0135 never named, each asserted on the function's own ACCOUNT of what it did rather than on its arithmetic: a creation that reported a space and whose readback never caught up does NOT bind the display for the rest of the run, because a call that made a space has not shown the display unusable; a readback that cannot be read at all is reported as the count failing BEFORE the create and nothing is created; a display already bound is refused with the cause quoted rather than tried again; and a bound display does not bind its neighbour, the binding being per-display and not per-run. ST0032's AC-03.3, AC-03.4 and AC-03.5 carry the three the issues did name and are descoped here by utilz-vc, so each behaviour is asserted once.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

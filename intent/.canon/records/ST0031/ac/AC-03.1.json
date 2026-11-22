@@ -1,0 +1,9 @@
+{
+  "id": "AC-03.1",
+  "text": "menuz stamps MENUZ_KIND by the rule help/menuz.md states with the stamps, which reads the release commit as Devbin ST0011 WP06's app-sign does; menuz.bats pins each answer and each exit 1.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "landed at b8e527d8; desk run 01M697M3EPJDYFVJ40S2YAD0TW, menuz.bats 1..138, 138 ok, 0 skip, 0 not ok, log sha256 9a5b7b66, judged green by utilz-vc"
+  }
+}

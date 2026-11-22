@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.2",
+  "text": "The laptop-only desk does not win at a two-screen site: with a one-display desk and a two-display desk in the catalogue and two screens present, detect names the two-display desk and reports the other as describing one of the two screens present.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

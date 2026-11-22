@@ -1,0 +1,10 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "note": "red 2026-09-21 before the fix: 541 and 503 glyph pixels in the outer 20 px; green after: video.sh ST0023-AT01 PASS, cargo test -p showreel 173 passed, ST0022 AT01 and AT30 PASS"
+}

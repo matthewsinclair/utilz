@@ -1,0 +1,10 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/utilz/test/install_e2e.bats",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not."
+}

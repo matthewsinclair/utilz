@@ -1,0 +1,9 @@
+{
+  "id": "AC-2.7",
+  "text": "A deviation attributed to a slide is separated from a deviation attributable to its capture POSITION before any floor is set. Only reordering separates them; no number of repeats at one order can. SATISFIED on the reverse-order run, whose CONCLUSION stands: with the capture budget held constant, the deviation followed the slide across both orders and the untouched slides were identical in both. Its NUMBERS are superseded -- that run predates 6c278a2 and carried pace=ambient. And a THIRD variable was held constant and is now known to matter: the capture MOMENT. The artefact migrates between slides as the budget changes, so this row rules out position and does not rule out budget.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Snorkeltoast e2380f5, verified by vc 2026-09-09. Full reverse-order capture against the forward control, compared per slide: slide 14 reads 0.002196 captured 14th forward AND 7th reverse; slide 20 reads 12.453773 captured 20th forward and 1st reverse; the twenty untouched slides are 0.000000 in both orders. The deviation follows the SLIDE, not the capture position, so cc's positional hypothesis is ruled out and no run-order floor sits under every slide. Discharged before any floor was set, which was the point."
+  }
+}

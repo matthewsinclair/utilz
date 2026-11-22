@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 104,
+  "schema": "intent/issue@4.0",
+  "id": "0104",
   "slug": "macos-publish-leaves-a-launch-services-record-fo",
   "title": "macos publish leaves a Launch Services record for each Menuz.app it unpacks to prove its zip, pointing at a path it then removes",
   "status": "closed",

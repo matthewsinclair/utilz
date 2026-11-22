@@ -1,0 +1,9 @@
+{
+  "id": "AC-2.15",
+  "text": "A per-slide floor is not derived from a single control run, because an artefact that MIGRATES between slides is attributed to whichever one showed it that day -- and the slide left at 0.000000 goes falsely red the next time it lands there. Measured 2026-09-09: the same sub-pixel artefact appears at x=145, one pixel wide, four pixels differing, max delta 2, on slide 14 under a 4000ms budget and on slide 13 under 1100ms. Both are left-aligned content templates and 145 is the left edge of the content block in each. Where an artefact has a NAMED CAUSE spanning a class of slides, the floor is a class floor at the largest observed value for that class, justified by the phenomenon rather than by which slide exhibited it. A class floor is not the global floor this contract rejects: a global floor is set by the worst slide in the reel and is wider than the signal, whereas a class floor is three orders of magnitude below the injected defect and is derived from a cause.",
+  "kind": "non-test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Minted on snorkeltoast's migration hypothesis, which their own test refuted. Six captures each of slides 13, 14 and 17, all fifteen pairs at a fixed 1100ms budget: slide 13 zero of 15 differ, slide 17 zero of 15, slide 14 FIVE of 15 and every one at exactly 0.002196. The artefact does not migrate -- slide 14 is BIMODAL, rendering one of two ways with no intermediate value, and slide 13's 0.001500 is a rarer instance of the same class rather than the same instance relocated. So per-slide floors stand as designed and the class-floor mechanism this row required is withdrawn with its proposer's agreement. The concern survives in AC-2.3 in a better form: a floor of 0.000000 recorded for a bimodal slide is a sampling artefact, not a measurement."
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 9,
+  "schema": "intent/issue@4.0",
+  "id": "0009",
   "slug": "m-x-utilz-offers-13-utilities-4-error-3-print-us",
   "title": "M-x utilz offers 13 utilities; 4 error, 3 print usage, 1 mutates on selection",
   "status": "closed",

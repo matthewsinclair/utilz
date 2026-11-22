@@ -1,0 +1,8 @@
+{
+  "id": "AC-06.1",
+  "text": "doctor names every precondition with its state (Hammerspoon running, the hs tool and IPC, Accessibility, separate spaces, auto-rearrange, Stage Manager), exits 1 when any fails, and completes without Hammerspoon present, naming it as missing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

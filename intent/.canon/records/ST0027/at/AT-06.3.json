@@ -1,0 +1,10 @@
+{
+  "id": "AT-06.3",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/SpecTests.swift",
+  "covers": [
+    "AC-06.3"
+  ],
+  "status": "green",
+  "note": "MenuSpec.icon nil without icon: and the example still ok; the bundle's CFBundleIconName, its AppIcon.icns and NSImage(named: MenuBarIcon) loading as a template are hosted in native/macos/Menuz/MenuzTests/NotifyArmTests.swift (the Icon suite); the catalogue is written by bin/devbin macos app-icons (opt/menuz/test/macos.bats, dc, add45d4) from design/menuz.svg and menuz-mark.svg; the mark on hv's bar from the dev build relaunched at 21:04Z on 17 Oct."
+}

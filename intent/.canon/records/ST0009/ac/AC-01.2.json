@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "A symlink in `bin/` that does NOT resolve to the dispatcher is invisible to every consumer -- this is the drift being closed, so the assertion must cover more than one consumer.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.6",
+  "text": "The divergence WP01 creates, that apply and diff disagree about a window an app holds at its own size, is recorded where a reader meets the limitation before meeting the contradiction: in issue 0133's design, in help's apply paragraph and in the CHANGELOG entry.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "help/arngz.md:110 states it as a known limitation with the reason; CHANGELOG.md's issue 0133 entry carries it under 'Known limitation, and new in this release'; intent/issues/0133.md's design states it in four places. Verified by reading all three, not from the design's claim to have recorded it."
+  }
+}

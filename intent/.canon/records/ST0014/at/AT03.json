@@ -1,0 +1,10 @@
+{
+  "id": "AT03",
+  "kind": "test",
+  "file": "opt/utilz/test/install.bats",
+  "covers": [
+    "AC03"
+  ],
+  "status": "green",
+  "note": "Publish INTO a Utilz source tree is refused, and the refusal is driven from the TARGET: run it with a source that is not the target too. A src-equals-dst comparison passes this and is the exact guard devbin's vendored copy walked past on 2026-09-07."
+}

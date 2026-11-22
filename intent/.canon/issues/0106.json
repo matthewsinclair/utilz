@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 106,
+  "schema": "intent/issue@4.0",
+  "id": "0106",
   "slug": "menuz-s-build-products-stay-registered-with-laun",
   "title": "Menuz's build products stay registered with Launch Services, so the bundle id resolves to a build, not the installed app",
   "status": "closed",

@@ -1,0 +1,9 @@
+{
+  "id": "AC-07.1",
+  "text": "`opt/todo/README.md` and `help/todo.md` document every verb and option.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "doc review (both written)"
+  }
+}

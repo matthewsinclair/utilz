@@ -1,0 +1,9 @@
+{
+  "id": "AT12",
+  "kind": "test",
+  "file": "opt/utilz/test/install_guards.bats",
+  "covers": [
+    "AC10"
+  ],
+  "status": "green"
+}

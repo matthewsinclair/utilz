@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 91,
+  "schema": "intent/issue@4.0",
+  "id": "0091",
   "slug": "menuz-bats-skips-isolate-tool-homes-so-an-inheri",
   "title": "menuz.bats skips isolate_tool_homes, so an inherited git config that signs reaches its fixture commit",
   "status": "closed",

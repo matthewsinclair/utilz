@@ -1,0 +1,10 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-01.3"
+  ],
+  "status": "green",
+  "note": "The 16:9 recording: a 40-capital handle has no glyph in the frame's outer 86 px and is still drawn. RED PROVEN RETROSPECTIVELY (restart.md's remedy for a block written after the code), by running it against HEAD's player in this tree and restoring it: 2743 and 2807 glyph pixels in the outer 86 px. GREEN at the fit: 0 and 0, the handle drawn at 41950 px inside the margin"
+}

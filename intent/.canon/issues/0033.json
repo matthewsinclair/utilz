@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 33,
+  "schema": "intent/issue@4.0",
+  "id": "0033",
   "slug": "utilz-todo-renumbers-every-item-on-every-write-s",
   "title": "utilz todo renumbers every item on every write, so an id cited anywhere goes stale at the next add, done or sync",
   "status": "closed",

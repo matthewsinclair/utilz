@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.2",
+  "text": "A freshly generated utility passes `utilz doctor`'s version-compatibility check with no hand-editing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

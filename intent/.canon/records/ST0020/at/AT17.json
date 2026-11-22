@@ -1,0 +1,10 @@
+{
+  "id": "AT17",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC-01.3"
+  ],
+  "status": "green",
+  "note": "NOT red-first: a regression guard, green at 9a99c31 by construction; AT15 is its control (red-st0020.log); green in utilz test prez, 17:51-17:55Z, bash 3.2.57 end to end (gates-st0020.log)"
+}

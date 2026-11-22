@@ -1,0 +1,9 @@
+{
+  "id": "AC-1.6",
+  "text": "The shared resolver keeps prez's newline-preserving comment stripping (R1) and its four provenance messages (R4). The shorter implementation is the worse one and a naive merge takes it.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "R4 verified by vc in the shared crate: artifact/src/theme.rs:270 and :275 are two templates parameterised over {mechanism} and {elsewhere}, giving four distinct messages across the shadowing and env-vs-flag axes, with prez's vocabulary (deck, --theme-path, PREZ_THEME_PATH) injected by the Registry rather than hardcoded. cc drove all four through the shim and each matches the pre-extraction wording. R1 red-proved by cc: injecting the naive strip fails stripping_a_comment_does_not_move_the_lines_after_it with 'the offender is on line 4 of the FILE; a comment-deleting strip reports line 2'; restored, sha matches, 12 pass."
+  }
+}

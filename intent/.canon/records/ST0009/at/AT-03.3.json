@@ -1,0 +1,12 @@
+{
+  "id": "AT-03.3",
+  "kind": "test",
+  "covers": [
+    "AC-03.2"
+  ],
+  "status": "green",
+  "note": "(red at HEAD)",
+  "legacy": {
+    "raw": "a generated utility passes doctor's version compatibility check"
+  }
+}

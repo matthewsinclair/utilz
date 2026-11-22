@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "Writes are atomic (temp + `mv`) and normalization is idempotent: running the write path twice yields a byte-identical file.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

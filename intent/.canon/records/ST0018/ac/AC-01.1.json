@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "A deck that names no theme, neither theme: nor theme-file:, built with PREZ_DEFAULT_THEME naming a theme, is dressed by that theme. Answers the request's clause: a deck without theme: plus fallback Y gives Y.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

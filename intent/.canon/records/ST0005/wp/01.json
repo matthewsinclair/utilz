@@ -1,0 +1,8 @@
+{
+  "id": "01",
+  "title": "WP/01: Scaffold & Metadata",
+  "status": "done",
+  "objective": "Bootstrap the pdf2md utility using `utilz generate`, set up the Python project structure with lib/ directory, requirements.txt, and update metadata with python3 dependency.",
+  "body": "## Tasks\n\n- [x] Run `utilz generate pdf2md \"PDF to Markdown converter\" \"Matthew Sinclair\"`\n- [x] Create `opt/pdf2md/lib/` directory\n- [x] Create `opt/pdf2md/lib/requirements.txt` with pdfplumber>=0.10.0\n- [x] Update `opt/pdf2md/pdf2md.yaml` with python3 dependency\n- [x] Create `opt/pdf2md/test/fixtures/` directory\n- [x] Add `opt/*/lib/.venv/` to `.gitignore`\n- [x] Verify: `pdf2md --help`, `pdf2md --version`, `utilz list` shows pdf2md\n\n## Verification\n\n```bash\npdf2md --help      # Shows help\npdf2md --version   # Shows version\nutilz list         # Lists pdf2md\n```",
+  "preamble": ""
+}

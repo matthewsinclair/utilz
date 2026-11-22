@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.1",
+  "text": "`sync` reconciles glyph vs section with glyph authoritative: an item marked `[x]` under `## TODO` relocates to the top of DONE; a `[ ]`/`[-]` under `## DONE` relocates out to TODO/DOING.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

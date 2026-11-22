@@ -1,0 +1,9 @@
+{
+  "id": "AC-06.2",
+  "text": "`opt/todo/todo.yaml` carries an `integration:` block so the Emacs bridge lists `todo`.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "`utilz emacs doctor` green (13 exposed)"
+  }
+}

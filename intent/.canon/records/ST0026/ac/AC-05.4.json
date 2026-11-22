@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.4",
+  "text": "Hand run on hv's machine, recorded as such: applying a discovered desk after its windows were scrambled by hand puts every app's windows back on their space and cell, verified by the final observe, and applying it again produces no ops.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

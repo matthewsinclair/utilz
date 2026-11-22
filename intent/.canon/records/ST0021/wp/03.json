@@ -1,0 +1,9 @@
+{
+  "id": "03",
+  "title": "The video verb and the encode",
+  "scope": "M",
+  "status": "done",
+  "objective": "The video verb and the encode: `showreel video <dir>` builds the reel into the next `_out/` slot, records it, and encodes it with ffmpeg, keeping the finished name only after ffmpeg and ffprobe agree.",
+  "body": "",
+  "preamble": ""
+}

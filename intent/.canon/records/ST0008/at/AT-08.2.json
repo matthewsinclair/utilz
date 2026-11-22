@@ -1,0 +1,11 @@
+{
+  "id": "AT-08.2",
+  "kind": "test",
+  "covers": [
+    "AC-08.2"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::foreign file in an Intent project with intent present is refused unchanged]"
+  }
+}

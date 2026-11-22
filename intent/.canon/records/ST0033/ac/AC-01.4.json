@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "The driver runs inside the suite the way plan_test.lua does, under whichever of lua5.4, lua or luajit is present, with its test count taken from the run rather than asserted as a number written by hand.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

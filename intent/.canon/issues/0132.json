@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 132,
+  "schema": "intent/issue@4.0",
+  "id": "0132",
   "slug": "arngz-apply-exits-1-for-an-app-running-with-no-w",
   "title": "arngz apply exits 1 for an app running with no window to name, though nothing failed, and diff reads one as a difference",
   "status": "closed",

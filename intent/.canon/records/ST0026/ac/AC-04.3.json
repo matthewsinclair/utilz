@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.3",
+  "text": "discover --save <desk> writes into the catalogue, refuses to overwrite an existing desk without --force (exit 2, naming the file), and overwrites with it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

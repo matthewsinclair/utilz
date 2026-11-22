@@ -1,0 +1,8 @@
+{
+  "id": "AC-08.3",
+  "text": "A file safe to write is written without error and gains the marker: no frontmatter (legacy Intent / fresh), frontmatter without a `generator:` (utilz's pre-marker `title:`/`history:` file), or `generator: utilz todo` (utilz's own). A foreign-marked file that is NOT inside an Intent project is taken over and re-stamped `generator: utilz todo`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

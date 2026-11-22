@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 13,
+  "schema": "intent/issue@4.0",
+  "id": "0013",
   "slug": "acceptance-sh-at03-captured-stderr-that-nothing",
   "title": "acceptance.sh AT03 captured stderr that nothing ever read, so a noisy success looked silent",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.3",
+  "text": "tools/formula-bump <tag> refuses a missing tag, a lightweight tag, a wrong argument count, and a formula without exactly one tag: and one revision: line, changing nothing in each case. For an annotated tag it rewrites exactly those two lines, to the tag and git rev-parse <tag>^{commit}, and prints the diff.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

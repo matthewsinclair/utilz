@@ -1,0 +1,8 @@
+{
+  "id": "AC08",
+  "text": "upgrade REPORTS files edited in place and leaves them alone without --force, and a file it declined to overwrite keeps its install-time checksum. Re-checksumming a file that was refused would record the edit as canonical and the next check would pronounce it intact.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

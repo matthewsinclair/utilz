@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 24,
+  "schema": "intent/issue@4.0",
+  "id": "0024",
   "slug": "utilz-install-neither-builds-nor-ships-showreel",
   "title": "utilz install neither builds nor ships showreel, so an installed prez showreel execs a missing file",
   "status": "closed",

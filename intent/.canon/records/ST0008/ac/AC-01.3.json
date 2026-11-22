@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "Item numbers are global and positional in file order (DOING, TODO, DONE), zero-padded to the max width present (1--9 -> `N`, 10--99 -> `NN`), rendered as `<num>:[<glyph>] <text>`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC09",
+  "text": "The wrong verb is pinned by a CONTROL THAT CAN GO RED. An --underlay build of the same stamp over the same opaque fixture produces no centre-region change, asserted as an absence. qpdf --underlay draws beneath page content and any page painting an opaque background covers it completely, so the output is byte-different from the input and pixel-identical to it: every check short of rendering the page and looking at it says it worked. The reason --overlay is the verb therefore lives in a test, not in a header comment that the next tidy-up can delete.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 66,
+  "schema": "intent/issue@4.0",
+  "id": "0066",
   "slug": "prez-an-unreadable-mermaid-value-eg-ture-reads-a",
   "title": "prez: an unreadable `mermaid:` value, eg `ture`, reads as off with no warning",
   "status": "closed",

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 109,
+  "schema": "intent/issue@4.0",
+  "id": "0109",
   "slug": "utilz-s-version-line-drops-at-root-contract-a3",
   "title": "utilz's version line drops \" at <root>\" (contract A3)",
   "status": "closed",

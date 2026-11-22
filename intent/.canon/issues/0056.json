@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 56,
+  "schema": "intent/issue@4.0",
+  "id": "0056",
   "slug": "utilz-test-prez-reads-the-compiled-binary-before",
   "title": "utilz test prez reads the compiled binary before the stage that builds it",
   "status": "closed",

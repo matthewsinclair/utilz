@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "With `yq` absent, `utilz doctor` still completes and reports `yq` as a missing required dependency rather than bailing -- doctor is the command you run to discover this.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

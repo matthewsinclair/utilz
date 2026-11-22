@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.2",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-03.2"
+  ],
+  "status": "green",
+  "note": "plan.lua carries no hs. reference (grep), and opt/arngz/test/plan_test.lua passes under plain Lua: a matching world yields no ops, a window off its cell one place, the wrong space move then place, a short display create_space, an app not running launch, --no-create and --no-launch remove theirs, plus frames, slack, positions, patterns, fullscreen, --bind and display refusal. RED PROVEN RETROSPECTIVELY at 16 Oct (plan.lua was written before its tests): against 3e11cb4 both tests fail with no plan.lua, and against a stub planner plan_test exits non-zero. GREEN at 16 Oct: plan_test 50/50 under LuaJIT 2.1 (no lua5.4 on this machine; CI installs it), both bats limbs green; estate 22/22. critic-lua clean at its fourth pass (0 critical, 0 warning)."
+}

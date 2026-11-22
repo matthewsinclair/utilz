@@ -1,5 +1,5 @@
 {
-  "schema": "intent/thread@3.0",
+  "schema": "intent/thread@4.0",
   "id": "ST0005",
   "title": "pdf2md - PDF to Markdown Converter",
   "status": "completed",
@@ -13,68 +13,6 @@
     {
       "id": "ST0004",
       "note": "`xtrct` -- depends on this utility for PDF-to-markdown conversion"
-    }
-  ],
-  "wps": [
-    {
-      "seq": 1,
-      "title": "WP/01: Scaffold & Metadata",
-      "status": "done",
-      "objective": "Bootstrap the pdf2md utility using `utilz generate`, set up the Python project structure with lib/ directory, requirements.txt, and update metadata with python3 dependency.",
-      "body": "## Tasks\n\n- [x] Run `utilz generate pdf2md \"PDF to Markdown converter\" \"Matthew Sinclair\"`\n- [x] Create `opt/pdf2md/lib/` directory\n- [x] Create `opt/pdf2md/lib/requirements.txt` with pdfplumber>=0.10.0\n- [x] Update `opt/pdf2md/pdf2md.yaml` with python3 dependency\n- [x] Create `opt/pdf2md/test/fixtures/` directory\n- [x] Add `opt/*/lib/.venv/` to `.gitignore`\n- [x] Verify: `pdf2md --help`, `pdf2md --version`, `utilz list` shows pdf2md\n\n## Verification\n\n```bash\npdf2md --help      # Shows help\npdf2md --version   # Shows version\nutilz list         # Lists pdf2md\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 2,
-      "title": "WP/02: Bash Wrapper with Venv Management",
-      "status": "done",
-      "objective": "Replace generated bash boilerplate with a venv-aware wrapper that handles --help/--version on the fast path (before venv setup), auto-creates a Python venv with pip-installed requirements on first run, and execs into the Python engine.",
-      "body": "## Tasks\n\n- [x] Implement `ensure_venv()` that creates `lib/.venv/` and pip-installs requirements\n- [x] Fast path for `--help` / `--version` (before venv setup)\n- [x] Check `python3` availability via `check_command`\n- [x] Exec into `$VENV_DIR/bin/python3 \"$LIB_DIR/pdf2md.py\" \"$@\"`\n- [x] Verify: `pdf2md --help` is instant; `pdf2md nonexistent.pdf` triggers venv creation\n\n## Design\n\n```\npdf2md [args]\n  ├─ --help / --version → handled immediately (no venv needed)\n  └─ anything else\n      ├─ check python3 available\n      ├─ ensure_venv() → create lib/.venv/ if missing, pip install requirements.txt\n      └─ exec $VENV_DIR/bin/python3 lib/pdf2md.py \"$@\"\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 3,
-      "title": "WP/03: Python Conversion Engine",
-      "status": "done",
-      "objective": "Implement `opt/pdf2md/lib/pdf2md.py` — the core PDF-to-markdown conversion algorithm ported from pdf2md.morethan.io, using pdfplumber for text extraction.",
-      "body": "## Pipeline Stages\n\n| Stage | Description                                                                 |\n| ----- | --------------------------------------------------------------------------- |\n| 1     | Extract text items via `page.chars` → `{x, y, w, h, text, font_name, size}` |\n| 2     | Calculate global stats: `most_used_height` (mode), `most_used_font`         |\n| 3     | Group into lines by Y-position (tolerance ~2px), sort by X within lines     |\n| 4     | Detect headings: `font_size > body` → H1-H6 by descending unique sizes      |\n| 5     | Detect list items: bullets, `-`, `*`, `1.`, `(a)` patterns                  |\n| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)            |\n| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown           |\n\n## Tasks\n\n- [x] Implement CLI via argparse: `pdf2md <file> [-o output] [--pages range] [--verbose]`\n- [x] Use `page.chars` for font metadata per character\n- [x] Cluster chars into spans by font, then into lines by Y-proximity\n- [x] `Counter(font_sizes).most_common(1)` for body text detection\n- [x] `--pages` parses ranges like `1-5,7,10-12`\n- [x] `--verbose` prints progress to stderr\n- [x] Handle empty/no-text PDFs gracefully\n\n## Verification\n\n```bash\npdf2md test/fixtures/sample.pdf   # Outputs markdown with headings and lists\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 4,
-      "title": "WP/04: Tests & Test Fixture",
-      "status": "done",
-      "objective": "Generate a deterministic test PDF fixture and write comprehensive BATS tests (~15 tests) covering both bash wrapper behavior and Python conversion accuracy.",
-      "body": "## Tasks\n\n- [x] Generate test PDF fixture at `opt/pdf2md/test/fixtures/sample.pdf` using fpdf2\n- [x] Fixture contains: 2 pages, heading, body text, list items, page footer\n- [x] Commit output PDF only (not generator script)\n- [x] Write `opt/pdf2md/test/pdf2md.bats` with ~15 tests\n\n## Test Tiers\n\n### Always run (no python3 required)\n\n- `--help` shows help\n- `--version` shows version\n- Unknown option shows error\n- No args shows usage\n- Nonexistent file shows error\n- Non-PDF file shows error\n\n### Require python3\n\n- Converts sample PDF to markdown\n- `-o` writes output file\n- Detects headings in output\n- Detects list items in output\n- `--pages` limits output to specified pages\n- `--verbose` shows progress on stderr\n\n## Verification\n\n```bash\nutilz test pdf2md   # All tests pass\n```",
-      "preamble": ""
-    },
-    {
-      "seq": 5,
-      "title": "WP/05: Documentation & CI",
-      "status": "done",
-      "objective": "Write full help documentation, update project README, update CI workflow to include pdf2md in the Linux test loop and add python3-venv to Ubuntu dependencies.",
-      "body": "## Tasks\n\n- [x] Write `help/pdf2md.md` following existing help file pattern\n- [x] Update `opt/pdf2md/README.md` with developer docs\n- [x] Update `.github/workflows/tests.yml`: add `pdf2md` to Linux test loop\n- [x] Update `.github/workflows/tests.yml`: add `python3-venv` to Ubuntu dependencies\n- [x] Update `README.md`: add pdf2md to utility table\n\n## Verification\n\n```bash\nutilz help pdf2md   # Renders help\nutilz list          # Shows pdf2md with description\n# CI passes on both Linux and macOS\n```",
-      "preamble": ""
-    }
-  ],
-  "attachments": [
-    {
-      "path": "design.md",
-      "text": "# Design - ST0005: pdf2md - PDF to Markdown Converter\n\n## Approach\n\nPort the [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown) algorithm from JavaScript to Python. The JS version uses `pdfjs-dist` for text extraction; we use `pdfplumber` which provides equivalent per-character layout data (x, y, width, height, font_name, font_size).\n\nThe implementation is a single Python file (`lib/pdf2md.py`) with a thin bash wrapper for utilz integration.\n\n## Design Decisions\n\n### pdfplumber over alternatives\n\n- `pdfplumber` provides character-level position and font data, which is what the algorithm needs\n- No ML dependencies (unlike `PyMuPDF` or `camelot`)\n- Pure Python, easy to install in a venv\n- Lightweight -- the entire dependency is one pip package\n\n### Single-file Python implementation\n\n- All conversion logic in `pdf2md.py` -- no need for multiple modules\n- The file contains: CLI argument parsing, PDF extraction, line grouping, heading detection, list detection, header/footer removal, and markdown emission\n- Keeps the utility simple and self-contained\n\n### Venv management in bash wrapper\n\n- The bash wrapper manages a local venv at `lib/.venv/`\n- Auto-creates and installs `requirements.txt` on first run\n- Subsequent runs just activate and exec\n- User never needs to manually manage Python deps\n\n## Architecture\n\n```\nInput PDF\n    |\n    v\npdfplumber.open(pdf_path)\n    |\n    v\nExtract text items per page:  {x, y, w, h, text, font_name, font_size}\n    |\n    v\nCalculate global stats:  most_used_height, most_used_font, max_height\n    |\n    v\nGroup items into lines by Y-position (within tolerance)\n    |\n    v\nSort items within lines by X-position, merge with spacing\n    |\n    v\nClassify lines:\n  - Heading (font_size > body) -> assign H1-H6\n  - List item (starts with bullet/number pattern)\n  - Body text\n    |\n    v\nRemove repetitive headers/footers (same text + Y on most pages)\n    |\n    v\nEmit markdown:\n  - Headings with # prefix\n  - List items with - prefix\n  - Body text joined into paragraphs\n```\n\n## Alternatives Considered\n\n### Using PyMuPDF (fitz)\n\n- More feature-rich but larger dependency\n- Has C extensions that can complicate venv setup\n- More than we need for text extraction\n\n### Using pdfminer.six directly\n\n- Lower-level API, more code to write\n- `pdfplumber` is built on top of it and provides a cleaner interface\n\n### Using an ML-based approach (e.g., nougat, marker)\n\n- Much heavier dependencies (PyTorch, etc.)\n- Overkill for structured invoices where text is already machine-readable\n- Would make the utility slow and hard to install\n",
-      "bytes": 2595,
-      "sha256": "ed35fee0225b9da2137b17f471c38d8220c2afd90311eb8dee3bbb7c79fd2d30"
-    },
-    {
-      "path": "impl.md",
-      "text": "# Implementation - ST0005: pdf2md - PDF to Markdown Converter\n\n## Implementation\n\nTo be filled in during implementation.\n\n## Key Implementation Notes\n\n### pdfplumber text extraction\n\nUse `page.chars` to get individual characters with position/font data, then cluster into words/lines. Alternatively, `page.extract_words()` may provide a useful starting point but check that it includes font metadata.\n\n### Y-tolerance for line grouping\n\nCharacters within ~2px of Y-position should be considered the same line. The exact tolerance may need tuning based on real PDFs.\n\n### Font size mode calculation\n\nUse `collections.Counter` to find the most common font size across all characters in the document. This is the \"body text\" size; anything larger is a heading candidate.\n\n## Challenges & Solutions\n\nTo be filled in during implementation.\n",
-      "bytes": 835,
-      "sha256": "6ab3856113ee4b6e5748e459fc95ec2d69ffb9bda02ec9c4c5530e99c8133a1a"
-    },
-    {
-      "path": "tasks.md",
-      "text": "# Tasks - ST0005: pdf2md - PDF to Markdown Converter\n\n## Tasks\n\n- [x] Scaffold utility with `utilz generate pdf2md \"PDF to Markdown converter\"`\n- [x] Add `lib/` directory with `requirements.txt` (pdfplumber)\n- [x] Implement `lib/pdf2md.py` -- CLI arg parsing + full conversion pipeline\n- [x] Update bash wrapper to manage venv and exec Python\n- [x] Add test fixtures (sample.pdf generated with fpdf2)\n- [x] Write BATS tests for basic conversion (15 tests, all passing)\n- [x] Verify stdout output and -o file output both work\n- [x] Verify --pages flag works\n- [x] Verify --verbose shows progress on stderr\n\n## Dependencies\n\n- No upstream dependencies. This is a standalone utility.\n- ST0004 (xtrct) depends on this being available.\n",
-      "bytes": 731,
-      "sha256": "b2da0fed83278ee1003afbdae2a57b4e1b35b53f64f02adcf50ed0de035e4fbb"
     }
   ]
 }

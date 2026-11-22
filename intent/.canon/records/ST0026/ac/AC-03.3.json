@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.3",
+  "text": "Hand run on hv's machine, recorded as such: observe reports every screen with UUID, name, frame and position, every space with ordinal and type, every window with bundle id, title and frame, the two settings, and every Dock binding, and agrees with the spike's observation.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "The flag --safe-zone and the key safe_zone: parse through one function, the flag wins, a bad value is refused by name at config parse so check and build refuse it too, and a frame wider than it is tall is refused naming both",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

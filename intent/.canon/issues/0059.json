@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 59,
+  "schema": "intent/issue@4.0",
+  "id": "0059",
   "slug": "the-prez-crate-is-unformatted-since-504825a-carg",
   "title": "The prez crate is unformatted since 504825a: cargo fmt --check fails on six diffs, so CI and the release gate check all are both red",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "Aspect::parse takes the four names in any case and W:H, refuses the rest by name, and one size rule gives target as the long edge, both even, 16:9 unchanged; the flag beats aspect: in showreel.yaml, which beats widescreen; a bad aspect: refuses at config parse; widescreen is laid out at scale 1 with metrics unchanged and a tall frame at half size, scale 2",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

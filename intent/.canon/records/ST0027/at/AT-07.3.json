@@ -1,0 +1,10 @@
+{
+  "id": "AT-07.3",
+  "kind": "test",
+  "file": "opt/menuz/test/menuz.bats",
+  "covers": [
+    "AC-07.3"
+  ],
+  "status": "green",
+  "note": "The five stamps as build settings, MENUZ_COMMIT eight characters, MENUZ_KIND release with VERSION's bare tag at HEAD on a clean source and dev without the tag or with a dirty source, stamps' five lines in a clone and an install; landed at 5f151ab, green under bash 5 and 3.2 and on kovacs"
+}

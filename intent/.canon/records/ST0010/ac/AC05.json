@@ -1,0 +1,8 @@
+{
+  "id": "AC05",
+  "text": "PDF: `utilz prez pdf examples/demo.md` produces one slide per 254x142.9mm page via a probed installed browser; with --browser /nonexistent it refuses non-zero, listing every path probed and the remedy. (Carried from _tools AC06.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

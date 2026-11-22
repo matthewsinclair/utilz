@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 34,
+  "schema": "intent/issue@4.0",
+  "id": "0034",
   "slug": "todo-done-prune-reports-pruned-0-item-s-whatever",
   "title": "todo done --prune reports 'pruned 0 item(s)' whatever it archived, because write_file recounts the buckets after DONE is cleared",
   "status": "closed",

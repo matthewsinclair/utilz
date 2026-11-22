@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "The rust job caches cargo's dependencies, never the workspace's own crates: `Swatinem/rust-cache` pinned to 6323deb102c322ba6fcbdcafc7e3dddab59af2b6, the commit its v2.9.2 tag names, with the version in a comment, `workspaces: opt/prez/crate -> target` and `key: ${{ matrix.os }}`. Its ubuntu leg, the only one a push to main runs, restores nothing and saves at the sweep's push, then restores at the next push that runs CI, and its compile time falls. Its macOS leg runs only on a `candidate/` push or a dispatch, and its first run restores nothing and saves; since GitHub restores a cache only from the run's own branch or the default branch, a `candidate/` run's save is invisible to the next cut's branch, and the macOS leg restores only a cache that a dispatch on main saved.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

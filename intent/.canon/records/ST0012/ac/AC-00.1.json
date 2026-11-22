@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.1",
+  "text": "THE DEHYDRATION GATE. No dehydration path removes any file while any declared precondition is unmet. This criterion is the estate's single carrier -- exactly one may exist project-wide, and a second anywhere makes every dehydration refuse. It asserts nothing itself; it names what must be true. <<PRECONDITIONS AC-00.2 AC-00.3 AC-00.4 PRECONDITIONS>>",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "The gate is declared and demonstrably bites. Measured 7 Sep in the scratch clone: with one precondition unsatisfied it refused, naming it -- '2 checked of 2 declared, 1 unmet: AC-00.7 (not satisfied)' -- and removed nothing; with the preconditions met the same command removed 9 files. A gate observed refusing AND passing, rather than one only ever seen to refuse."
+  }
+}

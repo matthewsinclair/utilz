@@ -1,0 +1,10 @@
+{
+  "id": "AC16",
+  "text": "AN EXPLICIT VERB REPOINTS THE PATH SYMLINKS AT A TREE THE CALLER NAMES, AND NOTHING ELSE EVER TOUCHES THEM. RULED by vc 7 Sep with the pen, closing the gap between the contract and hv's opening question -- why ~/.local/bin/utilz points at the checkout rather than the install. Measured: SIXTEEN links in ~/.local/bin resolve into the Utilz source tree, all fifteen utilities plus utilz. Without this row a green ST0014 leaves hv typing utilz and getting the checkout, and no criterion reports it. THE VERB IS SEPARATE FROM install AND upgrade, NOT A FLAG ON THEM: a --relink flag becomes habitual and then the relinking is implicit by habit, which is the thing AC11 forbids. AC11 and this row are the same policy from two sides -- never implicitly, always available explicitly. SHELL-INIT IN DEVBIN'S SHAPE WAS REJECTED: devbin has one entry point and is reached by absolute path from .zshrc:27-28, which does not transfer to sixteen PATH entries, and resolving by PATH order would make which-tree-answers depend on shell state, which is the defect AC15 exists to remove. DOING NOTHING WAS REJECTED because it leaves a manual sixteen-link step with no record, rediscovered as a bug rather than a decision. The verb reports what it changed and what it left, is reversible by naming the source tree, and LEAVES A LINK IT DID NOT WRITE ALONE -- ~/.local/bin/prez is relative and points at bin/utilz rather than bin/prez, which works because dispatch keys on basename $0, and normalising it is a change to hv's environment nobody asked for.",
+  "kind": "non-test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Mis-kinded at creation and unfixable in place: minted non-test because `intent ac new` defaults to that, and no verb changes an AC's kind. Re-minted verbatim as AC20 with kind test. Measured before choosing: with its covering AT forced red, a computed row goes unsatisfied while an evidence-backed row stays satisfied, so this row could not detect its own test failing. Withdrawn rather than left satisfied-by-evidence, because a row that cannot go red is worse than no row.",
+    "by": "vc"
+  }
+}

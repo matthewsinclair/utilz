@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.6",
+  "text": "prez --help and help/prez.md state the whole precedence -- the flags, then the deck, then PREZ_DEFAULT_THEME, then the built-in simple -- and how the variable resolves, what an empty value means and what it refuses. Nothing under opt/prez names the requester or any organisation.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "prez --help (src/args.rs USAGE: the order, highest first, and an Environment section) and help/prez.md (the Themes order sentence, a PREZ_DEFAULT_THEME subsection, the Options row) state the precedence, resolution, empty and refusals; a grep of the added lines under opt/prez and help/prez.md finds no requester or organisation name"
+  }
+}

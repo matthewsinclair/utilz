@@ -1,0 +1,9 @@
+{
+  "id": "AC-04.10",
+  "text": "VERBS.which observes once and passes P.detect's kind through untouched, so a response never asserts that one desk fits when several fitted and the current one decided. Engine code: reading is its only proof today.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "By reading, the proof this AC names: VERBS.which observes once and passes P.detect's kind through untouched (the sketch was corrected at 7d92de7f; the code was right throughout). Live, on utilz 2.14.10: 'arngz which' named homere as the one desk that fits, and hv's Discover ('arngz auto --default rhad') worked, first-hand in vc's session on 10 Nov."
+  }
+}

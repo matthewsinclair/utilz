@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "Browser discovery moves to the artifact crate",
+  "scope": "S",
+  "status": "done",
+  "objective": "Browser discovery has one home, in the `artifact` crate, shared by prez's `pdf`, `present` and `browser` verbs and by showreel's `video`.",
+  "body": "",
+  "preamble": ""
+}

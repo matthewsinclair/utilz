@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 74,
+  "schema": "intent/issue@4.0",
+  "id": "0074",
   "slug": "menuz-s-not-yaml-refusal-keeps-only-the-first-li",
   "title": "menuz's not-YAML refusal keeps only the first line of Yams' error, so an error with a context loses its problem",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-08.5",
+  "text": "With its DEFAULT path (no `--file`/`-g`) and no `./todo.md` present yet, utilz refuses to CREATE a new file inside an Intent project (Intent installed AND cwd's tree contains `intent/.config/config.json`), directing the user to `intent todo` or `--file`/`-g`; the file is not created and exit is non-zero. Unaffected (all proceed): explicit `--file`/`-g`, an already-existing utilz `./todo.md`, read-only queries that never write, non-Intent directories, and Intent-absent.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

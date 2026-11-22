@@ -1,0 +1,11 @@
+{
+  "id": "AT-02.2",
+  "kind": "test",
+  "covers": [
+    "AC-02.2"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::done prepends to DONE newest-first]"
+  }
+}

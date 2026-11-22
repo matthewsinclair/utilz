@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "`add <text>` appends the item to the bottom of TODO with `[ ]`; `add --top <text>` prepends it to the top of TODO.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

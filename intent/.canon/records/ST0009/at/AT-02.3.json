@@ -1,0 +1,12 @@
+{
+  "id": "AT-02.3",
+  "kind": "test",
+  "covers": [
+    "AC-02.3"
+  ],
+  "status": "green",
+  "note": "(red at HEAD)",
+  "legacy": {
+    "raw": "run_doctor() completes without yq and names it as missing"
+  }
+}

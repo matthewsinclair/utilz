@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 137,
+  "schema": "intent/issue@4.0",
+  "id": "0137",
   "slug": "lua-bin-picks-an-interpreter-with-command-v-whic",
   "title": "lua_bin picks an interpreter with command -v, which names a non-executable file",
   "status": "closed",

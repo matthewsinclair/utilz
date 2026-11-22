@@ -1,0 +1,10 @@
+{
+  "id": "AT05",
+  "kind": "test",
+  "file": "opt/utilz/test/upgrade.bats",
+  "covers": [
+    "AC04"
+  ],
+  "status": "green",
+  "note": "upgrade against a prefix holding no install: refused, and the message NAMES install. The mirror half of AT04; both halves or the mirror is untested."
+}

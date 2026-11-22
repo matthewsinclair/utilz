@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.4",
+  "text": "`get_util_metadata` returns non-zero (rather than an empty string) when the YAML file is absent or `yq` is missing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "AT-04.2",
+  "kind": "test",
+  "covers": [
+    "AC-04.2"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::flush clears DONE with --force and does not archive]"
+  }
+}

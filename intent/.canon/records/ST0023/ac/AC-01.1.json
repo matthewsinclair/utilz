@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "A socials page whose handle is 25 capitals, recorded at --aspect portrait, has no glyph in the frame's outer 20 px on either side and still draws the handle; 16:9 frames are byte-identical to the pre-fix build",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

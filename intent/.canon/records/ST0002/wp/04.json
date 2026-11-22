@@ -1,0 +1,8 @@
+{
+  "id": "04",
+  "title": "Conflict Resolution & Extra Features",
+  "status": "done",
+  "objective": "",
+  "body": "",
+  "preamble": "**Status**: Complete\n\n--source-wins (no --update). --dest-wins (--ignore-existing). Mutual exclusivity check. --exclude pattern support (repeatable). --backup with .syncz-bak suffix. --delete flag integration."
+}

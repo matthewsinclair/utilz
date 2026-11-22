@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 53,
+  "schema": "intent/issue@4.0",
+  "id": "0053",
   "slug": "stampz-exits-1-in-silence-on-a-pdf-it-cannot-rea",
   "title": "stampz exits 1 in silence on a PDF it cannot read: the refusal is unreachable under set -e and pipefail",
   "status": "closed",

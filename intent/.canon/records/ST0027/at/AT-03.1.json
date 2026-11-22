@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.1",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/ArmTests.swift",
+  "covers": [
+    "AC-03.1"
+  ],
+  "status": "green",
+  "note": "Arm.parse: the four arms, their file argument, usage refused exit 2; the project's shape (xcodegen, Swift 6, macOS 14, LSUIElement, the team) is project.yml, the test-host guard native/macos/Menuz/MenuzTests/TestHostTests.swift; vc ran the arms on the Debug product at 805ed42 (verify-805ed42.txt)"
+}

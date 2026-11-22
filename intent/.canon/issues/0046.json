@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 46,
+  "schema": "intent/issue@4.0",
+  "id": "0046",
   "slug": "ci-runs-the-macos-legs-on-every-push-and-never-c",
   "title": "CI runs the macOS legs on every push and never cancels a run that a newer push has superseded",
   "status": "closed",

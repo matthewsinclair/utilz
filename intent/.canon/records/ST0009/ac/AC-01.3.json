@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "A non-symlink regular file in `bin/` is not treated as a utility.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

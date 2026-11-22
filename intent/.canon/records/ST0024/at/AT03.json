@@ -1,0 +1,10 @@
+{
+  "id": "AT03",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-01.1"
+  ],
+  "status": "green",
+  "note": "The portrait recording: the headline is drawn on one line with no glyph in the outer 20 px. RED PROVEN RETROSPECTIVELY, same run against HEAD's player: 880 and 642 glyph pixels in the outer 20 px. GREEN at the fit: 0 and 0, the headline drawn at 43415 px inside the margin"
+}

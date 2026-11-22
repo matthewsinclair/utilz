@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.4",
+  "text": "Labels and each lines with a $ or a backtick are realised by the login shell at every menu open in one zsh -ilc invocation, asynchronously, the last values shown first and titles updated in place, under the realise cap with the previous value kept and the overrun logged; a label with neither is never sent to the shell; each expands to one item per stdout line with MENUZ_ITEM set.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

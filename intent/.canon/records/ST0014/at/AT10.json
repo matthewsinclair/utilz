@@ -1,0 +1,10 @@
+{
+  "id": "AT10",
+  "kind": "test",
+  "file": "opt/utilz/test/install_guards.bats",
+  "covers": [
+    "AC09"
+  ],
+  "status": "green",
+  "note": "The published install carries a built prez binary and runs it. Then make the install look stale to prez_is_stale and assert the shim REFUSES rather than building. Run that leg with CARGO_TARGET_DIR set to a junk path: install mode must ignore it, or the shim looks past the shipped binary."
+}

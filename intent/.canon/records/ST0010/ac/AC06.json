@@ -1,0 +1,8 @@
+{
+  "id": "AC06",
+  "text": "Present: `utilz prez present` builds, launches the browser de-chromed/fullscreen on the artifact, then exits -- no prez process left behind, no server, ever (hv's standing anti-requirement: the browser presents; prez writes a file and stops). (Carried from _tools AC07.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

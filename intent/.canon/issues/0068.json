@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 68,
+  "schema": "intent/issue@4.0",
+  "id": "0068",
   "slug": "check-command-calls-a-non-executable-file-on-pat",
   "title": "check_command calls a non-executable file on PATH present",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC07",
+  "text": "The install carries a manifest recording the utilz version, the source commit and a checksum for every owned file, and the recorded commit describes the bytes actually shipped.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

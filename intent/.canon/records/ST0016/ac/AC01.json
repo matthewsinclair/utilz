@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "For every utility, '<util> --help' and 'utilz <util> --help' produce BYTE-IDENTICAL output. This is the defect: 14 of 15 disagreed before the change, the symlink form rendering the curated help/<name>.md and the dispatcher form falling through to the utility's terse inline usage. The covering test asserts the SIZE of the population it swept and refuses below the full set -- a discovery loop that silently narrows reports a clean pass over a partial population, and this thread's own precondition sweep (all 15 carry a curated help file) was verified with a count control rather than assumed.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

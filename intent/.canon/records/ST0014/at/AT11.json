@@ -1,0 +1,10 @@
+{
+  "id": "AT11",
+  "kind": "test",
+  "file": "opt/utilz/test/install.bats",
+  "covers": [
+    "AC10"
+  ],
+  "status": "green",
+  "note": "The mode is on stdout before the first write. Measure it as ordering, not presence: run with the prefix unwritable so the publish fails at its first write, and assert the mode line was still printed."
+}

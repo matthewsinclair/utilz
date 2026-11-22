@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "The engine executes a recheck as it does a place, by setFrame and readback, and its response carries the records P.own_sizes_after returns.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

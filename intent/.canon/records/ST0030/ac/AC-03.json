@@ -1,0 +1,9 @@
+{
+  "id": "AC-03",
+  "text": "tools/post-cut pulls this machine's clone of the tap, so brew upgrade sees the release",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "vc's run of tools/post-cut 2.14.5, 28 Oct: the tap clone went from 396cd64 (utilz 2.14.4) to 6dbc261 (utilz 2.14.5), rc 0; shellcheck clean"
+  }
+}

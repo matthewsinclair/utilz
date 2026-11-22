@@ -1,0 +1,9 @@
+{
+  "id": "AC-03.7",
+  "text": "Progress goes to stderr as `frame N/M` when stderr is a terminal, and nothing is printed before the report when it is not.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "opt/prez/crate/crates/showreel/src/main.rs video_reel: progress goes to stderr only when std::io::stderr().is_terminal(). Measured 19 Sep at --fps 5 on video.sh's fixture: under a pseudo-terminal (script -q) the verb printed 75 progress updates, frame 1/75 to frame 75/75, then the report; with stderr to a file, stderr held 0 bytes and the report went to stdout."
+  }
+}

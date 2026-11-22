@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "A pinned pattern matches exactly one of its app's claimable windows: where the unanchored core would match another, discover takes the core anchored at the end, then the exact title; where none tells the window apart it is not recorded and said; a discovered desk plans against its own world with nothing but snapping places.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

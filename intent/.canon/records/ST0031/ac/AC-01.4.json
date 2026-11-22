@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.4",
+  "text": "Utilz's first cut in the new shape goes through the core alone: its candidate's run fires every leg and its RELEASE seal names each one, Menuz.app.zip is attached before any after: command runs, and `bin/devbin formula publish` moves homebrew-utilz to the new tag over hv's ssh.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

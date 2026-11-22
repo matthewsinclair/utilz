@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 58,
+  "schema": "intent/issue@4.0",
+  "id": "0058",
   "slug": "tools-test-estate-forces-a-path-not-a-bash-versi",
   "title": "tools/test-estate forces a PATH, not a bash version, so on a machine where /bin/bash is not 3.2 the gate reports green having proved nothing",
   "status": "closed",

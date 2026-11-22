@@ -1,0 +1,8 @@
+{
+  "id": "AC05",
+  "text": "The thirteen hand-copied dispatch arms are DEAD, proven by deletion rather than by inspection: with the arms removed, both invocation forms still answer correctly for all thirteen. Leaving them in place leaves two homes agreeing by convention, which is the arrangement that produced this defect -- and 'the dispatcher ALSO handles it' passes every test that 'the dispatcher handles it' passes.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

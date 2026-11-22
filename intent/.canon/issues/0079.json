@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 79,
+  "schema": "intent/issue@4.0",
+  "id": "0079",
   "slug": "utilz-use-and-relink-give-no-path-link-to-a-util",
   "title": "utilz use and relink give no PATH link to a utility added since the links were made, and do not say so",
   "status": "closed",

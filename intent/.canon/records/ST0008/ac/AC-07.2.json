@@ -1,0 +1,9 @@
+{
+  "id": "AC-07.2",
+  "text": "`utilz doctor` and `utilz list` pass with `todo` registered and its deps declared in YAML.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "`utilz doctor` (todo properly configured; only pre-existing PATH warning) + `utilz list` shows todo"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "The covering test asserts the SIZE of the population it swept and refuses at anything less than the full utility set. A discovery loop that silently narrows -- a glob that matches nothing, a filter that drops the Rust utility, a walker that skips a name -- reports a clean pass over an empty or partial population, which is indistinguishable from a real one. The count is part of the claim, not a diagnostic.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

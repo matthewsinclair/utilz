@@ -1,0 +1,10 @@
+{
+  "id": "AT-01.3",
+  "kind": "test",
+  "file": "opt/utilz/test/common_lib.bats",
+  "covers": [
+    "AC-01.3"
+  ],
+  "status": "green",
+  "note": "BATS: \"each_utility() ignores a plain file in bin/\" (common_lib.bats:411). The test name was in the file field until 2026-08-29 -- a v2->v3 ingest artefact, not an authored path."
+}

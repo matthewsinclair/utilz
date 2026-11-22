@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "Per-size stamps and per-range overlays",
+  "scope": "S",
+  "status": "done",
+  "objective": "One stamp per distinct page size, laid over that size pages in a single qpdf run with the ranges partitioning the pages, so a file whose pages differ in size is stamped rather than refused, and a file whose pages cannot all be measured still is.",
+  "body": "",
+  "preamble": ""
+}

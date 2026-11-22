@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.4",
+  "text": "All five former walk sites (`list_utilities`, `run_doctor` x2, `run_tests`, `emit_integration_tsv`, `emacs_doctor`) read `each_utility` and no longer open-code a `bin/*` glob.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "`grep -c 'UTILZ_HOME\"/bin/\\*' opt/utilz/lib/common.sh` returns 1, at line 222, inside `each_utility` itself"
+  }
+}

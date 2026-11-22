@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "'-h' agrees with '--help', on both invocation forms, for every utility. The intercept covers three flags and a test exercising only the long form cannot see a short form left behind -- which is exactly how this defect existed: one flag was intercepted at one site and the adjacent flag at neither.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

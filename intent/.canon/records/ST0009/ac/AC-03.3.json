@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.3",
+  "text": "`opt/utilz/tmpl/metadata.tmpl` contains no literal version floor; the floor arrives via the `{{UTILZ_FLOOR}}` placeholder.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "test",
+  "file": "opt/utilz/test/install.bats",
+  "covers": [
+    "AC04"
+  ],
+  "status": "green",
+  "note": "install against a prefix that already holds an install: refused, and the message NAMES upgrade. Assert the word, not just the non-zero rc."
+}

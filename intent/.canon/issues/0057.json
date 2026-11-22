@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 57,
+  "schema": "intent/issue@4.0",
+  "id": "0057",
   "slug": "st0025-s-at01-and-at02-go-green-on-the-regressio",
   "title": "ST0025's AT01 and AT02 go green on the regression they name: they prove ink exists, not that the stamp was made for the page",
   "status": "closed",

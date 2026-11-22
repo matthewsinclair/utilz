@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 48,
+  "schema": "intent/issue@4.0",
+  "id": "0048",
   "slug": "the-emacs-smoke-test-fails-its-first-check-it-wa",
   "title": "The Emacs smoke test fails its first check: it wants 12 menu commands, and the menu is six since issue 0009",
   "status": "closed",

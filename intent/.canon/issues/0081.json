@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 81,
+  "schema": "intent/issue@4.0",
+  "id": "0081",
   "slug": "get-util-metadata-reads-a-yaml-yq-cannot-read-as",
   "title": "get_util_metadata reads a yaml yq cannot read as a field it does not carry, so --version, list, doctor and install name the wrong fault",
   "status": "closed",

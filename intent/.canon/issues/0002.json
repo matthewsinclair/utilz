@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 2,
+  "schema": "intent/issue@4.0",
+  "id": "0002",
   "slug": "generator-stamps-a-utilz-version-floor-that-can-never-match",
   "title": "utilz generate stamps a utilz_version floor of ^1.0.0 that no 2.x framework can satisfy",
   "status": "closed",

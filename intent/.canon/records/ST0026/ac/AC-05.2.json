@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.2",
+  "text": "Display matching from fixtures: a UUID match wins; name and size resolve a single candidate; two identical panels resolve by position; a desk display with no candidate, or two desk displays on one screen, refuse naming every candidate, exit 2; --map <name>=<uuid> overrides one display and is reported.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

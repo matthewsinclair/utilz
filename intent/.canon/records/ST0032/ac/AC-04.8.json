@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.8",
+  "text": "arngz which and arngz auto are dispatched before the fallthrough that treats an unknown verb as a desk name, so neither is read as a desk.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

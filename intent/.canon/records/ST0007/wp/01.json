@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "YAML emacs metadata and template update",
+  "scope": "S",
+  "status": "done",
+  "objective": "Add declarative `integration:` capability metadata to each of the 12 utility YAMLs per the ST0007 design matrix (input: stdin | file | path | none; output: replace | buffer | message | discard). Update `opt/utilz/tmpl/metadata.tmpl` so future `utilz generate` scaffolds include a commented `integration:` stub. No dispatcher or elisp changes in this WP.",
+  "body": "## Deliverables\n\n- Updated `opt/<n>/<n>.yaml` for all 12 utilities with an `integration:` block matching the design matrix.\n- Updated `opt/utilz/tmpl/metadata.tmpl` with commented-out `integration:` stub.\n- All YAMLs continue to parse cleanly via `yq`.\n\n## Acceptance Criteria\n\n- [ ] All 12 YAMLs have an `integration:` block with `input` and `output` fields populated per the design matrix.\n- [ ] `utilz doctor` still passes (YAMLs parse, dependencies resolve).\n- [ ] `utilz test utilz` still passes (no regressions).\n- [ ] Generator template has the commented `integration:` stub so `utilz generate <name>` scaffolds with it.\n- [ ] `yq '.integration' opt/<n>/<n>.yaml` returns the expected structure for every utility.\n\n## Dependencies\n\n- None. Pure data addition; no code paths consume the `integration:` block yet (WP02 is the first reader).",
+  "preamble": ""
+}

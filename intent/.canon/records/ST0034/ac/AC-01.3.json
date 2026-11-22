@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "P.own_sizes_after merges a run's results into the records: an own_size readback of a place or recheck adds or replaces the record for its bundle and wanted size, a placed readback removes it, anything else leaves the records as they were, records for other keys are untouched, and merging the same results twice gives the same records.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 62,
+  "schema": "intent/issue@4.0",
+  "id": "0062",
   "slug": "tools-ci-state-reads-the-run-conclusion-and-neve",
   "title": "tools/ci-state reads the run conclusion and never the jobs, so an infrastructure refusal and a red suite are the same answer at step 11",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "Dependency posture: the crate's Cargo.toml declares comrak as its ONLY dependency, with default-features = false (the syntect default locks 104 packages against 25 and funds nothing here -- the theme owns code presentation). Args, front matter, slide split, inlining, base64 and shell-outs stay hand-rolled against std. Any further crate needs hv sign-off named in the adding commit. (Carried from _tools AC02.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

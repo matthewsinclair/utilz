@@ -1,0 +1,10 @@
+{
+  "id": "AT-05.5",
+  "kind": "test",
+  "file": "opt/arngz/test/acceptance.sh",
+  "covers": [
+    "AC-05.5"
+  ],
+  "status": "green",
+  "note": "A HAND RUN on hv's machine with hands off, vc's to run: acceptance.sh launch <desk> <bundle id>, the app not running. It takes the pointer. RUN on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Hammerspoon 1.1.1), hands off, 16 Oct 2026 16:20Z on f8c2827 from a detached worktree; transcript tmp/vc-st0026/handrun-rerun-f8c2827.txt. Console quit, then acceptance.sh launch handrun com.apple.Console: with --no-launch apply reported 'skipped: com.apple.Console is not running, and --no-launch leaves it so', exit 1, and left Console unlaunched; without it apply launched and placed Console, exit 0; every check passed (3 of 3). A diff handrun fired 1 s into that apply was answered after 1 s, exit 1, naming the launch still to do: reads are served between apply's phases (f8c2827's 0.05 s phase gap; on 45acc46 the same read waited until the apply ended, 9.5 s into 13 s). A second apply fired 1.5 s into a 17 s apply scramble was refused at 2 s, exit 2: 'the engine refused apply: an apply is already running (asked for at 2026-10-16T16:19:58Z)'; on 45acc46 it queued and ran after the first."
+}

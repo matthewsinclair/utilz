@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "Only the name being resolved is checked for a second definition: with refuse set, a build whose theme name has one definition succeeds even when another name on the path is defined twice. This limits the duplicate check only; the variable's value is checked at every compile (AC-01.7). Answers: it refuses only the name actually being resolved. A regression guard, green at HEAD by construction; AT15 is its control.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

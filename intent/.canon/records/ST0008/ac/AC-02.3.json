@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "`notdone <id>` moves the item to TODO as `[ ]`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 1,
+  "schema": "intent/issue@4.0",
+  "id": "0001",
   "slug": "mdagg-drops-unicode-lines-under-c-locale",
   "title": "mdagg silently drops content lines containing Unicode punctuation/math under a C locale",
   "status": "closed",

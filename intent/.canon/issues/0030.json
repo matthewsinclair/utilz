@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 30,
+  "schema": "intent/issue@4.0",
+  "id": "0030",
   "slug": "acceptance-sh-s-process-matchers-reach-other-run",
   "title": "acceptance.sh's process matchers reach other runs' processes: AT06 counts any prez on the machine, and AT20's cleanup can kill another run's browser",
   "status": "closed",

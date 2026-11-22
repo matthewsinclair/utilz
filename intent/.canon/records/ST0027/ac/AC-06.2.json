@@ -1,0 +1,8 @@
+{
+  "id": "AC-06.2",
+  "text": "menuz seeds no menu bar position; at a launch whose defaults hold no 'NSStatusItem Preferred Position Item-0' the app logs one line saying to hold Command and drag the icon where it is wanted, and posts it as a notice; with the key set it says nothing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

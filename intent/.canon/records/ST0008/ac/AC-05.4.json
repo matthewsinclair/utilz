@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.4",
+  "text": "`update` is an alias that runs `sync`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

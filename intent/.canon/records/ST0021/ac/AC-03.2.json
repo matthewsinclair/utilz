@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.2",
+  "text": "The video holds floor(D x fps) frames by ffprobe, where D is the player's own schedule. Its codec is H.264, its size is the reel's target at 16:9, it has no audio stream, and `.mov` gives the same codec in QuickTime. `--fps` takes 1 to 60 and refuses anything else by name.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

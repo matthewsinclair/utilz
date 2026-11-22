@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 121,
+  "schema": "intent/issue@4.0",
+  "id": "0121",
   "slug": "utilz-use-opt-s-unset-prefix-refusal-claims-a-sl",
   "title": "utilz use opt's unset-prefix refusal claims a sleeve and a checkout, and use brew with no Utilz link announces a removal and tallies other tools' links",
   "status": "closed",

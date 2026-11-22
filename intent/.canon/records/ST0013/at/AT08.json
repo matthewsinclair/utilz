@@ -1,0 +1,10 @@
+{
+  "id": "AT08",
+  "kind": "test",
+  "file": "opt/utilz/test/common_lib.bats",
+  "covers": [
+    "AC03"
+  ],
+  "status": "green",
+  "note": "THE SECOND HOME MOVES WITH THE FIRST. CI at `.github/workflows/tests.yml` must discover suites the same way the driver does, and neither may name a single suite filename any more. This row exists because the convention has THREE homes -- `common.sh`, `tests.yml`, `prez.bats:329` -- and a fix that lands in one leaves the estate with two answers to \"what actually runs\", which is the Highlander failure with a green attached. Its mechanism is a source assertion, not behaviour, because CI cannot run itself from inside a BATS suite; the precedent is already in this tree at `prez.bats:334`, which greps `common.sh` for a hardcoded `--strict` for exactly this reason. TARGET A STRING THE ARTIFACT CAN ONLY CONTAIN IF THE THING IS REALLY THERE, never a token the file might legitimately discuss -- a `grep` for the word `acceptance` would match the prose comments that surround both call sites and pass forever. Assert on the DISCOVERY construct, and assert the count of hardcoded `test/acceptance.sh` occurrences is ZERO in both files.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

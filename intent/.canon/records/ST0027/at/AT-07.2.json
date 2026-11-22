@@ -1,0 +1,10 @@
+{
+  "id": "AT-07.2",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzTests/IdentityRowTests.swift",
+  "covers": [
+    "AC-07.2"
+  ],
+  "status": "green",
+  "note": "Hosted: the builder's first item is the identity row, disabled, bold 13 pt, ahead of the refusals and the entries, under the stamps utilz menuz test passes; --render's first line is the same row (vc's verify at 90afe01)"
+}

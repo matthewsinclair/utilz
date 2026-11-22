@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 8,
+  "schema": "intent/issue@4.0",
+  "id": "0008",
   "slug": "issue-0006-s-sweep-left-a-third-hardcoded-roster",
   "title": "Issue 0006's sweep left a third hardcoded roster copy, in prez.bats",
   "status": "closed",

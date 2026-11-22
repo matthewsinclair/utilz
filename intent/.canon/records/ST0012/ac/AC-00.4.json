@@ -1,0 +1,9 @@
+{
+  "id": "AC-00.4",
+  "text": "DEHYDRATION RUNS ON A COMMITTED TREE, so version control is a second and independent net beneath hydrate. The two nets fail differently on purpose: hydrate restores from canon and would carry a canon defect with it, while git restores bytes and knows nothing about canon. A run on a dirty tree has neither -- it mixes removals it can undo with edits it cannot.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Practice, and checkable per run: the tree is committed to a clean git status before organise --apply is invoked, so every removed file is recoverable from HEAD independently of hydrate. Verified immediately before the 7 Sep run that removed ST0011's files."
+  }
+}

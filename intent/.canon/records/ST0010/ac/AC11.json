@@ -1,0 +1,8 @@
+{
+  "id": "AC11",
+  "text": "Repo build hygiene: opt/prez/crate/target/ is gitignored in a commit that lands BEFORE any in-tree build exists; no build-generated file is ever tracked (the pres_*.html litter class stays behind by hoisting from git at the pin, tracked content only, never cp -R). The Dropbox rationale of _tools AC01 is recorded as NOT transferring: Utilz sits outside Dropbox and its local remote is bare.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

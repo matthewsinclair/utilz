@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 4,
+  "schema": "intent/issue@4.0",
+  "id": "0004",
   "slug": "bin-utilz-unknown-command-list-is-a-sixth-open",
   "title": "bin/utilz unknown-command list is a sixth open-coded bin/ walk ST0009 missed",
   "status": "closed",

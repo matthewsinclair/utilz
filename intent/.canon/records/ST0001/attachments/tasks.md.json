@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0001: cleanz - LLM Text Cleaner Utility\n\n**Status**: COMPLETE\n\nAll tasks have been completed. See `done.md` for the completed task list.\n\n## Future Enhancements (Optional)\n\nThese are potential future improvements, not currently planned:\n\n- [ ] Add `--dry-run` mode to preview changes without applying\n- [ ] Add pattern file support for custom cleaning rules\n- [ ] Add `--aggressive` mode for more extensive cleaning\n- [ ] Add `--stats` mode for detailed character statistics\n",
+  "bytes": 487,
+  "sha256": "1eeab47631c4c4045a9e151d34c9ee68f3e7f88e57ca42173d2733f26a3fc6f7"
+}

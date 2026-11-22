@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 7,
+  "schema": "intent/issue@4.0",
+  "id": "0007",
   "slug": "prez-slide-counter-drops-below-the-4-5-1-contras",
   "title": "prez slide counter drops below the 4.5:1 contrast floor on dark slides and no theme can reach it",
   "status": "closed",

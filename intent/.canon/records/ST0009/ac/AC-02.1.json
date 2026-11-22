@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.1",
+  "text": "With `yq` absent from `PATH`, `utilz list` fails loudly, names `yq`, gives the install hint, and exits non-zero.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

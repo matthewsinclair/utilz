@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 119,
+  "schema": "intent/issue@4.0",
+  "id": "0119",
   "slug": "magic-numbers-remain-in-tests-and-guards-outside",
   "title": "Magic numbers remain in tests and guards outside the dispatch suites, to be deleted for the release after 2.14.4",
   "status": "closed",

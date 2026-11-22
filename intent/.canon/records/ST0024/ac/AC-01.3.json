@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "A socials handle whose INK is wider than its room is fitted in any orientation, and one whose ink fits its room is untouched: a 40-capital handle at 16:9 has no glyph in the frame's outer 86 px and is still drawn, while ST0023 D3's handle, which visibly fits, does not move",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

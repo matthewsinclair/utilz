@@ -1,0 +1,10 @@
+{
+  "id": "AT05",
+  "kind": "test",
+  "file": "opt/prez/crate/test/acceptance.sh",
+  "covers": [
+    "AC05"
+  ],
+  "status": "green",
+  "note": "Instrument: opt/prez/crate/test/acceptance.sh --strict, run 2026-08-29 16:40Z, REAL Chrome, no browser override: 12 blocks, 0 failed, 0 SKIPPED, exit 0. Binary: cold build at HEAD fdf161a, crate tree 98ace738, rm -rf target then a 6.44s release build; binary postdates its source commit (the seam AC17 names, found live here this morning at -55s and closed)."
+}

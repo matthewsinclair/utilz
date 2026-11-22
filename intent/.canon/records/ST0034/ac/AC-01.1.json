@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "P.plan emits recheck, not place, for a window that is not moving, whose origin agrees with its cell and whose size matches a record for its bundle and wanted size; and emits place when the origin differs, the size matches neither record nor cell, or the record is for another bundle or wanted size, every comparison through P.origins_agree and P.sizes_agree.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

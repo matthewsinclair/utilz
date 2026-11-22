@@ -1,0 +1,10 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC09"
+  ],
+  "status": "green",
+  "note": "The control. Builds the same stamp with --underlay over the same opaque fixture and asserts NO centre-region change. Goes red if someone switches the verb. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. Underlay changed 0 band pixels, overlay >200, and the file differs on disk."
+}

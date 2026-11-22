@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.3",
+  "text": "Hand run on hv's machine, recorded as such: a save of menuz.yaml, an atomic rename by an editor, and a deletion and recreation of MENUZ_HOME each reach the menu within one second with no restart.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

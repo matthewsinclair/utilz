@@ -1,0 +1,11 @@
+{
+  "id": "AT-01.4",
+  "kind": "test",
+  "file": "opt/utilz/test/common_lib.bats",
+  "covers": [
+    "AC-01.2",
+    "AC-01.5"
+  ],
+  "status": "green",
+  "note": "BATS: \"a stray bin/ symlink is invisible to both list_utilities and run_doctor\" (common_lib.bats:424). The test name was in the file field until 2026-08-29 -- a v2->v3 ingest artefact, not an authored path."
+}

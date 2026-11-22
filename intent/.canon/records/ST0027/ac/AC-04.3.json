@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.3",
+  "text": "Every run appends to ${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log, created on first use: a start line (timestamp, run id, item, cwd, the run line as written), stdout and stderr lines as they come prefixed with the run id, and an end line with exit code and duration; a secret's value never appears; a line the app cannot write is an error in OSLog and a notification.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

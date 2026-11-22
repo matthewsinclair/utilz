@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.3",
+  "text": "P.detect has one return shape, name then kind then report then candidates, with name nil unless a desk was chosen and kind one of exactly four values: one, current, several, none.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

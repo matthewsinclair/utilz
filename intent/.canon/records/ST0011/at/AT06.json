@@ -1,0 +1,10 @@
+{
+  "id": "AT06",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC07"
+  ],
+  "status": "green",
+  "note": "Manifest carries recipient, date, stamp time, source, and per-file pages plus sha256 before and after. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. The two hashes are asserted DIFFERENT."
+}

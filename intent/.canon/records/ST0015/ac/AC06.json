@@ -1,0 +1,8 @@
+{
+  "id": "AC06",
+  "text": "prez's crate is untouched: crate/Cargo.toml remains the single home of prez's version, no VERSION file is added beside it, and the binary invoked directly still answers clap's own --version. The rule this preserves is 'point at the one home you cannot delete', established 8 Sep -- cargo REQUIRES the version in [package], so a second home would be the duplication the estate spent that morning removing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

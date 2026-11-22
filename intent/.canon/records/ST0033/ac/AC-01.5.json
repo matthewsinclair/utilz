@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

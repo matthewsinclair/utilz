@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "non-test",
+  "prose": "By hand, as ST0023 did, and the exact run is in the note: the same reel recorded by the pre-thread binary and by the built one, compared frame by frame with cmp, and then the SAME build recorded twice to separate this thread's effect from Chrome's own",
+  "covers": [
+    "AC-01.9"
+  ],
+  "status": "n-a",
+  "note": "Reel: three type-only slides (card, socials each, wordmark), every line short enough to fit. Built at 504825a and at 504825a~1 by checking out that player and rebuilding --workspace. Command each time: showreel video <reel> --browser <Chrome> --fps 10 --aspect widescreen --frames <dir>, 75 frames. Compared with cmp per frame. RESULT: 25 of 75 frames differ, every one by a SINGLE channel sample of 1 at x=877 y=540 (blue), inside the card headline's edge. The same build recorded TWICE differs in the same 25 frames, at the same pixel, by the same 1, so the difference is Chrome's own rasterisation of that glyph edge and not this thread's. Portrait: 0 of 75 frames differ. The mechanism behind the claim is asserted instead by AT01's nothing-written pass"
+}

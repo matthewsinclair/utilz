@@ -1,0 +1,11 @@
+{
+  "id": "AT06",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-02.2",
+    "AC-02.3"
+  ],
+  "status": "green",
+  "note": "The portrait recording with --safe-zone social, against the same reel without it. RED before the zone existed: --safe-zone was refused as an unknown video option, so the recording this block reads could not be made at all. GREEN: 0 glyph pixels in each of the zone's four bands, 16080 inside the zone, and the control without the zone carries 410 left and 1646 right"
+}

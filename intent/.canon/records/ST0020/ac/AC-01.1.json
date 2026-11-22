@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "With PREZ_THEME_DUPLICATES=refuse, a theme name that two directories on the search path define is refused, byte-identical copies included: exit 2, a message beginning theme '<name>' is defined more than once, each definition named with its directory and the mechanism that put that directory on the path, listed in search order, and no output written. Answers AC05: a name that two directories define refuses and names both. Red-first: HEAD builds it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

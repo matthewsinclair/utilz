@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC05"
+  ],
+  "status": "green",
+  "note": "Page count before and after; and a forced mismatch refuses rather than warns. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0."
+}

@@ -1,0 +1,11 @@
+{
+  "id": "AT-08.1",
+  "kind": "test",
+  "covers": [
+    "AC-08.1"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::write stamps generator: utilz todo]"
+  }
+}

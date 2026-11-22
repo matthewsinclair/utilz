@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "test",
+  "file": "opt/utilz/test/formula_bump.bats",
+  "covers": [
+    "AC-05.3"
+  ],
+  "status": "green",
+  "note": "Red first, 21 Sep: at c36a773, with no tools/formula-bump, bats opt/utilz/test/formula_bump.bats fails 5 of 5. Green, WP-05, 21 Sep: 5 of 5 pass. An annotated tag rewrites exactly the tag: and revision: lines to 9.9.9 and git rev-parse 9.9.9^{commit}, keeps the formula's mode, and prints the diff. A missing tag, a lightweight tag, a formula with two revision: lines, and one with no tag: line are each refused with the formula byte-identical. Zero or two arguments exit 2. CI's shellcheck collector sees 20 files, tools/formula-bump among them, and all are clean."
+}

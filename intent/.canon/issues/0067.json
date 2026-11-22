@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 67,
+  "schema": "intent/issue@4.0",
+  "id": "0067",
   "slug": "prez-at04-s-fullscreen-checks-fail-under-chrome",
   "title": "prez: AT04's fullscreen checks fail under Chrome 155 on macOS, on HEAD as well as after 0065",
   "status": "closed",

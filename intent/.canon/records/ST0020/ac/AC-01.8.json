@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.8",
+  "text": "The one extension beyond the request, stated: with refuse set, one directory that defines a name both as <name>/theme.css and as <name>.css is refused, naming both files. Red-first: HEAD takes the directory form silently. vc's review of the design kept it, because without it the policy is half a policy.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

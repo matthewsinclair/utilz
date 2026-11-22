@@ -1,0 +1,10 @@
+{
+  "id": "AC-03.4",
+  "text": "When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator. Engine code: reading is its only proof today.",
+  "kind": "non-test",
+  "state": {
+    "is": "descoped",
+    "to": "ST0033",
+    "by": "vc"
+  }
+}

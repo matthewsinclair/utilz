@@ -1,0 +1,9 @@
+{
+  "id": "AC-1.5",
+  "text": "prez's and showreel's theme behaviours are diffed by two INDEPENDENT enumerations, each from source before seeing the other, before the shared crate takes either as its semantics.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "vc/inbox.cc.md entry 2026-09-09 08:16Z, committed 61206a5 (stamp repaired 20326b9). Two INDEPENDENT enumerations: snorkeltoast enumerated showreel from source before re-reading cc's table, cc enumerated prez before seeing theirs. Result: FOUR behaviours not five, one clean match, and the shipped defect that became issue 0014. The row existed because near-agreement suppresses the check, and the check disagreed."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.1",
+  "text": "An item's params are acquired through one form window holding every param in order (D4), each field typed from the param's type (text, secret, choice, file, folder; text when none is given; secret hidden) with its prompt and default; Cancel runs nothing and logs cancelled; required refuses an empty answer and a typed field refuses a value of the wrong kind, each named in the form; the values reach the run as exported variables under the declared names.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

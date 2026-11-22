@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 108,
+  "schema": "intent/issue@4.0",
+  "id": "0108",
   "slug": "mdagg-stops-at-a-missing-file-instead-of-warning",
   "title": "mdagg stops at a missing file instead of warning and carrying on",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "Where discover pins a window, the pattern is the title's core (its leading run of characters other than ASCII letters and digits removed), escaped for Lua and anchored at neither end, so it still matches the window's title with another leading decoration or none (run 8's '◑ utilz-dc' and '-zsh').",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "showreel video --aspect portrait records a 1080x1920 H.264 video at target 1920, with the same frame count as 16:9, and a malformed, zero or past-4:1 ratio is refused by name before any frame; widescreen stays 1920x1080",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

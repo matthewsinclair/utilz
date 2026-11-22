@@ -1,0 +1,6 @@
+{
+  "path": "design.md",
+  "text": "# Design - ST0003: Add --bidi to syncz\n\n## Approach\n\n[Planned approach for implementing this steel thread, including methodology and key steps]\n\n## Design Decisions\n\n[Key design decisions and their rationale]\n\n## Architecture\n\n[Architectural considerations and diagrams if applicable]\n\n## Alternatives Considered\n\n[Other approaches that were considered and why they were not chosen]\n",
+  "bytes": 383,
+  "sha256": "0a594f5b4ccec8b698859c9f38a93e24a9a991cc6bdd8447396d001733681391"
+}

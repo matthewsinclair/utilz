@@ -1,0 +1,9 @@
+{
+  "id": "AC17",
+  "text": "Every green recorded in this repo names the instrument that produced it, and that instrument is provably this repo's: the binary under test is built from a clean checkout of the recorded pin (3e16597), and WP-04 records the build's provenance alongside its numbers. The seam is real rather than theoretical -- at the pin, _tools-vc found the binary on disk predated its own source commit by three and a half minutes (cc had compiled a working tree and committed afterwards), so the first green there was true but unattributable until forced to rebuild from HEAD. The first Utilz build at the pin is the first moment the sha and the binary are provably the same artifact; if this repo's numbers disagree with _tools', that seam is checked BEFORE the port is suspected.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Cold build 2026-08-29: rm -rf opt/prez/crate/target (180M), release build in 6.44s from a clean crate tree at HEAD fdf161a (crate tree sha 98ace738), binary landing in-crate and postdating its source commit. The seam AC17 names was LIVE here and is closed: before the rebuild, target/release/prez had mtime 15:29:34Z against a source commit at 15:30:29Z -- 55 seconds older than its own source, the same defect _tools-vc found at the pin, and every number cc had reported was true but unattributable. Sizes matched byte-for-byte across warm and cold (4384816), which is what showed the numbers had been right all along. Every green on this thread cites the instrument and this run: acceptance.sh --strict 12/0/0 exit 0 with real Chrome, cargo test 128/0, utilz test 430 ok / 0 not ok across 17 suites exit 0, shellcheck 16 files exit 0 on CI's own file set, utilz doctor 6/6, intent doctor 0 findings."
+  }
+}

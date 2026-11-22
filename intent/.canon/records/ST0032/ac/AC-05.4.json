@@ -1,0 +1,9 @@
+{
+  "id": "AC-05.4",
+  "text": "The menuz menu reads Discover, which runs arngz auto --default, and Save Desk..., whose parameter default stays arngz current rather than arngz which. It is Molt-matts configuration, not a Utilz file, and it lands only after the arngz change is live on the machine.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Molt-matts b340832 (pushed): config/menuz/menuz.yaml reads Discover, which runs 'arngz auto --default rhad', and Save Desk..., whose desk default is $(arngz current || echo today). hv deployed it to ~/.config/menuz/menuz.yaml (cmp-equal) on Menuz 0.4.10 with utilz 2.14.10 (arngz 1.2.1) from brew. hv, 10 Nov, first-hand in vc's session: 'Discover worked.'"
+  }
+}

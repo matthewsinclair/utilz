@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 29,
+  "schema": "intent/issue@4.0",
+  "id": "0029",
   "slug": "at20-s-forwarded-leg-reports-a-window-that-never",
   "title": "AT20's forwarded leg reports a window that never opened as a wrong criterion, so a CI flake reads as a finding against AC19(d)",
   "status": "closed",

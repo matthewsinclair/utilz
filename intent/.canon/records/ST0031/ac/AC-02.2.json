@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "The rust job carries `timeout-minutes: 25` (issue 0131's point 5), with the measured leg durations in its comment.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

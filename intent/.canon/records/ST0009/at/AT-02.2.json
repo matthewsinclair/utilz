@@ -1,0 +1,12 @@
+{
+  "id": "AT-02.2",
+  "kind": "test",
+  "covers": [
+    "AC-02.2"
+  ],
+  "status": "green",
+  "note": "(red at HEAD)",
+  "legacy": {
+    "raw": "the yq install hint is printed once, not once per utility"
+  }
+}

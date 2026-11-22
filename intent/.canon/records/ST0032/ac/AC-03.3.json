@@ -1,0 +1,10 @@
+{
+  "id": "AC-03.3",
+  "text": "A creation that reported no space is tried up to M.CREATE_SPACE_TRIES times; a creation that reported a space is attempted once, and the attempts after it only re-read the desktop count. Engine code in exec_create_space: no suite reaches it and acceptance.sh cannot, so reading is its only proof today.",
+  "kind": "non-test",
+  "state": {
+    "is": "descoped",
+    "to": "ST0033",
+    "by": "vc"
+  }
+}

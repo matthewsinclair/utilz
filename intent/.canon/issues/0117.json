@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 117,
+  "schema": "intent/issue@4.0",
+  "id": "0117",
   "slug": "the-dispatch-suites-assert-written-counts-of-the",
   "title": "The dispatch suites assert written counts of the tree's utilities and arms, so a new utility means editing them",
   "status": "closed",

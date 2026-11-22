@@ -1,0 +1,10 @@
+{
+  "id": "AT21",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC-01.7"
+  ],
+  "status": "green",
+  "note": "red-first: HEAD ignores the variable; red at 9a99c31: 16 checks failed (red-st0020.log); green in utilz test prez, 17:51-17:55Z, bash 3.2.57 end to end (gates-st0020.log)"
+}

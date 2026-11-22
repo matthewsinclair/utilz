@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "With `yq` absent, the install hint appears exactly ONCE, not once per utility. (Regression test for the subshell-memo defect hit during this work.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

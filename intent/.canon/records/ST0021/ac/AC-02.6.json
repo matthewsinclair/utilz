@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.6",
+  "text": "A stall is named. A CDP reply that does not arrive within the watchdog is refused with the step that stalled, eg `during frame 63: screenshot`, and nothing is left running.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

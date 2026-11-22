@@ -62,3 +62,12 @@ native/macos/Menuz/MenuzKit/.swiftpm/
 # workspace) otherwise puts them in the project's build/ even with
 # -derivedDataPath. This line is the fence for a build that forgets.
 native/macos/Menuz/build/
+
+# An Intent view of many records: every clone renders its own from the store, so none is committed.
+intent/st/steel_threads.md
+
+# An Intent view of many records: every clone renders its own from the store, so none is committed.
+intent/todo.md
+
+# An Intent view of many records: every clone renders its own from the store, so none is committed.
+intent/st/*/acceptance.md

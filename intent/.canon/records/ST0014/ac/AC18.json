@@ -1,0 +1,8 @@
+{
+  "id": "AC18",
+  "text": "A file that NORMAL USE creates inside the prefix, and that the owned set does not name, is not drift. Two of fifteen utilities build a Python venv on first run -- pdf2md and xtrct each exec \"$LIB_DIR/.venv/bin/python3\" after ensure_venv (opt/utilz/lib/common.sh:223), at opt/<n>/lib/.venv, INSIDE the install and outside git ls-files because it is gitignored. So an install that has been USED carries files the manifest never recorded, and a check that reads any unowned file as drift reports drift nobody caused on two of fifteen utilities. THIS IS AC13'S SHAPE WITH AC13'S REMEDY UNAVAILABLE: utilz test is refused because refusing costs nothing, but pdf2md and xtrct RUNNING IS THE INSTALL WORKING (AC01), so the check must distinguish unowned-and-expected from owned-and-changed rather than refuse. Found by vc 7 Sep while verifying cc's D2 exclusion list; 22 paths across 5 utilities live outside opt/<n>/{<n>,<n>.yaml,README.md}, and these two are the pair that keep writing after install. RE-MINTED 8 Sep FROM AC14, WHICH WAS MINTED THE WRONG KIND. `intent ac new` defaults to `--kind non-test` and no verb changes an AC's kind, so AC14 carried a green AT and could not be satisfied by it. Satisfying it by evidence instead was measured and rejected: with the covering AT forced red, a computed row went unsatisfied and the evidence-backed row stayed satisfied -- so the old row could not detect its own test failing, which is the one thing the contract exists to do. Text is unchanged from AC14; only the kind is.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

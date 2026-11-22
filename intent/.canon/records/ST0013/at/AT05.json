@@ -1,0 +1,10 @@
+{
+  "id": "AT05",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "THE FRONT MATTER SPLITS IDENTICALLY, AC01 clause (d), or the ambiguity moves into the deck where it travels. Three legs. (1) `theme: simple` in front matter resolves as a NAME and never against the deck directory -- so a deck beside a `./simple/` directory builds the same artifact as the same deck built elsewhere, which is AT01 one layer down. (2) `theme: ./x.css` is REFUSED as a name carrying a separator, and the refusal NAMES `theme-file:`, the front-matter half of AC01 clause (f). (3) `theme-file: ./x.css` resolves DECK-RELATIVE, not cwd-relative: build the same deck from two different working directories and get the same artifact. Red-first: `frontmatter.rs` at 6e02020 has one `theme` key, and `theme::load` resolves a front-matter value as `base.join(spec)` -- a path -- so leg 2 today renders instead of refusing.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

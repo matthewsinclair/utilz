@@ -1,0 +1,10 @@
+{
+  "id": "AT05",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC06"
+  ],
+  "status": "green",
+  "note": "A two-geometry fixture is refused with the size count named. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0. The test asserts its fixture really carries two geometries first; red-first proven: the reference's lowercase pattern reddens it."
+}

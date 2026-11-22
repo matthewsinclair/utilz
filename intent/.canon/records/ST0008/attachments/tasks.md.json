@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0008: Add todo to utilz\n\n## Tasks\n\n- [x] WP-01 Scaffold + core: parse, normalize, render, write, file-location, list/add\n- [x] WP-02 Mutation verbs: start, done, notdone, toggle\n- [x] WP-03 Queries: next, doing, todo, done, count\n- [x] WP-04 Lifecycle: done --prune (history), done --flush\n- [x] WP-05 sync + edit\n- [x] WP-06 --json export + Emacs integration block\n- [x] WP-07 Docs: README + help + doctor deps\n\n## Task Notes\n\nAll acceptance ATs are covered by the 24-test BATS suite (`opt/todo/test/todo.bats`); the non-test ACs (integration block, docs, doctor/list) are satisfied with evidence recorded in `acceptance.md`.\n\n## Dependencies\n\n- `jq` -- optional, required only for `todo --json` (declared in `todo.yaml`).\n",
+  "bytes": 736,
+  "sha256": "16b13851d647d1eda4113e51220577790456ebdd53a05e8d8f398656c22c6310"
+}

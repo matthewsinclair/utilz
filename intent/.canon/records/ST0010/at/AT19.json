@@ -1,0 +1,10 @@
+{
+  "id": "AT19",
+  "kind": "test",
+  "file": "opt/prez/crate/test/runtime-logic-probe.mjs",
+  "covers": [
+    "AC20"
+  ],
+  "status": "green",
+  "note": "Instrument: opt/prez/crate/test/runtime-logic-probe.mjs, driven under acceptance.sh's AT17 block (the runner prints AT17; this row's id is the probe's own, which the probe emits). Run 2026-08-29 16:41Z: 37 checks on the synthetic deck and 37 on the mermaid deck, exit 0 both. Browserless by design -- it stubs the DOM and drives keydown at the script extracted from a BUILT artifact, so it claims dispatch and state and explicitly nothing visual. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
+}

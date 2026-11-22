@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.1",
+  "text": "The release: block from design D1, its estate gate included, is declared in bin/.devbin/config.yaml with the command still off, and bin/devbin doctor, whose cfg_validate reads the block, reports the config clean. The core's read-only release check is run by hv or vc as the first act of the switch-on (Devbin ST0007 WP-08), before any cut.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "vc, 21 Sep, in vc's detached worktree at 45c3830: bin/.devbin/config.yaml carries design D1's release: block (tag \"{version}\", repo matthewsinclair/utilz, gates check all + test estate, ci.query tools/ci-state) with commands.release off; bin/devbin doctor reads '11 checks, 0 failed, 4 notes' and notes the block 'declared and inert'. Mutation: tag swapped to \"release\" makes doctor refuse, naming release.tag ('must contain {version}'), so the pass comes from reading the block. The read-only release check is the switch-on's first act."
+  }
+}

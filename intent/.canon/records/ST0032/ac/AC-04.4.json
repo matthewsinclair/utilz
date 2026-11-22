@@ -1,0 +1,8 @@
+{
+  "id": "AC-04.4",
+  "text": "When several desks fit and options.current names one of them, detect returns that desk with kind current, so a site described by two desks keeps doing what it is doing rather than refusing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

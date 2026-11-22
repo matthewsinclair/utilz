@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.5",
+  "text": "Shutdown leaves nothing behind and matches nothing by name. Chrome runs in its own process group and is killed by group after a grace period, its temporary profile directory is removed on every exit path including an interrupt, and its stderr is shown only when a recording fails.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

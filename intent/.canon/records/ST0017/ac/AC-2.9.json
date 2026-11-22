@@ -1,0 +1,9 @@
+{
+  "id": "AC-2.9",
+  "text": "Frame STABILITY and frame PRESENCE are separate assertions and the harness makes both. Capturing at two virtual-time budgets and requiring identical frames establishes stability only: two identical EMPTY frames pass it, so a slide whose content never arrives within either budget is graded green while invisible. The presence half must be differential rather than thresholded -- the blankness detector it replaces read 55.75 percent 'has content' on the actual empty frame it was built to catch. The chosen budgets are themselves a parameter and are stated with their justification.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "CODE AND RAN, answered from harness source by snorkeltoast at vc's request. Three separate assertions reported in three columns, not one conflated measure: REPEAT (reproducibility), STABILITY (two budgets spanning the dwell), PRESENCE (the slide graded against a render of itself with its content stripped). THE PRESENCE HALF IS DIFFERENTIAL RATHER THAN THRESHOLDED, which is the row's load-bearing requirement: an empty frame cannot pass a comparison against a stripped render of itself, whereas the blankness detector this replaces read 55.75 percent \"has content\" on the actual empty frame it was built to catch. Two identical empty frames still pass stability, so stability alone grades an invisible slide green -- which is why the two assertions are separate rather than combined. THE BUDGETS ARE STATED WITH THEIR JUSTIFICATION as the row requires, in capture_budgets' docstring: lower bound ease + 200 so the transition has completed, upper bound dwell - 200 so the reel has not advanced, and the second sample at 60 percent of the remainder rather than a fixed offset because two samples 200ms apart would call a slow crawl stable."
+  }
+}

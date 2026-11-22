@@ -1,0 +1,11 @@
+{
+  "id": "AT-08.3",
+  "kind": "test",
+  "covers": [
+    "AC-08.3"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::safe files own no-frontmatter and no-generator are written]"
+  }
+}

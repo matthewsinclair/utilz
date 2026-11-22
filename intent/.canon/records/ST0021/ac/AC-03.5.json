@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.5",
+  "text": "`--keep N` prunes whole slots, in `build` and in `video`: a dropped revision's HTML and its video go together, and the warning past five revisions counts the videos' megabytes.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

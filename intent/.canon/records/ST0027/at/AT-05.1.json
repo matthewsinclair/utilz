@@ -1,0 +1,10 @@
+{
+  "id": "AT-05.1",
+  "kind": "test",
+  "file": "opt/menuz/test/menuz.bats",
+  "covers": [
+    "AC-05.1"
+  ],
+  "status": "green",
+  "note": "cc's 54 AT-05.1 tests with fakes for xcodegen, xcodebuild, lsregister, codesign, spctl, curl, ditto and the app: build's staleness hash, the location settings, the four stamps, --release and --unsigned, the refusals by name at exit 2; test; stamps; install's sequence and its exit 1 naming the step (quit, replace, unclaim, register, launch, build); the keg install's fetch, unzip, codesign, spctl, bundle id and version checks and a 404; use dev|installed; start, stop (5 s wait), restart; uninstall with --unregister-login-item and its exit 1 when the app went but the login item did not; doctor's eight labels and exit 1 on a FAIL. At 2b66d3f, verified by vc in a worktree: menuz.bats 119/119 (with dc's macos.bats 27) under bash 5.3.20 and 3.2.57, shellcheck clean; kovacs (Ubuntu) 119/0 at 2b66d3f plus dc's docs; the --unregister-login-item arm's decision is MenuzKit's Unregister, UnregisterTests."
+}

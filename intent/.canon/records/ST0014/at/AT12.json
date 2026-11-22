@@ -1,0 +1,10 @@
+{
+  "id": "AT12",
+  "kind": "test",
+  "file": "opt/utilz/test/relink.bats",
+  "covers": [
+    "AC11"
+  ],
+  "status": "green",
+  "note": "Snapshot the filesystem outside the prefix before and after install and upgrade: unchanged. Specifically ~/.local/bin is untouched -- point a fixture link there and assert it is neither relinked nor removed. Implicit relinking mutates hv's environment."
+}

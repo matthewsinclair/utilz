@@ -1,0 +1,11 @@
+{
+  "id": "AT-05.2",
+  "kind": "test",
+  "covers": [
+    "AC-05.2"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::sync tolerates hand-entered lines]"
+  }
+}

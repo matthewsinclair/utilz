@@ -1,6 +1,7 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 114,
+  "schema": "intent/issue@4.0",
+  "id": "0114",
+  "realised": true,
   "slug": "menuz-keeps-its-own-copies-of-what-arca-swift-is",
   "title": "menuz keeps its own copies of what arca_swift issue 0003 moves into arca_swift, until arca_swift tags them",
   "status": "open",

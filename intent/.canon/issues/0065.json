@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 65,
+  "schema": "intent/issue@4.0",
+  "id": "0065",
   "slug": "prez-page-numbers-in-pdf-output-as-a-front-matte",
   "title": "prez: page numbers in PDF output, as a front-matter setting (default off)",
   "status": "closed",

@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.3",
+  "kind": "test",
+  "file": "opt/arngz/test/acceptance.sh",
+  "covers": [
+    "AC-03.3"
+  ],
+  "status": "green",
+  "note": "A HAND RUN on hv's machine, recorded as such: opt/arngz/test/acceptance.sh observe <spike.lua>. Not run by utilz test: Accessibility cannot be granted on a CI runner (D12). GREEN, HAND RUN at 16 Oct 2026 on rhadamanth, macOS 27.0.1 (26A434), Hammerspoon 1.1.1: 37/37 checks. observe through the real hs reported 3 screens (main, above-right, above-left) with uuid, name, frame and position; 15 spaces with ordinal and type; every named window with bundle, title and frame; separate spaces true, mru-spaces false, stage manager false, accessibility true; 14 Dock bindings. dc's spike observe, run straight after on the same machine, agreed on every screen, every space's id/ordinal/type/uuid/active, the settings and all 14 bindings."
+}

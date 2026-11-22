@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 14,
+  "schema": "intent/issue@4.0",
+  "id": "0014",
   "slug": "prez-theme-refusal-misses-a-protocol-relative-im",
   "title": "prez theme refusal misses a protocol-relative @import, so the artifact fetches from the network",
   "status": "closed",

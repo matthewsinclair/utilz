@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.1",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/FormTests.swift",
+  "covers": [
+    "AC-04.1"
+  ],
+  "status": "green",
+  "note": "The form's model: a field per param in order, typed, prompt and default, required and wrong-kind refusals by name, Run only when clear, the exports by name; the panel, Return and Escape, and the identifiers are the app's ParamForm, driven in vc's AC-04.5 hand run at 9dde810"
+}

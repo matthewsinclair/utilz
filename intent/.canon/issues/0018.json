@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 18,
+  "schema": "intent/issue@4.0",
+  "id": "0018",
   "slug": "prez-applies-css-comment-grammar-to-layout-html",
   "title": "prez applies CSS comment grammar to layout.html, so a stray /* ... */ hides a live external reference",
   "status": "closed",

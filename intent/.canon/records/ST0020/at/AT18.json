@@ -1,0 +1,10 @@
+{
+  "id": "AT18",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC-01.4"
+  ],
+  "status": "green",
+  "note": "red-first: HEAD builds the default's duplicated name; red at 9a99c31: 4 checks failed (red-st0020.log); green in utilz test prez, 17:51-17:55Z, bash 3.2.57 end to end (gates-st0020.log)"
+}

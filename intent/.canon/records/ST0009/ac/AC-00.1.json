@@ -1,0 +1,8 @@
+{
+  "id": "AC-00.1",
+  "text": "The full BATS suite is green and `utilz doctor` reports no framework issue on a machine with `yq` installed.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

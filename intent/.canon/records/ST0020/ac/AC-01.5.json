@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.5",
+  "text": "One file reached twice is one definition, identified by device and inode: with refuse set, a directory listed twice on the path, a directory given by both --theme-path and PREZ_THEME_PATH, a symlink to a directory already on the path, and a hard link to a <name>.css already on the path each build. A regression guard, green at HEAD by construction; AT15's byte-identical copies are its control.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

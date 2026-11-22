@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "desk_from_world leaves out a window lying mostly off its display and says so in a note naming the display, rather than saving a desk that cannot be applied.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

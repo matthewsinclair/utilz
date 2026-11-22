@@ -1,0 +1,8 @@
+{
+  "id": "AC10",
+  "text": "The mode is ANNOUNCED before anything is written. A discriminator that is merely correct is not enough: a misdetection has to land in the output rather than be discovered later in the filesystem.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

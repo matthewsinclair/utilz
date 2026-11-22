@@ -1,0 +1,8 @@
+{
+  "id": "AC04",
+  "text": "install and upgrade mirror each other: install refuses when an install exists and names upgrade; upgrade refuses when none exists and names install. Whichever verb is reached for, the wrong one names the right one.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

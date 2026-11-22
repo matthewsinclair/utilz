@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 134,
+  "schema": "intent/issue@4.0",
+  "id": "0134",
   "slug": "arngz-discover-clamps-a-window-lying-off-its-dis",
   "title": "arngz discover clamps a window lying off its display into the edge cell, saving a desk entry that cannot apply",
   "status": "closed",

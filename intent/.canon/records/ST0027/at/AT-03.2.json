@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.2",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzKit/Tests/MenuzKitTests/ValidatorTests.swift",
+  "covers": [
+    "AC-03.2"
+  ],
+  "status": "green",
+  "note": "Every rule red on its fixture naming file, path, key and value, the example green, every refusal reported; the order and the tail are SpecTests.swift; the last-good menu with the refusal first is MenuBuilder, seen in vc's hand run at 805ed42"
+}

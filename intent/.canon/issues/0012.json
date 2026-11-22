@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 12,
+  "schema": "intent/issue@4.0",
+  "id": "0012",
   "slug": "prez-s-example-deck-trips-prez-s-own-class-warni",
   "title": "prez's example deck trips prez's own class warning, on every theme, on every build",
   "status": "closed",

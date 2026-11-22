@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 47,
+  "schema": "intent/issue@4.0",
+  "id": "0047",
   "slug": "the-emacs-bridge-puts-its-c-u-extra-flags-betwee",
   "title": "The Emacs bridge puts its C-u extra flags between a declared flag and the path, so todo's verbs cannot be reached",
   "status": "closed",

@@ -1,0 +1,12 @@
+{
+  "id": "AT-02.5",
+  "kind": "test",
+  "covers": [
+    "AC-02.5"
+  ],
+  "status": "green",
+  "note": "this is a regression guard for behaviour the refactor had to preserve, not new behaviour; it is the 1 of 12 that was not red) -- (**passes at HEAD too** -- this is a regression guard for behaviour the refactor had to preserve, not new behaviour; it is the 1 of 12 that was not red)",
+  "legacy": {
+    "raw": "get_util_metadata() resolves both an inline version and a version_file"
+  }
+}

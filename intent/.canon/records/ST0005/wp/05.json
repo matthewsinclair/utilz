@@ -1,0 +1,8 @@
+{
+  "id": "05",
+  "title": "WP/05: Documentation & CI",
+  "status": "done",
+  "objective": "Write full help documentation, update project README, update CI workflow to include pdf2md in the Linux test loop and add python3-venv to Ubuntu dependencies.",
+  "body": "## Tasks\n\n- [x] Write `help/pdf2md.md` following existing help file pattern\n- [x] Update `opt/pdf2md/README.md` with developer docs\n- [x] Update `.github/workflows/tests.yml`: add `pdf2md` to Linux test loop\n- [x] Update `.github/workflows/tests.yml`: add `python3-venv` to Ubuntu dependencies\n- [x] Update `README.md`: add pdf2md to utility table\n\n## Verification\n\n```bash\nutilz help pdf2md   # Renders help\nutilz list          # Shows pdf2md with description\n# CI passes on both Linux and macOS\n```",
+  "preamble": ""
+}

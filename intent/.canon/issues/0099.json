@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 99,
+  "schema": "intent/issue@4.0",
+  "id": "0099",
   "slug": "showreel-s-report-of-unused-assets-says-nothing",
   "title": "showreel's report of unused assets says nothing of a directory under assets/ it cannot read, and counts a size it cannot read as 0",
   "status": "closed",

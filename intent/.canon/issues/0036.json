@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 36,
+  "schema": "intent/issue@4.0",
+  "id": "0036",
   "slug": "the-prez-crate-has-never-been-through-rustfmt-so",
   "title": "The prez crate has never been through rustfmt, so devbin's fmt rust and check format are switched off",
   "status": "closed",

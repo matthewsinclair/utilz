@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 17,
+  "schema": "intent/issue@4.0",
+  "id": "0017",
   "slug": "prez-refuse-external-is-case-sensitive-whitespac",
   "title": "prez refuse_external is case-sensitive, whitespace-intolerant and line-bound, so three more external-reference shapes reach the artifact",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "`done <id>` moves the item to DONE as `[x]`, prepended so the newest completion is at the top of DONE.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

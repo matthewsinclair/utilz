@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 75,
+  "schema": "intent/issue@4.0",
+  "id": "0075",
   "slug": "menuz-s-return-after-a-logout-and-login-is-uncon",
   "title": "menuz's return after a logout and login is unconfirmed: ST0027 AC-05.2's last part, hv's keypress",
   "status": "closed",

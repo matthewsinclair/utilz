@@ -1,0 +1,8 @@
+{
+  "id": "AC03",
+  "text": "Output disposition is explicit. Stamped copies are written to an out-dir by default and --in-place is required to overwrite the source pack. PENDING hv RULING: this inverts the Lamplight default, which stamps in place and is safe there only because the originals regenerate from docs/pdf/investor/. Pointed at a pack that exists in one copy, an in-place default rewrites it. If hv rules for the reference default, this criterion moves with the ruling rather than being quietly dropped.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

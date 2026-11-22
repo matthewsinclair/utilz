@@ -1,0 +1,9 @@
+{
+  "id": "AC-1.1",
+  "text": "Theme resolution and base64 have exactly ONE implementation, linked by both binaries. Data-URI inlining is NOT in this set: the diff established it has no shared surface.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "Verified by vc 2026-09-09 at e0dd357: prez links the shared crate -- main.rs:49 'pub use artifact::Failure', main.rs:52 'pub(crate) use artifact::base64', theme.rs:3 records the resolver lives in artifact::theme. One implementation, both binaries."
+  }
+}

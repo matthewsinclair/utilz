@@ -1,0 +1,8 @@
+{
+  "id": "AC08",
+  "text": "The deterrence boundary is stated and true. Three parts, each asserted: the page own text remains extractable after stamping (nothing is rasterised); the recipient name is NOT contiguously extractable from the stamped file, because the rotation scatters the glyphs one per line in scrambled order; and the utility header carries the sentence that this DETERS and does NOT protect. An overlay is strippable in seconds by anyone with a PDF tool. The third part is tested rather than trusted to a comment, because it is the one thing a user could reasonably misunderstand about what they are getting.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

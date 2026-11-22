@@ -1,0 +1,10 @@
+{
+  "id": "AC-01.8",
+  "text": "THE CONTROL: a 16:9 recording of a reel whose lines all fit is byte-identical, frame for frame, to the same recording made before this thread",
+  "kind": "test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "Re-minted as AC-01.9, a non-test row: the control compares a recording against one made by a PRE-THREAD binary, which no suite can rebuild, so it is satisfied by evidence as ST0023's byte check was. The requirement is unchanged",
+    "by": "cc"
+  }
+}

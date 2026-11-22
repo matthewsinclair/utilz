@@ -1,0 +1,10 @@
+{
+  "id": "AT16",
+  "kind": "test",
+  "file": "opt/prez/test/prez.bats",
+  "covers": [
+    "AC13"
+  ],
+  "status": "green",
+  "note": "Instrument: opt/prez/test/prez.bats, driven by `utilz test`, run 2026-08-29 16:41Z: 430 ok / 0 not ok across all 17 framework suites, exit 0 -- the first run in which every suite passed, because prez acceptance now runs a real browser rather than skipping under the override. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
+}

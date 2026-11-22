@@ -1,0 +1,8 @@
+{
+  "id": "AC01",
+  "text": "Every utility answers --version with hv's ruled pair form: line one is exactly 'utilz:<framework>/<util>:<version>' and line two is the utility's description. The FORM is the requirement, not the presence of two numbers -- an assertion that merely finds both versions somewhere in the output does not satisfy this row, because a substring check cannot see a malformed pair. Assert the whole line.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

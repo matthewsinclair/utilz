@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "A fresh `list` (no file present) creates `todo.md` from the template: YAML frontmatter with `title: \"# TODO\"` and `history: _history/YYYYMMDD-done.md`, the `# TODO` H1, and the three buckets `## DOING`, `## TODO`, `## DONE:<ISO-8601-UTC>`, empty buckets shown as `_(none)_`.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

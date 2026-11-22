@@ -1,0 +1,8 @@
+{
+  "id": "AC02",
+  "text": "Self-contained artifact: `utilz prez build examples/demo.md` emits one .html that opens fully offline from file:// -- no prez-emitted http(s) references -- with local images inlined as data: URIs, and the text-only demo artifact <= 100 KB. (Carried from _tools AC03.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

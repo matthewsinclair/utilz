@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 131,
+  "schema": "intent/issue@4.0",
+  "id": "0131",
   "slug": "ci-s-rust-legs-stall-on-headless-chrome-prez-acc",
   "title": "CI's Rust legs stall on headless Chrome: prez acceptance AT21 hung on macOS at 2.14.8's tag, and showreel AT23 and AT29 timed out at frame 0 on ubuntu at 1434e764",
   "status": "closed",

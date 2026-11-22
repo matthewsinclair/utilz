@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT06",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC01"
+  ],
+  "status": "green",
+  "note": "SEARCH PATH BEFORE BUILT-INS, AC01 clause (a) second half. `--theme=simple` with a `simple` theme on `PREZ_THEME_PATH` resolves the search-path one, not the built-in of the same name. THIS ROW IS DELIBERATELY NOT RED-FIRST AND MUST NOT BE READ AS PROOF THE SPLIT LANDED. It is already correct at 6e02020 -- `theme.rs:126-129` tries `on_search_path` before `built_in` -- so it goes green on its first run and stays green. It is minted anyway because the fix is a TYPE change that rewrites that whole cascade (ccs finding, and the reason a branch reorder was rejected), and an ordering that is currently load-bearing by accident of line order is exactly what a rewrite drops silently. Every other row here fails loudly if the split is absent; this one fails only if the split is present and got the order wrong, which is the case no red-first test can reach.  ||  VERIFIED BY vc 2026-09-08 at 271d3c6, run rather than read. theme-addressing.sh --strict: exit 0, passed 6 failed 0 skipped 0. acceptance.sh --strict: exit 0, passed 14 failed 0 skipped 0 n/a 0, with PREZ_TEST_BROWSER UNSET and 18 browser-evidence matches, so a real browser was driven and nothing degraded to a skip. utilz test prez: exit 0, 4 suite(s), both black-box suites named separately. utilz test utilz: exit 0, AT07 legs 1/2/3 plus the leg-1 CONTROL all green. Refusal strings READ, not substring-matched: the deck-key remedy prints valid front matter."
+}

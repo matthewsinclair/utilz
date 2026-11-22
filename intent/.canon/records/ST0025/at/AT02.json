@@ -1,0 +1,10 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC02"
+  ],
+  "status": "green",
+  "note": "red against the code before ST0025: AT01 and AT02 on the mixed-geometry refusal, AT03 on a silent exit 1 with no message at all, AT04 the suite as it stood. GREEN after: the whole stampz suite is 24 ok, 0 not ok under bash 3.2.57, shellcheck -x clean, and a three-page mixed pack stamps to 3 pages, 2 sizes with every page size unchanged"
+}

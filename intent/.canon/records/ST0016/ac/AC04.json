@@ -1,0 +1,8 @@
+{
+  "id": "AC04",
+  "text": "'--version' is UNREGRESSED by this change: all 15 utilities, both forms, still answer the ST0015 pair form. The intercept that answers --help is the same function that answers --version, so an edit to one is an edit to both -- and a row proving --help now agrees says nothing about whether the older claim survived. ST0015 is closed and its evidence cannot be re-run from here, which is precisely why this thread must carry the check rather than assume the closed thread still holds.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

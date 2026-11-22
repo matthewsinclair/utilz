@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 136,
+  "schema": "intent/issue@4.0",
+  "id": "0136",
   "slug": "at-03-2-s-assertion-accepts-a-plan-test-lua-that",
   "title": "AT-03.2's assertion accepts a plan_test.lua that ran no checks",
   "status": "closed",

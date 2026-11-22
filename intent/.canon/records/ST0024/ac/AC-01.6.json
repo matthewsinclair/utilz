@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.6",
+  "text": "The fit is idempotent and is re-run once the face has settled: a second fit gives the same size as the first, so frames cannot move between runs",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

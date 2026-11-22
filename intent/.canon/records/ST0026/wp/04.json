@@ -1,0 +1,9 @@
+{
+  "id": "04",
+  "title": "discover and diff",
+  "scope": "S",
+  "status": "done",
+  "objective": "`discover` and `diff`. Discovery turns an observed world into a desk: standard windows only, full-screen ones as `fullscreen`, frames snapped to the desk's grid with the misfit recorded, every display with its four match fields, the Dock bindings read. `--save <desk>` writes into the catalogue and refuses to overwrite without `--force`. `diff <desk>` is the planner's output rendered as what apply would do, exit 1 when anything differs. Both are tested from fixture worlds through the fake `hs`, and a discovered desk round-trips through the validator unchanged.",
+  "body": "",
+  "preamble": ""
+}

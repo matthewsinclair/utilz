@@ -1,0 +1,10 @@
+{
+  "id": "AT22",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC-01.8"
+  ],
+  "status": "green",
+  "note": "red-first: HEAD takes the directory form silently; red at 9a99c31: 6 checks failed in leg 1, and leg 2, the control, green (red-st0020.log); green in utilz test prez, 17:51-17:55Z, bash 3.2.57 end to end (gates-st0020.log)"
+}

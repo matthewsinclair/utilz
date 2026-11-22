@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 19,
+  "schema": "intent/issue@4.0",
+  "id": "0019",
   "slug": "the-git-index-has-no-single-writer-rule-so-a-bro",
   "title": "the git index has no single-writer rule, so a broad pathspec commits another node's in-flight work",
   "status": "closed",

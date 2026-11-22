@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 26,
+  "schema": "intent/issue@4.0",
+  "id": "0026",
   "slug": "utilz-doctor-prints-step-6-s-dependency-verdict",
   "title": "utilz doctor prints step 6's dependency verdict under step 7's heading",
   "status": "closed",

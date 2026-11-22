@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.1",
+  "text": "design.md records hv's ruling on each of its questions Q1 to Q11 as a numbered decision or a descoping, in hv's words where hv gave them, and no recommendation is left standing in its place.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "hv's rulings of 16 Oct 2026 on Q1 to Q11, recorded as D1 to D11 in WP-01's body (and in design.md's Decisions section at the 0605 sync): Q4 one typed form, Q6 the source and dev build at native/macos/Menuz with the installed copy at ~/Applications/Menuz.app like the siblings and a use dev|installed switch (hv's correction in cc's session, confirmed to vc), Q7 Intent's signing, Q9 runs left running, Q10 and Q11 yes, the rest as recommended; no recommendation left standing in a ruling's place"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC02",
+  "text": "The CURATED help/<name>.md is what both forms render, not the terse inline usage. Direction matters and is the decision: the inline block is a second home for the same concern -- cleanz carries 80 lines of it against 232 in help/cleanz.md, free to drift -- and it only ever surfaced because the dispatcher was not looking. Assert the rendered content comes from the curated file, not merely that the two forms agree: two forms agreeing on the WRONG one would satisfy AC01 completely.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

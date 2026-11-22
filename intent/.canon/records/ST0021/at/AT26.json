@@ -1,0 +1,10 @@
+{
+  "id": "AT26",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-02.4"
+  ],
+  "status": "green",
+  "note": "Red first, 19 Sep: opt/prez/crate/test/video.sh, written before the verb and run at ef32951 under bash 3.2.57 with --strict, exits 1 (passed 0, failed 10) because showreel refuses unknown command 'video'. AT26 has no first frame of the photo's slide to measure. Green, WP-03, 19 Sep: video.sh --strict under bash 3.2.57 passes 10 of 10 (failed 0, skipped 0) against Chrome 153 and ffmpeg 9.0.2, at a load average of 16, in 77 s. The photo's first frame, frame 25, has mean 127 97 63, exactly the mean of the 1920x1280 JPEG the build embedded."
+}

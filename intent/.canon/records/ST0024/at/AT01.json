@@ -1,0 +1,16 @@
+{
+  "id": "AT01",
+  "kind": "test",
+  "file": "opt/prez/crate/test/video.sh",
+  "covers": [
+    "AC-01.1",
+    "AC-01.10",
+    "AC-01.3",
+    "AC-01.4",
+    "AC-01.5",
+    "AC-01.6",
+    "AC-01.7"
+  ],
+  "status": "green",
+  "note": "The player probe over CDP (test/fit-probe.mjs), driven by video.sh: measures the fit in the DOM at 540x960 and at 960x540. RED FIRST, genuinely: the first run reported that the player exposes no window.__showreelFit, so the fit could not be measured at either orientation. GREEN at hv's ruling (b): portrait 98/98, landscape 101/101, and over a reel whose lines all fit the probe asserts the fit wrote NOTHING -- 33/33 at each orientation. It caught two defects a pixel test passes: a word measured from a transformed rect (not idempotent under the crawl) and a room read inside out (a handle fitted to a row already grown past its pane)"
+}

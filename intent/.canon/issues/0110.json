@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 110,
+  "schema": "intent/issue@4.0",
+  "id": "0110",
   "slug": "utilz-doctor-stops-mid-report-saying-nothing-whe",
   "title": "utilz doctor stops mid-report, saying nothing, when a dependency read or its crate probe fails",
   "status": "closed",

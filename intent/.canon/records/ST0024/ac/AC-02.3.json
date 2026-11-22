@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.3",
+  "text": "A cap measured against the frame's height reads the zone box instead, so the at-work card and the social QR sit inside the shortened zone rather than overflowing it",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

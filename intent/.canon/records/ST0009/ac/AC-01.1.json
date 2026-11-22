@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.1",
+  "text": "`each_utility` emits exactly the utilities installed as `bin/` symlinks resolving to the dispatcher, one name per line, excluding `utilz` itself.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

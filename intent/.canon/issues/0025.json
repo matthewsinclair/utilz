@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 25,
+  "schema": "intent/issue@4.0",
+  "id": "0025",
   "slug": "prez-shim-s-one-shared-pending-stamp-fails-the-s",
   "title": "prez shim's one shared pending stamp fails the second of two overlapping stale runs after its build succeeds",
   "status": "closed",

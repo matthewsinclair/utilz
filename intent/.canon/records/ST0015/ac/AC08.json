@@ -1,0 +1,8 @@
+{
+  "id": "AC08",
+  "text": "The intercept exits with show_version's status, so a version that cannot be read is a FAILURE rather than a silent success. The arms it replaced exited 0 regardless of what show_version returned, which is IN-AG-NO-SILENT-001: a utility whose version_file is missing from an install would have reported an error message on stdout and success to the caller, and every scripted check of it would have passed. Assert the non-zero exit, not just the message.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

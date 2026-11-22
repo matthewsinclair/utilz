@@ -1,0 +1,9 @@
+{
+  "id": "AT03",
+  "kind": "test",
+  "file": "opt/prez/crate/tests/manifest.rs",
+  "covers": [
+    "AC-3.14"
+  ],
+  "status": "green"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.2",
+  "text": "plan(desk, world) is pure (its source holds no hs. reference, which the suite checks) and is tested under lua5.4 on the Linux leg from fixtures: a world already matching the desk yields no ops; a window on the wrong space yields move then place; a display short of spaces yields create_space; an app not running yields launch; --no-create and --no-launch remove theirs.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

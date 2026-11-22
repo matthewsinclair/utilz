@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 115,
+  "schema": "intent/issue@4.0",
+  "id": "0115",
   "slug": "menuz-s-release-build-product-held-a-launch-serv",
   "title": "Menuz's Release build product held a Launch Services record after 2.14.4's post-cut steps, though menuz build drops it (0106)",
   "status": "closed",

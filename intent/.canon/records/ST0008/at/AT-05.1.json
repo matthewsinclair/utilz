@@ -1,0 +1,11 @@
+{
+  "id": "AT-05.1",
+  "kind": "test",
+  "covers": [
+    "AC-05.1"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::sync relocates by glyph (glyph wins)]"
+  }
+}

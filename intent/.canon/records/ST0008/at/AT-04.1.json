@@ -1,0 +1,11 @@
+{
+  "id": "AT-04.1",
+  "kind": "test",
+  "covers": [
+    "AC-04.1"
+  ],
+  "status": "green",
+  "legacy": {
+    "raw": "[opt/todo/test/todo.bats::prune archives DONE to history newest-first and clears bucket]"
+  }
+}

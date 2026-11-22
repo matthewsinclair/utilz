@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 32,
+  "schema": "intent/issue@4.0",
+  "id": "0032",
   "slug": "install-run-bounded-s-watchdog-can-hold-its-call",
   "title": "install_run_bounded's watchdog can hold its caller's output pipe until the deadline, if a TERM lands before the sleep's pid is recorded",
   "status": "closed",

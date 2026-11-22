@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 43,
+  "schema": "intent/issue@4.0",
+  "id": "0043",
   "slug": "install-e2e-s-fixture-copies-a-linked-worktree-s",
   "title": "install_e2e's fixture copies a linked worktree's .git pointer, so its fixture commit would land in the real repository",
   "status": "closed",

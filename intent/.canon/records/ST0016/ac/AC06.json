@@ -1,0 +1,8 @@
+{
+  "id": "AC06",
+  "text": "A DIRECTLY EXECUTED utility still prints its inline usage: 'opt/<name>/<name> --help' is not a dispatched invocation and this thread does not govern it. The row exists to pin the boundary cc drew in D4, where ST0016 deliberately DIFFERS from ST0015: ST0015 could delete its thirteen --version arms because show_version was the only producer either way, but here the inline block produces genuinely different text and is the only usage a directly-executed script can print. Without this row a later tidy-up reads the two threads as one pattern and deletes fifteen arms that nothing else replaces.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.2",
+  "text": "The menu is exactly the file, in order: items, captions, headers, separators, submenus, then the fixed tail (Edit Menu, Open Log, Reload, Quit menuz); every validation rule in the design refuses its fixture naming file, entry path, key and value, and the example passes; a file that fails keeps the last good menu and shows the refusal as a disabled first item and in the log.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

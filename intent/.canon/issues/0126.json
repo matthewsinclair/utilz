@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 126,
+  "schema": "intent/issue@4.0",
+  "id": "0126",
   "slug": "devbin-macos-store-creds-puts-each-apple-notary",
   "title": "devbin macos store-creds puts each Apple notary credential, the app-specific password among them, in security(1)'s argv",
   "status": "closed",

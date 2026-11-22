@@ -1,0 +1,8 @@
+{
+  "id": "AC07",
+  "text": "Mermaid opt-in: with `mermaid: true` in front matter a fenced mermaid block renders as a diagram offline; without the opt-in the artifact carries zero mermaid bytes, proven by a grep for a library-internal symbol, never a token a deck might legitimately discuss. (Carried from _tools AC08.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

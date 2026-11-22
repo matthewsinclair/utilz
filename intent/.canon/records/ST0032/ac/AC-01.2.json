@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.2",
+  "text": "The slack rule has one home: P.frames_agree is P.origins_agree and P.sizes_agree together and nothing less, so no caller re-implements either half.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

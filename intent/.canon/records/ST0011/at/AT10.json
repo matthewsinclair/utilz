@@ -1,0 +1,10 @@
+{
+  "id": "AT10",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC10"
+  ],
+  "status": "green",
+  "note": "Dispatch through bin/stampz, --help and --version answer, utilz list shows it, utilz doctor checks the declared deps. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0."
+}

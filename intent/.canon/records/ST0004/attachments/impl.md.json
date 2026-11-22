@@ -1,0 +1,6 @@
+{
+  "path": "impl.md",
+  "text": "# Implementation - ST0004: xtrct - Semantic Data Extraction\n\n## Implementation\n\nTo be filled in during implementation.\n\n## Key Implementation Notes\n\n### Anthropic SDK usage\n\n```python\nimport anthropic\n\nclient = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var\nmessage = client.messages.create(\n    model=model,\n    max_tokens=4096,\n    system=system_prompt,\n    messages=[{\"role\": \"user\", \"content\": user_content}]\n)\nresult = message.content[0].text\n```\n\n### JSON extraction from response\n\nClaude may wrap JSON in markdown code fences. Strip them before parsing:\n\n````python\ntext = result.strip()\nif text.startswith(\"```\"):\n    text = text.split(\"\\n\", 1)[1]  # remove first line\n    text = text.rsplit(\"```\", 1)[0]  # remove last fence\njson.loads(text)\n````\n\n### CSV output for nested data\n\nFor schemas with arrays (like line_items), flatten by repeating top-level fields per array row, or output the array as a separate CSV section.\n\n## Challenges & Solutions\n\nTo be filled in during implementation.\n",
+  "bytes": 1008,
+  "sha256": "b07ef9e4975f79126d97436ced31b740f463357092d1fa30293726390c1d1136"
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 76,
+  "schema": "intent/issue@4.0",
+  "id": "0076",
   "slug": "menuz-an-in-process-notice-posted-while-the-firs",
   "title": "menuz: an in-process notice posted while the first launch's alert is up has never been measured",
   "status": "closed",

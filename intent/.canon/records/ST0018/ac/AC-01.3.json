@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.3",
+  "text": "The flags --theme and --theme-file each beat both the deck's key and PREZ_DEFAULT_THEME. Answers: --theme Z beats both.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 101,
+  "schema": "intent/issue@4.0",
+  "id": "0101",
   "slug": "showreel-accepts-an-output-pattern-whose-names-i",
   "title": "showreel accepts an output pattern whose names it cannot keep apart, one naming a directory, one with the counter in the last extension, or one ending in a video's or an unfinished recording's extension, and check calls such a reel valid",
   "status": "closed",

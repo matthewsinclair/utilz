@@ -1,0 +1,9 @@
+{
+  "id": "AC-02.6",
+  "text": "THE CONTROL: with no zone, this thread does not move a portrait recording of a reel whose lines all fit, measured against the pre-thread binary",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "cc, 22 Sep: 0 of 75 portrait frames differ between 504825a~1 and 504825a on a reel whose lines all fit"
+  }
+}

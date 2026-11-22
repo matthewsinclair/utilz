@@ -1,0 +1,8 @@
+{
+  "id": "AC-05.3",
+  "text": "`sync` warns on stderr for an unrecognizable non-blank line under a bucket and preserves it (never silently dropped).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

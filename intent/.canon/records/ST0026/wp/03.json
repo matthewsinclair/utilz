@@ -1,0 +1,9 @@
+{
+  "id": "03",
+  "title": "Engine: observe, the pure planner, execute, and the IPC contract",
+  "scope": "S",
+  "status": "done",
+  "objective": "The engine. `opt/arngz/lib/arngz.lua` with `observe`, the pure `plan`, and `execute`, and the IPC contract between the CLI and Hammerspoon: request and response as JSON files, `hs -c 'return dofile(...).run(<request>)'`. Lua becomes a declared language (`intent lang init lua`), the planner is tested under `lua5.4` on the Linux leg from fixture desks and worlds, and the CLI's bats suite drives the contract through a fake `hs` on `PATH`. `observe` is measured by hand on hv's machine against the world the spike recorded.",
+  "body": "",
+  "preamble": ""
+}

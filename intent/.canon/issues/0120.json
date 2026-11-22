@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 120,
+  "schema": "intent/issue@4.0",
+  "id": "0120",
   "slug": "utilz-help-verb-refuses-every-built-in-verb-with",
   "title": "`utilz help <verb>` refuses every built-in verb with an internal path, since show_help looks only for help/<name>.md",
   "status": "closed",

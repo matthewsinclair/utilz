@@ -1,0 +1,10 @@
+{
+  "id": "AT-02.1",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-02.1"
+  ],
+  "status": "green",
+  "note": "Dispatch, help naming every verb and flag, utilz list, the yaml's three dependency declarations, and doctor's report of each. RED at 16 Oct: against the generated stub, help named no verb and the yaml declared no dependency. GREEN at 16 Oct: 27/27 under bash 5 and 3.2; doctor's report of Hammerspoon is driven by stubbing check_app in both directions, and hs by hiding it from PATH; estate 22/22 suites."
+}

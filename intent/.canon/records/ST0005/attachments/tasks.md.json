@@ -1,0 +1,6 @@
+{
+  "path": "tasks.md",
+  "text": "# Tasks - ST0005: pdf2md - PDF to Markdown Converter\n\n## Tasks\n\n- [x] Scaffold utility with `utilz generate pdf2md \"PDF to Markdown converter\"`\n- [x] Add `lib/` directory with `requirements.txt` (pdfplumber)\n- [x] Implement `lib/pdf2md.py` -- CLI arg parsing + full conversion pipeline\n- [x] Update bash wrapper to manage venv and exec Python\n- [x] Add test fixtures (sample.pdf generated with fpdf2)\n- [x] Write BATS tests for basic conversion (15 tests, all passing)\n- [x] Verify stdout output and -o file output both work\n- [x] Verify --pages flag works\n- [x] Verify --verbose shows progress on stderr\n\n## Dependencies\n\n- No upstream dependencies. This is a standalone utility.\n- ST0004 (xtrct) depends on this being available.\n",
+  "bytes": 731,
+  "sha256": "b2da0fed83278ee1003afbdae2a57b4e1b35b53f64f02adcf50ed0de035e4fbb"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-03.6",
+  "text": "`prez showreel video` reaches the showreel binary through the shim's hand-over, as `check` and `build` do.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

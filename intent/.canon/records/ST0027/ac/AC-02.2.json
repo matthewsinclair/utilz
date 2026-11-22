@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.2",
+  "text": "init creates MENUZ_HOME (default ${XDG_CONFIG_HOME:-$HOME/.config}/menuz) with the example menuz.yaml and an empty bin/, refuses to overwrite an existing menuz.yaml without --force (exit 2, naming the file), and a second run changes nothing; edit opens the yaml with open -t, or $VISUAL/$EDITOR under --editor; log prints the log's path then tails it, -n N prints the last N lines; each refuses by name, exit 2, when its file is missing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

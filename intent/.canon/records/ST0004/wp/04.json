@@ -1,0 +1,8 @@
+{
+  "id": "04",
+  "title": "WP/04: Tests",
+  "status": "done",
+  "objective": "Write comprehensive BATS tests (~12 tests) in two tiers: tier 1 always runs (no API key needed), tier 2 requires ANTHROPIC_API_KEY and is skipped in CI.",
+  "body": "## Test Tiers\n\n### Tier 1 (always run)\n\n- `--help` shows help\n- `--version` shows version\n- Unknown option shows error\n- Missing `--schema` shows error\n- Missing `ANTHROPIC_API_KEY` shows error\n- Nonexistent input file shows error\n- Nonexistent schema file shows error\n- `.pdf` input without pdf2md available shows error\n\n### Tier 2 (skip without API key)\n\n- Extract from sample.md produces valid JSON\n- `--format csv` produces CSV output\n- `--format table` produces table output\n- Stdin piping works\n\n## Guard\n\n```bash\n[[ -z \"${ANTHROPIC_API_KEY:-}\" ]] && skip \"ANTHROPIC_API_KEY not set\"\n```\n\n## Verification\n\n```bash\nutilz test xtrct   # Tier 1 always passes; tier 2 passes locally with API key\n```",
+  "preamble": ""
+}

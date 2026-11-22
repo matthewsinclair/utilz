@@ -1,0 +1,8 @@
+{
+  "id": "AC-01.6",
+  "text": "When the desktop count goes from n to more than n+1, exec_create_space says so rather than reporting done, so an overshoot is visible to the operator.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

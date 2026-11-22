@@ -1,0 +1,9 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/prez/crate/test/acceptance.sh",
+  "covers": [
+    "AC-1.2"
+  ],
+  "status": "green"
+}

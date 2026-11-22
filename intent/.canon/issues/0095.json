@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 95,
+  "schema": "intent/issue@4.0",
+  "id": "0095",
   "slug": "prez-s-acceptance-suite-leaves-its-present-decks",
   "title": "prez's acceptance suite leaves its present decks in TMPDIR, and a pdf whose print fails leaves its staged HTML",
   "status": "closed",

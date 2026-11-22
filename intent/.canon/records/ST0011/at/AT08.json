@@ -1,0 +1,10 @@
+{
+  "id": "AT08",
+  "kind": "test",
+  "file": "opt/stampz/test/stampz.bats",
+  "covers": [
+    "AC03"
+  ],
+  "status": "green",
+  "note": "Default run leaves the source pack byte-identical and writes to the out-dir; --in-place is what overwrites. Moves if hv rules for the reference default. -- GREEN 2026-09-03: 22/22 BATS, utilz test stampz exits 0."
+}

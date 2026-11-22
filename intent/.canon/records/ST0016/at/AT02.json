@@ -1,0 +1,9 @@
+{
+  "id": "AT02",
+  "kind": "test",
+  "file": "opt/utilz/test/help_dispatch.bats",
+  "covers": [
+    "AC02"
+  ],
+  "status": "green"
+}

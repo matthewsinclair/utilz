@@ -1,0 +1,9 @@
+{
+  "id": "01",
+  "title": "Fit the socials handle to its pane, red test first",
+  "scope": "S",
+  "status": "done",
+  "objective": "The player fits a socials handle to its pane when it is too wide, down to its clamp floor, and a video.sh test written red first proves it at portrait.",
+  "body": "",
+  "preamble": ""
+}

@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 97,
+  "schema": "intent/issue@4.0",
+  "id": "0097",
   "slug": "menuz-s-floor-and-ci-job-name-xcode-26-while-its",
   "title": "menuz's floor and CI job name Xcode 26, while its release is built with Xcode 27.1; move both to 27.1",
   "status": "closed",

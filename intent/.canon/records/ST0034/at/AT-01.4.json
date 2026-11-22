@@ -1,0 +1,10 @@
+{
+  "id": "AT-01.4",
+  "kind": "test",
+  "file": "opt/arngz/test/engine_test.lua",
+  "covers": [
+    "AC-01.4"
+  ],
+  "status": "green",
+  "note": "to write: an injected-hs arm (ST0033's surface); red at the base, where the engine has no recheck. RED at the base 1401e7b3's code with the new tests laid over, in ~/Devel/scratch/utilz-dc/0133b/runs/st0034-wp01-20261110T175113Z.log (sha 09d003e3, driver ca20bf16, booked by devbin-vc in slot 01M739BNQ7EFKJHXHNFNEY4629): every new arm red there or named GREEN_AT_BASE in 0133b/guards.tsv (8b5c9b12). GREEN at the fix (code diff fa94557f) in the same run: plan_test 263/0, engine_test 51/0, bats 165 ok 0 not ok; ALL PASS"
+}

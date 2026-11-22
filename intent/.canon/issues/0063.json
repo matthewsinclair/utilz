@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 63,
+  "schema": "intent/issue@4.0",
+  "id": "0063",
   "slug": "prez-at04-flakes-on-the-linux-leg-every-cdp-port",
   "title": "prez AT04 flakes on the Linux leg: every CDP port is a hard-coded constant, and the wait that gives up says nothing about how long it waited",
   "status": "closed",

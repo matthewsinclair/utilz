@@ -1,0 +1,9 @@
+{
+  "id": "AC-01.6",
+  "text": "Live, on hv's machine: arngz apply zeophq then arngz diff zeophq reads no change with Appgate SDP present, which makes acceptance.sh apply zeophq passable for ST0032's AC-01.4 and AC-01.5.",
+  "kind": "non-test",
+  "state": {
+    "is": "satisfied",
+    "evidence": "vc decision 107 (28b8a381): hv's live run on 10 Nov 2026, desk homere standing in for zeophq (zeophq's saved 22E1W-above layout absent). arngz apply homere placed com.appgate.sdp in place at the app's own size, 375x667; arngz diff homere; echo rc=$? read the three unseen lines (Finder, Ivory, Console, not 0138's) and 'window 96 in place at the app's own size, 375x667 (displays[0].spaces[4].apps[1])', a recheck not a change, rc=0"
+  }
+}

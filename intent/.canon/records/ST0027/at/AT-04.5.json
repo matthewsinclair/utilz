@@ -1,0 +1,10 @@
+{
+  "id": "AT-04.5",
+  "kind": "test",
+  "file": "opt/menuz/test/run-handrun.sh",
+  "covers": [
+    "AC-04.5"
+  ],
+  "status": "green",
+  "note": "Hand run 16 Oct 2026 19:00Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275), hands off, the Debug product at 9dde810 under fixture XDG dirs with arngz linked into MENUZ_HOME/bin, driven through the accessibility tree by run-handrun.lua, transcript tmp/vc-st0026/st0027/ac045-handrun-9dde810.txt: discover through the form saved vc-ac045 (run 1, exit 0 in 1.5s); the each-generated item vc-ac045 applied it (run 2: 15 windows placed, 2 apps kept their own size, exit 1 in 19.7s, the failure notice posted); a text param through the form (run 3, '[3] hello hv', exit 0 in 0.2s); a slow run quit mid-way (run 4: 'quit; runs still going: 4' at 19:01:03Z, then '[4] done' and 'exit 0 in 20.3s' at 19:01:21Z, after the quit line); every start line with cwd and run as written, every output line prefixed by its id; the app quit clean and registered no login item"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT-03.3",
+  "kind": "test",
+  "file": "opt/menuz/test/watcher-handrun.sh",
+  "covers": [
+    "AC-03.3"
+  ],
+  "status": "green",
+  "note": "Hand run 16 Oct 2026 18:34Z on hv's machine (Mac16,6, macOS 27.0.1 build 26A434, Xcode 27.1 build 27A9275, Swift 6.4), hands off, the Debug product at 805ed42 under fixture XDG dirs, transcript tmp/vc-st0026/st0027/ac033-handrun-805ed42.txt: save in place 0.261 s, atomic rename 0.265 s, delete MENUZ_HOME 0.269 s, recreate MENUZ_HOME 0.263 s, each timed from the change to the watcher's OSLog reload line (a 250 ms coalesce and the re-read); the delete was reported as a refusal naming the missing file and the recreation as 'directory back'; the app quit clean and registered no login item, being not the installed copy. A first run of the same script from vc's scratchpad at 18:31Z measured 0.264, 0.272, 0.265 and 0.262 s"
+}

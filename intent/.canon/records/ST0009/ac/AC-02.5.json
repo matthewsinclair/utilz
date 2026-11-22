@@ -1,0 +1,8 @@
+{
+  "id": "AC-02.5",
+  "text": "`get_util_metadata` resolves both version forms: an inline `version:` and a `version_file:` reference (as `utilz` itself uses, pointing at the repo-root `VERSION`).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

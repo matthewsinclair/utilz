@@ -1,0 +1,10 @@
+{
+  "id": "AT07",
+  "kind": "test",
+  "file": "opt/utilz/test/install_lib.bats",
+  "covers": [
+    "AC06"
+  ],
+  "status": "green",
+  "note": "Three legs, all three run against the REAL install 8 Sep. (1) arrivals: 15 symlinks and ONE real file, utilz -- not two, because D2 excludes bin/devbin. VERIFIED. (2) every link's target string is byte-identical to its source counterpart, and each is the literal 'utilz'. VERIFIED. (3) corruption is detected BY PATH, not by target: point bin/syncz at something outside the tree and assert the check reports 'retargeted bin/syncz', then restore and assert rc 0. VERIFIED. DO NOT WRITE THE LEG THIS ROW USED TO CARRY -- 'retarget one link at a different utility' -- it is untestable, because all fifteen legitimately share one target string and there is no wrong utility to point at. That leg was vc's and it would have passed vacuously."
+}

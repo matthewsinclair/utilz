@@ -1,0 +1,9 @@
+{
+  "id": "AC-04.2",
+  "text": "Once hv has created and pushed matthewsinclair/homebrew-utilz and 2.11.0 is tagged, brew install matthewsinclair/utilz/utilz installs Utilz from the bare tag, and utilz doctor passes in the keg, manifest included.",
+  "kind": "non-test",
+  "state": {
+    "is": "withdrawn",
+    "reason": "It can only be satisfied after the 2.11.0 cut, when hv creates and pushes the tap with the tag's real commit (vc decision 9), and vc ruled that WP-04 closes on AC-04.1. Moved to WP-05, which is how the formula follows a release, as AC-05.2."
+  }
+}

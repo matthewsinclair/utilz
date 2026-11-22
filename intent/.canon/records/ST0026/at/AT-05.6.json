@@ -1,0 +1,10 @@
+{
+  "id": "AT-05.6",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-05.6"
+  ],
+  "status": "green",
+  "note": "RED PROVEN at 16 Oct: the WP-05 tests run in a detached worktree at 2ffdc4f (before the change), log /private/tmp/claude-501/-Users-matts-Devel-prj-Utilz/67bcef6b-d20d-4bb9-ac53-ff7fbaf2e422/scratchpad/red-wp05.log: the --bind row fails (HEAD accepted --bind). GREEN at 16 Oct, on the tree being landed: arngz.bats 119/119 under /bin/bash 3.2.57 and bash 5.3, plan_test.lua 160/160 under LuaJIT 2.1 (no lua5.4 here; CI installs it), shellcheck clean on CI's 22 files; critic-lua 0 critical 0 warning at its seventh pass, critic-shell 0 critical 0 warning at its fourth."
+}

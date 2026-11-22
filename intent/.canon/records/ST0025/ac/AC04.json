@@ -1,0 +1,8 @@
+{
+  "id": "AC04",
+  "text": "A file of one geometry takes the same path it takes today, through the same code rather than a special case, and the single-geometry suite stays green.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

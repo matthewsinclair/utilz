@@ -1,0 +1,10 @@
+{
+  "id": "AT04",
+  "kind": "test",
+  "file": "opt/prez/crate/test/acceptance.sh",
+  "covers": [
+    "AC04"
+  ],
+  "status": "green",
+  "note": "RED-FIRST OBSERVED HERE, not carried. AT04's first ever run with a real browser (2026-08-29) failed 2 of 52: bar_starts_hidden and bar_hidden_again, both reporting the bar ON where the check wanted it OFF. The runtime was correct; the checks sat 38 lines below an Escape press, and Escape is bound to quit(), which pops the close-shortcut message for 4000ms while settle() holds the bar open for any live panel. Proven by a scratch copy with a 4.5s wait, which passed both with nothing else changed. Fixed at c5c6a14 by moving the block ahead of the Escape press, where its name is true. Green at 16:37Z: 52/52. Binary: cold build at HEAD fdf161a, crate tree 98ace738, 6.44s release build, binary postdating its source commit."
+}

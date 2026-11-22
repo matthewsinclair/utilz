@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 55,
+  "schema": "intent/issue@4.0",
+  "id": "0055",
   "slug": "a-theme-s-hard-offset-shadows-paint-outside-the",
   "title": "A theme's hard-offset shadows paint outside the safe zone, which neither the zone's insets nor the fit's ink measurement can see",
   "status": "closed",

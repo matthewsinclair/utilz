@@ -1,0 +1,10 @@
+{
+  "id": "AT13",
+  "kind": "test",
+  "file": "opt/prez/crate/test/theme-addressing.sh",
+  "covers": [
+    "AC-01.4"
+  ],
+  "status": "green",
+  "note": "red at 34eb61d: 11 checks failed (red-st0018.log); green in utilz test prez, 14:14-14:15Z, bash 3.2.57 end to end (gates-st0018.log)"
+}

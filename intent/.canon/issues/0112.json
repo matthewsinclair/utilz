@@ -1,6 +1,6 @@
 {
-  "schema": "intent/issue@3.0",
-  "number": 112,
+  "schema": "intent/issue@4.0",
+  "id": "0112",
   "slug": "utilz-use-brew-removes-the-links-before-asking-w",
   "title": "utilz use brew removes the links before asking whether a Homebrew copy would answer, and can leave none on PATH (contract A4)",
   "status": "closed",

@@ -1,0 +1,8 @@
+{
+  "id": "AC04",
+  "text": "todo and prez each answer the pair form on BOTH invocation paths. They are named explicitly because they are the two that could not inherit the convention -- todo never copied the dispatch arm, prez cannot have one because clap answers before any shell runs -- so a fix that works by the thirteen utilities' existing mechanism would leave exactly these two broken while passing a population-wide test that tolerated them.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
