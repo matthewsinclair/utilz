@@ -1,0 +1,15 @@
+{
+  "id": "01M84ARFRPZSGEHKKAEZEG5QH6",
+  "ts": "2026-11-23T13:50:35.798Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand, after decision 15. To each seat in its own session, as each relayed it to vc, and in vc's session: \"Please finish booting, then hold for instructions from VC and then devbin-vc.\" (cc by its date -u of 13:01Z, ic 13:02Z, dc 13:03Z), repeated after further compacts as \"Please finish booting, then hold for instructions from VC and devbin-vc.\" (dc 13:05Z, ic 13:05Z, cc 13:06Z). Then in vc's session, during vc's turn, before vc's date -u of 13:49Z: \"However, I need to move. Now.\" and \"We can do this later.\" The rest is vc's wording. hv has left for now, and the spike waits for hv's return, in place of decision 15's (4) \"Now\". cc's ask for it, 01M848922YQPMVNF4T2WTM15WA, stays queued at the Desk, which devbin-vc has kept closed since 12:52Z until hv gives it a word. Meanwhile the seats work on vc's word, and the Desk's grants stay devbin-vc's. dc queues its heavy ask for ST0031/01's run, to go after the spike's END. cc codes STca1b7f9's WP3 and WP4's failure half in a worktree, with no run (vc decision 112). ic designs `showreel qr`."
+  }
+}

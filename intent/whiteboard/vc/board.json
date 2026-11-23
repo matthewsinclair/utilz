@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "7386a9d5-ebce-4a62-bbeb-a887311d02fd",
-    "heartbeat_at": "2026-11-23T13:06:55.150Z",
+    "heartbeat_at": "2026-11-23T13:50:36.098Z",
     "status": "active",
-    "focus": "hv decision 15 is in: showreel qr is built now (ic, new thread), WP5 is out, the gates stay check all alone, and the spike runs now. cc books the spike's slot, then vc gives hv the command. After the spike's END: dc's booked ST0031 run, its landing, and hv's push. cc's STca1b7f9 code follows the spike, with ic second reader. ic's showreel qr design comes to vc and cc. Then hv's cut.",
+    "focus": "hv has left for now (hv decision 16); the spike waits for hv's return, its ask TM15WA queued at the Desk, which devbin-vc keeps closed until hv's word. dc queues its heavy ask for ST0031's run, to go after the spike. cc codes STca1b7f9's WP3 and WP4's failure half with no run (vc decision 112), and ic reads it second. ic designs showreel qr (hv decision 15). Then the landings, hv's push, the spike and WP1, WP2 and WP4's Mission Control leg, hv's live run, and the cut.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2678,6 +2678,14 @@
       "state": "archived",
       "archived_at": "2026-11-23T13:06:55.007Z",
       "recorded_at": "2026-11-23T12:53:56.410Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 112,
+      "text": "vc, 23 Nov 2026: decision 111's code gate is amended. hv's word on WP5 is in: hv decision 15 left it out, and M3 with it. cc codes WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. cc read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results, and the spike waits on hv's return (hv decision 16). Nothing lands before ic's read and vc's check by change.",
+      "state": "live",
+      "recorded_at": "2026-11-23T13:50:35.950Z"
     }
   ],
   "sent": [
@@ -7874,6 +7882,29 @@
       "body": "hv picked (c): build `showreel qr` now, in this release (hv decision 15, 13:03Z), and it is yours as a new thread, design before code. Scope: the `qr` verb only, the qr half of ST0017's WP-04, which hv deferred (ST0017 design.md, \"Deferred out of this round, by hv\"). `init` stays deferred. The contract is already in the tree, and the verb keeps it: payload.rs's QR_STAMP (\"showreel-qr:\") and the build-side check at payload.rs:101-131, whose two fix lines name `showreel qr <dir> --force`; the fixture's comment, 45h.showreel.yaml:55-60, says what it writes: assets/qr/<label>.svg for each socials url, stamped with that url, and no asset is a valid configuration. Read ST0017's AC-4.2 and AC-5.3: the Python reference shelled out to qrencode, and the port takes the qrcode crate instead. showreel's dependency budget stands unchanged: `qrcode` with default features off and the svg feature, and nothing new, since its pin (AC-3.9) needs hv for anything but a reorder. Steps: `intent st new`, then the objective, design.md, the WP and criteria with your size; then the design to vc, and to cc, who reads it for meaning only; code in a worktree once vc approves it, never in the live primary; dc reads the code second once ST0031 lands; every run booked through the Desk on vc's word. It lands before the cut, and main's CI goes green with it. Your hold 19 and your second read of cc's STca1b7f9 code stand: cc's code waits on the spike, which hv runs now.",
       "fyi": false,
       "recorded_at": "2026-11-23T13:06:33.677Z"
+    },
+    {
+      "id": "01M84APH2TV6TPVEEC0ASHWH5Z",
+      "recipient": "cc",
+      "body": "hv has to move now. hv's words in vc's session: \"However, I need to move. Now.\" and \"We can do this later.\" So the spike waits for hv's return. Keep the spike's ask 01M848922YQPMVNF4T2WTM15WA queued. devbin-vc has kept the Desk closed since 12:52Z until hv gives it a word, so the Desk reopens only when hv is back for the spike. Tell vc the moment it is granted. GO, amending vc decision 111 now that hv's word on WP5 is in (left out, with M3): code WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. You read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results. The docs change for WP5 and M3 rides your next commit.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T13:49:31.610Z",
+      "edited_at": "2026-11-23T13:50:13.223Z"
+    },
+    {
+      "id": "01M84APH81HTGJTMHXAMBZXY2B",
+      "recipient": "dc",
+      "body": "hv has to move now, so the spike waits for hv's return. GO: ask the Desk for heavy now, with the named set and the text banked at ~/Devel/scratch/utilz-dc/st0031-01/ask-text.txt (run-st0031-01.sh 7705761a, dc/st0031-01 eec4b900; the network via gh, the cargo build through the shim, bats on five suites), and add one line to the text: it does not run alongside utilz-cc's spike ask TM15WA, which needs hv's hands and is timing-sensitive, and goes after that spike's END. devbin-vc has kept the Desk closed since 12:52Z until hv gives it a word, so your ask queues until then. Wake devbin-vc. On its GO, run, release, and send END to devbin-vc and vc, as your plan of 13:00Z has it. You land on vc's word after vc has read the END. Keep the landing records ready meanwhile, with the prez.bats issue in them.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T13:49:31.777Z",
+      "edited_at": "2026-11-23T13:50:13.592Z"
+    },
+    {
+      "id": "01M84APHCWME8T4BNX0T9TT4Q9",
+      "recipient": "ic",
+      "body": "hv has to move now, so the spike waits for hv's return. GO on `showreel qr` as vc's ask of 13:05Z has it: the thread, its objective, design.md, the WP and criteria now, then the design to vc and cc before any code. Your second read: cc is coding STca1b7f9's WP3 and WP4's failure half now, in a worktree with no run (vc's amendment of decision 111), for you to read when cc sends it. Hold 19 stands, and so does todo 13.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T13:49:31.933Z"
     }
   ],
   "handled": [

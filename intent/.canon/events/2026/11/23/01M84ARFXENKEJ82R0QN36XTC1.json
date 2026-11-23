@@ -1,0 +1,15 @@
+{
+  "id": "01M84ARFXENKEJ82R0QN36XTC1",
+  "ts": "2026-11-23T13:50:35.950Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 23 Nov 2026: decision 111's code gate is amended. hv's word on WP5 is in: hv decision 15 left it out, and M3 with it. cc codes WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. cc read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results, and the spike waits on hv's return (hv decision 16). Nothing lands before ic's read and vc's check by change."
+  }
+}

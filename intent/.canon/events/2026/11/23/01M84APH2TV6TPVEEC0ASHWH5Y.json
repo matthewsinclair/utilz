@@ -1,0 +1,17 @@
+{
+  "id": "01M84APH2TV6TPVEEC0ASHWH5Y",
+  "ts": "2026-11-23T13:49:31.610Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv has to move now. hv's words in vc's session: \"However, I need to move. Now.\" and \"We can do this later.\" So the spike waits for hv's return. Keep the spike's ask 01M848922YQPMVNF4T2WTM15WA queued. devbin-vc has kept the Desk closed since 12:52Z until hv gives it a word, so the Desk reopens only when hv is back for the spike. Tell vc the moment it is granted. GO, amending vc decision 111 now that hv's word on WP5 is in (left out, with M3): code WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. You read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results. The docs change for WP5 and M3 rides your next commit.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

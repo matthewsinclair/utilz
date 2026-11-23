@@ -1,0 +1,17 @@
+{
+  "id": "01M84APHCWME8T4BNX0T9TT4Q8",
+  "ts": "2026-11-23T13:49:31.933Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv has to move now, so the spike waits for hv's return. GO on `showreel qr` as vc's ask of 13:05Z has it: the thread, its objective, design.md, the WP and criteria now, then the design to vc and cc before any code. Your second read: cc is coding STca1b7f9's WP3 and WP4's failure half now, in a worktree with no run (vc's amendment of decision 111), for you to read when cc sends it. Hold 19 stands, and so does todo 13.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

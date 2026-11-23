@@ -1,0 +1,17 @@
+{
+  "id": "01M84APH81HTGJTMHXAMBZXY2A",
+  "ts": "2026-11-23T13:49:31.777Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv has to move now, so the spike waits for hv's return. GO: ask the Desk for heavy now, with the named set and the text banked at ~/Devel/scratch/utilz-dc/st0031-01/ask-text.txt (run-st0031-01.sh 7705761a, dc/st0031-01 eec4b900; the network via gh, the cargo build through the shim, bats on five suites), and add one line to the text: it does not run alongside utilz-cc's spike ask TM15WA, which needs hv's hands and is timing-sensitive, and goes after that spike's END. devbin-vc has kept the Desk closed since 12:52Z until hv gives it a word, so your ask queues until then. Wake devbin-vc. On its GO, run, release, and send END to devbin-vc and vc, as your plan of 13:00Z has it. You land on vc's word after vc has read the END. Keep the landing records ready meanwhile, with the prez.bats issue in them.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
