@@ -1,0 +1,15 @@
+{
+  "id": "01M8412DET355R64G5K3G4PTFF",
+  "ts": "2026-11-23T11:01:15.357Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "Ie8e55e87057927e0"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "menuz hard-codes the release asset's name, which the core derives"
+  }
+}
