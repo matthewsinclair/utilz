@@ -2,14 +2,14 @@
 wp_id: WP-93ea
 title: The desk-change fix: desktops that visit another display, from hv's diagnosis run on the dev tree
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-93ea: The desk-change fix: desktops that visit another display, from hv's diagnosis run on the dev tree
 
 ## Objective
 
-_(not yet written)_
+Make arngz right after a display change, where hv's diagnosis run showed it refusing and misreading. Each display's desktop order comes from com.apple.spaces only where macOS's record of that display is current, and otherwise from the order macOS lists the desktops in now; every step of a move reads its desktop back, so an order that proves wrong fails that move by name; apply, auto's which and discover --save wait for the displays to settle first; and a lone desktop takes a new one beside it in place of issue 0077's refusal. It also takes hv's two one-off failures, F3 (hs is let exit on its own) and F4 (discover's longer deadline).
 
 # The desk-change fix: design
 

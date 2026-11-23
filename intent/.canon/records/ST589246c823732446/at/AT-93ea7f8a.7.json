@@ -1,0 +1,10 @@
+{
+  "id": "AT-93ea7f8a.7",
+  "kind": "test",
+  "file": "opt/arngz/test/log_test.lua",
+  "covers": [
+    "AC-93ea7f8a.6"
+  ],
+  "status": "green",
+  "note": "log_test.lua's arm 17, the read after the creates (ST589246c/93ea7f8a): a desk that needs one desktop more than its display has, on a display whose record in com.apple.spaces holds only the desktops before; apply creates the new desktop, then takes one fresh read of the world, its first after the create, and waits on nothing else: the created wait ends done on that read and never times out, the block of displays logged after creating is that first read, and the points go out start, observed, planned, step, waiting and finished, the step before the create. It arms AC-93ea7f8a.6's first half, which AT-93ea7f8a.2's note had rested on reading alone; AT-53ef07aa.3 cites the same arm for the run log's record of the create. Red: never seen red, and not run at the base. By reading a29b75da, the arm passes there: that base's created wait read order_error, a field only its own observe set, and this arm stubs observe and sets none, so the wait ended on its first read there as it does now. So the arm is a guard, on the created phase's condition against a world in live order and on its first read, as the close head's design says (the WP body at 79938892, checked by vc). Green: slot 01M8433G's run of run-93ea-3.sh at bcfb1a1a, arngz.bats and engine.bats 184 of 184, with ok 184 (AT-53ef07aa.2), which passes only when every log_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T114104Z.tap); landed on main at bfb0a610."
+}

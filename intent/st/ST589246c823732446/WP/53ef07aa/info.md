@@ -2,14 +2,14 @@
 wp_id: WP-53ef
 title: The run log: every run appends to arngz.log what it saw, planned, did and read back, and arngz log prints the last run
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-53ef: The run log: every run appends to arngz.log what it saw, planned, did and read back, and arngz log prints the last run
 
 ## Objective
 
-_(not yet written)_
+Record what each arngz run saw, planned, did and read back, so a run that goes wrong after a display change can be diagnosed from its log rather than guessed at. Every run appends to ~/.local/state/arngz/arngz.log each display with its desktops, as com.apple.spaces records them and as they are live, the plan, each step and its readback, the outcome and the timings, and the CLI's side; the log puts nothing extra on screen and is capped in size, and `arngz log` prints the last run. It is what hv's diagnosis run was read from, and what the desk-change fix (93ea7f8a) was built on.
 
 # The run log
 

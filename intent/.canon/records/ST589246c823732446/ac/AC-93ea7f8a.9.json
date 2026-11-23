@@ -3,6 +3,7 @@
   "text": "Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walks' results are recorded, and any change they call for is made.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's live re-run on the dev tree after 93ea landed at 0666e2f2: runs rhad 20261123T104723Z-91703, auto 20261123T105129Z-53589 and zeopit 20261123T105242Z-55488 in ~/.local/state/arngz/arngz.log, which vc read and found AC-93ea7f8a.9 met, with no order refusal. The junction walks' results are recorded in the WP body (walks 1 and 2 both follow the live order, so the rule stands), and on vc's read they call for no change."
   }
 }

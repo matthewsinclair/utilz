@@ -1,0 +1,14 @@
+{
+  "id": "01M844G98AKJK0GY1JWAH4V0NF",
+  "ts": "2026-11-23T12:01:15.531Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-93ea7f8a.9"
+  },
+  "payload": {
+    "evidence": "hv's live re-run on the dev tree after 93ea landed at 0666e2f2: runs rhad 20261123T104723Z-91703, auto 20261123T105129Z-53589 and zeopit 20261123T105242Z-55488 in ~/.local/state/arngz/arngz.log, which vc read and found AC-93ea7f8a.9 met, with no order refusal. The junction walks' results are recorded in the WP body (walks 1 and 2 both follow the live order, so the rule stands), and on vc's read they call for no change."
+  }
+}

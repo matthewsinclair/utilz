@@ -1,0 +1,14 @@
+{
+  "id": "01M844G9DZYS45XP0NS3ZTASVJ",
+  "ts": "2026-11-23T12:01:15.712Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-93ea7f8a.7"
+  },
+  "payload": {
+    "evidence": "vc's read of help/arngz.md as landed at bfb0a610, unchanged on main at 13dfd7cc: the rule at :115 (com.apple.spaces where macOS's record is current, else the order macOS lists now, the run log saying which); what guards it, at :115 (every step of a move reads its desktop back, so an order that proves wrong fails that move, by name); what rests on it alone, at :115 (a window already on the desktop the order names, and discover); and when each verb waits: apply waits for 5 s of quiet, up to 20 s, and refuses at 20 s (:116), auto (:181) and discover --save (:135) wait, and which, diff and a plain discover do not (:181, :185). The code agrees: engine_ask_quiet is called under --save at opt/arngz/arngz:2091 to 2093, and for auto's which at :2276 to 2278."
+  }
+}

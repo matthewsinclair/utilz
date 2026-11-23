@@ -1,0 +1,10 @@
+{
+  "id": "AT-53ef07aa.3",
+  "kind": "test",
+  "file": "opt/arngz/test/log_test.lua",
+  "covers": [
+    "AC-53ef07aa.3"
+  ],
+  "status": "green",
+  "note": "log_test.lua's arm 17, the read after the creates (ST589246c/53ef07aa): the desktop apply creates is recorded by its id, in an op record \"created desktop <id>\", from the live list once the creation returns; and com.apple.spaces is logged in the block of displays after creating and in the one at the run's end, each with the new desktop on the live list, the record still without it, and the new desktop filed under no record, so the log shows macOS had not recorded it by then and the run went on without waiting for it. AT-93ea7f8a.7 cites the same arm for the created wait. Red: by reading at 03d8112c, 53ef's base, where lib/log.lua does not exist, so log_test.lua's first dofile raises and its summary never prints; not run at the base. Green: slot 01M8433G's run of run-93ea-3.sh at bcfb1a1a, arngz.bats and engine.bats 184 of 184, with ok 184 (AT-53ef07aa.2), which passes only when every log_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T114104Z.tap); landed on main at bfb0a610."
+}
