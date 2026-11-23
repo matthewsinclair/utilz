@@ -1,0 +1,10 @@
+{
+  "id": "AT-eae7633d.3",
+  "kind": "test",
+  "file": "opt/arngz/test/toast_test.lua:166",
+  "covers": [
+    "AC-eae7633d.3"
+  ],
+  "status": "green",
+  "note": "toast_test.lua's section of this id, run by opt/arngz/test/toast.bats (plain Lua, an injected hs). Red at the base 62d5eab0 by absence: toast.lua, toast_test.lua and toast.bats are not there, so toast.bats cannot pass. Not run. Green at e07f5c68, landed on main as 377409c5 and cafe5a34: run-eae7.sh (sha256 fb29caccac30fae8) in Desk slot SXV1CQ, dc's booking with 53ef07aa, TAP ~/Devel/scratch/utilz-ic/arngz-toasts/runs/eae7-20261123T063557Z.tap (sha256 6f906ceca76d): 1..1, ok 1, bats exit 0, Bats 1.14.0. The arm passes only on toast_test's own summary, 0 failed and more than 0 passed (assert_lua_suite_summary)."
+}
