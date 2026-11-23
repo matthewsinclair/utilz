@@ -20,13 +20,15 @@
 --
 -- NOTHING AT FILE SCOPE TOUCHES hs. Each reference resolves against the
 -- global at call time, so a fake assigned to _G.hs is what this module sees,
--- as in engine_test.lua, and the first touch of hs.canvas, which prints its
--- lazy load, happens inside T.point's error boundary.
+-- as in engine_test.lua.
 --
 -- IT NEVER PRINTS. Hammerspoon sends every print to every registered hs
 -- client, and a client arngz has killed raises "ipc port is no longer valid
--- (early)" until it is pruned (dc's log read of 23 Nov 2026, F3). A failure is
--- raised instead, for the engine's catch to log (progress.md, rule 6).
+-- (early)" until it is pruned (dc's log read of 23 Nov 2026, F3). So a failure
+-- is raised instead, for the engine's catch to log (progress.md, rule 6), and
+-- each hs module is reached through require (hs_module, below), never through
+-- hs's own lazy loader, which prints "-- Loading extension" the first time a
+-- module is touched (extensions/hs/_coresetup.lua).
 
 local T = {}
 
@@ -400,13 +402,16 @@ function ON.finished(st, f)
 end
 
 -- What a point does, as ON says, given st, and name_of to name an app by its
--- bundle id. A point this module draws nothing for is heard and left. A point
--- with no fields or no run breaks progress.md, so it is raised.
+-- bundle id. Every point progress.md names is in ON, the ones that draw
+-- nothing included. A point it does not name, or one with no fields or no
+-- run, breaks the contract, so it is raised: the engine and this module load
+-- from one directory in one call, so there is no other version to allow for,
+-- and a misspelt finished would otherwise leave the toast at Running.
 function T.on_point(st, name, f, name_of)
+  local on = ON[name]
+  if not on then error("progress.md has no point named " .. tostring(name), 0) end
   if type(f) ~= "table" then error("the " .. tostring(name) .. " point carries no fields", 0) end
   if f.run == nil then error("the " .. tostring(name) .. " point carries no run, which progress.md gives every point", 0) end
-  local on = ON[name]
-  if not on then return nil end
   return on(st, f, name_of)
 end
 
@@ -426,12 +431,19 @@ local function shared()
   return st
 end
 
+-- An hs module, through require. hs's lazy loader prints the first time it is
+-- asked for a module (the header), and require loads the same module without
+-- that line. rawget finds one already loaded, or the fake a test assigned.
+local function hs_module(name)
+  return rawget(hs, name) or require("hs." .. name)
+end
+
 local function stop(timer)
   if timer then timer:stop() end
 end
 
 local function primary_frame()
-  local f = hs.screen.primaryScreen():frame()
+  local f = hs_module("screen").primaryScreen():frame()
   return { x = f.x, y = f.y, w = f.w, h = f.h }
 end
 
@@ -441,13 +453,14 @@ end
 -- alone by Mission Control, so it stays in view while the engine switches a
 -- display's desktop.
 local function new_canvas()
-  local c = hs.canvas.new({ x = 0, y = 0, w = 1, h = 1 })
+  local canvas = hs_module("canvas")
+  local c = canvas.new({ x = 0, y = 0, w = 1, h = 1 })
   c:appendElements(
     { type = "rectangle", action = "strokeAndFill", fillColor = { white = 0, alpha = 0.78 },
       strokeColor = { white = 1, alpha = 0.8 }, strokeWidth = 1,
       roundedRectRadii = { xRadius = T.RADIUS, yRadius = T.RADIUS } },
     { type = "text", text = "", textSize = T.TEXT_SIZE, textColor = { white = 1 }, textLineBreak = "truncateTail" })
-  c:level(hs.canvas.windowLevels.status)
+  c:level(canvas.windowLevels.status)
   c:behaviorAsLabels({ "canJoinAllSpaces", "stationary" })
   return c
 end
@@ -464,6 +477,17 @@ local function remove(st, name)
   if name == "main" and st.live then
     st.runs[st.live] = nil
     st.live = nil
+  end
+end
+
+-- A timer's callback, which takes a slot's toast down. It runs after the IPC
+-- call that armed it has returned, so neither T.point's boundary nor the
+-- engine's catch is on the stack: what fails is kept on the shared state,
+-- never printed, and the next point raises it (T.point).
+local function take_down(st, name)
+  return function()
+    local ok, err = pcall(remove, st, name)
+    if not ok then st.late = "taking the " .. name .. " toast down: " .. tostring(err) end
   end
 end
 
@@ -502,24 +526,31 @@ local function draw(st, plan)
       s.shown, s.drawn = true, true
     end
   end
+  local timer = hs_module("timer")
   stop(slot.life)
-  slot.life = hs.timer.doAfter(T.LIFETIME, function() remove(st, plan.slot) end)
-  if plan.linger then slot.linger = hs.timer.doAfter(plan.linger, function() remove(st, plan.slot) end) end
+  slot.life = timer.doAfter(T.LIFETIME, take_down(st, plan.slot))
+  if plan.linger then slot.linger = timer.doAfter(plan.linger, take_down(st, plan.slot)) end
 end
 
 local function display_name(id)
-  return hs.application.nameForBundleID(id)
+  return hs_module("application").nameForBundleID(id)
 end
 
 -- The hook the engine calls at each progress point (progress.md, rule 5).
 -- Whatever fails, from a point that breaks the contract to a canvas
 -- Hammerspoon could not draw, is raised with the point's name for the
--- engine's catch to log and return once in the response (rule 6).
+-- engine's catch to log and return once in the response (rule 6). A failure a
+-- timer kept since the last point is raised too, once this point is drawn.
 function T.point(name, fields)
   local ok, err = pcall(function()
     local st = shared()
     local plan = T.on_point(st, name, fields, display_name)
     if plan then draw(st, plan) end
+    local late = st.late
+    if late then
+      st.late = nil
+      error("earlier, " .. late, 0)
+    end
   end)
   if not ok then error("arngz toast: the " .. tostring(name) .. " point: " .. tostring(err), 0) end
 end

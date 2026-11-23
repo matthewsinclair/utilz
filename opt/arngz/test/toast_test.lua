@@ -66,11 +66,16 @@ do
   check("cut: a line within the limit is left whole", T.cut("arngz: zeopit") == "arngz: zeopit")
   local long = T.cut(string.rep("x", 200))
   check("cut: a long line is cut to the limit, ending ...", #long == T.MAX_LINE and long:sub(-3) == "...", tostring(#long))
-  -- "a" then two-byte characters: a cut inside one would leave an even prefix.
-  local utf = T.cut("a" .. string.rep("\195\169", 100))
-  local prefix = utf:sub(1, -4)
-  check("cut: never inside a UTF-8 character", #utf <= T.MAX_LINE and #prefix % 2 == 1 and utf:sub(-3) == "...",
-    tostring(#prefix))
+  -- "a" then two-byte characters, so a whole prefix is odd. Cut at two
+  -- adjacent limits: one of the two falls inside a character, whichever the
+  -- limit's parity, so a cut that did not back off would leave an even prefix.
+  local utf = "a" .. string.rep("\195\169", 100)
+  for _, max in ipairs({ T.MAX_LINE, T.MAX_LINE + 1 }) do
+    local cut = T.cut(utf, max)
+    local prefix = cut:sub(1, -4)
+    check("cut: never inside a UTF-8 character, at " .. max, #cut <= max and #prefix % 2 == 1 and cut:sub(-3) == "...",
+      tostring(#prefix))
+  end
 
   local wrapped = T.wrap(string.rep("word ", 60))
   check("wrap: a long text takes two lines at most, each within the limit",
@@ -255,9 +260,12 @@ end
 
 -- ============================================================================
 -- The fake hs: what a real canvas and timer would be asked to do, recorded.
+-- opts.no_canvas leaves hs.canvas out; opts.delete_raises makes a canvas's
+-- delete raise.
 -- ============================================================================
 
-local function fake_hs(with_canvas)
+local function fake_hs(opts)
+  opts = opts or {}
   local log = { canvases = {}, timers = {}, mouse = 0 }
   local function new_canvas(frame)
     local c = { at = frame, elements = {}, showing = false, deleted = false, hides = 0, shows = 0 }
@@ -300,6 +308,7 @@ local function fake_hs(with_canvas)
       return self
     end
     function c:delete(fade)
+      if opts.delete_raises then error("this canvas could not be deleted", 0) end
       self.deleted, self.showing, self.fade_out = true, false, fade
     end
     function c:mouseCallback()
@@ -325,14 +334,14 @@ local function fake_hs(with_canvas)
     end },
     application = { nameForBundleID = function(id) return NAMES[id] end },
   }
-  if with_canvas ~= false then
+  if not opts.no_canvas then
     hs.canvas = { new = new_canvas, windowLevels = { normal = 0, floating = 3, status = 25, overlay = 102 } }
   end
   return hs, log
 end
 
--- Run f with print counted, so a check can say none happened; print is put
--- back before any check prints.
+-- f run with print counted, so a check can say none happened; print is put
+-- back before any check prints. Returns the prints, and f's ok and error.
 local function quietly(f)
   local saved, prints = print, 0
   _G.print = function() prints = prints + 1 end
@@ -341,12 +350,31 @@ local function quietly(f)
   return prints, ok, err
 end
 
-local function last_timer(log, seconds)
-  for i = #log.timers, 1, -1 do
-    local t = log.timers[i]
-    if t.seconds == seconds and not t.stopped then return t end
+-- One drawn scenario: a fresh fake hs and fresh shared state, and toast.lua
+-- loaded anew inside them, as dofile does at every IPC call, with print
+-- counted from before the load. So a print when the module loads, through a
+-- print it captured at file scope, or on any path is counted. f gets the fresh
+-- module, the fake's log and the fake. Returns the log, the prints, and f's ok
+-- and error; the checks come after, once print is back.
+local function drive(f, opts)
+  local hs, log = fake_hs(opts)
+  _G.hs, _G.arngz_toast = hs, nil
+  local prints, ok, err = quietly(function() f(dofile(toast_path), log, hs) end)
+  return log, prints, ok, err
+end
+
+-- The timers armed for `seconds`, in the order they were armed.
+local function timers_of(log, seconds)
+  local found = {}
+  for _, t in ipairs(log.timers) do
+    if t.seconds == seconds then found[#found + 1] = t end
   end
-  return nil
+  return found
+end
+
+local function last_timer(log, seconds)
+  local found = timers_of(log, seconds)
+  return found[#found]
 end
 
 -- ============================================================================
@@ -354,12 +382,12 @@ print("AT-eae7633d.7: the canvas takes no click, sits above apps, and is on ever
 -- ============================================================================
 
 do
-  local hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  local prints, ok, err = quietly(function()
-    T.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
-    T.point("waiting", { run = "r1", ["for"] = "new desktops", seconds = 3 })
-    T.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "com.apple.Safari", display = "laptop" })
+  local level
+  local log, prints, ok, err = drive(function(M, _, hs)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("waiting", { run = "r1", ["for"] = "new desktops", seconds = 3 })
+    M.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "com.apple.Safari", display = "laptop" })
+    level = hs.canvas.windowLevels.status
   end)
   local c = log.canvases[1]
   check("the points draw without error", ok, tostring(err))
@@ -367,14 +395,14 @@ do
     and c.elements[2].text == "arngz: zeopit\nRunning... 1 of 2: placing Safari on laptop\n" .. T.HANDS_OFF,
     c and tostring(c.elements[2].text))
   check("it sets no mouse callback, so a click goes to the window under it", log.mouse == 0)
-  check("it is drawn at the status level", c and c.level_set == hs.canvas.windowLevels.status)
+  check("it is drawn at the status level", c and level ~= nil and c.level_set == level)
   check("it is on every desktop and left alone by Mission Control", c and c.behaviors
     and c.behaviors[1] == "canJoinAllSpaces" and c.behaviors[2] == "stationary" and #c.behaviors == 2)
   check("it shows once, fading in", c and c.showing and c.shows == 1 and c.fade == T.FADE_IN)
   check("it sits inside the primary display's visible frame, a margin above its bottom", c
     and c.at.x >= SCREEN.x and c.at.y >= SCREEN.y and c.at.x + c.at.w <= SCREEN.x + SCREEN.w
     and c.at.y + c.at.h == SCREEN.y + SCREEN.h - T.MARGIN)
-  check("no print on the way", prints == 0, tostring(prints))
+  check("no print on the way, the module's load included", prints == 0, tostring(prints))
 end
 
 -- ============================================================================
@@ -382,34 +410,33 @@ print("AT-eae7633d.3 (drawn): Finished lingers, and a toast with no point heard 
 -- ============================================================================
 
 do
-  local hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  quietly(function()
-    T.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
-    T.point("finished", { run = "r1", outcome = "done", exit = 0, placed = 2, seconds = 3.5 })
+  local log, _, ok, err = drive(function(M)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("finished", { run = "r1", outcome = "done", exit = 0, placed = 2, seconds = 3.5 })
   end)
+  check("a run and its Finished draw without error", ok, tostring(err))
   local linger = last_timer(log, T.LINGER_CLEAN)
-  check("a clean run's Finished is given 5 s", linger ~= nil)
-  check("each draw renews the toast's life", last_timer(log, T.LIFETIME) ~= nil)
+  check("a clean run's Finished is given the clean time", linger ~= nil and not linger.stopped)
+  local lives = timers_of(log, T.LIFETIME)
+  local first, latest = lives[1], lives[#lives]
+  check("each draw renews the toast's life: the first life is stopped, and a later one runs",
+    first ~= nil and latest ~= first and first.stopped and not latest.stopped)
   local c = log.canvases[1]
-  if linger then linger.fn() end
-  check("when the 5 s are up, the toast fades out and is gone", c and c.deleted and c.fade_out == T.FADE_OUT
-    and _G.arngz_toast.slots.main == nil)
+  local prints = quietly(function() if linger then linger.fn() end end)
+  check("when its time is up, the toast fades out and is gone", c and c.deleted and c.fade_out == T.FADE_OUT
+    and _G.arngz_toast.slots.main == nil and prints == 0)
 
-  hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  quietly(function()
-    T.point("start", { run = "r2", verb = "apply", desk = "zeopit" })
-    T.point("finished", { run = "r2", outcome = "refused", exit = 2, first = "nope", fix = "yes" })
+  log = drive(function(M)
+    M.point("start", { run = "r2", verb = "apply", desk = "zeopit" })
+    M.point("finished", { run = "r2", outcome = "refused", exit = 2, first = "nope", fix = "yes" })
   end)
-  check("a refused run's Finished is given 15 s", last_timer(log, T.LINGER_OTHER) ~= nil)
+  linger = last_timer(log, T.LINGER_OTHER)
+  check("a refused run's Finished is given the longer time", linger ~= nil and not linger.stopped)
 
-  hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  quietly(function() T.point("start", { run = "r3", verb = "apply", desk = "zeopit" }) end)
+  log = drive(function(M) M.point("start", { run = "r3", verb = "apply", desk = "zeopit" }) end)
   local life = last_timer(log, T.LIFETIME)
   if life then life.fn() end
-  check("a toast that hears nothing for 120 s goes, and the apply it showed is forgotten",
+  check("a toast that hears nothing for its lifetime goes, and the apply it showed is forgotten",
     life ~= nil and log.canvases[1].deleted and _G.arngz_toast.live == nil and _G.arngz_toast.runs.r3 == nil)
 end
 
@@ -418,19 +445,19 @@ print("AT-eae7633d.4 (drawn): hidden for a grab, shown again at the next point")
 -- ============================================================================
 
 do
-  local hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  quietly(function() T.point("start", { run = "r1", verb = "apply", desk = "zeopit" }) end)
+  local hid, err_seen
+  local log, _, ok, err = drive(function(M, lg)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    local c = lg.canvases[1]
+    local f = c.at
+    M.point("step", { run = "r1", i = 1, n = 2, kind = "move", app = "Slack", x = f.x, y = f.y + 2, w = f.w, h = 400 })
+    hid = c.hides == 1 and not c.showing
+    M.point("step", { run = "r1", i = 2, n = 2, kind = "place", app = "Safari", display = "laptop" })
+  end)
+  err_seen = tostring(err)
   local c = log.canvases[1]
-  local f = c.at
-  quietly(function()
-    T.point("step", { run = "r1", i = 1, n = 2, kind = "move", app = "Slack", x = f.x, y = f.y + 2, w = f.w, h = 400 })
-  end)
-  check("a move whose title bar it would cover hides it", c.hides == 1 and not c.showing)
-  quietly(function()
-    T.point("step", { run = "r1", i = 2, n = 2, kind = "place", app = "Safari", display = "laptop" })
-  end)
-  check("the next point shows it again, with no second fade", c.showing and c.shows == 2 and c.fade == 0)
+  check("a move whose title bar it would cover hides it", ok and hid, err_seen)
+  check("the next point shows it again, with no second fade", c and c.showing and c.shows == 2 and c.fade == 0)
 end
 
 -- ============================================================================
@@ -438,16 +465,14 @@ print("AT-eae7633d.5 (drawn): the notice above the running toast")
 -- ============================================================================
 
 do
-  local hs, log = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  quietly(function()
-    T.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
-    T.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "Safari" })
-    T.point("start", { run = "r2", verb = "apply", desk = "homere" })
-    T.point("finished", { run = "r2", outcome = "refused", exit = 2, first = "an apply is already running" })
+  local log, _, ok, err = drive(function(M)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "Safari" })
+    M.point("start", { run = "r2", verb = "apply", desk = "homere" })
+    M.point("finished", { run = "r2", outcome = "refused", exit = 2, first = "an apply is already running" })
   end)
   local main, notice = log.canvases[1], log.canvases[2]
-  check("the refusal is a second canvas", #log.canvases == 2 and notice ~= nil)
+  check("the refusal draws without error, on a second canvas", ok and #log.canvases == 2 and notice ~= nil, tostring(err))
   check("the running toast keeps its text",
     main and main.elements[2].text == "arngz: zeopit\nRunning... 1 of 2: placing Safari\n" .. T.HANDS_OFF,
     main and tostring(main.elements[2].text))
@@ -459,21 +484,39 @@ print("AT-eae7633d.8: it never prints, and raises what it could not draw")
 -- ============================================================================
 
 do
-  local hs = fake_hs(false)
-  _G.hs, _G.arngz_toast = hs, nil
-  local prints, ok, err = quietly(function() T.point("start", { run = "r1", verb = "apply", desk = "zeopit" }) end)
+  local log, prints, ok, err = drive(function(M)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+  end, { no_canvas = true })
   check("with no canvas to draw on, point raises", ok == false)
   check("and the error names the point", type(err) == "string" and err:find("the start point", 1, true) ~= nil, tostring(err))
-  check("and nothing is printed", prints == 0, tostring(prints))
-  hs = fake_hs()
-  _G.hs, _G.arngz_toast = hs, nil
-  prints, ok, err = quietly(function() T.point("step", { i = 1, n = 2, kind = "place" }) end)
+  check("and nothing is printed, the module's load included", prints == 0, tostring(prints))
+
+  log, prints, ok, err = drive(function(M) M.point("step", { i = 1, n = 2, kind = "place" }) end)
   check("a point with no run breaks progress.md, and is raised as that", ok == false
     and tostring(err):find("carries no run", 1, true) ~= nil, tostring(err))
-  check("a point no toast is drawn for is heard and left", select(2, quietly(function()
-    T.point("start", { run = "w1", verb = "which", desk = "" })
-    T.point("someday", { run = "w1" })
-  end)) == true)
+
+  log, prints, ok, err = drive(function(M) M.point("finish", { run = "r1", outcome = "done" }) end)
+  check("a point progress.md does not name is raised, so a misspelt finished is seen", ok == false
+    and tostring(err):find("no point named finish", 1, true) ~= nil, tostring(err))
+
+  log, prints, ok, err = drive(function(M)
+    M.point("start", { run = "w1", verb = "which", desk = "" })
+    M.point("observed", { run = "w1", displays = 2, desktops = 9, windows = 30 })
+    M.point("finished", { run = "w1", outcome = "done", exit = 0 })
+  end)
+  check("a verb with no toast is heard, and nothing is drawn", ok and #log.canvases == 0, tostring(err))
+
+  local late_ok, late_err
+  log, prints, ok, err = drive(function(M, lg)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("finished", { run = "r1", outcome = "done", exit = 0, seconds = 1 })
+    last_timer(lg, T.LINGER_CLEAN).fn()
+    late_ok, late_err = pcall(M.point, "start", { run = "r2", verb = "apply", desk = "homere" })
+  end, { delete_raises = true })
+  check("a timer that cannot take its toast down raises nothing of its own", ok, tostring(err))
+  check("and the next point raises it", late_ok == false
+    and tostring(late_err):find("taking the main toast down", 1, true) ~= nil, tostring(late_err))
+  check("and nothing is printed on the way", prints == 0, tostring(prints))
 end
 
 _G.hs, _G.arngz_toast = nil, nil
