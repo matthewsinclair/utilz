@@ -52,7 +52,13 @@ pub struct Opened {
   pub stamp_said: Vec<String>,
 }
 
-pub fn open(path: &Path) -> Result<Opened, Failure> {
+/// A reel's directory and its `showreel.yaml`, read and validated: the first
+/// thing every verb does, done in one place.
+///
+/// **`qr` STOPS HERE AND `open` GOES ON.** The plan admits every asset the
+/// config names and refuses a `qr:` naming a file that is not there, which is
+/// the file `qr` exists to write.
+pub fn read_config(path: &Path) -> Result<(PathBuf, config::Reel), Failure> {
   let dir = resolve(path);
   let file = dir.join("showreel.yaml");
   let text = std::fs::read_to_string(&file).map_err(|e| {
@@ -62,6 +68,11 @@ pub fn open(path: &Path) -> Result<Opened, Failure> {
     )
   })?;
   let cfg = config::parse(&text, &file.display().to_string())?;
+  Ok((dir, cfg))
+}
+
+pub fn open(path: &Path) -> Result<Opened, Failure> {
+  let (dir, cfg) = read_config(path)?;
 
   // The theme, resolved exactly as a build resolves it. **THIS IS THE REFUSAL
   // THAT FIRES FIRST AGAINST THE LIVE 45h REEL**: its config names

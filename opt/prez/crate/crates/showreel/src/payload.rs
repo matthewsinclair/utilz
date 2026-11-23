@@ -25,14 +25,12 @@
 //! fails in pixels, as a blank, with the instrument pointing at the slides.
 //! Found by snorkeltoast; design.md 4.7.
 
+use crate::qr::{stamped_for, QR_STAMP, UNREADABLE};
 use crate::{admit, config, limits, normalise, plan, slide};
 use artifact::Failure;
 use serde::Serialize;
 use serde_json::{Map, Value};
 use std::path::Path;
-
-/// The stamp `showreel qr` writes into the SVG it generates.
-const QR_STAMP: &str = "showreel-qr:";
 
 /// The safety floors, as the payload carries them to the runtime.
 ///
@@ -107,48 +105,50 @@ pub struct BugRow {
 /// still embedded, exactly as the reference embeds it; only a warning is added.
 /// Contrast the other half of AC-4.2, which would change WHICH QR is embedded --
 /// that one is not taken silently and is WP-04's.
+///
+/// **A QR THAT IS THERE BUT CANNOT BE READ AS TEXT IS SAID, NOT DROPPED**
+/// (issue I88af1f3). A file that is not there says nothing, because absent is
+/// valid. One that is there and is not UTF-8, or not readable, was neither
+/// embedded nor warned about, which is the silence IN-AG-NO-SILENT-001 names.
 pub fn socials(reel: &Path, cfg: &config::Reel) -> (Vec<SocialRow>, Vec<String>) {
   let mut rows = Vec::new();
   let mut warnings = Vec::new();
   for s in &cfg.socials {
-    let url = s.url.trim().to_string();
+    let address = plan::social_url(s);
     let mut row = SocialRow {
       label: s.label.clone(),
       handle: s.handle.clone(),
-      url,
+      url: address.unwrap_or_default().to_string(),
       qr: None,
     };
     let path = plan::qr_path(reel, s);
-    if !row.url.is_empty() {
-      if let Ok(svg) = std::fs::read_to_string(&path) {
-        match stamped_for(&svg) {
-          Some(was) if was != row.url => warnings.push(format!(
-            "QR for {} was generated for\n    {was}\n  but the config now says\n    {}\n  fix: showreel qr <dir> --force",
-            row.label, row.url
-          )),
-          Some(_) => {}
-          None => warnings.push(format!(
-            "QR for {} carries no '{QR_STAMP}' stamp, so nothing can say whether it matches\n    {}\n  fix: showreel qr <dir> --force",
-            row.label, row.url
-          )),
+    if address.is_some() {
+      match std::fs::read_to_string(&path) {
+        Ok(svg) => {
+          match stamped_for(&svg) {
+            Some(was) if was != row.url => warnings.push(format!(
+              "QR for {} was generated for\n    {was}\n  but the config now says\n    {}\n  fix: showreel qr <dir> --force",
+              row.label, row.url
+            )),
+            Some(_) => {}
+            None => warnings.push(format!(
+              "QR for {} carries no '{QR_STAMP}' stamp, so nothing can say whether it matches\n    {}\n  fix: showreel qr <dir> --force",
+              row.label, row.url
+            )),
+          }
+          row.qr = Some(svg);
         }
-        row.qr = Some(svg);
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+        Err(e) => warnings.push(format!(
+          "QR for {} {UNREADABLE}, so it is not embedded\n    {}: {e}\n  fix: showreel qr <dir> --force",
+          row.label,
+          path.display()
+        )),
       }
     }
     rows.push(row);
   }
   (rows, warnings)
-}
-
-/// The address a QR's stamp says it was generated for, if it carries one.
-fn stamped_for(svg: &str) -> Option<String> {
-  let open = svg.find("<!--")?;
-  if !svg[..open].trim().is_empty() {
-    return None;
-  }
-  let rest = &svg[open + 4..];
-  let body = &rest[..rest.find("-->")?];
-  body.strip_prefix(QR_STAMP).map(str::to_string)
 }
 
 /// The corner mark, or `None` when the reel declares no bug.
@@ -539,6 +539,32 @@ mod tests {
       cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
     let (_, warns) = socials(&r, &c);
     assert!(warns.is_empty(), "{warns:?}");
+  }
+
+  /// **ISSUE I88af1f3.** A QR that is there but is not UTF-8 was neither
+  /// embedded nor warned about. It is said now, in cc's words, and is still
+  /// not embedded; a QR that is not there still says nothing.
+  #[test]
+  fn a_qr_there_but_not_readable_as_text_warns_and_is_not_embedded() {
+    let r = reel("unreadable", &[]);
+    let p = r.join("assets/qr/web.svg");
+    std::fs::create_dir_all(p.parent().unwrap()).unwrap();
+    std::fs::write(&p, b"\xff\xfe\xfd").unwrap();
+    let c =
+      cfg("artist: {handle: x}\nsocials: [{label: Web, handle: a, url: 'https://a.example'}]\n");
+    let (rows, warns) = socials(&r, &c);
+    assert_eq!(warns.len(), 1, "{warns:?}");
+    assert!(
+      warns[0].starts_with("QR for Web could not be read as text, so it is not embedded\n"),
+      "{}",
+      warns[0]
+    );
+    assert!(
+      warns[0].ends_with("\n  fix: showreel qr <dir> --force"),
+      "{}",
+      warns[0]
+    );
+    assert!(rows[0].qr.is_none(), "it is still not embedded");
   }
 
   #[test]

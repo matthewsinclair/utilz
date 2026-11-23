@@ -27,6 +27,7 @@ pub mod limits;
 pub mod normalise;
 pub mod payload;
 pub mod plan;
+pub mod qr;
 pub mod record;
 pub mod segment;
 pub mod slide;

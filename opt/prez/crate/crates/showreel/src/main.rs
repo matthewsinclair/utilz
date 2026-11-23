@@ -23,7 +23,7 @@
 use artifact::Failure;
 use showreel::aspect::Aspect;
 use showreel::zone::Zone;
-use showreel::{build, deliver, limits, plan, video};
+use showreel::{build, deliver, limits, plan, qr, video};
 use std::io::IsTerminal;
 use std::path::{Path, PathBuf};
 
@@ -52,13 +52,17 @@ fn main() {
         "showreel video <dir>",
       )),
     },
+    Some("qr") => match args.get(1) {
+      Some(path) => qr_flags(&args[2..]).and_then(|force| qr_reel(Path::new(path), force)),
+      None => Err(Failure::new("qr needs a directory", "showreel qr <dir>")),
+    },
     Some("--help" | "-h") | None => {
       println!("{USAGE}");
       return;
     }
     Some(other) => Err(Failure::new(
       format!("unknown command '{other}'"),
-      "expected one of: check, build, video. Try 'showreel --help'",
+      "expected one of: check, build, video, qr. Try 'showreel --help'",
     )),
   };
   if let Err(e) = result {
@@ -78,6 +82,9 @@ usage:
   showreel build <dir>    write the self-contained reel into <dir>/_out/
   showreel video <dir>    build the reel, then record it to a video beside it in
                           <dir>/_out/: the HTML's name with .html swapped for .mp4
+  showreel qr <dir>       write a QR for each socials url, and for the session's
+                          venue_url, where a build looks for it, stamped with its
+                          address. A file already there is kept
 
 build options:
   --out <file>            write here instead of the next _out/ slot. Suppresses
@@ -105,6 +112,9 @@ video options:
 
 video needs Chrome and ffmpeg: brew install ffmpeg, or sudo apt install ffmpeg.
 It records in real time or slower, so a three-minute reel takes minutes.
+
+qr options:
+  --force                 regenerate every QR, replacing the file that is there
 
 `prez showreel <verb>` and `utilz prez showreel <verb>` reach the same binary.
 WP-05 still owns the manifest, the doctor line and a `bin/` entry of its own.";
@@ -301,6 +311,38 @@ fn video_reel(path: &Path, f: &video::Options) -> Result<(), Failure> {
   println!("  frame 0 taken {} ms after the reel's start", v.late_ms);
   for line in v.said {
     eprintln!("showreel: {line}");
+  }
+  Ok(())
+}
+
+/// What `qr` was asked for beyond the directory: only whether to replace what
+/// is there.
+fn qr_flags(rest: &[String]) -> Result<bool, Failure> {
+  let mut force = false;
+  for flag in rest {
+    match flag.as_str() {
+      "--force" => force = true,
+      other => {
+        return Err(Failure::new(
+          format!("unknown qr option '{other}'"),
+          "expected --force",
+        ))
+      }
+    }
+  }
+  Ok(force)
+}
+
+/// One line for each QR the config gives an address for, as `qr` left it.
+fn qr_reel(path: &Path, force: bool) -> Result<(), Failure> {
+  let r = qr::run(path, force)?;
+  if r.done.is_empty() {
+    println!(
+      "showreel: nothing to write: the config gives no socials url and no session venue_url"
+    );
+  }
+  for (t, done) in &r.done {
+    println!("showreel: {}", qr::describe(&r.reel, t, done));
   }
   Ok(())
 }

@@ -66,6 +66,23 @@ pub fn venue_qr_path(reel: &Path) -> PathBuf {
   reel.join("assets/qr/venue.svg")
 }
 
+/// The venue's address, if the session gives one, trimmed as a social's url is
+/// trimmed. **ONE PREDICATE FOR THE PLAN AND FOR `qr`**, so the two never
+/// disagree about whether a venue QR is expected: a `venue_url` of blanks is
+/// absent to both.
+pub fn venue_url(cfg: &config::Reel) -> Option<&str> {
+  let url = cfg.session.venue_url.trim();
+  (!url.is_empty()).then_some(url)
+}
+
+/// A social's address, if it gives one, trimmed. **ONE RULE FOR THE BUILD'S
+/// ROW AND FOR `qr`'s TARGET**: the stamp `qr` writes must equal the address the
+/// build compares it with, or a fresh QR reads as stale.
+pub fn social_url(s: &config::Social) -> Option<&str> {
+  let url = s.url.trim();
+  (!url.is_empty()).then_some(url)
+}
+
 /// Lexically normalise, so the two sides of `have - used` are comparable.
 ///
 /// **THE REFERENCE CALLS `.resolve()` ON BOTH SIDES AND THE PORT MUST NORMALISE
@@ -85,8 +102,9 @@ pub fn venue_qr_path(reel: &Path) -> PathBuf {
 /// proved nothing.
 ///
 /// Lexical rather than `canonicalize` because a declared QR that does not exist
-/// yet is a valid configuration and `canonicalize` refuses it.
-fn tidy(path: &Path) -> PathBuf {
+/// yet is a valid configuration and `canonicalize` refuses it. `qr` decides
+/// with it whether a QR it would write stays inside the reel, for that reason.
+pub(crate) fn tidy(path: &Path) -> PathBuf {
   let mut out = PathBuf::new();
   for part in path.components() {
     match part {
@@ -158,7 +176,7 @@ pub fn plan(reel: &Path, cfg: &config::Reel) -> Result<Plan, Failure> {
   }
   // A venue QR is generated FROM `venue_url`, so its absence from the config is
   // what says the reel has none -- the file's absence says nothing.
-  if !cfg.session.venue_url.is_empty() {
+  if venue_url(cfg).is_some() {
     reel_level.push(venue_qr_path(reel));
   }
 
