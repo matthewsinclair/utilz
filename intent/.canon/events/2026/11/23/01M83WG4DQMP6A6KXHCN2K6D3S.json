@@ -1,0 +1,15 @@
+{
+  "id": "01M83WG4DQMP6A6KXHCN2K6D3S",
+  "ts": "2026-11-23T09:41:21.975Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"And yes, include all fixes.\" This answers vc's question on the two one-off failures from the morning's log read. dc had recommended leaving them out of ST589246c/93ea, and vc decision 108 (3) brought that to hv in dc's words, with dc's sizes. F3: arngz stops its hs helper the moment the answer lands, which once broke the next run (\"ipc port is no longer valid\"). The fix is to let hs exit on its own first, size S. F4: Save Desk once ran past the CLI's 60 s wait. The fix is to raise that wait, size XS; the alternative, running it in the background as apply does, is M. vc recommended both, the S fix and the XS raise. So both go into 93ea, in this release."
+  }
+}
