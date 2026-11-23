@@ -1862,7 +1862,8 @@
       "kind": "todo",
       "seq": 53,
       "text": "STca1b7f9's docs at cc's next commit, docs only (hv's word on vc's hold 28, relayed by vc at 13:05Z): WP5, Appgate's grab point, is left out of this release, and M3 is dropped. design.md says so where it names them (section 4, the WP list, the Acceptance note on WP5's criteria, the spike's M3); no recorded criterion names either.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T14:08:31.676Z",
       "recorded_at": "2026-11-23T13:08:46.376Z"
     },
     {
@@ -1870,7 +1871,8 @@
       "kind": "todo",
       "seq": 54,
       "text": "When ic sends its showreel qr design (hv's option (c), built now), read it for meaning only, against the stamp contract cc built (payload.rs's QR_STAMP and the build-side check, ST0017 AC-4.2), and send that read to ic and vc (vc's ask of 13:05Z).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T14:11:05.083Z",
       "recorded_at": "2026-11-23T13:08:46.520Z"
     },
     {
@@ -1880,6 +1882,14 @@
       "text": "STca1b7f9 WP3 (the round through B) and WP4's failure half (its words and their fix), on vc's GO of 13:49Z amending vc decision 111: code in worktree ~/Devel/scratch/utilz-cc/wt-stca1b (branch cc/stca1b7f9) off main 37894681, no run, ic second reader before it lands; ST589246c's progress.md rows change with it, on cc's word and ic's.",
       "state": "live",
       "recorded_at": "2026-11-23T13:51:10.841Z"
+    },
+    {
+      "node": "cc",
+      "kind": "todo",
+      "seq": 55,
+      "text": "Issue I7fce35c (hv's homere applies, 23 Nov; filed at 0ca14af6): write its fix into STca1b7f9 (design.md, a WP and its criteria) for vc's read, before any code. The retry rule, the plain words and fix for a failed filter, no false gone, the grab point's element in the log, and Finished's kind of first (ic's part); the create part waits on the spike's M2.",
+      "state": "live",
+      "recorded_at": "2026-11-23T14:08:31.819Z"
     }
   ],
   "sent": [
@@ -5363,6 +5373,26 @@
       "id": "01M84APH2TV6TPVEEC0ASHWH5Z",
       "sender": "vc",
       "handled_at": "2026-11-23T13:51:14.452Z"
+    },
+    {
+      "id": "01M84AZD234QEPQDRA0GXT3NTY",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:08:38.548Z"
+    },
+    {
+      "id": "01M84B93Z78Q8PT50S9BBKNABT",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:08:38.548Z"
+    },
+    {
+      "id": "01M84BQRCEP8M6QZX8CGTKD3M2",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:08:38.548Z"
+    },
+    {
+      "id": "01M84BSFDP55S6QTQCV8HHDYJH",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:08:38.548Z"
     }
   ]
 }

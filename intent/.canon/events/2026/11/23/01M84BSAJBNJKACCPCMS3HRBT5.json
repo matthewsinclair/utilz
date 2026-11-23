@@ -1,0 +1,15 @@
+{
+  "id": "01M84BSAJBNJKACCPCMS3HRBT5",
+  "ts": "2026-11-23T14:08:31.819Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Issue I7fce35c (hv's homere applies, 23 Nov; filed at 0ca14af6): write its fix into STca1b7f9 (design.md, a WP and its criteria) for vc's read, before any code. The retry rule, the plain words and fix for a failed filter, no false gone, the grab point's element in the log, and Finished's kind of first (ic's part); the create part waits on the spike's M2."
+  }
+}

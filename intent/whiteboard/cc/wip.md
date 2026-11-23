@@ -17,8 +17,7 @@ claims: [STca1b7f9d59191dfc]
 
 ## TODO
 
-- STca1b7f9's docs at cc's next commit, docs only (hv's word on vc's hold 28, relayed by vc at 13:05Z): WP5, Appgate's grab point, is left out of this release, and M3 is dropped. design.md says so where it names them (section 4, the WP list, the Acceptance note on WP5's criteria, the spike's M3); no recorded criterion names either.
-- When ic sends its showreel qr design (hv's option (c), built now), read it for meaning only, against the stamp contract cc built (payload.rs's QR_STAMP and the build-side check, ST0017 AC-4.2), and send that read to ic and vc (vc's ask of 13:05Z).
+- Issue I7fce35c (hv's homere applies, 23 Nov; filed at 0ca14af6): write its fix into STca1b7f9 (design.md, a WP and its criteria) for vc's read, before any code. The retry rule, the plain words and fix for a failed filter, no false gone, the grab point's element in the log, and Finished's kind of first (ic's part); the create part waits on the spike's M2.
 
 ## Holds
 
