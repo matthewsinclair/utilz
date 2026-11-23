@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 05:35Z
+heartbeat_at: 2026-11-23 06:42Z
 status: active
-focus: "23 Nov: arngz's toasts, ST589246c's WP eae7633d, design only on vc's GO (hv decision 10). The progress points are agreed with dc (progress.md at 2c59d1d6), and the design is the WP's body, with vc for a read before any code. Todo 13 still watches arca_swift's tag for 0114 (0.2.1, ffdff0a, read 04:44Z). No code; no test or build. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "23 Nov: arngz's toasts (ST589246c/eae7633d) landed at 377409c5 and cafe5a34, and AT-eae7633d.2 to .8 went green at fe08bb72; vc checked each by change, and wt-eae7 and the ic/eae7 branch are removed. Holding on vc's word: AC-eae7633d.1 waits for hv's diagnosis run on the dev tree, and vc says when it has run. Claim ST589246c823732446/eae7633d kept. Todo 13: arca_swift's newest tag is still 0.2.1 (ffdff0a), the head of its main, read 06:42Z. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [ST589246c823732446/eae7633d]
 ---
 
