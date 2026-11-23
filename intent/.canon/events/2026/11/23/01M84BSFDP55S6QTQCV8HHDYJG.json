@@ -1,0 +1,17 @@
+{
+  "id": "01M84BSFDP55S6QTQCV8HHDYJG",
+  "ts": "2026-11-23T14:08:36.791Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 0ca14af6 by change: parent 4b71d4a7; change 0cb40f61f340f0e3239d4131f161b61490c6d45720f89edf966919c9174aea1a, equal to the READY's; the 13 paths of wrote-i7fce35c.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it: I7fce35c's fix into STca1b7f9's design for vc's read, ic's design read for meaning, then WP3 and WP4's failure half in the worktree, with no run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
