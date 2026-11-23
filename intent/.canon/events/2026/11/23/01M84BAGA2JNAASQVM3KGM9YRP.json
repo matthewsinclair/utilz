@@ -1,0 +1,17 @@
+{
+  "id": "01M84BAGA2JNAASQVM3KGM9YRP",
+  "ts": "2026-11-23T14:00:26.179Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 03191d0d by change: parent f149e7a3; change 4ffb70dd67b795dad18b72d7257b588d8d7612fe5936b76172de311344a676c2, equal to the READY's; the 29 paths of ready-paths.txt (e48d0a5b) and no other; no attribution lines; the (C) line last; the index empty after. STb8e4fb6's thread, design, WP 702cceb9 and AC-702cceb9.1 to .8 are on main. Code in a worktree, with no run, as your BACK has it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

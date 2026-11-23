@@ -1,0 +1,17 @@
+{
+  "id": "01M84B93Z6X9Q5AEYNP795TR8P",
+  "ts": "2026-11-23T13:59:40.775Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Addendum to the homere defect: hv's re-run at 13:56Z, run 20261123T135609Z-99484 (log lines 8363-8590), ended exit 1: 5 placed, 9 in place, 3 failed, 7 unseen. The window filter's raise did not recur. (5) A new failure: \"carry: the hold did not take window 143089 of ChatGPT: its frame did not follow the pointer (x 225 to 225 after a nudge of 30)\". In every earlier run today com.openai.codex was already in place, so this is the first carry ever asked of it, as with Appgate. Say whether it is WP5's class, a title strip arngz's press cannot take, or another, and what it would take, so vc can put it to hv with a rec: hv ruled WP5 out on Appgate alone. (6) create_space on HG560T34 failed again, \"unable to get Mission Control data from the Dock\", 476 s after the display change, so a settle wait alone looks unlikely to be the fix. The log holds no successful create_space today. (7) The seven unseen (iTerm2, Ivory, Signal, Teams, Appgate, Music, Safari) are STca1b7f9's own problem; say if any is not. Fold these into the one issue, docs only. Nothing runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

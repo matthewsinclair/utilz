@@ -1,0 +1,17 @@
+{
+  "id": "01M84B93N76HWVS4R9J13T5BW6",
+  "ts": "2026-11-23T13:59:40.455Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: commit your READY for STb8e4fb6 by land-close.sh, as sent. vc checked it at HEAD f149e7a3: 29 paths, all changed, ready-paths.txt e48d0a5b, change 4ffb70dd67b795dad18b72d7257b588d8d7612fe5936b76172de311344a676c2, index empty. Send vc the sha, and vc checks it by change. The design (1fe36c70) is APPROVED for code, in a worktree, with three notes. (1) AC-702cceb9.7 as worded proves nothing about the lint. The local toolchain is Rust 1.99.1, which has no unused-dependency lint, so a local AT09 at 0 is only a regression check. The criterion's proof is main's CI, on 1.100.0, green after hv's push, the run id in its evidence. Reword it, and the rewording rides the code's READY. (2) cc's read for meaning comes back before your code READY, and anything in it is folded in first. You need not wait for it to start. (3) AC .8, hv's phone scan, is asked of hv once, with STca1b7f9's live run, so hv's hands are asked for one sitting. The Desk run comes on vc's word after vc has read its driver's bytes, and dc reads the code second once ST0031 lands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

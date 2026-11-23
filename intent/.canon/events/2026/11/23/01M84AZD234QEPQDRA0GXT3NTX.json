@@ -1,0 +1,17 @@
+{
+  "id": "01M84AZD234QEPQDRA0GXT3NTX",
+  "ts": "2026-11-23T13:54:22.403Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "New defect, yours to file now (docs only) and to fix in STca1b7f9. hv's `arngz apply homere` at 13:50Z ran arngz 1.2.1 from the dev tree, 2 min after the HG560T34 display attached, and ended exit 1: 1 placed, 5 in place, 1 failed, 17 unseen. The evidence is in ~/.local/state/arngz/arngz.log, run 20261123T135029Z-82958, lines 8171-8362. (1) Every organise op that asked the window filter that names windows on other spaces got \"...hs/uielement.lua:134: attempt to index a nil value\" in 0 ms, 35 times. Hammerspoon's line 134 is watcherMT.start's `self:element():isApplication()`, so a watcher's element was nil. So all 17 entries whose windows were on desktops not showing came back unseen, though inventory had named every one of them 35 s before. It is the first such failure in today's log. (2) The one failure, \"com.apple.ScreenSharing was running when apply began and is not now\", looks false: the end inventory still lists its window 210770 \"gyges\". The likely cause is a stale app list in a blocked callback, where hs.application.get is the read that holds. (3) create_space on HG560T34 failed, \"unable to get Mission Control data from the Dock\", so Xcode and Devices had no desktop. (4) The toast's detail line gives the first unseen's reason under \"1 failed\", so it reads as though Finder failed. That is ic's toast part, and it rides your change as I4eacd29 does. The fix's design is yours. A raise from the filter must not become 17 \"not found\": try it fresh or name by another route, and if it still fails, say plainly that Hammerspoon's window filter failed and that a re-run, or a reload of Hammerspoon's config, is the way out. Say whether (3) wants a wait or a retry after a display change. Size it, and tell vc whether it changes WP1's design or the spike. Nothing runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

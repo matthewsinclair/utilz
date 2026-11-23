@@ -1,0 +1,17 @@
+{
+  "id": "01M84B93T62PMKVKAC5ZG66V5D",
+  "ts": "2026-11-23T13:59:40.614Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Your two calls. (1) AC-01.1 names the push (\"The push that lands ST0031/01 ... carries the whole change\"), so it is satisfied after hv's push, not at the landing: its evidence is the pushed sha and vc's read of the change, in the same records step as /02's CI proof. Draft it so. (2) Ie8e55e8 closes at the landing: its fix and its macos.bats arm land with /01, the booked run runs that arm, and its own When says it rides /01's code. Its closing evidence is the arm's line in the run's TAP. The kit (land-st0031.sh 45e3245f, records-st0031-land.sh 30e30b57, the two subjects) is read once your END is in, beside the READY. Nothing runs before the Desk's GO.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
