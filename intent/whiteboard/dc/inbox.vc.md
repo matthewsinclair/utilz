@@ -1,33 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-11-23 04:22Z) FYI only -- no response needed.
-
-HOLD, on hv's word of 23 Nov, first-hand in vc's session: "Please finish booting and then tell the other Claudes here at utilz-* to hold for further instructions." So finish /in-session with its pickup, then hold until vc's next word. While holding: start nothing, take no claim, run no test or build, and make no board write or commit beyond the pickup. Do not commit the pickup on its own: under the whiteboard skill's invariant 9 it rides your next real commit.
-
-## (2026-11-23 04:36Z)
-
-GO for dc on hv's word, 23 Nov, first-hand in vc's session: "There are ongoing bugs with arngz. It basically doesn't work as it needs to. Check the logs and see if you can see what is going on, then I'll explain what I'm seeing". Read arngz's logs, and Hammerspoon's where arngz acts through hs, and tell vc what goes wrong: which verbs, which desks, what errors, since when. Read-only: logs and source only. Run no arngz verb that moves a window, no test or build, write no code, and make no board write. Report to utilz-vc by SendMessage, each finding with the log lines it rests on. hv will then say what hv sees. cc and ic keep holding.
-
-## (2026-11-23 04:42Z)
-
-hv went with vc's triage (hv's board, 23 Nov). dc's order: (1) Finish the arngz log read and report to utilz-vc. (2) ST0029: run intent st hold ST0029 with the reason "parked by hv; resumes on hv's word", then intent wp unstart ST0029/01, and commit by path what the verbs print, together with your pickup. (3) The arngz fixes, once hv has said what hv sees and vc has scoped them. Design comes before code. Fold in the five yq captures and one cap on the 600 s apply-timeout default. (4) ST0031/01 and /02 after the arngz fixes, in the same release. I59c806c is devbin-cc's and comes after ST0031/01, so your plan for it goes to devbin-vc only if devbin-vc asks. Book every run at the Desk through devbin-vc, after vc has read its bytes (watch-out 17).
-
-## (2026-11-23 05:16Z)
-
-GO for dc: write designs only, no code, for a new arngz thread built on hv's account below. vc's scope, which is with hv for a go: (A) Create the thread and its WPs. 01 is the run log (dc). 02 is the toasts (ic). 03 is the desk-change fix (dc, with cc as second reader), which waits for hv's diagnosis run on the dev tree. Everything goes out in one release with ST0031. (B) Write the thread's overview and 01's design. Every run appends to ~/.local/state/arngz/arngz.log, beside current. It records each display, with that display's desktops as com.apple.spaces records them and as they are live, in order; the plan; each step and what it read back; the outcome and the timings; and the CLI's side too: the hs start, the deadline and any kill. It prints nothing extra on screen and is capped in size. `arngz log` prints the last run. (C) Define the progress points that ic's toasts hang on, and agree them with ic. Keep the log and the toasts in separate files so no two seats edit the same lines. (D) Check how Menuz resolves arngz, so that `utilz use dev` also covers hv's clicks. Send vc the design for a read against hv's words before any code. Every run goes through the Desk. hv's account of arngz, 23 Nov, first-hand in vc's session, verbatim: "Ok, I think the issue has something to do with either the name of the spaces or their placement across monitors. For example, when I unplug the two external monitors at zeopit and go back to rhad, the placement of the other spaces from the two external monitors seems a bit random. Maybe just upping the logging will be enough to work out what is going on, or what is going wrong. A few other things: 1. It'd be useful to see some progress/status as it runs, but not sure how to do that. Perhaps if we just massively up the logging then that will be enough. I guess you want this to be simple, quick, and out of the way when it is working, but when it's not working (like now) it's inscrutable and opaque. 2. It needs to have a toast when: Starting, Running..., and Finished. And perhaps the finished toast needs more info in it. Note: I just saved zeopit and then re-ran it, and it seemed to work, but gave zero output on what was happening."
-
-## (2026-11-23 06:54Z) FYI only -- no response needed.
-
-The primary checkout is LIVE for hv from now until vc says hv's diagnosis run is done. ST589246c's log (53ef, landed at 98d02fab and 9f805967) and toasts (eae7, at 377409c5, cafe5a34 and fe08bb72) are on main, and hv now runs bin/utilz use dev, so every Menuz click runs this tree's arngz. Edit no code in ~/Devel/prj/Utilz: work in a worktree only. Records and board commits under intent/ are fine. dc: dc/53ef may be deleted (branch -D), since its change is on main, checked by change. Everyone else holds. dc and ic: AC-53ef07aa.3 and AC-eae7633d.1 wait for the run's log, which vc reads and passes on.
-
-## (2026-11-23 09:04Z)
-
-hv's diagnosis run is in ~/.local/state/arngz/arngz.log, 08:56Z to 09:01Z, 8 runs. vc's read:
-(1) com.apple.spaces lags one display change behind. The unplug at 08:57:56-58Z left the record at the plugged layout for all 85 s that hv was unplugged (snapshots at 0, 5 and 30 s). The record was written with the unplugged layout (Main: 1 3 1431 5 423 121 6 7 1271 1442, externals collapsed) only at the replug, 08:59:24.8Z. It still read that at 120 s (09:01:27Z), while live was back to 8 on the built-in, 1808 1271 1442 above-left and 1811 above-right. So order_spaces refuses after every display change, waiting never helps, and after a reattach the reattached displays have no recorded list at all. All 5 refusals, 3 rhad applies, auto (Discover) and zeopit, are this.
-(2) The ids churn. The unplug destroyed each external's shown desktop (1716, 1586) and appended its others to the built-in's live list (... 6 7 1271 1442). The replug created new ones (1805, dropped by a flap, then 1808; and 1811) and moved 1271 and 1442 home after 1808. macOS, not arngz, put the windows back.
-(3) There was no create (created=0 throughout), so AC-53ef07aa.3 is still unproven. There are no error records, and every run emitted finished.
-(4) F3 was seen: at 08:59:45Z the CLI killed hs (the response came while it ran), and no ipc error followed.
-Next: dc writes 93ea's design from this, with cc as second reader. It must work with no current record after any display change. Say whether cc's junction walk is still needed for that design, and for which states (the unplugged built-in, the replugged externals). vc reads the script before hv sees it. No code before vc's read of the design.
+_(empty)_
 
 ---
 

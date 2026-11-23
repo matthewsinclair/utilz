@@ -189,6 +189,14 @@
       "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"And yes, include all fixes.\" This answers vc's question on the two one-off failures from the morning's log read. dc had recommended leaving them out of ST589246c/93ea, and vc decision 108 (3) brought that to hv in dc's words, with dc's sizes. F3: arngz stops its hs helper the moment the answer lands, which once broke the next run (\"ipc port is no longer valid\"). The fix is to let hs exit on its own first, size S. F4: Save Desk once ran past the CLI's 60 s wait. The fix is to raise that wait, size XS; the alternative, running it in the background as apply does, is M. vc recommended both, the S fix and the XS raise. So both go into 93ea, in this release.",
       "state": "live",
       "recorded_at": "2026-11-23T09:41:21.975Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 12,
+      "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"Ok, context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The rest is vc's wording of how it was carried out. vc named the moment at once (announce of 10:12Z). Every utilz-* seat banks what lives outside the tree, localfolds without a release, and holds: dc at 21bf2768, ic at 8e906dc1 and cc at fcc49ed8, each checked by vc by change, with vc folding last. hv runs 93ea's test by hand meanwhile: /bin/bash ~/Devel/scratch/utilz-dc/st5892/run-93ea-2.sh, pinned to a763184a. dc's own slot for it, granted before vc's STOP reached dc, was stopped at 61 of 180 with none failed, released, and its partial TAP set aside. Then hv compacts each session. On the bounce, each seat runs /in-session with its pickup and carries on from its RESUME.md on vc's word: dc reads hv's TAP and lands 93ea, then hv's live run follows. Open for hv on the bounce: whether ST0031 moves from dc to cc now, to run in parallel (decision 9 named dc).",
+      "state": "live",
+      "recorded_at": "2026-11-23T10:17:03.571Z"
     }
   ],
   "sent": [],

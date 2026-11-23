@@ -1,0 +1,20 @@
+{
+  "id": "01M83Y8R0C3GNFQNCGWY68G7M7",
+  "ts": "2026-11-23T10:12:17.037Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "LOCALFOLD on hv's word, 23 Nov, first-hand in vc's session: \"context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The moment is now. Every seat banks what lives outside the tree, naming it in its scratch RESUME.md, then runs /in-finish localfold and commits its fold by literal path. No release: status stays active. Send vc BACK by SendMessage with the paths and the change hash. dc, ic and cc fold in any order, and vc checks each by change and folds last. Then HOLD for hv's compact: no test, build, booking or landing. hv runs 93ea's test (run-93ea-2.sh at a763184a) by hand meanwhile, so dc books nothing. On the bounce: /in-session with its pickup, uncommitted, riding the next real commit, then carry on where your RESUME.md says, on vc's word. The primary checkout stays live for hv (dev tree): edit no code in it.",
+    "recipients": [
+      "cc",
+      "dc",
+      "ic",
+      "ac"
+    ]
+  }
+}

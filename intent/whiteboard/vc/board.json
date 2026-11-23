@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "7386a9d5-ebce-4a62-bbeb-a887311d02fd",
-    "heartbeat_at": "2026-11-23T04:20:55.567Z",
+    "heartbeat_at": "2026-11-23T10:17:03.709Z",
     "status": "active",
     "focus": "10 Nov, session closed on hv's word. ST0032 (with 0133) and ST0034 (with 0138) are closed; Utilz 2.14.10 is released and main is pushed at c7a5df87. No claims, nothing in flight. Open: ST0031, ST0029 (parked), 0114 (waits on arca_swift's tag), and the follow-ups on intent/wip.md. Resume in ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
@@ -2286,7 +2286,8 @@
       "kind": "decision",
       "seq": 75,
       "text": "hv, 31 Oct, first-hand in vc's session, received with the pickup whose heartbeat reads 10:34:06Z: \"I have started VC and DC here. devbin-vc has the estate pen. Please follow its instructions.\" devbin-vc holds hv's pen for Devbin's ST0011 while hv is AFK. Its order, received between vc's clock reads of 10:38Z and 10:41Z: before ST0011/10's vendor sweep, which waits for hv's go, Utilz's vc and dc are to (1) inventory the paths the sweep retires, what calls them, and what duplicates the core, (2) give a baseline for ST0011/15 from the last cut, and (3) name anything slow or duplicated that can be fixed now, telling devbin-vc before starting it. Report (1) and (2), then hold for the sweep. Binding: nothing public (no tag, push, formula or release) without hv's explicit go; never --no-verify; every bats or heavy run booked through the desk; anything for hv goes through devbin-vc, not to hv. Done: vc sent (2), and dc's (1) at 48c0ea54, checked by vc. Decision 73's routing to intent-vc now reads as devbin-vc, and decision 74 stands. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:45.583Z",
       "recorded_at": "2026-10-31T10:49:00.349Z"
     },
     {
@@ -2321,7 +2322,8 @@
       "kind": "decision",
       "seq": 77,
       "text": "devbin-vc, 31 Oct, received by utilz-dc by its date -u of 13:03Z and relayed verbatim to vc: hv's 'Ok, crack on.' lifts the 12:43Z estate hold (devbin-vc decision 94; rhadamanth's desk hold released at 12:56Z). For Utilz: anything that needs no new core and nothing public may proceed; every bats or heavy run is booked at rhadamanth's desk (intent estate slots ask, devbin-vc grants), and decision 74 stands until a grant lifts it for that run, as 76 did; ST0031's sweep-dependent work waits until devbin-vc says Devbin 0.1.19's sweep has landed (Devbin's order of play: run 3, WP02, the full suite, WP09 at 0.1.19, then the sweep); the push of main, the dispatch for 0130 and 0131, and emptying dc's ~/.Trash/utilz-dc-exhaust-20261031 stay FOR hv with devbin-vc. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:45.729Z",
       "recorded_at": "2026-10-31T13:05:05.807Z"
     },
     {
@@ -2420,7 +2422,8 @@
       "kind": "decision",
       "seq": 86,
       "text": "devbin-vc, 2 Nov, relaying hv's word in devbin-vc's window, received by vc after its END of 0132's first run at 07:30:39Z and before its date -u of 07:46Z: once 0132 has landed, hv cuts the Utilz patch release, 2.14.9, through devbin 0.1.19's release core. It is the first consumer cut in the new shape (devbin ST0011 WP10, utilz ST0031), and hv wants it to work first time. The sweep has reached Utilz (fc8cd495, re-recorded at 7f5167b7), which unparks it for this cut; decision 84's park is otherwise kept. 0132 landed at efdd047d and closed at 58e45281. vc's plan, with utilz-dc's ST0031/04 (draft 1e5eec55 in its scratch), goes to hv and devbin-vc for hv's go before any write for the cut. Peers read this decision at pickup; cc and dc record no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:45.869Z",
       "recorded_at": "2026-11-02T07:52:33.907Z"
     },
     {
@@ -2428,7 +2431,8 @@
       "kind": "decision",
       "seq": 87,
       "text": "hv, 2 Nov, first-hand in vc's session, on vc's plan for 2.14.9 (decision 86): \"Go with your recommendations.\" So (i) R2, bin/devbin release check, and R3, bin/devbin release --patch --dry-run, run before the cut, read-only, which lifts watch-out 22's \"no dry run\" for them; (ii) R1, the tools/post-cut 2.14.8 smoke, runs; (iii) the version is 2.14.9; (iv) hv pushes main before the cut, and vc reads its CI green first. ST0031/04 (utilz-dc, S: tests.yml on candidate/**, post-cut in 0.1.19's shape) goes ahead on vc's chain, every run booked at the desk, then hv's cut with the freeze. Peers read this decision at pickup; cc and dc record no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.013Z",
       "recorded_at": "2026-11-02T08:22:22.487Z"
     },
     {
@@ -2445,7 +2449,8 @@
       "kind": "decision",
       "seq": 89,
       "text": "devbin-vc, 5 Nov, relaying hv's word in devbin-vc's window (given before devbin-vc's date -u of 10:32Z), received by vc over the socket after its pickup's heartbeat of 2026-11-05T10:45:38.025Z and before decision 88's event at 10:48:06.578Z: hv gave the go for devbin's consumer pass, Utilz first (devbin decision 144), so 2.14.9's cut through Devbin 0.1.20's core (devbin ST0011 WP10, Utilz ST0031/04) resumes from where hv parked it on 3 Nov (decision 88). For this turn hv runs utilz-vc, utilz-dc and devbin-vc alone (devbin decision 141), so utilz-cc stays down, and the pickup chain is dc then vc. vc reports to devbin-vc, and devbin-vc reports to hv. devbin-vc holds the desk and grants every run, reads each run's driver before its grant, and checks U1's four macOS sites against devbin's own candidate-ref conditions. The close-out's one-off rules hold for this turn: each fix runs its own arms, red at the base and green at the fix, and the cut is the one full test, with each tree-scan file run whole once before it. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.151Z",
       "recorded_at": "2026-11-05T11:00:12.079Z"
     },
     {
@@ -2453,7 +2458,8 @@
       "kind": "decision",
       "seq": 90,
       "text": "hv, 5 Nov, first-hand in vc's session, received by vc's date -u of 11:00Z: \"Go with your recommendations.\" on vc's revised plan for 2.14.9 under Devbin 0.1.20 (~/Devel/scratch/utilz-vc/plan-20261105.md). So (1) the plan goes to devbin-vc, and its order stands: vc records decision 89, sends the plan, and files kovacs-sysadm's Linux-leg finding low, deferred past 2.14.9 (decision 88); hv runs bin/devbin macos store-creds in a terminal, then bin/devbin macos doctor, on each Mac that cuts; dc writes ST0031/04's design v3 against 0.1.20, read only, then its records on vc's check; R2 runs at the base as U1's red arm; step 2 lands as one READY (U1; U2 with docs/releasing.md's store-creds paragraph, and macos.team if doctor counts more than one Developer ID identity; the CHANGELOG lines); then R2 at the fix, R1, R3 and the tree-scan files (common_lib.bats, arngz.bats, macos.bats and what the pin sweep adds), each booked on devbin's desk; then hv's push with CI read by sha, and hv's cut with the freeze. (2) U2 keeps formula publish and the tap pull, and release.formula stays undeclared, so the dry run and the cut print 'formula skipped'. (3) macos.binaries is not in 2.14.9. (4) U2's proof is critic-shell, the gate's shellcheck, R1 and the cut, with no new bats arm; it has no arm red at the base, a departure from the close-out rules named to devbin-vc. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.291Z",
       "recorded_at": "2026-11-05T11:00:12.243Z"
     },
     {
@@ -2478,7 +2484,8 @@
       "kind": "decision",
       "seq": 93,
       "text": "hv, 6 Nov, first-hand in vc's session, on vc's boot plan, received by vc's date -u of 12:30Z: \"Go with your recommendations, except: we're not cutting the release today. Just hold all of that for now. I have client work that takes precedence. Anything else simple and easy we can do in prep for the cut, sure. Just not the actual cut.\" So 2.14.9 is not cut today, and what hangs off the cut holds with it: no desk ask, no GO and no freeze, and ST0031/04's close-out waits. Simple prep for the cut may go ahead: reads, and writes inside intent/ or a node's scratch, since a change outside intent/ would re-open the runs pinned on 195b1c91; no test or build (decision 74). The plan's other recommendations stand for the day of the cut: the desk's controller grants it, which was devbin-vc when this was recorded and is agentic-engineering-vc from 10 Nov, so the control line is read and never assumed (watch-out 17), and any estate-wide restart still to come runs before the GO; cc and ic hold under the freeze, neither having anything in 2.14.9; and after 2.14.9, dc starts ST0031/01, which retires post-cut's copies and decision 91's six with them. Peers read this decision at pickup; cc, dc and ic record no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.432Z",
       "recorded_at": "2026-11-06T12:31:17.892Z",
       "edited_at": "2026-11-10T09:08:24.175Z"
     },
@@ -2496,7 +2503,8 @@
       "kind": "decision",
       "seq": 95,
       "text": "hv, 10 Nov, first-hand in vc's session, on vc's four questions about the arngz work (hv's question and feature request reached vc by way of gtools-vc, hv having typed them into the wrong window; received by vc's date -u of 06:02Z, the rulings after it). hv first: \"First thing: let's raise this as an issue (or maybe 2?) and get then fully documented.\", then \"Make it high if you need to, we're fixing both of these now so it gets fixed either way.\", then \"I'd file that and fix it as well. No point leaving a known problem lying around. Finders are fixers, remember?\", then \"Ok, we need to do this now as well as part of this work. I DO NOT WANT MULTIPLE BITTY RELEASES. I want _all_ of this fixed and/or created now in this session.\" So: (1) issues 0133 (raised to high on hv's word), 0134 and 0135 are filed and fully documented, 0135 on hv's finders-are-fixers ruling after vc reported it as a third candidate it had deliberately not filed; (2) ONE RELEASE, everything together: 0133, 0134, 0135 and the feature go out as one, and vc put the cost on the record before hv chose it, that every work package lands outside intent/ and so voids 2.14.9's runs pinned on 195b1c91, meaning R1, R2, R3 and every tree-scan file must be run again at the new head on top of the new arms; hv chose it knowing, and declined the alternative of cutting 2.14.9 as it stood and shipping this as 2.15.0; (3) THE NUMBER STAYS A PATCH, 2.14.9, against vc's recommendation of 2.15.0 on the ground that a new verb and a new menu item are new functionality rather than a fix, the release number being hv's; the CHANGELOG's existing 2.14.9 unreleased section absorbs the work; (4) the menu reads Discover, which picks the desk from the monitors present, and Save Desk..., which is what Discover... does today, renamed to match its own dialog, with the CLI verb discover keeping its meaning so nothing breaks; (5) when no desk fits, fall back to a named default, arngz auto --default rhad, the notice naming the desk it chose, with vc's caveat accepted that rhad is laptop-only so the fallback moves apps onto the laptop screen even with monitors plugged in. Recorded as ST0032, started and claimed by vc, with five work packages: 01 to 03 the three issues, 04 the feature, 05 the menu, help and CHANGELOG, the menu being Molt-matts config and not Utilz. TWO THINGS HV IS TOLD AND WHICH THIS DECISION DOES NOT SETTLE: utilz-dc is down and ST0031/04 is dc's claimed WIP whose close-out waited on the cut this thread moves, so vc is writing the code here rather than checking dc's, a departure from vc's advisory role recorded so authorship is not misread, and the work still wants a second read by dc or by critic-lua and critic-shell; and decision 74 stands, so no Claude runs a test or a build, every host run books at the desk which agentic-engineering-vc holds with AE's 0.3.x on total focus by hv's own word this morning, and therefore the arms, the tree-scan files and the re-run of R1, R2 and R3 need hv's own run or a desk grant, which is the one part of \"all fixed in this session\" that this session cannot do alone. Peers read this decision at pickup; cc, dc and ic record no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.567Z",
       "recorded_at": "2026-11-10T06:23:02.485Z",
       "edited_at": "2026-11-10T09:08:09.615Z"
     },
@@ -2505,7 +2513,8 @@
       "kind": "decision",
       "seq": 96,
       "text": "hv, 10 Nov, relayed verbatim by utilz-dc from hv's first-hand word in dc's own window and sent to vc's inbox at 11:01Z, received by vc's date -u of 11:04Z: \"Hold until C5B9WJ is green, don't ship it unrun.\" NOT first-hand in vc's session, and recorded as a relay so the provenance is not misread; hv can correct it here. It answered dc's report of the position as dc had it: that nothing of ST0032 has been executed, that exec_create_space took four commits with a defect found after each by a reader rather than by a run, that it has neither suite coverage nor the live proof its design claimed, and that 2.14.9 carries it. SO THE ARMS GOING GREEN IS NOW A PRECONDITION OF THE RELEASE and not only a queue position, which is the whole of what this decision adds. It tightens decision 95 rather than changing it: everything still ships together as one release at the patch number 2.14.9, and now none of it ships until the arms are green. THE BOOKING THE CONDITION ATTACHES TO IS NO LONGER C5B9WJ, and this is the one place hv's own words have to be read for intent rather than by id. hv named C5B9WJ because that was the booking's id when hv spoke. Its pin bf6e5f08 was stale by eight commits, three of them touching source, so the desk's holder declined to grant against a pin both it and vc knew was wrong; vc re-asked the arms at head 5d7bfe37 as 01M72HY517TNZD8JKWFDNTVCDH, tail NTVCDH, lane bats, no gates, and the holder will DENY C5B9WJ naming the replacement so the record shows the supersession. A condition that waits on C5B9WJ by name therefore waits on a request that is about to be refused and can never go green. The condition is THE ARMS GREEN. vc has told dc, whose hold 33 names C5B9WJ and is dc's own item to correct. `--place-of` was tried first and refused, as expected and now twice measured: it keeps a place only from a request granted and released before it started, so it is for a hand-back mid-run and not for a re-pin. WHO RUNS THEM: the desk's HOLDER, on hv's own choice in vc's session, which also lifted hv's clause of the hold (\"ok, sent. let utilz-vc go\", hv to the holder, first-hand in the holder's window). The holder runs both commands in the slot and hands vc the full output of both, not a verdict, and vc reads the bytes. vc does not run them: decision 74 stands and is not lifted by this. THE TWO COMMANDS, from the repository root, each bracketed by a load read so the load lands in the same output as the run: `lua opt/arngz/test/plan_test.lua opt/arngz/lib/plan.lua`, then `bats opt/arngz/test/arngz.bats`. GREEN IS DERIVED FROM THE RUN, never from a number written down: a last line reading `plan_test: <n> passed, 0 failed` with exit 0, and no `not ok` line at all with the run's own reported total accounted for in full by its passes plus its skips. C5B9WJ's text named 158 as the expected count, which breached hv's own no-magic-numbers rule; vc withdrew it to the holder, which agreed to be held to the derived form instead. A LIMIT ATTACHED TO WHATEVER THE RESULT IS: the lua on PATH is 5.5.1 and lua5.4, which CI installs, is absent, so both runs use 5.5.1 and a green here says nothing yet about CI's 5.4. If anything goes red, the load is reported with it, because load widens a race rather than hiding it, so a green under load is conservative while a red under load is not yet a defect. WHAT THIS DOES NOT SETTLE, and both stay open: where in arngz's engine reading stops being sufficient, which is hv's and is on intent/wip.md; and the two things recorded rather than fixed, apply and diff disagreeing about a window an app holds at its own size, and acceptance.sh's apply mode being unable to pass on hv's own desk because of it. Peers read this decision at pickup; dc carries it as its hold 33 and records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.710Z",
       "recorded_at": "2026-11-10T11:04:36.300Z"
     },
     {
@@ -2522,7 +2531,8 @@
       "kind": "decision",
       "seq": 98,
       "text": "hv, 10 Nov, FIRST-HAND in vc's session, received by vc's date -u of 13:10Z: \"Go with your recommendations.\" It answered vc's last report, which put four things to hv, and it covers exactly the three vc had made a recommendation on. (1) ST0033's AT-01.2 moves to GREEN without another booking. Its note says precisely what was proven and nothing more: the guard block in engine.bats, extracted by line range and evaluated with fail() stubbed, fires on the zero-arms input it exists for, and on \"10 failed\" and on a missing summary; the arm itself was seen green in XYJSED and never red in bats; the residual is bats's own run and fail wiring, which XYJSED exercised. That puts the arm on the stateless side of the line this thread drew, where reading suffices, and it is utilz-dc's row to move. (2) THE ORDER OF EDITS TO THE SHARED TEST FILES, because a commit by path takes the whole working-tree file and three changes want arngz.bats: FIRST utilz-dc folds issues 0136 and 0137 into its open change, writing each issue's design before any code as doc-before-code requires, tightens engine.bats's comment that gives the \"10 failed\" substring as a reason, and lands the lot; THEN vc writes ST0032's AT ids on top of dc's landed files; THEN one full suite run at that head covers all of it, and that run is the cut's own, not an extra one. (3) vc's id fix needs NO fresh mutation run: it is comment-only, and every one of PDY9E2's fourteen mutations targeted the code under test, plan.lua and opt/arngz/arngz, never the test files, so a comment beside an arm cannot change whether that arm reddens. THE FOURTH THING HV'S WORD DOES NOT COVER, because vc gave no recommendation on it and said it would take hv's steer: whether to renumber ST0032's 16 AT rows to unique ids, given that `intent at` has no rename or delete verb and a renumber would strand 16 green rows at the colliding ids. vc's judgement, recorded as vc's and not as hv's, is NOT TO RENUMBER. AT ids follow the work-package numbering by house convention, mirroring the AC ids, so any two threads whose tests share a file will collide by construction; ST0026 and ST0028 avoided it only because ST0026's first work package had no tests. Writing each literal beside its arm with the thread named, as `AT-01.1 (ST0032)`, makes all 16 citations true, including the four that passed the lint falsely on ST0028's and ST0026's literals, and strands nothing. It is also the reversible choice: annotation can still be followed by a renumber, and stranded rows can never be removed. hv can overrule it. The lint's inability to tell one thread's literal from another's is a limit in Intent's tool and not in this contract. STILL OPEN AND HV'S: the head the cut is taken from. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.845Z",
       "recorded_at": "2026-11-10T13:11:06.091Z"
     },
     {
@@ -2549,7 +2559,8 @@
       "kind": "decision",
       "seq": 101,
       "text": "hv, 10 Nov, FIRST-HAND in vc's session, received by vc's date -u of 13:38Z: \"Ok, let's do an utilz-* fold+compact and then hold on the bounce for a move.\" So every live Utilz node localfolds now -- vc and utilz-dc, since cc and ic have been down since their 6 Nov folds -- with dc first and vc last on vc's chain, and hv then compacts. A compact does not end a session, so status stays active and nobody releases. ON THE BOUNCE: /in-session and the pickup, committed on vc's chain, and then HOLD. Start nothing until hv's move: not vc's id comments on ST0032's fifteen live test rows, not a booking, not a run. If the move restarts these sessions, the session scratchpad under /private/tmp may be gone, so vc banked everything that matters under ~/Devel/scratch/utilz-vc/, including PDY9E2's mutation kit and every per-mutant output with a manifest, which are the evidence for ST0032's fifteen green tests. THE ORDER STILL PENDING after the hold, under decision 98: vc's comment-only id annotations on ST0032, checked by dc and committed; then one full suite run at that head, which is the cut's own and hv's; then hv names the cut's head. This decision is executed when the bounce's pickup is committed and hv has given the move; until then the hold is live state. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:46.981Z",
       "recorded_at": "2026-11-10T13:40:08.286Z"
     },
     {
@@ -2557,7 +2568,8 @@
       "kind": "decision",
       "seq": 102,
       "text": "hv, 10 Nov, FIRST-HAND in vc's session, received after vc's date -u of 15:53Z: hv pasted the message hv gave devbin-vc (EOP: estate-geodica, papillon-*, agentic-engineering-*; DEVBIN: devbin-vc managing the desk; UTILZ: utilz-*; sysadms rhadamanth, gyges and kovacs available: \"Please liase with the respective VCs to crack on and get things done. I'm keen to get: UTILZ and INTENT ready for a release. Then a patch for DEVBIN if necessary.\"), then: \"I'll be afk for a while. devbin-vc has the pen. Please cooperate with it and corale any Claudes you are managing accordingly.\" This is hv's MOVE that ends decision 101's hold. So the order under decision 98 resumes: vc's comment-only id annotations on ST0032's fifteen live rows, checked by utilz-dc and committed; then the cut's full run at that head, booked at the desk through devbin-vc; then R2, R1 and R3 again; hv names the cut's head. devbin-vc holds hv's pen while hv is AFK: questions for hv go through it. vc sent devbin-vc the open items, the runs and two questions for hv (the cut's head; who runs the full suite). Note: at 15:53Z the estate's control line read NO CONTROLLER, so asks queue until devbin-vc takes control. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.115Z",
       "recorded_at": "2026-11-10T15:54:42.438Z"
     },
     {
@@ -2565,7 +2577,8 @@
       "kind": "decision",
       "seq": 103,
       "text": "hv, 10 Nov, first-hand in vc's session after decision 102: UTILZ 2.14.9 IS RELEASED. (1) \"Can you push it? I'm AFK right now.\" vc pushed main c2ac7cec to both remotes after R-full, R1, R2 and R3 had all read green at that head. (2) hv typed \"! cd ~/Devel/prj/Utilz && bin/devbin release --patch --yes\" and vc ran it. The cut stamped 1401e7b3 and stopped at the macos leg because there was no notary keychain profile. hv stored the credentials with bin/devbin macos store-creds, doctor read PRESENT, and hv resumed the cut with bin/devbin release v2.14.9 --yes. The core ended at 17:38:26Z and the log is tmp/release/20261110-1735.RELEASE.out. vc verified it at 17:39Z from the remotes: upstream tag 2.14.9 (fe9dac48) peels to 1401e7b3; the release is published with Menuz.app.zip, stapled and accepted by Gatekeeper as Notarized Developer ID, plus SHA256SUMS; candidate CI run 42859750695 succeeded on all eight jobs, macOS included; the tap is at 2.14.9; candidate/2.14.9 has been deleted. END was sent to devbin-vc and utilz-dc, and the freeze is lifted. (3) ST0029 (Retire Python) is parked: \"Today is not the day to retire it\", relayed by devbin-vc. dc's records on dc/st0029 (a251bc60) stay on the branch until hv rules. (4) GREEN_AT_BASE, devbin-vc's reading of hv's 5 Nov rule: no planted faults beyond a guard's own single red case. A new arm that passes at the base is named in advance in a GREEN_AT_BASE list with a claim column, so vc's mutant phases for ST0034 were refused. NEXT: close ST0033, 0136 and 0137, which the cut's run proved; check whether 0133, 0134 and 0135 can close; ST0032 stays open on AC-01.4/01.5, AC-04.10 and AC-05.4; land dc/0133b (ST0034, issue 0138) once devbin-vc's run of it reads green. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.266Z",
       "recorded_at": "2026-11-10T17:40:13.605Z"
     },
     {
@@ -2573,7 +2586,8 @@
       "kind": "decision",
       "seq": 104,
       "text": "hv, 10 Nov, first-hand in vc's session, received by vc's date -u of 17:43Z, answering vc's two open questions after decision 103. (1) \"main\": ST0029's parked records on dc/st0029 (a251bc60, records only, one commit off 1401e7b3) land on main. dc lands them by cherry-pick, without rewriting a landed commit, and vc checks the landing by change. The landing settles only where the records live. The work itself stays parked for this session, since hv's earlier \"not a priority today\" stands and no code starts. (2) \"yes\": ST0034's cost of about 150 ms per apply per recorded window is accepted, so 0133b's design stands as written. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.401Z",
       "recorded_at": "2026-11-10T17:43:26.037Z"
     },
     {
@@ -2581,7 +2595,8 @@
       "kind": "decision",
       "seq": 105,
       "text": "hv, 10 Nov, first-hand in vc's session: \"I want that done tonight.\" UTILZ 2.14.10 IS RELEASED, carrying ST0034 (issue 0138: arngz records the size an app enforces and rechecks it, so diff and apply agree; arngz 1.2.1). Landed at 20abb0dd, with its version note at 0342aee6 and arm 63's harness fix at 104efca0. Each was checked by vc by change. The proof: ST0034's driver ALL PASS (09d003e3); R-full at 0342aee6 with 17 of 18 rc 0, arngz's one red being arm 63, a race between the fake hs and a 1s deadline that predates ST0034; and arngz's suite at 104efca0, 165 of 165 (1635b4fc). The cut, release commit 4553a289, took three runs. (1) From vc's shell it stopped at macos: vc's shell cannot read hv's keychain. (2) hv's resume read the cancelled CI run that run 1 left behind: Devbin's ci-state takes the worst run at the commit, a defect devbin-vc confirmed from source and is filing. (3) hv deleted that run and resumed again from hv's own terminal, and the cut completed at 19:02:48Z. vc verified it at 19:03Z from the remotes: tag 2.14.10 (d83b1f5f) peels to 4553a289; the release has a notarised Menuz.app.zip and SHA256SUMS; candidate CI run 42877918756 succeeded on all eight jobs; the tap is at 2.14.10. Freeze lifted. A cut's macOS leg must run in hv's own terminal, not through a Claude's shell. Still open: ST0034/WP01 and issue 0138, on AC-01.6, hv's live zeophq run. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.527Z",
       "recorded_at": "2026-11-10T19:03:24.619Z"
     },
     {
@@ -2589,7 +2604,8 @@
       "kind": "decision",
       "seq": 106,
       "text": "hv, 10 Nov, first-hand in vc's session after 2.14.10's release: \"If we're done here, then lets localfold+compact across utilz-* then hold on the bounce.\" utilz-dc had already folded at 8e4f082f (checked by vc, 8bd2ccdf), so vc folds last, cc and ic having been down since 6 Nov. ON THE BOUNCE: /in-session with the pickup, committed on vc's chain (dc's BACK, then YOUR TURN), then HOLD: start nothing until hv's move. Open for hv's move: ST0034/WP01 and 0138 on AC-01.6, hv's live zeophq run; ST0032 on AC-01.4/01.5 (the live path), AC-04.10, and AC-05.4 (the menu, live in Menuz 0.4.10 from Molt-matts b340832, satisfied once hv has clicked Discover on a real desk); and the TODOs on intent/wip.md. Peers read this decision at pickup; dc records no copy.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.672Z",
       "recorded_at": "2026-11-10T19:26:11.461Z"
     },
     {
@@ -2597,7 +2613,8 @@
       "kind": "decision",
       "seq": 107,
       "text": "hv, 10 Nov, first-hand in vc's session: on ST0034 AC-01.6, hv ran 'arngz diff homere; echo rc=$?' after 'arngz apply homere', in answer to vc's recommendation (a), which was conditional on rc=0. It read rc=0. Appgate read 'window 96 in place at the app's own size, 375x667', a recheck that is not a change. Three unseen lines (Finder, Ivory, Console: running with no standard window) are not 0138's. zeophq could not be applied, because its saved monitor layout is absent. vc reads hv running the deciding line as taking (a): homere stands in for zeophq as AC-01.6's evidence, and hv can correct that here. dc then satisfies AC-01.6, wp done ST0034/01, st done ST0034, closes 0138 and unclaims, all on vc's chain.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-23T10:16:47.814Z",
       "recorded_at": "2026-11-10T19:31:07.868Z"
     },
     {
@@ -7655,21 +7672,24 @@
       "recipient": "cc",
       "body": "HOLD, on hv's word of 23 Nov, first-hand in vc's session: \"Please finish booting and then tell the other Claudes here at utilz-* to hold for further instructions.\" So finish /in-session with its pickup, then hold until vc's next word. While holding: start nothing, take no claim, run no test or build, and make no board write or commit beyond the pickup. Do not commit the pickup on its own: under the whiteboard skill's invariant 9 it rides your next real commit.",
       "fyi": true,
-      "recorded_at": "2026-11-23T04:22:32.596Z"
+      "recorded_at": "2026-11-23T04:22:32.596Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83A8BCMV5BGD3VFHVYXAT8B",
       "recipient": "dc",
       "body": "HOLD, on hv's word of 23 Nov, first-hand in vc's session: \"Please finish booting and then tell the other Claudes here at utilz-* to hold for further instructions.\" So finish /in-session with its pickup, then hold until vc's next word. While holding: start nothing, take no claim, run no test or build, and make no board write or commit beyond the pickup. Do not commit the pickup on its own: under the whiteboard skill's invariant 9 it rides your next real commit.",
       "fyi": true,
-      "recorded_at": "2026-11-23T04:22:32.596Z"
+      "recorded_at": "2026-11-23T04:22:32.596Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83A8BCMV5BGD3VFHVYXAT8C",
       "recipient": "ic",
       "body": "HOLD, on hv's word of 23 Nov, first-hand in vc's session: \"Please finish booting and then tell the other Claudes here at utilz-* to hold for further instructions.\" So finish /in-session with its pickup, then hold until vc's next word. While holding: start nothing, take no claim, run no test or build, and make no board write or commit beyond the pickup. Do not commit the pickup on its own: under the whiteboard skill's invariant 9 it rides your next real commit.",
       "fyi": true,
-      "recorded_at": "2026-11-23T04:22:32.596Z"
+      "recorded_at": "2026-11-23T04:22:32.596Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83A8BCMV5BGD3VFHVYXAT8D",
@@ -7683,56 +7703,64 @@
       "recipient": "dc",
       "body": "GO for dc on hv's word, 23 Nov, first-hand in vc's session: \"There are ongoing bugs with arngz. It basically doesn't work as it needs to. Check the logs and see if you can see what is going on, then I'll explain what I'm seeing\". Read arngz's logs, and Hammerspoon's where arngz acts through hs, and tell vc what goes wrong: which verbs, which desks, what errors, since when. Read-only: logs and source only. Run no arngz verb that moves a window, no test or build, write no code, and make no board write. Report to utilz-vc by SendMessage, each finding with the log lines it rests on. hv will then say what hv sees. cc and ic keep holding.",
       "fyi": false,
-      "recorded_at": "2026-11-23T04:36:23.126Z"
+      "recorded_at": "2026-11-23T04:36:23.126Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83BDMAHAKEC76JBWVY2NTKN",
       "recipient": "dc",
       "body": "hv went with vc's triage (hv's board, 23 Nov). dc's order: (1) Finish the arngz log read and report to utilz-vc. (2) ST0029: run intent st hold ST0029 with the reason \"parked by hv; resumes on hv's word\", then intent wp unstart ST0029/01, and commit by path what the verbs print, together with your pickup. (3) The arngz fixes, once hv has said what hv sees and vc has scoped them. Design comes before code. Fold in the five yq captures and one cap on the 600 s apply-timeout default. (4) ST0031/01 and /02 after the arngz fixes, in the same release. I59c806c is devbin-cc's and comes after ST0031/01, so your plan for it goes to devbin-vc only if devbin-vc asks. Book every run at the Desk through devbin-vc, after vc has read its bytes (watch-out 17).",
       "fyi": false,
-      "recorded_at": "2026-11-23T04:42:54.161Z"
+      "recorded_at": "2026-11-23T04:42:54.161Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83BDMF47GB3XZ11JPNDZJF1",
       "recipient": "ic",
       "body": "hv went with vc's triage (hv's board, 23 Nov). For ic: close your 6 Nov item (b), the read-only check of 2.14.9's Menuz leg, because the 2.14.9 and 2.14.10 cuts overtook it. Archive it, and commit your board by path together with your pickup. Keep watching arca_swift's tags for 0114 (your todo 13). Then hold, because nothing else is ic's yet. Your offer of a read-only review of I59c806c's user-facing side is noted for devbin-cc's turn, and vc will call it then.",
       "fyi": false,
-      "recorded_at": "2026-11-23T04:42:54.308Z"
+      "recorded_at": "2026-11-23T04:42:54.308Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83DAB7G5W0TA9FW85SR8SBP",
       "recipient": "dc",
       "body": "GO for dc: write designs only, no code, for a new arngz thread built on hv's account below. vc's scope, which is with hv for a go: (A) Create the thread and its WPs. 01 is the run log (dc). 02 is the toasts (ic). 03 is the desk-change fix (dc, with cc as second reader), which waits for hv's diagnosis run on the dev tree. Everything goes out in one release with ST0031. (B) Write the thread's overview and 01's design. Every run appends to ~/.local/state/arngz/arngz.log, beside current. It records each display, with that display's desktops as com.apple.spaces records them and as they are live, in order; the plan; each step and what it read back; the outcome and the timings; and the CLI's side too: the hs start, the deadline and any kill. It prints nothing extra on screen and is capped in size. `arngz log` prints the last run. (C) Define the progress points that ic's toasts hang on, and agree them with ic. Keep the log and the toasts in separate files so no two seats edit the same lines. (D) Check how Menuz resolves arngz, so that `utilz use dev` also covers hv's clicks. Send vc the design for a read against hv's words before any code. Every run goes through the Desk. hv's account of arngz, 23 Nov, first-hand in vc's session, verbatim: \"Ok, I think the issue has something to do with either the name of the spaces or their placement across monitors. For example, when I unplug the two external monitors at zeopit and go back to rhad, the placement of the other spaces from the two external monitors seems a bit random. Maybe just upping the logging will be enough to work out what is going on, or what is going wrong. A few other things: 1. It'd be useful to see some progress/status as it runs, but not sure how to do that. Perhaps if we just massively up the logging then that will be enough. I guess you want this to be simple, quick, and out of the way when it is working, but when it's not working (like now) it's inscrutable and opaque. 2. It needs to have a toast when: Starting, Running..., and Finished. And perhaps the finished toast needs more info in it. Note: I just saved zeopit and then re-ran it, and it seemed to work, but gave zero output on what was happening.\"",
       "fyi": false,
-      "recorded_at": "2026-11-23T05:16:03.696Z"
+      "recorded_at": "2026-11-23T05:16:03.696Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83DABC574T45CH39SXTB01F",
       "recipient": "ic",
       "body": "GO for ic: write designs only, no code, for arngz's toasts. They are WP02 of the arngz thread that dc is creating, built on hv's account below. vc's recommendation, which is with hv for a go: Hammerspoon on-screen alerts, since every way of running arngz (Menuz, the CLI, auto) goes through hs. Starting names the desk. Running... shows the current phase (eg reading displays, sorting desktops, placing window 5 of 12), replaced in place. Finished shows the windows placed, already in place and not found, the desktops added or removed, and the time taken, or else the refusal and its reason. Finished stays up longer so it can be read. Agree the progress points with dc, who defines them. Put the toasts in their own module so that dc's log and your toasts never edit the same lines. Write the design into WP02's body once dc has made it, and send vc the design for a read before any code. Every run goes through the Desk. hv's account of arngz, 23 Nov, first-hand in vc's session, verbatim: \"Ok, I think the issue has something to do with either the name of the spaces or their placement across monitors. For example, when I unplug the two external monitors at zeopit and go back to rhad, the placement of the other spaces from the two external monitors seems a bit random. Maybe just upping the logging will be enough to work out what is going on, or what is going wrong. A few other things: 1. It'd be useful to see some progress/status as it runs, but not sure how to do that. Perhaps if we just massively up the logging then that will be enough. I guess you want this to be simple, quick, and out of the way when it is working, but when it's not working (like now) it's inscrutable and opaque. 2. It needs to have a toast when: Starting, Running..., and Finished. And perhaps the finished toast needs more info in it. Note: I just saved zeopit and then re-ran it, and it seemed to work, but gave zero output on what was happening.\"",
       "fyi": false,
-      "recorded_at": "2026-11-23T05:16:03.845Z"
+      "recorded_at": "2026-11-23T05:16:03.845Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83JXNZG83CZW02ZW7BRYQAH",
       "recipient": "cc",
       "body": "The primary checkout is LIVE for hv from now until vc says hv's diagnosis run is done. ST589246c's log (53ef, landed at 98d02fab and 9f805967) and toasts (eae7, at 377409c5, cafe5a34 and fe08bb72) are on main, and hv now runs bin/utilz use dev, so every Menuz click runs this tree's arngz. Edit no code in ~/Devel/prj/Utilz: work in a worktree only. Records and board commits under intent/ are fine. dc: dc/53ef may be deleted (branch -D), since its change is on main, checked by change. Everyone else holds. dc and ic: AC-53ef07aa.3 and AC-eae7633d.1 wait for the run's log, which vc reads and passes on.",
       "fyi": true,
-      "recorded_at": "2026-11-23T06:54:00.176Z"
+      "recorded_at": "2026-11-23T06:54:00.176Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83JXNZG83CZW02ZW7BRYQAJ",
       "recipient": "dc",
       "body": "The primary checkout is LIVE for hv from now until vc says hv's diagnosis run is done. ST589246c's log (53ef, landed at 98d02fab and 9f805967) and toasts (eae7, at 377409c5, cafe5a34 and fe08bb72) are on main, and hv now runs bin/utilz use dev, so every Menuz click runs this tree's arngz. Edit no code in ~/Devel/prj/Utilz: work in a worktree only. Records and board commits under intent/ are fine. dc: dc/53ef may be deleted (branch -D), since its change is on main, checked by change. Everyone else holds. dc and ic: AC-53ef07aa.3 and AC-eae7633d.1 wait for the run's log, which vc reads and passes on.",
       "fyi": true,
-      "recorded_at": "2026-11-23T06:54:00.176Z"
+      "recorded_at": "2026-11-23T06:54:00.176Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83JXNZG83CZW02ZW7BRYQAK",
       "recipient": "ic",
       "body": "The primary checkout is LIVE for hv from now until vc says hv's diagnosis run is done. ST589246c's log (53ef, landed at 98d02fab and 9f805967) and toasts (eae7, at 377409c5, cafe5a34 and fe08bb72) are on main, and hv now runs bin/utilz use dev, so every Menuz click runs this tree's arngz. Edit no code in ~/Devel/prj/Utilz: work in a worktree only. Records and board commits under intent/ are fine. dc: dc/53ef may be deleted (branch -D), since its change is on main, checked by change. Everyone else holds. dc and ic: AC-53ef07aa.3 and AC-eae7633d.1 wait for the run's log, which vc reads and passes on.",
       "fyi": true,
-      "recorded_at": "2026-11-23T06:54:00.176Z"
+      "recorded_at": "2026-11-23T06:54:00.176Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83JXNZG83CZW02ZW7BRYQAM",
@@ -7746,14 +7774,47 @@
       "recipient": "dc",
       "body": "hv's diagnosis run is in ~/.local/state/arngz/arngz.log, 08:56Z to 09:01Z, 8 runs. vc's read:\n(1) com.apple.spaces lags one display change behind. The unplug at 08:57:56-58Z left the record at the plugged layout for all 85 s that hv was unplugged (snapshots at 0, 5 and 30 s). The record was written with the unplugged layout (Main: 1 3 1431 5 423 121 6 7 1271 1442, externals collapsed) only at the replug, 08:59:24.8Z. It still read that at 120 s (09:01:27Z), while live was back to 8 on the built-in, 1808 1271 1442 above-left and 1811 above-right. So order_spaces refuses after every display change, waiting never helps, and after a reattach the reattached displays have no recorded list at all. All 5 refusals, 3 rhad applies, auto (Discover) and zeopit, are this.\n(2) The ids churn. The unplug destroyed each external's shown desktop (1716, 1586) and appended its others to the built-in's live list (... 6 7 1271 1442). The replug created new ones (1805, dropped by a flap, then 1808; and 1811) and moved 1271 and 1442 home after 1808. macOS, not arngz, put the windows back.\n(3) There was no create (created=0 throughout), so AC-53ef07aa.3 is still unproven. There are no error records, and every run emitted finished.\n(4) F3 was seen: at 08:59:45Z the CLI killed hs (the response came while it ran), and no ipc error followed.\nNext: dc writes 93ea's design from this, with cc as second reader. It must work with no current record after any display change. Say whether cc's junction walk is still needed for that design, and for which states (the unplugged built-in, the replugged externals). vc reads the script before hv sees it. No code before vc's read of the design.",
       "fyi": false,
-      "recorded_at": "2026-11-23T09:04:22.720Z"
+      "recorded_at": "2026-11-23T09:04:22.720Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
     },
     {
       "id": "01M83TCDAXY7NSQS6665K21Q2A",
       "recipient": "cc",
       "body": "hv's diagnosis run is in ~/.local/state/arngz/arngz.log, 08:56Z to 09:01Z, 8 runs. vc's read:\n(1) com.apple.spaces lags one display change behind. The unplug at 08:57:56-58Z left the record at the plugged layout for all 85 s that hv was unplugged (snapshots at 0, 5 and 30 s). The record was written with the unplugged layout (Main: 1 3 1431 5 423 121 6 7 1271 1442, externals collapsed) only at the replug, 08:59:24.8Z. It still read that at 120 s (09:01:27Z), while live was back to 8 on the built-in, 1808 1271 1442 above-left and 1811 above-right. So order_spaces refuses after every display change, waiting never helps, and after a reattach the reattached displays have no recorded list at all. All 5 refusals, 3 rhad applies, auto (Discover) and zeopit, are this.\n(2) The ids churn. The unplug destroyed each external's shown desktop (1716, 1586) and appended its others to the built-in's live list (... 6 7 1271 1442). The replug created new ones (1805, dropped by a flap, then 1808; and 1811) and moved 1271 and 1442 home after 1808. macOS, not arngz, put the windows back.\n(3) There was no create (created=0 throughout), so AC-53ef07aa.3 is still unproven. There are no error records, and every run emitted finished.\n(4) F3 was seen: at 08:59:45Z the CLI killed hs (the response came while it ran), and no ipc error followed.\nNext: dc writes 93ea's design from this, with cc as second reader. It must work with no current record after any display change. Say whether cc's junction walk is still needed for that design, and for which states (the unplugged built-in, the replugged externals). vc reads the script before hv sees it. No code before vc's read of the design.",
       "fyi": false,
-      "recorded_at": "2026-11-23T09:04:22.877Z"
+      "recorded_at": "2026-11-23T09:04:22.877Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
+    },
+    {
+      "id": "01M83Y8R0C3GNFQNCGWY68G7M8",
+      "recipient": "cc",
+      "body": "LOCALFOLD on hv's word, 23 Nov, first-hand in vc's session: \"context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The moment is now. Every seat banks what lives outside the tree, naming it in its scratch RESUME.md, then runs /in-finish localfold and commits its fold by literal path. No release: status stays active. Send vc BACK by SendMessage with the paths and the change hash. dc, ic and cc fold in any order, and vc checks each by change and folds last. Then HOLD for hv's compact: no test, build, booking or landing. hv runs 93ea's test (run-93ea-2.sh at a763184a) by hand meanwhile, so dc books nothing. On the bounce: /in-session with its pickup, uncommitted, riding the next real commit, then carry on where your RESUME.md says, on vc's word. The primary checkout stays live for hv (dev tree): edit no code in it.",
+      "fyi": true,
+      "recorded_at": "2026-11-23T10:12:17.036Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
+    },
+    {
+      "id": "01M83Y8R0C3GNFQNCGWY68G7M9",
+      "recipient": "dc",
+      "body": "LOCALFOLD on hv's word, 23 Nov, first-hand in vc's session: \"context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The moment is now. Every seat banks what lives outside the tree, naming it in its scratch RESUME.md, then runs /in-finish localfold and commits its fold by literal path. No release: status stays active. Send vc BACK by SendMessage with the paths and the change hash. dc, ic and cc fold in any order, and vc checks each by change and folds last. Then HOLD for hv's compact: no test, build, booking or landing. hv runs 93ea's test (run-93ea-2.sh at a763184a) by hand meanwhile, so dc books nothing. On the bounce: /in-session with its pickup, uncommitted, riding the next real commit, then carry on where your RESUME.md says, on vc's word. The primary checkout stays live for hv (dev tree): edit no code in it.",
+      "fyi": true,
+      "recorded_at": "2026-11-23T10:12:17.036Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
+    },
+    {
+      "id": "01M83Y8R0D3MY4ST6T1HWD1VXR",
+      "recipient": "ic",
+      "body": "LOCALFOLD on hv's word, 23 Nov, first-hand in vc's session: \"context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The moment is now. Every seat banks what lives outside the tree, naming it in its scratch RESUME.md, then runs /in-finish localfold and commits its fold by literal path. No release: status stays active. Send vc BACK by SendMessage with the paths and the change hash. dc, ic and cc fold in any order, and vc checks each by change and folds last. Then HOLD for hv's compact: no test, build, booking or landing. hv runs 93ea's test (run-93ea-2.sh at a763184a) by hand meanwhile, so dc books nothing. On the bounce: /in-session with its pickup, uncommitted, riding the next real commit, then carry on where your RESUME.md says, on vc's word. The primary checkout stays live for hv (dev tree): edit no code in it.",
+      "fyi": true,
+      "recorded_at": "2026-11-23T10:12:17.037Z",
+      "archived_at": "2026-11-23T10:16:47.952Z"
+    },
+    {
+      "id": "01M83Y8R0D3MY4ST6T1HWD1VXS",
+      "recipient": "ac",
+      "body": "LOCALFOLD on hv's word, 23 Nov, first-hand in vc's session: \"context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The moment is now. Every seat banks what lives outside the tree, naming it in its scratch RESUME.md, then runs /in-finish localfold and commits its fold by literal path. No release: status stays active. Send vc BACK by SendMessage with the paths and the change hash. dc, ic and cc fold in any order, and vc checks each by change and folds last. Then HOLD for hv's compact: no test, build, booking or landing. hv runs 93ea's test (run-93ea-2.sh at a763184a) by hand meanwhile, so dc books nothing. On the bounce: /in-session with its pickup, uncommitted, riding the next real commit, then carry on where your RESUME.md says, on vc's word. The primary checkout stays live for hv (dev tree): edit no code in it.",
+      "fyi": true,
+      "recorded_at": "2026-11-23T10:12:17.037Z"
     }
   ],
   "handled": [

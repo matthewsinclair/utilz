@@ -1,0 +1,15 @@
+{
+  "id": "01M83YHFTKEJNY8YTP7QY4X900",
+  "ts": "2026-11-23T10:17:03.571Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"Ok, context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The rest is vc's wording of how it was carried out. vc named the moment at once (announce of 10:12Z). Every utilz-* seat banks what lives outside the tree, localfolds without a release, and holds: dc at 21bf2768, ic at 8e906dc1 and cc at fcc49ed8, each checked by vc by change, with vc folding last. hv runs 93ea's test by hand meanwhile: /bin/bash ~/Devel/scratch/utilz-dc/st5892/run-93ea-2.sh, pinned to a763184a. dc's own slot for it, granted before vc's STOP reached dc, was stopped at 61 of 180 with none failed, released, and its partial TAP set aside. Then hv compacts each session. On the bounce, each seat runs /in-session with its pickup and carries on from its RESUME.md on vc's word: dc reads hv's TAP and lands 93ea, then hv's live run follows. Open for hv on the bounce: whether ST0031 moves from dc to cc now, to run in parallel (decision 9 named dc)."
+  }
+}
