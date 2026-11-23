@@ -1,0 +1,15 @@
+{
+  "id": "01M84Q4BP1TVZ54D3JG99KBZ3W",
+  "ts": "2026-11-23T17:26:47.746Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STca1b7f9's spike v3, M1 one route and one kept window per hs call with M2 regardless: spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc after hv's run of 17:12Z hung in m1_read. Released when hv says ready: cc asks the Desk, load-checks under that slot, then vc gives hv the command."
+  }
+}

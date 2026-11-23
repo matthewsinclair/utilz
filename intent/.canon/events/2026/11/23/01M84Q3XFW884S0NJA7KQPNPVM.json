@@ -1,0 +1,17 @@
+{
+  "id": "01M84Q3XFW884S0NJA7KQPNPVM",
+  "ts": "2026-11-23T17:26:33.212Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "FOLD NOW, on hv's word via devbin-vc (an estate-wide localfold+compact; the Desk is held from 17:26Z with no new grants). Localfold with no release: bank what lives outside the tree and name it in your RESUME.md, archive what is spent, clear what is handled, and set the focus line. Then commit by path and send vc the READY, and vc gives you the turn. After vc's CHECKED, quiesce for hv's compact.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

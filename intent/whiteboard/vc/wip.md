@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-23 13:50Z
+heartbeat_at: 2026-11-23 17:26Z
 status: active
-focus: "hv has left for now (hv decision 16); the spike waits for hv's return, its ask TM15WA queued at the Desk, which devbin-vc keeps closed until hv's word. dc queues its heavy ask for ST0031's run, to go after the spike. cc codes STca1b7f9's WP3 and WP4's failure half with no run (vc decision 112), and ic reads it second. ic designs showreel qr (hv decision 15). Then the landings, hv's push, the spike and WP1, WP2 and WP4's Mission Control leg, hv's live run, and the cut."
+focus: "Folded for hv's estate-wide compact (17:26Z, via devbin-vc; the Desk is held). Open: hold 30, spike v3 for hv's hands; dc's FF5TB4 (ST0031 at eec4b900) and ic's 1TDNX1 (showreel qr at 1ae82d9d), queued and re-judged after the compacts; cc's STca1b7f9 code on cc/stca1b7f9 (4ce6eec1 plus 3efc3397) with ic's toasts at 109fbccf, one run after the spike's code; hv decision 17 written on hv's board but uncommitted, since hv stopped its commit."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- STca1b7f9's spike v3, M1 one route and one kept window per hs call with M2 regardless: spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc after hv's run of 17:12Z hung in m1_read. Released when hv says ready: cc asks the Desk, load-checks under that slot, then vc gives hv the command.
 
 ## Watch-outs
 

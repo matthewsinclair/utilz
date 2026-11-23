@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "7386a9d5-ebce-4a62-bbeb-a887311d02fd",
-    "heartbeat_at": "2026-11-23T13:50:36.098Z",
+    "heartbeat_at": "2026-11-23T17:26:47.923Z",
     "status": "active",
-    "focus": "hv has left for now (hv decision 16); the spike waits for hv's return, its ask TM15WA queued at the Desk, which devbin-vc keeps closed until hv's word. dc queues its heavy ask for ST0031's run, to go after the spike. cc codes STca1b7f9's WP3 and WP4's failure half with no run (vc decision 112), and ic reads it second. ic designs showreel qr (hv decision 15). Then the landings, hv's push, the spike and WP1, WP2 and WP4's Mission Control leg, hv's live run, and the cut.",
+    "focus": "Folded for hv's estate-wide compact (17:26Z, via devbin-vc; the Desk is held). Open: hold 30, spike v3 for hv's hands; dc's FF5TB4 (ST0031 at eec4b900) and ic's 1TDNX1 (showreel qr at 1ae82d9d), queued and re-judged after the compacts; cc's STca1b7f9 code on cc/stca1b7f9 (4ce6eec1 plus 3efc3397) with ic's toasts at 109fbccf, one run after the spike's code; hv decision 17 written on hv's board but uncommitted, since hv stopped its commit.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2686,6 +2686,14 @@
       "text": "vc, 23 Nov 2026: decision 111's code gate is amended. hv's word on WP5 is in: hv decision 15 left it out, and M3 with it. cc codes WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. cc read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results, and the spike waits on hv's return (hv decision 16). Nothing lands before ic's read and vc's check by change.",
       "state": "live",
       "recorded_at": "2026-11-23T13:50:35.950Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 30,
+      "text": "STca1b7f9's spike v3, M1 one route and one kept window per hs call with M2 regardless: spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc after hv's run of 17:12Z hung in m1_read. Released when hv says ready: cc asks the Desk, load-checks under that slot, then vc gives hv the command.",
+      "state": "live",
+      "recorded_at": "2026-11-23T17:26:47.745Z"
     }
   ],
   "sent": [
@@ -8108,6 +8116,27 @@
       "body": "CHECKED 7e0aba3e by change: parent 3c7c7b7f; change 22cc9a28dc0b58646366841ae97ba5a3bed1c5c50888c80e5bb8eef80ca5862b, equal to the READY's; the 8 paths of ready-records2.txt and no other; no attribution lines; the (C) line last; the index empty after. Hold for hv's word to the Desk.",
       "fyi": false,
       "recorded_at": "2026-11-23T15:28:06.976Z"
+    },
+    {
+      "id": "01M84Q3XFW884S0NJA7KQPNPVN",
+      "recipient": "cc",
+      "body": "FOLD NOW, on hv's word via devbin-vc (an estate-wide localfold+compact; the Desk is held from 17:26Z with no new grants). Localfold with no release: bank what lives outside the tree and name it in your RESUME.md, archive what is spent, clear what is handled, and set the focus line. Then commit by path and send vc the READY, and vc gives you the turn. After vc's CHECKED, quiesce for hv's compact.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T17:26:33.212Z"
+    },
+    {
+      "id": "01M84Q3XN95GJWZXXYPC9JQZ20",
+      "recipient": "dc",
+      "body": "FOLD NOW, on hv's word via devbin-vc (an estate-wide localfold+compact; the Desk is held from 17:26Z with no new grants). Localfold with no release: bank what lives outside the tree and name it in your RESUME.md, archive what is spent, clear what is handled, and set the focus line. Then commit by path and send vc the READY, and vc gives you the turn. After vc's CHECKED, quiesce for hv's compact.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T17:26:33.385Z"
+    },
+    {
+      "id": "01M84Q3XTCVSE7842FC493MPGX",
+      "recipient": "ic",
+      "body": "FOLD NOW, on hv's word via devbin-vc (an estate-wide localfold+compact; the Desk is held from 17:26Z with no new grants). Localfold with no release: bank what lives outside the tree and name it in your RESUME.md, archive what is spent, clear what is handled, and set the focus line. Then commit by path and send vc the READY, and vc gives you the turn. After vc's CHECKED, quiesce for hv's compact.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T17:26:33.549Z"
     }
   ],
   "handled": [
