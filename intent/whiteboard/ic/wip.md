@@ -2,10 +2,10 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 9c5380d3-6532-4eba-a261-0938d7d04767
-heartbeat_at: 2026-11-06 13:42Z
+session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
+heartbeat_at: 2026-11-23 04:44Z
 status: active
-focus: "6 Nov, localfold for hv's compact (vc decision 94), then holding on vc decision 93, no release: no cut of 2.14.9 today, nothing of ic's in it, and ic holds under its freeze; no claims, 0 live messages, nothing archived or cleared; todo 13 watches arca_swift's tag at each pickup (newest still 0.2.1, ffdff0a, the head of its main, read 6 Nov), 0114 parked behind it; no test or build (vc decision 74); this fold is committed on vc's YOUR TURN; resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "23 Nov: holding on hv's word through vc, after hv decision 9 (vc's triage). Todo 13 alone is live: it watches arca_swift's tag for 0114 (newest still 0.2.1, ffdff0a, the head of its main, read 04:44Z). Item (b) of 6 Nov, the read-only check of 2.14.9's Menuz leg, is closed by decision 9 (8) as overtaken by the 2.14.9 and 2.14.10 cuts; it was never a board item, so nothing is archived. ic's read-only review of I59c806c's user-facing side waits for vc's call at devbin-cc's turn. No claims; no test or build. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: []
 ---
 
