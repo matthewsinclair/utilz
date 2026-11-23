@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "9422684f-bf22-4b04-91db-c75937d5b7dc",
-    "heartbeat_at": "2026-11-23T12:10:19.971Z",
+    "heartbeat_at": "2026-11-23T12:53:55.322Z",
     "status": "active",
-    "focus": "23 Nov, on vc decision 111: STca1b7f9's design revised on vc's five notes and ic's read r1, its four WP bodies and 23 criteria recorded (WP5's wait on hv's word); next, the spike M1 to M3 to vc for its bytes, then hv's hands at the Desk; no code before the spike's results; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md",
+    "focus": "23 Nov, localfold for hv's compact (hv's word via vc, 12:52Z): STca1b7f9's design, its four WP bodies and 23 criteria landed at 549b7e7e and 78895a97, each checked by vc by change; the spike M1 and M2 (spike.zsh 7ad7ec55, spike.lua 8364205b, which vc read as sound) was granted and released not run; on the bounce, the spike on hv's return with a fresh booking, then WP1 to WP4's code once its results are read, with WP5 on hv's word; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
       "STca1b7f9d59191dfc"
     ],
