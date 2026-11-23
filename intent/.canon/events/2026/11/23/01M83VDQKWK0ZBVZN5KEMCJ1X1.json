@@ -1,0 +1,14 @@
+{
+  "id": "01M83VDQKWK0ZBVZN5KEMCJ1X1",
+  "ts": "2026-11-23T09:22:34.749Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-53ef07aa.3"
+  },
+  "payload": {
+    "text": "Every desktop arngz creates is recorded with its id, from the live list that shows it once the creation returns. com.apple.spaces is logged after the creates and at the run's end, and never waited on, so the log shows whether macOS had recorded the new desktop by then (reworded on vc's word, 23 Nov 2026, after hv's diagnosis run)."
+  }
+}
