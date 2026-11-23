@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "Ib12d89443ed74611",
+  "origin": "01M84EF73WX0XP7HGR3HE8RZDM",
+  "realised": true,
+  "slug": "arngz-s-plan-reasons-say-display-nil-for-a-desk",
+  "title": "arngz's plan reasons say \"display nil\" for a desk display that has no name",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-23",
+  "reporter": "Matthew Sinclair",
+  "body": "P.plan words six of its reasons with the desk's name for a display, and none of them has a fallback: `tostring(d.name)` for a create (opt/arngz/lib/plan.lua:583) and `tostring(desk.displays[e.display].name)` for no_space, pending, unmovable, move and place (plan.lua:690, 696, 702, 716 and 731). The desk validator lets a display go unnamed, since a display must match by uuid or by name (opt/arngz/arngz:589-596). For such a desk the reasons read \"display nil\": in diff's plan, in apply's report and run log, and, for a failure, on the toast's Finished line. The step point names the same display \"display N\" (log.lua's `L.path_place`), as STca1b7f9's display names do (`P.display_names`).\n\nThe fix is one helper that names a desk display as the person reads it, its name else \"display N\". All six reasons and `P.display_names` use it, and a plan_test arm proves it in the suite's one booked run. Not in it: `P.match_displays`' two refusals (plan.lua:205 and 211) name a display by its index as well as its name (\"displays[0] (nil)\"), so they stay as they are.\n\nIt rides STca1b7f9d59191dfc on cc's branch, by vc's ruling of 23 Nov 2026, since that change is in P.plan already and the release carries what is not deferred. Found by critic-lua in its review of cc's 8620c933, and filed by cc at vc's ask.\n"
+}

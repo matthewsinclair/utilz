@@ -1,0 +1,15 @@
+{
+  "id": "01M84EF73WX0XP7HGR3HE8RZDM",
+  "ts": "2026-11-23T14:55:26.334Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "Ib12d89443ed74611"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "arngz's plan reasons say \"display nil\" for a desk display that has no name"
+  }
+}

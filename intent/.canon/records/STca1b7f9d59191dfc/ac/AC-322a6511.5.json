@@ -1,6 +1,6 @@
 {
   "id": "AC-322a6511.5",
-  "text": "Finished carries `first_outcome` beside `first`, failed, unseen or skipped (log_test), and the toast shows an unseen first as not found (toast_test, ic's).",
+  "text": "Finished carries `first_outcome` beside `first`: \"failed\", \"unseen\" or \"skipped\", what the entry `first` names was, in the tally's own keys, and none when `first` is a refusal's or a failed run's words (log_test).",
   "kind": "test",
   "state": {
     "is": "computed"
