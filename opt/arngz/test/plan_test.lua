@@ -437,9 +437,9 @@ do
     tops == nil and string.find(tostring(terr), twice_want, 1, true) ~= nil, terr or ops_text(tops))
 end
 
--- AT-93ea7f8a.2: a lone desktop whose record is not current takes a new desktop beside it:
--- apply's created wait reads the live list, never the record (WP 93ea7f8a, in
--- place of issue 0077's refusal).
+-- AT-93ea7f8a.2: a lone desktop whose record is not current takes a new desktop beside it,
+-- in place of issue 0077's refusal (WP 93ea7f8a). That apply then takes one fresh read
+-- of the world and waits on nothing else is log_test.lua's arm 17 (AT-93ea7f8a.7).
 do
   local w = base_world()
   local vscode = table.remove(w.screens[1].spaces, 2).windows[1]

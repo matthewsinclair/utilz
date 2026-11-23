@@ -21,10 +21,13 @@
 #                      response FAKE_HS_DELAY seconds later (default 1), as
 #                      the engine does for apply (D20 as amended)
 #   scheduled-never    say the verb was scheduled, exit 0, and never answer
-#   unsettled-once     answer the first ask as the engine's quiet gate does
+#   unsettled-once     answer the test's first ask as the engine's quiet gate does
 #                      while the displays settle (WP 93ea7f8a): unsettled,
 #                      with FAKE_HS_WAIT and FAKE_HS_BEGAN; every later ask
 #                      as ok does
+#   unsettled-moved    as unsettled-once, but the second ask is unsettled
+#                      too, its wait begun again at FAKE_HS_BEGAN_AGAIN, as a
+#                      faulty engine's would be; every later ask as ok does
 #
 # Every ask is also kept as FAKE_HS_LOG/request.<n>.json, counting from 1, for
 # a verb that asks more than once.
@@ -54,6 +57,17 @@ echo "$asks" >"$FAKE_HS_LOG/asks"
 cp "$request" "$FAKE_HS_LOG/request.$asks.json"
 response="$(dirname "$request")/response.json"
 
+# The engine's quiet gate's answer while the displays settle (WP 93ea7f8a):
+# unsettled, with FAKE_HS_WAIT and the start given, written aside and
+# renamed, as the engine writes its answers.
+answer_unsettled() {
+  local verb
+  verb="$(yq -r '.verb' "$request")"
+  V="$verb" W="${FAKE_HS_WAIT:?}" B="$1" yq -n -o json \
+    '{"status": "ok", "verb": strenv(V), "unsettled": {"wait": strenv(W), "began": strenv(B)}}' >"$response.partial"
+  mv "$response.partial" "$response"
+}
+
 case "${FAKE_HS_MODE:-ok}" in
   ok) cp "$FAKE_HS_RESPONSE" "$response"; echo "arngz: ok observe" ;;
   none) exit 0 ;;
@@ -77,16 +91,19 @@ case "${FAKE_HS_MODE:-ok}" in
     echo "arngz: scheduled $verb"
     ;;
   unsettled-once)
-    if [[ -e "$FAKE_HS_LOG/unsettled" ]]; then
-      cp "$FAKE_HS_RESPONSE" "$response"
+    if [[ "$asks" == 1 ]]; then
+      answer_unsettled "${FAKE_HS_BEGAN:?}"
     else
-      : >"$FAKE_HS_LOG/unsettled"
-      verb="$(yq -r '.verb' "$request")"
-      # Written aside and renamed, as the engine writes its answers.
-      V="$verb" W="${FAKE_HS_WAIT:?}" B="${FAKE_HS_BEGAN:?}" yq -n -o json \
-        '{"status": "ok", "verb": strenv(V), "unsettled": {"wait": strenv(W), "began": strenv(B)}}' >"$response.partial"
-      mv "$response.partial" "$response"
+      cp "$FAKE_HS_RESPONSE" "$response"
     fi
+    echo "arngz: ok"
+    ;;
+  unsettled-moved)
+    case "$asks" in
+      1) answer_unsettled "${FAKE_HS_BEGAN:?}" ;;
+      2) answer_unsettled "${FAKE_HS_BEGAN_AGAIN:?}" ;;
+      *) cp "$FAKE_HS_RESPONSE" "$response" ;;
+    esac
     echo "arngz: ok"
     ;;
   *) echo "fake-hs: unknown FAKE_HS_MODE '$FAKE_HS_MODE'" >&2; exit 64 ;;

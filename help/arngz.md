@@ -182,7 +182,7 @@ It exits 0 and prints the name when one desk fits; 1 when none does; and 2 when 
 
 ### diff
 
-`diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. It exits 0 when this machine already matches the desk, and 1 when it does not. An `unseen` entry, an app running with no window to match, is printed and counts against nothing, as in `apply`'s report, unless a window could not be read just then. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
+`diff <desk>` prints what `apply` would do, one line per change with its reason, and changes nothing: it asks Hammerspoon for a plan, never for an action. Like `which` and a plain `discover`, it reads the displays as they are, and does not wait for them to settle. It exits 0 when this machine already matches the desk, and 1 when it does not. An `unseen` entry, an app running with no window to match, is printed and counts against nothing, as in `apply`'s report, unless a window could not be read just then. A window discover found on a hidden space may read as `unseen` when Accessibility cannot name it at that moment.
 
 ### doctor and init
 

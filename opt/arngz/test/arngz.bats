@@ -2736,6 +2736,58 @@ log_events() {
   assert_output "which"
 }
 
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: an engine's wait that is not a time is refused, exit 2, after one ask and writing nothing" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs unsettled-once "$response"
+  export FAKE_HS_WAIT=soon FAKE_HS_BEGAN=1795000000.125
+  run_arngz discover --save zeop2
+  assert_exit_code 2
+  assert_output_contains "the engine asked discover to wait '$FAKE_HS_WAIT' s from '$FAKE_HS_BEGAN', which are not times"
+  [ ! -e "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ] || fail "a desk was written: $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  [ ! -e "$FAKE_HS_LOG/request.2.json" ] || fail "the engine was asked again after a wait that is not a time"
+}
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: an engine's wait whose start is not a time is refused, exit 2, after one ask and writing nothing" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs unsettled-once "$response"
+  export FAKE_HS_WAIT=0.1 FAKE_HS_BEGAN=later
+  run_arngz discover --save zeop2
+  assert_exit_code 2
+  assert_output_contains "the engine asked discover to wait '$FAKE_HS_WAIT' s from '$FAKE_HS_BEGAN', which are not times"
+  [ ! -e "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ] || fail "a desk was written: $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  [ ! -e "$FAKE_HS_LOG/request.2.json" ] || fail "the engine was asked again after a start that is not a time"
+}
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: an engine's wait whose start moves is refused, exit 2, after two asks and writing nothing" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs unsettled-moved "$response"
+  export FAKE_HS_WAIT=0.1 FAKE_HS_BEGAN=1795000000.125 FAKE_HS_BEGAN_AGAIN=1795000003.250
+  run_arngz discover --save zeop2
+  assert_exit_code 2
+  assert_output_contains "it began at $FAKE_HS_BEGAN, and now at $FAKE_HS_BEGAN_AGAIN"
+  [ ! -e "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ] || fail "a desk was written: $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  [ -e "$FAKE_HS_LOG/request.2.json" ] || fail "the engine was not asked again after the first wait"
+  [ ! -e "$FAKE_HS_LOG/request.3.json" ] || fail "the engine was asked a third time after its wait moved"
+}
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: diff does not wait for the displays to settle: its request asks for no quiet" {
+  local response
+  response="$(engine_response plan off_cell_world base_desk)"
+  fake_hs ok "$response"
+  catalogue
+  run_arngz diff zeop1
+  assert_exit_code 1
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "null"
+}
+
 # AT-93ea7f8a.6
 @test "AT-93ea7f8a.6: an hs that exits on its own just after its response is let exit, and one that hangs is stopped after the grace (F3)" {
   local took

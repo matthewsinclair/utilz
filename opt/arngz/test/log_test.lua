@@ -27,15 +27,22 @@
 -- only just started waits, with its waiting point, before it reads; one whose
 -- displays keep changing refuses at the limit, having read nothing; auto's
 -- which answers unsettled, reading and pointing nothing, until they settle;
--- and discover --save refuses at the limit with no desk.
+-- and discover --save refuses at the limit with no desk. A watcher from
+-- another tree that is replaced while its own start raises leaves no watcher
+-- behind. And an apply that creates a desktop takes its first read after the
+-- creates as it comes, sends its step point before the create and its
+-- waiting point for new desktops, names the desktop with its id, and logs
+-- com.apple.spaces after the creates and at its end.
 --
 -- WHAT IT DOES NOT HOLD, said so it is not read into a green. The waiting
--- points of the creates, the launches and the unseen windows, the step
--- points, and rule 2's "a step goes out before its work", come only from an
--- apply that creates, launches or moves, and the hand that moves a window is
--- not faked here; nor is the read after the creates. Those are read in the
--- code (steps_before, waiting, wait_ended) and proven live on hv's dev tree,
--- where the toasts show the steps.
+-- points of the launches and the unseen windows, their step points and those
+-- of the moves, and rule 2's "a step goes out before its work" for them, come
+-- only from an apply that launches or moves, and the hand that moves a window
+-- is not faked here. Those are read in the code (steps_before, waiting,
+-- wait_ended) and proven live on hv's dev tree, where the toasts show the
+-- steps. The read after the creates is held only as the stubbed observe
+-- gives it: no arm drives the real observe through the fake, so none is red
+-- against a29b75da's wait on order_error, a field only that base's observe set.
 --
 -- HOW THE INJECTION WORKS is engine_test.lua's: every hs reference in
 -- arngz.lua resolves at call time, so a fake in _G.hs is what the engine sees.
@@ -205,7 +212,11 @@ local function new_fake()
     screen = {
       watcher = { new = function(fn)
         f.watcher = fn
-        return { start = function(self) return self end, stop = function() end }
+        -- f.watch_fail, when set, is what a start raises.
+        return { start = function(self)
+          if f.watch_fail then error(f.watch_fail, 0) end
+          return self
+        end, stop = function() end }
       end },
       allScreens = function() return { built_in } end,
       primaryScreen = function() return built_in end,
@@ -712,6 +723,133 @@ arm("the displays settle", function()
       and string.find(tostring(response.error), "did not settle", 1, true) ~= nil
       and point_names(recs, "R-SAVE") == "start finished",
     response and tostring(response.error) .. " / " .. point_names(recs, "R-SAVE"))
+end)
+
+-- ------------------------ arm 16: a watcher that cannot restart (93ea7f8a)
+-- AT-93ea7f8a.4: a watcher from another tree is stopped, then cleared before
+-- this tree's own starts, so a start that raises leaves no watcher behind
+-- (cc's code read, item 2). With none, the settle counts from when its wait
+-- began, as plan_test.lua's settle block shows of P.quiet_verdict.
+
+arm("a watcher that cannot restart", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  local stopped = false
+  _G.arngz_screens = { module = "another tree", log = log, started = f.clock, timers = {},
+    watcher = { stop = function() stopped = true end } }
+  f.watch_fail = "the display watcher would not start"
+  M.observe = function() return world_fixture() end
+  run_engine(f, { verb = "observe", options = {}, run = "R-RESTART", log = log })
+  local left = rawget(_G, "arngz_screens")
+  check("restart: the watcher being replaced is stopped", stopped)
+  check("restart: a start that raises leaves no watcher behind", left == nil, left and tostring(left.module))
+  check("restart: the failed start is an error record",
+    find(records(log), "error", "the display watcher could not start: " .. f.watch_fail) ~= nil,
+    last_line(records(log)))
+end)
+
+-- --------------------------- arm 17: the read after the creates (93ea7f8a)
+-- AT-93ea7f8a.7: after the creates, apply takes one fresh read of the world,
+-- its first, and waits on nothing else. A desktop it has just created, which
+-- no record holds yet, is in that read's live order, and the run goes on, its
+-- points start, observed, planned, step, waiting and finished, the step
+-- before its work. AT-53ef07aa.3: the desktop is recorded with its id, from
+-- the live list once the creation returns, and com.apple.spaces is logged
+-- after the creates and at the run's end, so the log shows macOS had not
+-- recorded it by then. observe is stubbed, as in every apply arm here: after
+-- the create it returns the new desktop live, in live order, with
+-- com.apple.spaces without it, and numbers its reads. So the arm is not red
+-- at a29b75da, whose created wait read order_error, a field only that base's
+-- own observe set and this stub sets none of. What it guards is the created
+-- phase's condition against a world in live order, and its first read.
+
+arm("the read after the creates", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local before, after = {}, {}
+  for i, sp in ipairs(base.spaces) do
+    before[i] = sp.id
+    after[i] = sp.id
+  end
+  local made = before[#before] + 1
+  after[#after + 1] = made
+  local record = L.recorded({ { ["Display Identifier"] = base.uuid, ["Current Space"] = { ManagedSpaceID = before[1] },
+    Spaces = spaces_of(before) } })
+  f.live = before
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.addSpaceToScreen = function()
+    f.live = after
+    return true
+  end
+  local reads_after = 0
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    w.recorded = record
+    local s = w.screens[1]
+    s.live = f.live
+    s.order_source = "record"
+    if #f.live > #before then
+      -- Numbered in a field only the log reads, so each block of displays
+      -- says which read after the create it came from.
+      reads_after = reads_after + 1
+      w.hammerspoon = "read " .. reads_after .. " after the create"
+      s.spaces[#s.spaces + 1] = { id = made, ordinal = #f.live, type = "user", uuid = "SPACE-" .. made,
+        active = false, windows = {} }
+      s.order_source, s.order_note = "live", "no list in com.apple.spaces holds exactly these desktops"
+    end
+    return w
+  end
+  local desk = F.base_desk()
+  local spaces = desk.displays[1].spaces
+  spaces[#spaces + 1] = { name = "spare", apps = {} }
+  local response = run_engine(f, { verb = "apply", desk = desk, options = {}, run = "R-CREATED", log = log })
+  local recs = records(log)
+  check("created: apply answers ok, exit 0, with the desktop made",
+    response and response.status == "ok" and response.exit == 0
+      and find(recs, "report", (#after - #before) .. " desktop(s) created") ~= nil,
+    response and (tostring(response.status) .. " / " .. tostring(response.exit) .. " / " .. last_line(recs)))
+  local done = find(recs, "wait", "created: done after")
+  local logged = find(recs, "displays", "after creating:", "engine")
+  check("created: the read after the creates is its first, taken as it comes, never waited past",
+    done ~= nil and find(recs, "wait", "created: timed out") == nil
+      and logged ~= nil and logged.text:find("Hammerspoon read 1 after the create", 1, true) ~= nil,
+    (done and done.text or "no wait ended done") .. " / " .. (logged and logged.text or "no after creating block"))
+  check("created: the desktop is recorded with its id, from the live list once the creation returns",
+    find(recs, "op", "created desktop " .. made) ~= nil, last_line(recs))
+  local step_at, made_at
+  for i, r in ipairs(recs) do
+    if not step_at and r.run == "R-CREATED" and r.event == "point" and r.text:match("^step") then step_at = i end
+    if not made_at and r.event == "op" and r.text:find("created desktop " .. made, 1, true) then made_at = i end
+  end
+  check("created: the points go out start, observed, planned, step, waiting, finished, the step before its create",
+    point_names(recs, "R-CREATED") == "start observed planned step waiting finished"
+      and step_at ~= nil and made_at ~= nil and step_at < made_at,
+    point_names(recs, "R-CREATED"))
+  -- A block of the engine's displays records runs from its "<label>:" line to
+  -- the next displays line.
+  local function in_block(label, event, text)
+    local inside = false
+    for _, r in ipairs(recs) do
+      if r.event == "displays" then
+        inside = r.source == "engine" and r.text:sub(1, #label + 1) == label .. ":"
+      elseif inside and r.event == event and r.text:find(text, 1, true) then
+        return true
+      end
+    end
+    return false
+  end
+  local uuid = tostring(base.uuid)
+  for _, label in ipairs({ "after creating", "end" }) do
+    check("created: com.apple.spaces is logged " .. label .. ", the new desktop live and filed under no record",
+      in_block(label, "live", uuid .. ": " .. table.concat(after, " "))
+        and in_block(label, "record", uuid .. ": " .. table.concat(before, " ") .. " (current ")
+        and in_block(label, "filed", made .. " under none"))
+  end
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))

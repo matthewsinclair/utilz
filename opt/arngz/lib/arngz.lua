@@ -547,6 +547,12 @@ function M.watch(lg)
         local ended, terr = pcall(function() t:stop() end)
         if not ended then note(lg, "error", "a snapshot timer of the watcher being replaced would not stop: " .. tostring(terr)) end
       end
+      -- Stopped or not, it is cleared before the new one starts: one that
+      -- would not stop is no better a clock than one that did. A start that
+      -- raises below then leaves no watcher, and the settle counts from when
+      -- its wait began, never from a last change that no longer moves (cc's
+      -- code read of WP 93ea7f8a, item 2).
+      rawset(_G, "arngz_screens", nil)
     end
     local state = { module = MODULE, log = lg.path, started = hs.timer.secondsSinceEpoch(), timers = {} }
     state.watcher = hs.screen.watcher.new(function()
