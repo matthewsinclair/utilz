@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 09:22Z
+heartbeat_at: 2026-11-23 10:13Z
 status: active
-focus: "23 Nov: ST589246c, arngz's run log, toasts and desk-change fix (hv decision 10). dc holds 53ef07aa, the run log. Its design, the thread's overview and the progress points are recorded and with vc for a read against hv's words; the points are with ic to agree. No code before vc's word. 93ea7f8a waits for hv's diagnosis run on the dev tree. After the arngz fixes, ST0031/01 and /02, in the same release. Every run is booked at the Desk through devbin-vc after vc reads its bytes."
+focus: "23 Nov: ST589246c/93ea7f8a, arngz's desk-change fix (with F3 and F4, hv decision 11): code banked on dc/93ea (wt-93ea, a763184a), vc checked; hv runs run-93ea-2.sh by hand; HOLD for hv's compact, then the landing on vc's word. 53ef07aa waits on a live create (AC .3). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 ---
 
@@ -13,7 +13,8 @@ claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 
 ## DOING
 
-_(none)_
+- ST589246c/93ea7f8a, the desk-change fix: code banked on branch dc/93ea in ~/Devel/scratch/utilz-dc/wt-93ea at a763184a (READY st5892/READY-93ea.md; vc checked a763184a). hv runs st5892/run-93ea-2.sh by hand; on its green, land the net change a29b75da..a763184a as one commit on vc's word (message drafted at st5892/tools/subject-93ea-land.txt), then mint AT-93ea7f8a.1 to .6 and satisfy the test ACs. AC .3 and .9 wait for hv's live run on the dev tree.
+- ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.
 
 ## TODO
 
@@ -21,11 +22,12 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- No test, build or landing until hv's compact has bounced and vc gives the word on 93ea's landing (vc, 23 Nov 2026, on hv's word).
 
 ## Watch-outs
 
 - No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. The ST0031/03 exception (vc decision 80) is spent: it landed at b8e527d8 and closed at 001b8c0d. Touching build_kind again, eg for ST0031/01's re-read against the vendored 0.1.19 app-sign, needs a fresh go from hv. (edited)
+- The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew.
 
 ## Decisions
 

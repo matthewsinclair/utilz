@@ -1,0 +1,15 @@
+{
+  "id": "01M83YB29X616651ZV3W747G3V",
+  "ts": "2026-11-23T10:13:33.117Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew."
+  }
+}

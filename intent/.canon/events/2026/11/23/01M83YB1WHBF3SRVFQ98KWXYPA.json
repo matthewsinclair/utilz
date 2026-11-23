@@ -1,0 +1,15 @@
+{
+  "id": "01M83YB1WHBF3SRVFQ98KWXYPA",
+  "ts": "2026-11-23T10:13:32.689Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST589246c/93ea7f8a, the desk-change fix: code banked on branch dc/93ea in ~/Devel/scratch/utilz-dc/wt-93ea at a763184a (READY st5892/READY-93ea.md; vc checked a763184a). hv runs st5892/run-93ea-2.sh by hand; on its green, land the net change a29b75da..a763184a as one commit on vc's word (message drafted at st5892/tools/subject-93ea-land.txt), then mint AT-93ea7f8a.1 to .6 and satisfy the test ACs. AC .3 and .9 wait for hv's live run on the dev tree."
+  }
+}

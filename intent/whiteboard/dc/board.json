@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "02346c8e-1026-49af-b928-04d0f4037c1b",
-    "heartbeat_at": "2026-11-23T09:22:34.894Z",
+    "heartbeat_at": "2026-11-23T10:13:45.280Z",
     "status": "active",
-    "focus": "23 Nov: ST589246c, arngz's run log, toasts and desk-change fix (hv decision 10). dc holds 53ef07aa, the run log. Its design, the thread's overview and the progress points are recorded and with vc for a read against hv's words; the points are with ic to agree. No code before vc's word. 93ea7f8a waits for hv's diagnosis run on the dev tree. After the arngz fixes, ST0031/01 and /02, in the same release. Every run is booked at the Desk through devbin-vc after vc reads its bytes.",
+    "focus": "23 Nov: ST589246c/93ea7f8a, arngz's desk-change fix (with F3 and F4, hv decision 11): code banked on dc/93ea (wt-93ea, a763184a), vc checked; hv runs run-93ea-2.sh by hand; HOLD for hv's compact, then the landing on vc's word. 53ef07aa waits on a live create (AC .3). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
       "ST589246c823732446/53ef07aa",
       "ST589246c823732446/93ea7f8a"
@@ -906,6 +906,38 @@
       "archived_at": "2026-11-10T17:47:14.780Z",
       "recorded_at": "2026-11-10T11:01:15.540Z",
       "edited_at": "2026-11-10T13:40:24.078Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 24,
+      "text": "ST589246c/93ea7f8a, the desk-change fix: code banked on branch dc/93ea in ~/Devel/scratch/utilz-dc/wt-93ea at a763184a (READY st5892/READY-93ea.md; vc checked a763184a). hv runs st5892/run-93ea-2.sh by hand; on its green, land the net change a29b75da..a763184a as one commit on vc's word (message drafted at st5892/tools/subject-93ea-land.txt), then mint AT-93ea7f8a.1 to .6 and satisfy the test ACs. AC .3 and .9 wait for hv's live run on the dev tree.",
+      "state": "live",
+      "recorded_at": "2026-11-23T10:13:32.689Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 25,
+      "text": "ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.",
+      "state": "live",
+      "recorded_at": "2026-11-23T10:13:32.831Z"
+    },
+    {
+      "node": "dc",
+      "kind": "hold",
+      "seq": 34,
+      "text": "No test, build or landing until hv's compact has bounced and vc gives the word on 93ea's landing (vc, 23 Nov 2026, on hv's word).",
+      "state": "live",
+      "recorded_at": "2026-11-23T10:13:32.974Z"
+    },
+    {
+      "node": "dc",
+      "kind": "watchout",
+      "seq": 7,
+      "text": "The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew.",
+      "state": "live",
+      "recorded_at": "2026-11-23T10:13:33.117Z"
     }
   ],
   "sent": [
@@ -3648,6 +3680,26 @@
       "id": "01M83DAB7G5W0TA9FW85SR8SBP",
       "sender": "vc",
       "handled_at": "2026-11-23T05:28:33.111Z"
+    },
+    {
+      "id": "01M83GFCRN3KBHC9NAMAT1PBV0",
+      "sender": "ic",
+      "handled_at": "2026-11-23T10:14:11.194Z"
+    },
+    {
+      "id": "01M83JXNZG83CZW02ZW7BRYQAJ",
+      "sender": "vc",
+      "handled_at": "2026-11-23T10:14:11.330Z"
+    },
+    {
+      "id": "01M83TCD604B0ZYHXVARYE5AYW",
+      "sender": "vc",
+      "handled_at": "2026-11-23T10:14:11.330Z"
+    },
+    {
+      "id": "01M83Y8R0C3GNFQNCGWY68G7M9",
+      "sender": "vc",
+      "handled_at": "2026-11-23T10:14:11.330Z"
     }
   ]
 }

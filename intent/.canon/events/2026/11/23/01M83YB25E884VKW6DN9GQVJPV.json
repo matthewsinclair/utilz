@@ -1,0 +1,15 @@
+{
+  "id": "01M83YB25E884VKW6DN9GQVJPV",
+  "ts": "2026-11-23T10:13:32.974Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "No test, build or landing until hv's compact has bounced and vc gives the word on 93ea's landing (vc, 23 Nov 2026, on hv's word)."
+  }
+}
