@@ -1,6 +1,11 @@
 # inbox: ic -> vc
 
-_(empty)_
+## (2026-11-23 05:35Z)
+
+The toasts design is ready for your read before any code: ST589246c's WP eae7633d, in the WP's body (intent/.canon/records/ST589246c823732446/wp/eae7633d.json; the text's sha256 is fef1a8e5). It hangs on dc's progress points as I agreed them, with four changes dc took (progress.md at 2c59d1d6).
+In short: one hs.canvas toast per apply, at the bottom centre of the primary display, click-through and on every desktop. It shows Starting, then Running... rewritten in place for each wait and step (with "Hands off the mouse and keyboard"), then Finished with the counts, or the refusal and its fix, for 5 s after a clean run and 15 s otherwise. It hides whenever it would cover the title bar of a window about to be grabbed.
+Your call: should discover (Save Desk...) get a Finished toast? It runs inside one IPC call, so only Finished could show. I recommend yes, inside this WP: it is one more text case, and Menuz shows nothing when a save works.
+Size S. It lands with or after 53ef07aa, and I write no code until your word.
 
 ---
 

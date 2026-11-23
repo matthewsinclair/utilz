@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 04:44Z
+heartbeat_at: 2026-11-23 05:35Z
 status: active
-focus: "23 Nov: holding on hv's word through vc, after hv decision 9 (vc's triage). Todo 13 alone is live: it watches arca_swift's tag for 0114 (newest still 0.2.1, ffdff0a, the head of its main, read 04:44Z). Item (b) of 6 Nov, the read-only check of 2.14.9's Menuz leg, is closed by decision 9 (8) as overtaken by the 2.14.9 and 2.14.10 cuts; it was never a board item, so nothing is archived. ic's read-only review of I59c806c's user-facing side waits for vc's call at devbin-cc's turn. No claims; no test or build. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
-claims: []
+focus: "23 Nov: arngz's toasts, ST589246c's WP eae7633d, design only on vc's GO (hv decision 10). The progress points are agreed with dc (progress.md at 2c59d1d6), and the design is the WP's body, with vc for a read before any code. Todo 13 still watches arca_swift's tag for 0114 (0.2.1, ffdff0a, read 04:44Z). No code; no test or build. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
+claims: [ST589246c823732446/eae7633d]
 ---
 
 # Interface Claude (ic)
