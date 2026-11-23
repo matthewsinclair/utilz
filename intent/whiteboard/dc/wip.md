@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 12:01Z
+heartbeat_at: 2026-11-23 12:53Z
 status: active
-focus: "23 Nov, after hv's compact: ST589246c/93ea7f8a and 53ef07aa closed by their close records, on vc's GO; next, wt-93ea removed by the fold's checks and branches dc/93ea and dc/53ef deleted (vc's yes); then ST0031/01's code in a worktree off main on /02's bank, under (A). hv's call on main's red CI (qrcode in showreel) is open; if hv picks (a), the fix is dc's, its own commit in /01's booking and push. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md."
+focus: "23 Nov, localfold for hv's compact of 12:52Z, no release: ST0031/01 with /02 at dc/st0031-01 eec4b900, READY checked by vc, driver SOUND; its slot was denied at the compact, so on the bounce re-ask with the same named set, run, then land on vc's word. hv's qrcode pick is open. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md, under the 12:52Z fold."
 claims: [ST0031/01, ISSUE:Ie8e55e87057927e0]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0031/01, ISSUE:Ie8e55e87057927e0]
 
 ## DOING
 
-- ST0031/01, retire Utilz's CI readers and post-cut into Devbin 0.1.28's core, under (A) (hv decision 14): the WP body is the re-plan of 23 Nov, and the formula stays Utilz's until I59c806c. Issue Ie8e55e8 rides it. Next: the code in a worktree off main on ST0031/02's bank (~/Devel/scratch/utilz-dc/st0031-02-v2.patch), one booked run of install_lib.bats, install_guards.bats, formula.bats and macos.bats with probe (b), then /01 and /02 land together on vc's word. Only after 93ea's close, and never two bookings at once.
+- ST0031/01 with /02, under (A) (hv decision 14): the code is on branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (b5baa351 /02's bank, 1cebad3c /02's critic fold, eec4b900 /01; base 377b3fba; 17 paths, change 29fcc052), the READY checked by vc and the driver run-st0031-01.sh (7705761a) read SOUND. Its slot 01M847DK was denied at hv's compact of 12:52Z, so on the bounce: re-ask with the same named set (heavy, the text naming network, cargo and bats), run, END. Then /01 and /02 land on vc's word, with the records: AC-01.1, AC-01.3 on probe (b), /02 on the push's CI, I59c806c's body section, and a low issue for prez.bats running in no CI job. Steps in ~/Devel/scratch/utilz-dc/RESUME.md. (edited)
 
 ## TODO
 
