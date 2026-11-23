@@ -1,0 +1,17 @@
+{
+  "id": "01M84G82ZHNM95WTQ50GF8K3F2",
+  "ts": "2026-11-23T15:26:29.873Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN: commit the Dock ruling's records by commit-checked.sh with commit-dock.subject. vc checked the READY at HEAD c690b919: the 8 paths of wrote-dock.out, all changed, change 264078894b3d14e2206e186be9d42e2730d8b9567be60f385d357f1f32b72e60, index empty, and the subject ends on the (C) line. design.md is d2415774: section 5 says a Dock failure binds every display for the run, and AC-322a6511.4 says so, held by plan_test and engine_test's arm 10. Send vc the sha. The driver, run-stca1b.sh bac09793, read in full, is SOUND as it stands: it refuses an empty HEAD_WANT, pins HEAD and a clean tree, runs bats --tap over the three suites in their own process group, kills at 1200 s (the last whole runs took 109 to 118 s), and takes every count from the TAP. At the GO, its one change is HEAD_WANT, which vc checks by hashing it back to bac09793.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

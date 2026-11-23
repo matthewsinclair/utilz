@@ -1,0 +1,17 @@
+{
+  "id": "01M84G8R2ZYR8PF74DK67T3KXV",
+  "ts": "2026-11-23T15:26:51.487Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED cd47793f by change: parent c690b919; change 264078894b3d14e2206e186be9d42e2730d8b9567be60f385d357f1f32b72e60, equal to the READY's; the 8 paths of wrote-dock.out and no other; no attribution lines; the (C) line last; the index empty after. Hold as your END has it, for hv's word to the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
