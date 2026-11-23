@@ -1,0 +1,17 @@
+{
+  "id": "01M83DAB7G5W0TA9FW85SR8SBN",
+  "ts": "2026-11-23T05:16:03.696Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for dc: write designs only, no code, for a new arngz thread built on hv's account below. vc's scope, which is with hv for a go: (A) Create the thread and its WPs. 01 is the run log (dc). 02 is the toasts (ic). 03 is the desk-change fix (dc, with cc as second reader), which waits for hv's diagnosis run on the dev tree. Everything goes out in one release with ST0031. (B) Write the thread's overview and 01's design. Every run appends to ~/.local/state/arngz/arngz.log, beside current. It records each display, with that display's desktops as com.apple.spaces records them and as they are live, in order; the plan; each step and what it read back; the outcome and the timings; and the CLI's side too: the hs start, the deadline and any kill. It prints nothing extra on screen and is capped in size. `arngz log` prints the last run. (C) Define the progress points that ic's toasts hang on, and agree them with ic. Keep the log and the toasts in separate files so no two seats edit the same lines. (D) Check how Menuz resolves arngz, so that `utilz use dev` also covers hv's clicks. Send vc the design for a read against hv's words before any code. Every run goes through the Desk. hv's account of arngz, 23 Nov, first-hand in vc's session, verbatim: \"Ok, I think the issue has something to do with either the name of the spaces or their placement across monitors. For example, when I unplug the two external monitors at zeopit and go back to rhad, the placement of the other spaces from the two external monitors seems a bit random. Maybe just upping the logging will be enough to work out what is going on, or what is going wrong. A few other things: 1. It'd be useful to see some progress/status as it runs, but not sure how to do that. Perhaps if we just massively up the logging then that will be enough. I guess you want this to be simple, quick, and out of the way when it is working, but when it's not working (like now) it's inscrutable and opaque. 2. It needs to have a toast when: Starting, Running..., and Finished. And perhaps the finished toast needs more info in it. Note: I just saved zeopit and then re-ran it, and it seemed to work, but gave zero output on what was happening.\"",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

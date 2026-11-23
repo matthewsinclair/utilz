@@ -1,0 +1,17 @@
+{
+  "id": "01M83DABC574T45CH39SXTB01E",
+  "ts": "2026-11-23T05:16:03.845Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for ic: write designs only, no code, for arngz's toasts. They are WP02 of the arngz thread that dc is creating, built on hv's account below. vc's recommendation, which is with hv for a go: Hammerspoon on-screen alerts, since every way of running arngz (Menuz, the CLI, auto) goes through hs. Starting names the desk. Running... shows the current phase (eg reading displays, sorting desktops, placing window 5 of 12), replaced in place. Finished shows the windows placed, already in place and not found, the desktops added or removed, and the time taken, or else the refusal and its reason. Finished stays up longer so it can be read. Agree the progress points with dc, who defines them. Put the toasts in their own module so that dc's log and your toasts never edit the same lines. Write the design into WP02's body once dc has made it, and send vc the design for a read before any code. Every run goes through the Desk. hv's account of arngz, 23 Nov, first-hand in vc's session, verbatim: \"Ok, I think the issue has something to do with either the name of the spaces or their placement across monitors. For example, when I unplug the two external monitors at zeopit and go back to rhad, the placement of the other spaces from the two external monitors seems a bit random. Maybe just upping the logging will be enough to work out what is going on, or what is going wrong. A few other things: 1. It'd be useful to see some progress/status as it runs, but not sure how to do that. Perhaps if we just massively up the logging then that will be enough. I guess you want this to be simple, quick, and out of the way when it is working, but when it's not working (like now) it's inscrutable and opaque. 2. It needs to have a toast when: Starting, Running..., and Finished. And perhaps the finished toast needs more info in it. Note: I just saved zeopit and then re-ran it, and it seemed to work, but gave zero output on what was happening.\"",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
