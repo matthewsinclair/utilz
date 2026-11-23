@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 11:43Z
+heartbeat_at: 2026-11-23 12:08Z
 status: active
-focus: "23 Nov, localfold for hv's compact (hv's word, first-hand in ic's session, 11:43Z), no release. arngz's toasts (ST589246c/eae7633d) closed at a47961d6, checked by vc by change; no claims. Todo 13 only: arca_swift has no new tag (0.2.1, ffdff0a), and its main at 88a1e56 adds Intent upgrades and 0003's issue note, no fix (read 11:43Z). The primary is live for hv: no code edits there. On the bounce: /in-session with the pickup, then hold for vc's word; resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
-claims: []
+focus: "23 Nov: second reader of STca1b7f9 (cc's arngz thread: apps with windows on several desktops, and a route past a full-screen desktop) in place of dc, vc decision 111. Design read r1 sent to cc and vc at 12:03Z, and cc folds it in. Next: the WPs' criteria at cc's BACK, then the code before it lands. Issue I4eacd29 filed and claimed: a window title can reach arngz's Finished toast; it rides STca1b7f9's change and its run. Todo 13: arca_swift has no new tag. No code edits in the live primary. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
+claims: [ISSUE:I4eacd29e03a5e888]
 ---
 
 # Interface Claude (ic)
