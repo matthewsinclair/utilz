@@ -1,0 +1,16 @@
+{
+  "id": "01M841GW8Y2HTKSVQJMM48MBNM",
+  "ts": "2026-11-23T11:09:09.278Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 24,
+    "text": "ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, checked by vc by change, proven by hv's run of st5892/run-93ea-2.sh (180 of 180), and live on hv's re-run, where AC .9 is met on the log (rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. The close: the head the WP body's \"The close's follow-up head\" names (help's diff sentence, plan_test.lua's comment, M.watch's clear, engine_ask_quiet's two fault arms, the two gap arms with a new AT .7), built on dc/93ea in wt-93ea, one booked run of arngz.bats and engine.bats, landed on vc's word; then vc's read for AC .7, the close records (AC .9, AC .7, AT .7, the extended notes) and wp done."
+  }
+}

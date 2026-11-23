@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 10:34Z
+heartbeat_at: 2026-11-23 11:09Z
 status: active
-focus: "23 Nov: ST589246c/93ea7f8a landed at 0666e2f2 (vc checked by change); its records commit (ATs .1 to .6, AC .3, the WP body's settle words) goes to vc as READY; hv's live run under way (AC-93ea7f8a.9, AC-53ef07aa.3, AC-eae7633d.1); then the close's follow-up head on one booked run. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "23 Nov: ST589246c/93ea7f8a landed (0666e2f2) and live-proven (AC .9 on hv's re-run); its close follow-up head is designed (WP body amended) and goes on dc/93ea in wt-93ea, one booked run, then the close records and wp done. ST0031/01 re-planned, waiting on hv's (A) or (B). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 
 ## DOING
 
-- ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, the net change of dc/93ea a29b75da..a763184a, checked by vc by change, and proven by hv's own run of st5892/run-93ea-2.sh (TAP st5892/runs/93ea-20261123T101352Z.tap, 180 of 180). Its records: AT-93ea7f8a.1 to .6 green, AC .3 satisfied by reading as vc ruled, and the WP body quoting the settle refusal in the code's words. Open: AC .9 on hv's live run, and AC .7 on vc's read of the close's docs commit. At the close, one follow-up head on one booked run carries help's sentence on diff, plan_test.lua:441's comment, cc's items (2) and (3) from ~/Devel/scratch/utilz-cc/93ea-code-read.md, dc's two gap arms (an apply whose create com.apple.spaces never lists still finishes; diff's request carries no options.quiet), and whatever the live run calls for. wt-93ea and dc/93ea stay for that head. (edited)
+- ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, checked by vc by change, proven by hv's run of st5892/run-93ea-2.sh (180 of 180), and live on hv's re-run, where AC .9 is met on the log (rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. The close: the head the WP body's "The close's follow-up head" names (help's diff sentence, plan_test.lua's comment, M.watch's clear, engine_ask_quiet's two fault arms, the two gap arms with a new AT .7), built on dc/93ea in wt-93ea, one booked run of arngz.bats and engine.bats, landed on vc's word; then vc's read for AC .7, the close records (AC .9, AC .7, AT .7, the extended notes) and wp done. (edited)
 - ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.
 
 ## TODO
@@ -22,7 +22,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- ST0031/01's records and code wait until hv chooses (A) or (B) for its re-plan (vc put it to hv on 23 Nov 2026 with a rec for (A); draft at ~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md). On (A) or (B): record the body and the criteria on vc's YOUR TURN, claim ST0031/01, then build on /02's bank.
 
 ## Watch-outs
 

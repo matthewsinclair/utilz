@@ -1,0 +1,15 @@
+{
+  "id": "01M841GWT50S3WK9P9DWJ5CDYS",
+  "ts": "2026-11-23T11:09:09.829Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0031/01's records and code wait until hv chooses (A) or (B) for its re-plan (vc put it to hv on 23 Nov 2026 with a rec for (A); draft at ~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md). On (A) or (B): record the body and the criteria on vc's YOUR TURN, claim ST0031/01, then build on /02's bank."
+  }
+}

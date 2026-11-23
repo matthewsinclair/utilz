@@ -116,6 +116,45 @@ help/arngz.md's "A display just attached" bullet is replaced with these points:
   - log_test.lua: the order's source, the counted line and the observed `order` (AT-93ea7f8a.3); the quiet phase and the gate, with the watcher's state injected (AT-93ea7f8a.4).
   - arngz.bats, with the fake hs's `unsettled-once` and `reply-then-exit`: the gate from the CLI (AT-93ea7f8a.5); F3 and F4 (AT-93ea7f8a.6).
 
+## The close's follow-up head (23 Nov 2026, on vc's GO)
+
+hv's live re-run met AC .9. In vc's read of the log, every step of every switch and carry read back as predicted, in rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488 and auto 20261123T105129Z-53589, and no run refused on order. It called for nothing more of this WP. Two failures in it are not this WP's, and they go to hv: a held carry across a full-screen space, which P.move_legs refuses, and Appgate's title bar, which has no grab point.
+
+So the landing at 0666e2f2 is followed by one head on dc/93ea, proven by one booked run of arngz.bats and engine.bats. It carries six things.
+
+1. **help/arngz.md's diff section** gains one sentence: diff reads the displays as they are and does not wait for them to settle, as which and a plain discover do not. AC .7 names when each verb waits, and AC .10 names diff.
+2. **plan_test.lua's comment on AT-93ea7f8a.2's lone create** still says apply's created wait reads the live list. It is reworded: after the creates, apply makes one fresh read and waits on nothing else (the critics' fold).
+3. **M.watch clears the global once the old watcher has stopped** (cc's code read, item 2).
+   - **Today:** M.watch stops a watcher from another tree, starts its own, and sets `arngz_screens` only once that start succeeds. A start that raises leaves the stopped watcher in the global, and the settle counts quiet from a last change that no longer moves.
+   - **Cleared:** a failed start leaves no watcher, and quiet counts from when the wait began, as the settle's section says.
+   - **The arm**, in log_test's watcher arm: a watcher from another tree is in the global and the new start raises. The old watcher is stopped, the global is empty, and the error is recorded.
+   - **Red on main by reading:** the global still holds the stopped watcher.
+4. **engine_ask_quiet's two fault refusals get arms** (cc's item 3), in arngz.bats through the fake hs. Each guards code already there, and reading shows each arm fails without its check.
+   - **A wait that is not a time**, with FAKE_HS_WAIT not a number, refuses discover --save: exit 2, naming it, after one ask and writing nothing. Without the check, `sleep` is handed the word and its own refusal speaks instead.
+   - **A start that moves** refuses it: exit 2, naming both starts, after two asks and writing nothing. A new fake mode, `unsettled-moved`, answers unsettled twice with two starts. Without the check, the CLI asks a third time, the fake answers ok, and the desk is saved.
+5. **Gap arm 1, the one read after the creates** (AC .6's first half), in log_test.
+   - **The arm:** the desk wants a desktop the screen lacks. The fake's addSpaceToScreen adds it to the live list. observe, stubbed as in the other apply arms, returns it after the create in live order, with no record holding it.
+   - **What it checks:** the apply finishes with the desktop created, and its wait for new desktops ends done on its first read, never timed out.
+   - **How it fails:** reading shows it fails against any created-phase condition that rejects a world in live order, since such a condition would observe again for up to 3 s and end timed out.
+   - **It is not red at a29b75da itself.** The base waited on `order_error`, which only the base's own observe set, and the stub sets no such field. This is the arm vc asked to be told of.
+6. **Gap arm 2, diff does not wait** (AC .10), in arngz.bats.
+   - **The arm:** diff's recorded request carries no `options.quiet`.
+   - **How it fails:** it is green at the base too. Reading shows it fails if diff asked through engine_ask_quiet, whose first act writes `.quiet = {}` into the options (arngz:1037). There is no planted fault (vc decision 67).
+
+**The ATs:**
+
+- The arm of item 3 extends AT-93ea7f8a.4 (log_test.lua, AC .5).
+- Those of items 4 and 6 extend AT-93ea7f8a.5 (arngz.bats, AC .10).
+- Item 5 is a new AT-93ea7f8a.7 (log_test.lua, AC .6).
+- AT .2's and AT .5's notes, which say the two gaps rest on reading, are extended to name the arms that now cover them.
+
+**Then:**
+
+- vc reads help's sentence and the comment for AC .7.
+- The close records satisfy AC .9 from hv's run ids and AC .7 on vc's read, record AT .7 and the extended notes, and the WP is done.
+
+**Files:** help/arngz.md, opt/arngz/lib/arngz.lua (M.watch), opt/arngz/test/plan_test.lua (the comment), opt/arngz/test/log_test.lua, opt/arngz/test/arngz.bats, and opt/arngz/test/fixtures/fake-hs.
+
 ## Acceptance
 
 1. Where exactly one recorded list holds a display's live desktops, observe takes that list's order, and logs it when the live order differs (16 Oct's shape). Where none does, it takes the live order and logs the record as stale (hv's unplugged and replugged lists). Where two do, it takes the live order and logs both. plan and discover refuse for none of these.
