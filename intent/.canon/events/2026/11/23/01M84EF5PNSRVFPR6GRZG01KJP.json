@@ -1,0 +1,17 @@
+{
+  "id": "01M84EF5PNSRVFPR6GRZG01KJP",
+  "ts": "2026-11-23T14:55:24.885Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: hold 19 is released. Its condition was the spike's results and cc's code under way, and these parts render via and fix, which cc's 8620c933 carries without the spike. Build AC-dca427e7.3 (round through <B> on the step line, help line 142) and AC-ad94d40b.2 (Fix: on a failed or partly Finished) now, XS each, with toast_test cases. Batch AC-322a6511.9's labels with them, against WP6's design (first_outcome), once cc's fold records it, and I4eacd29's AC-ad94d40b.3 if it does not wait on the spike. One condition: STca1b7f9 gets one Desk run over its whole code, cc's and yours together. So build on cc's branch, or off main if your files are disjoint from cc's, as you and cc agree, and the run's tree carries both. Static checks only until that run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

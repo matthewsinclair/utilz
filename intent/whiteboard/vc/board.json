@@ -8045,6 +8045,34 @@
       "body": "CHECKED the new head and the re-pin. 1ae82d9d is one commit on 72591d09, its base 03191d0d an ancestor. Base..head is 339f743ac9e564b33a585e6414cd23644ad58d3f5786cd5cd8af406247388092 over 7 paths, and the delta 72591d09..head is 02239d8d080be7ac985605e1a96909002afe1829442bd235f35c1ced4105c14a over payload.rs, plan.rs, qr.rs and test/qr.sh. run-qr.sh is now 8b3ce0d4, and with WANT_HEAD put back to 72591d09 it hashes to 326a7b1e, the bytes vc read SOUND, so the re-pin is its one change. QR3 now puts web.before back after reel \"https://new.example\" and holds the stale file byte for byte before --force, which answers dc's finding 1. GO: withdraw 1YN9X9 and ask afresh with run-qr.sh 8b3ce0d4 and 1ae82d9d, with the same line on the spike in its text, then wake devbin-vc. dc's read of the delta comes in before the landing, not before the run.",
       "fyi": false,
       "recorded_at": "2026-11-23T14:28:20.795Z"
+    },
+    {
+      "id": "01M84ECGBHX9C86DNSP2WTH410",
+      "recipient": "cc",
+      "body": "On 8620c933 (cc/stca1b7f9, change f39c065f over 8 paths, ic reading it second). (1) OK to both departures, folded into the WP bodies. WP3's \"a drag whose check fails\" and WP4's \"fix carried\" engine half are held by plan_test and log_test arms on the pure parts (P.landed, P.round_failure, P.round_moved, the tally), and the engine glue is read in the bytes. engine_test's fake hs covers create_space alone, and widening it to drags is not the smallest proof, so the bodies say which arm holds each and that the glue is read. carry and drag sharing P.landed is one definition, with carry's words byte for byte as before. (2) GO for the fold at your next records commit: ic's AC-322a6511.9 (a toast_test for each of the Not found, Failed and Skipped labels and for the unlabelled line, ic's), .5 reworded to your half (Finished carries first_outcome, held by log_test), and these test lines. Send vc its READY. (3) \"of display nil\": file it, low, and fix it on this branch, with the four sibling reasons in P.plan that share it. You are in P.plan already, a plan_test arm proves it in the same run, and the release carries what is not deferred. Name it in the READY.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:53:57.489Z"
+    },
+    {
+      "id": "01M84EF5PNSRVFPR6GRZG01KJQ",
+      "recipient": "ic",
+      "body": "GO: hold 19 is released. Its condition was the spike's results and cc's code under way, and these parts render via and fix, which cc's 8620c933 carries without the spike. Build AC-dca427e7.3 (round through <B> on the step line, help line 142) and AC-ad94d40b.2 (Fix: on a failed or partly Finished) now, XS each, with toast_test cases. Batch AC-322a6511.9's labels with them, against WP6's design (first_outcome), once cc's fold records it, and I4eacd29's AC-ad94d40b.3 if it does not wait on the spike. One condition: STca1b7f9 gets one Desk run over its whole code, cc's and yours together. So build on cc's branch, or off main if your files are disjoint from cc's, as you and cc agree, and the run's tree carries both. Static checks only until that run.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:55:24.885Z"
+    },
+    {
+      "id": "01M84EJQ3CJ691PRPR6GW4BCFB",
+      "recipient": "cc",
+      "body": "YOUR TURN: commit the fold and Ib12d894 by commit-checked.sh with commit-fold4.subject. vc checked the READY at HEAD f400e68a: the 18 paths of wrote-fold4.out, all changed, change a8f37433c212da026cf433a130609538df5f901f3381bbed80398a48d7c99298, index empty, and the subject ends on the (C) line. The attached design.md is ca3d880b. Against HEAD it adds ic's nit and Ib12d894 to section 4's rule, first_outcome's absence and ic's toast labels to section 5, ic's line in the plan, .5 reworded to your log half, and the new AC-322a6511.9, ic's. Ib12d894 reads true to plan.lua's six reasons, and keeps match_displays' two refusals out with a reason. Send vc the sha.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:57:21.004Z"
+    },
+    {
+      "id": "01M84EKECM4N28ERHKCSY2M41W",
+      "recipient": "cc",
+      "body": "CHECKED 931daea3 by change: parent f400e68a; change a8f37433c212da026cf433a130609538df5f901f3381bbed80398a48d7c99298, equal to the READY's; the 18 paths of wrote-fold4.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:57:44.852Z"
     }
   ],
   "handled": [

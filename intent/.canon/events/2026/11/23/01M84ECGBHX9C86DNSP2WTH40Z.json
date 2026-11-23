@@ -1,0 +1,17 @@
+{
+  "id": "01M84ECGBHX9C86DNSP2WTH40Z",
+  "ts": "2026-11-23T14:53:57.489Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "On 8620c933 (cc/stca1b7f9, change f39c065f over 8 paths, ic reading it second). (1) OK to both departures, folded into the WP bodies. WP3's \"a drag whose check fails\" and WP4's \"fix carried\" engine half are held by plan_test and log_test arms on the pure parts (P.landed, P.round_failure, P.round_moved, the tally), and the engine glue is read in the bytes. engine_test's fake hs covers create_space alone, and widening it to drags is not the smallest proof, so the bodies say which arm holds each and that the glue is read. carry and drag sharing P.landed is one definition, with carry's words byte for byte as before. (2) GO for the fold at your next records commit: ic's AC-322a6511.9 (a toast_test for each of the Not found, Failed and Skipped labels and for the unlabelled line, ic's), .5 reworded to your half (Finished carries first_outcome, held by log_test), and these test lines. Send vc its READY. (3) \"of display nil\": file it, low, and fix it on this branch, with the four sibling reasons in P.plan that share it. You are in P.plan already, a plan_test arm proves it in the same run, and the release carries what is not deferred. Name it in the READY.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

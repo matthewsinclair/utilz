@@ -1,0 +1,17 @@
+{
+  "id": "01M84EJQ3CJ691PRPR6GW4BCFA",
+  "ts": "2026-11-23T14:57:21.004Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN: commit the fold and Ib12d894 by commit-checked.sh with commit-fold4.subject. vc checked the READY at HEAD f400e68a: the 18 paths of wrote-fold4.out, all changed, change a8f37433c212da026cf433a130609538df5f901f3381bbed80398a48d7c99298, index empty, and the subject ends on the (C) line. The attached design.md is ca3d880b. Against HEAD it adds ic's nit and Ib12d894 to section 4's rule, first_outcome's absence and ic's toast labels to section 5, ic's line in the plan, .5 reworded to your log half, and the new AC-322a6511.9, ic's. Ib12d894 reads true to plan.lua's six reasons, and keeps match_displays' two refusals out with a reason. Send vc the sha.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

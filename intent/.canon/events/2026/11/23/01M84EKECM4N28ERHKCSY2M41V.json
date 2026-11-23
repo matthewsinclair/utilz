@@ -1,0 +1,17 @@
+{
+  "id": "01M84EKECM4N28ERHKCSY2M41V",
+  "ts": "2026-11-23T14:57:44.852Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 931daea3 by change: parent f400e68a; change a8f37433c212da026cf433a130609538df5f901f3381bbed80398a48d7c99298, equal to the READY's; the 18 paths of wrote-fold4.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
