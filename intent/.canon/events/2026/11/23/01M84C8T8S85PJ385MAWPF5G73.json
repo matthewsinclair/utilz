@@ -1,0 +1,14 @@
+{
+  "id": "01M84C8T8S85PJ385MAWPF5G73",
+  "ts": "2026-11-23T14:16:59.418Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "STb8e4fb60638e2a9c/AC-702cceb9.1"
+  },
+  "payload": {
+    "text": "showreel qr <dir> writes a QR for each socials entry with a url, at plan::qr_path, and one for session.venue_url when plan::venue_url gives one, at plan::venue_qr_path, in config order. Each file starts with <!--showreel-qr:<url>--> naming the trimmed address it encodes, then the renderer's <svg> element with no XML declaration; and on that reel payload.rs's check raises none of its QR warnings and embeds every one."
+  }
+}

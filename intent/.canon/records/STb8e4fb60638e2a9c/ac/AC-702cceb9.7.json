@@ -1,6 +1,6 @@
 {
   "id": "AC-702cceb9.7",
-  "text": "The workspace builds with no unused dependency warning: acceptance.sh's AT09 counts no clippy warnings or errors, in the Desk's run of the landing.",
+  "text": "Main's CI, on Rust 1.100.0, is green after hv's push, with no unused dependency warning for qrcode, and its run id is this criterion's evidence. Local Rust 1.99.1 has no such lint, so a local AT09 counting no clippy warnings or errors is a regression check only.",
   "kind": "test",
   "state": {
     "is": "computed"

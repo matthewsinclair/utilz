@@ -1,0 +1,14 @@
+{
+  "id": "01M84C8TQ250EN6DMD1FENFFV6",
+  "ts": "2026-11-23T14:16:59.875Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "STb8e4fb60638e2a9c/AC-702cceb9.7"
+  },
+  "payload": {
+    "text": "Main's CI, on Rust 1.100.0, is green after hv's push, with no unused dependency warning for qrcode, and its run id is this criterion's evidence. Local Rust 1.99.1 has no such lint, so a local AT09 counting no clippy warnings or errors is a regression check only."
+  }
+}

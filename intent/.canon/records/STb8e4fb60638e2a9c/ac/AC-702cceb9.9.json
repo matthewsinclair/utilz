@@ -1,0 +1,8 @@
+{
+  "id": "AC-702cceb9.9",
+  "text": "Issue I88af1f3 (cc's): payload.rs's check warns on a socials QR that is there but cannot be read as text, in cc's words: QR for <label> could not be read as text, so it is not embedded, then the path and the reason, then fix: showreel qr <dir> --force. The row embeds no QR, and a QR that is not there still says nothing.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

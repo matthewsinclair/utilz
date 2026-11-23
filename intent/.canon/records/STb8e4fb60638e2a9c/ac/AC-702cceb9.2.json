@@ -1,6 +1,6 @@
 {
   "id": "AC-702cceb9.2",
-  "text": "Without --force, a file already at a target is kept byte for byte, and the verb's line for it says whether its stamp matches the config, names another address, or is missing, naming --force for the last two. With --force, every target is written anew.",
+  "text": "Without --force, a file already at a target is kept byte for byte, and the verb's line for it says whether its stamp matches the config, names another address, is missing, or the file could not be read as text, naming --force for the last three. With --force, every target is written anew.",
   "kind": "test",
   "state": {
     "is": "computed"

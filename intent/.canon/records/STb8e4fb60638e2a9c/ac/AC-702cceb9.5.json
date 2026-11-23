@@ -1,6 +1,6 @@
 {
   "id": "AC-702cceb9.5",
-  "text": "QR_STAMP and the stamp's reader each have one definition, in src/qr.rs, used by the verb and by payload.rs's check, whose words are unchanged. showreel's dependencies stay as ST0017 AC-3.9 has them, qrcode with default features off and svg, unchanged in Cargo.toml and in tests/manifest.rs.",
+  "text": "QR_STAMP, the stamp's reader and the words for an unreadable QR each have one definition, in src/qr.rs, used by the verb and by payload.rs's check, whose words are unchanged but for issue I88af1f3's one warning (AC-702cceb9.9). showreel's dependencies stay as ST0017 AC-3.9 has them, qrcode with default features off and svg, unchanged in Cargo.toml and in tests/manifest.rs.",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"
