@@ -1,0 +1,14 @@
+{
+  "id": "01M83XWS2Q3HVWVQ8W157YYYMA",
+  "ts": "2026-11-23T10:05:44.920Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-93ea7f8a.6"
+  },
+  "payload": {
+    "text": "After the creates apply waits for nothing but one fresh read of the world, never for com.apple.spaces, since each create is done only once its own readback lists the new desktop; and a lone desktop can take a new one beside it."
+  }
+}

@@ -59,7 +59,7 @@ What guards the order, and what does not (cc's item 4):
 ## Creates
 
 - **The trigger is unchanged**: a display with fewer user desktops than the desk asks for gets the difference, after the settle.
-- **The created wait follows the live list.** After create_space, apply observes again until every created id is on its display's live list, within the existing 3 s. It no longer waits for com.apple.spaces. That display's record is then stale until macOS records the new desktop, if it does before the next display change, so its order comes from the live list until then. The run's log shows com.apple.spaces after the creates and at the end, which answers AC-53ef07aa.3.
+- **After the creates, one fresh read, and no wait.** Each create is done only once its own count readback lists the new desktop (exec_create_space), so apply then reads the world once more for the replan, trying a failed read again for up to the existing 3 s, and waits for nothing else (critic-lua: a wait on the created ids could never go red). It no longer waits for com.apple.spaces. That display's record is then stale until macOS records the new desktop, if it does before the next display change, so its order comes from the live list until then. The run's log shows com.apple.spaces after the creates and at the end, which answers AC-53ef07aa.3.
 - **Where macOS puts a created desktop** (cc's read-ahead, point 5): the create record names its id and the live list after it. The plan's ordinal for it, have+1, is confirmed by that list or fails at the step readback.
 
 ## Surplus desktops (decision 10; cc's item 5)
@@ -91,7 +91,7 @@ help/arngz.md's "A display just attached" bullet is replaced with these points:
 
 ## The log
 
-- **Each display's order says where it came from**: `(record)`, with how the live order differs when it does, or `(live; <why>)`. The observed point's `order` field is `record` when every display's order is the record's, else `live on <n> of <m> displays` (progress.md).
+- **Each display's order says where it came from**: `(record)`, with how the live order differs when it does, or `(live; <why>)`. The observed point's `order` field is `record` when every display's order is the record's, else `of <m> displays: live on <n>, unread on <k>`, naming only the counts that are not 0, and `no displays` when there are none (progress.md). A display whose desktops could not be read has no order, and is never counted as the record's.
 - **The padding** (on vc's word): every displays record printed com.apple.spaces' ~50 collapsed entries, mostly one display's repeated. They are now one line, `record collapsed: <n> entries, under <display> x<count>, ...`, by display in the order each first appears. The built-in's own UUID has such entries, so the line does not call them detached displays. Each list that holds desktops is still written whole.
 
 ## F3 and F4 (in this WP, hv decision 11: "And yes, include all fixes.")
@@ -102,12 +102,12 @@ help/arngz.md's "A display just attached" bullet is replaced with these points:
 ## Not in this WP
 
 - **A check that two desks' counts agree across an unplug**, eg in `arngz doctor`: hv's call, if hv wants one.
-- **opt/arngz/test/acceptance.sh's D22 check** now always passes, since no order refusal is left. It is Python, on hold 24's list (dc's census, 30 Oct), so it is left as it stands.
+- **opt/arngz/test/acceptance.sh's D22 check** could no longer go red, since no order refusal is left (critic-lua), so it is deleted: five lines of Python fewer, on hold 24's list (dc's census, 30 Oct). The run log's order lines, with each display's source, replace it in a hand run.
 
 ## Files
 
 - `opt/arngz/lib/plan.lua`: P.order_spaces takes the three cases and says which source it used; 0077's create refusal goes; unread() refuses an id on two displays' live lists; P.quiet_verdict, the one settle rule.
-- `opt/arngz/lib/arngz.lua`: observe keeps the order's source; the quiet phase, apply's first; the quiet gate in M.run for which and discover asked with `options.quiet`; the created wait on the live list, in place of spaces_agree.
+- `opt/arngz/lib/arngz.lua`: observe keeps the order's source; the quiet phase, apply's first; the quiet gate in M.run for which and discover asked with `options.quiet`; the read after the creates, in place of spaces_agree.
 - `opt/arngz/lib/log.lua`: each display's order source; the collapsed entries as one counted line; the observed point's `order`.
 - `opt/arngz/arngz`: engine_ask_quiet, which auto's which and discover --save ask through; F3's grace; F4's per-verb deadline.
 - `help/arngz.md`.
@@ -123,7 +123,7 @@ help/arngz.md's "A display just attached" bullet is replaced with these points:
 3. A move whose step reads back a desktop other than the one the order predicted fails by name, and is not reported done.
 4. Full-screen spaces are ordered with the rest, and desk ordinals skip them (hv's built-in list, with 423 and 121 at positions 5 and 6).
 5. apply waits for 5 s of display quiet, counted from the later of the watcher's last change and its start, before it observes. Displays still changing at 20 s refuse the apply, with nothing created, moved or placed, saying how long they had been unchanged.
-6. The created wait ends when the live list shows each new desktop, and a lone desktop can take a new one beside it.
+6. After the creates apply waits for nothing but one fresh read of the world, never for com.apple.spaces, since each create is done only once its own readback lists the new desktop; and a lone desktop can take a new one beside it.
 7. help/arngz.md says the rule, what guards it, what rests on it alone, and when each verb waits.
 8. The displays records say each order's source, write the collapsed entries as one counted line, and the observed point's `order` says where the orders came from.
 9. Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walks' results are recorded, and any change they call for is made.
