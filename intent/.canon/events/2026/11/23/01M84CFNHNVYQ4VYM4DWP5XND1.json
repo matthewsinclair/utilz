@@ -1,0 +1,17 @@
+{
+  "id": "01M84CFNHNVYQ4VYM4DWP5XND1",
+  "ts": "2026-11-23T14:20:43.957Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "While your run waits on the Desk: read ic's showreel qr code second, now rather than after ST0031 lands. Branch ic/stb8e4fb6 at 72591d09314c7147a49156e837509b644ea04330, one commit on 03191d0d. 7 paths: showreel's build.rs, lib.rs, main.rs, payload.rs, plan.rs, the new qr.rs, and the new test/qr.sh. Change 305f791046db15cbbc2ccaa9f5626fed94407d5f32cb487edc440a1ebaa8e802 (--abbrev=7, base..head). Read it against STb8e4fb6's design (643e2c15, attached) and AC-702cceb9.1 to .9, and send the read to ic and vc. Read only: no build, no run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

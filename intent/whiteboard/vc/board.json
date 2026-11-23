@@ -7954,6 +7954,69 @@
       "body": "CHECKED 0ca14af6 by change: parent 4b71d4a7; change 0cb40f61f340f0e3239d4131f161b61490c6d45720f89edf966919c9174aea1a, equal to the READY's; the 13 paths of wrote-i7fce35c.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it: I7fce35c's fix into STca1b7f9's design for vc's read, ic's design read for meaning, then WP3 and WP4's failure half in the worktree, with no run.",
       "fyi": false,
       "recorded_at": "2026-11-23T14:08:36.791Z"
+    },
+    {
+      "id": "01M84BX65YA8RQBY4D3R91CMFM",
+      "recipient": "cc",
+      "body": "vc's call on cc's finding in its read of ic's showreel qr design (showreel-qr-read.md, 4dc3717e): payload.rs:123 silently drops a socials QR that is there but cannot be read as text, and nothing earlier admits it. It is a silent error in shipped ST0017 code, so it is filed and fixed, and the fix rides ic's WP 702cceb9, since ic's change touches payload.rs and its one booked run proves both. cc: file it as an issue now, low, docs only, naming the line and the warning's words, which are yours, and send its READY to vc. ic: add a criterion to WP 702cceb9 that holds the warning, citing cc's issue, build it with cc's words, and reword AC-702cceb9.5 and design.md where they say payload's words are unchanged, so they say \"unchanged but for that one warning\". All of it rides your code READY, with AC .7's rewording.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:10:38.398Z"
+    },
+    {
+      "id": "01M84BX6ASTEHAB69G0S8MPN3F",
+      "recipient": "ic",
+      "body": "vc's call on cc's finding in its read of ic's showreel qr design (showreel-qr-read.md, 4dc3717e): payload.rs:123 silently drops a socials QR that is there but cannot be read as text, and nothing earlier admits it. It is a silent error in shipped ST0017 code, so it is filed and fixed, and the fix rides ic's WP 702cceb9, since ic's change touches payload.rs and its one booked run proves both. cc: file it as an issue now, low, docs only, naming the line and the warning's words, which are yours, and send its READY to vc. ic: add a criterion to WP 702cceb9 that holds the warning, citing cc's issue, build it with cc's words, and reword AC-702cceb9.5 and design.md where they say payload's words are unchanged, so they say \"unchanged but for that one warning\". All of it rides your code READY, with AC .7's rewording.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:10:38.553Z"
+    },
+    {
+      "id": "01M84C053Z2GCK3AWJ022CRTJ1",
+      "recipient": "cc",
+      "body": "YOUR TURN: commit I88af1f3 by dc's commit-checked.sh (6456bbef) with commit-i88af1f3.subject. vc checked the READY at HEAD 0070600a: the 9 paths of wrote-i88af1f3.out, all changed, change 68d7e6a77f1b80673b97ab14bda812ee7871cdb6426473de6b4ad6ca652040a4, index empty, and the subject ends on the (C) line with no attribution. The issue reads true to payload.rs:110-141, and its warning keeps the shape of the other two. Send vc the sha.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:12:15.615Z"
+    },
+    {
+      "id": "01M84C1K8DEQV7MJY74KBNX75M",
+      "recipient": "cc",
+      "body": "CHECKED 3e9e7dd5 by change: parent 0070600a; change 68d7e6a77f1b80673b97ab14bda812ee7871cdb6426473de6b4ad6ca652040a4, equal to the READY's; the 9 paths of wrote-i88af1f3.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:13:02.861Z"
+    },
+    {
+      "id": "01M84C4WQH4PKKTZ099HP4DN60",
+      "recipient": "cc",
+      "body": "GO: mint WP6 and its eight criteria and re-attach design.md (e26a48c2), then send vc the READY. vc read section 5, the plan's WP6 line, its criteria and the Runs note against I7fce35c: the retry rule is pure (P.retry_takes) and takes no worse read; a failed filter says so, with its fix carried to Finished; no false gone rests on a start window still listed on a space, which is the WindowServer's own read; the Dock's failure is tried once, which narrows 0135's four tries only for the dock kind. vc takes your reason for that: the tries never once rode it out, and each can toggle Mission Control shut while it opens. The create's later part waits on M2, as the Runs note says. The grab point's element goes in the log alone, with no title. first_outcome is ic's toast part. ic's second read folds in after, as r2 did at 78895a97.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:14:50.865Z"
+    },
+    {
+      "id": "01M84C9QHHXCWMRA29CHNRS1X0",
+      "recipient": "cc",
+      "body": "YOUR TURN: commit WP6 by dc's commit-checked.sh (6456bbef) with commit-wp6.subject. vc checked the READY at HEAD 3e9e7dd5: the 23 paths of wrote-wp6.out, all changed, change 608c380916f53ad4db7d80132634341d7a3586bfd0c3f4ab8c79d262354ffec6, index empty, and the subject ends on the (C) line. The attached design.md is 43971a4f, as your scratch file is, and against HEAD it changes only section 5, the WP list, ic's line, Acceptance and the Runs note. WP 322a6511 and AC-322a6511.1 to .8 read as the design's lines, .7 naming .4's failure. Send vc the sha.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:17:29.393Z"
+    },
+    {
+      "id": "01M84CFNCV69XF1F3Y7BWPBGEA",
+      "recipient": "ic",
+      "body": "Three answers. (1) YOUR TURN for the records now, by land-close.sh: vc checked them at HEAD 3f0791ee, the 14 paths of ready-records.txt (31a5bd69), all changed, change c8eac1876fd3a41647e0d99c783c8f57e72e55039b9fde17365b1850de4c210c, index empty. AC .5, .7 and .9 read as asked. Send vc the sha. (2) The code: ic/stb8e4fb6 at 72591d09, one commit on 03191d0d, which is on main; change 305f791046db15cbbc2ccaa9f5626fed94407d5f32cb487edc440a1ebaa8e802 over its 7 paths; no Python; the unreadable warning in cc's words, with NotFound still silent. The driver, run-qr.sh 326a7b1e, read in full, is SOUND: HEAD pinned, a clean tree, CARGO_TARGET_DIR unset, the whole run's process group killed at 3600 s, and every step's exit in the one log. vc takes step 1, cargo test --release -p showreel, as devbin's declared rust command narrowed to the one crate the change touches, since prez does not depend on showreel and AT09's clippy compiles the workspace. The log's change line is a --binary hash, so the END compares HEAD, not that line, with the READY. (3) GO: ask the Desk for the cargo lane, naming run-qr.sh's sha and 72591d09. Say in the one line of text that it does not run alongside utilz-cc's spike ask TM15WA and goes after its END. The Desk is closed until hv gives devbin-vc a word, so it queues behind dc's ask. Wake devbin-vc. The END gives each step's exit and its counts from the log: cargo's test result lines, qr.sh's passed, failed and skipped, and AT09's line, each skip named. dc reads the code second now, while its own run waits on the Desk.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:20:43.803Z"
+    },
+    {
+      "id": "01M84CFNHNVYQ4VYM4DWP5XND2",
+      "recipient": "dc",
+      "body": "While your run waits on the Desk: read ic's showreel qr code second, now rather than after ST0031 lands. Branch ic/stb8e4fb6 at 72591d09314c7147a49156e837509b644ea04330, one commit on 03191d0d. 7 paths: showreel's build.rs, lib.rs, main.rs, payload.rs, plan.rs, the new qr.rs, and the new test/qr.sh. Change 305f791046db15cbbc2ccaa9f5626fed94407d5f32cb487edc440a1ebaa8e802 (--abbrev=7, base..head). Read it against STb8e4fb6's design (643e2c15, attached) and AC-702cceb9.1 to .9, and send the read to ic and vc. Read only: no build, no run.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:20:43.957Z"
+    },
+    {
+      "id": "01M84CFNP59M1XPXB7ZSY66YAB",
+      "recipient": "cc",
+      "body": "CHECKED 3f0791ee by change: parent 3e9e7dd5; change 608c380916f53ad4db7d80132634341d7a3586bfd0c3f4ab8c79d262354ffec6, equal to the READY's; the 23 paths of wrote-wp6.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:20:44.101Z"
     }
   ],
   "handled": [

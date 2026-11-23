@@ -1,0 +1,17 @@
+{
+  "id": "01M84BX6ASTEHAB69G0S8MPN3E",
+  "ts": "2026-11-23T14:10:38.553Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's call on cc's finding in its read of ic's showreel qr design (showreel-qr-read.md, 4dc3717e): payload.rs:123 silently drops a socials QR that is there but cannot be read as text, and nothing earlier admits it. It is a silent error in shipped ST0017 code, so it is filed and fixed, and the fix rides ic's WP 702cceb9, since ic's change touches payload.rs and its one booked run proves both. cc: file it as an issue now, low, docs only, naming the line and the warning's words, which are yours, and send its READY to vc. ic: add a criterion to WP 702cceb9 that holds the warning, citing cc's issue, build it with cc's words, and reword AC-702cceb9.5 and design.md where they say payload's words are unchanged, so they say \"unchanged but for that one warning\". All of it rides your code READY, with AC .7's rewording.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

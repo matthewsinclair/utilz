@@ -1,0 +1,17 @@
+{
+  "id": "01M84C053Z2GCK3AWJ022CRTJ0",
+  "ts": "2026-11-23T14:12:15.615Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN: commit I88af1f3 by dc's commit-checked.sh (6456bbef) with commit-i88af1f3.subject. vc checked the READY at HEAD 0070600a: the 9 paths of wrote-i88af1f3.out, all changed, change 68d7e6a77f1b80673b97ab14bda812ee7871cdb6426473de6b4ad6ca652040a4, index empty, and the subject ends on the (C) line with no attribution. The issue reads true to payload.rs:110-141, and its warning keeps the shape of the other two. Send vc the sha.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

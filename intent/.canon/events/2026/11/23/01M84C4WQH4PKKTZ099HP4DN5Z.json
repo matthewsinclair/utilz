@@ -1,0 +1,17 @@
+{
+  "id": "01M84C4WQH4PKKTZ099HP4DN5Z",
+  "ts": "2026-11-23T14:14:50.865Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: mint WP6 and its eight criteria and re-attach design.md (e26a48c2), then send vc the READY. vc read section 5, the plan's WP6 line, its criteria and the Runs note against I7fce35c: the retry rule is pure (P.retry_takes) and takes no worse read; a failed filter says so, with its fix carried to Finished; no false gone rests on a start window still listed on a space, which is the WindowServer's own read; the Dock's failure is tried once, which narrows 0135's four tries only for the dock kind. vc takes your reason for that: the tries never once rode it out, and each can toggle Mission Control shut while it opens. The create's later part waits on M2, as the Runs note says. The grab point's element goes in the log alone, with no title. first_outcome is ic's toast part. ic's second read folds in after, as r2 did at 78895a97.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

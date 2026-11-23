@@ -1,0 +1,17 @@
+{
+  "id": "01M84C1K8DEQV7MJY74KBNX75K",
+  "ts": "2026-11-23T14:13:02.861Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 3e9e7dd5 by change: parent 0070600a; change 68d7e6a77f1b80673b97ab14bda812ee7871cdb6426473de6b4ad6ca652040a4, equal to the READY's; the 9 paths of wrote-i88af1f3.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

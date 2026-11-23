@@ -1,0 +1,17 @@
+{
+  "id": "01M84CFNP59M1XPXB7ZSY66YAA",
+  "ts": "2026-11-23T14:20:44.101Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 3f0791ee by change: parent 3e9e7dd5; change 608c380916f53ad4db7d80132634341d7a3586bfd0c3f4ab8c79d262354ffec6, equal to the READY's; the 23 paths of wrote-wp6.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
