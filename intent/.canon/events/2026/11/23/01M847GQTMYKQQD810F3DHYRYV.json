@@ -1,0 +1,15 @@
+{
+  "id": "01M847GQTMYKQQD810F3DHYRYV",
+  "ts": "2026-11-23T12:53:56.181Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "hv's three answers, put to hv in vc's session on 23 Nov before hv left: (1) main's red CI, showreel's unused qrcode: (a) drop it and reword the two fix lines naming showreel qr, which does not exist (dc's and vc's rec), (b) allow the lint, or (c) build showreel qr; (2) STca1b7f9's WP5, Appgate's grab point: leave it out (cc's and vc's rec) or add it; (3) the cut's gates, now that a release dry run runs none: check all alone (dc's and vc's rec) or test estate back. Released for each when hv answers it; vc records each ruling on hv's board."
+  }
+}
