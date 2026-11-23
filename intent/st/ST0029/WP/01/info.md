@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: xtrct goldens from the current Python
 scope: S
-status: WIP
+status: Not Started
 ---
 
 # WP-01: xtrct goldens from the current Python

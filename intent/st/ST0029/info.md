@@ -1,7 +1,8 @@
 ---
 st_id: ST0029
 title: Retire Python from Utilz
-status: WIP
+status: On Hold
+status_reason: parked by hv; resumes on hv's word
 created: 2026-10-26
 completed:
 ---
