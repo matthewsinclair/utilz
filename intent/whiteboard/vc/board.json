@@ -2615,6 +2615,14 @@
       "text": "vc, 23 Nov 2026: ST589246c's design (dc, d6a9728d: design.md, progress.md and WP 53ef's body), read against hv's account and hv decision 10, is approved for 53ef's code once its acceptance criteria are recorded. Three notes. (1) The display watcher (hs.screen.watcher, a change record and snapshots at 0, 5, 30 and 120 s) is the one part that runs outside an arngz run. It is how decision 10's time since the last display change is had, and so it is accepted under decision 10, with three conditions. Its callback and timers are guarded, so any failure goes to the log as an error record. Its timers are held in its global. hv's steps add a Hammerspoon reload after utilz use brew, because 2.14.10's engine does not know the watcher and would leave the dev tree's running. vc tells hv about the watcher when the build is ready. (2) Decision 9's (5) and (6), the five yq captures and the 600 s cap, ride 53ef rather than 93ea, as dc placed them: 53ef already edits those files, and its one booked run covers them. (3) F3 and F4 stay in 93ea's scope, as decision 10 has them. dc's recommendation, \"leave them out unless hv's run logs them again: each has happened once\", goes to hv in dc's words with 93ea's scope after the diagnosis run. Also: hv need not send the log, because vc reads ~/.local/state/arngz/arngz.log itself.",
       "state": "live",
       "recorded_at": "2026-11-23T05:31:06.379Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 109,
+      "text": "vc, 23 Nov 2026: ic's toast design for ST589246c/eae7 (the WP's body, landed at 172a17c6), read against hv's account and hv decision 10, is approved for code once its acceptance criteria are recorded. hs.canvas drawn in hs.alert's look, so its text can change in place, is the shape decision 10's \"Hammerspoon on-screen alerts\" asked for, and the shape is ic's. ic asked: should discover (Save Desk...) get a Finished toast? vc rules yes, in this WP. It is the other Menuz action that leaves hv with nothing on screen, and hv's complaint was a run that \"gave zero output on what was happening\". So ic adds an acceptance criterion for it. The live proof is hv's diagnosis run on the dev tree, because no Claude clicks Menuz or moves a window. toast_test.lua runs in the same Desk booking as 53ef's arngz.bats and engine.bats when the two WPs land together. If eae7 lags 53ef, the log lands first, since hv's diagnosis run waits on the log alone. No off switch unless hv asks.",
+      "state": "live",
+      "recorded_at": "2026-11-23T05:36:35.891Z"
     }
   ],
   "sent": [
@@ -10223,6 +10231,11 @@
       "id": "01M72HX7WW9SNPPDM3N5N1PSRP",
       "sender": "dc",
       "handled_at": "2026-11-10T11:09:46.779Z"
+    },
+    {
+      "id": "01M83EE3G6A3RQHD24C02HHFYR",
+      "sender": "ic",
+      "handled_at": "2026-11-23T05:36:42.689Z"
     }
   ]
 }

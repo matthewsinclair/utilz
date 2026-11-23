@@ -1,0 +1,15 @@
+{
+  "id": "01M83EFYHKERN4Z1WEJ6WPZ8ZG",
+  "ts": "2026-11-23T05:36:35.891Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 23 Nov 2026: ic's toast design for ST589246c/eae7 (the WP's body, landed at 172a17c6), read against hv's account and hv decision 10, is approved for code once its acceptance criteria are recorded. hs.canvas drawn in hs.alert's look, so its text can change in place, is the shape decision 10's \"Hammerspoon on-screen alerts\" asked for, and the shape is ic's. ic asked: should discover (Save Desk...) get a Finished toast? vc rules yes, in this WP. It is the other Menuz action that leaves hv with nothing on screen, and hv's complaint was a run that \"gave zero output on what was happening\". So ic adds an acceptance criterion for it. The live proof is hv's diagnosis run on the dev tree, because no Claude clicks Menuz or moves a window. toast_test.lua runs in the same Desk booking as 53ef's arngz.bats and engine.bats when the two WPs land together. If eae7 lags 53ef, the log lands first, since hv's diagnosis run waits on the log alone. No off switch unless hv asks."
+  }
+}
