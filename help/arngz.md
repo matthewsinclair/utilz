@@ -26,6 +26,7 @@ arngz which
 arngz auto [--default <desk>]
 arngz init [--yes]
 arngz doctor
+arngz log
 arngz --help | -h
 arngz --version
 ```
@@ -152,6 +153,17 @@ A toast takes no click and no focus: a click on it goes to the window under it. 
 
 When the record cannot be written, the `apply` or `discover` that tried says so on stderr and keeps its own exit. The record then still names the desk before, so `current` lags behind that apply until the next one that records.
 
+### The run log
+
+Every run of `apply`, `diff`, `discover`, `which`, `auto`, `doctor`, `init` and `delete` appends what it saw, planned, did and read back to `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/arngz.log`, beside `current`. `list`, `show`, `current` and `log` only read, and log nothing. The log puts nothing on screen. `arngz log` prints the last run, from its start to its end.
+
+- **One record per line**: `<time> <run> <source> <event> <text>`. `time` is UTC, to the second from the CLI and to the millisecond from the engine. `run` is the run's id, the same on every record of one run. `source` is `cli`, `engine`, or `displays` for the display watcher, whose records carry `-` as their run. `event` is one fixed word per kind of record, so `grep` picks out one kind.
+- **The CLI's side**: `start` (arngz's version, the tree that ran, the verb and its arguments, and whether Menuz or a shell called it); `request`; `hs` (its pid and its deadlines); `kill`, when the CLI stopped hs and why; `answer` (how the asking ended); `refused`, with a refusal's words; and `end`, the exit code and the seconds the run took.
+- **The engine's side**: `start`, then the displays at the run's start and, for `apply`, again at its end. For each display there is a `screen` line, its desktops as they are `live`, where com.apple.spaces has each one `filed` (a desktop filed under another display is a visitor), the `order` taken or why none could be, the `windows` arngz can name on each desktop, and every `record` com.apple.spaces keeps, a collapsed one included. Then the `plan`, each `phase`, each `wait`, each `op` with what it read back, each `step` of a move, the desktops a creation added, the `report`, and each progress `point` the toasts are told.
+- **The display watcher.** The first engine call in a Hammerspoon session starts a watcher. Each display change is a `change` record, followed by a `snapshot` of every display's desktops at once and 5, 30 and 120 seconds after it. A run's displays record says how long ago the displays last changed. A reload of Hammerspoon's config stops the watcher, and the next run starts it again. After `utilz use brew`, reload Hammerspoon's config so the dev tree's watcher stops.
+- **Its size** stays under `ARNGZ_LOG_MAX` bytes, 4 MiB unless set. At a run's start, a log at or over that moves to `arngz.log.1`, replacing the older one, so there are never more than the two.
+- **A log that cannot be written** is said once, on stderr, and the run goes on with its own exit.
+
 ### which and auto
 
 `which` prints the name of the desk the screens in front of you are, and changes nothing. A desk fits when each of its displays matches a distinct screen **and** every screen present is matched. Both halves matter: a desk that describes the laptop alone matches the laptop screen whatever else is plugged in, so without the second half it would be the answer at every site. The report, on stderr, names every desk and why it did or did not fit, so the name alone comes back on stdout.
@@ -210,6 +222,7 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | `auto`          | apply the desk the screens present are, or `--default` when none fits                   | as apply, 1, or 2      |
 | `init`          | create the catalogue and report what Hammerspoon needs; with `--yes`, provide it        | 0, 1, or 2             |
 | `doctor`        | every precondition, each with its state, and what fixes each one that does not hold     | 0, or 1 if any fails   |
+| `log`           | the last run, from the run log; it changes nothing and asks Hammerspoon nothing         | 0, or 1 if none logged |
 
 ### Options
 
@@ -256,6 +269,7 @@ arngz current                 # the desk applied or saved last
 
 - `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml` -- one desk.
 - `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/current` -- the current desk's name, which `apply` and `discover --save` write and `delete` clears.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/arngz.log`, and `arngz.log.1` before it -- the run log, which `arngz log` reads.
 - `${TMPDIR:-/tmp}/arngz.XXXXXX/` -- one call to Hammerspoon: its `request.json` and `response.json`. It is removed after a call that went well, and kept and named after one that did not.
 
 ---
@@ -263,7 +277,8 @@ arngz current                 # the desk applied or saved last
 ## Environment
 
 - `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset.
-- `XDG_STATE_HOME` -- where the current desk is recorded; `$HOME/.local/state` when unset.
+- `XDG_STATE_HOME` -- where the current desk is recorded and the run log kept; `$HOME/.local/state` when unset.
+- `ARNGZ_LOG_MAX` -- how many bytes the run log may reach before a run moves it to `arngz.log.1`; 4194304 (4 MiB) when unset.
 - `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
 - `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset.
 - `ARNGZ_APPLY_TIMEOUT` -- how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
@@ -274,7 +289,7 @@ arngz current                 # the desk applied or saved last
 ## Exit Status
 
 - `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
+- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `log` found no run logged, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
 - `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering. For `which` and `auto` it is also the question having no one answer: more than one desk fits the screens present and none of them is the current desk, so `auto` moves nothing.
 
 ---

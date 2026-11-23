@@ -24,6 +24,10 @@ end
 local here = dirname(debug.getinfo(1, "S").source:gsub("^@", ""))
 if not here then error("arngz: cannot tell which directory this module was loaded from") end
 local P = dofile(here .. "/plan.lua")
+-- log.lua, beside it: the run log's formatters and its one write (ST589246c).
+local L = dofile(here .. "/log.lua")
+-- This file's own path, which keys the display watcher (M.watch).
+local MODULE = (debug.getinfo(1, "S").source:gsub("^@", ""))
 
 local M = {}
 
@@ -69,6 +73,122 @@ local function read_defaults(domain)
     return nil, "could not parse what defaults export " .. domain .. " printed"
   end
   return t
+end
+
+-- com.apple.spaces and its Monitors list, which holds each display's desktops
+-- in Mission Control's order (D22): the one reader observe and the display
+-- watcher share. The prefs come back too, for the Dock bindings observe reads.
+local function spaces_record()
+  local prefs, err = read_defaults("com.apple.spaces")
+  local monitors = prefs and prefs.SpacesDisplayConfiguration
+    and prefs.SpacesDisplayConfiguration["Management Data"]
+    and prefs.SpacesDisplayConfiguration["Management Data"].Monitors
+  return monitors, prefs, err
+end
+
+-- ---------------------------------------------------------------- the run log
+
+-- THE RUN LOG (ST589246c, WP 53ef07aa). The CLI names the file and the run's
+-- id in the request; every run has a log table, so the toast hook and the
+-- response's warnings work whether or not there is a file, and with no file
+-- nothing is written. A record that cannot be written never changes the run
+-- and is never dropped: the first failure and the count go back in the
+-- response as log_error, which the CLI says once.
+local function new_log(request)
+  local path = type(request.log) == "string" and request.log ~= "" and request.log or nil
+  local run = type(request.run) == "string" and request.run ~= "" and request.run or "-"
+  local clocked, started = pcall(function() return hs.timer.secondsSinceEpoch() end)
+  return { path = path, run = run, failures = 0, started = clocked and started or os.time() }
+end
+
+-- Append the { event, text } pairs MAKE returns, under SOURCE. MAKE runs
+-- inside the guard, so a record that cannot even be built counts as a failed
+-- write, kept and never raised into the run.
+local function write_log(lg, source, make)
+  if not (lg and lg.path) then return end
+  local ok, err = pcall(function()
+    local stamp = L.stamp(hs.timer.secondsSinceEpoch())
+    local lines = {}
+    for _, p in ipairs(make()) do
+      for _, piece in ipairs(L.split(p[2])) do lines[#lines + 1] = L.record(stamp, lg.run, source, p[1], piece) end
+    end
+    local wrote, why = L.append(lg.path, lines)
+    if not wrote then error(why, 0) end
+  end)
+  if not ok then
+    lg.failures = lg.failures + 1
+    lg.first_failure = lg.first_failure or tostring(err)
+  end
+end
+
+-- One engine record. TEXT is a string, or a function that returns one, for a
+-- record whose words need reads that may fail.
+local function note(lg, event, text)
+  write_log(lg, "engine", function()
+    local said = text
+    if type(said) == "function" then said = said() end
+    return { { event, tostring(said) } }
+  end)
+end
+
+-- The displays a run saw at LABEL, with the time since the last display change.
+local function log_world(lg, label, world)
+  if not (lg and lg.path and world) then return end
+  write_log(lg, "engine", function()
+    return L.world_pairs(world, label, L.since(hs.timer.secondsSinceEpoch(), rawget(_G, "arngz_screens")))
+  end)
+end
+
+-- ic's toasts (WP eae7633d) hang on the progress points through
+-- opt/arngz/lib/toast.lua, loaded when the file is there (progress.md, rule
+-- 5). A hook that will not load toasts nothing and is said in each run's log
+-- and response. A test sets M.toast itself.
+local function load_toast()
+  local path = here .. "/toast.lua"
+  local f, oerr, errno = io.open(path, "r")
+  -- Only a file that is not there means no toasts; one that will not open
+  -- is said, as one that will not load is.
+  if not f then
+    if errno == 2 then return nil end
+    return nil, "could not open " .. path .. ": " .. tostring(oerr)
+  end
+  f:close()
+  local ok, t = pcall(dofile, path)
+  if not ok then return nil, "could not load " .. path .. ": " .. tostring(t) end
+  if type(t) ~= "table" or type(t.point) ~= "function" then return nil, path .. " returns no point function" end
+  return t
+end
+M.toast, M.toast_error = load_toast()
+
+-- A progress point (progress.md): its record, then the toast hook with the
+-- same name and fields, `run` on every one. FIELDS is a table, or a function
+-- that makes one, and is made inside the guard: a point whose fields cannot
+-- be made still goes out, with the error as its one field, so `finished`
+-- always comes (rule 3) and the log never fails a run. The hook is guarded
+-- too: an error in it is the run's toast_error, logged and answered once,
+-- and changes nothing else (rule 6).
+local function point(lg, name, fields)
+  local made, f = pcall(function()
+    local got = fields
+    if type(got) == "function" then got = got() end
+    if got == nil then got = {} end
+    if type(got) ~= "table" then error("the fields are a " .. type(got) .. ", not a table", 0) end
+    return got
+  end)
+  if not made then
+    note(lg, "error", "the " .. tostring(name) .. " point's fields could not be made: " .. tostring(f))
+    f = { error = tostring(f) }
+  end
+  f.run = lg and lg.run or "-"
+  note(lg, "point", function() return L.point_text(name, f) end)
+  if M.toast then
+    local ok, err = pcall(M.toast.point, name, f)
+    if not ok and lg then
+      local why = "the toast hook failed at " .. tostring(name) .. ": " .. tostring(err)
+      lg.toast_error = lg.toast_error or why
+      note(lg, "error", why)
+    end
+  end
 end
 
 -- The app's own bundle id for a desk's spelling of it. A desk names an app
@@ -171,6 +291,33 @@ end
 
 -- ---------------------------------------------------------------- observe
 
+-- One screen as observe and the display watcher both read it: what it is,
+-- where it sits, the desktop it shows, and its desktops live, each error kept
+-- beside its value. The one builder of a world.screens entry; observe adds
+-- the order and the windows. Returns the entry and the live list.
+local function read_screen(scr, primary_uuid, primary_frame)
+  local uuid = scr:getUUID()
+  local full = rect(scr:fullFrame())
+  local active, aerr = hs.spaces.activeSpaceOnScreen(uuid)
+  local entry = {
+    uuid = uuid,
+    name = scr:name(),
+    primary = uuid == primary_uuid,
+    frame = rect(scr:frame()),
+    full_frame = full,
+    position = P.position(full, primary_frame),
+    active_space = active,
+    active_error = aerr,
+    spaces = {},
+  }
+  local spaces, serr = hs.spaces.spacesForScreen(uuid)
+  -- Keyed on the missing value, so nil with no message is still unread.
+  if not spaces then entry.spaces_error = serr or "spacesForScreen returned nothing" end
+  -- The desktops live, in the live list's order, for the run log.
+  entry.live = spaces
+  return entry, spaces
+end
+
 -- The world as it is now. Read-only. Every lookup that can fail records its
 -- error beside the value rather than dropping it, because "could not see" and
 -- "is not there" need different answers. `bundles`, the desk's app bundle
@@ -178,10 +325,7 @@ end
 function M.observe(bundles)
   -- com.apple.spaces first: it holds each display's space order (D22) as
   -- well as the Dock bindings.
-  local spaces_prefs, spaces_err = read_defaults("com.apple.spaces")
-  local monitors = spaces_prefs and spaces_prefs.SpacesDisplayConfiguration
-    and spaces_prefs.SpacesDisplayConfiguration["Management Data"]
-    and spaces_prefs.SpacesDisplayConfiguration["Management Data"].Monitors
+  local monitors, spaces_prefs, spaces_err = spaces_record()
   local data, derr = hs.spaces.data_managedDisplaySpaces()
   local uuids = {}
   for _, display in ipairs(data or {}) do
@@ -204,29 +348,18 @@ function M.observe(bundles)
     window_id_errors = id_errors.count,
     window_id_error = id_errors.first,
     managed_spaces_error = derr,
+    -- Every list com.apple.spaces holds, as macOS names it, for the run log
+    -- (ST589246c): the order rule reads `monitors` itself, below.
+    recorded = L.recorded(monitors),
+    recorded_error = spaces_err,
     screens = {},
     apps_running = {},
     app_bindings = {},
   }
 
   for _, scr in ipairs(hs.screen.allScreens()) do
-    local uuid = scr:getUUID()
-    local full = rect(scr:fullFrame())
-    local active, aerr = hs.spaces.activeSpaceOnScreen(uuid)
-    local entry = {
-      uuid = uuid,
-      name = scr:name(),
-      primary = uuid == primary:getUUID(),
-      frame = rect(scr:frame()),
-      full_frame = full,
-      position = P.position(full, primary_frame),
-      active_space = active,
-      active_error = aerr,
-      spaces = {},
-    }
-    local spaces, serr = hs.spaces.spacesForScreen(uuid)
-    -- Keyed on the missing value, so nil with no message is still unread.
-    if not spaces then entry.spaces_error = serr or "spacesForScreen returned nothing" end
+    local entry, spaces = read_screen(scr, primary:getUUID(), primary_frame)
+    local active = entry.active_space
     -- Mission Control's order is com.apple.spaces', not the live list's
     -- (D22, measured 16 Oct 2026). Without it the spaces are still recorded,
     -- in the live order, and order_error says why: plan refuses that. A lone
@@ -332,10 +465,114 @@ function M.observe(bundles)
   return world
 end
 
+-- ---------------------------------------------------------------- the display watcher
+
+-- WHEN THE DISPLAYS CHANGED, and where every desktop sat after, is what a run
+-- cannot see: arngz runs when it is asked, after the change (ST589246c,
+-- 53ef07aa's design, "The display watcher"). So the first engine call in a
+-- Hammerspoon session starts an hs.screen.watcher, held in a global as
+-- arngz_running is, and keyed on this module's path and the log's, so a call
+-- from another tree (`utilz use dev`) replaces it. Each change is a `change`
+-- record and a snapshot of every display's desktops, at once and after each
+-- of SNAPSHOT_AFTER, so the log shows whether and when visiting desktops go
+-- home. Its timers live in the same global, so none is collected before it
+-- fires and a replaced watcher stops them with it. Everything it runs is
+-- guarded, and a failure is an `error` record (vc's read, 23 Nov 2026). A
+-- reload of Hammerspoon's config drops it; the next engine call starts it
+-- again, and its start is in the log, so a change it missed reads as unseen.
+M.SNAPSHOT_AFTER = { 5, 30, 120 }
+
+-- Every display's desktops now, live and recorded, without the windows:
+-- lighter than observe, for the snapshots.
+local function desktops_now()
+  local monitors, _, err = spaces_record()
+  local world = { screens = {}, recorded = L.recorded(monitors), recorded_error = err }
+  local primary = hs.screen.primaryScreen()
+  local primary_uuid, primary_frame = primary:getUUID(), rect(primary:fullFrame())
+  for _, scr in ipairs(hs.screen.allScreens()) do
+    world.screens[#world.screens + 1] = (read_screen(scr, primary_uuid, primary_frame))
+  end
+  return world
+end
+
+-- A watcher record. With no run to answer, a write that fails goes to
+-- Hammerspoon's console instead, as done() says a response it cannot write.
+local function watcher_write(state, make)
+  local lg = { path = state.log, run = "-", failures = 0 }
+  write_log(lg, "displays", make)
+  if lg.failures > 0 then
+    print("arngz: the display watcher could not write the run log: " .. tostring(lg.first_failure))
+  end
+end
+
+-- F under a guard: a failure is an error record in the log.
+local function watch_guarded(state, what, f)
+  local ok, err = pcall(f)
+  if not ok then
+    watcher_write(state, function() return { { "error", what .. ": " .. tostring(err) } } end)
+  end
+end
+
+local function snapshot(state, label)
+  watch_guarded(state, "the snapshot " .. label, function()
+    local world = desktops_now()
+    watcher_write(state, function() return L.world_pairs(world, "snapshot " .. label, nil, false) end)
+  end)
+end
+
+local function display_changed(state)
+  state.last_change = hs.timer.secondsSinceEpoch()
+  local names = {}
+  for _, s in ipairs(hs.screen.allScreens()) do
+    names[#names + 1] = tostring(s:getUUID()) .. ' "' .. tostring(s:name()) .. '"'
+  end
+  watcher_write(state, function()
+    return { { "change", #names .. " display(s) attached: " .. table.concat(names, "; ") } }
+  end)
+  snapshot(state, "at once")
+  local pending = {}
+  for _, t in ipairs(state.timers) do
+    if t:running() then pending[#pending + 1] = t end
+  end
+  state.timers = pending
+  for _, after in ipairs(M.SNAPSHOT_AFTER) do
+    local label = after .. " s after the change"
+    state.timers[#state.timers + 1] = hs.timer.doAfter(after, function() snapshot(state, label) end)
+  end
+end
+
+function M.watch(lg)
+  if not (lg and lg.path) then return end
+  local ok, err = pcall(function()
+    local g = rawget(_G, "arngz_screens")
+    if g and g.module == MODULE and g.log == lg.path then return end
+    if g then
+      -- One that will not stop would write beside its replacement: said.
+      local stopped, serr = pcall(function() g.watcher:stop() end)
+      if not stopped then note(lg, "error", "the watcher being replaced would not stop: " .. tostring(serr)) end
+      for _, t in ipairs(g.timers or {}) do
+        local ended, terr = pcall(function() t:stop() end)
+        if not ended then note(lg, "error", "a snapshot timer of the watcher being replaced would not stop: " .. tostring(terr)) end
+      end
+    end
+    local state = { module = MODULE, log = lg.path, started = hs.timer.secondsSinceEpoch(), timers = {} }
+    state.watcher = hs.screen.watcher.new(function()
+      watch_guarded(state, "the display watcher", function() display_changed(state) end)
+    end)
+    state.watcher:start()
+    rawset(_G, "arngz_screens", state)
+    note(lg, "watch", "watching display changes from " .. L.stamp(state.started)
+      .. (g and (", in place of the watcher " .. tostring(g.module) .. " started") or ""))
+  end)
+  if not ok then note(lg, "error", "the display watcher could not start: " .. tostring(err)) end
+end
+
 -- ---------------------------------------------------------------- execute
 
 -- How many desktops a screen has, or nil and why it could not be read, so a
--- failed readback is never blamed on the op it was reading back.
+-- failed readback is never blamed on the op it was reading back. The third
+-- value is the live list the count was read from, so the run log can name the
+-- desktop a creation added without a read of its own.
 local function user_space_count(uuid)
   local spaces, err = hs.spaces.spacesForScreen(uuid)
   if not spaces then return nil, "spacesForScreen: " .. tostring(err) end
@@ -345,7 +582,17 @@ local function user_space_count(uuid)
     if stype == nil then return nil, "spaceType(" .. tostring(id) .. "): " .. tostring(terr) end
     if P.is_user_space(stype) then n = n + 1 end
   end
-  return n
+  return n, nil, spaces
+end
+
+-- The ids in AFTER that BEFORE did not hold: the desktops a creation added.
+local function added(before, after)
+  local had, out = {}, {}
+  for _, id in ipairs(before or {}) do had[id] = true end
+  for _, id in ipairs(after or {}) do
+    if not had[id] then out[#out + 1] = id end
+  end
+  return out
 end
 
 local function exec_create_space(op, ctx)
@@ -358,7 +605,7 @@ local function exec_create_space(op, ctx)
     return { status = "failed", reason = string.format(
       "creating a space on this display already failed and was not tried again (%s)", said) }
   end
-  local before, berr = user_space_count(op.screen)
+  local before, berr, before_ids = user_space_count(op.screen)
   if not before then
     local reason = "could not count the desktops before: " .. berr
     ctx.space_failed[op.screen] = reason
@@ -388,13 +635,14 @@ local function exec_create_space(op, ctx)
   -- a single attempt would give up run 35's retry, the case this issue was
   -- raised for. The overshoot arm below makes it visible instead of silent:
   -- attempt 2's readback sees before + 2 and says so by name.
-  local made, why
+  local made, why, last_ids
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
     if not made then
       made, why = hs.spaces.addSpaceToScreen(op.screen, true)
     end
-    local now, nerr = user_space_count(op.screen)
+    local now, nerr, now_ids = user_space_count(op.screen)
     if not now then error("could not count the desktops back: " .. tostring(nerr), 0) end
+    last_ids = now_ids
     if now == before + 1 then return now end
     if now > before + 1 then
       -- Not a success to be reported done: something made desktops nobody
@@ -419,7 +667,9 @@ local function exec_create_space(op, ctx)
     return not made and why ~= nil and P.space_error_kind(why) == "gone"
   end)
   if ok then
-    return { status = "done", readback = { user_spaces = res } }
+    -- `created` names the desktop it added, from the lists the counts were
+    -- read from, for the run log (ST589246c).
+    return { status = "done", readback = { user_spaces = res }, created = added(before_ids, last_ids) }
   end
   local after = user_space_count(op.screen)
   -- No fixed outer phrase. apply_report prefixes every loose line with the op
@@ -754,6 +1004,12 @@ local function centre(r) return { x = P.round(r.x + r.w / 2), y = P.round(r.y + 
 -- Each leg returns nil when it took, or why it did not.
 local LEG = {}
 
+-- One step of a gesture and what it read back, in the run log (ST589246c). A
+-- step's failure is the op's reason, which the op's own record carries.
+local function step_note(ctx, text)
+  if ctx and ctx.lg then note(ctx.lg, "step", text) end
+end
+
 -- Nothing held: the display under the pointer steps along its order.
 function LEG.switch(ctx, leg)
   local scr = screen_of(ctx.state, leg.screen)
@@ -769,6 +1025,8 @@ function LEG.switch(ctx, leg)
         leg.side, STEP_WAIT, tostring(leg.screen), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr)),
         tostring(step))
     end
+    step_note(ctx, string.format("switch: pressed Move-space %s with nothing held; screen %s shows space %s",
+      tostring(leg.side), tostring(leg.screen), tostring(step)))
   end
   return nil
 end
@@ -813,6 +1071,7 @@ function LEG.carry(ctx, leg, id)
   local hand = ctx.hand
   local missed = take_hold(hand, id, g, leg.side == "right" and NUDGE_PX or -NUDGE_PX)
   if missed then return missed end
+  step_note(ctx, string.format("carry: held window %s at %s,%s", tostring(id), tostring(g.point.x), tostring(g.point.y)))
   hand:hold(0.1, "before the keys")
   for _, step in ipairs(leg.steps) do
     press_key(ctx.keys[leg.side])
@@ -820,6 +1079,10 @@ function LEG.carry(ctx, leg, id)
       local spaces = list(hs.spaces.windowSpaces(id))
       return #spaces == 1 and spaces[1] == step and hs.spaces.activeSpaceOnScreen(leg.screen) == step
     end)
+    if took then
+      step_note(ctx, string.format("carry: pressed Move-space %s holding window %s; it is on space %s, which screen %s shows",
+        tostring(leg.side), tostring(id), tostring(step), tostring(leg.screen)))
+    end
     if not took then
       hand:release()
       local spaces, serr = hs.spaces.windowSpaces(id)
@@ -850,6 +1113,8 @@ function LEG.drag(ctx, leg, id)
   hand:drag(P.path(chain, g.point, dest))
   hand:hold(0.2, "before letting go")
   hand:release()
+  step_note(ctx, string.format("drag: carried window %s from screen %s to screen %s and let go at %s,%s",
+    tostring(id), tostring(leg.from_screen), tostring(leg.screen), tostring(dest.x), tostring(dest.y)))
   return nil
 end
 
@@ -914,15 +1179,17 @@ end
 -- after this one.
 local function run_legs(ctx, legs, id)
   for _, leg in ipairs(legs) do
+    step_note(ctx, string.format("leg %s: screen %s%s, steps %s, Move-space %s", tostring(leg.kind), tostring(leg.screen),
+      leg.from_screen and (" from screen " .. tostring(leg.from_screen)) or "", L.ids(leg.steps), tostring(leg.side)))
     local ok, err = pcall(LEG[leg.kind], ctx, leg, id)
     if not ok then
       local released, rerr = pcall(function() ctx.hand:release() end)
-      local note = released and "" or ("; and letting go of the button failed: " .. tostring(rerr))
+      local let_go = released and "" or ("; and letting go of the button failed: " .. tostring(rerr))
       if type(err) == "table" and err.stop then
         ctx.stopped = "the pointer was taken back during an earlier move (" .. err.stop .. ")"
-        return "stopped: " .. err.stop .. note
+        return "stopped: " .. err.stop .. let_go
       end
-      return "lua error in the " .. leg.kind .. " leg: " .. tostring(err) .. note
+      return "lua error in the " .. leg.kind .. " leg: " .. tostring(err) .. let_go
     end
     if err then return leg.kind .. ": " .. err end
     for _, screen in ipairs({ leg.screen, leg.from_screen }) do
@@ -1044,6 +1311,15 @@ local REPORT_ONLY = { unseen = "unseen", not_launched = "skipped", gone = "faile
 local EXEC = { create_space = exec_create_space, launch = exec_launch, move = exec_move, place = exec_place,
   recheck = exec_place }
 
+-- The kinds of op execute performs, which are the ones a step point stands
+-- for; log_test holds log.lua's PLANNED_FIELD to them (ST589246c).
+function M.acting_kinds()
+  local out = {}
+  for kind in pairs(EXEC) do out[#out + 1] = kind end
+  table.sort(out)
+  return out
+end
+
 -- Perform each op in order and read back after each one (D14). Nothing is
 -- reported done that the readback does not show. ctx carries the hand, the
 -- Move-space keys and where things are, for the moves.
@@ -1053,6 +1329,8 @@ function M.execute(ops, ctx)
   local results = {}
   for i, op in ipairs(ops or {}) do
     local r
+    -- Timed only for the run log, so a caller with no log makes no clock read.
+    local t0 = ctx.lg and now()
     if REPORT_ONLY[op.op] then
       r = { status = REPORT_ONLY[op.op], reason = op.reason }
     elseif EXEC[op.op] then
@@ -1072,6 +1350,7 @@ function M.execute(ops, ctx)
     -- An unseen op's mark, which plan set and apply's report reads (issue 0132).
     r.uncounted = op.uncounted
     results[#results + 1] = r
+    if ctx.lg then note(ctx.lg, "op", function() return L.result_text(op, r, (now() - t0) / 1e6) end) end
   end
   return results
 end
@@ -1191,26 +1470,61 @@ local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither
 -- first read have passed; then `next_phase`. When `must_observe`, a wait in
 -- which no observe succeeded raises the last error; otherwise what is in
 -- hand stands.
+-- What each wait is for, in the waiting point's words (progress.md).
+local WAIT_FOR = { unseen = "unseen windows", created = "new desktops", launched = "launched apps" }
+
+-- A wait's start and end in the run log, and its point when it starts. After
+-- the creates, the displays are logged as the wait left them: whether macOS
+-- recorded the new desktops, and where (ST589246c, WP 93ea7f8a's question).
+local function wait_began(job, name, seconds)
+  job.waited = job.waited or {}
+  job.waited[name] = now()
+  note(job.lg, "wait", string.format("%s: for %s, up to %s s", name, WAIT_FOR[name] or name, tostring(seconds)))
+  point(job.lg, "waiting", { ["for"] = WAIT_FOR[name] or name, seconds = seconds })
+end
+
+local function wait_ended(job, name, how, world)
+  if not (job.lg and job.lg.path) then return end
+  local since = job.waited and job.waited[name]
+  note(job.lg, "wait", string.format("%s: %s after %s ms", name, how,
+    since and tostring(math.floor((now() - since) / 1e6)) or "?"))
+  if name == "created" then log_world(job.lg, "after creating", world) end
+end
+
 local function waiting(job, name, seconds, done, next_phase, must_observe)
+  if not job.deadlines[name] then wait_began(job, name, seconds) end
   job.deadlines[name] = job.deadlines[name] or (now() + seconds * 1e9)
   local ok, world = pcall(M.observe, job.bundles)
   if ok then
     job.observed[name] = true
-    if done(world) then return next_phase end
+    if done(world) then
+      wait_ended(job, name, "done", world)
+      return next_phase
+    end
   else
     job.observe_errors[name] = world
   end
   if now() < job.deadlines[name] then return name, POLL_SECONDS end
+  wait_ended(job, name, "timed out", ok and world or nil)
   if must_observe and not job.observed[name] then error("observe: " .. tostring(job.observe_errors[name]), 0) end
   return next_phase
 end
 
 -- Plan from job.world with job.options: the held plan, then a wait while an
 -- entry is unseen, then `after`. A refusal is plan's err and fix, for the
--- caller.
+-- caller. Every plan goes in the run log; the planned point goes out for the
+-- first one alone (progress.md, rule 1).
 local function plan_then(job, after)
   local ops, err, fix = P.plan(job.desk, job.world, job.options)
-  if not ops then return nil, err, fix end
+  if not ops then
+    note(job.lg, "refused", "the plan: " .. tostring(err) .. (fix and ("; fix: " .. tostring(fix)) or ""))
+    if not job.planned then point(job.lg, "planned", function() return L.planned_fields(nil, err) end) end
+    job.planned = true
+    return nil, err, fix
+  end
+  write_log(job.lg, "engine", function() return L.plan_pairs(ops, P.plan_report(ops)) end)
+  if not job.planned then point(job.lg, "planned", function() return L.planned_fields(ops) end) end
+  job.planned = true
   job.ops, job.after_unseen = ops, after
   job.deadlines.unseen, job.observed.unseen, job.observe_errors.unseen = nil, nil, nil
   if has_unseen(ops) then return "unseen", POLL_SECONDS end
@@ -1221,6 +1535,8 @@ end
 function PHASE.inventory(job)
   job.bundles = P.desk_bundles(job.desk)
   job.world = M.observe(job.bundles)
+  log_world(job.lg, "start", job.world)
+  point(job.lg, "observed", function() return L.observed_fields(job.world) end)
   -- Only Hammerspoon can say whether it holds the grant; the preferences are
   -- the CLI's to judge, before it asks (D26).
   if job.world.accessibility ~= true then refuse(ACCESSIBILITY) end
@@ -1235,7 +1551,7 @@ end
 
 -- Step 6's refusals, then the creates (step 7).
 function PHASE.prepare(job)
-  local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, launched = {} }
+  local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, launched = {}, lg = job.lg }
   ctx.keys, ctx.keys_error = move_keys()
   if P.needs_hand(job.ops, job.world) then
     if not ctx.keys then refuse(ctx.keys_error) end
@@ -1325,10 +1641,12 @@ function PHASE.finish(job)
     job.results[#job.results + 1] = { op = "final_observe", status = "failed", reason = tostring(final) }
     final = nil
   end
-  local lines, code = P.apply_report(job.desk, job.results)
+  local lines, code, tally = P.apply_report(job.desk, job.results)
+  log_world(job.lg, "end", final)
+  write_log(job.lg, "engine", function() return L.report_pairs(lines, code, tally) end)
   local own_sizes, changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
   job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
-    own_sizes = own_sizes, own_sizes_changed = changed })
+    own_sizes = own_sizes, own_sizes_changed = changed, tally = tally })
 end
 
 -- The error response for a verb that raised: refused (nothing changed) or a
@@ -1376,7 +1694,70 @@ local function schedule(job, name, delay)
   return true
 end
 
+-- A phase in the run log as it starts, with how long the one before took. A
+-- wait runs its phase again every POLL_SECONDS, and is logged once, by
+-- waiting().
+local function phase_began(job, name)
+  if not (job.lg and job.lg.path) or job.phase_name == name then return end
+  local t = now()
+  local took = job.phase_at and string.format("; %s took %d ms", job.phase_name, math.floor((t - job.phase_at) / 1e6)) or ""
+  job.phase_at, job.phase_name = t, name
+  note(job.lg, "phase", name .. took)
+end
+
+-- A step point stands for an op execute performs (EXEC), so a kind added
+-- there gets its step without a second list to keep in step.
+local function steps_total(job)
+  local n = 0
+  local function count(ops)
+    for _, op in ipairs(ops or {}) do
+      if EXEC[op.op] then n = n + 1 end
+    end
+  end
+  if job.rest then
+    count(job.creates)
+    count(job.launches)
+    count(job.rest)
+  else
+    count(job.ops)
+  end
+  return n
+end
+
+-- THE STEP POINTS GO OUT BEFORE THEIR WORK (progress.md, rule 2): Hammerspoon
+-- draws only between callbacks, so each is emitted here, before the callback
+-- that does it is scheduled. prepare's creates and launch's launches run as
+-- one batch each, so their steps all go out before it. A move's step carries
+-- the window's frame now, for the toast to keep clear of the grab. A point
+-- that cannot be made is an error record, never a failed run.
+local function steps_before(job, nxt)
+  local batch
+  if nxt == "prepare" then
+    batch = only(job.ops, { create_space = true })
+  elseif nxt == "launch" then
+    batch = job.launches
+  elseif nxt == "organise" then
+    local op = job.rest and job.rest[job.next_op]
+    batch = (op and EXEC[op.op]) and { op } or {}
+  else
+    return
+  end
+  local ok, err = pcall(function()
+    for _, op in ipairs(batch or {}) do
+      job.step_i = (job.step_i or 0) + 1
+      local frame
+      if op.op == "move" then
+        local w = hs.window.get(op.window)
+        frame = w and rect(w:frame())
+      end
+      point(job.lg, "step", L.step_fields(job.desk, op, job.step_i, steps_total(job), frame))
+    end
+  end)
+  if not ok then note(job.lg, "error", "a step point could not be made: " .. tostring(err)) end
+end
+
 run_phase = function(job, name)
+  phase_began(job, name)
   local ok, nxt, delay = pcall(PHASE[name], job)
   if not ok then
     if not job.changed then return job.respond(error_response("apply", nxt)) end
@@ -1385,6 +1766,7 @@ run_phase = function(job, name)
     nxt, delay = "finish", 0
   end
   if not nxt then return end
+  steps_before(job, nxt)
   local scheduled, serr = schedule(job, nxt, delay)
   if scheduled then return end
   local why = "could not schedule the " .. nxt .. " phase: " .. tostring(serr)
@@ -1397,7 +1779,7 @@ end
 -- Start apply: its first phase is scheduled, and respond(response) is called
 -- once, by the phase that answers. True, or nil and why nothing was
 -- scheduled.
-function M.start_apply(desk, options, respond)
+function M.start_apply(desk, options, respond, lg)
   if type(desk) ~= "table" then return nil, "apply needs the desk" end
   options = options or {}
   local job = {
@@ -1405,6 +1787,8 @@ function M.start_apply(desk, options, respond)
     options = { no_create = options.no_create, no_launch = options.no_launch, map = options.map,
       own_sizes = options.own_sizes },
     deadlines = {}, observed = {}, observe_errors = {}, changed = false,
+    -- The run's log (ST589246c); with none, no record is written.
+    lg = lg or new_log({}),
   }
   -- Answered once: a second answer would write over the first.
   job.respond = function(response)
@@ -1429,9 +1813,17 @@ end
 -- engine").
 -- A refusal from a pure function travels back as a refusal raised here,
 -- which answer() turns into an error response of kind "refused".
+-- Each verb takes the run's log third, and records the displays it read and
+-- the observed point (ST589246c); nothing else in it changes for the log.
+local function observed(lg, world)
+  log_world(lg, "start", world)
+  point(lg, "observed", function() return L.observed_fields(world) end)
+  return world
+end
+
 local VERBS = {
-  observe = function()
-    local world = M.observe()
+  observe = function(_, _, lg)
+    local world = observed(lg, M.observe())
     return { world = world }
   end,
   -- which: the desk the screens present are (ST0032/04). options.desks, a
@@ -1441,26 +1833,32 @@ local VERBS = {
   -- would collapse "none fits" and "several fit" into one kind. M.observe is
   -- reused whole, though only the screens are needed, because world.screens
   -- has one builder and a second could drift from what match_displays expects.
-  which = function(_, options)
-    local world = M.observe()
+  which = function(_, options, lg)
+    local world = observed(lg, M.observe())
     local name, kind, report, candidates =
       P.detect(options.desks or {}, world, { current = options.current })
     return { desk = name, kind = kind, candidates = candidates, report = report }
   end,
   -- discover: the world as a desk (WP-04). options.grid, options.name.
-  discover = function(_, options)
-    local world = M.observe()
+  discover = function(_, options, lg)
+    local world = observed(lg, M.observe())
     local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
     if not desk then refuse(notes, fix) end
     return { desk = desk, report = notes }
   end,
   -- plan: what apply would do, and nothing done (diff, and apply --dry-run).
   -- execute is never called on this path.
-  plan = function(desk, options)
+  plan = function(desk, options, lg)
     if type(desk) ~= "table" then refuse("plan needs the desk") end
-    local ops, err, fix = plan_settled(desk, M.observe(P.desk_bundles(desk)), options)
-    if not ops then refuse(err, fix) end
-    return { ops = ops, report = P.plan_report(ops), exit = P.plan_exit(ops) }
+    local ops, err, fix = plan_settled(desk, observed(lg, M.observe(P.desk_bundles(desk))), options)
+    if not ops then
+      point(lg, "planned", function() return L.planned_fields(nil, err) end)
+      refuse(err, fix)
+    end
+    local report = P.plan_report(ops)
+    write_log(lg, "engine", function() return L.plan_pairs(ops, report) end)
+    point(lg, "planned", function() return L.planned_fields(ops) end)
+    return { ops = ops, report = report, exit = P.plan_exit(ops) }
   end,
 }
 
@@ -1495,12 +1893,47 @@ end
 
 -- The verb's answer, or an error response whose kind says whether the engine
 -- refused (nothing changed) or failed (a Lua error), for the CLI (D25).
-local function answer(request)
-  local ok, out = pcall(VERBS[request.verb], request.desk, request.options or {})
+local function answer(request, lg)
+  local ok, out = pcall(VERBS[request.verb], request.desk, request.options or {}, lg)
   if not ok then return error_response(request.verb, out) end
   out.status = "ok"
   out.verb = request.verb
   return out
+end
+
+-- A run's start (ST589246c): its record, the toast hook's state, and the
+-- start point (progress.md).
+local function begin_run(lg, request)
+  local desk = type(request.desk) == "table" and request.desk.desk
+    or (type(request.options) == "table" and request.options.name) or ""
+  note(lg, "start", function()
+    return string.format("%s %s; options %s; toasts %s", tostring(request.verb), tostring(desk),
+      L.options_text(request.options),
+      M.toast and "on" or (M.toast_error and ("off: " .. M.toast_error) or "off: there is no toast.lua"))
+  end)
+  if M.toast_error then lg.toast_error = lg.toast_error or M.toast_error end
+  point(lg, "start", { verb = tostring(request.verb), desk = tostring(desk) })
+end
+
+-- A run's end (progress.md, rule 3): the finished point, from the response,
+-- whatever it says; then what the log and the toast hook could not do, which
+-- goes back in the response for the CLI to say once; then the response. Every
+-- path that answers a request comes through here, once.
+local function finish_run(response_path, response, lg)
+  local clocked, t = pcall(function() return hs.timer.secondsSinceEpoch() end)
+  local seconds = (clocked and lg.started) and math.floor((t - lg.started) * 10 + 0.5) / 10 or 0
+  if response.status ~= "ok" then
+    note(lg, response.kind == "refused" and "refused" or "error",
+      tostring(response.error) .. (response.fix and ("; fix: " .. tostring(response.fix)) or ""))
+  end
+  point(lg, "finished", function() return L.finished_fields(response, seconds, lg.path) end)
+  -- One line each: the CLI reads the two as two lines.
+  if lg.failures > 0 then
+    response.log_error = (string.format("%s (%d write(s) failed)", tostring(lg.first_failure), lg.failures)
+      :gsub("%c", " "))
+  end
+  if lg.toast_error then response.toast_error = (tostring(lg.toast_error):gsub("%c", " ")) end
+  return respond(response_path, response)
 end
 
 -- The IPC entry. Reads {verb, desk, options} from request_path, writes the
@@ -1522,11 +1955,17 @@ function M.run(request_path)
   elseif type(request) ~= "table" then
     return respond(response_path, { status = "error", kind = "refused", error = "cannot read the request at " .. tostring(request_path)
       .. ": hs.json.read returned nothing, so it is missing or not JSON" })
-  elseif not (VERBS[request.verb] or SCHEDULED[request.verb]) then
-    return respond(response_path, { status = "error", kind = "refused", verb = request.verb,
-      error = "the engine has no verb " .. tostring(request.verb) })
   end
-  if not SCHEDULED[request.verb] then return respond(response_path, answer(request)) end
+  -- From here the request names its run and its log (ST589246c), and every
+  -- answer goes through finish_run.
+  local lg = new_log(request)
+  M.watch(lg)
+  begin_run(lg, request)
+  if not (VERBS[request.verb] or SCHEDULED[request.verb]) then
+    return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb,
+      error = "the engine has no verb " .. tostring(request.verb) }, lg)
+  end
+  if not SCHEDULED[request.verb] then return finish_run(response_path, answer(request, lg), lg) end
 
   -- One at a time: two applies would take the one pointer from each other.
   -- apply spans timer callbacks, so a second request reaches the engine
@@ -1535,24 +1974,26 @@ function M.run(request_path)
   -- dofile makes this module anew at every call (dc, D20).
   local running = rawget(_G, "arngz_running")
   if running then
-    return respond(response_path, { status = "error", kind = "refused", verb = request.verb,
+    -- Its own start and finished, under its own run, so its toast leaves the
+    -- running one alone (progress.md, rule 3).
+    return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb,
       error = string.format("an %s is already running (asked for at %s)", running.verb, running.at),
       fix = "wait for it to finish; if none is running, reload Hammerspoon's config (hs.reload() in its console),"
-        .. " which clears what a crashed apply left set" })
+        .. " which clears what a crashed apply left set" }, lg)
   end
   rawset(_G, "arngz_running", { verb = request.verb, at = utc_now() })
   local function done(response)
-    local ok, line = pcall(respond, response_path, response)
+    local ok, line = pcall(finish_run, response_path, response, lg)
     if not ok then print("arngz: error: " .. tostring(line)) end
     rawset(_G, "arngz_running", nil)
     rawset(_G, "arngz_timer", nil)
   end
-  local called, started, why = pcall(START[request.verb], request.desk, request.options or {}, done)
+  local called, started, why = pcall(START[request.verb], request.desk, request.options or {}, done, lg)
   if not called then started, why = nil, tostring(started) end
   if not started then
     -- Never left marked as running when nothing was scheduled.
     rawset(_G, "arngz_running", nil)
-    return respond(response_path, { status = "error", kind = "refused", verb = request.verb, error = why })
+    return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb, error = why }, lg)
   end
   return "arngz: scheduled " .. request.verb
 end

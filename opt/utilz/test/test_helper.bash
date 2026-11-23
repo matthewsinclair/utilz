@@ -93,6 +93,11 @@ setup() {
   # ~/.local/bin, which on a maintainer's machine holds the live link set.
   # UTILZ_LINK_DIR names it for tests only, here a directory no test has made.
   export UTILZ_LINK_DIR="$BATS_TEST_TMPDIR/link-dir"
+  # AND THE STATE IS THE TEST'S (ST589246c): arngz appends its run log under
+  # XDG_STATE_HOME at every run that logs, so a test that names no state of its
+  # own would append to the maintainer's ~/.local/state. A test that wants
+  # other state still sets its own.
+  export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
 
   # A suite about one platform's paths names it at its top (issue 0083).
   if [[ -n "${UTILZ_TEST_PLATFORM:-}" ]]; then

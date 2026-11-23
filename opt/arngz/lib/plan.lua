@@ -1169,9 +1169,18 @@ local BLANKET = { phase = true }
 -- that plan marked uncounted, and this apply launched nothing for it: a launch
 -- changed the machine, so an entry it served that was not placed counts
 -- (issue 0132). Each result is counted, not only the one the outcome shows.
+--
+-- The third value is the tally the run log and the Finished point read
+-- (ST589246c, progress.md), from this one classifier rather than a second:
+-- each entry once, placed when something was done for it and in_place when
+-- nothing was, else failed, unseen or skipped; the desktops created; and the
+-- first failure's words.
+local TALLIED = { failed = true, unseen = true, skipped = true }
 function P.apply_report(desk, results)
   local by_path, by_app, loose, blanket = {}, {}, {}, {}
+  local tally = { placed = 0, in_place = 0, failed = 0, unseen = 0, skipped = 0, created = 0 }
   for _, r in ipairs(results or {}) do
+    if r.op == "create_space" and r.status == "done" then tally.created = tally.created + 1 end
     if BLANKET[r.op] and r.status ~= "done" then blanket[#blanket + 1] = tostring(r.reason) end
     if r.op == "launch" then
       by_app[app_key(r.bundle)] = r
@@ -1222,9 +1231,17 @@ function P.apply_report(desk, results)
       counts = true
     end
     if outcome == "placed" then
+      if by_path[e.path] or launch then tally.placed = tally.placed + 1 else tally.in_place = tally.in_place + 1 end
       if launch then outcome = "launched and placed" elseif moved then outcome = "moved and placed" end
-    elseif counts or launch then
-      code = 1
+    else
+      local kind = TALLIED[outcome] and outcome or "failed"
+      tally[kind] = tally[kind] + 1
+      -- The first failure is one that counts, as the exit's is: an uncounted
+      -- unseen entry is tallied, and never named as what went wrong.
+      if counts or launch then
+        code = 1
+        tally.first = tally.first or why[1] or outcome
+      end
     end
     local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
     lines[#lines + 1] = string.format("%s (%s): %s%s%s", name, e.path, outcome,
@@ -1234,11 +1251,14 @@ function P.apply_report(desk, results)
   -- A note is said and counts against nothing: something apply left as it
   -- found it on purpose, such as focus on a desktop no longer shown.
   for _, r in ipairs(loose) do
-    if r.status ~= "note" then code = 1 end
+    if r.status ~= "note" then
+      code = 1
+      tally.first = tally.first or tostring(r.reason)
+    end
     lines[#lines + 1] = string.format("%s%s: %s: %s", tostring(r.op), r.path and (" (" .. r.path .. ")") or "",
       tostring(r.status), tostring(r.reason))
   end
-  return lines, code
+  return lines, code, tally
 end
 
 -- ------------------------------------------------------------- discover

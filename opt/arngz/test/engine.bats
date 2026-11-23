@@ -48,3 +48,22 @@ bats_require_minimum_version 1.5.0
   # test_helper.bash, which carries the reason (issue 0136).
   assert_lua_suite_summary engine_test
 }
+
+# ============================================================================
+# AT-53ef07aa.2 -- the run log's engine side, under plain Lua (ST589246c)
+# ============================================================================
+
+@test "AT-53ef07aa.2: the run log's engine driver passes under plain Lua" {
+  local driver="$UTILZ_HOME/opt/arngz/test/log_test.lua"
+  local engine="$UTILZ_HOME/opt/arngz/lib/arngz.lua"
+  [ -f "$driver" ]
+  [ -f "$engine" ]
+
+  local lua
+  lua="$(lua_bin)" || fail "no Lua interpreter (lua5.4, lua or luajit) on PATH; CI installs lua5.4"
+
+  run "$lua" "$driver" "$engine"
+  echo "$output"
+  assert_success
+  assert_lua_suite_summary log_test
+}

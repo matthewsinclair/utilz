@@ -31,6 +31,12 @@ FIXTURES="$UTILZ_HOME/opt/arngz/test/fixtures"
 # shellcheck disable=SC2034 # read by test_helper's setup()
 UTILZ_TEST_PLATFORM=Darwin
 
+# THE ONE CAP ON A SCHEDULED APPLY'S WAIT, for every arm (ST589246c, folded
+# into WP 53ef07aa). An arm whose fake engine never answers waits out
+# ARNGZ_APPLY_TIMEOUT, 600 s by default, so a red cost ten minutes an arm. An
+# arm that sets its own keeps it.
+export ARNGZ_APPLY_TIMEOUT=20
+
 run_arngz() {
   run "$UTILZ_BIN_DIR/arngz" "$@"
 }
@@ -399,11 +405,18 @@ fake_hs() {
   mkdir -p "$TMPDIR"
 }
 
-@test "AT-03.1: the request holds exactly verb, desk and options, and hs runs the module's run on it" {
+@test "AT-03.1: the request holds exactly verb, desk, options, run and log, and hs runs the module's run on it" {
   fake_hs ok
   run_arngz discover
   run yq -o json -I0 'keys' "$FAKE_HS_LOG/request.json"
-  assert_output '["verb","desk","options"]'
+  assert_output '["verb","desk","options","run","log"]'
+  # run and log are the run's id and its log (ST589246c), for the engine's records.
+  run yq -r '.log' "$FAKE_HS_LOG/request.json"
+  assert_output "$XDG_STATE_HOME/arngz/arngz.log"
+  run yq -r '.run' "$FAKE_HS_LOG/request.json"
+  # A run id, so an empty one on both sides cannot pass as equal.
+  [[ "$output" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]] || fail "the request's run is not a run id: '$output'"
+  assert_output "$(awk '$4 == "start" { id = $2 } END { print id }' "$XDG_STATE_HOME/arngz/arngz.log")"
   run yq -r '.verb' "$FAKE_HS_LOG/request.json"
   assert_output "discover"
   grep -qxF -- "-c" "$FAKE_HS_LOG/argv"
@@ -1182,9 +1195,14 @@ snapshot() {
 }
 
 # The fixture machine outside the catalogue: HOME less the catalogue and the
-# config dir that holds it, the hs prefix, and the app.
+# config dir that holds it, and less the run log and the dirs that hold it,
+# since every run that logs appends to it (ST589246c); the hs prefix; and the
+# app. The log alone is left out: any other state init writes there, eg
+# current or own-sizes, still shows. snapshot() prints a dir with a trailing
+# slash and a file followed by a space and its checksum.
 machine_snapshot() {
-  snapshot "$HOME" | grep -Ev '^\./\.config/$|^\./\.config/arngz'
+  snapshot "$HOME" |
+    grep -Ev '^\./\.config/$|^\./\.config/arngz|^\./\.local/$|^\./\.local/state/$|^\./\.local/state/arngz/$|^\./\.local/state/arngz/arngz\.log '
   snapshot "$ARNGZ_HS_PREFIX"
   snapshot "$BATS_TEST_TMPDIR/Applications"
 }
@@ -1969,8 +1987,9 @@ current_record() {
   apply_machine scheduled "$response"
   run_arngz apply zeop1
   assert_success
-  # The record is written beside itself and moved over, leaving nothing else.
-  [ "$(ls -A "$XDG_STATE_HOME/arngz")" = "current" ]
+  # The record is written beside itself and moved over, leaving nothing else
+  # but the run log, which the apply also wrote (ST589246c).
+  [ "$(ls -A "$XDG_STATE_HOME/arngz")" = "$(printf 'arngz.log\ncurrent')" ]
   run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
   assert_success
   assert_output "zeop1"
@@ -2143,7 +2162,7 @@ current_record() {
 # init makes the catalogue alone, doctor checks the catalogue alone, and the
 # catalogue verbs work as they do anywhere.
 
-ENGINE_OFF_LINUX="arngz's engine (apply, diff, discover, which, auto and init --yes) needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+ENGINE_OFF_LINUX="arngz's engine (apply, diff, discover, which, auto and init --yes) needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete, current and log work here"
 
 # Recorders for every tool an engine verb reaches first, first on PATH: each
 # call is written to $BATS_TEST_TMPDIR/calls, which a refusal leaves unwritten.
@@ -2183,7 +2202,7 @@ record_engine_tools() {
     # shellcheck disable=SC2086 # each case is a verb and its words
     run_arngz $args
     assert_exit_code 2
-    assert_output_contains "$verb needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete and current work here"
+    assert_output_contains "$verb needs macOS and Hammerspoon, so it is not available on Linux; arngz list, show, delete, current and log work here"
     checked="$checked ${args%% *}"
   done
   local engine_verb
@@ -2498,4 +2517,149 @@ own_sizes_at() {
   run_arngz apply zeop1
   assert_success
   [ "$(shasum -a 256 "$file")" = "$before" ] || fail "apply rewrote a record that had not changed"
+}
+
+# ============================================================================
+# AT-53ef07aa.1 -- the run log, the CLI's side (ST589246c, WP 53ef07aa)
+# ============================================================================
+
+# The run log as a run writes it, and the space-separated events of its
+# records in order. The fake hs is not the engine, so every record here is the
+# CLI's; the engine's are log_test.lua's (AT-53ef07aa.2).
+run_log() {
+  printf '%s/arngz/arngz.log\n' "$XDG_STATE_HOME"
+}
+
+log_events() {
+  awk '{ printf "%s ", $4 }' "$1"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: an engine run appends its records, start to end, every one under the run's one id" {
+  fake_hs ok
+  unset MENUZ_LOG
+  run_arngz discover
+  assert_success
+  local log
+  log="$(run_log)"
+  [ -f "$log" ] || fail "no run log at $log"
+  # A kill record comes between hs and answer when hs is still running as the
+  # response lands, which the fake may or may not be.
+  [[ "$(log_events "$log")" =~ ^start\ request\ hs\ (kill\ )?answer\ end\ $ ]] ||
+    fail "the records are not start, request, hs, answer, end: $(log_events "$log")"
+  [ "$(awk '{ print $2 }' "$log" | sort -u | wc -l | tr -d ' ')" = 1 ] || fail "more than one run id: $(cat "$log")"
+  [[ "$(awk '{ print $2; exit }' "$log")" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]] || fail "the run id is not <UTC stamp>-<pid>"
+  [ "$(awk '{ print $3 }' "$log" | sort -u)" = cli ] || fail "a record not the CLI's: $(cat "$log")"
+  grep -q ' cli start arngz .*, tree '"$UTILZ_HOME"', discover, from shell$' "$log" || fail "the start record does not name the tree: $(head -1 "$log")"
+  grep -q ' cli end exit 0 in [0-9]* s$' "$log" || fail "no end record with exit 0: $(cat "$log")"
+  # How hs ended: it exited 0, or the CLI stopped it once the response landed.
+  grep -q -E ' cli answer discover: returned 0 after [0-9]+ s; hs exited (0|killed); response ok$' "$log" ||
+    fail "the answer record does not say how hs ended: $(grep ' answer ' "$log")"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: a refusal before the engine is asked logs start, refused and end, exit 2" {
+  catalogue
+  run_arngz apply no-such-desk
+  assert_exit_code 2
+  local log
+  log="$(run_log)"
+  [ "$(log_events "$log")" = "start refused end " ] || fail "records: $(log_events "$log")"
+  grep -q ' cli refused .*no-such-desk' "$log" || fail "the refused record does not say what: $(cat "$log")"
+  grep -q ' cli end exit 2 in ' "$log" || fail "the end record is not exit 2: $(cat "$log")"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: a read-only verb logs nothing, since Menuz runs current at every menu open" {
+  catalogue
+  # Each ran, and to its own end: current has no desk to name, list one desk.
+  run_arngz current
+  assert_exit_code 1
+  run_arngz list
+  assert_success
+  assert_output_contains "zeop1"
+  [ ! -e "$(run_log)" ] || fail "a read-only verb wrote the run log: $(cat "$(run_log)")"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: the log puts nothing on screen: a logged run's stderr is exactly its report, and its stdout the desk" {
+  fake_hs ok
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" discover
+  assert_success
+  # discover prints the desk on stdout and its report on stderr; the log adds
+  # a line to neither.
+  [ "$stderr" = "$(yq -r '.report[]' "$FIXTURES/responses/discover.json")" ] || fail "stderr is not exactly the report: $stderr"
+  [ -n "$output" ] || fail "no desk on stdout"
+  refute_output_contains "run log"
+  [ -f "$(run_log)" ] || fail "the run was not logged"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: at ARNGZ_LOG_MAX the log moves to arngz.log.1 before the run writes, and two files at most" {
+  fake_hs ok
+  export ARNGZ_LOG_MAX=1
+  local log second third
+  log="$(run_log)"
+  run_arngz discover
+  run_arngz discover
+  second="$(awk '$4 == "start" { print $2 }' "$log")"
+  run_arngz discover
+  third="$(awk '$4 == "start" { print $2 }' "$log")"
+  [ "$(awk '$4 == "start" { print $2 }' "$log.1")" = "$second" ] || fail "arngz.log.1 is not the run before the last"
+  [ "$third" != "$second" ] || fail "the last run's log is the run before it"
+  run ls -A "${log%/*}"
+  assert_output "$(printf 'arngz.log\narngz.log.1')"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: a bad ARNGZ_LOG_MAX is refused before anything is sent or logged, exit 2" {
+  fake_hs ok
+  export ARNGZ_LOG_MAX=big
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "ARNGZ_LOG_MAX = 'big': a whole number of bytes"
+  [ ! -e "$FAKE_HS_LOG/argv" ] || fail "hs was asked"
+  # Judged before the run has a log, as a platform refusal is: no start
+  # without its end.
+  [ ! -e "$(run_log)" ] || fail "a refused run wrote the run log: $(cat "$(run_log)")"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: arngz log prints the last run, the watcher's records in it, and no other run's" {
+  fake_hs ok
+  local log first last
+  log="$(run_log)"
+  run_arngz discover
+  first="$(awk '$4 == "start" { print $2 }' "$log")"
+  run_arngz discover
+  last="$(awk '$4 == "start" { id = $2 } END { print id }' "$log")"
+  printf '%s - displays change 1 display(s) attached\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >>"$log"
+  printf '%s other-run engine point start verb=which\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >>"$log"
+  run_arngz log
+  assert_success
+  [ "$(printf '%s\n' "$output" | awk '{ print $4; exit }')" = start ] || fail "it does not begin at the run's start: $output"
+  [ "$(printf '%s\n' "$output" | awk '{ print $2; exit }')" = "$last" ] || fail "it does not begin at the last run: $output"
+  assert_output_contains " - displays change 1 display(s) attached"
+  refute_output_contains "$first"
+  refute_output_contains "other-run"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: arngz log with no run logged says where it looked, exit 1" {
+  catalogue
+  run_arngz log
+  assert_exit_code 1
+  assert_output_contains "no run is logged yet: there is no $(run_log)"
+}
+
+# AT-53ef07aa.1
+@test "AT-53ef07aa.1: a log that cannot be written is said once on stderr, and the run keeps its exit" {
+  fake_hs ok
+  export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state-is-a-file"
+  : >"$XDG_STATE_HOME"
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" discover
+  assert_success
+  [ "$(printf '%s\n' "$stderr" | grep -c 'the run log could not be written')" = 1 ] || fail "not said exactly once: $stderr"
+  # The run's own report is still there, on stderr where discover puts it.
+  printf '%s\n' "$stderr" | grep -q '^FIXTURE-LINE-1 ' || fail "the report is gone: $stderr"
 }

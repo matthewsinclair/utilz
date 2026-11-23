@@ -26,7 +26,7 @@ fi
 # Every verb. A desk may not take one of these names (design.md, the
 # validator's seventh condition; AC-05.7), because `arngz <desk>` is apply and
 # a desk called `list` could never be applied that way.
-ARNGZ_VERBS="apply discover diff list show delete current which auto init doctor"
+ARNGZ_VERBS="apply discover diff list show delete current which auto init doctor log"
 
 # Whether WORD is one of the space-separated words in LIST.
 in_list() {
@@ -76,7 +76,7 @@ verb_phrase() {
 # A list written out in prose cannot be checked against the gate; one the gate
 # reads cannot disagree with it.
 ARNGZ_ENGINE_VERBS="apply diff discover which auto"
-ARNGZ_CATALOGUE_VERBS="list show delete current"
+ARNGZ_CATALOGUE_VERBS="list show delete current log"
 ARNGZ_ENGINE_NEEDS="macOS and Hammerspoon"
 
 # The two sentences, rendered where they are used and not at every load. As
@@ -128,8 +128,11 @@ VERBS:
   auto [--default <desk>]    apply the desk the screens present are, or the default
   init [--yes]               create the catalogue, and report what Hammerspoon needs
   doctor                     every precondition, each with its state
+  log                        the last run, from the run log
 
 The catalogue is \${XDG_CONFIG_HOME:-\$HOME/.config}/arngz/desks/<desk>.yaml.
+Each run of $(verb_phrase "$(logged_verbs)") appends
+what it saw and did to \${XDG_STATE_HOME:-\$HOME/.local/state}/arngz/arngz.log.
 
 For detailed help, run: utilz help arngz
 EOF
@@ -158,11 +161,34 @@ catalogue_desks() {
   done
 }
 
+# A refusal said, and recorded while the run logs: the one place a refusal's
+# words go. The validator calls it for every reason a desk fails, before its
+# caller exits 2.
+desk_refused() {
+  log_record refused "$*"
+  error "arngz: $*"
+}
+
 # A refusal, in the one shape every one of them takes: what refused, and exit 2
 # because nothing has changed.
 refuse() {
-  error "arngz: $*"
+  desk_refused "$@"
   exit 2
+}
+
+# A value yq parses, read from its stdout alone: a warning yq prints on stderr
+# (yq 4.54 warns when -p comes without -o) would otherwise become part of the
+# value (ST0034, ST589246c). yq_value runs yq with the arguments it is given
+# and exits as yq did; yq_words runs the same again for what yq said, on one
+# line, which a caller asks for only once yq_value has failed.
+yq_value() {
+  yq "$@" 2>/dev/null
+}
+
+yq_words() {
+  local words
+  words="$(yq "$@" 2>&1 >/dev/null)" || true
+  printf '%s\n' "${words//$'\n'/ }"
 }
 
 # The one place a desk NAME is judged. A verb name is the design's seventh
@@ -184,6 +210,165 @@ desk_name_refusal() {
 }
 
 # ============================================================================
+# THE RUN LOG (ST589246c, WP 53ef07aa)
+# ============================================================================
+
+# Where arngz keeps its state: the current desk, the sizes apps hold their
+# windows at, and the run log. One place, so the three cannot part.
+state_dir() {
+  printf '%s/arngz\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+}
+
+# The run log. One record per line, `<time> <run> <source> <event> <text>`:
+# the CLI writes its own as `cli`, the engine its as `engine` and the display
+# watcher its as `displays` (lib/log.lua). help/arngz.md, "The run log", says
+# what each record holds.
+log_file() {
+  printf '%s/arngz.log\n' "$(state_dir)"
+}
+
+# The verbs whose runs log nothing: each only reads, and Menuz runs
+# `arngz current` at every menu open, which would drown the log.
+ARNGZ_UNLOGGED_VERBS="list show current log"
+
+# The verbs whose runs log, in ARNGZ_VERBS' order: every verb but those, so
+# the usage line that names them is rendered from the lists run_logs tests.
+logged_verbs() {
+  local verb out=""
+  for verb in $ARNGZ_VERBS; do
+    if ! in_list "$verb" "$ARNGZ_UNLOGGED_VERBS"; then out="$out $verb"; fi
+  done
+  printf '%s' "${out# }"
+}
+
+# While a run logs: its id, its log, and the second it began; empty while it
+# does not. ARNGZ_LOG_FAILED keeps the first failure to write, so it is said
+# once, and ARNGZ_TOAST_FAILED the same for the toast hook.
+ARNGZ_RUN=""
+ARNGZ_LOG=""
+ARNGZ_LOG_T0=0
+ARNGZ_LOG_FAILED=""
+ARNGZ_TOAST_FAILED=""
+
+# A log that could not be written is said once, on stderr, and changes nothing
+# else about the run: the log serves the run, never the other way round, and
+# it is never silent about failing.
+log_failed() {
+  if [[ -z "$ARNGZ_LOG_FAILED" ]]; then
+    ARNGZ_LOG_FAILED="${1:-it failed}"
+    warn "arngz: the run log could not be written: $ARNGZ_LOG_FAILED"
+  fi
+  return 0
+}
+
+# Append one record, log_record <event> <text>, while the run logs. The line
+# goes out in one printf, so it lands whole beside the engine's.
+log_record() {
+  [[ -n "$ARNGZ_LOG" ]] || return 0
+  local event="$1" text="${2:-}" why
+  text="${text//$'\n'/ }"
+  if ! why="$({ printf '%s %s cli %s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$ARNGZ_RUN" "$event" "$text" >>"$ARNGZ_LOG"; } 2>&1)"; then
+    log_failed "${why:-a write to $ARNGZ_LOG failed}"
+  fi
+  return 0
+}
+
+# Keep the log under ARNGZ_LOG_MAX bytes, 4 MiB unless set: at a run's start,
+# a log at or over it moves to <log>.1, over the older one, so there are never
+# more than two. Only here, and only before the run writes: the engine and the
+# display watcher only append, so a run in flight carries on in the new file.
+log_rotate() {
+  local max="$1" size why
+  [[ -f "$ARNGZ_LOG" ]] || return 0
+  if ! size="$({ wc -c <"$ARNGZ_LOG"; } 2>&1)"; then
+    log_failed "could not read the size of $ARNGZ_LOG: $size"
+    return 0
+  fi
+  size="${size//[[:space:]]/}"
+  if [[ "$size" -ge "$max" ]]; then
+    if ! why="$(mv -f -- "$ARNGZ_LOG" "$ARNGZ_LOG.1" 2>&1)"; then
+      log_failed "could not move it to $ARNGZ_LOG.1: $why"
+    fi
+  fi
+  return 0
+}
+
+# Whether the run of verb VERB logs: all but the read-only verbs and help. A
+# bare desk is apply, and logs.
+run_logs() {
+  case "$1" in
+    -h | --help) return 1 ;;
+  esac
+  if in_list "$1" "$ARNGZ_UNLOGGED_VERBS"; then
+    return 1
+  fi
+  return 0
+}
+
+# Begin the run's log: its id, the rotation, the start record, and the EXIT
+# trap that writes the end record, for a refusal's exit 2 as for any other.
+# The trap reads globals, since bash 5's EXIT trap has lost a function's
+# locals by the time it runs. ARNGZ_LOG_MAX is judged before the run has a
+# log, so a bad one is refused with nothing written, as the platform gate's
+# refusal is. INT and TERM exit 130 and 143 through the EXIT trap, because
+# bash 5 reads $? as 0 there after an untrapped signal, which would log a run
+# stopped by Ctrl-C as exit 0.
+log_open() {
+  local why version caller=shell max
+  max="$(count_setting ARNGZ_LOG_MAX 4194304 bytes)" || exit 2
+  ARNGZ_LOG="$(log_file)"
+  ARNGZ_RUN="$(date -u +%Y%m%dT%H%M%SZ)-$$"
+  ARNGZ_LOG_T0=$SECONDS
+  if ! why="$(mkdir -p -- "${ARNGZ_LOG%/*}" 2>&1)"; then
+    log_failed "could not make ${ARNGZ_LOG%/*}: $why"
+  fi
+  log_rotate "$max"
+  if ! version="$({ tr -d '[:space:]' <"$UTILZ_HOME/opt/arngz/VERSION"; } 2>&1)"; then
+    version="unknown ($version)"
+  fi
+  if [[ -n "${MENUZ_LOG:-}" ]]; then
+    caller=menuz
+  fi
+  log_record start "arngz ${version:-unknown}, tree $UTILZ_HOME, $*, from $caller"
+  trap 'log_close $?' EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+}
+
+log_close() {
+  log_record end "exit $1 in $((SECONDS - ARNGZ_LOG_T0)) s"
+}
+
+# arngz log: the last run, from its start record to the end of the log, with
+# the display watcher's records between. The run that began in <log>.1 is read
+# from there on. Exit 1 when no run is logged, saying where it looked.
+cmd_log() {
+  if [[ $# -gt 0 ]]; then refuse "log takes no arguments, not '$*'"; fi
+  local log files=() rc=0
+  log="$(log_file)"
+  if [[ -f "$log.1" ]]; then files+=("$log.1"); fi
+  if [[ -f "$log" ]]; then files+=("$log"); fi
+  if [[ ${#files[@]} -eq 0 ]]; then
+    error "arngz: no run is logged yet: there is no $log"
+    exit 1
+  fi
+  awk '
+    { line[NR] = $0; run[NR] = $2 }
+    $3 == "cli" && $4 == "start" { start = NR; last = $2 }
+    END {
+      if (!start) exit 3
+      for (i = start; i <= NR; i++) if (run[i] == last || run[i] == "-") print line[i]
+    }' "${files[@]}" || rc=$?
+  if [[ $rc -eq 3 ]]; then
+    error "arngz: no run is logged yet: $log holds no run's start"
+    exit 1
+  elif [[ $rc -ne 0 ]]; then
+    error "arngz: could not read $log (awk exited $rc)"
+    exit 1
+  fi
+}
+
+# ============================================================================
 # THE CURRENT DESK (issue 0070)
 # ============================================================================
 
@@ -191,7 +376,7 @@ desk_name_refusal() {
 # for, or the one a discover --save just saved. It is state, not
 # configuration, so it lives under XDG_STATE_HOME and not in the catalogue.
 current_file() {
-  printf '%s/arngz/current\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+  printf '%s/current\n' "$(state_dir)"
 }
 
 # Record DESK as the current desk, written beside the file and moved over it so
@@ -253,7 +438,7 @@ forget_current() {
 # configuration, beside the current desk. The engine decides every change to
 # them (P.own_sizes_after); the CLI only carries them in and writes them out.
 own_sizes_file() {
-  printf '%s/arngz/own-sizes\n' "${XDG_STATE_HOME:-$HOME/.local/state}"
+  printf '%s/own-sizes\n' "$(state_dir)"
 }
 
 # Put the records into the engine's OPTIONS file as .own_sizes. No file is no
@@ -267,12 +452,11 @@ own_sizes_file() {
 # warning, captured with the shape, once made every valid file "not a list"
 # (ST0034's design.md). yq's stderr is said only when yq fails.
 own_sizes_into() {
-  local options="$1" file shape why err
+  local options="$1" file shape why query='(type) + " " + (length | tostring)'
   file="$(own_sizes_file)"
   [[ -e "$file" ]] || return 0
-  err="${options%/*}/own-sizes.err"
-  if ! shape="$(yq -r -p json -o yaml '(type) + " " + (length | tostring)' "$file" 2>"$err")"; then
-    warn "arngz: the sizes apps hold their windows at, $file, cannot be read, so none is used: $(cat -- "$err" 2>/dev/null)"
+  if ! shape="$(yq_value -r -p json -o yaml "$query" "$file")"; then
+    warn "arngz: the sizes apps hold their windows at, $file, cannot be read, so none is used: $(yq_words -r -p json -o yaml "$query" "$file")"
     return 0
   fi
   case "$shape" in
@@ -293,11 +477,10 @@ own_sizes_into() {
 # changed, beside the file and moved over it as record_current writes. A
 # record that cannot be written is said, and apply keeps its own exit.
 record_own_sizes() {
-  local response="$1" changed file tmp why err
+  local response="$1" changed file tmp why
   # Parsed, so from yq's stdout alone, as own_sizes_into reads its shape.
-  err="${response%/*}/own-sizes-changed.err"
-  if ! changed="$(yq -r '.own_sizes_changed // false' "$response" 2>"$err")"; then
-    warn "arngz: could not read whether the sizes apps hold their windows at changed: $(cat -- "$err" 2>/dev/null)"
+  if ! changed="$(yq_value -r '.own_sizes_changed // false' "$response")"; then
+    warn "arngz: could not read whether the sizes apps hold their windows at changed: $(yq_words -r '.own_sizes_changed // false' "$response")"
     return 0
   fi
   [[ "$changed" == true ]] || return 0
@@ -456,11 +639,11 @@ validate_desk() {
   file="$(desk_file "$desk")"
 
   if reason="$(desk_name_refusal "$desk")"; then
-    error "arngz: desk '$desk' ($file): $reason"
+    desk_refused "desk '$desk' ($file): $reason"
     return 2
   fi
   if [[ ! -f "$file" ]]; then
-    error "arngz: desk '$desk' does not exist: no $file (arngz list names the desks there are)"
+    desk_refused "desk '$desk' does not exist: no $file (arngz list names the desks there are)"
     return 2
   fi
   validate_desk_file "$desk" "$file"
@@ -471,7 +654,7 @@ validate_desk() {
 validate_desk_file() {
   local desk="$1" file="$2" facts refusals path value why
   if ! facts="$(desk_facts "$file" 2>&1)"; then
-    error "arngz: desk '$desk' ($file) is not YAML yq can read: $facts"
+    desk_refused "desk '$desk' ($file) is not YAML yq can read: $facts"
     return 2
   fi
   refusals="$(printf '%s\n' "$facts" | awk "$DESK_RULES")"
@@ -480,9 +663,9 @@ validate_desk_file() {
   fi
   while IFS=$'\037' read -r path value why; do
     if [[ -n "$value" ]]; then
-      error "arngz: desk '$desk' ($file): $path = '$value': $why"
+      desk_refused "desk '$desk' ($file): $path = '$value': $why"
     else
-      error "arngz: desk '$desk' ($file): $path: $why"
+      desk_refused "desk '$desk' ($file): $path: $why"
     fi
   done <<<"$refusals"
   return 2
@@ -506,15 +689,21 @@ engine_module() {
   printf '%s/opt/arngz/lib/arngz.lua\n' "$UTILZ_HOME"
 }
 
+# A whole number of UNITs from the environment variable NAME, DEFAULT when it
+# is unset; anything else is refused.
+count_setting() {
+  local name="$1" default="$2" unit="$3" t
+  t="${!name:-$default}"
+  if [[ ! "$t" =~ ^[1-9][0-9]*$ ]]; then
+    refuse "$name = '$t': a whole number of $unit"
+  fi
+  printf '%s\n' "$t"
+}
+
 # A number of seconds from the environment variable NAME, DEFAULT when it is
 # unset; anything but a whole number of seconds is refused.
 seconds_setting() {
-  local name="$1" default="$2" t
-  t="${!name:-$default}"
-  if [[ ! "$t" =~ ^[1-9][0-9]*$ ]]; then
-    refuse "$name = '$t': a whole number of seconds"
-  fi
-  printf '%s\n' "$t"
+  count_setting "$1" "$2" seconds
 }
 
 # How long one engine call may take, in seconds. ARNGZ_HS_TIMEOUT overrides it,
@@ -589,7 +778,10 @@ ENGINE_KIND=""
 # THE SAME LIST AS `SCHEDULED` in lib/arngz.lua, which arngz.bats holds the
 # two to: the CLI needs its own copy to check the deadline before it sends.
 SCHEDULED_VERBS="apply"
-engine_ask() {
+# hs's exit code for the run log: a number, or killed, or empty when hs never
+# ran.
+ENGINE_HS_RC=""
+engine_ask_run() {
   local verb="$1" desk_file="${2:-}" options_file="${3:-}" tool state hs fix module timeout dir request response out why rc deadline hung=0
   local tmp_fix="make ${TMPDIR:-/tmp} a writable directory, or set TMPDIR to one"
   ENGINE_RESPONSE=""
@@ -598,6 +790,7 @@ engine_ask() {
   ENGINE_DIR=""
   ENGINE_PENDING=0
   ENGINE_KIND=""
+  ENGINE_HS_RC=""
   # The hs tool as doctor and init tell it, so the three cannot disagree.
   tool="$(hs_tool_state "$(hs_prefix)")"
   IFS=$'\037' read -r state hs fix <<<"$tool"
@@ -636,18 +829,23 @@ engine_ask() {
       return 2
     fi
   fi
+  # The run's id and its log ride in the request (ST589246c), empty when the
+  # run does not log, so the engine's records land beside the CLI's.
   rc=0
   if [[ -n "$desk_file" ]]; then
-    why="$(V="$verb" D="$desk_file" O="$options_file" yq -n -o json \
-      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O))' 2>&1 >"$request")" || rc=$?
+    why="$(V="$verb" D="$desk_file" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" yq -n -o json \
+      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG)' \
+      2>&1 >"$request")" || rc=$?
   else
-    why="$(V="$verb" O="$options_file" yq -n -o json \
-      '.verb = strenv(V) | .desk = null | .options = load(strenv(O))' 2>&1 >"$request")" || rc=$?
+    why="$(V="$verb" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" yq -n -o json \
+      '.verb = strenv(V) | .desk = null | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG)' \
+      2>&1 >"$request")" || rc=$?
   fi
   if [[ $rc -ne 0 ]]; then
     engine_unasked "could not write the request for $verb to $request (yq exited $rc): $why" "fix what yq names, then run arngz again"
     return 2
   fi
+  log_record request "$verb: $request${desk_file:+, desk $desk_file}"
 
   # STDIN FROM /dev/null, ALWAYS: hs reads Lua from stdin when stdin is not a
   # terminal, so under any caller whose stdin stays open it waits for input
@@ -656,6 +854,7 @@ engine_ask() {
   # The response-file wait below stays as the defence against the next hang.
   "$hs" -a -t "$timeout" -c "return dofile(\"$module\").run(\"$request\")" </dev/null >"$out" 2>&1 &
   local pid=$!
+  log_record hs "$hs pid $pid, -t $timeout, deadline $timeout s${waited:+; a scheduled $verb is then waited for up to $waited s}"
   deadline=$((SECONDS + timeout))
   while [[ ! -f "$response" ]] && kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $deadline ]]; do
     sleep 0.1
@@ -664,11 +863,19 @@ engine_ask() {
   if [[ -f "$response" ]]; then
     if kill -0 "$pid" 2>/dev/null; then
       kill "$pid" 2>/dev/null || true
+      ENGINE_HS_RC=killed
+      log_record kill "stopped hs (pid $pid): the response came while it still ran"
     fi
-    wait "$pid" 2>/dev/null || true
+    # The response is the answer, so hs's status changes nothing here; it is
+    # kept for the run log's answer record, which says how hs ended.
+    local hs_rc=0
+    wait "$pid" 2>/dev/null || hs_rc=$?
+    ENGINE_HS_RC="${ENGINE_HS_RC:-$hs_rc}"
   elif kill -0 "$pid" 2>/dev/null; then
     kill "$pid" 2>/dev/null || true
     wait "$pid" 2>/dev/null || true
+    ENGINE_HS_RC=killed
+    log_record kill "stopped hs (pid $pid): no response by its $timeout s deadline"
     if [[ -z "$waited" ]]; then
       ENGINE_ERROR="hs did not answer within ${timeout}s and wrote no response"
       ENGINE_FIX="Hammerspoon is busy or hung: see its console (its menu bar icon: Console), or quit and reopen it"
@@ -681,6 +888,7 @@ engine_ask() {
   else
     rc=0
     wait "$pid" || rc=$?
+    ENGINE_HS_RC=$rc
   fi
   # A SCHEDULED VERB (D20 as amended): the hs client gives up 4 s after
   # sending, so apply's work runs on a timer inside Hammerspoon, the IPC call
@@ -699,6 +907,7 @@ engine_ask() {
     fi
   fi
   if [[ $taken -eq 1 ]]; then
+    log_record wait "the engine took $verb; its answer is waited for up to $waited s"
     deadline=$((SECONDS + waited))
     while [[ ! -f "$response" && $SECONDS -lt $deadline ]]; do
       sleep 0.2
@@ -759,8 +968,8 @@ engine_ask() {
   ENGINE_RESPONSE="$response"
   ENGINE_KIND=unreadable
   local status
-  if ! status="$(yq -r '.status' "$response" 2>"$ENGINE_DIR/yq.err")"; then
-    ENGINE_ERROR="the engine's response is not JSON: $(tr '\n' ' ' <"$ENGINE_DIR/yq.err")"
+  if ! status="$(yq_value -r '.status' "$response")"; then
+    ENGINE_ERROR="the engine's response is not JSON: $(yq_words -r '.status' "$response")"
     ENGINE_FIX="$(engine_failing)"
     return 3
   fi
@@ -780,6 +989,42 @@ engine_ask() {
     return 3
   fi
   ENGINE_KIND=ok
+}
+
+# engine_ask: engine_ask_run, then the run log's account of how the asking
+# ended, and the warnings the engine's response carries (its records or its
+# toast hook could not do their part), each said once. Its exits are
+# engine_ask_run's.
+engine_ask() {
+  local rc=0 t0=$SECONDS pending=""
+  engine_ask_run "$@" || rc=$?
+  if [[ $ENGINE_PENDING -eq 1 ]]; then pending="; pending"; fi
+  log_record answer "$1: returned $rc after $((SECONDS - t0)) s; hs exited ${ENGINE_HS_RC:-never ran}; response ${ENGINE_KIND:-none}$pending${ENGINE_ERROR:+; $ENGINE_ERROR}"
+  if [[ -n "$ENGINE_RESPONSE" && -f "$ENGINE_RESPONSE" ]]; then
+    engine_warnings "$ENGINE_RESPONSE"
+  fi
+  return "$rc"
+}
+
+# The response's log_error and toast_error, said once each per run. The engine
+# writes each on one line, so the two come back as two lines, read from yq's
+# stdout alone.
+engine_warnings() {
+  local response="$1" lines log_error toast_error="" query='(.log_error // ""), (.toast_error // "")'
+  if ! lines="$(yq_value -r "$query" "$response")"; then
+    warn "arngz: could not read the engine's warnings in $response: $(yq_words -r "$query" "$response")"
+    return 0
+  fi
+  log_error="${lines%%$'\n'*}"
+  if [[ "$lines" == *$'\n'* ]]; then toast_error="${lines#*$'\n'}"; fi
+  if [[ -n "$log_error" ]]; then
+    log_failed "the engine's records: $log_error"
+  fi
+  if [[ -n "$toast_error" && -z "$ARNGZ_TOAST_FAILED" ]]; then
+    ARNGZ_TOAST_FAILED=1
+    warn "arngz: the toasts could not be shown: $toast_error"
+  fi
+  return 0
 }
 
 # Nothing was asked: say why and what fixes it, and remove the request's temp
@@ -859,8 +1104,9 @@ HAMMERSPOON_INSTALL=""
 HAMMERSPOON_PROCESS="Hammerspoon"
 load_hammerspoon() {
   local yaml="$UTILZ_HOME/opt/arngz/arngz.yaml" entry
-  if ! entry="$(yq -r '.dependencies[] | select(.name == "Hammerspoon") | (.app // "") + "|" + (.install // "")' "$yaml" 2>&1)"; then
-    refuse "could not read Hammerspoon's entry in $yaml: $entry"
+  local query='.dependencies[] | select(.name == "Hammerspoon") | (.app // "") + "|" + (.install // "")'
+  if ! entry="$(yq_value -r "$query" "$yaml")"; then
+    refuse "could not read Hammerspoon's entry in $yaml: $(yq_words -r "$query" "$yaml")"
   fi
   HAMMERSPOON_BUNDLE="${entry%%|*}"
   HAMMERSPOON_INSTALL="${entry#*|}"
@@ -1677,7 +1923,10 @@ cmd_apply() {
     error "arngz: apply ran, and its report could not be printed; its response is kept at $ENGINE_RESPONSE"
     exit 1
   fi
-  if ! code="$(yq -r '.exit' "$ENGINE_RESPONSE" 2>&1)" || [[ "$code" != 0 && "$code" != 1 ]]; then
+  if ! code="$(yq_value -r '.exit' "$ENGINE_RESPONSE")"; then
+    code="unreadable: $(yq_words -r '.exit' "$ENGINE_RESPONSE")"
+  fi
+  if [[ "$code" != 0 && "$code" != 1 ]]; then
     error "arngz: apply ran, and its exit code reads '$code', not 0 or 1; its response is kept at $ENGINE_RESPONSE"
     exit 1
   fi
@@ -1707,7 +1956,10 @@ cmd_diff() {
   if ! render_report "$ENGINE_RESPONSE"; then
     refuse "the engine's plan could not be printed (kept at $ENGINE_RESPONSE)"
   fi
-  if ! code="$(yq -r '.exit' "$ENGINE_RESPONSE" 2>&1)" || [[ "$code" != 0 && "$code" != 1 ]]; then
+  if ! code="$(yq_value -r '.exit' "$ENGINE_RESPONSE")"; then
+    code="unreadable: $(yq_words -r '.exit' "$ENGINE_RESPONSE")"
+  fi
+  if [[ "$code" != 0 && "$code" != 1 ]]; then
     refuse "the engine's plan carries exit '$code', not 0 or 1 (kept at $ENGINE_RESPONSE)"
   fi
   rm -rf -- "$ENGINE_DIR"
@@ -1793,7 +2045,8 @@ cmd_discover() {
 #
 # It makes and prints its own temp dir and removes it before every refusal, as
 # apply_options does: a helper that refused while its caller owned the dir left
-# one behind on four paths, and there is no trap in this file to catch them.
+# one behind on four paths, and the one EXIT trap here, the run log's, writes
+# its end record and removes nothing.
 which_options() {
   local dir options names current name file why rc=0 count=0
   if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-which.XXXXXX" 2>&1)"; then
@@ -1851,9 +2104,9 @@ which_options() {
 # each read with yq's own words kept on a failure. The response is left where
 # it is, so a refusal can name it for a look.
 which_answer() {
-  local out
-  if ! out="$(yq -r '[(.kind // ""), (.desk // "")] | @tsv' "$ENGINE_RESPONSE" 2>&1)"; then
-    refuse "could not read the engine's answer at $ENGINE_RESPONSE: $out"
+  local out query='[(.kind // ""), (.desk // "")] | @tsv'
+  if ! out="$(yq_value -r "$query" "$ENGINE_RESPONSE")"; then
+    refuse "could not read the engine's answer at $ENGINE_RESPONSE: $(yq_words -r "$query" "$ENGINE_RESPONSE")"
   fi
   printf '%s\n' "$out"
 }
@@ -2033,7 +2286,8 @@ cmd_doctor() {
     outcome=0
     engine_ask observe || outcome=$?
     if [[ $outcome -eq 0 ]]; then
-      granted="$(yq -r '.world.accessibility' "$ENGINE_RESPONSE" 2>&1)" || granted="(unreadable: $granted)"
+      granted="$(yq_value -r '.world.accessibility' "$ENGINE_RESPONSE")" ||
+        granted="(unreadable: $(yq_words -r '.world.accessibility' "$ENGINE_RESPONSE"))"
     fi
     if [[ $outcome -eq 3 ]]; then
       kept="$ENGINE_DIR"
@@ -2096,9 +2350,16 @@ main() {
     # Everything left is a bare desk name, which is apply.
     refuse_engine_off_macos "arngz apply"
   fi
+  # The run log (ST589246c): opened here, past the platform gate, so a run
+  # that logs has its start record before anything it does, and its end
+  # record whatever way it exits.
+  if run_logs "$verb"; then
+    log_open "$verb" "$@"
+  fi
   # current reads one file at every menu open that asks it, and needs no
-  # engine, so it skips the read of Hammerspoon's entry, as help does.
-  if [[ "$verb" != -h && "$verb" != --help && "$verb" != current ]]; then
+  # engine, so it skips the read of Hammerspoon's entry, as help does; and so
+  # does log, which reads only the run log.
+  if [[ "$verb" != -h && "$verb" != --help && "$verb" != current && "$verb" != log ]]; then
     load_hammerspoon
   fi
   case "$verb" in
@@ -2109,6 +2370,7 @@ main() {
     show) cmd_show "$@" ;;
     delete) cmd_delete "$@" ;;
     current) cmd_current "$@" ;;
+    log) cmd_log "$@" ;;
     # Before the fallthrough below, which would otherwise read these as the
     # names of desks to apply.
     which) cmd_which "$@" ;;
