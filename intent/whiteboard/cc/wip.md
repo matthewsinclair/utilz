@@ -3,10 +3,10 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-23 10:14Z
+heartbeat_at: 2026-11-23 11:44Z
 status: active
-focus: "23 Nov, localfold for hv's compact on vc's LOCALFOLD (hv's word); holding for the compact, then on the bounce /in-session with the pickup, and second reader for ST589246c/93ea's code and landing on vc's word; the junction walk is done, both walks backing 93ea's live-order rule; nothing of cc's open, no claims, watch-out 6 live; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: []
+focus: "23 Nov, localfold for hv's compact on hv's direct word; STca1b7f9d59191dfc (windows across desktops and a route past a full-screen desktop, hv decision 13) claimed, its design attached for vc's read, then spike M1 to M3 through the Desk before any code; nothing else of cc's open; watch-out 6 live; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: [STca1b7f9d59191dfc]
 ---
 
 # Control Claude (cc)

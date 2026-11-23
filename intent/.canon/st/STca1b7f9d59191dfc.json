@@ -1,0 +1,13 @@
+{
+  "schema": "intent/thread@4.0",
+  "id": "STca1b7f9d59191dfc",
+  "origin": "01M84349BA4VYCX1B83BCRDB94",
+  "title": "arngz: apps with windows on several desktops, and a route past a full-screen desktop",
+  "slug": "arngz-apps-with-windows-on-several-desktops-and",
+  "status": "triage",
+  "created": "2026-11-23",
+  "objective": "Make arngz put each window of an app with several windows where its desk says, and only there, and move a window past a full-screen desktop.\n\n- arngz names a window it has named before in this Hammerspoon session, even when Hammerspoon's own routes no longer list it.\n- Each desk entry keeps the windows it was recorded with. So a changed title does not lose a window, and an entry with no title never takes a window that was there, unrecorded, when the desk was saved.\n- A move that would carry a window into a full-screen space goes round through another display. On the laptop alone it goes through Mission Control, if a measurement shows that works; otherwise it refuses, naming the way out.\n\nhv decision 13, 23 Nov 2026.",
+  "context": "hv decision 13 (23 Nov 2026, recorded by vc at fb424e2f): \"New thread, yes. Why not fix it now? I see no reason not to.\" It answered vc's question after ST589246c/93ea's live re-runs. cc designs and builds it, design before code. dc is second reader on the design once ST0031 allows. Every run goes through the Desk.\n\nThe run log that ST589246c added shows four faults, all on 23 Nov 2026. design.md cites the runs.\n\n- **arngz cannot always see every window.** Screen Sharing's two windows, gyges (210770) and All Connections (79), were never named in the same read after 11:00Z, though neither closed.\n- **An entry with no title takes every window of its app.** The 11:08Z save saw one Screen Sharing window and recorded an entry with no title. At 11:15Z, auto saw only the other window, carried it to that entry's desktop and stretched it to 8x4.\n- **A title is a fragile way to pick a window.** A browser's title follows its tab, a terminal's its command, and Screen Sharing's its host.\n- **A move cannot carry a window past a full-screen desktop.** P.move_legs refuses it. That refusal failed four moves in rhad's re-run and one in zeopit's. One more failure in rhad's re-run was Appgate's grab: its title bar is drawn by a web area.\n\nUntil this lands:\n\n- hv keeps Screen Sharing and Parallels out of full screen.\n- vc gave Screen Sharing two entries titled by window in hv's desks rhad and zeopit. gyges is full size on desktop 6, and All Connections is on desktop 7. The desks from before are in ~/Devel/scratch/utilz-vc/desks-before-20261123/.\n\nIt follows ST589246c, whose run log records every read used here.",
+  "body": "",
+  "preamble": ""
+}
