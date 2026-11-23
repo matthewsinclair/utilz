@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.3",
+  "text": "A move whose step reads back a desktop other than the one the order predicted fails by name, and is not reported done.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

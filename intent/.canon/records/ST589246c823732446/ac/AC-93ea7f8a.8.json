@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.8",
+  "text": "The displays records say each order's source, write the collapsed entries as one counted line, and the observed point's `order` says where the orders came from.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

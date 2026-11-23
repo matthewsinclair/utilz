@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.1",
+  "text": "Where exactly one recorded list holds a display's live desktops, observe takes that list's order, and logs it when the live order differs (16 Oct's shape). Where none does, it takes the live order and logs the record as stale (hv's unplugged and replugged lists). Where two do, it takes the live order and logs both. plan and discover refuse for none of these.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

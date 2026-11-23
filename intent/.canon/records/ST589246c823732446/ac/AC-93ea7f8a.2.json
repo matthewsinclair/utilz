@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.2",
+  "text": "An id on two displays' live lists is refused, naming both. A live list that cannot be read is refused as before.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

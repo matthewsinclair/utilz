@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.11",
+  "text": "Once its response has come, hs is given 3 s to exit on its own, and is stopped only if it still runs (F3).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

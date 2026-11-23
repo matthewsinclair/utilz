@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.4",
+  "text": "Full-screen spaces are ordered with the rest, and desk ordinals skip them (hv's built-in list, with 423 and 121 at positions 5 and 6).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

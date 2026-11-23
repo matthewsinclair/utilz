@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.9",
+  "text": "Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walks' results are recorded, and any change they call for is made.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

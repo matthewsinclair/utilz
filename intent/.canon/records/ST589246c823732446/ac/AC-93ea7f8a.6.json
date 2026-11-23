@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.6",
+  "text": "The created wait ends when the live list shows each new desktop, and a lone desktop can take a new one beside it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

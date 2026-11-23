@@ -22,6 +22,7 @@ How arngz orders and creates desktops when a change of desk moves desktops betwe
 3. **Visitors go home at once.** At the replug, above-left reads `1805 1271 1442` in the snapshot taken 0.17 s after the change. A replug flaps: there were eight change events in 4.1 s, from 08:59:23.761Z to 08:59:27.896Z.
 4. **The ids churn.** At the unplug, macOS removed one desktop from each external, the one each was showing: 1716, which was also above-left's first, and 1586, above-right's only one. It moved above-left's others to the built-in. At the replug it made a new one for each, listed first (1805, then 1808 after a flap; and 1811), and moved 1271 and 1442 home. Over the cycle the counts held: above-left 3, above-right 1. This is one cycle.
 5. **No desktop was created**, so whether com.apple.spaces records a created desktop, and when, is still unmeasured (AC-53ef07aa.3). F3 was seen once more: at 08:59:45Z the CLI killed hs as the response landed, and no ipc error followed.
+6. **The record's lag is not the same for every display, and a blip churns ids too** (vc's and cc's reads). At 09:39:27.8Z, as hv's displays woke, above-left dropped and came back within 1.5 s, with nothing logged before it, and came back with a new first desktop, 1819, in place of 1808. By 09:39:27.978Z the record held above-right's lone 1811, while Main stayed at its 10 and above-left had no list. So in one state a display's record can be current while its neighbour's is stale, and the rule below is taken per display. And ids churn on a blip as well as an unplug, which the settle covers.
 
 ## The order rule, in place of D22
 
@@ -44,14 +45,16 @@ What guards the order, and what does not (cc's item 4):
 - **In the order**: a full-screen space is in the live list and in com.apple.spaces' lists like any desktop, and the rule orders it with the rest. Desk ordinals count user desktops only (P.user_spaces), so its place changes no ordinal. A move steps through it with one Move-space press, so a full-screen space the order misplaces fails a move that crosses it, at that step's readback.
 - **In discover**: each full-screen window is filed under the user desktop before its space in the order (D11, plan.lua's discover), with no readback. plan leaves full-screen windows alone, so a misfiled one moves nothing, but the desk file records it under the wrong desktop.
 - **Where the risk is**: 16 Oct's built-in had one full-screen space, and the live order parted from Mission Control's on that display. hv's replugged built-in has two, 423 and 121 at live positions 5 and 6, and its record is stale (8 live, while Main holds 10), so the live order places them. The built-in's walk steps through both.
-- **If that walk finds the live order misplaces them**, discover files no full-screen window on a display whose order came from the live list, and names them in its notes instead, as it already does for one with no desktop before it.
+- **The walk found the live order places them right** (walk 2, below), so discover files full-screen windows by the order as it always has. Had it not, discover would have filed no full-screen window on a display whose order came from the live list, and named them in its notes instead.
 
 ## The settle, for a replug's flaps (cc's item 2)
 
 - **Before apply observes, it waits for 5 s of quiet**, the run's flap being 4.1 s. Quiet is counted from the later of the watcher's last display change and the watcher's start. M.watch starts a watcher at the run's start whenever none is running from this tree. So after a Hammerspoon reload, or a call from another tree, the first apply waits the full 5 s and sees a flap in progress. If the watcher could not start, which its error record says, quiet is counted from the run's start.
 - **It waits up to 20 s.** If the displays have not settled by then, apply refuses and changes nothing: "the displays did not settle: <n> changes in 20 s, the last at <time>", with the fix "run it again once the displays have stopped changing", which is true of a flap. Nothing is created on that path (cc's read-ahead, point 4). No window is moved or placed either, since a display still changing can move under them. cc left "go on without creates" or "refuse" to dc and vc. dc takes refuse, as the smaller and safer of the two.
 - **The wait is a phase**, a timer, never a sleep inside a callback. Its point is `waiting`, with `for` set to "the displays to settle", sent once when the wait begins (ic agreed on 23 Nov 2026; progress.md at f977764f).
-- **diff, which and discover do not wait.** Each run's log already records the time since the last display change (53ef07aa).
+- **Every verb that acts on what it reads waits the same way** (cc's round 2, adopted by vc). auto's which picks the desk auto then applies. Menuz's Discover is `auto --default rhad`, hv's likeliest click just after plugging in, and mid-flap which can see the built-in alone and pick rhad. discover --save, Menuz's Save Desk, writes a desk from one reading. Both now wait for the displays to settle, and at 20 s each refuses and writes nothing, as apply does.
+- **How they wait: the engine gates, the CLI sleeps.** Their requests carry `options.quiet`. While the displays have not settled, the engine answers `unsettled`, with how long to wait and when the wait began, reads nothing, and sends no point. The CLI sleeps that long in bash and asks again under the same run with the same start. Once settled, the verb runs as ever; past the limit it refuses, with its start and finished points. The rule and the limit live once, in P.quiet_verdict, which apply's phase calls too. Hammerspoon is never held, since which and discover answer inside one IPC call and cannot wait on a timer. During the wait no toast shows: which draws none, and discover draws its Finished alone.
+- **Read-only which, diff and plain discover do not wait.** Each run's log already records the time since the last display change (53ef07aa).
 
 ## Creates
 
@@ -73,7 +76,10 @@ What guards the order, and what does not (cc's item 4):
   - **The built-in** (8 live, while Main holds 10): 7 presses through 423 and 121. It tests where the live order puts full-screen spaces, the 16 Oct pattern.
 - **Not needed**: the steady state, or any display whose record is current (the record's order is taken); the unplugged built-in, whose order macOS itself wrote at the flap; a lone desktop (above-right's `1811`).
 - **How**: cc's widened `junction-walk.md` and `junction-walk.zsh`, with vc for its read before hv sees it. hv runs it once.
-- **If either walk differs from the live list**, the stale branch changes before that state is relied on. It becomes either an order walk at runtime for that display (ctrl+right through its desktops, with a readback each time) or D22's refusal for that state, vc's and hv's choice. For the built-in, discover's full-screen rule above applies at once.
+- **Walk 1, above-left, done** (23 Nov 2026, runs 09:43:32Z to 09:43:50Z in arngz.log; cc's report `~/Devel/scratch/utilz-cc/junction-walk-20261123T094332Z-94252.out`). With no list of its own, and with its desktops as of the 09:39Z wake, `1819 1271 1442`: each press showed 1819, then 1271, then 1442. ctrl+right follows the live order, the new desktop first, so the live order is right for a reattached display, and a stale record's order (new desktop last) would have been wrong.
+- **Walk 2, the built-in, done** (runs 09:47:42Z to 09:48:44Z; cc's report `~/Devel/scratch/utilz-cc/junction-walk-20261123T094742Z-1198.out`). With Main's record stale at 10 and its live list `1 3 1431 5 423 121 6 7`, the presses showed 1, 3, 1431, 5, 423, 121, 6, 7. ctrl+right follows the live order, through both full-screen spaces in their live places.
+- **So the rule stands as written** (vc, 23 Nov 2026). Both walks agree with the live list where no current record backs it, so no order walk is added at runtime, and the step readbacks guard every later state. discover's full-screen fallback below is not needed, and is not built.
+- **Had either walk differed from the live list**, the stale branch would have changed before that state was relied on, to an order walk at runtime for that display (ctrl+right through its desktops, with a readback each time) or to D22's refusal for that state, vc's and hv's choice.
 
 ## Refusal text and help
 
@@ -85,42 +91,45 @@ help/arngz.md's "A display just attached" bullet is replaced with these points:
 
 ## The log
 
-- **Each display's order says where it came from**: the record, with any live disagreement, or the live list, with the record stale.
-- **The padding** (on vc's word): every displays record printed com.apple.spaces' ~50 collapsed entries, mostly one id repeated. log.lua writes them as one counted line, `record collapsed: <n> entries for <k> displays no longer attached`. Each list that holds desktops is still written whole.
+- **Each display's order says where it came from**: `(record)`, with how the live order differs when it does, or `(live; <why>)`. The observed point's `order` field is `record` when every display's order is the record's, else `live on <n> of <m> displays` (progress.md).
+- **The padding** (on vc's word): every displays record printed com.apple.spaces' ~50 collapsed entries, mostly one display's repeated. They are now one line, `record collapsed: <n> entries, under <display> x<count>, ...`, by display in the order each first appears. The built-in's own UUID has such entries, so the line does not call them detached displays. Each list that holds desktops is still written whole.
+
+## F3 and F4 (in this WP, hv decision 11: "And yes, include all fixes.")
+
+- **F3, the hs client stopped mid-IPC.** Once its response has come, hs is given `HS_EXIT_GRACE`, 3 s, to exit on its own, and is stopped only if it still runs then. An hs stopped the moment its response landed once left Hammerspoon's IPC port stale for the next call. One that hangs after replying (16 Oct) is still stopped, after the grace. The fake hs's `reply-then-exit` and `hang-after-reply` prove both.
+- **F4, discover's deadline.** discover's default deadline is 180 s, and every other call's stays 60 s: a discover reads every window on every desktop inside one IPC call, and one took 87 s in hv's log. `ARNGZ_HS_TIMEOUT` still sets every call's. Hammerspoon's main thread is still held for a whole discover (the XS fix, as put to hv; the M fix, discover on a timer, is not taken).
 
 ## Not in this WP
 
-- **F3**, the killed hs client: seen again at 08:59:45Z, and harmless. It is with hv, through vc, at size S. The fix gives hs a short grace to exit on its own once the response has landed, and kills it only at the deadline. arngz.bats' existing hang-after-reply fake proves it. dc recommends leaving it out.
-- **F4**, discover's deadline: no new data. It is with hv at two sizes. XS gives discover its own deadline, eg 180 s, which still holds Hammerspoon's main thread for the whole discover. M runs discover on a timer, as apply runs. dc recommends leaving it out, or XS if hv wants it now.
 - **A check that two desks' counts agree across an unplug**, eg in `arngz doctor`: hv's call, if hv wants one.
+- **opt/arngz/test/acceptance.sh's D22 check** now always passes, since no order refusal is left. It is Python, on hold 24's list (dc's census, 30 Oct), so it is left as it stands.
 
 ## Files
 
-- `opt/arngz/lib/plan.lua`: P.order_spaces takes the three cases and says which source it used; 0077's create refusal goes; unread() refuses an id on two displays' live lists.
-- `opt/arngz/lib/arngz.lua`: observe keeps the order's source; the settle phase; the created wait on the live list, in place of spaces_agree; discover's full-screen rule, if the walk calls for it.
-- `opt/arngz/lib/log.lua`: each display's order source; the collapsed entries as one counted line.
+- `opt/arngz/lib/plan.lua`: P.order_spaces takes the three cases and says which source it used; 0077's create refusal goes; unread() refuses an id on two displays' live lists; P.quiet_verdict, the one settle rule.
+- `opt/arngz/lib/arngz.lua`: observe keeps the order's source; the quiet phase, apply's first; the quiet gate in M.run for which and discover asked with `options.quiet`; the created wait on the live list, in place of spaces_agree.
+- `opt/arngz/lib/log.lua`: each display's order source; the collapsed entries as one counted line; the observed point's `order`.
+- `opt/arngz/arngz`: engine_ask_quiet, which auto's which and discover --save ask through; F3's grace; F4's per-verb deadline.
 - `help/arngz.md`.
 - Tests:
-  - plan_test.lua: the order rule, from hv's lists with 423 and 121, and 16 Oct's shape.
-  - engine_test.lua: the settle phase, with the watcher's state injected (a recent change, a new watcher, no watcher, and a flap that outlasts 20 s), and the created wait.
-  - log_test.lua: the order's source and the counted line.
-  - arngz.bats, where the refusal text is pinned.
+  - plan_test.lua: the order rule, from hv's lists with 423 and 121, and 16 Oct's shape (AT-93ea7f8a.1); a desktop on two screens, and a lone desktop's create (AT-93ea7f8a.2); P.quiet_verdict (AT-93ea7f8a.4).
+  - log_test.lua: the order's source, the counted line and the observed `order` (AT-93ea7f8a.3); the quiet phase and the gate, with the watcher's state injected (AT-93ea7f8a.4).
+  - arngz.bats, with the fake hs's `unsettled-once` and `reply-then-exit`: the gate from the CLI (AT-93ea7f8a.5); F3 and F4 (AT-93ea7f8a.6).
 
-## Acceptance (proposed)
+## Acceptance
 
 1. Where exactly one recorded list holds a display's live desktops, observe takes that list's order, and logs it when the live order differs (16 Oct's shape). Where none does, it takes the live order and logs the record as stale (hv's unplugged and replugged lists). Where two do, it takes the live order and logs both. plan and discover refuse for none of these.
 2. An id on two displays' live lists is refused, naming both. A live list that cannot be read is refused as before.
 3. A move whose step reads back a desktop other than the one the order predicted fails by name, and is not reported done.
 4. Full-screen spaces are ordered with the rest, and desk ordinals skip them (hv's built-in list, with 423 and 121 at positions 5 and 6).
-5. apply waits for 5 s of display quiet, counted from the later of the watcher's last change and its start, before it observes. A display still changing at 20 s refuses the apply, with nothing created, moved or placed, and the changes named.
+5. apply waits for 5 s of display quiet, counted from the later of the watcher's last change and its start, before it observes. Displays still changing at 20 s refuse the apply, with nothing created, moved or placed, saying how long they had been unchanged.
 6. The created wait ends when the live list shows each new desktop, and a lone desktop can take a new one beside it.
-7. help/arngz.md says the rule, what guards it, and what rests on it alone.
-8. The displays records say each order's source, and write the collapsed entries as one counted line.
-9. Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walk's result is recorded, and any change it calls for is made.
-
-## Acceptance
-
-Acceptance Criteria for this work package are RENDERED into `ST589246c/acceptance.md`, under the `WP-93ea` heading. THAT FILE IS A GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in the thread's model, and the verbs write it: `intent ac new` and `intent at new` mint a row, `intent ac edit` and `intent at edit` reword or re-cite one, and `intent ac satisfy|unsatisfy|descope|rescope|withdraw|reinstate` and `intent at green|red|na` move its state. This cover never restates them.
+7. help/arngz.md says the rule, what guards it, what rests on it alone, and when each verb waits.
+8. The displays records say each order's source, write the collapsed entries as one counted line, and the observed point's `order` says where the orders came from.
+9. Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walks' results are recorded, and any change they call for is made.
+10. auto's which and discover --save wait for the displays to settle through the engine's gate: while unsettled the engine answers `unsettled`, with the wait and its start, reading and pointing nothing, and the CLI sleeps and asks again under the same run. At 20 s each refuses, exit 2, writing and applying nothing. which, diff and plain discover do not wait.
+11. Once its response has come, hs is given 3 s to exit on its own, and is stopped only if it still runs (F3).
+12. discover's default deadline is longer than the other calls', 180 s against 60 s, and `ARNGZ_HS_TIMEOUT` sets every call's (F4).
 
 ---
 

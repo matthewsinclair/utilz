@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.12",
+  "text": "discover's default deadline is longer than the other calls', 180 s against 60 s, and `ARNGZ_HS_TIMEOUT` sets every call's (F4).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-93ea7f8a.5",
+  "text": "apply waits for 5 s of display quiet, counted from the later of the watcher's last change and its start, before it observes. Displays still changing at 20 s refuse the apply, with nothing created, moved or placed, saying how long they had been unchanged.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
