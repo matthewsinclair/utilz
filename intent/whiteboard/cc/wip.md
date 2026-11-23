@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-23 13:51Z
+heartbeat_at: 2026-11-23 17:27Z
 status: active
-focus: "23 Nov, after hv's second compact: STca1b7f9's WP3 and WP4's failure half coded in a worktree off main on vc's GO of 13:49Z, no run, ic reads second; the spike's slot 01M848922YQPMVNF4T2WTM15WA stays queued, the Desk closed until hv's word to devbin-vc; WP1, WP2 and WP4's Mission Control leg wait on the spike; WP5 left out with M3 (hv decision 15); no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "23 Nov, localfold for hv's estate-wide compact (vc's FOLD NOW, 17:26Z), no release. STca1b7f9's branch cc/stca1b7f9 at 3efc3397 (WP3, WP4's failure half, Ib12d894, WP6 but its create's M2 part), ic's toasts stacked, no run; spike v3 read SOUND and held for hv's ready (hold); its code (WP1, WP2, the mission leg, WP6's create) then the one booked run by stca1b/run-stca1b.sh. Records landed and checked: 0ca14af6, 3e9e7dd5, 3f0791ee, 931daea3, cd47793f. No test or build (vc decision 74). Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]
 ---
 
@@ -13,15 +13,15 @@ claims: [STca1b7f9d59191dfc]
 
 ## DOING
 
-- STca1b7f9 WP3 (the round through B) and WP4's failure half (its words and their fix), on vc's GO of 13:49Z amending vc decision 111: code in worktree ~/Devel/scratch/utilz-cc/wt-stca1b (branch cc/stca1b7f9) off main 37894681, no run, ic second reader before it lands; ST589246c's progress.md rows change with it, on cc's word and ic's.
+- STca1b7f9's code on branch cc/stca1b7f9 in ~/Devel/scratch/utilz-cc/wt-stca1b, no run: WP3 and WP4's failure half (8620c933), issue Ib12d894 (ee8337da), WP6 but its create's M2 part (4ce6eec1), and ic's progress.md nit (3efc3397); ic's second reads all SOUND, and ic's toasts are stacked on it (4b20e2b8, 109fbccf). Next: the spike on hv's word, then the spike's code (WP1, WP2, the mission leg, WP6's create), ic's last rebase, and the one booked run by stca1b/run-stca1b.sh (bac09793, HEAD_WANT set at the GO). (edited)
 
 ## TODO
 
-- Issue I7fce35c (hv's homere applies, 23 Nov; filed at 0ca14af6): write its fix into STca1b7f9 (design.md, a WP and its criteria) for vc's read, before any code. The retry rule, the plain words and fix for a failed filter, no false gone, the grab point's element in the log, and Finished's kind of first (ic's part); the create part waits on the spike's M2.
+_(none)_
 
 ## Holds
 
-- STca1b7f9's spike M1+M2 (spike.zsh 7ad7ec55, spike.lua 8364205b): slot 01M848922YQPMVNF4T2WTM15WA, asked on vc's GO of 13:05Z (hv's pick of Now). Released when devbin-vc grants it; the Desk has been closed since 12:52Z for hv's compact and grants only on hv's word to it. Then tell vc, start only on vc's word that hv has the go, and send START and END to devbin-vc and vc.
+- STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc; the 17:12Z run ended in M1 and M2 never ran): released when vc says hv is ready. Then a fresh light ask named spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d; at the slot's start the load-only check, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step.
 
 ## Watch-outs
 

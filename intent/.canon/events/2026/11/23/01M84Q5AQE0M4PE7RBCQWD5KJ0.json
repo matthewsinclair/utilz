@@ -1,0 +1,15 @@
+{
+  "id": "01M84Q5AQE0M4PE7RBCQWD5KJ0",
+  "ts": "2026-11-23T17:27:19.534Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc; the 17:12Z run ended in M1 and M2 never ran): released when vc says hv is ready. Then a fresh light ask named spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d; at the slot's start the load-only check, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step."
+  }
+}

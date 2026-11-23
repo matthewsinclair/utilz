@@ -1,0 +1,16 @@
+{
+  "id": "01M84GA04S6RKQAJVGRFVC1QHZ",
+  "ts": "2026-11-23T15:27:32.506Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 75,
+    "text": "STca1b7f9's code on branch cc/stca1b7f9 in ~/Devel/scratch/utilz-cc/wt-stca1b, no run: WP3 and WP4's failure half (8620c933), issue Ib12d894 (ee8337da), WP6 but its create's M2 part (4ce6eec1), and ic's progress.md nit (3efc3397); ic's second reads all SOUND, and ic's toasts are stacked on it (4b20e2b8, 109fbccf). Next: the spike on hv's word, then the spike's code (WP1, WP2, the mission leg, WP6's create), ic's last rebase, and the one booked run by stca1b/run-stca1b.sh (bac09793, HEAD_WANT set at the GO)."
+  }
+}
