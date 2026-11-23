@@ -1,0 +1,8 @@
+{
+  "id": "AC-702cceb9.6",
+  "text": "showreel --help lists qr <dir> and --force; showreel qr with no directory refuses with showreel qr <dir> as its remedy; an unknown option to qr refuses; and an unknown command's remedy names qr among the verbs.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

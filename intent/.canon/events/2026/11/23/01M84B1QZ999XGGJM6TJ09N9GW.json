@@ -1,0 +1,14 @@
+{
+  "id": "01M84B1QZ999XGGJM6TJ09N9GW",
+  "ts": "2026-11-23T13:55:39.116Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "STb8e4fb60638e2a9c"
+  },
+  "payload": {
+    "title": "showreel qr: write a reel's stamped QR codes"
+  }
+}

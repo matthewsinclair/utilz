@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 12:54Z
+heartbeat_at: 2026-11-23 13:04Z
 status: active
 focus: "23 Nov, localfold for hv's compact (hv's word at 12:52Z, relayed by vc), no release. Second reader of STca1b7f9 (cc's arngz thread: apps with windows on several desktops, and a route past a full-screen desktop) in place of dc, vc decision 111: design read r1 (12:03Z) and criteria read r2 (12:16Z) sent to cc and vc; next, cc's code before it lands. Hold 19: ic's toast parts, AC-dca427e7.3 and AC-ad94d40b.2, built once cc's code is under way. Issue I4eacd29, claimed, rides cc's change as AC-ad94d40b.3. Todo 13: arca_swift has no new tag (0.2.1; main 88a1e56). No code edits in the live primary. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
-claims: [ISSUE:I4eacd29e03a5e888]
+claims: [ISSUE:I4eacd29e03a5e888, STb8e4fb60638e2a9c]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-_(none)_
+- STb8e4fb6, showreel qr (hv decision 15, vc's ask of 13:05Z): thread, objective, design.md, WP 702cceb9 (S) and criteria AC-702cceb9.1 to .8 written; the design is with vc to approve and with cc to read for meaning. Code in a worktree once vc approves, never in the live primary; dc reads it second once ST0031 lands; every run booked at the Desk through vc.
 
 ## TODO
 

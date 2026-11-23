@@ -1,0 +1,10 @@
+{
+  "id": "702cceb9",
+  "origin": "01M84B2NVGEATM9ET4963HAXDF",
+  "title": "The qr verb, its help and its tests",
+  "scope": "S",
+  "status": "not-started",
+  "objective": "",
+  "body": "## Scope\n\n`showreel qr <dir> [--force]`, as design.md has it:\n\n- the targets: each socials url at `plan::qr_path`, and the session's `venue_url` at `plan::venue_qr_path`;\n- the refusals, made before anything is written;\n- keep or write, with a write through a temporary file and a rename;\n- the stamped SVG from `qrcode`, with no XML declaration;\n- the report, one line per target;\n- the help text and the remedy's verb list.\n\n## The code\n\n- `QR_STAMP` and `stamped_for` move from payload.rs into a new `src/qr.rs`, so that the writer and the reader share one definition. payload.rs's check and its words are unchanged.\n- `build::open`'s config read is given a name, so that `qr` reads the config the same way.\n- plan.rs's `tidy` becomes `pub(crate)`, for the containment check.\n- No dependency is added. `qrcode` keeps its features (ST0017 AC-3.9).\n\n## Tests\n\n- **In `src/qr.rs`:**\n  - the stamp's round trip through payload's reader;\n  - `qr` and then `payload::socials` on a constructed reel, with no warning;\n  - the targets and their order;\n  - each refusal, with nothing written;\n  - keep, in each of the three stamp states, and `--force`;\n  - no temporary file left behind;\n  - the file's shape.\n- **In `tests/qr.rs`, against the built binary:** the command line.\n\n## Evidence\n\n- the Desk's run of showreel's cargo tests and clippy, and acceptance.sh's AT09 counting no clippy warnings or errors;\n- hv's phone scan of one written QR;\n- main's CI green after hv's push.\n\n## Done when\n\nAll of the thread's criteria are satisfied:\n\n- code in a worktree, once vc has approved the design;\n- dc reads the code second, once ST0031 lands;\n- vc checks the landing by its change.\n",
+  "preamble": ""
+}

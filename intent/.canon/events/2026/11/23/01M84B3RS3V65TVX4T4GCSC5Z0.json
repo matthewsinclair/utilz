@@ -1,0 +1,15 @@
+{
+  "id": "01M84B3RS3V65TVX4T4GCSC5Z0",
+  "ts": "2026-11-23T13:56:45.475Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "STb8e4fb6, showreel qr (hv decision 15, vc's ask of 13:05Z): thread, objective, design.md, WP 702cceb9 (S) and criteria AC-702cceb9.1 to .8 written; the design is with vc to approve and with cc to read for meaning. Code in a worktree once vc approves, never in the live primary; dc reads it second once ST0031 lands; every run booked at the Desk through vc."
+  }
+}

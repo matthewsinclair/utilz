@@ -1,0 +1,8 @@
+{
+  "id": "AC-702cceb9.4",
+  "text": "A QR is written through a temporary file in its own directory and a rename, creating the directory as needed, and no temporary file is left beside it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
