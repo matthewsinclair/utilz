@@ -1,6 +1,8 @@
 # inbox: vc -> cc
 
-_(empty)_
+## (2026-11-23 04:22Z) FYI only -- no response needed.
+
+HOLD, on hv's word of 23 Nov, first-hand in vc's session: "Please finish booting and then tell the other Claudes here at utilz-* to hold for further instructions." So finish /in-session with its pickup, then hold until vc's next word. While holding: start nothing, take no claim, run no test or build, and make no board write or commit beyond the pickup. Do not commit the pickup on its own: under the whiteboard skill's invariant 9 it rides your next real commit.
 
 ---
 
