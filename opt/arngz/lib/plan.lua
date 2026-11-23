@@ -296,16 +296,18 @@ function P.user_spaces(screen)
 end
 
 -- What observe could not read, refused rather than planned as empty: the
--- windows that could not be listed at all, a screen whose spaces, or their
--- order (D22), could not be read, a space whose type could not be read, or a
--- space whose windows could not be read. Counting an unread space as "not a
--- desktop", or its windows as none, would plan a create_space for a space
--- that exists, shift every ordinal after it, and miss windows that are there.
--- Over every screen, because the window pool is the whole world's. Plan and
+-- windows that could not be listed at all, a screen whose spaces could not be
+-- read, a space whose type could not be read, or a space whose windows could
+-- not be read. Counting an unread space as "not a desktop", or its windows as
+-- none, would plan a create_space for a space that exists, shift every
+-- ordinal after it, and miss windows that are there. And a desktop listed
+-- twice, on two screens or on one, which cannot be ordered: the live data
+-- should never show one, and it is refused all the same, by name (WP
+-- 93ea7f8a). Over
+-- every screen, because the window pool is the whole world's. Plan and
 -- discover both refuse through this one check. One window that went away
 -- between being listed and being read is not this: it is unnamed, with its
--- read_error, and not seen. Returns why, and the fix observe kept beside an
--- order error, or nil.
+-- read_error, and not seen. Returns why, or nil.
 local function unread(world)
   if world.windows_list_error then
     return "the windows could not be listed: " .. tostring(world.windows_list_error)
@@ -313,15 +315,20 @@ local function unread(world)
   if world.apps_running_error then
     return "the running apps could not be listed: " .. tostring(world.apps_running_error)
   end
+  local listed_on = {}
   for _, s in ipairs(world.screens or {}) do
     if s.spaces_error then
       return string.format("the spaces of screen %s could not be read: %s", tostring(s.uuid), tostring(s.spaces_error))
     end
-    if s.order_error then
-      return string.format("the order of screen %s's spaces could not be read: %s", tostring(s.uuid),
-        tostring(s.order_error)), s.order_fix
-    end
     for _, sp in ipairs(s.spaces or {}) do
+      local other = sp.id ~= nil and listed_on[sp.id]
+      if other == s.uuid then
+        return string.format("desktop %s is listed twice on screen %s", tostring(sp.id), tostring(s.uuid))
+      elseif other then
+        return string.format("desktop %s is listed on two screens, %s and %s", tostring(sp.id), tostring(other),
+          tostring(s.uuid))
+      end
+      if sp.id ~= nil then listed_on[sp.id] = s.uuid end
       if sp.type == nil then
         return string.format("space %s on screen %s has no type%s", tostring(sp.id), tostring(s.uuid),
           sp.type_error and (": " .. tostring(sp.type_error)) or "")
@@ -557,8 +564,8 @@ function P.plan(desk, world, options)
   if not grid then return nil, "the desk's grid is not WxH: " .. tostring(desk.grid) end
   local pattern_refusal = bad_pattern(desk)
   if pattern_refusal then return nil, pattern_refusal end
-  local unread_refusal, unread_fix = unread(world)
-  if unread_refusal then return nil, unread_refusal, unread_fix end
+  local unread_refusal = unread(world)
+  if unread_refusal then return nil, unread_refusal end
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
 
@@ -569,13 +576,6 @@ function P.plan(desk, world, options)
     local s = screens[di]
     local have, need = #P.user_spaces(s), #(d.spaces or {})
     if need > have and not options.no_create then
-      -- A screen ordered without a list takes no new desktop: apply would add
-      -- it, then wait for a list macOS may take minutes to write, and fail
-      -- after a change. Refused here, before anything changes (issue 0077, D25).
-      if s.order_pending then
-        return nil, string.format("screen %s cannot take a new desktop yet: %s", tostring(s.uuid),
-          tostring(s.order_pending)), s.order_fix
-      end
       for n = have + 1, need do
         creates[#creates + 1] = {
           op = "create_space", screen = s.uuid,
@@ -800,51 +800,92 @@ end
 
 -- ------------------------------------------------------------- space order
 
--- A screen's spaces in Mission Control's order (D22): its list in
--- com.apple.spaces' SpacesDisplayConfiguration, found as the one list whose
--- spaces are exactly the screen's live spaces. The plist names the built-in
--- display "Main" and keeps lists for displays no longer attached, so a list
--- is never chosen by its name. One space has one order, so a screen with one
--- needs no list: just after a display attaches, macOS has not written its
--- list yet (issue 0077). `monitors` is the plist's Monitors array, each
--- { Spaces = { { ManagedSpaceID = id }, ... } }, or nil when the plist has
--- none, with unread_why saying why. Every order refusal's words are here.
--- Returns the ids in order. For a lone space no list holds, it returns the
--- ids, with why no list holds it and the fix: no desktop can be added beside
--- it until macOS records it, since apply could not then follow the new one.
--- Otherwise it returns nil, why and, when waiting is what fixes it, the fix.
+-- A screen's spaces in Mission Control's order (WP 93ea7f8a, in place of
+-- D22's refusal). Where exactly one list in com.apple.spaces'
+-- SpacesDisplayConfiguration holds the screen's live spaces, that list's
+-- order is taken: measured on 16 Oct 2026, the live list had parted from
+-- Mission Control there, and the list had not. But macOS rewrites the lists
+-- only at the next display change, with the layout from before it (hv's run,
+-- 23 Nov 2026), so after a display change no list holds them, and then the
+-- live order is taken: every list macOS wrote in that run equalled it. Two
+-- lists that both hold them is the live order too. Each step of a move reads
+-- its desktop back, so an order that proves wrong fails that move by name.
+-- The plist names the built-in display "Main" and keeps lists for displays no
+-- longer attached, so a list is never chosen by its name. `monitors` is the
+-- plist's Monitors array, each { Spaces = { { ManagedSpaceID = id }, ... } },
+-- or nil when the plist has none, with unread_why saying why. Never refuses.
+-- Returns the ids in order; where they came from, "record" or "live"; and a
+-- note for the run log, or nil: why the record was not taken, or how the
+-- live order differs from it.
 function P.order_spaces(live_ids, monitors, unread_why)
   local live, n = {}, 0
   for _, id in ipairs(live_ids or {}) do
     live[id] = true
     n = n + 1
   end
-  local why, fix
-  if not monitors then
-    why = "com.apple.spaces carries no display configuration" .. (unread_why and (": " .. unread_why) or "")
-  else
-    local found
-    for _, m in ipairs(monitors) do
-      local ids, same = {}, true
-      for _, sp in ipairs(m.Spaces or {}) do
-        local id = sp.ManagedSpaceID
-        ids[#ids + 1] = id
-        if not live[id] then same = false end
-      end
-      if same and #ids == n and n > 0 then
-        if found and n > 1 then
-          return nil, "two lists in com.apple.spaces hold exactly this screen's spaces"
-        end
-        found = ids
-      end
-    end
-    if found then return found end
-    why = "com.apple.spaces has not recorded this screen's spaces (" .. table.concat(live_ids or {}, ", ")
-      .. ") yet, as happens just after a display attaches or a desktop is added"
-    fix = "wait for macOS to record them, then run arngz again"
+  local function live_order(why)
+    local ids = {}
+    for i, id in ipairs(live_ids or {}) do ids[i] = id end
+    return ids, "live", why
   end
-  if n == 1 then return { live_ids[1] }, why, fix end
-  return nil, why .. ", so their order is not known", fix
+  if not monitors then
+    return live_order("com.apple.spaces carries no display configuration" .. (unread_why and (": " .. unread_why) or ""))
+  end
+  local found, twice
+  for _, m in ipairs(monitors) do
+    -- A list holds the live desktops only if it names each exactly once: one
+    -- that names a desktop twice would drop another and read that one twice.
+    local ids, same, named = {}, true, {}
+    for _, sp in ipairs(m.Spaces or {}) do
+      local id = sp.ManagedSpaceID
+      ids[#ids + 1] = id
+      if not live[id] or named[id] then same = false end
+      if id ~= nil then named[id] = true end
+    end
+    if same and #ids == n and n > 0 then
+      -- One space has one order, whichever list holds it.
+      if found and n > 1 then twice = true end
+      found = found or ids
+    end
+  end
+  if twice then return live_order("two lists in com.apple.spaces hold exactly these desktops") end
+  if not found then return live_order("no list in com.apple.spaces holds exactly these desktops") end
+  for i, id in ipairs(found) do
+    if live_ids[i] ~= id then
+      return found, "record", "the live order differs: " .. table.concat(live_ids, " ")
+    end
+  end
+  return found, "record", nil
+end
+
+-- ------------------------------------------- the displays settle (93ea7f8a)
+
+-- How long the displays must have been unchanged before a verb that acts on
+-- what it reads reads them, and how long it waits for that before refusing.
+-- A replug flaps: eight display changes in 4.1 s in hv's run of 23 Nov 2026.
+P.QUIET_SECONDS = 5
+P.QUIET_LIMIT = 20
+
+-- Whether the displays can be read at NOW. They have been unchanged since the
+-- later of the display watcher's last change and its start, since a watcher
+-- that has just started has seen nothing yet; with no watcher, since BEGAN,
+-- when the wait began. "go" once that is QUIET_SECONDS. "refuse", with why
+-- and the fix, once QUIET_LIMIT has passed since BEGAN without it. Otherwise
+-- "wait", and for how many seconds, rounded up to a tenth. Every time is in
+-- seconds since the epoch, as Hammerspoon's timer gives them.
+function P.quiet_verdict(now, watcher, began)
+  local since = began
+  if type(watcher) == "table" and type(watcher.started) == "number" then
+    since = math.max(watcher.last_change or watcher.started, watcher.started)
+  end
+  local quiet = now - since
+  if quiet >= P.QUIET_SECONDS then return "go" end
+  local waited = now - began
+  if waited >= P.QUIET_LIMIT then
+    return "refuse", string.format("the displays did not settle in %d s: they had been unchanged for %.1f s, and %d s is needed",
+      P.QUIET_LIMIT, quiet, P.QUIET_SECONDS), "run it again once the displays have stopped changing"
+  end
+  return "wait", math.ceil(math.min(P.QUIET_SECONDS - quiet, P.QUIET_LIMIT - waited) * 10) / 10
 end
 
 -- ------------------------------------------------------------- moving (D21)
@@ -1391,8 +1432,8 @@ function P.desk_from_world(world, options)
   -- What observe could not read is refused, never written down as empty: a
   -- desk that says "nothing here" where the engine could not look would be
   -- applied as if it were true.
-  local unread_refusal, unread_fix = unread(world)
-  if unread_refusal then return nil, unread_refusal, unread_fix end
+  local unread_refusal = unread(world)
+  if unread_refusal then return nil, unread_refusal end
 
   -- A window listed on more than one space is on every space; it is no
   -- space's, so it is said and left out.

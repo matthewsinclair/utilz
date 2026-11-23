@@ -76,7 +76,8 @@ local function read_defaults(domain)
 end
 
 -- com.apple.spaces and its Monitors list, which holds each display's desktops
--- in Mission Control's order (D22): the one reader observe and the display
+-- in Mission Control's order as of the last display change (D22, WP
+-- 93ea7f8a): the one reader observe and the display
 -- watcher share. The prefs come back too, for the Dock bindings observe reads.
 local function spaces_record()
   local prefs, err = read_defaults("com.apple.spaces")
@@ -323,8 +324,8 @@ end
 -- "is not there" need different answers. `bundles`, the desk's app bundle
 -- ids, is what is asked about one by one, fresh, for whether it runs.
 function M.observe(bundles)
-  -- com.apple.spaces first: it holds each display's space order (D22) as
-  -- well as the Dock bindings.
+  -- com.apple.spaces first: it holds each display's space order as of the
+  -- last display change (D22, WP 93ea7f8a) as well as the Dock bindings.
   local monitors, spaces_prefs, spaces_err = spaces_record()
   local data, derr = hs.spaces.data_managedDisplaySpaces()
   local uuids = {}
@@ -360,21 +361,13 @@ function M.observe(bundles)
   for _, scr in ipairs(hs.screen.allScreens()) do
     local entry, spaces = read_screen(scr, primary:getUUID(), primary_frame)
     local active = entry.active_space
-    -- Mission Control's order is com.apple.spaces', not the live list's
-    -- (D22, measured 16 Oct 2026). Without it the spaces are still recorded,
-    -- in the live order, and order_error says why: plan refuses that. A lone
-    -- space no list holds yet is ordered, and order_pending says why no
-    -- desktop can be added beside it yet (issue 0077).
+    -- Mission Control's order: com.apple.spaces' where its record of this
+    -- screen is current, and the live list's where it is not, as after a
+    -- display change (P.order_spaces, WP 93ea7f8a). Where it came from, and
+    -- why, go in the run log.
     local ordered = spaces
     if spaces then
-      local oerr, ofix
-      ordered, oerr, ofix = P.order_spaces(spaces, monitors, spaces_err)
-      if ordered then
-        entry.order_pending, entry.order_fix = oerr, ofix
-      else
-        ordered = spaces
-        entry.order_error, entry.order_fix = oerr, ofix
-      end
+      ordered, entry.order_source, entry.order_note = P.order_spaces(spaces, monitors, spaces_err)
     end
     for ordinal, id in ipairs(ordered or {}) do
       local raw, werr = hs.spaces.windowsForSpace(id)
@@ -617,9 +610,9 @@ local function exec_create_space(op, ctx)
   -- report. Whether waiting could put a failure right is plan's to say.
   --
   -- A CALL THAT REPORTED A SPACE IS NEVER MADE AGAIN. addSpaceToScreen creates
-  -- a desktop, and com.apple.spaces LAGS behind it: user_space_count reads
-  -- spacesForScreen, the same list spaces_agree waits on and the one the
-  -- created phase exists to let catch up. So a count read in the same breath
+  -- a desktop, and the desktop list LAGS behind it: user_space_count reads
+  -- spacesForScreen, the live list, and this count readback is what waits for
+  -- the new desktop to be listed (WP 93ea7f8a). So a count read in the same breath
   -- as the creation cannot be the trigger for another creation -- a lagging
   -- list would make a second, a third and a fourth desktop for one op, and
   -- report done with the extras unaccounted for. `made` is captured, so once
@@ -1380,15 +1373,6 @@ end
 -- What the settles wait for, shared by the plan verb's blocking wait and
 -- apply's phases. Each takes the world just observed.
 
--- After create_space: com.apple.spaces has caught up with the live list
--- (design.md, apply 7).
-local function spaces_agree(world)
-  for _, s in ipairs(world.screens or {}) do
-    if s.order_error then return false end
-  end
-  return true
-end
-
 -- A plan that finds an entry unseen is planned again from fresh observes for
 -- up to this long: a window on a desktop its display is not showing is named
 -- in one read and not the next (vc's hand run, 16 Oct 2026), so one read is
@@ -1471,11 +1455,12 @@ local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither
 -- which no observe succeeded raises the last error; otherwise what is in
 -- hand stands.
 -- What each wait is for, in the waiting point's words (progress.md).
-local WAIT_FOR = { unseen = "unseen windows", created = "new desktops", launched = "launched apps" }
+local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops",
+  launched = "launched apps" }
 
 -- A wait's start and end in the run log, and its point when it starts. After
--- the creates, the displays are logged as the wait left them: whether macOS
--- recorded the new desktops, and where (ST589246c, WP 93ea7f8a's question).
+-- the creates, the displays are logged as the read found them: whether macOS
+-- had recorded the new desktops, and where (ST589246c, AC-53ef07aa.3).
 local function wait_began(job, name, seconds)
   job.waited = job.waited or {}
   job.waited[name] = now()
@@ -1531,6 +1516,28 @@ local function plan_then(job, after)
   return after
 end
 
+-- Before step 5 (WP 93ea7f8a): the displays settle before apply reads them,
+-- judged from the display watcher's state alone, so nothing is read while a
+-- replug flaps. Each look is a timer, never a sleep inside a callback; the
+-- wait is logged and pointed once, and one that outlasts P.QUIET_LIMIT
+-- refuses, with nothing changed.
+function PHASE.quiet(job)
+  local t = hs.timer.secondsSinceEpoch()
+  job.quiet_began = job.quiet_began or t
+  local verdict, a, b = P.quiet_verdict(t, rawget(_G, "arngz_screens"), job.quiet_began)
+  local began = job.waited and job.waited.quiet
+  if verdict == "go" then
+    if began then wait_ended(job, "quiet", "done", nil) end
+    return "inventory"
+  end
+  if verdict == "refuse" then
+    if began then wait_ended(job, "quiet", "timed out", nil) end
+    refuse(a, b)
+  end
+  if not began then wait_began(job, "quiet", P.QUIET_LIMIT) end
+  return "quiet", a
+end
+
 -- Step 5: observe, match, plan.
 function PHASE.inventory(job)
   job.bundles = P.desk_bundles(job.desk)
@@ -1571,10 +1578,16 @@ function PHASE.prepare(job)
   return "organise_start"
 end
 
+-- After the creates, one fresh read of the world for the replan, tried again
+-- through a read that fails for up to 3 s (WP 93ea7f8a). Nothing is waited for
+-- beyond that read: each create is done only once its own count readback
+-- lists the new desktop (exec_create_space), and com.apple.spaces, which macOS
+-- may not write before the next display change, is never waited on. The read
+-- is logged, so the run log shows the record after the creates.
 function PHASE.created(job)
   return waiting(job, "created", 3, function(w)
     job.world = w
-    return spaces_agree(w)
+    return true
   end, #job.launches > 0 and "launch" or "replan", true)
 end
 
@@ -1800,7 +1813,7 @@ function M.start_apply(desk, options, respond, lg)
     out.status, out.verb = "ok", "apply"
     job.respond(out)
   end
-  local scheduled, serr = schedule(job, "inventory", 0)
+  local scheduled, serr = schedule(job, "quiet", 0)
   if not scheduled then return nil, "could not schedule apply: " .. tostring(serr) end
   return true
 end
@@ -1915,10 +1928,22 @@ local function begin_run(lg, request)
   point(lg, "start", { verb = tostring(request.verb), desk = tostring(desk) })
 end
 
+-- What the log and the toast hook could not do, put in RESPONSE for the CLI
+-- to say once, then the response written. One line each: the CLI reads the
+-- two as two lines.
+local function respond_with(response_path, response, lg)
+  if lg.failures > 0 then
+    response.log_error = (string.format("%s (%d write(s) failed)", tostring(lg.first_failure), lg.failures)
+      :gsub("%c", " "))
+  end
+  if lg.toast_error then response.toast_error = (tostring(lg.toast_error):gsub("%c", " ")) end
+  return respond(response_path, response)
+end
+
 -- A run's end (progress.md, rule 3): the finished point, from the response,
--- whatever it says; then what the log and the toast hook could not do, which
--- goes back in the response for the CLI to say once; then the response. Every
--- path that answers a request comes through here, once.
+-- whatever it says; then the response, with what the log and the toast hook
+-- could not do. Every path that answers a request comes through here, once,
+-- but the quiet gate's `unsettled`, which ends nothing (M.run).
 local function finish_run(response_path, response, lg)
   local clocked, t = pcall(function() return hs.timer.secondsSinceEpoch() end)
   local seconds = (clocked and lg.started) and math.floor((t - lg.started) * 10 + 0.5) / 10 or 0
@@ -1927,13 +1952,38 @@ local function finish_run(response_path, response, lg)
       tostring(response.error) .. (response.fix and ("; fix: " .. tostring(response.fix)) or ""))
   end
   point(lg, "finished", function() return L.finished_fields(response, seconds, lg.path) end)
-  -- One line each: the CLI reads the two as two lines.
-  if lg.failures > 0 then
-    response.log_error = (string.format("%s (%d write(s) failed)", tostring(lg.first_failure), lg.failures)
-      :gsub("%c", " "))
+  return respond_with(response_path, response, lg)
+end
+
+-- The quiet gate (WP 93ea7f8a). auto's which and discover --save act on what
+-- they read, so their requests carry options.quiet, and they read nothing
+-- until the displays have settled (P.quiet_verdict). Until then the answer
+-- is `unsettled`, saying how long to wait and when the wait began, with no
+-- point and no run begun: the CLI sleeps, never Hammerspoon, and asks again
+-- under the same run with that began. Past the limit the run refuses, with
+-- its start and finished, and a gate that raises answers as a verb's own
+-- error does. apply waits in its own phase instead. Returns the written
+-- status line when the gate answers, or nil when the verb is to run.
+local function quiet_answer(request, lg, response_path)
+  local quiet = type(request.options) == "table" and request.options.quiet
+  if type(quiet) ~= "table" or SCHEDULED[request.verb] then return nil end
+  local ok, verdict, a, b, began = pcall(function()
+    local t = hs.timer.secondsSinceEpoch()
+    local from = tonumber(quiet.began) or t
+    local v, x, y = P.quiet_verdict(t, rawget(_G, "arngz_screens"), from)
+    return v, x, y, from
+  end)
+  if ok and verdict == "go" then return nil end
+  if ok and verdict == "wait" then
+    note(lg, "quiet", string.format("%s: the displays have not settled; the CLI waits %.1f s and asks again",
+      tostring(request.verb), a))
+    -- As strings, so the CLI hands back exactly what it was given.
+    return respond_with(response_path, { status = "ok", verb = request.verb,
+      unsettled = { wait = string.format("%.1f", a), began = string.format("%.3f", began) } }, lg)
   end
-  if lg.toast_error then response.toast_error = (tostring(lg.toast_error):gsub("%c", " ")) end
-  return respond(response_path, response)
+  begin_run(lg, request)
+  if not ok then return finish_run(response_path, error_response(request.verb, verdict), lg) end
+  return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb, error = a, fix = b }, lg)
 end
 
 -- The IPC entry. Reads {verb, desk, options} from request_path, writes the
@@ -1957,9 +2007,11 @@ function M.run(request_path)
       .. ": hs.json.read returned nothing, so it is missing or not JSON" })
   end
   -- From here the request names its run and its log (ST589246c), and every
-  -- answer goes through finish_run.
+  -- answer goes through finish_run, but the quiet gate's unsettled.
   local lg = new_log(request)
   M.watch(lg)
+  local gated = quiet_answer(request, lg, response_path)
+  if gated then return gated end
   begin_run(lg, request)
   if not (VERBS[request.verb] or SCHEDULED[request.verb]) then
     return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb,

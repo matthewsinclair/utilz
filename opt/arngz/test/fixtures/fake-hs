@@ -10,6 +10,8 @@
 #   hang               write nothing and never return
 #   hang-after-reply   write the response, then never return (measured on a
 #                      real hs, 16 Oct 2026)
+#   reply-then-exit    write the response, then exit 0 FAKE_HS_EXIT_AFTER
+#                      seconds later, as an hs still finishing its IPC does
 #   exit-69            exit 69, as hs does when Hammerspoon is unreachable
 #   receive-timeout    exit 69 with "receive timeout", as hs does when the
 #                      message was delivered and the reply came too late
@@ -19,6 +21,13 @@
 #                      response FAKE_HS_DELAY seconds later (default 1), as
 #                      the engine does for apply (D20 as amended)
 #   scheduled-never    say the verb was scheduled, exit 0, and never answer
+#   unsettled-once     answer the first ask as the engine's quiet gate does
+#                      while the displays settle (WP 93ea7f8a): unsettled,
+#                      with FAKE_HS_WAIT and FAKE_HS_BEGAN; every later ask
+#                      as ok does
+#
+# Every ask is also kept as FAKE_HS_LOG/request.<n>.json, counting from 1, for
+# a verb that asks more than once.
 
 set -euo pipefail
 printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"
@@ -38,6 +47,11 @@ done
 request="$(printf '%s\n' "$code" | sed -n 's/.*\.run("\(.*\)").*/\1/p')"
 [[ -n "$request" ]] || { echo "fake-hs: no run(\"...\") in: $code" >&2; exit 64; }
 cp "$request" "$FAKE_HS_LOG/request.json"
+asks=0
+if [[ -f "$FAKE_HS_LOG/asks" ]]; then asks="$(cat "$FAKE_HS_LOG/asks")"; fi
+asks=$((asks + 1))
+echo "$asks" >"$FAKE_HS_LOG/asks"
+cp "$request" "$FAKE_HS_LOG/request.$asks.json"
 response="$(dirname "$request")/response.json"
 
 case "${FAKE_HS_MODE:-ok}" in
@@ -45,6 +59,7 @@ case "${FAKE_HS_MODE:-ok}" in
   none) exit 0 ;;
   hang) exec sleep 300 ;;
   hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec sleep 300 ;;
+  reply-then-exit) cp "$FAKE_HS_RESPONSE" "$response"; sleep "${FAKE_HS_EXIT_AFTER:?}"; echo "arngz: ok" ;;
   exit-69) echo "error: can't access Hammerspoon message port" >&2; exit 69 ;;
   receive-timeout) echo "error: receive timeout" >&2; exit 69 ;;
   exit-75) echo "error: Hammerspoon is not running" >&2; exit 75 ;;
@@ -60,6 +75,19 @@ case "${FAKE_HS_MODE:-ok}" in
     fi
     verb="$(yq -r '.verb' "$request")"
     echo "arngz: scheduled $verb"
+    ;;
+  unsettled-once)
+    if [[ -e "$FAKE_HS_LOG/unsettled" ]]; then
+      cp "$FAKE_HS_RESPONSE" "$response"
+    else
+      : >"$FAKE_HS_LOG/unsettled"
+      verb="$(yq -r '.verb' "$request")"
+      # Written aside and renamed, as the engine writes its answers.
+      V="$verb" W="${FAKE_HS_WAIT:?}" B="${FAKE_HS_BEGAN:?}" yq -n -o json \
+        '{"status": "ok", "verb": strenv(V), "unsettled": {"wait": strenv(W), "began": strenv(B)}}' >"$response.partial"
+      mv "$response.partial" "$response"
+    fi
+    echo "arngz: ok"
     ;;
   *) echo "fake-hs: unknown FAKE_HS_MODE '$FAKE_HS_MODE'" >&2; exit 64 ;;
 esac

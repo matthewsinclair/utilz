@@ -502,9 +502,10 @@ fake_hs() {
   # Delivered and not answered in time: Hammerspoon is running, so this is
   # never "could not reach" it, and never init's fix.
   fake_hs receive-timeout
+  export ARNGZ_HS_TIMEOUT=7
   run_arngz discover
   assert_exit_code 2
-  assert_output_contains "hs gave up on discover after 60s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time"
+  assert_output_contains "hs gave up on discover after ${ARNGZ_HS_TIMEOUT}s with receive timeout: the request reached Hammerspoon, which is running, and no answer came in time"
   assert_output_contains "; fix: Hammerspoon is busy or hung: let an arngz apply that is running finish"
   refute_output_contains "could not reach Hammerspoon"
   refute_output_contains "init --yes"
@@ -2662,4 +2663,118 @@ log_events() {
   [ "$(printf '%s\n' "$stderr" | grep -c 'the run log could not be written')" = 1 ] || fail "not said exactly once: $stderr"
   # The run's own report is still there, on stderr where discover puts it.
   printf '%s\n' "$stderr" | grep -q '^FIXTURE-LINE-1 ' || fail "the report is gone: $stderr"
+}
+
+# ============================================================================
+# ST589246c/93ea7f8a -- the displays settle before a verb acts on what it reads
+# ============================================================================
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: auto's which and discover --save ask for the displays to settle first; which and plain discover do not" {
+  local response
+  which_fixture which-none.json
+  run_arngz which
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "null"
+  run_arngz auto
+  assert_exit_code 1
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "{}"
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs ok "$response"
+  run_arngz discover
+  assert_success
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "null"
+  run_arngz discover --save zeop2
+  assert_success
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "{}"
+}
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: told the displays have not settled, the CLI sleeps what the engine names, then asks again with the wait's start" {
+  local response first
+  response="$(engine_response discover discover_world "" "zeop2")"
+  fake_hs unsettled-once "$response"
+  export FAKE_HS_WAIT=0.1 FAKE_HS_BEGAN=1795000000.125
+  run_arngz discover --save zeop2
+  assert_success
+  assert_output_contains "waiting $FAKE_HS_WAIT s for them to settle"
+  assert_output_contains "saved $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.1.json"
+  assert_output "{}"
+  run yq -r '.options.quiet.began' "$FAKE_HS_LOG/request.json"
+  assert_output "$FAKE_HS_BEGAN"
+  # Both asks are one run.
+  first="$(yq -r '.run' "$FAKE_HS_LOG/request.1.json")"
+  [[ -n "$first" && "$first" != null ]] || fail "the first ask carries no run: '$first'"
+  run yq -r '.run' "$FAKE_HS_LOG/request.json"
+  assert_output "$first"
+}
+
+# AT-93ea7f8a.5
+@test "AT-93ea7f8a.5: displays that do not settle refuse discover --save and auto, exit 2, writing and applying nothing" {
+  local refused="$BATS_TEST_TMPDIR/refused.json"
+  local why="the displays did not settle in 20 s: they had been unchanged for 1.5 s, and 5 s is needed"
+  local fix="run it again once the displays have stopped changing"
+  W="$why" F="$fix" yq -n -o json '{"status": "error", "kind": "refused", "error": strenv(W), "fix": strenv(F)}' >"$refused"
+  catalogue
+  fake_hs ok "$refused"
+  run_arngz discover --save zeop2
+  assert_exit_code 2
+  assert_output_contains "$why"
+  assert_output_contains "$fix"
+  # The refusal came to the ask that waits for the displays to settle.
+  run yq -o json -I0 '.options.quiet' "$FAKE_HS_LOG/request.json"
+  assert_output "{}"
+  [ ! -e "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ] || fail "a desk was written: $XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  run_arngz auto --default zeop1
+  assert_exit_code 2
+  assert_output_contains "$why"
+  run yq -r '.verb' "$FAKE_HS_LOG/request.json"
+  assert_output "which"
+}
+
+# AT-93ea7f8a.6
+@test "AT-93ea7f8a.6: an hs that exits on its own just after its response is let exit, and one that hangs is stopped after the grace (F3)" {
+  local took
+  fake_hs reply-then-exit
+  export FAKE_HS_EXIT_AFTER=0.5
+  run_arngz discover
+  assert_success
+  run grep -c ' cli kill ' "$(run_log)"
+  assert_output "0"
+  grep -qE ' cli answer discover: returned 0 after [0-9]+ s; hs exited 0; ' "$(run_log)" ||
+    fail "hs's own exit is not the answer's: $(grep ' cli answer ' "$(run_log)")"
+  # One that hangs after replying is stopped once its grace runs out, well
+  # before its deadline.
+  fake_hs hang-after-reply
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz discover
+  assert_success
+  grep -q ' cli kill stopped hs (pid [0-9]*): it still ran [0-9]* s after its response came' "$(run_log)" ||
+    fail "the hung hs was not stopped after the grace: $(grep ' cli kill ' "$(run_log)")"
+  took="$(sed -n 's/.* cli answer discover: returned 0 after \([0-9]*\) s; hs exited killed;.*/\1/p' "$(run_log)")"
+  [ -n "$took" ] && [ "$took" -lt "$ARNGZ_HS_TIMEOUT" ] ||
+    fail "the hung hs was stopped at its deadline, not after its grace: '$took' s"
+}
+
+# AT-93ea7f8a.6
+@test "AT-93ea7f8a.6: discover may take longer than other calls, and ARNGZ_HS_TIMEOUT still sets every call's deadline (F4)" {
+  local discover_t which_t
+  which_fixture which-none.json
+  unset ARNGZ_HS_TIMEOUT
+  run_arngz which
+  which_t="$(sed -n '/^-t$/{n;p;}' "$FAKE_HS_LOG/argv")"
+  fake_hs ok
+  run_arngz discover
+  assert_success
+  discover_t="$(sed -n '/^-t$/{n;p;}' "$FAKE_HS_LOG/argv")"
+  [ "$discover_t" -gt "$which_t" ] || fail "discover's deadline, $discover_t s, is not longer than which's, $which_t s"
+  export ARNGZ_HS_TIMEOUT=7
+  run_arngz discover
+  assert_success
+  run sed -n '/^-t$/{n;p;}' "$FAKE_HS_LOG/argv"
+  assert_output "$ARNGZ_HS_TIMEOUT"
 }

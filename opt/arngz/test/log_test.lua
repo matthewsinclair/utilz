@@ -21,15 +21,21 @@
 -- are said in the response and change nothing else; a desktop a creation
 -- added is named; and the display watcher writes a change and its snapshots,
 -- each timer set to its label's delay, with a snapshot that fails written as
--- an error record.
+-- an error record. Each display's order is written with where it came from,
+-- and the entries com.apple.spaces holds no desktop under are counted on one
+-- line. And the displays settle (WP 93ea7f8a): an apply whose watcher has
+-- only just started waits, with its waiting point, before it reads; one whose
+-- displays keep changing refuses at the limit, having read nothing; auto's
+-- which answers unsettled, reading and pointing nothing, until they settle;
+-- and discover --save refuses at the limit with no desk.
 --
 -- WHAT IT DOES NOT HOLD, said so it is not read into a green. The waiting
--- and step points, and rule 2's "a step goes out before its work", come only
--- from an apply that creates, launches or moves, and the hand that moves a
--- window is not faked here; nor is the wait after the creates, which records
--- how long com.apple.spaces took to record a new desktop. Those are read in
--- the code (steps_before, waiting, wait_ended) and proven live by hv's
--- diagnosis run on the dev tree, where the toasts show the steps.
+-- points of the creates, the launches and the unseen windows, the step
+-- points, and rule 2's "a step goes out before its work", come only from an
+-- apply that creates, launches or moves, and the hand that moves a window is
+-- not faked here; nor is the read after the creates. Those are read in the
+-- code (steps_before, waiting, wait_ended) and proven live on hv's dev tree,
+-- where the toasts show the steps.
 --
 -- HOW THE INJECTION WORKS is engine_test.lua's: every hs reference in
 -- arngz.lua resolves at call time, so a fake in _G.hs is what the engine sees.
@@ -133,6 +139,8 @@ local MONITORS = {
   { ["Display Identifier"] = "34791BF3", ["Current Space"] = { ManagedSpaceID = 1271 }, Spaces = spaces_of({ 1271, 1442 }) },
   { ["Display Identifier"] = "2F1BFA83", ["Current Space"] = { ManagedSpaceID = 1586 }, Spaces = spaces_of({ 1586 }) },
   { ["Display Identifier"] = "B6EB478C", ["Collapsed Space"] = { ManagedSpaceID = 99 } },
+  { ["Display Identifier"] = "B6EB478C", ["Collapsed Space"] = { ManagedSpaceID = 99 } },
+  { ["Display Identifier"] = "E497D823", ["Collapsed Space"] = { ManagedSpaceID = 98 } },
 }
 
 local function world_fixture()
@@ -144,7 +152,7 @@ local function world_fixture()
     screens = { {
       uuid = "37D8832A", name = "Built-in Retina Display", primary = true, position = "main",
       full_frame = { x = 0, y = 0, w = 1800, h = 1169 }, active_space = 3, live = LIVE,
-      order_error = "com.apple.spaces has not recorded this screen's spaces",
+      order_source = "live", order_note = "no list in com.apple.spaces holds exactly these desktops",
       spaces = { { id = 1, ordinal = 1, type = 0, named = 1, window_ids = 2, windows = {
         { id = 101, named = true, bundle = "com.apple.finder", title = "Downloads\nsecond line",
           frame = { x = 0, y = 25, w = 800, h = 600 } } } } },
@@ -235,6 +243,20 @@ end
 
 local function fresh_globals()
   _G.arngz_screens, _G.arngz_running, _G.arngz_timer = nil, nil, nil
+end
+
+-- A display watcher this module and LOG keep, as M.watch finds it on a
+-- later run (WP 93ea7f8a): started long before, and either settled, with no
+-- change since, or flapping, its last change always now on F's clock.
+local function watcher_of(f, log, flapping)
+  local state = { module = arngz_path, log = log, started = f.clock - 2 * P.QUIET_LIMIT, timers = {},
+    watcher = { stop = function() end } }
+  if not flapping then return state end
+  -- __index: last_change reads F's clock at every look, so the displays have
+  -- always only just changed; rawget and pairs show no last_change.
+  return setmetatable(state, { __index = function(_, k)
+    if k == "last_change" then return f.clock end
+  end })
 end
 
 local function entries(desk)
@@ -334,6 +356,8 @@ arm("the planned fields", function()
 end)
 
 -- -------------------------- arm 5: a run's records, its id, its points
+-- AT-93ea7f8a.3: each display's order with its source, the collapsed entries
+-- on one counted line, and the observed point's order field.
 
 arm("a run's records", function()
   fresh_globals()
@@ -358,9 +382,37 @@ arm("a run's records", function()
   check("live: the desktops in live order", find(recs, "live", "37D8832A: " .. L.ids(LIVE)) ~= nil)
   check("filed: the visitors under the displays that keep them", find(recs, "filed", "1586 under 2F1BFA83") ~= nil
     and find(recs, "filed", "1271 1442 under 34791BF3") ~= nil)
-  check("order: none, and why", find(recs, "order", "none: com.apple.spaces has not recorded") ~= nil)
-  check("record: every list as macOS names it", find(recs, "record", "Main: " .. L.ids(MAIN)) ~= nil
-    and find(recs, "record", "B6EB478C: collapsed") ~= nil)
+  check("order: the order taken, where it came from, and why",
+    find(recs, "order", "37D8832A: 1 (live; no list in com.apple.spaces holds exactly these desktops)") ~= nil)
+  check("record: every list that holds desktops as macOS names it", find(recs, "record", "Main: " .. L.ids(MAIN)) ~= nil)
+  -- The line the fixture's entries that hold no desktop make, counted from
+  -- MONITORS itself, by display in the order each first appears.
+  local total, order, per = 0, {}, {}
+  for _, m in ipairs(MONITORS) do
+    if m["Collapsed Space"] and not m.Spaces then
+      total = total + 1
+      local d = m["Display Identifier"]
+      if not per[d] then
+        per[d] = 0
+        order[#order + 1] = d
+      end
+      per[d] = per[d] + 1
+    end
+  end
+  local each = {}
+  for i, d in ipairs(order) do each[i] = d .. " x" .. per[d] end
+  local want = string.format("collapsed: %d %s, under %s", total, total == 1 and "entry" or "entries", table.concat(each, ", "))
+  check("record: the entries that hold none, counted on one line by the display each is under",
+    find(recs, "record", want) ~= nil and count(recs, "record", "collapsed") == 1, want)
+  -- The observed point's order field, from the fixture's own screens.
+  local screens, from_live = 0, 0
+  for _, s in ipairs(world_fixture().screens) do
+    screens = screens + 1
+    if s.order_source == "live" then from_live = from_live + 1 end
+  end
+  local order = string.format("order=of %d displays: live on %d", screens, from_live)
+  check("observed: its order field says how many displays' orders are the live list's",
+    find(recs, "point", order) ~= nil, order)
   check("windows: a title with a newline stays on one line", find(recs, "windows", '"Downloads second line"') ~= nil)
 end)
 
@@ -385,6 +437,7 @@ arm("an apply to its end", function()
   fresh_globals()
   local log = tmpdir() .. "/arngz.log"
   local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
   M.observe = function()
     local w = F.base_world()
     w.accessibility = true
@@ -432,6 +485,7 @@ arm("a phase's Lua error", function()
   fresh_globals()
   local log = tmpdir() .. "/arngz.log"
   local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
   M.observe = function() error("observe raised on purpose", 0) end
   local response = run_engine(f, { verb = "apply", desk = { desk = "zeopit", displays = {} }, options = {},
     run = "R-APPLY", log = log })
@@ -543,6 +597,121 @@ arm("the display watcher", function()
   end
   check("watcher: the next run's start says when the displays last changed",
     start ~= nil and start.text:find("last display change", 1, true) ~= nil, start and start.text)
+end)
+
+-- ------------------------- arm 15: the observed point's order (93ea7f8a)
+-- AT-93ea7f8a.3
+
+arm("the observed order", function()
+  local function screen(source) return { uuid = "S", live = {}, spaces = {}, order_source = source } end
+  -- One screen per argument, a nil among them included, which ipairs would
+  -- stop at.
+  local function order_of(...)
+    local w = { screens = {} }
+    for i = 1, select("#", ...) do w.screens[i] = screen((select(i, ...))) end
+    return L.observed_fields(w).order
+  end
+  check("observed order: record when every display's order is com.apple.spaces'",
+    order_of("record", "record") == "record", order_of("record", "record"))
+  check("observed order: the displays ordered from the live list, counted",
+    order_of("record", "live", "live") == "of 3 displays: live on 2", order_of("record", "live", "live"))
+  -- A screen whose desktops could not be read has no order, and is never
+  -- counted as the record's.
+  check("observed order: a display with no order is unread, never the record's",
+    order_of("record", nil) == "of 2 displays: unread on 1", order_of("record", nil))
+  check("observed order: both, together", order_of("live", nil, "record") == "of 3 displays: live on 1, unread on 1",
+    order_of("live", nil, "record"))
+  check("observed order: no displays is said, never record", order_of() == "no displays", order_of())
+end)
+
+-- -------------------------------- arm 14: the displays settle (93ea7f8a)
+-- AT-93ea7f8a.4
+
+arm("the displays settle", function()
+  -- An apply whose watcher has only just started has seen nothing yet, so it
+  -- waits QUIET_SECONDS, and says so, before it reads anything.
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  local reads = 0
+  M.observe = function()
+    reads = reads + 1
+    local w = F.base_world()
+    w.accessibility = true
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-QUIET", log = log })
+  local recs = records(log)
+  check("settle: a watcher just started, so apply waits before it reads",
+    response and response.status == "ok" and point_names(recs, "R-QUIET") == "start waiting observed planned finished",
+    point_names(recs, "R-QUIET"))
+  -- Every point carries its run, so the fields are read one by one.
+  local waited = find(recs, "point", "for=the displays to settle")
+  check("settle: its point is for the displays to settle, for up to QUIET_LIMIT",
+    waited ~= nil and waited.text:match("^waiting ") ~= nil
+      and waited.text:find("seconds=" .. P.QUIET_LIMIT, 1, true) ~= nil, waited and waited.text)
+  check("settle: the wait is logged as it begins and ends", find(recs, "wait", "quiet: for the displays to settle") ~= nil
+    and find(recs, "wait", "quiet: done after") ~= nil)
+
+  -- Displays that keep changing: the apply refuses at QUIET_LIMIT, nothing read.
+  fresh_globals()
+  log = tmpdir() .. "/arngz.log"
+  f = new_fake()
+  reads = 0
+  _G.arngz_screens = watcher_of(f, log, true)
+  response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-FLAP", log = log })
+  recs = records(log)
+  check("settle: displays still changing at QUIET_LIMIT refuse the apply, with the fix, nothing read",
+    response and response.kind == "refused" and reads == 0
+      and string.find(tostring(response.error), "the displays did not settle in " .. P.QUIET_LIMIT .. " s", 1, true) ~= nil
+      and response.fix == "run it again once the displays have stopped changing",
+    response and tostring(response.error))
+  check("settle: its points are start, waiting, finished, and the wait timed out",
+    point_names(recs, "R-FLAP") == "start waiting finished" and find(recs, "wait", "quiet: timed out after") ~= nil,
+    point_names(recs, "R-FLAP"))
+
+  -- auto's which carries options.quiet: unsettled, nothing is read or
+  -- pointed, and the answer says how long to wait and when the wait began.
+  fresh_globals()
+  log = tmpdir() .. "/arngz.log"
+  f = new_fake()
+  reads = 0
+  M.observe = function()
+    reads = reads + 1
+    return F.base_world()
+  end
+  response = run_engine(f, { verb = "which", options = { desks = {}, quiet = {} }, run = "R-GATE", log = log })
+  recs = records(log)
+  local unsettled = response and response.unsettled or {}
+  local wait, began = tonumber(unsettled.wait), unsettled.began
+  check("gate: unsettled, with the wait and its start, and nothing read or pointed",
+    response and response.status == "ok" and wait ~= nil and wait > 0 and wait <= P.QUIET_SECONDS
+      and tonumber(began) ~= nil and reads == 0 and point_names(recs, "R-GATE") == ""
+      and find(recs, "quiet", "which: the displays have not settled") ~= nil,
+    tostring(unsettled.wait) .. " / " .. tostring(began) .. " / " .. point_names(recs, "R-GATE"))
+  -- The CLI sleeps that long, then asks again with the same start.
+  f.clock = f.clock + (wait or 0)
+  response = run_engine(f, { verb = "which", options = { desks = {}, quiet = { began = began } }, run = "R-GATE", log = log })
+  recs = records(log)
+  check("gate: asked again once settled, which reads and answers as ever, with its start and finished",
+    response and response.status == "ok" and response.unsettled == nil and reads == 1
+      and point_names(recs, "R-GATE") == "start observed finished", point_names(recs, "R-GATE"))
+
+  -- discover --save, asked with a wait begun QUIET_LIMIT ago and the displays
+  -- still changing: refused, with no desk, and nothing read.
+  fresh_globals()
+  log = tmpdir() .. "/arngz.log"
+  f = new_fake()
+  reads = 0
+  _G.arngz_screens = watcher_of(f, log, true)
+  response = run_engine(f, { verb = "discover", options = { grid = "8x4", name = "zeopit",
+    quiet = { began = string.format("%.3f", f.clock - P.QUIET_LIMIT) } }, run = "R-SAVE", log = log })
+  recs = records(log)
+  check("gate: displays still changing at QUIET_LIMIT refuse discover --save, no desk, nothing read",
+    response and response.kind == "refused" and response.desk == nil and reads == 0
+      and string.find(tostring(response.error), "did not settle", 1, true) ~= nil
+      and point_names(recs, "R-SAVE") == "start finished",
+    response and tostring(response.error) .. " / " .. point_names(recs, "R-SAVE"))
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))

@@ -416,40 +416,39 @@ do
     nops == nil and string.find(tostring(nerr), "running apps could not be listed", 1, true) ~= nil, nerr or ops_text(nops))
 end
 
--- A screen whose space order could not be read (D22) is refused, never
--- ordered by guess.
+-- AT-93ea7f8a.2: a desktop listed on two screens orders neither: plan and discover both
+-- refuse it, naming both screens, before anything changes (WP 93ea7f8a).
 do
   local w = base_world()
-  -- What observe keeps for a screen of two spaces no list holds: order_spaces'
-  -- own refusal and fix.
-  local _, owhy, ofix = P.order_spaces({ 3215, 3216 }, {})
-  w.screens[1].order_error, w.screens[1].order_fix = owhy, ofix
-  local ops, err, fix = P.plan(base_desk(), w, {})
-  check("plan refuses a screen whose space order could not be read",
-    ops == nil and string.find(tostring(err), "order of screen SCREEN-A", 1, true) ~= nil, err or ops_text(ops))
-  -- plan and discover return the fix third, which the engine writes into the
-  -- refusal's response (issue 0077).
-  local desk, derr, dfix = P.desk_from_world(w, {})
-  check("plan and discover hand on the order's fix with the refusal",
-    ofix ~= nil and fix == ofix and desk == nil and dfix == ofix,
-    tostring(fix) .. " / " .. tostring(dfix) .. " / " .. tostring(derr))
+  w.screens[2] = { uuid = "SCREEN-B", spaces = { { id = space(w, 1).id, ordinal = 1, type = "user", windows = {} } } }
+  local ops, err = P.plan(base_desk(), w, {})
+  local want = string.format("desktop %s is listed on two screens, SCREEN-A and SCREEN-B", tostring(space(w, 1).id))
+  check("plan refuses a desktop listed on two screens, naming both",
+    ops == nil and string.find(tostring(err), want, 1, true) ~= nil, err or ops_text(ops))
+  local desk, derr = P.desk_from_world(w, {})
+  check("and discover refuses it in the same words", desk == nil and string.find(tostring(derr), want, 1, true) ~= nil,
+    tostring(derr))
+  local twice = base_world()
+  local first = space(twice, 1)
+  table.insert(twice.screens[1].spaces, { id = first.id, ordinal = #twice.screens[1].spaces + 1, type = "user", windows = {} })
+  local tops, terr = P.plan(base_desk(), twice, {})
+  local twice_want = string.format("desktop %s is listed twice on screen SCREEN-A", tostring(first.id))
+  check("plan refuses a desktop listed twice on one screen, by name",
+    tops == nil and string.find(tostring(terr), twice_want, 1, true) ~= nil, terr or ops_text(tops))
 end
 
--- A lone space no list holds yet takes no new desktop: apply would add one,
--- then wait for a list macOS may take minutes to write, and fail after a
--- change. Refused before anything changes, with the wait fix (issue 0077,
--- D25).
+-- AT-93ea7f8a.2: a lone desktop whose record is not current takes a new desktop beside it:
+-- apply's created wait reads the live list, never the record (WP 93ea7f8a, in
+-- place of issue 0077's refusal).
 do
   local w = base_world()
   local vscode = table.remove(w.screens[1].spaces, 2).windows[1]
   table.insert(space(w, 1).windows, vscode)
-  local _, pwhy, pfix = P.order_spaces({ 3215 }, {})
-  w.screens[1].order_pending, w.screens[1].order_fix = pwhy, pfix
-  local ops, err, fix = P.plan(base_desk(), w, {})
-  check("a screen ordered without a list takes no new desktop, refused before anything changes, with the wait fix",
-    ops == nil and string.find(tostring(err), "screen SCREEN-A cannot take a new desktop yet", 1, true) ~= nil
-      and string.find(tostring(err), "has not recorded", 1, true) ~= nil and pfix ~= nil and fix == pfix,
-    tostring(err) .. " / " .. tostring(fix))
+  local _, source = P.order_spaces({ space(w, 1).id }, {})
+  w.screens[1].order_source = source
+  local ops = P.plan(base_desk(), w, {})
+  check("a lone desktop ordered from the live list takes a new desktop beside it",
+    source == "live" and ops ~= nil and ops[1] ~= nil and ops[1].op == "create_space", tostring(source) .. " " .. ops_text(ops))
   local without = P.plan(base_desk(), w, { no_create = true })
   check("and under --no-create it plans as before, creating nothing", kinds(without) == "no_space", ops_text(without))
 end
@@ -645,60 +644,135 @@ do
     dup == nil and dwhy ~= nil and string.find(dwhy, "both match screen SCREEN-A", 1, true) ~= nil, dwhy)
 end
 
--- ------------------------------------------------------------- space order (D22)
+-- ------------------------------------------------ space order (WP 93ea7f8a)
+-- AT-93ea7f8a.1
 
 print("space order")
 do
-  -- hv's plist, measured 16 Oct 2026: the built-in is "Main", detached
-  -- displays keep empty lists, and Mission Control's order is the plist's.
-  local monitors = {
-    { ["Display Identifier"] = "Main", Spaces = {
-      { ManagedSpaceID = 1 }, { ManagedSpaceID = 3 }, { ManagedSpaceID = 2588 }, { ManagedSpaceID = 1733 },
-      { ManagedSpaceID = 305 } } },
-    { ["Display Identifier"] = "34791BF3", Spaces = { { ManagedSpaceID = 2634 } } },
-    { ["Display Identifier"] = "6F89E131" },
-  }
-  local order = P.order_spaces({ 1, 3, 2588, 305, 1733 }, monitors)
-  check("a screen's spaces take the plist's order, not the live list's",
-    order and table.concat(order, ",") == "1,3,2588,1733,305", order and table.concat(order, ","))
-  -- Two spaces, so the list is read: the second of three, in an order the
-  -- live list does not give.
-  local later = { monitors[1],
-    { ["Display Identifier"] = "2F1BFA83", Spaces = { { ManagedSpaceID = 3216 }, { ManagedSpaceID = 3215 } } },
-    monitors[3] }
-  local found = P.order_spaces({ 3215, 3216 }, later)
-  check("a screen's list is the one holding exactly its spaces, wherever it sits",
-    found and table.concat(found, ",") == "3216,3215", found and table.concat(found, ","))
-  local missing, why = P.order_spaces({ 1, 3, 2588, 305, 1733, 4000 }, monitors)
-  check("a screen with a space the plist does not list yet has no order, and says why",
-    missing == nil and string.find(tostring(why), "4000", 1, true) ~= nil, why)
-  local fewer = P.order_spaces({ 1, 3 }, monitors)
-  check("a list holding more than the screen's spaces is not its list", fewer == nil)
-  -- Waiting is not known to clear two lists, so that refusal names no fix.
-  local twice, why2, fix2 = P.order_spaces({ 3215, 3216 }, { later[2], later[2] })
-  check("two lists that both fit refuse rather than choose, and name no fix",
-    twice == nil and string.find(tostring(why2), "two lists", 1, true) ~= nil and fix2 == nil,
-    tostring(why2) .. " / " .. tostring(fix2))
-  -- Just after a display attaches, macOS has not yet written its list (hv's
-  -- zeopit desk, 19 Oct 2026, issue 0077). One space has one order, so it
-  -- needs none; two or more refuse, and say what to do.
-  local alone = P.order_spaces({ 3215 }, monitors)
-  check("a screen with one space is its own order, though no list holds it",
-    alone ~= nil and #alone == 1 and alone[1] == 3215, alone and table.concat(alone, ","))
-  local unknown, uwhy, ufix = P.order_spaces({ 3215, 3216 }, monitors)
-  check("a screen with two spaces and no list refuses, saying macOS has not recorded them yet, and to wait",
-    unknown == nil and string.find(tostring(uwhy), "has not recorded this screen's spaces (3215, 3216) yet", 1, true) ~= nil
-      and string.find(tostring(uwhy), "just after a display attaches", 1, true) ~= nil
-      and ufix == "wait for macOS to record them, then run arngz again",
-    tostring(uwhy) .. " / " .. tostring(ufix))
-  -- With no display configuration in com.apple.spaces, the same rule, in
-  -- order_spaces' words, and no fix, since waiting is not known to bring one.
-  local solo = P.order_spaces({ 3215 }, nil, "defaults export failed")
-  local pair, pwhy, pfix = P.order_spaces({ 3215, 3216 }, nil, "defaults export failed")
-  check("with no display configuration, one space is ordered and two are refused, saying why, with no fix",
-    solo ~= nil and solo[1] == 3215 and pair == nil and pfix == nil
-      and string.find(tostring(pwhy), "carries no display configuration: defaults export failed", 1, true) ~= nil,
-    tostring(pwhy) .. " / " .. tostring(pfix))
+  local function list(display, ids)
+    local spaces = {}
+    for i, id in ipairs(ids) do spaces[i] = { ManagedSpaceID = id } end
+    return { ["Display Identifier"] = display, Spaces = spaces }
+  end
+  local function text(ids) return ids and table.concat(ids, ",") or "nil" end
+
+  -- hv's plist, measured 16 Oct 2026: the live list read 1, 3, 2588, 305 and
+  -- the record 1, 3, 2588, 1733, and ctrl+right from 2588 went to 1733. Where
+  -- one list holds a screen's live desktops exactly, the record is current,
+  -- and its order is taken, the live one said beside it.
+  local monitors = { list("Main", { 1, 3, 2588, 1733, 305 }), list("34791BF3", { 2634 }), { ["Display Identifier"] = "6F89E131" } }
+  local order, source, note = P.order_spaces({ 1, 3, 2588, 305, 1733 }, monitors)
+  check("a current record's order is taken over the live list's (16 Oct)",
+    text(order) == "1,3,2588,1733,305" and source == "record", text(order) .. " " .. tostring(source))
+  check("and the log is told how the live order differs",
+    note ~= nil and string.find(note, "the live order differs: 1 3 2588 305 1733", 1, true) ~= nil, tostring(note))
+  local same, ssource, snote = P.order_spaces({ 1, 3, 2588, 1733, 305 }, monitors)
+  check("a record the live order agrees with is taken, with nothing to say",
+    text(same) == "1,3,2588,1733,305" and ssource == "record" and snote == nil, tostring(snote))
+  local later = { monitors[1], list("2F1BFA83", { 3216, 3215 }), monitors[3] }
+  local found, fsource = P.order_spaces({ 3215, 3216 }, later)
+  check("a screen's list is the one holding exactly its desktops, wherever it sits, never chosen by its name",
+    text(found) == "3216,3215" and fsource == "record", text(found))
+
+  -- hv's diagnosis run, 23 Nov 2026. com.apple.spaces lags one display change
+  -- behind, so after each change no list holds a screen's live desktops, and
+  -- the live order is taken. Its full-screen spaces, 423 and 121, are in it
+  -- like any desktop.
+  local collapsed = { ["Display Identifier"] = "B6EB478C", ["Collapsed Space"] = { ManagedSpaceID = 99 } }
+  local plugged = { list("Main", { 1, 3, 1431, 5, 423, 121, 6, 7 }), list("34791BF3", { 1716, 1271, 1442 }),
+    list("2F1BFA83", { 1586 }), collapsed }
+  local unplugged_live = { 1, 3, 1431, 5, 423, 121, 6, 7, 1271, 1442 }
+  local unplugged, usource, unote = P.order_spaces(unplugged_live, plugged)
+  check("unplugged, with the record still at the plugged layout: the live order, and why",
+    text(unplugged) == text(unplugged_live) and usource == "live"
+      and string.find(tostring(unote), "no list in com.apple.spaces holds exactly these desktops", 1, true) ~= nil,
+    text(unplugged) .. " " .. tostring(usource) .. " " .. tostring(unote))
+  -- At the replug's flap macOS wrote the unplugged layout, which is the order
+  -- taken above: the live order is what macOS itself recorded.
+  local flap = { list("Main", unplugged_live), collapsed }
+  local recorded, fsource, fnote = P.order_spaces(unplugged_live, flap)
+  check("the record macOS wrote at the flap holds the unplugged desktops exactly, so it is taken, with nothing to say",
+    text(recorded) == text(unplugged) and fsource == "record" and fnote == nil,
+    text(recorded) .. " " .. tostring(fsource) .. " " .. tostring(fnote))
+  local builtin_live = { 1, 3, 1431, 5, 423, 121, 6, 7 }
+  local builtin, bsource = P.order_spaces(builtin_live, flap)
+  local aleft, asource = P.order_spaces({ 1808, 1271, 1442 }, flap)
+  local aright, rsource = P.order_spaces({ 1811 }, flap)
+  check("replugged, with the record at the unplugged layout: each display in its live order",
+    text(builtin) == text(builtin_live) and bsource == "live" and text(aleft) == "1808,1271,1442" and asource == "live"
+      and text(aright) == "1811" and rsource == "live",
+    table.concat({ text(builtin), text(aleft), text(aright) }, " / "))
+  local fullscreen = { [423] = true, [121] = true }
+  local screen = { uuid = "37D8832A", spaces = {} }
+  for i, id in ipairs(builtin) do
+    screen.spaces[i] = { id = id, ordinal = i, type = fullscreen[id] and "fullscreen" or "user", windows = {} }
+  end
+  local desktops = {}
+  for i, sp in ipairs(P.user_spaces(screen)) do desktops[i] = sp.id end
+  -- Each full-screen space where the live list puts it, and the desktops
+  -- besides them in the live list's order: what the order and the desk
+  -- ordinals keep.
+  local placed, want = true, {}
+  for i, id in ipairs(builtin_live) do
+    if fullscreen[id] then
+      placed = placed and builtin[i] == id
+    else
+      want[#want + 1] = id
+    end
+  end
+  check("its full-screen spaces sit where the live list puts them, and desk ordinals skip them",
+    placed and text(desktops) == text(want), text(desktops))
+  local doubled, dsource = P.order_spaces({ 1, 2 }, { list("Main", { 2, 2 }) })
+  check("a list that names a desktop twice is never a screen's list, though its size matches",
+    text(doubled) == "1,2" and dsource == "live", text(doubled) .. " " .. tostring(dsource))
+
+  local twice, tsource, tnote = P.order_spaces({ 3215, 3216 }, { later[2], later[2] })
+  check("two lists that both hold a screen's desktops: the live order, and both said",
+    text(twice) == "3215,3216" and tsource == "live" and string.find(tostring(tnote), "two lists", 1, true) ~= nil,
+    tostring(tnote))
+  local fewer, fsource2 = P.order_spaces({ 1, 3 }, monitors)
+  check("a list holding more than the screen's desktops is not its list", text(fewer) == "1,3" and fsource2 == "live")
+  local alone, asource2 = P.order_spaces({ 3215 }, monitors)
+  check("a lone desktop no list holds is its own order", text(alone) == "3215" and asource2 == "live")
+  local pair, psource, pnote = P.order_spaces({ 3215, 3216 }, nil, "defaults export failed")
+  check("with no display configuration: the live order, saying why",
+    text(pair) == "3215,3216" and psource == "live"
+      and string.find(tostring(pnote), "carries no display configuration: defaults export failed", 1, true) ~= nil,
+    tostring(pnote))
+end
+
+-- --------------------------------------- the displays settle (WP 93ea7f8a)
+-- AT-93ea7f8a.4
+
+print("the displays settle")
+do
+  local now = 1795000000
+  local long_ago = now - 2 * P.QUIET_LIMIT
+  local verdict = P.quiet_verdict(now, { started = long_ago }, now)
+  check("a watcher that has seen no change for long enough: go", verdict == "go", verdict)
+  verdict = P.quiet_verdict(now, { started = long_ago, last_change = now - P.QUIET_SECONDS }, now)
+  check("a last change QUIET_SECONDS ago: go", verdict == "go", verdict)
+  local wait
+  verdict, wait = P.quiet_verdict(now, { started = long_ago, last_change = now - 1 }, now)
+  check("a change a second ago: wait out the rest of QUIET_SECONDS",
+    verdict == "wait" and wait == P.QUIET_SECONDS - 1, tostring(verdict) .. " " .. tostring(wait))
+  verdict, wait = P.quiet_verdict(now, { started = now - 1 }, now)
+  check("a watcher started a second ago has seen nothing yet: it waits the same",
+    verdict == "wait" and wait == P.QUIET_SECONDS - 1, tostring(verdict) .. " " .. tostring(wait))
+  verdict, wait = P.quiet_verdict(now, nil, now - 1)
+  check("with no watcher, quiet counts from when the wait began",
+    verdict == "wait" and wait == P.QUIET_SECONDS - 1, tostring(verdict) .. " " .. tostring(wait))
+  verdict = P.quiet_verdict(now, nil, now - P.QUIET_SECONDS)
+  check("and goes once QUIET_SECONDS have passed", verdict == "go", verdict)
+  local began = now - (P.QUIET_LIMIT - 1)
+  verdict, wait = P.quiet_verdict(now, { started = long_ago, last_change = now }, began)
+  check("a wait is never asked to run past QUIET_LIMIT", verdict == "wait" and wait == 1, tostring(verdict) .. " " .. tostring(wait))
+  local why, fix
+  verdict, why, fix = P.quiet_verdict(now, { started = long_ago, last_change = now - 1 }, now - P.QUIET_LIMIT)
+  check("displays still changing at QUIET_LIMIT: refuse, saying so, with the fix",
+    verdict == "refuse" and string.find(tostring(why), "the displays did not settle in " .. P.QUIET_LIMIT .. " s", 1, true) ~= nil
+      and fix == "run it again once the displays have stopped changing",
+    tostring(verdict) .. " / " .. tostring(why) .. " / " .. tostring(fix))
 end
 
 -- ------------------------------------------------------------- moving (D21)

@@ -168,10 +168,11 @@ end
 
 -- The displays as a run saw them at LABEL, as { event, text } pairs: for each
 -- screen its frame and the desktop it shows, its desktops live, where the
--- record files each, the order taken or why none, and the windows arngz can
--- name on each desktop; then every list com.apple.spaces holds. SINCE says
--- when the displays last changed. WINDOWS false leaves the windows out, as
--- the watcher's snapshots do.
+-- record files each, the order taken and where it came from, and the windows
+-- arngz can name on each desktop; then every list com.apple.spaces holds, the
+-- entries that hold no desktop ("Collapsed Space" alone) counted on one line
+-- (WP 93ea7f8a). SINCE says when the displays last changed. WINDOWS false
+-- leaves the windows out, as the watcher's snapshots do.
 function L.world_pairs(world, label, since, windows)
   local out = {}
   local function add(event, text) out[#out + 1] = { event, text } end
@@ -197,12 +198,11 @@ function L.world_pairs(world, label, since, windows)
       groups[#groups + 1] = ids(g.ids) .. " under " .. g.display
     end
     if #groups > 0 then add("filed", u .. ": " .. table.concat(groups, "; ")) end
-    if s.order_error then
-      add("order", u .. ": none: " .. tostring(s.order_error))
-    elseif s.spaces and #s.spaces > 0 then
+    if s.spaces and #s.spaces > 0 then
       local taken = {}
       for i, sp in ipairs(s.spaces) do taken[i] = sp.id end
-      add("order", u .. ": " .. ids(taken) .. (s.order_pending and ("; pending: " .. tostring(s.order_pending)) or ""))
+      add("order", string.format("%s: %s (%s%s)", u, ids(taken), tostring(s.order_source),
+        s.order_note and ("; " .. tostring(s.order_note)) or ""))
     end
     if windows ~= false then
       for _, sp in ipairs(s.spaces or {}) do
@@ -220,26 +220,57 @@ function L.world_pairs(world, label, since, windows)
       end
     end
   end
+  local collapsed, under, per = 0, {}, {}
   for _, r in ipairs(world.recorded or {}) do
     if r.collapsed then
-      add("record", r.display .. ": collapsed")
+      collapsed = collapsed + 1
+      if not per[r.display] then
+        per[r.display] = 0
+        under[#under + 1] = r.display
+      end
+      per[r.display] = per[r.display] + 1
     else
       add("record", string.format("%s: %s (current %s)", r.display, ids(r.spaces), tostring(r.current)))
     end
+  end
+  if collapsed > 0 then
+    local each = {}
+    for i, d in ipairs(under) do each[i] = string.format("%s x%d", d, per[d]) end
+    add("record", string.format("collapsed: %d %s, under %s", collapsed, collapsed == 1 and "entry" or "entries",
+      table.concat(each, ", ")))
   end
   if world.recorded_error then add("record", "unread: " .. tostring(world.recorded_error)) end
   return out
 end
 
--- The observed point's fields (progress.md), from a world.
+-- The observed point's fields (progress.md), from a world. `order` says where
+-- the displays' desktop orders came from (WP 93ea7f8a): "record" when every
+-- display's is com.apple.spaces', else how many are the live list's and how
+-- many have none, their desktops unread, eg "of 3 displays: live on 1,
+-- unread on 1"; "no displays" when there are none.
 function L.observed_fields(world)
-  local f = { displays = 0, desktops = 0, windows = 0, visitors = 0, order = "ok" }
+  local f = { displays = 0, desktops = 0, windows = 0, visitors = 0 }
+  local from_live, unread = 0, 0
   for _, s in ipairs(world.screens or {}) do
     f.displays = f.displays + 1
     f.desktops = f.desktops + #(s.live or {})
     f.visitors = f.visitors + L.visitors(s.live, world.recorded)
     for _, sp in ipairs(s.spaces or {}) do f.windows = f.windows + (sp.named or 0) end
-    if s.order_error and f.order == "ok" then f.order = tostring(s.order_error) end
+    if s.order_source == "live" then
+      from_live = from_live + 1
+    elseif s.order_source ~= "record" then
+      unread = unread + 1
+    end
+  end
+  local parts = {}
+  if from_live > 0 then parts[#parts + 1] = "live on " .. from_live end
+  if unread > 0 then parts[#parts + 1] = "unread on " .. unread end
+  if f.displays == 0 then
+    f.order = "no displays"
+  elseif #parts == 0 then
+    f.order = "record"
+  else
+    f.order = string.format("of %d displays: %s", f.displays, table.concat(parts, ", "))
   end
   return f
 end

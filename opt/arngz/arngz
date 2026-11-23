@@ -706,11 +706,15 @@ seconds_setting() {
   count_setting "$1" "$2" seconds
 }
 
-# How long one engine call may take, in seconds. ARNGZ_HS_TIMEOUT overrides it,
-# which is how the suite makes a call that never answers fail in one second
-# rather than sixty.
+# How long one engine call for VERB may take, in seconds: 60, and for discover
+# 180, since it reads every window on every desktop inside one call, and one
+# took 87 s in hv's log (F4, ST589246c/93ea7f8a). ARNGZ_HS_TIMEOUT overrides it
+# for every verb, which is how the suite makes a call that never answers fail
+# in one second rather than sixty.
 engine_timeout() {
-  seconds_setting ARNGZ_HS_TIMEOUT 60
+  local default=60
+  if [[ "${1:-}" == discover ]]; then default=180; fi
+  seconds_setting ARNGZ_HS_TIMEOUT "$default"
 }
 
 # How long the CLI waits for a scheduled verb's answer, apply's, in seconds
@@ -778,12 +782,17 @@ ENGINE_KIND=""
 # THE SAME LIST AS `SCHEDULED` in lib/arngz.lua, which arngz.bats holds the
 # two to: the CLI needs its own copy to check the deadline before it sends.
 SCHEDULED_VERBS="apply"
+# How long hs is given to exit on its own once the response has come, in
+# seconds (F3, ST589246c/93ea7f8a): an hs stopped the moment its response
+# landed, while it still ran, once left Hammerspoon's IPC port stale for the
+# next call. Counted in tenths of a second, so it is never under its value,
+# as a SECONDS deadline, which ticks in whole seconds, could be.
+HS_EXIT_GRACE=3
 # hs's exit code for the run log: a number, or killed, or empty when hs never
 # ran.
 ENGINE_HS_RC=""
 engine_ask_run() {
   local verb="$1" desk_file="${2:-}" options_file="${3:-}" tool state hs fix module timeout dir request response out why rc deadline hung=0
-  local tmp_fix="make ${TMPDIR:-/tmp} a writable directory, or set TMPDIR to one"
   ENGINE_RESPONSE=""
   ENGINE_ERROR=""
   ENGINE_FIX=""
@@ -799,13 +808,13 @@ engine_ask_run() {
     return 2
   fi
   module="$(engine_module)"
-  timeout="$(engine_timeout)" || exit 2
+  timeout="$(engine_timeout "$verb")" || exit 2
   local waited=""
   case " $SCHEDULED_VERBS " in
     *" $verb "*) waited="$(engine_scheduled_timeout)" || exit 2 ;;
   esac
   if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz.XXXXXX" 2>&1)"; then
-    engine_unasked "could not make a temp dir under ${TMPDIR:-/tmp} for the request: $dir" "$tmp_fix"
+    engine_unasked "could not make a temp dir under ${TMPDIR:-/tmp} for the request: $dir" "$(tmp_fix)"
     return 2
   fi
   ENGINE_DIR="$dir"
@@ -825,7 +834,7 @@ engine_ask_run() {
   if [[ -z "$options_file" ]]; then
     options_file="$ENGINE_DIR/options.json"
     if ! why="$({ printf '{}\n' >"$options_file"; } 2>&1)"; then
-      engine_unasked "could not write the request's options to $options_file: $why" "$tmp_fix"
+      engine_unasked "could not write the request's options to $options_file: $why" "$(tmp_fix)"
       return 2
     fi
   fi
@@ -861,10 +870,18 @@ engine_ask_run() {
   done
 
   if [[ -f "$response" ]]; then
+    # hs is let finish its own IPC first (F3), and stopped only if it still
+    # runs HS_EXIT_GRACE seconds after its response came, as one that hangs
+    # after replying does (16 Oct).
+    local tenths=$((HS_EXIT_GRACE * 10))
+    while kill -0 "$pid" 2>/dev/null && [[ $tenths -gt 0 ]]; do
+      sleep 0.1
+      tenths=$((tenths - 1))
+    done
     if kill -0 "$pid" 2>/dev/null; then
       kill "$pid" 2>/dev/null || true
       ENGINE_HS_RC=killed
-      log_record kill "stopped hs (pid $pid): the response came while it still ran"
+      log_record kill "stopped hs (pid $pid): it still ran $HS_EXIT_GRACE s after its response came"
     fi
     # The response is the answer, so hs's status changes nothing here; it is
     # kept for the run log's answer record, which says how hs ended.
@@ -1006,6 +1023,59 @@ engine_ask() {
   return "$rc"
 }
 
+# engine_ask_quiet: engine_ask for a verb that acts on what it reads, auto's
+# which and discover --save, which reads nothing until the displays have
+# settled (WP 93ea7f8a). Until then the engine answers `unsettled`, with how
+# long to wait and when the wait began. This sleeps here, so Hammerspoon is
+# never held, and asks again with that start, until the engine reads, or
+# refuses once the displays have not settled within its limit. When to wait,
+# and how long for, are the engine's alone. Its exits are engine_ask's, with
+# ENGINE_ERROR and ENGINE_FIX set on each, for engine_refuse.
+engine_ask_quiet() {
+  local verb="$1" desk="${2:-}" options="${3:-}" rc answer wait began why first_began=""
+  local query='[(.unsettled.wait // ""), (.unsettled.began // "")] | @tsv'
+  if ! why="$(yq -i -o json '.quiet = {}' "$options" 2>&1)"; then
+    engine_unasked "$verb: could not ask in $options for the displays to settle first: $why" "$(tmp_fix)"
+    return 2
+  fi
+  while :; do
+    rc=0
+    engine_ask "$verb" "$desk" "$options" || rc=$?
+    if [[ $rc -ne 0 ]]; then return "$rc"; fi
+    if ! answer="$(yq_value -r "$query" "$ENGINE_RESPONSE")"; then
+      ENGINE_ERROR="could not read the engine's answer at $ENGINE_RESPONSE: $(yq_words -r "$query" "$ENGINE_RESPONSE")"
+      ENGINE_FIX="$(engine_failing)"
+      return 3
+    fi
+    IFS=$'\t' read -r wait began <<<"$answer"
+    if [[ -z "$wait" ]]; then return 0; fi
+    if [[ ! "$wait" =~ ^[0-9]+(\.[0-9]+)?$ || ! "$began" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+      ENGINE_ERROR="the engine asked $verb to wait '$wait' s from '$began', which are not times (kept at $ENGINE_RESPONSE)"
+      ENGINE_FIX="$(engine_failing)"
+      return 3
+    fi
+    # The engine counts its limit from the start it was handed back, so a
+    # start that moves would be a wait with no end: refused by name.
+    if [[ -n "$first_began" && "$began" != "$first_began" ]]; then
+      ENGINE_ERROR="the engine restarted $verb's wait for the displays to settle: it began at $first_began, and now at $began (kept at $ENGINE_RESPONSE)"
+      ENGINE_FIX="$(engine_failing)"
+      return 3
+    fi
+    first_began="$began"
+    if ! rm -rf -- "$ENGINE_DIR"; then warn "arngz: could not remove $ENGINE_DIR"; fi
+    info "the displays changed moments ago: waiting $wait s for them to settle"
+    if ! why="$(sleep "$wait" 2>&1)"; then
+      engine_unasked "$verb: could not wait $wait s for the displays to settle, as sleep said: $why" \
+        "fix what sleep says, then run arngz again"
+      return 2
+    fi
+    if ! why="$(B="$began" yq -i -o json '.quiet.began = strenv(B)' "$options" 2>&1)"; then
+      engine_unasked "$verb: could not hand the wait's start back in $options: $why" "$(tmp_fix)"
+      return 2
+    fi
+  done
+}
+
 # The response's log_error and toast_error, said once each per run. The engine
 # writes each on one line, so the two come back as two lines, read from yq's
 # stdout alone.
@@ -1038,6 +1108,11 @@ engine_unasked() {
     fi
     ENGINE_DIR=""
   fi
+}
+
+# What fixes a temp file the CLI could not make or write.
+tmp_fix() {
+  printf 'make %s a writable directory, or set TMPDIR to one\n' "${TMPDIR:-/tmp}"
 }
 
 # What fixes the engine answering with an error: nothing on this machine.
@@ -2012,7 +2087,13 @@ cmd_discover() {
   # Refused as engine_call refuses, once this verb's own temp dir is gone: the
   # request the engine kept carries the options in it.
   rc=0
-  engine_ask discover "" "$options" || rc=$?
+  # A desk saved is written from one reading, so --save waits for the displays
+  # to settle first; a plain discover only prints what it sees.
+  if [[ -n "$save" ]]; then
+    engine_ask_quiet discover "" "$options" || rc=$?
+  else
+    engine_ask discover "" "$options" || rc=$?
+  fi
   if [[ $rc -ne 0 ]]; then
     rm -rf -- "$dir"
     engine_refuse
@@ -2192,7 +2273,9 @@ cmd_auto() {
     fi
   fi
   dir="$(which_options)"
-  engine_ask which "" "$dir/options.json" || rc=$?
+  # auto acts on what which reads, so which waits for the displays to settle
+  # first: just after a replug, a passing layout would name the wrong desk.
+  engine_ask_quiet which "" "$dir/options.json" || rc=$?
   if [[ $rc -ne 0 ]]; then
     rm -rf -- "$dir"
     engine_refuse
