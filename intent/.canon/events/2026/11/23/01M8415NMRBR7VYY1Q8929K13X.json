@@ -1,0 +1,14 @@
+{
+  "id": "01M8415NMRBR7VYY1Q8929K13X",
+  "ts": "2026-11-23T11:03:02.040Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.unclaim",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "claim": "ST589246c823732446/eae7633d"
+  }
+}

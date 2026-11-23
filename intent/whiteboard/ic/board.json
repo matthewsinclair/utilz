@@ -5,12 +5,10 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "3bcdc7a2-7fd8-4497-8141-011923ff78f3",
-    "heartbeat_at": "2026-11-23T10:12:57.894Z",
+    "heartbeat_at": "2026-11-23T11:03:02.396Z",
     "status": "active",
-    "focus": "23 Nov, localfold for hv's compact (vc's LOCALFOLD of 10:12Z), no release. arngz's toasts (ST589246c/eae7633d) landed at 377409c5 and cafe5a34, AT-eae7633d.2 to .8 green at fe08bb72, all checked by vc by change; AC-eae7633d.1 waits for 93ea's live run (vc decision 110: hv's first run moved no window), then wp done. Claim ST589246c823732446/eae7633d kept. The primary is live for hv: no code edits there. Todo 13: arca_swift still 0.2.1 (ffdff0a), read 06:42Z. On the bounce: /in-session with the pickup, then carry on from ~/Devel/scratch/utilz-ic/RESUME.md on vc's word.",
-    "claims": [
-      "ST589246c823732446/eae7633d"
-    ],
+    "focus": "23 Nov: arngz's toasts (ST589246c/eae7633d) done on hv's word after 93ea's live re-runs: AC-eae7633d.1 satisfied, the WP done, its claim released. Todo 13: arca_swift still 0.2.1 (ffdff0a), read 10:17Z. Holding for vc's word; the primary is live for hv, so no code edits there.",
+    "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
   },

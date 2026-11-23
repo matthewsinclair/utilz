@@ -2,7 +2,7 @@
 wp_id: WP-eae7
 title: Progress toasts: Starting, Running and Finished, hung on the run log's progress points
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-eae7: Progress toasts: Starting, Running and Finished, hung on the run log's progress points

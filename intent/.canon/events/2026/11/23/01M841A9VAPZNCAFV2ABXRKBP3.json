@@ -1,0 +1,14 @@
+{
+  "id": "01M841A9VAPZNCAFV2ABXRKBP3",
+  "ts": "2026-11-23T11:05:33.803Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-eae7633d.1"
+  },
+  "payload": {
+    "evidence": "hv, 23 Nov 2026, first-hand in vc's session after ST589246c/93ea's live re-runs, relayed by vc: \"The toasts work as expected.\" vc's read of hv's screenshots: three toasts, the settle wait, \"Running... waiting for the displays to settle (up to 20 s)\"; Running... with its step and the hands-off line, \"1 of 19: placing Finder on main\"; and Finished, with its counts and the first problem, three times (rhad twice, zeopit once). None shows Starting. arngz's log has the start point that draws it, desk=rhad, at 10:39:06.873Z of run 20261123T103906Z-92295, and vc decision 110 records hv seeing Starting on the diagnosis run. vc's read of the log: the engine switches desktops and moves windows under the toast in both re-runs, rhad at run 20261123T104723Z-91703 and zeopit at run 20261123T105242Z-55488. That meets vc decision 110's condition, that hv sees 93ea's live run of the rhad and zeopit applies."
+  }
+}

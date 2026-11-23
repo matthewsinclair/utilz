@@ -3,6 +3,7 @@
   "text": "On hv's diagnosis run on the dev tree, an apply from Menuz shows one toast on the primary display: Starting with the desk's name, then Running..., rewritten in place as each wait and each step begins, then Finished. It never takes focus or a click, and stays in view while the engine switches desktops.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv, 23 Nov 2026, first-hand in vc's session after ST589246c/93ea's live re-runs, relayed by vc: \"The toasts work as expected.\" vc's read of hv's screenshots: three toasts, the settle wait, \"Running... waiting for the displays to settle (up to 20 s)\"; Running... with its step and the hands-off line, \"1 of 19: placing Finder on main\"; and Finished, with its counts and the first problem, three times (rhad twice, zeopit once). None shows Starting. arngz's log has the start point that draws it, desk=rhad, at 10:39:06.873Z of run 20261123T103906Z-92295, and vc decision 110 records hv seeing Starting on the diagnosis run. vc's read of the log: the engine switches desktops and moves windows under the toast in both re-runs, rhad at run 20261123T104723Z-91703 and zeopit at run 20261123T105242Z-55488. That meets vc decision 110's condition, that hv sees 93ea's live run of the rhad and zeopit applies."
   }
 }
