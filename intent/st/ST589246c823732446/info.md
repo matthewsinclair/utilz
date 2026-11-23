@@ -1,9 +1,9 @@
 ---
 st_id: ST589246c
 title: arngz: a run log, progress toasts, and the desk-change fix
-status: WIP
+status: Completed
 created: 2026-11-23
-completed:
+completed: 2026-11-23
 ---
 
 # ST589246c: arngz: a run log, progress toasts, and the desk-change fix
