@@ -1,0 +1,14 @@
+{
+  "id": "01M8437C4RGTKN231SE2KP5CA2",
+  "ts": "2026-11-23T11:38:55.003Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-01.1"
+  },
+  "payload": {
+    "text": "The push that lands ST0031/01 with ST0031/02's bank carries the whole change: tools/ci-state, tools/post-cut, install.sh's install_ci_state and install_ci_jobs, and the tests of each are gone; bin/.devbin/config.yaml's one after: command is `tools/formula publish --pull`, and its gates stay `check all` alone, as hv ruled on 28 Oct 2026 (ST0030); issue Ie8e55e8 is fixed, so menuz names the release asset from one home, held equal to the core's derivation; docs/releasing.md describes the cut at Devbin 0.1.28; and no tracked file outside bin/.devbin, CHANGELOG.md and intent/ names tools/ci-state, tools/post-cut, install_ci_state or install_ci_jobs. Reworded on hv decision 14 (23 Nov 2026)."
+  }
+}

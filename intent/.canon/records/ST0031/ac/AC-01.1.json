@@ -1,6 +1,6 @@
 {
   "id": "AC-01.1",
-  "text": "The sweep's push carries the whole change, on ST0031/02's bank: tools/ci-state, tools/post-cut, tools/formula, install.sh's install_ci_state and install_ci_jobs, and the tests of each are gone; bin/.devbin/config.yaml gates the cut with `check all` then `test estate`, and its one after: command is `bin/devbin formula publish`; docs/releasing.md describes the cut in the new shape; and no tracked file outside bin/.devbin, CHANGELOG.md and intent/ names any of them.",
+  "text": "The push that lands ST0031/01 with ST0031/02's bank carries the whole change: tools/ci-state, tools/post-cut, install.sh's install_ci_state and install_ci_jobs, and the tests of each are gone; bin/.devbin/config.yaml's one after: command is `tools/formula publish --pull`, and its gates stay `check all` alone, as hv ruled on 28 Oct 2026 (ST0030); issue Ie8e55e8 is fixed, so menuz names the release asset from one home, held equal to the core's derivation; docs/releasing.md describes the cut at Devbin 0.1.28; and no tracked file outside bin/.devbin, CHANGELOG.md and intent/ names tools/ci-state, tools/post-cut, install_ci_state or install_ci_jobs. Reworded on hv decision 14 (23 Nov 2026).",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"

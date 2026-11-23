@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 11:09Z
+heartbeat_at: 2026-11-23 11:38Z
 status: active
-focus: "23 Nov: ST589246c/93ea7f8a landed (0666e2f2) and live-proven (AC .9 on hv's re-run); its close follow-up head is designed (WP body amended) and goes on dc/93ea in wt-93ea, one booked run, then the close records and wp done. ST0031/01 re-planned, waiting on hv's (A) or (B). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
+focus: "23 Nov: ST589246c/93ea7f8a's close head (dc/93ea bcfb1a1a) waits for its Desk slot, then the landing and the close records, which close 93ea and 53ef. ST0031/01 under (A) (hv decision 14): body and criteria recorded, code after 93ea's close. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a, ST0031/01, ISSUE:Ie8e55e87057927e0]
 ---
 
 # DevX Claude (dc)
@@ -15,6 +15,7 @@ claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 
 - ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, checked by vc by change, proven by hv's run of st5892/run-93ea-2.sh (180 of 180), and live on hv's re-run, where AC .9 is met on the log (rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. The close: the head the WP body's "The close's follow-up head" names (help's diff sentence, plan_test.lua's comment, M.watch's clear, engine_ask_quiet's two fault arms, the two gap arms with a new AT .7), built on dc/93ea in wt-93ea, one booked run of arngz.bats and engine.bats, landed on vc's word; then vc's read for AC .7, the close records (AC .9, AC .7, AT .7, the extended notes) and wp done. (edited)
 - ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.
+- ST0031/01, retire Utilz's CI readers and post-cut into Devbin 0.1.28's core, under (A) (hv decision 14): the WP body is the re-plan of 23 Nov, and the formula stays Utilz's until I59c806c. Issue Ie8e55e8 rides it. Next: the code in a worktree off main on ST0031/02's bank (~/Devel/scratch/utilz-dc/st0031-02-v2.patch), one booked run of install_lib.bats, install_guards.bats, formula.bats and macos.bats with probe (b), then /01 and /02 land together on vc's word. Only after 93ea's close, and never two bookings at once.
 
 ## TODO
 
@@ -22,7 +23,7 @@ _(none)_
 
 ## Holds
 
-- ST0031/01's records and code wait until hv chooses (A) or (B) for its re-plan (vc put it to hv on 23 Nov 2026 with a rec for (A); draft at ~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md). On (A) or (B): record the body and the criteria on vc's YOUR TURN, claim ST0031/01, then build on /02's bank.
+_(none)_
 
 ## Watch-outs
 

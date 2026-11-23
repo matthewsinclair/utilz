@@ -1,0 +1,14 @@
+{
+  "id": "01M8437CQGGK01KZMJ4Y04WFB1",
+  "ts": "2026-11-23T11:38:55.602Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-01.3"
+  },
+  "payload": {
+    "text": "Before tools/ci-state goes, the core gives Utilz the answers it gives: tools/ci-state and `bin/devbin ci-state`, each given the full sha, give the same verdict word on f2021ddc (green) and 1434e764 (failed), naming the same failed jobs on 1434e764. The formula's half, tools/formula's render against the core's, goes to issue I59c806c, where the template changes. Reworded on hv decision 14 (23 Nov 2026)."
+  }
+}

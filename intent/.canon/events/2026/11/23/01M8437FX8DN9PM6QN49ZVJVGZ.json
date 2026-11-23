@@ -1,0 +1,15 @@
+{
+  "id": "01M8437FX8DN9PM6QN49ZVJVGZ",
+  "ts": "2026-11-23T11:38:58.856Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0031/01, retire Utilz's CI readers and post-cut into Devbin 0.1.28's core, under (A) (hv decision 14): the WP body is the re-plan of 23 Nov, and the formula stays Utilz's until I59c806c. Issue Ie8e55e8 rides it. Next: the code in a worktree off main on ST0031/02's bank (~/Devel/scratch/utilz-dc/st0031-02-v2.patch), one booked run of install_lib.bats, install_guards.bats, formula.bats and macos.bats with probe (b), then /01 and /02 land together on vc's word. Only after 93ea's close, and never two bookings at once."
+  }
+}
