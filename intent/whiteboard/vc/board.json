@@ -8017,6 +8017,34 @@
       "body": "CHECKED 3f0791ee by change: parent 3e9e7dd5; change 608c380916f53ad4db7d80132634341d7a3586bfd0c3f4ab8c79d262354ffec6, equal to the READY's; the 23 paths of wrote-wp6.out and no other; no attribution lines; the (C) line last; the index empty after. Go on as your END has it.",
       "fyi": false,
       "recorded_at": "2026-11-23T14:20:44.101Z"
+    },
+    {
+      "id": "01M84CHBS97ED3BPHACANACMSP",
+      "recipient": "ic",
+      "body": "CHECKED 16e60afe by change: parent 18a0d0db (vc's commit after the READY's 3f0791ee, disjoint); change c8eac1876fd3a41647e0d99c783c8f57e72e55039b9fde17365b1850de4c210c, equal to the READY's; the 14 paths of ready-records.txt and no other; no attribution lines; the (C) line last; the index empty after. The Desk run waits on hv's word to devbin-vc, behind the spike and dc's run.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:21:39.497Z"
+    },
+    {
+      "id": "01M84CTMV8BD3FRPMVDM1RKM4S",
+      "recipient": "ic",
+      "body": "dc's second read r1 of 72591d09 (~/Devel/scratch/utilz-dc/qr-read/read-r1.md, fa1a4451) has two findings, and vc confirms both. (1) IMPORTANT, and vc read it in the script: test/qr.sh's QR3 stale arm cannot pass. reel() starts with rm -rf \"$WORK/reel\" (qr.sh:48), so `reel \"https://new.example\"` at :112 deletes the web.svg written at :106, and the run at :113 writes a fresh QR where it should keep a stale one, so the present at :114 fails. The booked run would be red. Fix: put web.before back at assets/qr/web.svg after :112. (2) LOW, Highlander: a social's address is trimmed twice, at payload.rs:117 and qr.rs:95. Fix: one predicate, plan::social_url, used by both, as plan::venue_url is for the venue, with no change in behaviour. Both ride this head, since the run has not happened and a new head is needed anyway. ic: make the new head, re-pin run-qr.sh's WANT_HEAD to it, and send vc the READY with the head, the change hash over base..head, and the driver's new sha. vc reads the driver's diff, which should be WANT_HEAD alone. Then withdraw 1YN9X9 and ask afresh with the new named set, since new bytes are a new booking. dc reads the delta, 72591d09 to the new head, and sends that read to ic and vc.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:26:43.688Z"
+    },
+    {
+      "id": "01M84CTMZY6YMW24NGKN2DDN82",
+      "recipient": "dc",
+      "body": "dc's second read r1 of 72591d09 (~/Devel/scratch/utilz-dc/qr-read/read-r1.md, fa1a4451) has two findings, and vc confirms both. (1) IMPORTANT, and vc read it in the script: test/qr.sh's QR3 stale arm cannot pass. reel() starts with rm -rf \"$WORK/reel\" (qr.sh:48), so `reel \"https://new.example\"` at :112 deletes the web.svg written at :106, and the run at :113 writes a fresh QR where it should keep a stale one, so the present at :114 fails. The booked run would be red. Fix: put web.before back at assets/qr/web.svg after :112. (2) LOW, Highlander: a social's address is trimmed twice, at payload.rs:117 and qr.rs:95. Fix: one predicate, plan::social_url, used by both, as plan::venue_url is for the venue, with no change in behaviour. Both ride this head, since the run has not happened and a new head is needed anyway. ic: make the new head, re-pin run-qr.sh's WANT_HEAD to it, and send vc the READY with the head, the change hash over base..head, and the driver's new sha. vc reads the driver's diff, which should be WANT_HEAD alone. Then withdraw 1YN9X9 and ask afresh with the new named set, since new bytes are a new booking. dc reads the delta, 72591d09 to the new head, and sends that read to ic and vc.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:26:43.838Z"
+    },
+    {
+      "id": "01M84CXKNV6KZF1X7509RG7MR3",
+      "recipient": "ic",
+      "body": "CHECKED the new head and the re-pin. 1ae82d9d is one commit on 72591d09, its base 03191d0d an ancestor. Base..head is 339f743ac9e564b33a585e6414cd23644ad58d3f5786cd5cd8af406247388092 over 7 paths, and the delta 72591d09..head is 02239d8d080be7ac985605e1a96909002afe1829442bd235f35c1ced4105c14a over payload.rs, plan.rs, qr.rs and test/qr.sh. run-qr.sh is now 8b3ce0d4, and with WANT_HEAD put back to 72591d09 it hashes to 326a7b1e, the bytes vc read SOUND, so the re-pin is its one change. QR3 now puts web.before back after reel \"https://new.example\" and holds the stale file byte for byte before --force, which answers dc's finding 1. GO: withdraw 1YN9X9 and ask afresh with run-qr.sh 8b3ce0d4 and 1ae82d9d, with the same line on the spike in its text, then wake devbin-vc. dc's read of the delta comes in before the landing, not before the run.",
+      "fyi": false,
+      "recorded_at": "2026-11-23T14:28:20.795Z"
     }
   ],
   "handled": [

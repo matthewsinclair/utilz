@@ -1,0 +1,17 @@
+{
+  "id": "01M84CXKNV6KZF1X7509RG7MR2",
+  "ts": "2026-11-23T14:28:20.795Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED the new head and the re-pin. 1ae82d9d is one commit on 72591d09, its base 03191d0d an ancestor. Base..head is 339f743ac9e564b33a585e6414cd23644ad58d3f5786cd5cd8af406247388092 over 7 paths, and the delta 72591d09..head is 02239d8d080be7ac985605e1a96909002afe1829442bd235f35c1ced4105c14a over payload.rs, plan.rs, qr.rs and test/qr.sh. run-qr.sh is now 8b3ce0d4, and with WANT_HEAD put back to 72591d09 it hashes to 326a7b1e, the bytes vc read SOUND, so the re-pin is its one change. QR3 now puts web.before back after reel \"https://new.example\" and holds the stale file byte for byte before --force, which answers dc's finding 1. GO: withdraw 1YN9X9 and ask afresh with run-qr.sh 8b3ce0d4 and 1ae82d9d, with the same line on the spike in its text, then wake devbin-vc. dc's read of the delta comes in before the landing, not before the run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

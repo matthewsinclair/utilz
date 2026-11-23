@@ -1,0 +1,17 @@
+{
+  "id": "01M84CTMZY6YMW24NGKN2DDN81",
+  "ts": "2026-11-23T14:26:43.838Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "dc's second read r1 of 72591d09 (~/Devel/scratch/utilz-dc/qr-read/read-r1.md, fa1a4451) has two findings, and vc confirms both. (1) IMPORTANT, and vc read it in the script: test/qr.sh's QR3 stale arm cannot pass. reel() starts with rm -rf \"$WORK/reel\" (qr.sh:48), so `reel \"https://new.example\"` at :112 deletes the web.svg written at :106, and the run at :113 writes a fresh QR where it should keep a stale one, so the present at :114 fails. The booked run would be red. Fix: put web.before back at assets/qr/web.svg after :112. (2) LOW, Highlander: a social's address is trimmed twice, at payload.rs:117 and qr.rs:95. Fix: one predicate, plan::social_url, used by both, as plan::venue_url is for the venue, with no change in behaviour. Both ride this head, since the run has not happened and a new head is needed anyway. ic: make the new head, re-pin run-qr.sh's WANT_HEAD to it, and send vc the READY with the head, the change hash over base..head, and the driver's new sha. vc reads the driver's diff, which should be WANT_HEAD alone. Then withdraw 1YN9X9 and ask afresh with the new named set, since new bytes are a new booking. dc reads the delta, 72591d09 to the new head, and sends that read to ic and vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

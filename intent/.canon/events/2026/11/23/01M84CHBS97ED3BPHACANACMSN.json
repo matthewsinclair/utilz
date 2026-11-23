@@ -1,0 +1,17 @@
+{
+  "id": "01M84CHBS97ED3BPHACANACMSN",
+  "ts": "2026-11-23T14:21:39.497Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 16e60afe by change: parent 18a0d0db (vc's commit after the READY's 3f0791ee, disjoint); change c8eac1876fd3a41647e0d99c783c8f57e72e55039b9fde17365b1850de4c210c, equal to the READY's; the 14 paths of ready-records.txt and no other; no attribution lines; the (C) line last; the index empty after. The Desk run waits on hv's word to devbin-vc, behind the spike and dc's run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
