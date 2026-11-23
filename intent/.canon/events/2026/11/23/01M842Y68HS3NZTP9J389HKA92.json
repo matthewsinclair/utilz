@@ -1,0 +1,15 @@
+{
+  "id": "01M842Y68HS3NZTP9J389HKA92",
+  "ts": "2026-11-23T11:33:54.065Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session, received by vc's date -u of 11:33Z: \"ok, go\". It answers vc's restatement of ST0031's (A) and (B), which hv asked for in decision 13 (3). vc reads it as (A), the recommendation of dc and vc, and says so to hv. The rest is vc's wording. ST0031/01 retires tools/ci-state, install.sh's install_ci_state and install_ci_jobs, and tools/post-cut, as dc's re-plan of 23 Nov has it (~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md, 1b222cf9). tools/formula stays until issue I59c806c, devbin-cc's, which takes AC-01.3's formula half, and the cut's one after: line becomes `tools/formula publish --pull`. This amends decision 9 (1), under which WP01 also retired tools/formula. The cut's gates stay `check all` alone, by hv's ruling of 28 Oct (ST0030), and AC-01.1 is reworded to match. Issue Ie8e55e8, menuz's hard-coded asset name, rides /01. /01 and /02 land together, in this release."
+  }
+}
