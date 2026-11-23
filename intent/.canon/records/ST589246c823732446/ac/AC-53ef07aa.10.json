@@ -3,6 +3,7 @@
   "text": "The five yq captures at opt/arngz/arngz:862, 1680, 1710, 1855 and 2036 read stdout alone, and arngz.bats caps the scheduled arms' ARNGZ_APPLY_TIMEOUT in one place.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "utilz-vc's read, 23 Nov 2026, of 7a2a32a7 as landed at 98d02fab: the five parsed yq reads (and the four beside them) go through yq_value and yq_words, reading stdout alone; the yq 2>&1 captures left catch error words only; and arngz.bats sets ARNGZ_APPLY_TIMEOUT=20 once, at its top."
   }
 }

@@ -1,0 +1,14 @@
+{
+  "id": "01M83JTJ85DDK9ECTR48MR52H2",
+  "ts": "2026-11-23T06:52:18.055Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-53ef07aa.10"
+  },
+  "payload": {
+    "evidence": "utilz-vc's read, 23 Nov 2026, of 7a2a32a7 as landed at 98d02fab: the five parsed yq reads (and the four beside them) go through yq_value and yq_words, reading stdout alone; the yq 2>&1 captures left catch error words only; and arngz.bats sets ARNGZ_APPLY_TIMEOUT=20 once, at its top."
+  }
+}

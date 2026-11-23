@@ -1,0 +1,14 @@
+{
+  "id": "AT-53ef07aa.1",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-53ef07aa.1",
+    "AC-53ef07aa.4",
+    "AC-53ef07aa.5",
+    "AC-53ef07aa.6",
+    "AC-53ef07aa.7"
+  ],
+  "status": "green",
+  "note": "arngz.bats's run-log arms (ST589246c/53ef07aa): the CLI's records under one run id, start to end; a refusal's start, refused and end; nothing logged by the read-only verbs; nothing extra on screen; the rotation at ARNGZ_LOG_MAX; a bad ARNGZ_LOG_MAX refused with nothing logged; arngz log printing the last run alone; a log that cannot be written said once. Red: by reading at 03d8112c, which has no run log, so each arm fails at its first look at the log; and seen red in slot SXV1CQ at d601f3ce on two of its arms (168 and 173), whose own reading of discover's streams was wrong (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/53ef-20261123T063356Z.tap). Green: slot VE7R84 at 7a2a32a7, arngz.bats 173 of 173 with every AT-53ef07aa.1 arm ok (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/53ef-arngz-20261123T064718Z.tap); landed on main at 98d02fab."
+}

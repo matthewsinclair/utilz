@@ -1,0 +1,13 @@
+{
+  "id": "AT-53ef07aa.2",
+  "kind": "test",
+  "file": "opt/arngz/test/log_test.lua",
+  "covers": [
+    "AC-53ef07aa.1",
+    "AC-53ef07aa.2",
+    "AC-53ef07aa.8",
+    "AC-53ef07aa.9"
+  ],
+  "status": "green",
+  "note": "log_test.lua, run by engine.bats's AT-53ef07aa.2 arm (ST589246c/53ef07aa): the formatters, each visiting desktop filed under its display, apply's tally, the planned fields held to the engine's acting kinds, a run's records under its id, the points of diff and of an apply carried to its end, the end record and the report, a toast hook that raises, finished after a phase's Lua error, a second apply refused under its own run, the desktop a creation added, a log that cannot be written, and the display watcher's change and snapshots. Red: by reading at 03d8112c, where lib/log.lua does not exist, so the driver's first dofile raises and its summary never prints. Green: slot SXV1CQ at d601f3ce, engine.bats's AT-53ef07aa.2 arm ok (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/53ef-20261123T063356Z.tap). The engine and this driver are byte-identical at 7a2a32a7, which changes arngz.bats alone; landed on main at 98d02fab."
+}
