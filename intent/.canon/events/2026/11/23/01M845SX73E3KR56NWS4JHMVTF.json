@@ -1,0 +1,14 @@
+{
+  "id": "01M845SX73E3KR56NWS4JHMVTF",
+  "ts": "2026-11-23T12:23:59.460Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "STca1b7f9d59191dfc/AC-dca427e7.2"
+  },
+  "payload": {
+    "text": "A move that goes round through another display carries `via` on its step point: the desk's name for that display, or the screen's own name when the desk does not describe it. A round that fails after its first drag says where it left the window, as `<app> not moved to desktop <n> on <A>, and now on <B>'s desktop <m>: <why>`, with no fix line."
+  }
+}

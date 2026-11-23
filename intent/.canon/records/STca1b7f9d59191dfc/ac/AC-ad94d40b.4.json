@@ -1,6 +1,6 @@
 {
   "id": "AC-ad94d40b.4",
-  "text": "M2's result is recorded. If Mission Control moved the held window, the `mission` leg moves a window past a full-screen space on one display, read back. Otherwise AC-ad94d40b.1's failure is the laptop's answer.",
+  "text": "M2's result is recorded in design.md's Runs, from the spike's results file. If Mission Control moved the held window, the `mission` leg moves a window past a full-screen space on one display, read back. Otherwise AC-ad94d40b.1's failure is the laptop's answer.",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"

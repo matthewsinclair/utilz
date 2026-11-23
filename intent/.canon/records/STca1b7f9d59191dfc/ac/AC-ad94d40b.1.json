@@ -1,6 +1,6 @@
 {
   "id": "AC-ad94d40b.1",
-  "text": "With no route and no `mission` leg, the move fails. Its reason leads with the window's app by its display name, names every full-screen app the walk would pass, and gives desktops as the desk's ordinals and no window title. Its fix fits the case: attach a display when there is no other display, or show a desktop on the display it names when there is. The log carries both.",
+  "text": "With no route and no `mission` leg, the move fails. Its reason leads with the window's app by its display name, names the target's desktop and display and every full-screen app the walk would pass, and gives the window's desktop and its target as the ends of the gap, with desktops as the desk's ordinals and no window title. Its fix fits the case: attach a display when there is no other; show a desktop on the display the route would take when others share an edge with it and each shows a full-screen space; arrange a display to share an edge when none does. The log carries both.",
   "kind": "test",
   "state": {
     "is": "computed"

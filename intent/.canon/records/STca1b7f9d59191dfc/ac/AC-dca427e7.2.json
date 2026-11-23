@@ -1,6 +1,6 @@
 {
   "id": "AC-dca427e7.2",
-  "text": "A move that goes round through another display carries `via`, that display's name, on its step point. A round that fails after its first drag says where it left the window, by display and desk ordinal.",
+  "text": "A move that goes round through another display carries `via` on its step point: the desk's name for that display, or the screen's own name when the desk does not describe it. A round that fails after its first drag says where it left the window, as `<app> not moved to desktop <n> on <A>, and now on <B>'s desktop <m>: <why>`, with no fix line.",
   "kind": "test",
   "state": {
     "is": "computed"

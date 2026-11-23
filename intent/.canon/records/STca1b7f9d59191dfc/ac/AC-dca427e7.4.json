@@ -1,6 +1,6 @@
 {
   "id": "AC-dca427e7.4",
-  "text": "help/arngz.md says that a move may go round through another display (lines 44 and 117).",
+  "text": "help/arngz.md says that a move may go round through another display (lines 44 and 117), and its Toasts section shows \"round through <display>\" on the step line (line 142).",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"

@@ -1,0 +1,14 @@
+{
+  "id": "01M845SX2N3SXMAW2PH74W8S86",
+  "ts": "2026-11-23T12:23:59.318Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "STca1b7f9d59191dfc/AC-b9d4e976.1"
+  },
+  "payload": {
+    "text": "discover --save writes the desk's record whole, in the desk's own file, with no temp file left beside it: each entry's windows, `newest`, the desk's hash and the session. apply, diff and auto write no record, and delete removes it with the desk."
+  }
+}
