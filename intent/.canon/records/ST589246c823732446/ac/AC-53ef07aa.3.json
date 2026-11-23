@@ -1,6 +1,6 @@
 {
   "id": "AC-53ef07aa.3",
-  "text": "Every desktop arngz creates is recorded with its id and with how long until com.apple.spaces recorded it, or that it never did.",
+  "text": "Every desktop arngz creates is recorded with its id, from the live list that shows it once the creation returns; com.apple.spaces, which records a new desktop only at the next display change, is logged beside it and never waited on (reworded on vc's word, 23 Nov 2026, after hv's diagnosis run).",
   "kind": "test",
   "state": {
     "is": "computed"

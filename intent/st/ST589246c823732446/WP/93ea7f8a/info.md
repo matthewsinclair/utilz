@@ -38,7 +38,8 @@ How arngz orders and creates desktops when a change of desk moves desktops betwe
 ## Creates
 
 - **The trigger is unchanged**: a display with fewer live desktops than the desk asks for gets the difference. It is safe now: visitors are home at once (3), and the settle covers the flap. cc's point 4's guard is then the settle itself.
-- **The created wait changes.** It waits for the live list to show the new desktop, which it already does by the time exec_create_space returns. It no longer waits for com.apple.spaces, which records nothing until the next display change (1). For vc: AC-53ef07aa.3 asks how long com.apple.spaces took to record a created desktop. Under this rule the answer in every run is "not until the next display change". dc proposes rewording AC .3 to the live list, and proving it on the first apply that creates.
+- **The created wait changes.** It waits for the live list to show the new desktop, which it already does by the time exec_create_space returns. It no longer waits for com.apple.spaces, which records nothing until the next display change (1). So AC-53ef07aa.3 is reworded to the live list (agreed by vc), and proven on the first apply that creates.
+- **Surplus desktops** (hv decision 10 names them). The settle prevents new surplus: apply no longer reads a display that is still flapping, which is the one moment a display could read short and so get a desktop it does not need. arngz removes no desktop, because desks share a display's desktops: rhad's 8 on the built-in hold zeopit's 6, so a desktop surplus to one desk is another desk's. The surplus already there stays. Removing it is hv's choice, by hand in Mission Control.
 - **Where macOS puts a created desktop** (cc's point 5): the create record names its id and the live list after it. The plan's ordinal for it, have+1, is confirmed by that list or refused by the step readback.
 
 ## cc's junction walk: needed where no record backs the live order
@@ -48,6 +49,7 @@ How arngz orders and creates desktops when a change of desk moves desktops betwe
   - Above-left: `1808 1271 1442`, with no list of its own at all.
   - The built-in: 8 live, while Main still holds 10 (cc).
 - **Not needed:** the steady state, or the unplugged built-in (2), whose order macOS itself wrote at the flap. Nor a display of one desktop (above-right `1811`), which has no order.
+- **Which walk decides** (cc's sharpening): taking a stale record's order for the ids it holds, with the rest in live order, agrees with the live order everywhere but the replugged above-left. There the live order puts the new 1808 first, and that composed order puts it last. So above-left's walk, 3 desktops and 2 presses, decides between the two. The built-in's walk, 7 presses, cannot decide between them. It tests the live order they both rest on, which 16 Oct's counterexample, also on the built-in, once broke.
 - **How:** cc widens `junction-walk.md` to walk any display by its UUID, with no visitors needed. vc reads it before hv sees it, and hv runs it once.
   - If Mission Control's order agrees with the live list on both displays, the rule stands as written, and the step readbacks guard every later state.
   - If it differs, this design adds an order walk for a display that has just reattached: ctrl+right through its desktops, with a readback each time, before anything is moved there. arngz then measures the order itself, in the state that needs it.
@@ -58,15 +60,19 @@ help/arngz.md's "A display just attached" bullet is replaced. arngz takes each d
 
 ## Not in this WP
 
-- **F3**, the killed hs client: seen again at 08:59:45Z and harmless. dc recommends leaving it out (hv's call, through vc).
-- **F4**, discover's deadline: no new data. dc recommends leaving it out.
-- **The log's padding.** Every displays record prints com.apple.spaces' ~50 collapsed entries, mostly one id repeated. One line with a count would do. It is small, and folds into this WP's code if vc agrees.
+- **F3**, the killed hs client: seen again at 08:59:45Z, and harmless. Put to hv, through vc, with its size: S. The fix gives hs a short grace to exit on its own once the response has landed, and kills it only at the deadline, with arngz.bats' existing hang-after-reply fake proving it. dc recommends leaving it out.
+- **F4**, discover's deadline: no new data. Put to hv with two sizes. XS: discover's own deadline, eg 180 s, which still holds Hammerspoon's main thread for the whole discover. M: discover runs on a timer, as apply does, so Hammerspoon stays free; that touches the engine's and the CLI's scheduled lists, discover's path, and its arms. dc recommends leaving it out, or XS if hv wants it now.
+- **The surplus desktops already on hv's displays**, which stay (see Creates).
+
+## The log's padding (in this WP, on vc's word)
+
+Every displays record printed com.apple.spaces' ~50 collapsed entries, mostly one id repeated. log.lua now writes them as one counted line: `record collapsed: <n> entries for <k> displays no longer attached`. Each list that holds desktops is still written whole.
 
 ## Files
 
 - `opt/arngz/lib/plan.lua`: P.order_spaces becomes the live order; unread() keeps the refusal for a live list that cannot be read.
 - `opt/arngz/lib/arngz.lua`: observe; the settle phase; the created wait; the report's words on the order.
-- `opt/arngz/lib/log.lua`: the collapsed entries counted, if vc agrees.
+- `opt/arngz/lib/log.lua`: the collapsed entries written as one counted line.
 - `help/arngz.md`.
 - Tests: plan_test.lua (the order rule, from the lists in hv's run); log_test.lua or engine_test.lua (the settle phase, with the watcher's state injected); arngz.bats where the refusal text is pinned.
 
@@ -79,6 +85,7 @@ help/arngz.md's "A display just attached" bullet is replaced. arngz takes each d
 5. The created wait ends when the live list shows the new desktop.
 6. help/arngz.md says the rule.
 7. Live, on hv's dev tree: rhad applies unplugged, and zeopit applies replugged, with no order refusal. The junction walk's result is recorded.
+8. The displays records write com.apple.spaces' collapsed entries as one counted line, and every list that holds desktops whole (log_test.lua).
 
 ## Acceptance
 
