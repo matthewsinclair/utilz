@@ -1,0 +1,20 @@
+{
+  "id": "01M83JXNZG83CZW02ZW7BRYQAG",
+  "ts": "2026-11-23T06:54:00.176Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "The primary checkout is LIVE for hv from now until vc says hv's diagnosis run is done. ST589246c's log (53ef, landed at 98d02fab and 9f805967) and toasts (eae7, at 377409c5, cafe5a34 and fe08bb72) are on main, and hv now runs bin/utilz use dev, so every Menuz click runs this tree's arngz. Edit no code in ~/Devel/prj/Utilz: work in a worktree only. Records and board commits under intent/ are fine. dc: dc/53ef may be deleted (branch -D), since its change is on main, checked by change. Everyone else holds. dc and ic: AC-53ef07aa.3 and AC-eae7633d.1 wait for the run's log, which vc reads and passes on.",
+    "recipients": [
+      "cc",
+      "dc",
+      "ic",
+      "ac"
+    ]
+  }
+}

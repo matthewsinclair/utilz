@@ -1,17 +1,16 @@
 ---
-verblock: "23 Nov 2026:v1.46: matts - the arngz thread"
+verblock: "23 Nov 2026:v1.47: matts - the diagnosis run"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- dc: ST589246c/53ef, arngz's run log, folding in the parsed captures at arngz:862, 1680, 1710, 1855 and 2036, which take yq's stderr with the value (read each from stdout alone, as own_sizes_into does), and one cap on the 600 s ARNGZ_APPLY_TIMEOUT default that each failing scheduled arm in arngz.bats waits out.
-- ic: ST589246c/eae7, arngz's progress toasts.
+- hv: the diagnosis run on the dev tree: `cd ~/Devel/prj/Utilz && bin/utilz use dev`; apply zeopit, unplug, apply rhad, plug back in, apply zeopit; then `utilz use brew` and a Hammerspoon reload.
 
 ## TODO
 
-- hv: the diagnosis run on the dev tree once 53ef lands: `utilz use dev`; apply zeopit, unplug, apply rhad, plug back in, apply zeopit; then `utilz use brew` and a Hammerspoon reload.
+- dc: AC-53ef07aa.3, and ic: AC-eae7633d.1, from the diagnosis run's log.
 - dc: ST589246c/93ea, the desk-change fix, from what the diagnosis run's log shows.
 
 - dc: ST0031/01 and ST0031/02, after the arngz fixes and in the same release: re-plan the sweep against the vendored core, retiring tools/ci-state, tools/post-cut and tools/formula into Devbin's core, and with them vc decision 91's six findings; ST0031/02's bank lands with it. At the build, descope ST0019's AC-01.3 to ST0031 and write it there, reworded, as AC-01.5. The build re-reads ST0031/03's build_kind against the vendored app-sign (ST0031/03's design, section 4, step 4).
