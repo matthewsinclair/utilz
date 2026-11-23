@@ -1,0 +1,14 @@
+{
+  "id": "01M83DRAB860E33CNWQDPA17J7",
+  "ts": "2026-11-23T05:23:41.547Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST589246c823732446"
+  },
+  "payload": {
+    "title": "arngz: a run log, progress toasts, and the desk-change fix"
+  }
+}

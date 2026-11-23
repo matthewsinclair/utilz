@@ -1,0 +1,14 @@
+{
+  "schema": "intent/thread@4.0",
+  "id": "ST589246c823732446",
+  "origin": "01M83DRAB860E33CNWQDPA17J7",
+  "realised": true,
+  "title": "arngz: a run log, progress toasts, and the desk-change fix",
+  "slug": "arngz-a-run-log-progress-toasts-and-the-desk-cha",
+  "status": "wip",
+  "created": "2026-11-23",
+  "objective": "Make arngz say what it does, and fix what a change of desk breaks. Every run appends what it saw, planned, did and read back to ~/.local/state/arngz/arngz.log, and `arngz log` prints the last run (WP 53ef07aa). A run shows Starting, Running and Finished toasts (WP eae7633d). The desk-change failures are then fixed from what hv's run on the dev tree logs (WP 93ea7f8a).",
+  "context": "hv, 23 Nov 2026, first-hand in vc's session: arngz \"basically doesn't work as it needs to\". When hv unplugs the two external monitors at zeopit and goes back to rhad, \"the placement of the other spaces from the two external monitors seems a bit random\". When arngz is not working it is \"inscrutable and opaque\", and a run that worked \"gave zero output on what was happening\". hv asked for much more logging, and for toasts at Starting, Running and Finished. hv gave vc's scope a go (hv decision 10). The design attachment quotes hv in full and gives the evidence from dc's read of the logs. All of it goes out in one release with ST0031.",
+  "body": "",
+  "preamble": ""
+}

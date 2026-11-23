@@ -1,0 +1,10 @@
+{
+  "id": "93ea7f8a",
+  "origin": "01M83DRHHKWX9C8VXX3TMCMB5R",
+  "title": "The desk-change fix: desktops that visit another display, from hv's diagnosis run on the dev tree",
+  "scope": "S",
+  "status": "not-started",
+  "objective": "",
+  "body": "# The desk-change fix\n\nHow arngz orders and creates desktops when a change of desk leaves desktops visiting another display. The design waits for hv's diagnosis run on the dev tree, read from 53ef07aa's log. cc is second reader.\n\n## Inputs\n\n- The log of hv's run: each display's desktops live and recorded at a run's start and end, the visitors and the display each is filed under, every desktop arngz creates, and the watcher's snapshots after each display change.\n- cc's read-ahead, `~/Devel/scratch/utilz-cc/arngz-wp03-readahead.md`, six points, kept as cc wrote them.\n\n## What the design must settle from the run, never by a guess\n\n- Where Mission Control puts a visiting desktop in a display's order, measured with ctrl+right across each junction (cc's point 1).\n- Whether \"Main\" in com.apple.spaces is the built-in display or the primary one (cc's point 2).\n- Which refusals are a desk whose displays have not attached yet, and which stand (cc's point 3).\n- Whether apply creates desktops on a display whose own desktops are still visiting another, and the guard that stops it (cc's point 4).\n- The composed rule's edge cases: an id in two lists, collapsed entries, issue 0077's lone desktop, where macOS puts a created desktop, and spaces_agree's wait (cc's point 5).\n- A refusal text, and the words in help/arngz.md, that say what is true and give a fix that changes the outcome (cc's point 6).\n",
+  "preamble": ""
+}

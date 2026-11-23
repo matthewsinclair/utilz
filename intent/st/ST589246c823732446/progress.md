@@ -1,0 +1,24 @@
+# The progress points
+
+The contract between 53ef07aa's run log (dc) and eae7633d's toasts (ic). dc writes this file and ic agrees to it before either side codes. After that, neither changes a point without the other.
+
+## The points
+
+| Point      | When                                                        | Fields                                                                                                                                                                       | Verbs             |
+| ---------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| `start`    | The engine has the request and begins                       | `run`, `verb`, `desk` (empty for which, discover and doctor)                                                                                                                 | every engine verb |
+| `observed` | The displays, their desktops and the windows have been read | `displays`, `desktops`, `windows` (named), `order` ("ok", or the refusal's words), `visitors` (desktops filed under another display)                                         | every engine verb |
+| `planned`  | The plan is made, or refused                                | `creates`, `launches`, `moves`, `places`, `nothing` (true when there is nothing to do), `refused` (the words, when it refused)                                               | apply, diff       |
+| `waiting`  | A wait begins                                               | `for` ("new desktops", "launched apps", "unseen windows"), `seconds` (its longest)                                                                                           | apply             |
+| `step`     | Before each create, launch, move or place                   | `i`, `n`, `kind`, `app`, `display` (the desk's name for it), `desktop` (its ordinal)                                                                                         | apply             |
+| `finished` | The run has its answer, whatever it is                      | `outcome` ("done", "partly", "refused" or "failed"), `exit`, `placed`, `failed`, `unseen`, `skipped`, `seconds`, `first` (the first failure's words), `log` (the log's path) | every engine verb |
+
+## Rules
+
+1. **Order.** Each run emits `start` once, then `observed`, then for apply and diff `planned`, then any number of `waiting` and `step`, then `finished` once.
+2. **`finished` always comes.** It comes after a refusal, after a Lua error in a phase, and on the guarded path that answers a crashed apply, so no toast is left at Running. Nothing follows it.
+3. **Plain values.** A point's fields are strings, numbers and booleans. The log holds the windows and the desktop lists, and the toasts never need them.
+4. **One emitter, two listeners.** The engine emits each point once. The log writes it as a record, and the toast hook receives the same name and fields. The hook is `opt/arngz/lib/toast.lua`, which returns a table with `point(name, fields)`. The engine loads it when the file is there.
+5. **A listener never fails a run.** An error in the toast hook is caught, written to the log and returned once in the response, and the CLI prints it as one warning line. The run's outcome and exit code stay as they were.
+6. **The CLI's own moments are not points.** The hs start, the deadline, a kill, and a refusal before the engine is asked are log records only. The engine is not running then, and Menuz already posts a notice for a non-zero exit. Whether a failed run shows both the Finished toast and Menuz's notice is ic's call.
+7. **Hands off.** From the first `step` to `finished`, arngz moves the pointer, and runs 106 and 113 lost moves to a hand on the mouse. dc recommends that the Running toast say so. The toast's wording is ic's.
