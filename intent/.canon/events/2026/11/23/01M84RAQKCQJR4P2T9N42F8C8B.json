@@ -1,0 +1,16 @@
+{
+  "id": "01M84RAQKCQJR4P2T9N42F8C8B",
+  "ts": "2026-11-23T17:47:45.132Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 15,
+    "text": "STb8e4fb6, showreel qr (hv decision 15): code landed as 6e9cf356 and its AT ids as 7e0f5111, each CHECKED by vc, proved by Desk slot 1TDNX1 (END rc 0, rustc 1.100.0). WP 702cceb9's ACs satisfied but .7, main's CI on Rust 1.100.0 after hv's push, and .8, hv's phone scan with STca1b7f9's live run; vc keeps both beside hv's push on intent/wip.md. The worktrees wt-stb8e4fb6 and wt-stb8e4fb6-atids go at ic's next fold."
+  }
+}

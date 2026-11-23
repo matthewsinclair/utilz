@@ -1,0 +1,10 @@
+{
+  "id": "AT-702cceb9.6",
+  "kind": "test",
+  "file": "opt/prez/crate/test/qr.sh:65",
+  "covers": [
+    "AC-702cceb9.6"
+  ],
+  "status": "green",
+  "note": "test/qr.sh QR1. Set back to red: at lint wants AT-702cceb9.6 carried over QR1's arm in qr.sh, which needs a comment-only code change."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT-702cceb9.3",
+  "kind": "test",
+  "file": "opt/prez/crate/test/qr.sh:133",
+  "covers": [
+    "AC-702cceb9.3"
+  ],
+  "status": "green",
+  "note": "QR4. test/qr.sh --strict passed 4 of 4, 0 failed, 0 skipped, in Desk slot 1TDNX1 (run-qr.sh 8b3ce0d4 at 1ae82d9d, rustc 1.100.0, END rc 0; landed as 6e9cf356, ids at 7e0f5111)."
+}

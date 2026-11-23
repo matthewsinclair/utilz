@@ -1,0 +1,14 @@
+{
+  "id": "01M84R87Z6ST11N2JN6K6Z4GW3",
+  "ts": "2026-11-23T17:46:23.591Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "STb8e4fb60638e2a9c/AC-702cceb9.5"
+  },
+  "payload": {
+    "evidence": "6e9cf356 (change 339f743a, vc CHECKED): QR_STAMP (qr.rs:24), UNREADABLE (qr.rs:28) and stamped_for (qr.rs:71) are each defined once, in src/qr.rs, and imported by payload.rs; payload.rs's words change only by I88af1f3's warning. git diff 03191d0d 6e9cf356 touches neither showreel's Cargo.toml, tests/manifest.rs nor Cargo.lock. Desk slot 1TDNX1 (run-qr.sh 8b3ce0d4 at 1ae82d9d): cargo test --release -p showreel 212 passed, 0 failed, the manifest test among them."
+  }
+}

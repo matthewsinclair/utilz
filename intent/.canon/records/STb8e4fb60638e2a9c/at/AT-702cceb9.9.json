@@ -1,0 +1,10 @@
+{
+  "id": "AT-702cceb9.9",
+  "kind": "test",
+  "file": "opt/prez/crate/crates/showreel/src/payload.rs:547",
+  "covers": [
+    "AC-702cceb9.9"
+  ],
+  "status": "green",
+  "note": "payload.rs a_qr_there_but_not_readable_as_text_warns_and_is_not_embedded. cargo test --release -p showreel passed 212, 0 failed, in Desk slot 1TDNX1 (run-qr.sh 8b3ce0d4 at 1ae82d9d, rustc 1.100.0, END rc 0; landed as 6e9cf356, ids at 7e0f5111)."
+}
