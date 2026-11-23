@@ -6,7 +6,7 @@ session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
 heartbeat_at: 2026-11-23 05:28Z
 status: active
 focus: "23 Nov: ST589246c, arngz's run log, toasts and desk-change fix (hv decision 10). dc holds 53ef07aa, the run log. Its design, the thread's overview and the progress points are recorded and with vc for a read against hv's words; the points are with ic to agree. No code before vc's word. 93ea7f8a waits for hv's diagnosis run on the dev tree. After the arngz fixes, ST0031/01 and /02, in the same release. Every run is booked at the Desk through devbin-vc after vc reads its bytes."
-claims: [ST589246c823732446/53ef07aa]
+claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 ---
 
 # DevX Claude (dc)
