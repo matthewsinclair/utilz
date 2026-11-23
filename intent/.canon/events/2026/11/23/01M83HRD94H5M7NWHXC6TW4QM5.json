@@ -1,0 +1,14 @@
+{
+  "id": "01M83HRD94H5M7NWHXC6TW4QM5",
+  "ts": "2026-11-23T06:33:38.854Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST589246c823732446/AC-53ef07aa.2"
+  },
+  "payload": {
+    "text": "The displays records name, for each display, its live desktops in order, com.apple.spaces' lists, and each visiting desktop with the display it is filed under. They are written at the start of every engine run and, for apply, the one verb that changes anything, again at its end (vc, 23 Nov 2026)."
+  }
+}
