@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 06:42Z
+heartbeat_at: 2026-11-23 10:12Z
 status: active
-focus: "23 Nov: arngz's toasts (ST589246c/eae7633d) landed at 377409c5 and cafe5a34, and AT-eae7633d.2 to .8 went green at fe08bb72; vc checked each by change, and wt-eae7 and the ic/eae7 branch are removed. Holding on vc's word: AC-eae7633d.1 waits for hv's diagnosis run on the dev tree, and vc says when it has run. Claim ST589246c823732446/eae7633d kept. Todo 13: arca_swift's newest tag is still 0.2.1 (ffdff0a), the head of its main, read 06:42Z. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "23 Nov, localfold for hv's compact (vc's LOCALFOLD of 10:12Z), no release. arngz's toasts (ST589246c/eae7633d) landed at 377409c5 and cafe5a34, AT-eae7633d.2 to .8 green at fe08bb72, all checked by vc by change; AC-eae7633d.1 waits for 93ea's live run (vc decision 110: hv's first run moved no window), then wp done. Claim ST589246c823732446/eae7633d kept. The primary is live for hv: no code edits there. Todo 13: arca_swift still 0.2.1 (ffdff0a), read 06:42Z. On the bounce: /in-session with the pickup, then carry on from ~/Devel/scratch/utilz-ic/RESUME.md on vc's word."
 claims: [ST589246c823732446/eae7633d]
 ---
 
