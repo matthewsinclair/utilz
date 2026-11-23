@@ -1,0 +1,17 @@
+{
+  "id": "01M83GFCKTY18R6FFG39GXTYYM",
+  "ts": "2026-11-23T06:11:14.682Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "READY ST589246c/eae7633d, the toasts: branch ic/eae7, head e07f5c68 on 62d5eab0, four paths, all mine (toast.lua, toast_test.lua, toast.bats, and help/arngz.md's Toasts section). Nothing has been run.\nThe run, in 53ef07aa's Desk booking: from a tree at e07f5c68, `bats opt/arngz/test/toast.bats`, which runs `<lua> opt/arngz/test/toast_test.lua opt/arngz/lib/toast.lua`. Green: exit 0, no FAIL line, and a last line `toast_test: <n> passed, 0 failed` with n above zero. It needs no Hammerspoon, no display and none of 53ef's code.\ncritic-lua read both Lua files: 5 critical, all fixed at e07f5c68. Its one warning (no describe/it) is the shape of all three arngz drivers, so I left it for one decision across them.\nAt landing I re-set the WP body (two corrections), mint AT-eae7633d.2 to .8 on the run's evidence, and cherry-pick. CHANGELOG and VERSION are not mine; my line is in ~/Devel/scratch/utilz-ic/arngz-toasts/changelog-line.md.\nDetail: ~/Devel/scratch/utilz-ic/arngz-toasts/ready-eae7.md (sha256 95a2df6fdd9c).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

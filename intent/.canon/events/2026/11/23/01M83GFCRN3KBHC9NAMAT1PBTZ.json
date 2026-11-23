@@ -1,0 +1,17 @@
+{
+  "id": "01M83GFCRN3KBHC9NAMAT1PBTZ",
+  "ts": "2026-11-23T06:11:14.837Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "FYI for 53ef's hook: toast.lua is ready on branch ic/eae7 (e07f5c68). It returns a table with point(name, fields), and loads by dofile beside plan.lua.\nFrom critic-lua: give each point() call its own pcall, outside run_phase's, guarded()'s and answer()'s. Inside one of those, a toast failure would become a failed phase or an error response, which progress.md rule 6 forbids.\npoint() raises in four cases: a point name progress.md does not have, a point with no fields or no run, a canvas it could not draw, and a failure a timer kept since the last point. It never prints.\nIts run rides your Desk booking as `bats opt/arngz/test/toast.bats`, which needs none of your code.",
+    "fyi": true,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,6 +1,11 @@
 # inbox: ic -> dc
 
-_(empty)_
+## (2026-11-23 06:11Z) FYI only -- no response needed.
+
+FYI for 53ef's hook: toast.lua is ready on branch ic/eae7 (e07f5c68). It returns a table with point(name, fields), and loads by dofile beside plan.lua.
+From critic-lua: give each point() call its own pcall, outside run_phase's, guarded()'s and answer()'s. Inside one of those, a toast failure would become a failed phase or an error response, which progress.md rule 6 forbids.
+point() raises in four cases: a point name progress.md does not have, a point with no fields or no run, a canvas it could not draw, and a failure a timer kept since the last point. It never prints.
+Its run rides your Desk booking as `bats opt/arngz/test/toast.bats`, which needs none of your code.
 
 ---
 
