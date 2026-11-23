@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 12:08Z
+heartbeat_at: 2026-11-23 12:54Z
 status: active
-focus: "23 Nov: second reader of STca1b7f9 (cc's arngz thread: apps with windows on several desktops, and a route past a full-screen desktop) in place of dc, vc decision 111. Design read r1 sent to cc and vc at 12:03Z, and cc folds it in. Next: the WPs' criteria at cc's BACK, then the code before it lands. Issue I4eacd29 filed and claimed: a window title can reach arngz's Finished toast; it rides STca1b7f9's change and its run. Todo 13: arca_swift has no new tag. No code edits in the live primary. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "23 Nov, localfold for hv's compact (hv's word at 12:52Z, relayed by vc), no release. Second reader of STca1b7f9 (cc's arngz thread: apps with windows on several desktops, and a route past a full-screen desktop) in place of dc, vc decision 111: design read r1 (12:03Z) and criteria read r2 (12:16Z) sent to cc and vc; next, cc's code before it lands. Hold 19: ic's toast parts, AC-dca427e7.3 and AC-ad94d40b.2, built once cc's code is under way. Issue I4eacd29, claimed, rides cc's change as AC-ad94d40b.3. Todo 13: arca_swift has no new tag (0.2.1; main 88a1e56). No code edits in the live primary. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: [ISSUE:I4eacd29e03a5e888]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- STca1b7f9's toast parts, ic's, XS each: AC-dca427e7.3, "round through <B>" on a move's step line, kept in view past the 90-byte cut; and AC-ad94d40b.2, Fix: on a failed or partly Finished; with drafts of help's Toasts lines 142 and 143. Held until the spike's results are in and cc's code is under way; then built in a worktree on vc's word, never in the live primary.
 
 ## Watch-outs
 
