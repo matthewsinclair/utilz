@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-23 17:26Z
+heartbeat_at: 2026-11-23 17:36Z
 status: active
 focus: "Folded for hv's estate-wide compact (17:26Z, via devbin-vc; the Desk is held). Open: hold 30, spike v3 for hv's hands; dc's FF5TB4 (ST0031 at eec4b900) and ic's 1TDNX1 (showreel qr at 1ae82d9d), queued and re-judged after the compacts; cc's STca1b7f9 code on cc/stca1b7f9 (4ce6eec1 plus 3efc3397) with ic's toasts at 109fbccf, one run after the spike's code; hv decision 17 written on hv's board but uncommitted, since hv stopped its commit."
 claims: []
