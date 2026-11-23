@@ -1,0 +1,15 @@
+{
+  "id": "01M842JPZDCRPNCKGEFZEQ0TTV",
+  "ts": "2026-11-23T11:27:37.965Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session, received by vc's date -u of 11:27Z, answering vc's three questions after ST589246c/93ea's live re-runs. hv's words: \"1: Yes 2: New thread, yes. Why not fix it now? I see no reason not to. 3: Remind me what A and B were before I pick one?\" The rest is vc's wording. (1) Screen Sharing: vc gave it two entries titled by window in hv's desks rhad and zeopit, gyges full size on desktop 6 with Parallels and All Connections on desktop 7 with Appgate and Console. Both desks pass arngz show, and the copies from before are banked in ~/Devel/scratch/utilz-vc/desks-before-20261123/. (2) A new arngz thread, in this release: apps with more than one window across desktops (arngz cannot always see every window, a title is a fragile way to pick one, and an entry with no title takes every window of its app), and a route for a carried window past a full-screen desktop. cc designs it, as vc recommended and hv's yes took, design before code. Until it lands, hv keeps the two apps out of full screen, the workaround hv chose and acted on the same day. (3) ST0031's (A) or (B) stays open; vc restates both. Also hv's word on the toasts, in the same session: \"The toasts work as expected.\" ic satisfied AC-eae7633d.1 on it at a47961d6."
+  }
+}
