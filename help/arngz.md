@@ -132,6 +132,18 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 
 The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given, and makes it the current desk. Either way, the desk is checked by the validator first.
 
+### Toasts
+
+While `apply` runs, Hammerspoon shows a toast at the bottom of the main display, however the apply was started: from Menuz, in a terminal, or by `auto`.
+
+- **Starting** names the desk while arngz reads the screens and windows and makes its plan.
+- **Running...** is rewritten in place as each wait and each step begins, eg `5 of 12: moving Slack to desktop 2 on left`. From the first step it also says `Hands off the mouse and keyboard until it finishes`, because moving the pointer stops the apply.
+- **Finished** says what happened: how many windows were placed, already in place, not found, skipped or failed, each only when there were any, the desktops added, and the time taken. A refusal says that nothing moved, why, and its fix. A run that failed says where it stopped and why, and `arngz log` has the rest. Finished stays up 5 s after a clean run and 15 s otherwise.
+- **A second apply** asked for while one runs is refused, and says so in a small toast of its own above the running one, which carries on.
+- **`discover`** (Menuz's Save Desk...) shows Finished alone: what it read, its displays, desktops and windows, and the time taken, or why it was refused. It answers inside one call to Hammerspoon, which draws nothing until that call returns, so it has no Starting or Running. The desk file is written after the read; a write that fails is said on stderr, and Menuz's notice shows it.
+
+A toast takes no click and no focus: a click on it goes to the window under it. It stays in view while arngz switches desktops, and steps out of the way of a window arngz is about to take by its title bar. The other verbs show none. A refusal before Hammerspoon is asked, such as a desk that does not validate, shows none either: the CLI's message says it, and Menuz's notice for a non-zero exit. A toast that cannot be drawn changes nothing else: the apply runs and reports as it would without it, and the run log says why.
+
 ### current
 
 `current` prints the name of the desk the screen was last arranged as. An `apply` that ran records it, whatever its report says, because windows may have moved. A `discover --save` records the desk it saved. A `--dry-run`, and a refusal before anything changed, leave the record as it was. `delete` of that desk clears the record.
