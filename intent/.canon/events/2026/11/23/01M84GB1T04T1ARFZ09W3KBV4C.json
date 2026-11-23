@@ -1,0 +1,17 @@
+{
+  "id": "01M84GB1T04T1ARFZ09W3KBV4C",
+  "ts": "2026-11-23T15:28:06.976Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 7e0aba3e by change: parent 3c7c7b7f; change 22cc9a28dc0b58646366841ae97ba5a3bed1c5c50888c80e5bb8eef80ca5862b, equal to the READY's; the 8 paths of ready-records2.txt and no other; no attribution lines; the (C) line last; the index empty after. Hold for hv's word to the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
