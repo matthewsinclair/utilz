@@ -1,0 +1,11 @@
+{
+  "id": "AT-93ea7f8a.1",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua",
+  "covers": [
+    "AC-93ea7f8a.1",
+    "AC-93ea7f8a.4"
+  ],
+  "status": "green",
+  "note": "plan_test.lua's space-order block (ST589246c/93ea7f8a): a current record's order taken over the live list's, and the log told how the live order differs (16 Oct); unplugged, with the record still at the plugged layout, the live order and why (hv's lists, with full-screen 423 and 121); the record macOS wrote at the flap taken; replugged, each display in its live order; the full-screen spaces where the live list puts them, with desk ordinals skipping them; a list that names a desktop twice never taken; two lists that hold a screen's desktops, the live order with both said; a list holding more than the screen's desktops not taken; a lone desktop no list holds its own order; no display configuration, the live order and why. P.order_spaces has no refusal left, so plan and discover refuse none of these. Red: by reading at a29b75da, whose P.order_spaces named no source and returned no order where no list held a screen's spaces (with the fix \"wait for macOS to record them, then run arngz again\") or where two did, so the block fails there at its first check; not run at the base. Green: hv's own run of run-93ea-2.sh at a763184a, started 10:13:52Z: arngz.bats and engine.bats 180 of 180, with ok 37 (AT-03.2), which passes only when every plan_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap); landed on main at 0666e2f2."
+}

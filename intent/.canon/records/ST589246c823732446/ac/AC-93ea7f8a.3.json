@@ -3,6 +3,7 @@
   "text": "A move whose step reads back a desktop other than the one the order predicted fails by name, and is not reported done.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "dc, 23 Nov 2026, on vc's ruling: by reading at a763184a as landed at 0666e2f2, with hv's TAP for the verdict's arms. The move code, which 93ea did not change, guards each step: LEG.switch (opt/arngz/lib/arngz.lua:1007 to 1025) and LEG.carry's loop (1069 to 1088) wait STEP_WAIT for the desktop the order predicted, and otherwise fail the leg by name, saying what the screen shows and the step it wanted; exec_move returns that failure as the op's, never done (1289 to 1290). No arm runs a step's check, so that rests on reading at a763184a and on no arm. A move whose end readback shows another desktop is failed, never done, by P.move_verdict (opt/arngz/lib/plan.lua:1148 to 1166), whose reason names the window's spaces, the screen and what it shows; plan_test.lua's move_verdict arms (opt/arngz/test/plan_test.lua:890 to 908) prove the failed status, though not the reason's words, and pass in hv's own run of run-93ea-2.sh at a763184a, ok 37 (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap)."
   }
 }

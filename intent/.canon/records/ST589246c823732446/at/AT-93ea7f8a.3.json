@@ -1,0 +1,10 @@
+{
+  "id": "AT-93ea7f8a.3",
+  "kind": "test",
+  "file": "opt/arngz/test/log_test.lua",
+  "covers": [
+    "AC-93ea7f8a.8"
+  ],
+  "status": "green",
+  "note": "log_test.lua's display records (ST589246c/93ea7f8a): arm 5, each display's order line with its source and note, and com.apple.spaces' collapsed entries as one counted line; arm 15, the observed point's order: record, of N displays with the live and unread counts, and no displays. Red: by reading at a29b75da, whose display records name no source and write each collapsed entry on a line of its own, and whose observed point's order is ok or an order error, so both arms fail there; and seen red in slot 01M83XYM at 7f7a97af on two of arm 15's checks, whose own helper was wrong (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T100720Z.tap, not ok 180). Green: hv's own run of run-93ea-2.sh at a763184a, started 10:13:52Z: arngz.bats and engine.bats 180 of 180, with ok 180 (AT-53ef07aa.2), which passes only when every log_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap); landed on main at 0666e2f2."
+}

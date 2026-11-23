@@ -1,0 +1,11 @@
+{
+  "id": "AT-93ea7f8a.4",
+  "kind": "test",
+  "file": "opt/arngz/test/log_test.lua",
+  "covers": [
+    "AC-93ea7f8a.5",
+    "AC-93ea7f8a.10"
+  ],
+  "status": "green",
+  "note": "The displays settle (ST589246c/93ea7f8a): plan_test.lua's P.quiet_verdict block, go once QUIET_SECONDS have passed since the later of the watcher's last change and its start, or since the wait began with no watcher, wait for the rest and never past QUIET_LIMIT, and refuse at QUIET_LIMIT with the fix; log_test.lua's arm 14, apply's quiet phase with the watcher's state injected, which waits before it reads, logs the wait as it begins and ends, and refuses at QUIET_LIMIT with nothing read, and the engine's gate, unsettled with the wait and its start and nothing read or pointed, then, asked again once settled, reading and answering as ever. Red: by reading at a29b75da, which has no P.quiet_verdict, quiet phase or gate, so both blocks fail there at their first call; and seen red in slot 01M83XYM at 7f7a97af on one of arm 14's checks, whose own read of the waiting point's fields was wrong (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T100720Z.tap, not ok 180). Green: hv's own run of run-93ea-2.sh at a763184a, started 10:13:52Z: arngz.bats and engine.bats 180 of 180, with ok 37 (AT-03.2), which passes only when every plan_test.lua check does, and ok 180 (AT-53ef07aa.2), which passes only when every log_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap); landed on main at 0666e2f2."
+}

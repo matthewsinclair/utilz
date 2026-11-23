@@ -1,0 +1,16 @@
+{
+  "id": "01M83ZGWJCFWGK9C8ZR84SD0K9",
+  "ts": "2026-11-23T10:34:12.428Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 24,
+    "text": "ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, the net change of dc/93ea a29b75da..a763184a, checked by vc by change, and proven by hv's own run of st5892/run-93ea-2.sh (TAP st5892/runs/93ea-20261123T101352Z.tap, 180 of 180). Its records: AT-93ea7f8a.1 to .6 green, AC .3 satisfied by reading as vc ruled, and the WP body quoting the settle refusal in the code's words. Open: AC .9 on hv's live run, and AC .7 on vc's read of the close's docs commit. At the close, one follow-up head on one booked run carries help's sentence on diff, plan_test.lua:441's comment, cc's items (2) and (3) from ~/Devel/scratch/utilz-cc/93ea-code-read.md, dc's two gap arms (an apply whose create com.apple.spaces never lists still finishes; diff's request carries no options.quiet), and whatever the live run calls for. wt-93ea and dc/93ea stay for that head."
+  }
+}

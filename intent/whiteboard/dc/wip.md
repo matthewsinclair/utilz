@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 10:13Z
+heartbeat_at: 2026-11-23 10:34Z
 status: active
-focus: "23 Nov: ST589246c/93ea7f8a, arngz's desk-change fix (with F3 and F4, hv decision 11): code banked on dc/93ea (wt-93ea, a763184a), vc checked; hv runs run-93ea-2.sh by hand; HOLD for hv's compact, then the landing on vc's word. 53ef07aa waits on a live create (AC .3). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "23 Nov: ST589246c/93ea7f8a landed at 0666e2f2 (vc checked by change); its records commit (ATs .1 to .6, AC .3, the WP body's settle words) goes to vc as READY; hv's live run under way (AC-93ea7f8a.9, AC-53ef07aa.3, AC-eae7633d.1); then the close's follow-up head on one booked run. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a]
 
 ## DOING
 
-- ST589246c/93ea7f8a, the desk-change fix: code banked on branch dc/93ea in ~/Devel/scratch/utilz-dc/wt-93ea at a763184a (READY st5892/READY-93ea.md; vc checked a763184a). hv runs st5892/run-93ea-2.sh by hand; on its green, land the net change a29b75da..a763184a as one commit on vc's word (message drafted at st5892/tools/subject-93ea-land.txt), then mint AT-93ea7f8a.1 to .6 and satisfy the test ACs. AC .3 and .9 wait for hv's live run on the dev tree.
+- ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, the net change of dc/93ea a29b75da..a763184a, checked by vc by change, and proven by hv's own run of st5892/run-93ea-2.sh (TAP st5892/runs/93ea-20261123T101352Z.tap, 180 of 180). Its records: AT-93ea7f8a.1 to .6 green, AC .3 satisfied by reading as vc ruled, and the WP body quoting the settle refusal in the code's words. Open: AC .9 on hv's live run, and AC .7 on vc's read of the close's docs commit. At the close, one follow-up head on one booked run carries help's sentence on diff, plan_test.lua:441's comment, cc's items (2) and (3) from ~/Devel/scratch/utilz-cc/93ea-code-read.md, dc's two gap arms (an apply whose create com.apple.spaces never lists still finishes; diff's request carries no options.quiet), and whatever the live run calls for. wt-93ea and dc/93ea stay for that head. (edited)
 - ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.
 
 ## TODO
@@ -22,7 +22,7 @@ _(none)_
 
 ## Holds
 
-- No test, build or landing until hv's compact has bounced and vc gives the word on 93ea's landing (vc, 23 Nov 2026, on hv's word).
+_(none)_
 
 ## Watch-outs
 

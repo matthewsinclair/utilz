@@ -1,0 +1,11 @@
+{
+  "id": "AT-93ea7f8a.6",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-93ea7f8a.11",
+    "AC-93ea7f8a.12"
+  ],
+  "status": "green",
+  "note": "arngz.bats's F3 and F4 arms (ST589246c/93ea7f8a), through the fake hs's reply-then-exit: an hs that exits on its own just after its response is let exit, and one that hangs is stopped after the grace, before its ARNGZ_HS_TIMEOUT deadline (F3); discover's deadline is longer than which's, and ARNGZ_HS_TIMEOUT still sets every call's (F4). Red: by reading at a29b75da, whose CLI stops hs the moment its response lands and gives discover the same 60 s as every call, so both arms fail there; not run at the base. Green: hv's own run of run-93ea-2.sh at a763184a, started 10:13:52Z: arngz.bats and engine.bats 180 of 180, with ok 177 and 178 (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap); landed on main at 0666e2f2."
+}

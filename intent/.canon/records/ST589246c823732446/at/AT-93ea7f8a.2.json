@@ -1,0 +1,11 @@
+{
+  "id": "AT-93ea7f8a.2",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua",
+  "covers": [
+    "AC-93ea7f8a.2",
+    "AC-93ea7f8a.6"
+  ],
+  "status": "green",
+  "note": "plan_test.lua's two refusals and the lone create (ST589246c/93ea7f8a): a desktop listed on two screens refused by plan and discover, naming both screens, before anything changes; a desktop listed twice on one screen refused by name; a lone desktop ordered from the live list takes a new desktop beside it, and under --no-create plans as before. A screen whose spaces cannot be read is refused as before, by the older arm for a screen whose spaces could not be read. AC-93ea7f8a.6's first half, one fresh read after the creates and no wait on com.apple.spaces, rests on reading at a763184a and on no arm: PHASE.created's condition returns true on any read that succeeds (opt/arngz/lib/arngz.lua:1587 to 1591), and each create is done only once its own readback lists the new desktop, which log_test.lua's arm 11 and engine_test.lua (AT-01.2) prove. Red: by reading at a29b75da, which refused neither a desktop on two screens nor one listed twice on one screen, and refused the lone desktop's create under issue 0077 (order_pending), so the block fails there; not run at the base. Green: hv's own run of run-93ea-2.sh at a763184a, started 10:13:52Z: arngz.bats and engine.bats 180 of 180, with ok 37 (AT-03.2), which passes only when every plan_test.lua check does (TAP /Users/matts/Devel/scratch/utilz-dc/st5892/runs/93ea-20261123T101352Z.tap); landed on main at 0666e2f2."
+}
