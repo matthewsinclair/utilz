@@ -489,17 +489,29 @@
       "node": "ic",
       "kind": "hold",
       "seq": 19,
-      "text": "STca1b7f9's toast parts, ic's, XS each: AC-dca427e7.3, \"round through <B>\" on a move's step line, kept in view past the 90-byte cut; and AC-ad94d40b.2, Fix: on a failed or partly Finished; with drafts of help's Toasts lines 142 and 143. Held until the spike's results are in and cc's code is under way; then built in a worktree on vc's word, never in the live primary.",
-      "state": "live",
-      "recorded_at": "2026-11-23T12:53:56.958Z"
+      "text": "STca1b7f9's toast parts, ic's, XS each: AC-dca427e7.3, \"round through <B>\" on a move's step line, kept in view past the 90-byte cut; AC-ad94d40b.2, Fix: on a failed or partly Finished; and AC-322a6511.9 (WP6, once cc folds it in), partly's reason line labelled from first_outcome as Not found, Failed or Skipped, or bare; with drafts of help's Toasts lines 142 and 143. Held until the spike's results are in and cc's code is under way; then built in a worktree on vc's word, never in the live primary.",
+      "state": "archived",
+      "archived_at": "2026-11-23T14:58:17.473Z",
+      "recorded_at": "2026-11-23T12:53:56.958Z",
+      "edited_at": "2026-11-23T14:22:22.838Z"
     },
     {
       "node": "ic",
       "kind": "doing",
       "seq": 15,
-      "text": "STb8e4fb6, showreel qr (hv decision 15, vc's ask of 13:05Z): thread, objective, design.md, WP 702cceb9 (S) and criteria AC-702cceb9.1 to .8 written; the design is with vc to approve and with cc to read for meaning. Code in a worktree once vc approves, never in the live primary; dc reads it second once ST0031 lands; every run booked at the Desk through vc.",
+      "text": "STb8e4fb6, showreel qr (hv decision 15): records at 03191d0d and 16e60afe, each CHECKED by vc; code on ic/stb8e4fb6 at 1ae82d9d (72591d09 plus dc's second-read fixes), CHECKED by vc, its driver run-qr.sh (8b3ce0d4) re-pinned and SOUND. Desk ask 1TDNX1 on the cargo lane (1YN9X9 withdrawn for new bytes), queued after utilz-cc's spike TM15WA and utilz-dc's FF5TB4; the Desk grants nothing until hv's word, and ic starts nothing before devbin-vc's GO. dc reads the delta; the landing follows the run's END.",
       "state": "live",
-      "recorded_at": "2026-11-23T13:56:45.475Z"
+      "recorded_at": "2026-11-23T13:56:45.475Z",
+      "edited_at": "2026-11-23T14:28:35.145Z"
+    },
+    {
+      "node": "ic",
+      "kind": "doing",
+      "seq": 16,
+      "text": "STca1b7f9's toast parts, ic's (hold 19, released by vc): AC-dca427e7.3, \"round through <B>\" on a move's step line kept past the cut; AC-ad94d40b.2, Fix: on a partly or failed Finished; and AC-322a6511.9, partly's first problem labelled Not found, Failed or Skipped from first_outcome; with help line 142. At 109fbccf on ic/stca1b7f9-toasts, two commits on cc's WP6 head 4ce6eec1. One Desk run over cc's code and ic's together, after the spike's code, on vc's word.",
+      "state": "live",
+      "recorded_at": "2026-11-23T14:58:17.618Z",
+      "edited_at": "2026-11-23T15:27:19.698Z"
     }
   ],
   "sent": [

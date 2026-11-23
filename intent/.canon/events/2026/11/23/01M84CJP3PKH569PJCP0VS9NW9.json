@@ -1,0 +1,16 @@
+{
+  "id": "01M84CJP3PKH569PJCP0VS9NW9",
+  "ts": "2026-11-23T14:22:22.838Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 19,
+    "text": "STca1b7f9's toast parts, ic's, XS each: AC-dca427e7.3, \"round through <B>\" on a move's step line, kept in view past the 90-byte cut; AC-ad94d40b.2, Fix: on a failed or partly Finished; and AC-322a6511.9 (WP6, once cc folds it in), partly's reason line labelled from first_outcome as Not found, Failed or Skipped, or bare; with drafts of help's Toasts lines 142 and 143. Held until the spike's results are in and cc's code is under way; then built in a worktree on vc's word, never in the live primary."
+  }
+}
