@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.5",
+  "text": "A second apply refused while one runs gets its own small toast just above the running one, and the running one keeps its text.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

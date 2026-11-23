@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.6",
+  "text": "Save Desk... (discover) shows a Finished toast: what it read (displays, desktops and windows) and the time taken, or why it was refused and its fix.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

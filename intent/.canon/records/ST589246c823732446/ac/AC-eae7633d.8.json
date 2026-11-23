@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.8",
+  "text": "point() never prints, and raises what it could not draw with the point's name, for the engine to log (progress.md rule 6), so an apply's outcome and exit code stay as they were.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.3",
+  "text": "Finished stays up 5 s after a clean run and 15 s otherwise. Starting and Running stay until the next point, and a toast that hears no point for 120 s removes itself.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

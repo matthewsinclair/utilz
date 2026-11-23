@@ -13,7 +13,7 @@ Show hv what an apply is doing while it runs. A Hammerspoon toast reads Starting
 
 # Toasts: Starting, Running and Finished (design)
 
-Design by ic, for vc's read before any code. It hangs on the progress points in the thread's `progress.md`, dc's, as ic agreed to them with four changes, all taken, committed at 2c59d1d6. Read against arngz as it stands on main (opt/arngz last changed at c7a5df87, 10 Nov), dc's log read of 23 Nov, and the thread's design.
+Design by ic, approved for code by vc decision 109 (03d8112c) with the changes it ruled, folded in here. It hangs on the progress points in the thread's `progress.md`, dc's, as ic agreed to them with four changes, all taken, committed at 2c59d1d6. Read against arngz as it stands on main (opt/arngz last changed at c7a5df87, 10 Nov), dc's log read of 23 Nov, and the thread's design.
 
 ## What hv asked for
 
@@ -27,7 +27,7 @@ One toast per apply, drawn by Hammerspoon, which every way of running arngz alre
 
 It is drawn with hs.canvas, which hs.alert itself draws with, so it looks like hs.alert while its text changes in place. hs.alert can only close one alert and show another, which flickers and moves.
 
-Toasts are for apply. Every other verb runs inside one IPC call, and Hammerspoon draws nothing until that call has answered, so only a Finished toast could ever show for one. Whether discover (Save Desk...) gets one is the open question below.
+Toasts are for apply, and discover (Save Desk...) gets a Finished toast (vc decision 109): it is the other Menuz action that leaves hv with nothing on screen. Every verb but apply runs inside one IPC call, and Hammerspoon draws nothing until that call has answered, so discover can only show Finished, and the other verbs show nothing.
 
 ## What each toast says
 
@@ -42,7 +42,8 @@ The first line is always `arngz: <desk>`. Then, by point:
   - partly: `Finished in 13.2 s with problems: 9 placed, 1 not found, 1 failed`, then the first problem's words, then `arngz log has the rest`.
   - refused: `Refused, nothing moved: <the refusal>`, then `Fix: <its fix>`.
   - failed: `Failed at step 5 of 12, after 7.1 s: <the first failure>`, then `arngz log has the rest`.
-- **A second apply** asked for while one runs is refused inside M.run, between the first run's callbacks. Its points carry their own `run`, so its toast is a small one of its own, just above the running one, which stays as it is: `Refused: zeopit is still being arranged`.
+- **A second apply** asked for while one runs is refused inside M.run, between the first run's callbacks. Its points carry their own `run`, so its toast is a small one of its own, just above the running one, which stays as it is: `Refused: zeopit is still being arranged`. Any toast run that starts while an apply runs goes there, a discover included.
+- **discover's finished**: the first line reads `arngz: <desk>` when its start names the desk it saves as, and `arngz: Save Desk` when it does not. When done: `Read the screens in 4.2 s: 3 displays, 14 desktops, 22 windows`, from its observed point. The CLI writes the desk file after the engine has answered, so the toast says what was read; a save that then fails is the CLI's, and Menuz's notice shows it. When refused or failed, it reads as apply's does, with `nothing saved` for `nothing moved`.
 
 A count that is zero is left out. The counts are per desk entry: placed (by a step of this run), already in place, not found (unseen), skipped and failed, plus the desktops added. arngz removes no desktop today, so Finished names desktops added only; if 93ea7f8a adds removal, the point gets a count and the toast says it.
 
@@ -81,31 +82,38 @@ progress.md's rule 7 stands: the CLI's own moments are not points. A run refused
 
 ## Files, and who writes them
 
-- ic, in this WP: opt/arngz/lib/toast.lua (new), with the pure `text(name, fields, run)`, `layout(lines, frame)` and `hides(toast_frame, fields)`, and `point(name, fields)`, a thin coordinator over hs.canvas; opt/arngz/test/toast_test.lua (new), plain lua as plan_test.lua is; and the "Toasts" section of help/arngz.md.
+- ic, in this WP: opt/arngz/lib/toast.lua (new): the pure parts (each point's lines, the cuts, the layout, the hide rule, and what a point does to the runs and the toasts' places), and `point(name, fields)`, a thin coordinator over hs.canvas and hs.timer. opt/arngz/test/toast_test.lua (new), plain lua as engine_test.lua is, with an injected hs for the coordinator; opt/arngz/test/toast.bats (new), one arm that runs it, as engine.bats runs engine_test.lua; and the "Toasts" section of help/arngz.md.
 - dc, in 53ef07aa: the emitter, its call sites and the hook's loading in opt/arngz/lib/arngz.lua, the log in opt/arngz/lib/log.lua, and the CLI.
 
 No file is edited by both seats. The points are the one thing both read.
 
 ## Proof
 
-- toast_test.lua: each point's text, the caps, the zero counts left out, the run kept apart from a second apply's, the layout inside the visible frame, and the hide rule. Plain lua, run where plan_test.lua runs.
-- With 53ef07aa, one hand run at the Desk: an apply from Menuz shows Starting, Running with "5 of 12" and "Hands off", and Finished with its counts; a refused apply shows why; a second click while one runs shows its own small toast. That run is the evidence for the criteria below. No bats arm is added for the toast.
+- toast_test.lua, run by toast.bats: each point's text, the cuts, the zero counts left out, how long each toast stays, the run kept apart from a second apply's, discover's Finished, the layout inside the visible frame, the hide rule, the canvas's settings, and that point() never prints and raises what it could not draw. It runs in the same Desk booking as 53ef07aa's arngz.bats and engine.bats when the two WPs land together; if this WP lags, the log lands first (vc decision 109).
+- The live proof is hv's diagnosis run on the dev tree, because no Claude clicks Menuz or moves a window: an apply from Menuz shows Starting, Running with "5 of 12" and "Hands off", and Finished with its counts, on the display hv is looking at, without taking a click or focus.
 
-## Acceptance criteria (proposed)
+## Acceptance criteria
 
-1. Every apply, from Menuz, the CLI or auto, shows a toast that reads Starting with the desk's name, then Running..., rewritten in place as each wait and each step begins (5 of 12, with its app, and "Hands off" from the first step), then Finished.
-2. Finished says what happened: the windows placed, already in place, not found, skipped and failed, each only when not zero, the desktops added, and the time taken. A refusal says that nothing moved, why, and its fix. A failure says where it stopped and why. It stays up 5 s after a clean run and 15 s otherwise.
-3. The toast never takes focus or a click, stays in view while the engine switches desktops, and is never over the title bar of a window the engine is about to grab.
-4. A toast that cannot be drawn changes nothing else: the apply's moves, report and exit code are what they would be without it, and the log says why it was not drawn.
+Recorded in the thread as AC-eae7633d.1 to .8. The first is seen on hv's diagnosis run; the rest are test-backed by toast_test.lua.
+
+1. (non-test) On hv's diagnosis run on the dev tree, an apply from Menuz shows one toast on the primary display: Starting with the desk's name, then Running..., rewritten in place as each wait and each step begins, then Finished. It never takes focus or a click, and stays in view while the engine switches desktops.
+2. Each point's text: Starting; each wait with its longest; each step as "i of n" with its kind, app and display, and "Hands off the mouse and keyboard until it finishes" from the first step on; Finished by outcome, with the counts that are not zero, the desktops added and the time taken, a refusal's reason and fix, or where it stopped and the first failure. No line is longer than 90 characters, and a refusal or a fix takes at most two lines.
+3. Finished stays up 5 s after a clean run and 15 s otherwise. Starting and Running stay until the next point, and a toast that hears no point for 120 s removes itself.
+4. A toast hides for a move step whose window's title bar it would cover, and shows again at the next point.
+5. A second apply refused while one runs gets its own small toast just above the running one, and the running one keeps its text.
+6. Save Desk... (discover) shows a Finished toast: what it read (displays, desktops and windows) and the time taken, or why it was refused and its fix.
+7. The toast sets no mouse callback, so it takes no click; it is drawn at the status window level; and it is on every desktop and left alone by Mission Control (canJoinAllSpaces, stationary).
+8. point() never prints, and raises what it could not draw with the point's name, for the engine to log (progress.md rule 6), so an apply's outcome and exit code stay as they were.
 
 ## Size and order
 
 S. It needs 53ef07aa's emitter, so it lands with or after 53ef07aa, in the same release as the rest of the thread.
 
-## Open, for vc
+## Settled by vc decision 109
 
-- discover (Save Desk...): it runs inside one IPC call, so a toast could only say "Saved" at the end. It is the other run that leaves hv waiting with nothing on screen (87 s once, 12 Nov). Not in this WP unless vc adds it.
-- No setting turns the toasts off. If hv wants one, it goes in arngz.yaml.
+- discover (Save Desk...) gets a Finished toast in this WP, with criterion 6.
+- No setting turns the toasts off unless hv asks for one.
+- The live proof is hv's diagnosis run on the dev tree, and toast_test.lua rides 53ef07aa's Desk booking.
 
 ## Acceptance
 

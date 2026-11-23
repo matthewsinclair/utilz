@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.2",
+  "text": "Each point's text: Starting; each wait with its longest; each step as \"i of n\" with its kind, app and display, and \"Hands off the mouse and keyboard until it finishes\" from the first step on; Finished by outcome, with the counts that are not zero, the desktops added and the time taken, a refusal's reason and fix, or where it stopped and the first failure. No line is longer than 90 characters, and a refusal or a fix takes at most two lines.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

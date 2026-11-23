@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.1",
+  "text": "On hv's diagnosis run on the dev tree, an apply from Menuz shows one toast on the primary display: Starting with the desk's name, then Running..., rewritten in place as each wait and each step begins, then Finished. It never takes focus or a click, and stays in view while the engine switches desktops.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.7",
+  "text": "The toast sets no mouse callback, so it takes no click; it is drawn at the status window level; and it is on every desktop and left alone by Mission Control (canJoinAllSpaces, stationary).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

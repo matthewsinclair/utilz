@@ -1,0 +1,8 @@
+{
+  "id": "AC-eae7633d.4",
+  "text": "A toast hides for a move step whose window's title bar it would cover, and shows again at the next point.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
