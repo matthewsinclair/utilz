@@ -1,0 +1,14 @@
+{
+  "id": "01M84G699P7Y5ENMEZ6M458TKQ",
+  "ts": "2026-11-23T15:25:30.807Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "STca1b7f9d59191dfc/AC-322a6511.4"
+  },
+  "payload": {
+    "text": "A create that fails with the Dock's Mission Control error is tried once, binds every display for the run so that no other desktop is asked for, and its reason and fix say to add the desktop in Mission Control by hand (plan_test, and engine_test's arm 10)."
+  }
+}

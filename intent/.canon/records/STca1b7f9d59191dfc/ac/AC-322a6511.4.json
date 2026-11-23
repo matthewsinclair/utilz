@@ -1,6 +1,6 @@
 {
   "id": "AC-322a6511.4",
-  "text": "A create that fails with the Dock's Mission Control error is tried once in its callback, and its reason and fix say to add the desktop in Mission Control by hand.",
+  "text": "A create that fails with the Dock's Mission Control error is tried once, binds every display for the run so that no other desktop is asked for, and its reason and fix say to add the desktop in Mission Control by hand (plan_test, and engine_test's arm 10).",
   "kind": "test",
   "state": {
     "is": "computed"
