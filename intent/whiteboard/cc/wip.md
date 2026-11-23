@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: f6bdc192-e655-43d6-a420-8de7f4a3f23a
-heartbeat_at: 2026-11-06 13:44Z
+session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
+heartbeat_at: 2026-11-23 10:14Z
 status: active
-focus: "6 Nov, localfold for hv's compact (vc decision 94), no release; holding on vc decision 93: no cut of 2.14.9 today, simple prep only, nothing asked of cc; nothing of cc's open or banked, no claims, 0 live messages, nothing sent unarchived, watch-out 6 live; this fold and the pickup after the compact are committed on vc's YOUR TURN; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "23 Nov, localfold for hv's compact on vc's LOCALFOLD (hv's word); holding for the compact, then on the bounce /in-session with the pickup, and second reader for ST589246c/93ea's code and landing on vc's word; the junction walk is done, both walks backing 93ea's live-order rule; nothing of cc's open, no claims, watch-out 6 live; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: []
 ---
 
