@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "02346c8e-1026-49af-b928-04d0f4037c1b",
-    "heartbeat_at": "2026-11-23T12:53:30.060Z",
+    "heartbeat_at": "2026-11-23T16:19:45.282Z",
     "status": "active",
-    "focus": "23 Nov, localfold for hv's compact of 12:52Z, no release: ST0031/01 with /02 at dc/st0031-01 eec4b900, READY checked by vc, driver SOUND; its slot was denied at the compact, so on the bounce re-ask with the same named set, run, then land on vc's word. hv's qrcode pick is open. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md, under the 12:52Z fold.",
+    "focus": "23 Nov: ST0031/01 with /02 at eec4b900, slot 01M84ATR asked on vc's GO at 13:51Z, queued after cc's spike TM15WA, the Desk closed until hv's word; on devbin-vc's GO run, release, END; land on vc's word, the records ready in ~/Devel/scratch/utilz-dc/st0031-01/. ic's `showreel qr` read second: r1 and r2 sent, no finding left.",
     "claims": [
       "ST0031/01",
       "ISSUE:Ie8e55e87057927e0"
@@ -957,10 +957,20 @@
       "node": "dc",
       "kind": "doing",
       "seq": 26,
-      "text": "ST0031/01 with /02, under (A) (hv decision 14): the code is on branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (b5baa351 /02's bank, 1cebad3c /02's critic fold, eec4b900 /01; base 377b3fba; 17 paths, change 29fcc052), the READY checked by vc and the driver run-st0031-01.sh (7705761a) read SOUND. Its slot 01M847DK was denied at hv's compact of 12:52Z, so on the bounce: re-ask with the same named set (heavy, the text naming network, cargo and bats), run, END. Then /01 and /02 land on vc's word, with the records: AC-01.1, AC-01.3 on probe (b), /02 on the push's CI, I59c806c's body section, and a low issue for prez.bats running in no CI job. Steps in ~/Devel/scratch/utilz-dc/RESUME.md.",
+      "text": "ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 asked at 13:51Z on vc's GO (heavy; network, cargo and bats in its text), after cc's spike TM15WA, which needs hv's hands; the Desk is closed until hv's word to devbin-vc. On devbin-vc's GO: run, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/.",
       "state": "live",
       "recorded_at": "2026-11-23T11:38:58.856Z",
-      "edited_at": "2026-11-23T12:53:28.726Z"
+      "edited_at": "2026-11-23T13:53:15.775Z"
+    },
+    {
+      "node": "dc",
+      "kind": "todo",
+      "seq": 30,
+      "text": "Second read of ic's `showreel qr` (STb8e4fb6, vc's ask of 14:20Z): r1 sent to ic and vc at 14:25Z (~/Devel/scratch/utilz-dc/qr-read/read-r1.md): QR3's stale arm can never pass, and a social's url is trimmed twice. Read ic's fix when it comes, until the code lands.",
+      "state": "archived",
+      "archived_at": "2026-11-23T14:29:03.666Z",
+      "recorded_at": "2026-11-23T13:53:16.008Z",
+      "edited_at": "2026-11-23T14:26:37.361Z"
     }
   ],
   "sent": [
@@ -3728,6 +3738,31 @@
       "id": "01M83Z8BNVXFRF6Z9VSGVW4SFY",
       "sender": "vc",
       "handled_at": "2026-11-23T10:34:12.676Z"
+    },
+    {
+      "id": "01M8487VDVAFHXQQXW1CHD1WV4",
+      "sender": "vc",
+      "handled_at": "2026-11-23T13:53:16.192Z"
+    },
+    {
+      "id": "01M84APH81HTGJTMHXAMBZXY2B",
+      "sender": "vc",
+      "handled_at": "2026-11-23T13:53:16.192Z"
+    },
+    {
+      "id": "01M84B93T62PMKVKAC5ZG66V5E",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:01:01.946Z"
+    },
+    {
+      "id": "01M84CFNHNVYQ4VYM4DWP5XND2",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:26:37.609Z"
+    },
+    {
+      "id": "01M84CTMZY6YMW24NGKN2DDN82",
+      "sender": "vc",
+      "handled_at": "2026-11-23T14:29:03.808Z"
     }
   ]
 }

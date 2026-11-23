@@ -1,0 +1,15 @@
+{
+  "id": "01M84AXC774SPBNV3XF7GZ3YYW",
+  "ts": "2026-11-23T13:53:16.008Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "Second read of ic's `showreel qr` (STb8e4fb6, vc's ask of 14:20Z): r1 sent to ic and vc at 14:25Z (~/Devel/scratch/utilz-dc/qr-read/read-r1.md): QR3's stale arm can never pass, and a social's url is trimmed twice. Read ic's fix when it comes, until the code lands."
+  }
+}

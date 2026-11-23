@@ -1,0 +1,16 @@
+{
+  "id": "01M84AXBZZ5VYVJ5DZ3YY26YDK",
+  "ts": "2026-11-23T13:53:15.775Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 26,
+    "text": "ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 asked at 13:51Z on vc's GO (heavy; network, cargo and bats in its text), after cc's spike TM15WA, which needs hv's hands; the Desk is closed until hv's word to devbin-vc. On devbin-vc's GO: run, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/."
+  }
+}
