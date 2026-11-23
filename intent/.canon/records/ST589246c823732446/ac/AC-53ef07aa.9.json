@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.9",
+  "text": "The progress points are emitted in progress.md's order, and finished comes even after a phase's Lua error; a toast hook that raises is logged and leaves the run's outcome unchanged.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

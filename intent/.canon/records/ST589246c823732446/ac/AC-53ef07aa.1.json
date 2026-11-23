@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.1",
+  "text": "An engine run appends its CLI and engine records to ~/.local/state/arngz/arngz.log, every one carrying the run's id, from start to end; a refusal before the engine is asked appends start, refused and end.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

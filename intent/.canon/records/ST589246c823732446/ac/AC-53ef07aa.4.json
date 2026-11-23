@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.4",
+  "text": "A run prints the same stdout and stderr as before this change, except the one warning when the log cannot be written.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

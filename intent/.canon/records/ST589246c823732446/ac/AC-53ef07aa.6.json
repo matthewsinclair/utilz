@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.6",
+  "text": "arngz log prints the last run, and no other run's records.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

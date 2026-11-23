@@ -109,6 +109,8 @@ The time since the last display change needs something that sees the change when
 - It then appends a `snapshot` of every display's desktops, live and recorded, as above: at once, then 5, 30 and 120 s later. That shows whether, and when, the visiting desktops go home (cc's points 3 and 4).
 - A Hammerspoon reload drops the watcher, and the next arngz call starts it again. The log records when the watcher started, so a change it missed reads as unseen and is never guessed.
 - Cost: four snapshots per display change, each one `defaults export` and the spaces reads, about a tenth of a second. It writes to the log and nowhere else.
+- Guarded: the watcher's callback and each snapshot timer run inside a pcall, and a failure goes to the log as an `error` record, never into Hammerspoon's console alone. The snapshot timers are held in the watcher's global, beside the watcher, so none is collected before it fires, and a replaced watcher stops its timers with it.
+- hv's way back: after `utilz use brew`, a reload of Hammerspoon's config drops the dev engine's watcher, which 2.14.10's engine does not know about. That step is in hv's steps in design.md.
 
 **This is the one part of this design that runs outside an arngz run. It is put to vc and hv as such.**
 
@@ -165,7 +167,7 @@ A log that cannot be written never changes a run's outcome, and the failure is n
 5. At the cap the log moves to `arngz.log.1`, and never more than the two files exist.
 6. `arngz log` prints the last run and no other run's records.
 7. A log that cannot be written leaves the run's exit unchanged and prints the one warning.
-8. The watcher records a display change and its four snapshots, and a run's start record gives the time since that change.
+8. The watcher records a display change and its four snapshots, and a run's start record gives the time since that change. A failure in the watcher's callback or one of its timers is written as an `error` record.
 9. The progress points are emitted in `progress.md`'s order, and `finished` comes even after a phase's Lua error.
 10. The five captures read stdout alone, and arngz.bats' scheduled arms are capped in one place.
 
@@ -178,7 +180,7 @@ A log that cannot be written never changes a run's outcome, and the failure is n
 
 - The toasts are eae7633d.
 - The order rule and the creates are 93ea7f8a.
-- F3 (arngz kills hs, which can leave a stale ipc port) and F4 (discover running past the 60 s deadline) are in no WP yet. The log records both, from the CLI's side.
+- F3 (arngz kills hs, which can leave a stale ipc port) and F4 (discover running past the 60 s deadline) are in 93ea7f8a's scope, as hv decision 10 has them. This WP's log records both, from the CLI's side.
 
 ## Acceptance
 

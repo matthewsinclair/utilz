@@ -29,6 +29,12 @@ How arngz orders and creates desktops when a change of desk leaves desktops visi
 - The composed rule's edge cases: an id in two lists, collapsed entries, issue 0077's lone desktop, where macOS puts a created desktop, and spaces_agree's wait (cc's point 5).
 - A refusal text, and the words in help/arngz.md, that say what is true and give a fix that changes the outcome (cc's point 6).
 
+## Also in scope (hv decision 10)
+
+- F3: arngz stops its hs client (opt/arngz/arngz:664-671), and a client stopped before it unregisters can leave Hammerspoon's ipc a dead port for up to 60 s, which failed an apply on 16 Nov ("ipc port is no longer valid (early)").
+- F4: discover runs synchronously under the CLI's 60 s deadline, and on 12 Nov it answered after 87 s, when the CLI had already failed.
+- dc's recommendation, which goes to hv in dc's words with this WP's scope after the run: leave both out unless the run log records them again, since each has happened once.
+
 ## Acceptance
 
 Acceptance Criteria for this work package are RENDERED into `ST589246c/acceptance.md`, under the `WP-93ea` heading. THAT FILE IS A GENERATED VIEW -- a row authored there is discarded by the next sync. The contract is canon in the thread's model, and the verbs write it: `intent ac new` and `intent at new` mint a row, `intent ac edit` and `intent at edit` reword or re-cite one, and `intent ac satisfy|unsatisfy|descope|rescope|withdraw|reinstate` and `intent at green|red|na` move its state. This cover never restates them.

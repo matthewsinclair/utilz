@@ -25,7 +25,7 @@ dc read them on 23 Nov, read-only. The full note, with every log line, is `~/Dev
 | eae7633d | ic                        | Toasts: Starting, Running and Finished, hung on the progress points (`progress.md`)                     | ic's agreement to the points   |
 | 93ea7f8a | dc, with cc second reader | The desk-change fix: the order rule and the creates when desktops visit another display                 | hv's diagnosis run, on the log |
 
-53ef07aa lands first, because hv's diagnosis run needs the log. eae7633d can land with it or after it. 93ea7f8a's design waits for that run, and takes cc's read-ahead (`~/Devel/scratch/utilz-cc/arngz-wp03-readahead.md`, six points) as its input. 53ef07aa also carries vc's two folded items: the five yq captures that take stderr with a parsed value, and one cap on the 600 s apply timeout in arngz.bats.
+53ef07aa lands first, because hv's diagnosis run needs the log. eae7633d can land with it or after it. 93ea7f8a's design waits for that run, and takes cc's read-ahead (`~/Devel/scratch/utilz-cc/arngz-wp03-readahead.md`, six points) as its input. 53ef07aa also carries vc's two folded items: the five yq captures that take stderr with a parsed value, and one cap on the 600 s apply timeout in arngz.bats. F3 (the killed hs client) and F4 (discover past its 60 s deadline) are in 93ea7f8a's scope, as hv decision 10 has them. The log records both from the CLI's side.
 
 ## Where the pieces meet
 
@@ -54,8 +54,8 @@ hv's steps, once 53ef07aa is on main:
 
 1. Run `utilz use dev` in a terminal.
 2. Use arngz from Menuz as usual, including the unplug at zeopit and the return to rhad.
-3. After any run that goes wrong, send vc `arngz log`, or the file `~/.local/state/arngz/arngz.log`.
-4. Run `utilz use brew` to go back.
+3. Tell vc when a run goes wrong. vc reads `~/.local/state/arngz/arngz.log` itself, so hv sends nothing.
+4. Run `utilz use brew` to go back, then reload Hammerspoon's config (its menu bar icon: Reload Config). The reload drops the dev engine's display watcher, which 2.14.10's engine does not know about.
 
 ## Release
 

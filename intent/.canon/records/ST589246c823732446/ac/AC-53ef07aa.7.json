@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.7",
+  "text": "A log that cannot be written leaves the run's exit code unchanged and prints the one warning, once.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

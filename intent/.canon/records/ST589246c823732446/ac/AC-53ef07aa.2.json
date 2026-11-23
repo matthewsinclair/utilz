@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.2",
+  "text": "The displays records name, for each display, its live desktops in order, com.apple.spaces' lists, and each visiting desktop with the display it is filed under, and they are written at the run's start and at its end.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

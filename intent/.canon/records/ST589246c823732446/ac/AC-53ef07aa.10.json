@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.10",
+  "text": "The five yq captures at opt/arngz/arngz:862, 1680, 1710, 1855 and 2036 read stdout alone, and arngz.bats caps the scheduled arms' ARNGZ_APPLY_TIMEOUT in one place.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.8",
+  "text": "The display watcher records a display change and its snapshots at 0, 5, 30 and 120 s, a run's start record gives the time since the last change, and a failure in its callback or timers is written as an error record.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

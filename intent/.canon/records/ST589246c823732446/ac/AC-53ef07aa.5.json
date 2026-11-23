@@ -1,0 +1,8 @@
+{
+  "id": "AC-53ef07aa.5",
+  "text": "At ARNGZ_LOG_MAX the log moves to arngz.log.1 before the run writes, and never more than the two files exist.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
