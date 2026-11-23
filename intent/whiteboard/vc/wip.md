@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-23 12:54Z
+heartbeat_at: 2026-11-23 13:06Z
 status: active
-focus: "Folded for hv's second compact (hv's call via devbin-vc, 12:52Z). On the bounce: hv's three answers and the spike (holds 28 and 29); dc's booked run of ST0031/01 with /02 at eec4b900, then their landing and hv's push; cc's STca1b7f9 code after the spike, ic second reader; then hv's cut."
+focus: "hv decision 15 is in: showreel qr is built now (ic, new thread), WP5 is out, the gates stay check all alone, and the spike runs now. cc books the spike's slot, then vc gives hv the command. After the spike's END: dc's booked ST0031 run, its landing, and hv's push. cc's STca1b7f9 code follows the spike, with ic second reader. ic's showreel qr design comes to vc and cc. Then hv's cut."
 claims: []
 ---
 
@@ -21,8 +21,7 @@ _(none)_
 
 ## Holds
 
-- hv's three answers, put to hv in vc's session on 23 Nov before hv left: (1) main's red CI, showreel's unused qrcode: (a) drop it and reword the two fix lines naming showreel qr, which does not exist (dc's and vc's rec), (b) allow the lint, or (c) build showreel qr; (2) STca1b7f9's WP5, Appgate's grab point: leave it out (cc's and vc's rec) or add it; (3) the cut's gates, now that a release dry run runs none: check all alone (dc's and vc's rec) or test estate back. Released for each when hv answers it; vc records each ruling on hv's board.
-- STca1b7f9's spike, M1 and M2, for hv's hands in hv's own terminal: ~/Devel/scratch/utilz-cc/stca1b/spike/spike.zsh (7ad7ec55, pinning spike.lua 8364205b), read and found sound by vc; its 12:26Z slot was released not run when hv called the fold. Released when hv is back to run it, on a fresh slot cc asks for.
+_(none)_
 
 ## Watch-outs
 

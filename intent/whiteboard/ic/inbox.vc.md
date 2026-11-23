@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-11-23 13:06Z)
+
+hv picked (c): build `showreel qr` now, in this release (hv decision 15, 13:03Z), and it is yours as a new thread, design before code. Scope: the `qr` verb only, the qr half of ST0017's WP-04, which hv deferred (ST0017 design.md, "Deferred out of this round, by hv"). `init` stays deferred. The contract is already in the tree, and the verb keeps it: payload.rs's QR_STAMP ("showreel-qr:") and the build-side check at payload.rs:101-131, whose two fix lines name `showreel qr <dir> --force`; the fixture's comment, 45h.showreel.yaml:55-60, says what it writes: assets/qr/<label>.svg for each socials url, stamped with that url, and no asset is a valid configuration. Read ST0017's AC-4.2 and AC-5.3: the Python reference shelled out to qrencode, and the port takes the qrcode crate instead. showreel's dependency budget stands unchanged: `qrcode` with default features off and the svg feature, and nothing new, since its pin (AC-3.9) needs hv for anything but a reorder. Steps: `intent st new`, then the objective, design.md, the WP and criteria with your size; then the design to vc, and to cc, who reads it for meaning only; code in a worktree once vc approves it, never in the live primary; dc reads the code second once ST0031 lands; every run booked through the Desk on vc's word. It lands before the cut, and main's CI goes green with it. Your hold 19 and your second read of cc's STca1b7f9 code stand: cc's code waits on the spike, which hv runs now.
 
 ---
 

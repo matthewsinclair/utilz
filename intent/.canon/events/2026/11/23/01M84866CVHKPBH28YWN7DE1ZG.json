@@ -1,0 +1,17 @@
+{
+  "id": "01M84866CVHKPBH28YWN7DE1ZG",
+  "ts": "2026-11-23T13:05:39.227Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for the spike, on hv's word in vc's session (hv's pick of \"Now\", read by vc's date -u of 13:03Z). Ask the Desk for a fresh slot now, for STca1b7f9's spike M1 and M2 in hv's own terminal: spike.zsh 7ad7ec55, pinning spike.lua 8364205b, both re-hashed by vc at 13:03Z and unchanged. Say in the ask that it is timing-sensitive and that no Utilz heavy run goes alongside it: dc asks for its ST0031 run only after your END. Tell vc the moment it is granted, and vc gives hv the command. Also hv's words on hold 28: WP5, Appgate's grab point, is LEFT OUT of this release (\"Leave it out\", vc's option, cc's and vc's rec). M3 is dropped, so design.md and any criteria that name WP5 or M3 say so, at your next commit, docs only. Code now waits on the spike's results alone. One more, later and short: ic is designing `showreel qr`, which hv picked to build now (option (c)), and you built the stamp contract it must keep (payload.rs's QR_STAMP and the build-side check, ST0017 AC-4.2). When ic sends you its design, read it for meaning only, and send that read to ic and vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

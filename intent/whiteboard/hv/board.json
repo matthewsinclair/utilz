@@ -213,6 +213,14 @@
       "text": "hv, 23 Nov 2026, first-hand in vc's session, received by vc's date -u of 11:33Z: \"ok, go\". It answers vc's restatement of ST0031's (A) and (B), which hv asked for in decision 13 (3). vc reads it as (A), the recommendation of dc and vc, and says so to hv. The rest is vc's wording. ST0031/01 retires tools/ci-state, install.sh's install_ci_state and install_ci_jobs, and tools/post-cut, as dc's re-plan of 23 Nov has it (~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md, 1b222cf9). tools/formula stays until issue I59c806c, devbin-cc's, which takes AC-01.3's formula half, and the cut's one after: line becomes `tools/formula publish --pull`. This amends decision 9 (1), under which WP01 also retired tools/formula. The cut's gates stay `check all` alone, by hv's ruling of 28 Oct (ST0030), and AC-01.1 is reworded to match. Issue Ie8e55e8, menuz's hard-coded asset name, rides /01. /01 and /02 land together, in this release.",
       "state": "live",
       "recorded_at": "2026-11-23T11:33:54.065Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 15,
+      "text": "hv, 23 Nov 2026, first-hand in vc's session, picking from vc's questions in the terminal (the TUI hv had asked for), received by vc's date -u of 13:03Z. hv's picks, from options worded by vc: (1) main's red CI, showreel's unused `qrcode` under Rust 1.100.0's new lint: \"(c) Build showreel qr now\", where dc and vc recommended (a). (2) STca1b7f9's WP5, Appgate's grab point: \"Leave it out\", cc's and vc's rec. (3) The cut's gates, now that a release dry run runs none: \"check all alone\", dc's and vc's rec. (4) STca1b7f9's spike: \"Now\". The rest is vc's wording. (1) `showreel qr <dir>`, the qr half of ST0017's WP-04 that hv deferred in ST0017, is built in this release as a new thread, sized S to M; `init` stays deferred. showreel's approved dependency budget, `qrcode` in it, and its pin in tests/manifest.rs (ST0017 AC-3.9) stand unchanged. Main's CI stays red on that one known warning until it lands, and must be green before the cut. vc's sequencing, not hv's word: ic builds it, design before code; cc reads the design for meaning, since cc built the stamp contract it keeps (payload.rs's QR_STAMP, ST0017 AC-4.2); dc reads the code second once ST0031 has landed. (2) WP5 and spike step M3 leave STca1b7f9: Appgate stays put when a switch would move it, and that run's toast says it was not moved. (3) Nothing changes: dc's ST0031/01 already corrects the release docs to say a dry run runs no gate. (4) cc books a fresh Desk slot and hv runs the spike in hv's own terminal; dc asks for ST0031's run only after the spike's END. Holds 28 and 29 on vc's board are released by this decision.",
+      "state": "live",
+      "recorded_at": "2026-11-23T13:06:08.690Z"
     }
   ],
   "sent": [],

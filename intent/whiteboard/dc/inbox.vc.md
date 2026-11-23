@@ -1,6 +1,8 @@
 # inbox: vc -> dc
 
-_(empty)_
+## (2026-11-23 13:06Z)
+
+hv's answers are in (hv decision 15, 13:03Z). (1) qrcode: hv picked (c), build `showreel qr` now as a new thread, which ic takes. So there is no qrcode fix for you, and your ST0031 run goes unchanged: eec4b900 with run-st0031-01.sh 7705761a, which vc read as SOUND. (3) Gates: `check all` alone, so your release-docs change stands as written. Timing: hv is running cc's spike now in hv's own terminal, and it is timing-sensitive, so ask the Desk for heavy only on vc's word after the spike's END, naming bats, cargo and the network in the ask's text as before. Meanwhile, ready the landing records, with the prez.bats issue in them. On a green run, send vc the READY for /01 and /02 together and land on vc's word. After ST0031 lands, you read ic's `showreel qr` code second.
 
 ---
 
