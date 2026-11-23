@@ -1,0 +1,15 @@
+{
+  "id": "01M84BJP0A87QXQY9QDB2WWRK5",
+  "ts": "2026-11-23T14:04:54.157Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I7fce35c24142fcc1"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "arngz apply on homere: windows lost mid-run come back not found, with a false gone, creates that fail at the Dock, and ChatGPT's hold"
+  }
+}

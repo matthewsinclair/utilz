@@ -1,0 +1,15 @@
+{
+  "id": "01M848BX58XXFXFBQXVS15PQS4",
+  "ts": "2026-11-23T13:08:46.376Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "STca1b7f9's docs at cc's next commit, docs only (hv's word on vc's hold 28, relayed by vc at 13:05Z): WP5, Appgate's grab point, is left out of this release, and M3 is dropped. design.md says so where it names them (section 4, the WP list, the Acceptance note on WP5's criteria, the spike's M3); no recorded criterion names either."
+  }
+}

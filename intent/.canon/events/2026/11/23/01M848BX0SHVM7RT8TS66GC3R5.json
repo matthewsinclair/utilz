@@ -1,0 +1,15 @@
+{
+  "id": "01M848BX0SHVM7RT8TS66GC3R5",
+  "ts": "2026-11-23T13:08:46.233Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STca1b7f9's spike M1+M2 (spike.zsh 7ad7ec55, spike.lua 8364205b): slot 01M848922YQPMVNF4T2WTM15WA, asked on vc's GO of 13:05Z (hv's pick of Now). Released when devbin-vc grants it; the Desk has been closed since 12:52Z for hv's compact and grants only on hv's word to it. Then tell vc, start only on vc's word that hv has the go, and send START and END to devbin-vc and vc."
+  }
+}

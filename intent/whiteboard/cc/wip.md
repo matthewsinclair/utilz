@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-23 12:53Z
+heartbeat_at: 2026-11-23 13:51Z
 status: active
-focus: "23 Nov, localfold for hv's compact (hv's word via vc, 12:52Z): STca1b7f9's design, its four WP bodies and 23 criteria landed at 549b7e7e and 78895a97, each checked by vc by change; the spike M1 and M2 (spike.zsh 7ad7ec55, spike.lua 8364205b, which vc read as sound) was granted and released not run; on the bounce, the spike on hv's return with a fresh booking, then WP1 to WP4's code once its results are read, with WP5 on hv's word; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "23 Nov, after hv's second compact: STca1b7f9's WP3 and WP4's failure half coded in a worktree off main on vc's GO of 13:49Z, no run, ic reads second; the spike's slot 01M848922YQPMVNF4T2WTM15WA stays queued, the Desk closed until hv's word to devbin-vc; WP1, WP2 and WP4's Mission Control leg wait on the spike; WP5 left out with M3 (hv decision 15); no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]
 ---
 
@@ -13,15 +13,16 @@ claims: [STca1b7f9d59191dfc]
 
 ## DOING
 
-_(none)_
+- STca1b7f9 WP3 (the round through B) and WP4's failure half (its words and their fix), on vc's GO of 13:49Z amending vc decision 111: code in worktree ~/Devel/scratch/utilz-cc/wt-stca1b (branch cc/stca1b7f9) off main 37894681, no run, ic second reader before it lands; ST589246c's progress.md rows change with it, on cc's word and ic's.
 
 ## TODO
 
-_(none)_
+- STca1b7f9's docs at cc's next commit, docs only (hv's word on vc's hold 28, relayed by vc at 13:05Z): WP5, Appgate's grab point, is left out of this release, and M3 is dropped. design.md says so where it names them (section 4, the WP list, the Acceptance note on WP5's criteria, the spike's M3); no recorded criterion names either.
+- When ic sends its showreel qr design (hv's option (c), built now), read it for meaning only, against the stamp contract cc built (payload.rs's QR_STAMP and the build-side check, ST0017 AC-4.2), and send that read to ic and vc (vc's ask of 13:05Z).
 
 ## Holds
 
-_(none)_
+- STca1b7f9's spike M1+M2 (spike.zsh 7ad7ec55, spike.lua 8364205b): slot 01M848922YQPMVNF4T2WTM15WA, asked on vc's GO of 13:05Z (hv's pick of Now). Released when devbin-vc grants it; the Desk has been closed since 12:52Z for hv's compact and grants only on hv's word to it. Then tell vc, start only on vc's word that hv has the go, and send START and END to devbin-vc and vc.
 
 ## Watch-outs
 

@@ -1,0 +1,15 @@
+{
+  "id": "01M848BX9RD50XTYQ3AWDDT8TE",
+  "ts": "2026-11-23T13:08:46.520Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "When ic sends its showreel qr design (hv's option (c), built now), read it for meaning only, against the stamp contract cc built (payload.rs's QR_STAMP and the build-side check, ST0017 AC-4.2), and send that read to ic and vc (vc's ask of 13:05Z)."
+  }
+}

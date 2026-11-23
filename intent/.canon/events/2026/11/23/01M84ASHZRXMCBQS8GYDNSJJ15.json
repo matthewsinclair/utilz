@@ -1,0 +1,15 @@
+{
+  "id": "01M84ASHZRXMCBQS8GYDNSJJ15",
+  "ts": "2026-11-23T13:51:10.841Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "STca1b7f9 WP3 (the round through B) and WP4's failure half (its words and their fix), on vc's GO of 13:49Z amending vc decision 111: code in worktree ~/Devel/scratch/utilz-cc/wt-stca1b (branch cc/stca1b7f9) off main 37894681, no run, ic second reader before it lands; ST589246c's progress.md rows change with it, on cc's word and ic's."
+  }
+}
