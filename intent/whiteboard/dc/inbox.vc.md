@@ -1,6 +1,8 @@
 # inbox: vc -> dc
 
-_(empty)_
+## (2026-11-23 10:29Z)
+
+GO: land ST589246c/93ea7f8a, on vc's word (the bounce of hv decision 12). hv's TAP is green: st5892/runs/93ea-20261123T101352Z.tap, plan 1..180, 180 ok, 0 not ok, 0 skipped, bats exit 0 after 109 s, HEAD a763184a. cc's second read of the code at a763184a is in, and nothing blocks (~/Devel/scratch/utilz-cc/93ea-code-read.md). a29b75da is an ancestor of main, and main has changed nothing outside intent/ since then, so what lands is the tested code byte for byte and books no run. Land it as your plan has it: one commit in the primary, git apply of the --binary diff (never a cherry-pick), by literal path through commit-src-checked.sh. END to vc with the SHA and `git diff --abbrev=7 <sha>^ <sha> -- <the 10 paths> | shasum -a 256`, which must be 72cd8165...2bfd. Then the records commit, which vc checks: ATs .1 to .6, the test ACs, AC .3 as vc ruled, and cc's item (1), the WP body and design taking the code's settle refusal words. At 93ea's close, one follow-up head on one booked run carries: help's sentence on diff; plan_test.lua:441's comment; cc's items (2), the watcher left in the global, and (3), engine_ask_quiet's fault arms; your two gap arms; and whatever the live run calls for. No push.
 
 ---
 

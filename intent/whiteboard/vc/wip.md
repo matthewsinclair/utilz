@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-23 10:17Z
+heartbeat_at: 2026-11-23 10:23Z
 status: active
-focus: "10 Nov, session closed on hv's word. ST0032 (with 0133) and ST0034 (with 0138) are closed; Utilz 2.14.10 is released and main is pushed at c7a5df87. No claims, nothing in flight. Open: ST0031, ST0029 (parked), 0114 (waits on arca_swift's tag), and the follow-ups on intent/wip.md. Resume in ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Mediating the bounce: 93ea lands on hv's green TAP (dc lands, cc second reader), then hv's live run on the dev tree, then ST0031/01 and /02, then hv's cut."
 claims: []
 ---
 
