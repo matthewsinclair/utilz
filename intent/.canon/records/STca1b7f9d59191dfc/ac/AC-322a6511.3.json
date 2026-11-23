@@ -1,0 +1,8 @@
+{
+  "id": "AC-322a6511.3",
+  "text": "An app that reads as not running while a window it had at the start is still listed is taken as running, is not reported gone, and the log says so. One with no start window still listed is reported gone, as now.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

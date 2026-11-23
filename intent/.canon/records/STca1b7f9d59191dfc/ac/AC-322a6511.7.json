@@ -1,0 +1,8 @@
+{
+  "id": "AC-322a6511.7",
+  "text": "M2's result decides the create. If Mission Control's group appeared within 2 s, arngz opens Mission Control itself before a create and looks for the group across callbacks, and the live run creates a desktop on a display that needs one. Otherwise AC-322a6511.4's failure is the answer.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

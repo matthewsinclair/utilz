@@ -1,0 +1,8 @@
+{
+  "id": "AC-322a6511.5",
+  "text": "Finished carries `first_outcome` beside `first`, failed, unseen or skipped (log_test), and the toast shows an unseen first as not found (toast_test, ic's).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

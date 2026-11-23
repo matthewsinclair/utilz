@@ -1,0 +1,8 @@
+{
+  "id": "AC-322a6511.4",
+  "text": "A create that fails with the Dock's Mission Control error is tried once in its callback, and its reason and fix say to add the desktop in Mission Control by hand.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-322a6511.2",
+  "text": "With the filter failed in the plan in hand, each unseen entry's reason says that Hammerspoon's window filter failed, so windows on desktops not shown could not be named, and its fix (run it again, or reload Hammerspoon's config) reaches Finished's `fix` and the log.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
