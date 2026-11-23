@@ -1,0 +1,17 @@
+{
+  "id": "01M83B1PEPZTT5PGNFEKKE8R3X",
+  "ts": "2026-11-23T04:36:23.126Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for dc on hv's word, 23 Nov, first-hand in vc's session: \"There are ongoing bugs with arngz. It basically doesn't work as it needs to. Check the logs and see if you can see what is going on, then I'll explain what I'm seeing\". Read arngz's logs, and Hammerspoon's where arngz acts through hs, and tell vc what goes wrong: which verbs, which desks, what errors, since when. Read-only: logs and source only. Run no arngz verb that moves a window, no test or build, write no code, and make no board write. Report to utilz-vc by SendMessage, each finding with the log lines it rests on. hv will then say what hv sees. cc and ic keep holding.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

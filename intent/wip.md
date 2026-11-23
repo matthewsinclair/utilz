@@ -1,16 +1,16 @@
 ---
-verblock: "10 Nov 2026:v1.44: matts - ST0032 and ST0034 closed"
+verblock: "23 Nov 2026:v1.45: matts - hv's triage of the open work"
 ---
 
 # Work In Progress
 
 ## DOING
 
+- dc: arngz: read its logs for hv, then fix what hv reports, folding in the parsed captures at arngz:860, 1678, 1708, 1853 and 2034, which take yq's stderr with the value (read each from stdout alone, as own_sizes_into does), and one cap on the 600 s ARNGZ_APPLY_TIMEOUT default that each failing scheduled arm in arngz.bats waits out (as arm 63 is capped).
+
 ## TODO
 
-- dc: ST0031/01, Utilz's side of Devbin ST0011/10's sweep: re-plan it against the vendored core, retiring tools/post-cut and tools/formula into Devbin's core, and with them vc decision 91's six findings; ST0031/02's bank lands with it. At the build, descope ST0019's AC-01.3 to ST0031 and write it there, reworded, as AC-01.5. The build re-reads ST0031/03's build_kind against the vendored app-sign (ST0031/03's design, section 4, step 4).
-- dc: arngz's latent yq class: the parsed captures at arngz:860, 1678, 1708, 1853 and 2034 take yq's stderr with the value, harmless while no `-p` makes yq warn; read each from stdout alone, as own_sizes_into now does.
-- dc: arngz.bats's scheduled arms on ARNGZ_APPLY_TIMEOUT's 600 s default: a writer that fails costs 10 minutes per arm; cap them in one place, as arm 63 now is.
-- Devbin (devbin-vc's to file): a cut's resume reads every CI run at the commit and takes the worst, so a cancelled run from a stopped attempt fails every resume; until fixed, delete each cancelled run on the release commit before resuming. A cut's macOS leg needs hv's keychain, so it runs in hv's own terminal.
+- dc: ST0031/01 and ST0031/02, after the arngz fixes and in the same release: re-plan the sweep against the vendored core, retiring tools/ci-state, tools/post-cut and tools/formula into Devbin's core, and with them vc decision 91's six findings; ST0031/02's bank lands with it. At the build, descope ST0019's AC-01.3 to ST0031 and write it there, reworded, as AC-01.5. The build re-reads ST0031/03's build_kind against the vendored app-sign (ST0031/03's design, section 4, step 4).
+- devbin-cc: issue I59c806c, devbin#0326's install and use, in devbin-vc's order and after ST0031/01 lands.
 - ic: issue 0114, once arca_swift tags its issue 0003's fixes.
-- dc: ST0029, Retire Python, parked by hv ("not a priority today"); its records are on main, its WP01 started, and no code until hv's word (vc decisions 79 and 104).
+- dc: ST0029, Retire Python, once hv lifts its hold.

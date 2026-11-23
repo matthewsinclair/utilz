@@ -1,0 +1,15 @@
+{
+  "id": "01M83BDM5T9PBN6CABVEWV8HR1",
+  "ts": "2026-11-23T04:42:54.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "text": "A cut's macOS leg needs hv's keychain for notarisation, so it runs in hv's own terminal and never through a Claude's shell. 2.14.10's cut on 10 Nov stopped there from vc's shell (vc decision 105)."
+  }
+}

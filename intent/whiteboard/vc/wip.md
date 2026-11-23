@@ -29,6 +29,7 @@ _(none)_
 - Every host run books through Intent's slots on the desk after vc reads its bytes; the desk's holder is estate status's control line, READ IT RATHER THAN ASSUMING (agentic-engineering-vc since 10 Nov, devbin-vc before it, and it has changed under vc twice without notice); GO by name; START and END to the holder and vc; new bytes are a new booking, and a grant records only the lane, so a head that has moved since the ask is confirmed to the holder in the exchange that grants it. (edited)
 - kovacs is brew-only for Utilz; reads and changes go through kovacs-sysadm while it runs, batched by the desk's holder (estate status's control line); rustup stable 1.99.1 alone is CI's lint twin. (edited)
 - hv's release rules: one release carries everything not deferred; land one change at a time on vc's word; hv runs the suites and the cut, no dry run; hv keeps cuts, tags and pushes. (edited)
+- A cut's macOS leg needs hv's keychain for notarisation, so it runs in hv's own terminal and never through a Claude's shell. 2.14.10's cut on 10 Nov stopped there from vc's shell (vc decision 105).
 
 ## Decisions
 

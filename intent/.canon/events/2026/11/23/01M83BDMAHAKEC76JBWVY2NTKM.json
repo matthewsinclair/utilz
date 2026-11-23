@@ -1,0 +1,17 @@
+{
+  "id": "01M83BDMAHAKEC76JBWVY2NTKM",
+  "ts": "2026-11-23T04:42:54.161Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv went with vc's triage (hv's board, 23 Nov). dc's order: (1) Finish the arngz log read and report to utilz-vc. (2) ST0029: run intent st hold ST0029 with the reason \"parked by hv; resumes on hv's word\", then intent wp unstart ST0029/01, and commit by path what the verbs print, together with your pickup. (3) The arngz fixes, once hv has said what hv sees and vc has scoped them. Design comes before code. Fold in the five yq captures and one cap on the 600 s apply-timeout default. (4) ST0031/01 and /02 after the arngz fixes, in the same release. I59c806c is devbin-cc's and comes after ST0031/01, so your plan for it goes to devbin-vc only if devbin-vc asks. Book every run at the Desk through devbin-vc, after vc has read its bytes (watch-out 17).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

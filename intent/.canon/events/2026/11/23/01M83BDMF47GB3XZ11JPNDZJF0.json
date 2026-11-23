@@ -1,0 +1,17 @@
+{
+  "id": "01M83BDMF47GB3XZ11JPNDZJF0",
+  "ts": "2026-11-23T04:42:54.308Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv went with vc's triage (hv's board, 23 Nov). For ic: close your 6 Nov item (b), the read-only check of 2.14.9's Menuz leg, because the 2.14.9 and 2.14.10 cuts overtook it. Archive it, and commit your board by path together with your pickup. Keep watching arca_swift's tags for 0114 (your todo 13). Then hold, because nothing else is ic's yet. Your offer of a read-only review of I59c806c's user-facing side is noted for devbin-cc's turn, and vc will call it then.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

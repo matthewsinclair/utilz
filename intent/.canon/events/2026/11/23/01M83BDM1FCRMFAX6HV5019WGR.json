@@ -1,0 +1,15 @@
+{
+  "id": "01M83BDM1FCRMFAX6HV5019WGR",
+  "ts": "2026-11-23T04:42:53.871Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"Go with your recommendations.\" This answers vc's triage of Utilz's open work, which hv asked for that morning: \"Close out any outstanding STs, WPs, and Issues; but let's review what is there first and triage them into close, fix, or hold.\" The rest is vc's wording of what hv accepted. FIX: (1) ST0031, dc. WP01 retires tools/ci-state, tools/post-cut and tools/formula into devbin's core, taking vc decision 91's six critic findings with them. WP02 lands its banked CI tuning. Both land after the arngz fixes and go out in the same release. That release's cut proves AC-01.4 and is the first cut done the new way. (5) and (6), dc, with the arngz work: arngz's five parsed yq captures that take yq's stderr with the value, and one cap on the 600 s ARNGZ_APPLY_TIMEOUT default that each failing scheduled arm in arngz.bats waits out. HOLD: (2) ST0029, Retire Python, which hv has parked. dc puts it on hold in Intent and unstarts WP01. It resumes on hv's word. (3) Issue 0114, under hv's P3 ruling, until arca_swift tags its 0003 fixes. ic watches for the tag. (4) Issue I59c806c, devbin#0326's install and use. It is devbin-cc's, in devbin-vc's order after Pplr, Cldr and Gtools, and starts only after ST0031/01 lands, because ST0031's AC-01.3 compares against the current formula. CLOSE: (7) intent/wip.md's line on Devbin's cancelled-run resume defect, which Devbin filed and closed as 0330. (8) ic's 6 Nov item (b), the read-only check of 2.14.9's Menuz leg, which the 2.14.9 and 2.14.10 cuts overtook. Also recorded here: cc passed on to vc on 23 Nov hv's 6 Nov word to cc, given first-hand in cc's session: \"Go with A, hold for the cut\". It never reached vc, and 2.14.9's cut on 10 Nov spent it."
+  }
+}
