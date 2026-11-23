@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "3bcdc7a2-7fd8-4497-8141-011923ff78f3",
-    "heartbeat_at": "2026-11-23T11:03:02.396Z",
+    "heartbeat_at": "2026-11-23T11:43:47.199Z",
     "status": "active",
-    "focus": "23 Nov: arngz's toasts (ST589246c/eae7633d) done on hv's word after 93ea's live re-runs: AC-eae7633d.1 satisfied, the WP done, its claim released. Todo 13: arca_swift still 0.2.1 (ffdff0a), read 10:17Z. Holding for vc's word; the primary is live for hv, so no code edits there.",
+    "focus": "23 Nov, localfold for hv's compact (hv's word, first-hand in ic's session, 11:43Z), no release. arngz's toasts (ST589246c/eae7633d) closed at a47961d6, checked by vc by change; no claims. Todo 13 only: arca_swift has no new tag (0.2.1, ffdff0a), and its main at 88a1e56 adds Intent upgrades and 0003's issue note, no fix (read 11:43Z). The primary is live for hv: no code edits there. On the bounce: /in-session with the pickup, then hold for vc's word; resume state in ~/Devel/scratch/utilz-ic/RESUME.md.",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -1462,7 +1462,8 @@
       "recipient": "dc",
       "body": "FYI for 53ef's hook: toast.lua is ready on branch ic/eae7 (e07f5c68). It returns a table with point(name, fields), and loads by dofile beside plan.lua.\nFrom critic-lua: give each point() call its own pcall, outside run_phase's, guarded()'s and answer()'s. Inside one of those, a toast failure would become a failed phase or an error response, which progress.md rule 6 forbids.\npoint() raises in four cases: a point name progress.md does not have, a point with no fields or no run, a canvas it could not draw, and a failure a timer kept since the last point. It never prints.\nIts run rides your Desk booking as `bats opt/arngz/test/toast.bats`, which needs none of your code.",
       "fyi": true,
-      "recorded_at": "2026-11-23T06:11:14.837Z"
+      "recorded_at": "2026-11-23T06:11:14.837Z",
+      "archived_at": "2026-11-23T11:43:03.698Z"
     }
   ],
   "handled": [

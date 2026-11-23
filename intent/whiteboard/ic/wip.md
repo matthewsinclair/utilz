@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 11:03Z
+heartbeat_at: 2026-11-23 11:43Z
 status: active
-focus: "23 Nov: arngz's toasts (ST589246c/eae7633d) done on hv's word after 93ea's live re-runs: AC-eae7633d.1 satisfied, the WP done, its claim released. Todo 13: arca_swift still 0.2.1 (ffdff0a), read 10:17Z. Holding for vc's word; the primary is live for hv, so no code edits there."
+focus: "23 Nov, localfold for hv's compact (hv's word, first-hand in ic's session, 11:43Z), no release. arngz's toasts (ST589246c/eae7633d) closed at a47961d6, checked by vc by change; no claims. Todo 13 only: arca_swift has no new tag (0.2.1, ffdff0a), and its main at 88a1e56 adds Intent upgrades and 0003's issue note, no fix (read 11:43Z). The primary is live for hv: no code edits there. On the bounce: /in-session with the pickup, then hold for vc's word; resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
 claims: []
 ---
 
