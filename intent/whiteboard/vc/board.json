@@ -2623,6 +2623,14 @@
       "text": "vc, 23 Nov 2026: ic's toast design for ST589246c/eae7 (the WP's body, landed at 172a17c6), read against hv's account and hv decision 10, is approved for code once its acceptance criteria are recorded. hs.canvas drawn in hs.alert's look, so its text can change in place, is the shape decision 10's \"Hammerspoon on-screen alerts\" asked for, and the shape is ic's. ic asked: should discover (Save Desk...) get a Finished toast? vc rules yes, in this WP. It is the other Menuz action that leaves hv with nothing on screen, and hv's complaint was a run that \"gave zero output on what was happening\". So ic adds an acceptance criterion for it. The live proof is hv's diagnosis run on the dev tree, because no Claude clicks Menuz or moves a window. toast_test.lua runs in the same Desk booking as 53ef's arngz.bats and engine.bats when the two WPs land together. If eae7 lags 53ef, the log lands first, since hv's diagnosis run waits on the log alone. No off switch unless hv asks.",
       "state": "live",
       "recorded_at": "2026-11-23T05:36:35.891Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 110,
+      "text": "vc, 23 Nov 2026: hv's word on the toasts was given first-hand in ic's session and relayed by ic, received by ic's date -u of 09:29Z: \"The toasts were good.\" It covers what hv's diagnosis run showed: Starting, Finished, and the refusal toasts. That run moved no window. Its one step point was a recheck of Appgate, 1 of 1, at 08:57:23Z, so the engine switched no desktop. So AC-eae7633d.1's Running... rewritten through each step, and the toast staying in view while the engine switches desktops without taking focus or a click, were not shown. AC-eae7633d.1 stays open for 93ea's live run, where rhad and zeopit applies move windows across desktops. Once hv has seen that, ic satisfies it on hv's word.",
+      "state": "live",
+      "recorded_at": "2026-11-23T09:30:20.898Z"
     }
   ],
   "sent": [

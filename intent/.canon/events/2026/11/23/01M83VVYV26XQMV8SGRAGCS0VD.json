@@ -1,0 +1,15 @@
+{
+  "id": "01M83VVYV26XQMV8SGRAGCS0VD",
+  "ts": "2026-11-23T09:30:20.898Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 23 Nov 2026: hv's word on the toasts was given first-hand in ic's session and relayed by ic, received by ic's date -u of 09:29Z: \"The toasts were good.\" It covers what hv's diagnosis run showed: Starting, Finished, and the refusal toasts. That run moved no window. Its one step point was a recheck of Appgate, 1 of 1, at 08:57:23Z, so the engine switched no desktop. So AC-eae7633d.1's Running... rewritten through each step, and the toast staying in view while the engine switches desktops without taking focus or a click, were not shown. AC-eae7633d.1 stays open for 93ea's live run, where rhad and zeopit applies move windows across desktops. Once hv has seen that, ic satisfies it on hv's word."
+  }
+}
