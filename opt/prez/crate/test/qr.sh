@@ -62,6 +62,7 @@ stamp() { head -n 1 "$WORK/reel/assets/qr/$1"; }
 
 # ---------------------------------------------------------------- QR1 -- AC-702cceb9.6
 
+# AT-702cceb9.6 (STb8e4fb6 acceptance.md) cites this arm.
 if want QR1; then
   start QR1 "the verb is dispatched, and its help and its refusals name it"
   reel
@@ -81,6 +82,7 @@ fi
 
 # ---------------------------------------------------------------- QR2 -- AC-702cceb9.1
 
+# AT-702cceb9.1 (STb8e4fb6 acceptance.md) cites this arm.
 if want QR2; then
   start QR2 "each address gets a QR where the build looks, stamped with that address"
   reel
@@ -100,6 +102,7 @@ fi
 
 # ---------------------------------------------------------------- QR3 -- AC-702cceb9.2
 
+# AT-702cceb9.2 (STb8e4fb6 acceptance.md) cites this arm.
 if want QR3; then
   start QR3 "a file there is kept and its state said; --force writes it anew"
   reel
@@ -127,6 +130,7 @@ fi
 
 # ---------------------------------------------------------------- QR4 -- AC-702cceb9.3
 
+# AT-702cceb9.3 (STb8e4fb6 acceptance.md) cites this arm.
 if want QR4; then
   start QR4 "a QR outside the reel is refused before anything is written"
   rm -rf "$WORK/reel"

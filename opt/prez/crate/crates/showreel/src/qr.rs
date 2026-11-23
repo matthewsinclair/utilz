@@ -578,6 +578,7 @@ socials:
     );
   }
 
+  /// AT-702cceb9.4 (STb8e4fb6 acceptance.md) cites this test.
   #[test]
   fn a_written_qr_leaves_no_temporary_file_beside_it() {
     let r = reel(

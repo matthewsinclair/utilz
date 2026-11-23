@@ -544,6 +544,7 @@ mod tests {
   /// **ISSUE I88af1f3.** A QR that is there but is not UTF-8 was neither
   /// embedded nor warned about. It is said now, in cc's words, and is still
   /// not embedded; a QR that is not there still says nothing.
+  /// AT-702cceb9.9 (STb8e4fb6 acceptance.md) cites this test.
   #[test]
   fn a_qr_there_but_not_readable_as_text_warns_and_is_not_embedded() {
     let r = reel("unreadable", &[]);
