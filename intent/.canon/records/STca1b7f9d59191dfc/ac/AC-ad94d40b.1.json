@@ -1,0 +1,8 @@
+{
+  "id": "AC-ad94d40b.1",
+  "text": "With no route and no `mission` leg, the move fails. Its reason leads with the window's app by its display name, names every full-screen app the walk would pass, and gives desktops as the desk's ordinals and no window title. Its fix fits the case: attach a display when there is no other display, or show a desktop on the display it names when there is. The log carries both.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-ad94d40b.6",
+  "text": "In the live run, rhad, unplugged, does as AC-ad94d40b.4's outcome says: the `mission` leg moves each window past a full-screen space, or the failure names the way out, and no other window moves.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "AC-dca427e7.3",
+  "text": "The toast's step line says \"round through <display>\" for a move that goes round through another display (toast.lua, ic's).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

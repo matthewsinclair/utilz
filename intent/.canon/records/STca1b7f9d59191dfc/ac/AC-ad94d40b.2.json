@@ -1,0 +1,8 @@
+{
+  "id": "AC-ad94d40b.2",
+  "text": "Finished shows the first failure's fix as `Fix:` on a failed or partly run, as on a refused one (toast.lua, ic's).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

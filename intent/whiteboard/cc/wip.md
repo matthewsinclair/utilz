@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-23 11:44Z
+heartbeat_at: 2026-11-23 12:10Z
 status: active
-focus: "23 Nov, localfold for hv's compact on hv's direct word; STca1b7f9d59191dfc (windows across desktops and a route past a full-screen desktop, hv decision 13) claimed, its design attached for vc's read, then spike M1 to M3 through the Desk before any code; nothing else of cc's open; watch-out 6 live; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "23 Nov, on vc decision 111: STca1b7f9's design revised on vc's five notes and ic's read r1, its four WP bodies and 23 criteria recorded (WP5's wait on hv's word); next, the spike M1 to M3 to vc for its bytes, then hv's hands at the Desk; no code before the spike's results; no test or build (vc decision 74); resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]
 ---
 

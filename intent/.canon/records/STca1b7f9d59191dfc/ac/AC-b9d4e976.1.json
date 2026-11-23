@@ -1,0 +1,8 @@
+{
+  "id": "AC-b9d4e976.1",
+  "text": "discover --save writes the desk's record whole, in the desk's own file and by a rename: each entry's windows, `newest`, the desk's hash and the session. apply, diff and auto write no record, and delete removes it with the desk.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

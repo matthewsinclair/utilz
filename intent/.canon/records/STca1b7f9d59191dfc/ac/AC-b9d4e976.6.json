@@ -1,0 +1,8 @@
+{
+  "id": "AC-b9d4e976.6",
+  "text": "discover --save while an apply runs is refused, naming the running apply, and writes neither the desk nor its record.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

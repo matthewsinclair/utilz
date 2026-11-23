@@ -1,0 +1,8 @@
+{
+  "id": "AC-dca427e7.1",
+  "text": "A move on one display that would pass a full-screen space goes round through another display, by the four legs. The first drag is read back before the switch, and the move is done only when the readback shows it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

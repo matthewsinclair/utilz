@@ -1,0 +1,8 @@
+{
+  "id": "AC-026eadfc.2",
+  "text": "A remembered window whose id no space lists, whose reads fail, or whose bundle has changed, is dropped and not named. Nothing is pruned in a read where a space's list could not be read.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

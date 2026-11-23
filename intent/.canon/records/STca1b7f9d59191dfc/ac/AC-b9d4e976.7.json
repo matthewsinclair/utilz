@@ -1,0 +1,8 @@
+{
+  "id": "AC-b9d4e976.7",
+  "text": "help/arngz.md says what the record holds and where, that Save Desk alone writes it, when it is void and what applies then, that a hand edit and the record exclude each other, and that delete clears it and deleting it is safe. Its lines 93, 108 and 131, and its Files and Environment lists, are true of it.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

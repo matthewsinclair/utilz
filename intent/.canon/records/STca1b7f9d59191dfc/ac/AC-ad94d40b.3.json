@@ -1,0 +1,8 @@
+{
+  "id": "AC-ad94d40b.3",
+  "text": "unmovable's reason names the app and no window title, and the title goes to the log (issue I4eacd29).",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

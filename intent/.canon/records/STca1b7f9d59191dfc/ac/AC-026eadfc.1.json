@@ -1,0 +1,8 @@
+{
+  "id": "AC-026eadfc.1",
+  "text": "A window that arngz named earlier in this Hammerspoon session, whose id a space still lists, and whose reads answer with the same bundle, is named again, with `via = \"remembered\"`, when neither allWindows nor filter.default names it.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

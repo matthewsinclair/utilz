@@ -1,0 +1,8 @@
+{
+  "id": "AC-dca427e7.2",
+  "text": "A move that goes round through another display carries `via`, that display's name, on its step point. A round that fails after its first drag says where it left the window, by display and desk ordinal.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
