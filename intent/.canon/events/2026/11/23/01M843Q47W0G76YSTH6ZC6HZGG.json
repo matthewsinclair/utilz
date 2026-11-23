@@ -1,0 +1,16 @@
+{
+  "id": "01M843Q47W0G76YSTH6ZC6HZGG",
+  "ts": "2026-11-23T11:47:31.196Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 24,
+    "text": "ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2 and its close head at bfb0a610 (dc/93ea bcfb1a1a, green in slot 01M8433G, 184 of 184), both checked by vc by change; live on hv's re-run (AC .9 met on the log: rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. Next, on the bounce: the close records (new AT-93ea7f8a.7 and AT-53ef07aa.3 from log_test's arm 17; AT .2, .4 and .5's notes extended; AC .9 from hv's run ids and AC .7 on vc's read of help), then wp done, unclaim, and wt-93ea and dc/93ea removed by the fold's checks. Steps in ~/Devel/scratch/utilz-dc/RESUME.md, under BOUNCE."
+  }
+}

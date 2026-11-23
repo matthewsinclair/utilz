@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 11:38Z
+heartbeat_at: 2026-11-23 11:47Z
 status: active
-focus: "23 Nov: ST589246c/93ea7f8a's close head (dc/93ea bcfb1a1a) waits for its Desk slot, then the landing and the close records, which close 93ea and 53ef. ST0031/01 under (A) (hv decision 14): body and criteria recorded, code after 93ea's close. Resume state in ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "23 Nov, localfold for hv's compact (hv's word, first-hand): 93ea's close head landed at bfb0a610 (184 of 184, vc checked); on the bounce, 93ea's close records (AT .7, AT-53ef07aa.3, the notes, AC .9 and .7), then wp done for 93ea and 53ef; then ST0031/01's code in a worktree off main on /02's bank, under (A). Resume state in ~/Devel/scratch/utilz-dc/RESUME.md, under BOUNCE."
 claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a, ST0031/01, ISSUE:Ie8e55e87057927e0]
 ---
 
@@ -13,8 +13,8 @@ claims: [ST589246c823732446/53ef07aa, ST589246c823732446/93ea7f8a, ST0031/01, IS
 
 ## DOING
 
-- ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2, checked by vc by change, proven by hv's run of st5892/run-93ea-2.sh (180 of 180), and live on hv's re-run, where AC .9 is met on the log (rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. The close: the head the WP body's "The close's follow-up head" names (help's diff sentence, plan_test.lua's comment, M.watch's clear, engine_ask_quiet's two fault arms, the two gap arms with a new AT .7), built on dc/93ea in wt-93ea, one booked run of arngz.bats and engine.bats, landed on vc's word; then vc's read for AC .7, the close records (AC .9, AC .7, AT .7, the extended notes) and wp done. (edited)
-- ST589246c/53ef07aa, the run log: landed; AC-53ef07aa.3 (every desktop arngz creates is logged) stays open until a live apply creates one, which hv's live run after 93ea's landing can show; then satisfy it and close the WP.
+- ST589246c/93ea7f8a, the desk-change fix: landed at 0666e2f2 and its close head at bfb0a610 (dc/93ea bcfb1a1a, green in slot 01M8433G, 184 of 184), both checked by vc by change; live on hv's re-run (AC .9 met on the log: rhad 20261123T104723Z-91703, zeopit 20261123T105242Z-55488, auto 20261123T105129Z-53589). Records at fa8d1eb4: AT-93ea7f8a.1 to .6 green, AC .3 satisfied. Next, on the bounce: the close records (new AT-93ea7f8a.7 and AT-53ef07aa.3 from log_test's arm 17; AT .2, .4 and .5's notes extended; AC .9 from hv's run ids and AC .7 on vc's read of help), then wp done, unclaim, and wt-93ea and dc/93ea removed by the fold's checks. Steps in ~/Devel/scratch/utilz-dc/RESUME.md, under BOUNCE. (edited)
+- ST589246c/53ef07aa, the run log: landed. AC-53ef07aa.3 (every desktop arngz creates is recorded, and com.apple.spaces logged after the creates and at the end, never waited on) is now held by log_test's arm 17 on 93ea's close head, green in slot 01M8433G; it is minted as AT-53ef07aa.3 in 93ea's close records on the bounce, and this WP closes with 93ea. (edited)
 - ST0031/01, retire Utilz's CI readers and post-cut into Devbin 0.1.28's core, under (A) (hv decision 14): the WP body is the re-plan of 23 Nov, and the formula stays Utilz's until I59c806c. Issue Ie8e55e8 rides it. Next: the code in a worktree off main on ST0031/02's bank (~/Devel/scratch/utilz-dc/st0031-02-v2.patch), one booked run of install_lib.bats, install_guards.bats, formula.bats and macos.bats with probe (b), then /01 and /02 land together on vc's word. Only after 93ea's close, and never two bookings at once.
 
 ## TODO
