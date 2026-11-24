@@ -6,5 +6,5 @@
     "AC18"
   ],
   "status": "green",
-  "note": "Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent."
+  "note": "Publish, then run pdf2md --version or whatever the cheapest venv-creating path is, then run the manifest check: it must report the install intact. Assert the .venv actually got created first, or the test passes by never exercising the case. Then edit an OWNED file and assert the same check DOES report that -- one leg without the other proves only that the check is silent. Re-pointed for I59c806c (devbin#0326, devbin publishes): green at 0aaae2d0 in Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA, 2026-11-24 by date -u: opt/utilz/test 272 of 272 under BSD, 0 skipped, plan equal to bats counts; run 01M872BJ48VAVA4WXV14H1BAF8 had the same 272 under BSD, GNU and /bin/bash 3.2."
 }

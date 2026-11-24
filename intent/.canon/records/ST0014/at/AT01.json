@@ -6,5 +6,5 @@
     "AC01"
   ],
   "status": "green",
-  "note": "Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not."
+  "note": "Publish to a temp prefix, move the Utilz source tree aside, then run <prefix>/bin/utilz and a dispatched utility from it. Moving the source is the measurement; asserting files arrived is not. Re-pointed for I59c806c (devbin#0326, devbin publishes): green at 0aaae2d0 in Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA, 2026-11-24 by date -u: opt/utilz/test 272 of 272 under BSD, 0 skipped, plan equal to bats counts; run 01M872BJ48VAVA4WXV14H1BAF8 had the same 272 under BSD, GNU and /bin/bash 3.2."
 }

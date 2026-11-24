@@ -6,5 +6,5 @@
     "AC07"
   ],
   "status": "green",
-  "note": "Verified by vc 8 Sep against the real install: manifest header carries utilz-version 2.5.0 and source-commit d3142a7, which is an ancestor of main; 111 file/link rows; install_manifest_check returns rc 0, so every recorded checksum matches the shipped bytes. The commit-describes-the-shipped-bytes leg holds by construction here because AC02's dirty gate refused anything else -- the install announced 'clean, d3142a7' before writing. The refusal leg itself is exercised in cc's install.bats, which passes."
+  "note": "Verified by vc 8 Sep against the real install: manifest header carries utilz-version 2.5.0 and source-commit d3142a7, which is an ancestor of main; 111 file/link rows; install_manifest_check returns rc 0, so every recorded checksum matches the shipped bytes. The commit-describes-the-shipped-bytes leg holds by construction here because AC02's dirty gate refused anything else -- the install announced 'clean, d3142a7' before writing. The refusal leg itself is exercised in cc's install.bats, which passes. Re-pointed for I59c806c (devbin#0326, devbin publishes): green at 0aaae2d0 in Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA, 2026-11-24 by date -u: opt/utilz/test 272 of 272 under BSD, 0 skipped, plan equal to bats counts; run 01M872BJ48VAVA4WXV14H1BAF8 had the same 272 under BSD, GNU and /bin/bash 3.2."
 }

@@ -6,5 +6,5 @@
     "AC13"
   ],
   "status": "green",
-  "note": "utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/."
+  "note": "utilz test run with UTILZ_HOME at an install tree: refused, and the message names the SOURCE tree as where to run it. Then assert the install's manifest still verifies -- a refusal that ran anything first has already rewritten bin/. Re-pointed for I59c806c (devbin#0326, devbin publishes): green at 0aaae2d0 in Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA, 2026-11-24 by date -u: opt/utilz/test 272 of 272 under BSD, 0 skipped, plan equal to bats counts; run 01M872BJ48VAVA4WXV14H1BAF8 had the same 272 under BSD, GNU and /bin/bash 3.2."
 }
