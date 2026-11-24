@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "Ibf2b53b853c153cc",
+  "origin": "01M8670P05VD903ECQXMM2RN6J",
+  "realised": true,
+  "slug": "opt-prez-test-prez-bats-runs-in-no-ci-job",
+  "title": "opt/prez/test/prez.bats runs in no CI job",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-24",
+  "reporter": "Matthew Sinclair",
+  "body": "Found by critic-shell's read of ST0031/02's tools/ci-suites on 23 Nov 2026, and filed on vc's word with ST0031/01's landing records.\n\n## The gap\n\nopt/prez/test/prez.bats runs in no CI job:\n\n- test-linux and test-macos run every utility's suite through tools/ci-suites, which leaves prez out, because prez's black-box suites need what only the rust job installs: node 26, ffmpeg, poppler and, on Linux, a display;\n- the rust job runs cargo build, cargo test and every crate/test/*.sh suite, and no bats;\n- the clippy job only lints.\n\nSo a change that breaks prez.bats still passes CI. The suite runs only where someone runs `utilz test prez` by hand. The gap is older than tools/ci-suites: test-macos left prez out the same way, and its comment said nothing was lost.\n\n## The fix (hv's scope)\n\nRun prez.bats on CI, either:\n\n- in tools/ci-suites, where prez is left out: its header says nothing in it builds the crate, and its arms that need the binary skip without one; or\n- in the rust job, after its build, where the binary exists.\n\nNeither has been run on a runner, so whether the suite passes there is unproven.\n\n## When\n\nvc recommends the next release, so as not to put this release's CI on a suite CI has never run.\n"
+}

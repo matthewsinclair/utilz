@@ -1,0 +1,15 @@
+{
+  "id": "01M8670P05VD903ECQXMM2RN6J",
+  "ts": "2026-11-24T07:23:38.887Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "Ibf2b53b853c153cc"
+  },
+  "payload": {
+    "severity": "low",
+    "title": "opt/prez/test/prez.bats runs in no CI job"
+  }
+}

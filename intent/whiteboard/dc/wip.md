@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-24 04:28Z
+heartbeat_at: 2026-11-24 07:23Z
 status: active
-focus: "23 Nov: ST0031/01 with /02 at eec4b900, slot 01M84ATR asked on vc's GO at 13:51Z, queued after cc's spike TM15WA, the Desk closed until hv's word; on devbin-vc's GO run, release, END; land on vc's word, the records ready in ~/Devel/scratch/utilz-dc/st0031-01/. ic's `showreel qr` read second: r1 and r2 sent, no finding left."
-claims: [ST0031/01, ISSUE:Ie8e55e87057927e0]
+focus: "24 Nov: ST0031/01 and /02 landed at 7c0b9538 and 00c87c15 on slot 01M84ATR's run; the landing records with vc; /01 open until the cut proves AC-01.4, /02 until CI proves its criteria."
+claims: [ST0031/01, ST0031/02]
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-- ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 is live and still asked (heavy; network, cargo and bats). It is P2 under devbin decision 286, after Molt's 1.4.8 cut, as dc asked devbin-vc on 23 Nov: the run is unmeasured, with a cold prez build and a 1800 s cap. Main at 9ccf44ad leaves the run's 17 paths and its three reader pins unmoved. On devbin-vc's GO: run, time it, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/. (edited)
+- ST0031/01 with /02, under (A) (hv decision 14): landed on main at 7c0b9538 (/02) and 00c87c15 (/01), proven by slot 01M84ATR's run at eec4b900, each checked by vc by change. After hv's push: AC-01.1 on the pushed sha and vc's read, with /02's criteria as CI proves them (AC-02.1 also at the next push that runs CI, AC-02.3 at the first candidate/ run or dispatch), then /02 done. /01 stays open until the cut proves AC-01.4. The worktree ~/Devel/scratch/utilz-dc/wt-st0031-01 and branch dc/st0031-01 go by the fold's checks. (edited)
 
 ## TODO
 

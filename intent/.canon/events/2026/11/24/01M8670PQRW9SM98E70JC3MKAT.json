@@ -1,0 +1,16 @@
+{
+  "id": "01M8670PQRW9SM98E70JC3MKAT",
+  "ts": "2026-11-24T07:23:39.640Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 26,
+    "text": "ST0031/01 with /02, under (A) (hv decision 14): landed on main at 7c0b9538 (/02) and 00c87c15 (/01), proven by slot 01M84ATR's run at eec4b900, each checked by vc by change. After hv's push: AC-01.1 on the pushed sha and vc's read, with /02's criteria as CI proves them (AC-02.1 also at the next push that runs CI, AC-02.3 at the first candidate/ run or dispatch), then /02 done. /01 stays open until the cut proves AC-01.4. The worktree ~/Devel/scratch/utilz-dc/wt-st0031-01 and branch dc/st0031-01 go by the fold's checks."
+  }
+}

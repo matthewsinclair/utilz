@@ -3,6 +3,7 @@
   "text": "Before tools/ci-state goes, the core gives Utilz the answers it gives: tools/ci-state and `bin/devbin ci-state`, each given the full sha, give the same verdict word on f2021ddc (green) and 1434e764 (failed), naming the same failed jobs on 1434e764. The formula's half, tools/formula's render against the core's, goes to issue I59c806c, where the template changes. Reworded on hv decision 14 (23 Nov 2026).",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "Probe (b) in slot 01M84ATR's run of run-st0031-01.sh (7705761a) at eec4b900, before tools/ci-state went, each reader given the full sha: on f2021ddc, main's tools/ci-state said green (run 41127538028) and the core's `bin/devbin ci-state` said green (run 41127538028); on 1434e764, main's said failed (run 41140741047: Rust (ubuntu-latest), Test Summary) and the core's said failed (run 41140741047: Rust (ubuntu-latest), Test Summary), the same failed jobs, read side by side by dc and vc. The core's reader was devbin 0.1.28's; 0.1.29 (main at 9ccf44ad) leaves lib/cmd/ci-state unchanged, by vc's read. Log: ~/Devel/scratch/utilz-dc/st0031-01/runs/st0031-01-20261124T071828Z.log (sha256 73f9b7ae). tools/ci-state retired at 00c87c15."
   }
 }

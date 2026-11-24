@@ -1,0 +1,14 @@
+{
+  "id": "01M8670NCPDCD334YKRX7J5DXS",
+  "ts": "2026-11-24T07:23:38.263Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-01.3"
+  },
+  "payload": {
+    "evidence": "Probe (b) in slot 01M84ATR's run of run-st0031-01.sh (7705761a) at eec4b900, before tools/ci-state went, each reader given the full sha: on f2021ddc, main's tools/ci-state said green (run 41127538028) and the core's `bin/devbin ci-state` said green (run 41127538028); on 1434e764, main's said failed (run 41140741047: Rust (ubuntu-latest), Test Summary) and the core's said failed (run 41140741047: Rust (ubuntu-latest), Test Summary), the same failed jobs, read side by side by dc and vc. The core's reader was devbin 0.1.28's; 0.1.29 (main at 9ccf44ad) leaves lib/cmd/ci-state unchanged, by vc's read. Log: ~/Devel/scratch/utilz-dc/st0031-01/runs/st0031-01-20261124T071828Z.log (sha256 73f9b7ae). tools/ci-state retired at 00c87c15."
+  }
+}

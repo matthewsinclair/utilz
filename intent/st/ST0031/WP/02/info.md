@@ -2,7 +2,7 @@
 wp_id: WP-02
 title: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
 scope: S
-status: Not Started
+status: WIP
 ---
 
 # WP-02: CI tuning, banked for the sweep's push: a cargo cache, test-linux's roster derived, and a timeout on the rust job
