@@ -1,0 +1,15 @@
+{
+  "id": "01M878EZAMFW7VB3H8GSN35AB6",
+  "ts": "2026-11-24T17:08:10.196Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 24 Nov 2026: the release dry run (Desk slot 01M878APGMRMAHBKF8WQ1C3W33, granted by devbin-vc, START 17:06:19Z, END 17:07:23Z) resolved 2.15.0 and stopped at pre-flight. The one remaining cause is that notarytool cannot query Apple under the devbin keychain profile from vc's shell, so the plan was not reached and the step order is not proven. vc's uncommitted pickup files also stopped the first try; vc committed them at 2540b6fd. devbin-vc's order: its 0.1.31 sweep onto 2540b6fd goes first, then hv runs the dry run in hv's own terminal (watch-out 23). vc holds intent sync --apply (41 view removals) until the sweep lands. Output: ~/Devel/scratch/utilz-vc/dryrun-20261124/."
+  }
+}

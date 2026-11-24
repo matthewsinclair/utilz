@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-24 17:05Z
+heartbeat_at: 2026-11-24 17:08Z
 status: active
-focus: "24 Nov 16:54Z: localfold for hv's estate compact (devbin-vc, 16:53Z). I59c806c landed at b58bb55e and pushed; CI run 45442089070 pending. Next: release dry run, first Desk slot after the compacts. Hold 31 stands."
+focus: "24 Nov 17:08Z: dry run stopped at pre-flight on hv's notary keychain; devbin-vc sweeps 0.1.31 onto 2540b6fd first, then hv runs the dry run. vc checks the sweep, then runs intent sync --apply. Hold 31 stands."
 claims: []
 ---
 
@@ -42,6 +42,7 @@ _(none)_
 - hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 13:01Z. hv's words: "ready, but be sure to sync with devbin-vc." The rest is vc's wording. It releases hold 30: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5, unchanged at 13:01Z). cc makes a fresh light ask at the Desk, devbin-vc grants it in its order, cc runs the load-only check under the slot, and then vc gives hv the command to run in hv's own terminal. vc tells devbin-vc first, as hv asked.
 - vc, 24 Nov 2026: devbin-vc relayed, after 14:45Z, words it gives as hv's in devbin-vc's window: "You have the Pen and the Desk. You have approval across all Claudes here to run whatever is needed to get the unified plan executed." It names the Utilz cut with its push, tap and formula, and pushes, as pre-approved. vc did not hear these words first-hand. A relayed word is not hv's approval in vc's session, and vc's own push is refused there, so vc pushes nothing and cuts nothing on it. The Utilz cut cannot go ahead in any case: by the plan it follows STca1b7f9's landing, which needs spike v3 and hv's live run at the keyboard, and its macOS leg needs hv's keychain in hv's own terminal (watch-out 23). Records, CHECKs and booked runs go on as before.
 - vc, 24 Nov 2026: issue I59c806c (devbin-cc) landed on main at b58bb55e, a fast-forward from 2423573c, at vc's date -u of 16:48Z. Its four commits were CHECKED by change: 2c9f7d99 (2523e259, 27 paths), e50fb93e (659ca8f4, 88), 0aaae2d0 (f1ef7d6d, 1) and b58bb55e (6cc4a0ac, 18). Each has 0 attribution and the (C) line last. Its proof is Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA (driver 5d212100): 272 of 272 under BSD, 0 skipped, the opt-tree guard clean, the red arm failing at the base, critic exit 0, and release check formula true, after none. hv pushed main to b58bb55e on both remotes. The issue closes when push run 45442089070 is green. The old AT notes keep their text. Next: the release dry run in the canon tree, in the Desk's first slot after hv's compacts (devbin-vc, 16:53Z).
+- vc, 24 Nov 2026: the release dry run (Desk slot 01M878APGMRMAHBKF8WQ1C3W33, granted by devbin-vc, START 17:06:19Z, END 17:07:23Z) resolved 2.15.0 and stopped at pre-flight. The one remaining cause is that notarytool cannot query Apple under the devbin keychain profile from vc's shell, so the plan was not reached and the step order is not proven. vc's uncommitted pickup files also stopped the first try; vc committed them at 2540b6fd. devbin-vc's order: its 0.1.31 sweep onto 2540b6fd goes first, then hv runs the dry run in hv's own terminal (watch-out 23). vc holds intent sync --apply (41 view removals) until the sweep lands. Output: ~/Devel/scratch/utilz-vc/dryrun-20261124/.
 
 ---
 
