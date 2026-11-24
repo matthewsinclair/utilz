@@ -81,7 +81,6 @@ Full contract: `intent/docs/critics.md` at the Intent install.
 - Never create steel thread or work package directories manually — use `intent st new` and `intent wp new`.
 - Never manually edit `status:` fields in info.md frontmatter — use `intent st start | done | cancel` and `intent wp start | done`.
 - Never use leading zeros for ST or WP specifiers (`ST0035` or `35`, never `0035`) — leading zeros parse as octal in bash.
-- Never manually wrap lines in markdown files — let the renderer handle it.
 
 <!-- Add project-specific NEVER DOs here. -->
 
