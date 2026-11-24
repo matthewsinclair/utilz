@@ -1,5 +1,5 @@
 ---
-verblock: "24 Nov 2026:v1.64: matts - sweep and views sync done"
+verblock: "24 Nov 2026:v1.65: matts - dry run passed"
 ---
 
 # Work In Progress
@@ -10,7 +10,6 @@ verblock: "24 Nov 2026:v1.64: matts - sweep and views sync done"
 
 ## TODO
 
-- hv: the release dry run, `bin/devbin release --minor --dry-run`, in hv's own terminal, since its pre-flight needs hv's keychain for notarytool; it must show the Menuz.app attach before the formula step.
 - hv: "ready" to vc for STca1b7f9's spike v3 in hv's own terminal (vc hold 31); cc asks the Desk, and vc gives hv the command at the grant.
 - cc: STca1b7f9's WP1, WP2, WP4's Mission Control leg and WP6's create, once the spike's results are read; then the thread's one Desk run. Issue I7fce35c closes with AC-322a6511.6, .7 and AC-026eadfc.1 to .4.
 - hv: STca1b7f9's live run on the dev tree, and a phone scan of one QR `showreel qr` wrote (AC-702cceb9.8).

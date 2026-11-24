@@ -5,9 +5,9 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "7386a9d5-ebce-4a62-bbeb-a887311d02fd",
-    "heartbeat_at": "2026-11-24T17:08:10.344Z",
+    "heartbeat_at": "2026-11-24T17:21:17.777Z",
     "status": "active",
-    "focus": "24 Nov 17:08Z: dry run stopped at pre-flight on hv's notary keychain; devbin-vc sweeps 0.1.31 onto 2540b6fd first, then hv runs the dry run. vc checks the sweep, then runs intent sync --apply. Hold 31 stands.",
+    "focus": "24 Nov 17:21Z: hv's dry run passed (vc decision 117): 2.15.0, attach before formula. hv pushes main. Hold 31 stands.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2737,6 +2737,14 @@
       "text": "vc, 24 Nov 2026: the release dry run (Desk slot 01M878APGMRMAHBKF8WQ1C3W33, granted by devbin-vc, START 17:06:19Z, END 17:07:23Z) resolved 2.15.0 and stopped at pre-flight. The one remaining cause is that notarytool cannot query Apple under the devbin keychain profile from vc's shell, so the plan was not reached and the step order is not proven. vc's uncommitted pickup files also stopped the first try; vc committed them at 2540b6fd. devbin-vc's order: its 0.1.31 sweep onto 2540b6fd goes first, then hv runs the dry run in hv's own terminal (watch-out 23). vc holds intent sync --apply (41 view removals) until the sweep lands. Output: ~/Devel/scratch/utilz-vc/dryrun-20261124/.",
       "state": "live",
       "recorded_at": "2026-11-24T17:08:10.196Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 117,
+      "text": "vc, 24 Nov 2026: the release dry run passed in hv's own terminal, on main at b3f9a633, as devbin-vc relayed to vc before vc's date -u of 17:21Z. vc did not read the output first-hand. By devbin-vc's read: it resolved 2.15.0, and no step failed. The pre-flight passed with hv's keychain. The object step attaches Menuz.app.zip and SHA256SUMS, and then the formula step runs formula publish --pull, so the step order is proven. The legs are candidate, local and macos. This closes decision 116's open point. Next: hv pushes main (2540b6fd..b3f9a633 and this record) to upstream and local.",
+      "state": "live",
+      "recorded_at": "2026-11-24T17:21:17.630Z"
     }
   ],
   "sent": [

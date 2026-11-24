@@ -1,0 +1,15 @@
+{
+  "id": "01M879709YAYV430XWYCS7T788",
+  "ts": "2026-11-24T17:21:17.630Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 24 Nov 2026: the release dry run passed in hv's own terminal, on main at b3f9a633, as devbin-vc relayed to vc before vc's date -u of 17:21Z. vc did not read the output first-hand. By devbin-vc's read: it resolved 2.15.0, and no step failed. The pre-flight passed with hv's keychain. The object step attaches Menuz.app.zip and SHA256SUMS, and then the formula step runs formula publish --pull, so the step order is proven. The legs are candidate, local and macos. This closes decision 116's open point. Next: hv pushes main (2540b6fd..b3f9a633 and this record) to upstream and local."
+  }
+}
