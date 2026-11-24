@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+#
+# ci-suites -- every utility's suite but prez's, as CI's two test jobs run
+# them (ST0031/02): `utilz test` for the dispatcher, then for each utility the
+# tree installs, stopping at the first that fails.
+#
+# ONE ROSTER, AND IT IS each_utility'S. test-linux carried its own list of
+# utilities, which every new utility had to be added to by hand or go untested
+# on that leg with nothing reporting the gap, while test-macos derived its
+# roster from `utilz list`, a listing written for people. Both jobs now run
+# this, which iterates each_utility (opt/utilz/lib/common.sh), the one walker
+# of bin/ that `utilz test` itself iterates, so a utility is covered on both
+# legs the day it lands, and the roster has one home.
+#
+# prez IS LEFT TO THE rust JOB, DELIBERATELY, and not because it is failing.
+# `utilz test prez` drives three sources: cargo, BATS, and the crate's
+# black-box suites, which always pass --strict. Those suites need what only
+# the rust job installs: node 26, ffmpeg, poppler and, on Linux, a display.
+# Here they would skip, and --strict counts a skip as a failure, correctly.
+# The rust job builds and tests the crate across its os matrix and runs every
+# crate/test/*.sh suite, and the clippy job lints every crate. prez's BATS
+# suite, opt/prez/test/prez.bats, runs in neither, nor in any CI job: that gap
+# is older than this file, which does not close it.
+#
+# The tree's own dispatcher and lib, never PATH's: on a desk a plain `utilz`
+# can be a Homebrew install.
+set -euo pipefail
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+utilz="$root/bin/utilz"
+# shellcheck source=opt/utilz/lib/common.sh
+. "$root/opt/utilz/lib/common.sh"
+
+# Read whole first, with its own status, so a walk that fails stops the run
+# here, and one that names nothing is refused by name rather than run as a
+# roster of the dispatcher alone.
+names="$(each_utility "$root")"
+if [ -z "$names" ]; then
+  echo "ci-suites: $root/bin holds no utility, so there is nothing to test" >&2
+  exit 1
+fi
+utilities=(utilz)
+while IFS= read -r name; do
+  utilities+=("$name")
+done <<<"$names"
+
+for utility in "${utilities[@]}"; do
+  if [ "$utility" = prez ]; then
+    echo "Skipping prez here: the rust job runs its suites, as the header of tools/ci-suites says."
+    continue
+  fi
+  echo "== $utility =="
+  "$utilz" test "$utility"
+done

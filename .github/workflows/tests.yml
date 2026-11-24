@@ -91,22 +91,10 @@ jobs:
         utilz list
         utilz version
 
+    # Every utility but prez, from the dispatcher's own list, as test-macos
+    # runs them (ST0031/02). tools/ci-suites says why prez is the rust job's.
     - name: Run tests
-      run: |
-        # NOTE THE ASYMMETRY, which is a known defect and not a style choice:
-        # this roster is hardcoded while test-macos derives its own from
-        # `utilz list`, so a new utility is covered there for free and must be
-        # added HERE by hand or it goes untested on this leg with nothing
-        # reporting the gap. stampz (ST0011) was added on 2026-09-03, arngz
-        # (ST0026) on 2026-10-16: its suite stubs Hammerspoon out; menuz (ST0027)
-        # the same day: its suite fakes the app. cleanz, clipz and macoz joined
-        # with issue 0083: clipz's suite stubs the clipboard (issue 0082), and
-        # macoz's proves its refusal off macOS. Fixing
-        # the roster is its own change; this line is the toll until then.
-        for utility in utilz cryptz gitz mdagg retry syncz pdf2md xtrct lnrel todo expz stampz arngz menuz cleanz clipz macoz; do
-          echo "Testing: $utility"
-          utilz test $utility || exit 1
-        done
+      run: tools/ci-suites
 
   test-macos:
     name: Test on macOS
@@ -166,38 +154,10 @@ jobs:
         utilz version
         echo "bash on PATH: $(command -v bash), $(bash -c 'echo "$BASH_VERSION"')"
 
+    # Every utility but prez, from the dispatcher's own list, as test-linux
+    # runs them (ST0031/02). tools/ci-suites says why prez is the rust job's.
     - name: Run tests
-      run: |
-        # EVERY UTILITY EXCEPT prez, and the roster is DERIVED from the
-        # dispatcher rather than listed here. A hardcoded list is a second
-        # roster: test-linux carries one, and the next utility added there
-        # goes untested on that leg with nothing reporting it. Deriving means
-        # a new utility is covered on macOS the day it lands.
-        #
-        # prez is excluded DELIBERATELY, and not because it is failing. It is
-        # the first utility needing a toolchain, and `utilz test` drives three
-        # sources for it -- cargo, BATS, and acceptance.sh with --strict always
-        # hard-coded. This runner has no Rust, so the cargo leg reports
-        # "Required command not found: cargo"; it has no Chrome or node, so
-        # eleven acceptance checks cannot run; and it can never have `intent`,
-        # so AT09's critic gate skips on any runner that will ever exist.
-        # --strict counts a skip as a failure, correctly -- which makes it the
-        # wrong instrument for a machine that legitimately lacks the tools.
-        #
-        # NOTHING IS LOST. The crate is covered by the dedicated `rust` job
-        # (cargo build + cargo test across the os matrix) and by `clippy`
-        # (--all-targets -D warnings), both of which install a toolchain. The
-        # `all-green` gate needs both. acceptance.sh stays a developer-machine
-        # gate, which is honest about what it needs rather than degrading to a
-        # green that measured nothing.
-        for utility in utilz $(utilz list | awk '/^  [a-z]/ {print $1}'); do
-          if [ "$utility" = "prez" ]; then
-            echo "Skipping prez here -- covered by the rust and clippy jobs; see the comment above."
-            continue
-          fi
-          echo "== $utility =="
-          utilz test "$utility" || exit 1
-        done
+      run: tools/ci-suites
 
   shellcheck:
     name: Shell Script Analysis
@@ -279,6 +239,11 @@ jobs:
   rust:
     name: Rust (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    # A bound on the whole leg (issue 0131). A green leg takes 5.5 to 7.1
+    # minutes on ubuntu and 11.1 on macOS (runs 41127529723, 41140741047 and
+    # 41127538028); a stalled one held its leg for 22.9 until it was cancelled
+    # by hand, and GitHub's own bound is 360.
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
@@ -289,6 +254,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7.0.1
+
+    # The dependencies' build products and cargo's registry, kept between runs
+    # (ST0031/02). Each leg compiles its dependencies twice, for the release
+    # build and for its tests: 34 s and more on ubuntu, two minutes on macOS
+    # (run 41140741047, and 41127538028's macOS leg). Keyed on the toolchain,
+    # Cargo.lock and the leg's os, and dependencies only: the workspace's own
+    # crates always build fresh. A third party's action, so it is pinned by
+    # the commit its tag named when read, not by the tag, which can move.
+    - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      with:
+        workspaces: opt/prez/crate -> target
+        key: ${{ matrix.os }}
 
     # AT12 (determinism) drives Chrome over CDP from a plain .mjs with no
     # dependencies -- it relies on Node's GLOBAL WebSocket, which is why the
