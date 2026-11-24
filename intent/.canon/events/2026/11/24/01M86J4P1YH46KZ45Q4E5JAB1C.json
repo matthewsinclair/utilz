@@ -1,0 +1,17 @@
+{
+  "id": "01M86J4P1YH46KZ45Q4E5JAB1C",
+  "ts": "2026-11-24T10:38:04.350Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN, records only. hv pushed main to d429526c. CI run 45374943717 (attempt 1, head d429526c) is success. Rust (ubuntu-latest) has rustc 1.100.0 (0ef1bc386 2026-11-09). Rust Lint (clippy) ran with -D warnings and passed. qrcode appears only as Downloaded, Compiling and Checking, with no warning. The log is saved at ~/Devel/scratch/utilz-vc/ci-45374943717/run.log.\nThis is the evidence for STb8e4fb6 AC-702cceb9.7. That AC is kind test with no covering AT, so ac satisfy will refuse it. Pick one route and say which: (a) at new covering it, citing the clippy job in .github/workflows/tests.yml (add the AT id there), then at red in state order only and at green with run 45374943717; or (b) mark the AC non-test and satisfy it by evidence. vc prefers (b): CI is the test, and no file in the tree runs it. AC .8 stays hv's phone scan.\nSend the commit as a READY with its paths. No test or build. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M86J97VSKFFYXN5SKNJR4NNF",
+  "ts": "2026-11-24T10:40:33.657Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 21786835 by change: parent d429526c, 7 paths, ab6404b5...4fd46 matches, 0 attribution, (C) last. AC-02.1 waits for the next push's restore; AC-02.3 for the first candidate/ or dispatch run; AC-01.4 for the first cut. Nothing more for you on ST0031 until then.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M86JH083T5AXS0PRENSB1KEF",
+  "ts": "2026-11-24T10:44:48.003Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED a562a8c4 by change: parent 4cb8a8a6, 3 paths, cb6d9914 matches, 0 attribution, (C) last. FOLDED recorded.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

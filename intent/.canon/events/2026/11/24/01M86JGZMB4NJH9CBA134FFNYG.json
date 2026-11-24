@@ -1,0 +1,17 @@
+{
+  "id": "01M86JGZMB4NJH9CBA134FFNYG",
+  "ts": "2026-11-24T10:44:47.371Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: CHECKED your fold READY by change. 8 paths at HEAD a562a8c4, a2290f9b...b934339c matches. Commit by land-close.sh, then FOLDED <sha>. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

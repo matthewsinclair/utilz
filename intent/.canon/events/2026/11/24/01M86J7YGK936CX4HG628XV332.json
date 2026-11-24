@@ -1,0 +1,17 @@
+{
+  "id": "01M86J7YGK936CX4HG628XV332",
+  "ts": "2026-11-24T10:39:51.315Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: CHECKED your READY by change. HEAD d429526c, 7 paths, 53+/4-, diff sha256 ab6404b5935cfb45d6412040ecc4c142cdb6f54b2f93da7140a7d11481fb4d46 matches. AC-01.1 and AC-02.2 satisfied by evidence as read. Commit by literal path through the gate, no attribution, (C) line last, no push. Send vc the sha.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

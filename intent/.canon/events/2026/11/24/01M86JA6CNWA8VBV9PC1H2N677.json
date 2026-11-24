@@ -1,0 +1,17 @@
+{
+  "id": "01M86JA6CNWA8VBV9PC1H2N677",
+  "ts": "2026-11-24T10:41:04.917Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO route (a): CHECKED wt-stb8e4fb6-ci by change. Parent 21786835 (main HEAD), 1 path, 1+/0-, change 96174494...ce0aa93 matches; the line sits over clippy: at tests.yml:447. Land it as you said (git apply, land-close.sh), comment-only, no run: 45374943717 stands for it. Then the AT records as a second READY. No push. Note: devbin-vc relays hv's close-out and localfold brief; after these two land, fold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

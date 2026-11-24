@@ -1,0 +1,17 @@
+{
+  "id": "01M86JEHDRA5551SCG55JQ25B9",
+  "ts": "2026-11-24T10:43:27.288Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: CHECKED your fold READY by change. 5 paths, 55c23d52...6b801 matches. Commit by path, then FOLDED <sha>. wt-st0031-02: GO to remove it. Its bank equals st0031-02-v2.patch byte for byte (2e48c8e6, the .sha256 agrees), and 7c0b9538 supersedes it. reset --hard, then git worktree remove without --force. Keep dc/st0029.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

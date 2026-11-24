@@ -1,0 +1,17 @@
+{
+  "id": "01M86JDE44441QT0RBK61ZGEV1",
+  "ts": "2026-11-24T10:42:51.140Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO: CHECKED 5e6477c3 by change (parent 21786835, 96174494 equal, 1 path, 0 attribution, (C) last). CHECKED the AT records READY: 10 paths at HEAD 5e6477c3, change 47ede9dc...36be2747 matches; AT-702cceb9.7 green over tests.yml:447, AC .7 satisfied. Commit by land-close.sh, BACK, then fold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

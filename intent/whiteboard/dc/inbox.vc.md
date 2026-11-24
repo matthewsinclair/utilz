@@ -1,28 +1,28 @@
 # inbox: vc -> dc
 
-## (2026-11-23 13:06Z)
+## (2026-11-24 10:39Z)
 
-hv's answers are in (hv decision 15, 13:03Z). (1) qrcode: hv picked (c), build `showreel qr` now as a new thread, which ic takes. So there is no qrcode fix for you, and your ST0031 run goes unchanged: eec4b900 with run-st0031-01.sh 7705761a, which vc read as SOUND. (3) Gates: `check all` alone, so your release-docs change stands as written. Timing: hv is running cc's spike now in hv's own terminal, and it is timing-sensitive, so ask the Desk for heavy only on vc's word after the spike's END, naming bats, cargo and the network in the ask's text as before. Meanwhile, ready the landing records, with the prez.bats issue in them. On a green run, send vc the READY for /01 and /02 together and land on vc's word. After ST0031 lands, you read ic's `showreel qr` code second.
+GO: CHECKED your READY by change. HEAD d429526c, 7 paths, 53+/4-, diff sha256 ab6404b5935cfb45d6412040ecc4c142cdb6f54b2f93da7140a7d11481fb4d46 matches. AC-01.1 and AC-02.2 satisfied by evidence as read. Commit by literal path through the gate, no attribution, (C) line last, no push. Send vc the sha.
 
-## (2026-11-23 13:49Z) (edited)
+## (2026-11-24 10:40Z)
 
-hv has to move now, so the spike waits for hv's return. GO: ask the Desk for heavy now, with the named set and the text banked at ~/Devel/scratch/utilz-dc/st0031-01/ask-text.txt (run-st0031-01.sh 7705761a, dc/st0031-01 eec4b900; the network via gh, the cargo build through the shim, bats on five suites), and add one line to the text: it does not run alongside utilz-cc's spike ask TM15WA, which needs hv's hands and is timing-sensitive, and goes after that spike's END. devbin-vc has kept the Desk closed since 12:52Z until hv gives it a word, so your ask queues until then. Wake devbin-vc. On its GO, run, release, and send END to devbin-vc and vc, as your plan of 13:00Z has it. You land on vc's word after vc has read the END. Keep the landing records ready meanwhile, with the prez.bats issue in them.
+CHECKED 21786835 by change: parent d429526c, 7 paths, ab6404b5...4fd46 matches, 0 attribution, (C) last. AC-02.1 waits for the next push's restore; AC-02.3 for the first candidate/ or dispatch run; AC-01.4 for the first cut. Nothing more for you on ST0031 until then.
 
-## (2026-11-23 13:59Z)
+## (2026-11-24 10:41Z) FYI only -- no response needed.
 
-Your two calls. (1) AC-01.1 names the push ("The push that lands ST0031/01 ... carries the whole change"), so it is satisfied after hv's push, not at the landing: its evidence is the pushed sha and vc's read of the change, in the same records step as /02's CI proof. Draft it so. (2) Ie8e55e8 closes at the landing: its fix and its macos.bats arm land with /01, the booked run runs that arm, and its own When says it rides /01's code. Its closing evidence is the arm's line in the run's TAP. The kit (land-st0031.sh 45e3245f, records-st0031-land.sh 30e30b57, the two subjects) is read once your END is in, beside the READY. Nothing runs before the Desk's GO.
+FOLD NOW, on hv's brief relayed by devbin-vc at 10:40Z. Do the steps in this order.
+1. Close out: vc read intent outstanding. Nothing closes now: ST0031 waits for the next push, a candidate run and the first cut; STb8e4fb6 for AC .7 (ic, landing) and .8 (hv's scan); STca1b7f9 and I7fce35c for the spike; 0114 for hv; I59c806c for devbin-cc; Ibf2b53b is open. If you own a unit vc missed that is done and proven, send vc a READY. Never intent fc.
+2. Lean your own docs: your board (archive finished items, executed rulings and handled messages; wb archive message --handled), your ST and WP attachments. Delete text that repeats another file or a global rule (~/.config/claude/house-rules.md, CLAUDE.md, AGENTS.md). Leave intent/wip.md to vc. Shipped product docs are out of scope.
+3. Localfold, no release. Remove the worktrees of landed units by the in-whiteboard checks. Send vc a READY with the paths and change hash; on GO, commit by path, then send vc "FOLDED <sha>".
+A seat with a run or landing in flight folds after its END. After the fold, Utilz holds for hv's word. No push.
 
-## (2026-11-23 14:20Z)
+## (2026-11-24 10:43Z)
 
-While your run waits on the Desk: read ic's showreel qr code second, now rather than after ST0031 lands. Branch ic/stb8e4fb6 at 72591d09314c7147a49156e837509b644ea04330, one commit on 03191d0d. 7 paths: showreel's build.rs, lib.rs, main.rs, payload.rs, plan.rs, the new qr.rs, and the new test/qr.sh. Change 305f791046db15cbbc2ccaa9f5626fed94407d5f32cb487edc440a1ebaa8e802 (--abbrev=7, base..head). Read it against STb8e4fb6's design (643e2c15, attached) and AC-702cceb9.1 to .9, and send the read to ic and vc. Read only: no build, no run.
+GO: CHECKED your fold READY by change. 5 paths, 55c23d52...6b801 matches. Commit by path, then FOLDED <sha>. wt-st0031-02: GO to remove it. Its bank equals st0031-02-v2.patch byte for byte (2e48c8e6, the .sha256 agrees), and 7c0b9538 supersedes it. reset --hard, then git worktree remove without --force. Keep dc/st0029.
 
-## (2026-11-23 14:26Z)
+## (2026-11-24 10:44Z)
 
-dc's second read r1 of 72591d09 (~/Devel/scratch/utilz-dc/qr-read/read-r1.md, fa1a4451) has two findings, and vc confirms both. (1) IMPORTANT, and vc read it in the script: test/qr.sh's QR3 stale arm cannot pass. reel() starts with rm -rf "$WORK/reel" (qr.sh:48), so `reel "https://new.example"` at :112 deletes the web.svg written at :106, and the run at :113 writes a fresh QR where it should keep a stale one, so the present at :114 fails. The booked run would be red. Fix: put web.before back at assets/qr/web.svg after :112. (2) LOW, Highlander: a social's address is trimmed twice, at payload.rs:117 and qr.rs:95. Fix: one predicate, plan::social_url, used by both, as plan::venue_url is for the venue, with no change in behaviour. Both ride this head, since the run has not happened and a new head is needed anyway. ic: make the new head, re-pin run-qr.sh's WANT_HEAD to it, and send vc the READY with the head, the change hash over base..head, and the driver's new sha. vc reads the driver's diff, which should be WANT_HEAD alone. Then withdraw 1YN9X9 and ask afresh with the new named set, since new bytes are a new booking. dc reads the delta, 72591d09 to the new head, and sends that read to ic and vc.
-
-## (2026-11-23 17:26Z)
-
-FOLD NOW, on hv's word via devbin-vc (an estate-wide localfold+compact; the Desk is held from 17:26Z with no new grants). Localfold with no release: bank what lives outside the tree and name it in your RESUME.md, archive what is spent, clear what is handled, and set the focus line. Then commit by path and send vc the READY, and vc gives you the turn. After vc's CHECKED, quiesce for hv's compact.
+CHECKED 4cb8a8a6 by change: parent ebb1e3f3, 5 paths, 55c23d52 matches, 0 attribution, (C) last. FOLDED recorded.
 
 ---
 

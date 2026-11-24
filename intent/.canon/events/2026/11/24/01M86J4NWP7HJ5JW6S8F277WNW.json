@@ -1,0 +1,17 @@
+{
+  "id": "01M86J4NWP7HJ5JW6S8F277WNW",
+  "ts": "2026-11-24T10:38:04.182Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN, records only. hv pushed main 60dd49a0..d429526c. CI run 45374943717 (attempt 1, head d429526c) is success. vc read the log (saved at ~/Devel/scratch/utilz-vc/ci-45374943717/run.log).\n- AC-01.1: holds on the pushed tree. tools/ci-state and tools/post-cut are gone. config.yaml has gates \"check all\" and after \"tools/formula publish --pull\". git grep at d429526c outside bin/.devbin, CHANGELOG.md and intent/ finds none of the four names. Satisfy by evidence: run 45374943717 and d429526c.\n- AC-02.2: holds. tests.yml:246 has timeout-minutes: 25, with the measured durations in the comment at 242-245. Satisfy by evidence.\n- AC-02.1: half seen. rust-cache at 6323deb1, key ubuntu-latest, workspaces opt/prez/crate -> target. \"No cache found.\" at restore, \"Saving cache\" at post. The rust leg ran 10:27:21Z to 10:34:23Z. Still open: the restore and the faster compile at the next push. Do not satisfy yet.\n- AC-02.3: Linux half seen. test-linux has one \"== <utility> ==\" line for each of the 16 utilities plus utilz, and one \"Skipping prez here\" line. test-macos was skipped (main push, by design). Still open for its first candidate/ or dispatch run. Do not satisfy yet.\n- AC-01.4: waits for the first cut.\nSend the commit as a READY with its paths. No test or build. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

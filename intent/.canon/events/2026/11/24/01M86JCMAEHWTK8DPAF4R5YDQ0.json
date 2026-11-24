@@ -1,0 +1,172 @@
+{
+  "id": "01M86JCMAEHWTK8DPAF4R5YDQ0",
+  "ts": "2026-11-24T10:42:24.718Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.archive",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "message",
+    "messages": [
+      {
+        "id": "01M84866CVHKPBH28YWN7DE1ZH",
+        "to": "cc"
+      },
+      {
+        "id": "01M8487VDVAFHXQQXW1CHD1WV4",
+        "to": "dc"
+      },
+      {
+        "id": "01M8487VJC6JV2TNP0KX8C6621",
+        "to": "ic"
+      },
+      {
+        "id": "01M84APH2TV6TPVEEC0ASHWH5Z",
+        "to": "cc"
+      },
+      {
+        "id": "01M84APH81HTGJTMHXAMBZXY2B",
+        "to": "dc"
+      },
+      {
+        "id": "01M84APHCWME8T4BNX0T9TT4Q9",
+        "to": "ic"
+      },
+      {
+        "id": "01M84AZD234QEPQDRA0GXT3NTY",
+        "to": "cc"
+      },
+      {
+        "id": "01M84B93N76HWVS4R9J13T5BW7",
+        "to": "ic"
+      },
+      {
+        "id": "01M84B93T62PMKVKAC5ZG66V5E",
+        "to": "dc"
+      },
+      {
+        "id": "01M84B93Z78Q8PT50S9BBKNABT",
+        "to": "cc"
+      },
+      {
+        "id": "01M84BAGA2JNAASQVM3KGM9YRQ",
+        "to": "ic"
+      },
+      {
+        "id": "01M84BQRCEP8M6QZX8CGTKD3M2",
+        "to": "cc"
+      },
+      {
+        "id": "01M84BSFDP55S6QTQCV8HHDYJH",
+        "to": "cc"
+      },
+      {
+        "id": "01M84BX65YA8RQBY4D3R91CMFM",
+        "to": "cc"
+      },
+      {
+        "id": "01M84BX6ASTEHAB69G0S8MPN3F",
+        "to": "ic"
+      },
+      {
+        "id": "01M84C053Z2GCK3AWJ022CRTJ1",
+        "to": "cc"
+      },
+      {
+        "id": "01M84C1K8DEQV7MJY74KBNX75M",
+        "to": "cc"
+      },
+      {
+        "id": "01M84C4WQH4PKKTZ099HP4DN60",
+        "to": "cc"
+      },
+      {
+        "id": "01M84C9QHHXCWMRA29CHNRS1X0",
+        "to": "cc"
+      },
+      {
+        "id": "01M84CFNCV69XF1F3Y7BWPBGEA",
+        "to": "ic"
+      },
+      {
+        "id": "01M84CFNHNVYQ4VYM4DWP5XND2",
+        "to": "dc"
+      },
+      {
+        "id": "01M84CFNP59M1XPXB7ZSY66YAB",
+        "to": "cc"
+      },
+      {
+        "id": "01M84CHBS97ED3BPHACANACMSP",
+        "to": "ic"
+      },
+      {
+        "id": "01M84CTMV8BD3FRPMVDM1RKM4S",
+        "to": "ic"
+      },
+      {
+        "id": "01M84CTMZY6YMW24NGKN2DDN82",
+        "to": "dc"
+      },
+      {
+        "id": "01M84CXKNV6KZF1X7509RG7MR3",
+        "to": "ic"
+      },
+      {
+        "id": "01M84ECGBHX9C86DNSP2WTH410",
+        "to": "cc"
+      },
+      {
+        "id": "01M84EF5PNSRVFPR6GRZG01KJQ",
+        "to": "ic"
+      },
+      {
+        "id": "01M84EJQ3CJ691PRPR6GW4BCFB",
+        "to": "cc"
+      },
+      {
+        "id": "01M84EKECM4N28ERHKCSY2M41W",
+        "to": "cc"
+      },
+      {
+        "id": "01M84G446FBP0SK6K7NE6X31E3",
+        "to": "cc"
+      },
+      {
+        "id": "01M84G82ZHNM95WTQ50GF8K3F3",
+        "to": "cc"
+      },
+      {
+        "id": "01M84G8R2ZYR8PF74DK67T3KXW",
+        "to": "cc"
+      },
+      {
+        "id": "01M84GA9GR0JQ0JRV0Y5N4BHKF",
+        "to": "ic"
+      },
+      {
+        "id": "01M84GB1T04T1ARFZ09W3KBV4D",
+        "to": "ic"
+      },
+      {
+        "id": "01M84Q3XFW884S0NJA7KQPNPVN",
+        "to": "cc"
+      },
+      {
+        "id": "01M84Q3XN95GJWZXXYPC9JQZ20",
+        "to": "dc"
+      },
+      {
+        "id": "01M84Q3XTCVSE7842FC493MPGX",
+        "to": "ic"
+      },
+      {
+        "id": "01M86J4NWP7HJ5JW6S8F277WNX",
+        "to": "dc"
+      }
+    ]
+  }
+}

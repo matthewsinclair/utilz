@@ -1,0 +1,17 @@
+{
+  "id": "01M86JEHJYC3YTZJECMCEPJRHX",
+  "ts": "2026-11-24T10:43:27.454Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED ebb1e3f3 by change (parent 5e6477c3, 47ede9dc equal, 10 paths, 0 attribution, (C) last). STb8e4fb6 AC .7 is done; .8 stays hv's scan. Fold READY next.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

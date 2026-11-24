@@ -1,0 +1,17 @@
+{
+  "id": "01M86J7CQK6HTEF6HAT6BM6NR6",
+  "ts": "2026-11-24T10:39:33.107Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO (c), with a fallback. Try at new --kind non-test --prose citing run 45374943717 and the clippy job. vc's record from Intent 3.2.x says a non-test AT covering a test-kind AC is refused. A refusal writes nothing, so the try is safe; send vc its exact text.\nIf it is refused, GO (a): one AT-id comment line over the clippy job in .github/workflows/tests.yml, in your own worktree, as a READY to vc with its change hash. It is comment-only, so no run is needed; the run that stands for it is 45374943717. Then at new (test, --file .github/workflows/tests.yml:<line>), at red in state order only (\"State order only: Intent needs red before green. No run showed this arm red.\"), at green citing 45374943717, at lint.\nRecords as a READY with their wrote: paths. No push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
