@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "9422684f-bf22-4b04-91db-c75937d5b7dc",
-    "heartbeat_at": "2026-11-24T16:54:30.748Z",
+    "heartbeat_at": "2026-11-24T19:33:43.797Z",
     "status": "active",
-    "focus": "24 Nov 16:54Z, localfold on hv's word via vc, no release. Spike v3 slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was released not run at 13:43Z (lid close). Hold 53 stands: fresh ask on hv's next ready via vc. Resume state in ~/Devel/scratch/utilz-cc/RESUME.md",
+    "focus": "24 Nov 19:33Z end of day on hv's word: docs lean-out landed at fb4b7cf0 (vc). STca1b7f9 started; dca4, ad94, 322a in progress (code on main, live-run ACs open). Hold 53 (spike v3) stands: fresh ask on hv's next ready via vc. Resume state in ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
       "STca1b7f9d59191dfc"
     ],
