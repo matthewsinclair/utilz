@@ -1,0 +1,10 @@
+{
+  "id": "AT-322a6511.4",
+  "kind": "test",
+  "file": "opt/arngz/test/engine_test.lua:284",
+  "covers": [
+    "AC-322a6511.4"
+  ],
+  "status": "green",
+  "note": "engine_test.lua's arm 10, run by engine.bats. State order only: Intent needs red before green. No run showed this arm red. Green: Desk slot 01M85XY3 ran engine.bats at c3b49875 (run-stca1b.sh 583a158f, TAP stca1b/runs/stca1b-20261124T072237Z.tap, rc 1 from arngz.bats alone), and engine.bats was all ok. 18870cc5 differs from c3b49875 only by f5451a0e, which changes help/arngz.md, plan_test.lua and plan.lua; engine_test and log_test load plan.lua, but its change is only FILTER_FIX's words and two comments, and no engine, log or toast test reads FILTER_FIX. The AT id is at 3fd0923c."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT-322a6511.2",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua:333",
+  "covers": [
+    "AC-322a6511.2"
+  ],
+  "status": "green",
+  "note": "plan_test.lua's arm at line 334, run by arngz.bats test 37. Red: Desk slot 01M85XY3 ran arngz.bats at c3b49875 (run-stca1b.sh 583a158f, TAP stca1b/runs/stca1b-20261124T072237Z.tap), and its test 37, which runs plan_test.lua, was not ok, on the check at plan_test.lua:890 and not this arm. Green: Desk slot 01M867BQ ran arngz.bats at f5451a0e (run-stca1b-2.sh e1644075, TAP stca1b/runs/stca1b-2-20261124T083815Z.tap), rc 0, 182 of 182, test 37 ok; the bytes landed on main at 18870cc5, with the AT id at 3fd0923c."
+}

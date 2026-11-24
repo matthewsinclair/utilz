@@ -13,7 +13,7 @@ claims: [STca1b7f9d59191dfc]
 
 ## DOING
 
-- STca1b7f9's code on branch cc/stca1b7f9 in ~/Devel/scratch/utilz-cc/wt-stca1b, no run: WP3 and WP4's failure half (8620c933), issue Ib12d894 (ee8337da), WP6 but its create's M2 part (4ce6eec1), and ic's progress.md nit (3efc3397); ic's second reads all SOUND, and ic's toasts are stacked on it (4b20e2b8, 109fbccf). Next: the spike on hv's word, then the spike's code (WP1, WP2, the mission leg, WP6's create), ic's last rebase, and the one booked run by stca1b/run-stca1b.sh (bac09793, HEAD_WANT set at the GO). (edited)
+- STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
 
 ## TODO
 

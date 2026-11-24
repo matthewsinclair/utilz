@@ -1,0 +1,10 @@
+{
+  "id": "AT-ad94d40b.2",
+  "kind": "test",
+  "file": "opt/arngz/test/toast_test.lua:182",
+  "covers": [
+    "AC-ad94d40b.2"
+  ],
+  "status": "green",
+  "note": "toast_test.lua's arm at line 183, run by toast.bats. State order only: Intent needs red before green. No run showed this arm red. Green: Desk slot 01M85XY3 ran toast.bats at c3b49875 (run-stca1b.sh 583a158f, TAP stca1b/runs/stca1b-20261124T072237Z.tap, rc 1 from arngz.bats alone), and toast.bats was all ok. 18870cc5 differs from c3b49875 only by f5451a0e, which changes help/arngz.md, plan_test.lua and plan.lua; engine_test and log_test load plan.lua, but its change is only FILTER_FIX's words and two comments, and no engine, log or toast test reads FILTER_FIX. The AT id is at 3fd0923c."
+}
