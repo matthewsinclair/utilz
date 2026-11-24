@@ -8,37 +8,37 @@
 
 ## Purpose
 
-`prez` turns a markdown deck into **one self-contained HTML file**. That file opens offline, from a USB stick, from an email attachment, in five years -- there is nothing beside it to lose.
+`prez` turns a markdown deck into **one self-contained HTML file**. That file opens offline, eg from a USB stick or an email attachment. It needs no other file.
 
-**It is a pipeline, not a viewer.** prez writes a file and stops. The browser does the presenting: there is no server, no watch-me-render mode, and there never will be. Every feature request beginning "and then prez could serve..." is answered by that sentence.
+**It is a pipeline, not a viewer.** prez writes a file and stops. The browser shows the presentation. prez has no server and no live render mode.
 
-**`prez showreel` does not weaken that, and the distinction is exact rather than a carve-out.** The sentence above said "no player" until 2026-09-09, and a showreel artifact carries one INSIDE the single file it writes -- the reel advances itself in a browser, from a USB stick, with nothing installed and nothing served. prez still writes a file and stops; what is new is that one of the files it writes happens to animate once opened. **The anti-requirement is about prez SERVING or WATCHING, and neither has moved.** A player that ships inside the artifact is the opposite of a server: it is what lets the output need nothing at all.
+**`prez showreel` keeps this rule.** A showreel file has its player inside it, so the reel plays by itself in a browser with nothing installed. prez still writes a file and stops, and nothing serves or watches that file.
 
-Two consequences worth knowing before you start:
+Two results of this design:
 
-- The artifact is the deliverable. Once it is built, prez is out of the loop entirely.
-- `pdf` and `present` drive a browser you already have. They are conveniences around the same artifact, not a second rendering path.
+- The artifact is the deliverable. After the build, prez has no more part in it.
+- `pdf` and `present` drive a browser that you already have. They use the same artifact and do not render the deck a second way.
 
 ---
 
 ## The first run builds it
 
-Unlike every other Utilz utility, `prez` is a Rust program. `opt/prez/prez` is a shim that resolves the binary, builds it if it is missing or out of date, and hands over.
+`prez` is a Rust program. `opt/prez/prez` is a shim. In a source checkout, the shim finds the binary, builds it if it is missing or out of date, and runs it. An install ships the built binaries and never builds. If a binary is missing from an install, the shim refuses and names `utilz upgrade`.
 
 ```
 $ prez build deck.md
 prez: first use, building (this happens once)...
-   Compiling prez v2.0.0
+   Compiling prez ...
 prez: built
 ```
 
-That needs `cargo` **once**, on the machine where the build happens:
+A build needs `cargo` on the machine that builds:
 
 ```bash
 brew install rust
 ```
 
-After that the binary is self-contained -- no runtime dependencies at all, themes and the mermaid library included -- and the shim only rebuilds when a crate source, theme, asset or manifest is newer than the binary. `utilz doctor` reports cargo as an optional line, present only because a crate is present; it is a build-time need, not a runtime one. The one verb with runtime needs is `prez showreel video`, below: it drives Chrome, as `pdf` and `present` do, and ffmpeg.
+The built binary has no runtime dependencies. The themes and the mermaid library are compiled into it. The shim builds again only when a file in the crate changed after the last successful build. `utilz doctor` names cargo only when cargo is missing and the tree holds a crate's `Cargo.toml`. `prez showreel video` is the one verb with runtime needs: it drives Chrome, as `pdf` and `present` do, and it uses ffmpeg.
 
 ---
 
@@ -47,16 +47,15 @@ After that the binary is self-contained -- no runtime dependencies at all, theme
 ```bash
 prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
 prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
-prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--browser=PATH]
+prez present <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--window=WxH] [--browser=PATH]
+prez browser
 prez showreel <verb> [args]           # hands over to the showreel tool
 prez --help | --version
 ```
 
 Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 
-**`--theme` TAKES A NAME AND NOTHING ELSE (ST0013, hv 29 Aug 2026).** It resolves on `PREZ_THEME_PATH` -- extended for one run by `--theme-path` -- and then among the built-ins, and it never looks in the working directory. Passing a path to it is refused, and the refusal names `--theme-file`.
-
-**If you have `--theme <path>` in a script or a shell history, the migration is one word:** `--theme=` becomes `--theme-file=`, and both shapes it accepted before -- a `.css` file and a directory holding `theme.css` -- still work. The split exists because `--theme=simple` beside a `./simple/` directory used to resolve the local one and elsewhere the built-in, silently, so the same command built two different decks.
+**`--theme` takes a name only.** prez looks for the name on `PREZ_THEME_PATH`, with `--theme-path` added in front for one run, and then among the built-ins. It never looks in the working directory. A value that contains a `/` is read as a path and refused, and the refusal names `--theme-file`.
 
 ---
 
@@ -66,45 +65,46 @@ Every flag takes its value either way: `--theme=simple` or `--theme simple`.
 | ---------- | ----------------------------------------------------------------------------- |
 | `build`    | Deck to one self-contained `.html`. The default output sits beside the input. |
 | `pdf`      | Deck to a PDF, one slide per page, through a headless browser.                |
-| `present`  | Build, then open the artifact in a de-chromed fullscreen window, then exit.   |
+| `present`  | Build, then open the artifact in a de-chromed window, then exit.              |
+| `browser`  | Print the browser that `pdf` and `present` drive, or name each path it tried. |
 | `showreel` | **Hands over to a different tool under a shared name.** See below.            |
 
 ---
 
 ## `prez showreel` is a handover, not a subcommand
 
-**Everything after `showreel` belongs to the showreel tool and nothing here describes it.** `prez showreel <...>` execs a separate binary built from the same workspace; its verbs, its flags, its refusals and its help are its own. Run `prez showreel --help` for them -- deliberately not restated here, because a second copy of another tool's grammar is one that drifts.
+**Everything after `showreel` belongs to the showreel tool.** `prez showreel <...>` runs a separate binary from the same Cargo workspace. Its verbs, flags, refusals and help are its own. Run `prez showreel --help` for them. This page does not repeat them.
 
 What showreel does, in one line: a directory of pictures and a `showreel.yaml` become one self-contained looping HTML reel that plays from a USB stick with nothing installed.
 
-**And it records that reel to a video.** `prez showreel video <dir>` builds the reel as `build` does, then plays the built HTML's own player in headless Chrome on a clock it controls, capturing every frame, and encodes them with ffmpeg to an H.264 `.mp4` beside the HTML, or to a `.mov` with `-o`. The video is the reel, because the player that drew it is the one that ships. `--aspect` records it portrait (`9:16`), square (`1:1`), `feed` (`4:5`) or any `W:H`, for phones, with the reel's target as the long edge; `aspect:` in `showreel.yaml` sets it for a reel, and the default is widescreen 16:9. It needs Chrome and ffmpeg, and `utilz doctor` reports ffmpeg as an optional dependency. It records no faster than the machine renders, so a three-minute reel takes minutes. Its flags are in `prez showreel --help`.
+showreel can also record the reel to a video, and write QR codes for the links in `showreel.yaml`. `prez showreel video` needs Chrome and ffmpeg. `utilz doctor` shows ffmpeg as an optional dependency.
 
-**Why it lives under `prez` at all.** The two tools share a real implementation -- theme resolution, the offline guarantee, base64, failure reporting -- and they share a name so a user learns one entry point. They do not share a binary: `prez build` never links showreel's image decoders, and neither budget pays for the other.
+**Why it is under `prez`.** The two tools share code in the `artifact` crate: theme resolution, the offline check, base64 and failure reports. They share a name, so a user learns one entry point. They do not share a binary: `prez build` does not link showreel's image decoders.
 
 ---
 
 ## Options
 
-`prez --help` is the **authoritative** flag reference: it is compiled into the binary beside the parser, so it cannot drift from what the tool actually accepts. This table is the guide.
+`prez help` prints the flag reference that is compiled into the binary with the parser. (`prez --help` shows this page.) This table is a guide.
 
 | Option           | Applies to   | Notes                                                                                                                            |
 | ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `-o, --out PATH` | build, pdf   | Default: beside the input with the extension swapped.                                                                            |
+| `-o, --out PATH` | all          | Default: beside the input, extension swapped. `present` without it stages the file in temp.                                      |
 | `--theme NAME`   | all          | A theme NAME: `PREZ_THEME_PATH` first, then the built-ins. Never the working directory. Beats the deck and `PREZ_DEFAULT_THEME`. |
 | `--theme-file P` | all          | A theme PATH: a `.css` file, or a directory holding `theme.css`. Excludes `--theme`.                                             |
 | `--theme-path P` | all          | Colon-separated directories PREPENDED to `PREZ_THEME_PATH` for this run.                                                         |
 | `--watch`        | build        | Rebuild on every save. A failed rebuild is reported and survived.                                                                |
 | `--paper WxH`    | pdf          | Page size in millimetres, eg `254x142.9` (the 16:9 default).                                                                     |
-| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only -- see below.                                    |
+| `--window WxH`   | present      | Window size in pixels. Default `1280x720`, the deck's own 16:9. Cold start only: see below.                                      |
 | `--browser P`    | pdf, present | Drive this browser instead of probing.                                                                                           |
 
 ---
 
 ## Presenting: the keys
 
-The artifact is self-driving -- every key below is in the file, so they work from a USB stick with no network and nothing installed.
+The artifact handles every key below itself, so the keys work offline with nothing installed.
 
-Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deliberately the same visual weight as the page counter opposite it: a presentation tool that decorates the presentation has misunderstood the job.
+Press `?` (or `h`) to show the key bar at the bottom of the screen. It has the same visual weight as the page counter on the other side.
 
 | Key                | Does                                              |
 | ------------------ | ------------------------------------------------- |
@@ -112,7 +112,7 @@ Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deli
 | `←` `PgUp`         | Previous slide                                    |
 | `home`             | First slide                                       |
 | `end`              | Last slide                                        |
-| `g`                | Go to a page -- type a number, press enter        |
+| `g`                | Go to a page: type a number, press enter          |
 | `i`                | Index: every slide at once                        |
 | `enter` `space`    | In the index, open the highlighted slide          |
 | `f`                | Fullscreen                                        |
@@ -120,15 +120,15 @@ Press `?` (or `h`) to pop up the key bar at the bottom of the screen. It is deli
 | `?` or `h`         | Show or hide the key bar                          |
 | `q` or `esc`       | Names the shortcut that closes the window         |
 
-**In the index, the arrows move the highlight and `enter` or `space` opens it** -- or click any slide. `i` again closes the index without moving. Outside the index `space` means next slide as usual, and `enter` does nothing: the key bar only ever lists what the keys do in the mode you are actually in.
+**In the index, the arrows move the highlight, and `enter` or `space` opens the slide.** You can also click a slide. Press `i` again to close the index and stay on the same slide. Outside the index, `space` goes to the next slide and `enter` does nothing. The key bar shows only the keys for the current mode.
 
-**`g` clamps rather than complains.** Ask for page 99 in a ten-slide deck and you get page ten -- that is plainly what you wanted, and an error message would be a worse answer than the slide. Press `esc` while the number box is open to cancel it; `esc` only closes the window when the box is not open.
+**`g` clamps the number.** Page 99 in a ten-slide deck goes to page ten. Press `esc` while the number box is open to cancel it.
 
-**`q` and `esc` do not close the window, and no longer claim to.** A page can only close a window it opened itself, and that is not the window `prez present` gives you either -- a command-line `--app` window is the browser's, not the page's. So `q` and `esc` tell you the shortcut that does work: **cmd-W** on a Mac, **ctrl-W** elsewhere. The key bar's close row says the same thing.
+**`q` and `esc` usually cannot close the window.** A page can close only a window that it opened itself, and the `--app` window from `prez present` belongs to the browser. So `q` and `esc` try to close the window, and then show the shortcut that closes it: **cmd-W** on a Mac, **ctrl-W** elsewhere. The key bar's close row shows the same.
 
-Which one it says is decided **when you open the deck, not when it was built**. The artifact is portable by design, so a deck built on a Mac and opened on Linux says ctrl-W. Baking in the author's platform would be right on their machine and wrong on everyone else's -- and invisible to the only people who could notice.
+The deck chooses the shortcut **when it opens**, not when it was built. So a deck built on a Mac and opened on Linux shows ctrl-W.
 
-**`r` is not a workaround for a missing autoreload -- there is nothing to autoreload.** The artifact is one static file with no server behind it, by design, so nothing can push a change to it. `prez build --watch` rebuilds the file on every save; `r` is how the open window picks that up. Your position lives in the URL hash, so a reload lands you back on the slide you were on. Watch in one terminal, press `r` in the browser: that is the whole loop.
+**`r` reloads the file.** The artifact is one static file with no server, so nothing can push a change to it. `prez build --watch` builds the file again on each save, and `r` loads the new file into the open window. The slide number is in the URL hash, so a reload keeps your place.
 
 **Every position is a URL.** The counter shows `4 / 12`, and `deck.html#4` opens on slide four. Send someone a link to a slide, not to a deck.
 
@@ -162,7 +162,7 @@ numbering: on
 - another
 ```
 
-**Slides are separated by a line of exactly `---`**, and only at fence depth zero -- a `---` inside a fenced code block is content, not a break, so a deck about YAML or diffs splits correctly.
+**Slides are separated by a line of exactly `---`**, outside fenced code blocks only. A `---` inside a fenced code block is content, so a deck about YAML or diffs splits correctly.
 
 **Front matter keys**: `title`, `author`, `date`, `theme`, `theme-file`, `include`, `mermaid`, `numbering`.
 
@@ -177,11 +177,11 @@ numbering: on
 
 Notes are removed **deck-wide before slides are cut**, so a note containing a bare `---` cannot leave its tail rendering as prose on the next slide.
 
-Every theme is expected to declare a standard class vocabulary -- `title`, `section`, `quote`, `full`, `center`, `small` -- so a `class:` directive stays portable when you swap themes. Use a class the chosen theme does not style and prez says so rather than silently doing nothing.
+Each theme should style a standard set of classes: `title`, `section`, `quote`, `full`, `center`, `small`. Then a `class:` directive works with any theme. If a slide uses a class that the theme does not style, prez warns.
 
 **Images are inlined** as data URIs at build time, which is what makes the artifact openable offline. A missing image warns and is left visibly broken rather than quietly dropped.
 
-**Mermaid diagrams are opt-in** with `mermaid: true` in front matter. The library is vendored into the binary, not fetched, so a diagram deck still opens on a plane. Without the opt-in, the artifact carries none of those bytes.
+**Mermaid diagrams are opt-in** with `mermaid: true` in front matter. The library is compiled into the binary and never fetched, so a diagram deck still opens offline. Without the opt-in, the artifact carries none of those bytes.
 
 **`mermaid:` and `numbering:` are on/off switches, and read the same words**, in any case: `on`, `true`, `yes` and `1` turn one on, and `off`, `false`, `no` and `0` turn it off. Anything else, eg `mermaid: ture`, is refused by name rather than read as off.
 
@@ -193,11 +193,11 @@ Every theme is expected to declare a standard class vocabulary -- `title`, `sect
 
 A theme is a `.css` file, or a directory holding `theme.css` and optionally `theme.js` and `layout.html`. **The order, highest first**: a flag (`--theme` or `--theme-file`), then the deck's `theme:` or `theme-file:`, then `PREZ_DEFAULT_THEME`, then the built-in `simple`.
 
-**Built-ins**: `simple`, `mono`, `manuscript`, `contrast`, `blueprint`, `steampunk`, `8bit`. Ask the binary rather than trusting this list -- an unknown theme's refusal enumerates the current set.
+**Built-ins**: `simple`, `mono`, `manuscript`, `contrast`, `blueprint`, `steampunk`, `8bit`. The refusal for an unknown theme lists the current built-ins.
 
 **prez draws a numbered slide's page number on `.gp-slide::after` in print**, coloured `var(--gp-muted)` and set in `var(--gp-display)` when the theme defines it. A theme that puts its own content on a slide's `::after` loses it on numbered slides.
 
-**No built-in is ever a brand.** prez is designed to be extracted and reused, and a binary carrying one organisation's palette cannot be. House themes live outside the binary and arrive over the search path.
+**No built-in is a brand.** Keep house themes outside the binary, and supply them on the search path.
 
 ### `PREZ_THEME_PATH`
 
@@ -223,7 +223,7 @@ the built-in of the same name. Elsewhere the same command builds a different dec
 says nothing -- rename the local theme if that is not what you want.
 ```
 
-The two read differently because they **fail** differently. An external name simply refuses elsewhere, loudly and with a remedy. A name shadowing a built-in silently produces a different deck elsewhere -- same command, same file, same commit -- and that is the one worth catching. A built-in resolving normally says nothing at all.
+The two warnings differ because the failures differ. On another machine, an external name is refused with a remedy. A name that shadows a built-in builds a different deck on another machine, with no message. A built-in theme gives no warning.
 
 ### `PREZ_DEFAULT_THEME`
 
@@ -234,11 +234,11 @@ export PREZ_DEFAULT_THEME=mono
 prez build deck.md    # mono, unless deck.md names a theme of its own
 ```
 
-It resolves exactly as `--theme` does -- on `PREZ_THEME_PATH`, extended for one run by `--theme-path`, then among the built-ins, and never in the working directory -- and it is refused exactly as `--theme` is. An unknown name gets the unknown-theme refusal, listing the built-ins and every directory searched, with one more line saying the name came from `PREZ_DEFAULT_THEME`. A path is refused naming the variable: put the theme's directory on `PREZ_THEME_PATH` and set `PREZ_DEFAULT_THEME` to its name. **Empty means unset**, so `PREZ_DEFAULT_THEME= prez build deck.md` clears it for one command. `prez showreel` does not read it.
+It resolves as `--theme` does, and it is refused as `--theme` is. An unknown name gets the unknown-theme refusal, listing the built-ins and every directory searched, with one more line saying the name came from `PREZ_DEFAULT_THEME`. A path is refused naming the variable: put the theme's directory on `PREZ_THEME_PATH` and set `PREZ_DEFAULT_THEME` to its name. **Empty means unset**, so `PREZ_DEFAULT_THEME= prez build deck.md` clears it for one command. `prez showreel` does not read it.
 
 ### `PREZ_THEME_DUPLICATES`
 
-What prez does when the search path defines one theme NAME more than once. First match is the default, and for a path you chose it is the point: `--theme-path` is prepended precisely so that a directory given for one run overrides an exported one. For a path that is assembled rather than chosen, eg by a script that joins several theme directories, a silent choice between two definitions is a hazard, and this variable asks prez to refuse it instead.
+What prez does when the search path defines one theme NAME more than once. The default is the first match, so a `--theme-path` directory overrides one on `PREZ_THEME_PATH`. Where a script builds the path from several directories, a silent choice between two definitions can be wrong. Set this variable to `refuse` to stop that choice.
 
 - **Unset, empty or `first`**: first match, exactly as without the variable. `first` states the default in a shell that inherited `refuse`.
 - **`refuse`**: a name with more than one definition is refused, exit 2, with every definition listed in search order. The first line is the one first match would have taken.
@@ -262,19 +262,19 @@ Only the name being resolved is checked, so a duplicate elsewhere on the path th
 
 ### Refusals, not fallbacks
 
-An unrecognised theme is refused, listing the built-ins and every directory searched. `--theme=steampnk` never quietly builds a plausible deck in the wrong clothes.
+An unrecognised theme is refused, listing the built-ins and every directory searched. So `--theme=steampnk` never builds the deck with a different theme.
 
-A theme referencing anything outside the artifact -- `http://`, `https://`, a protocol-relative `url(//...)` -- is a **build error** naming the offending line. Orthogonality means you pick a theme without auditing it, so the offline guarantee has to live in prez rather than in each theme's good behaviour. URLs inside CSS comments are documentation and pass.
+A theme that refers to anything outside the artifact, eg `http://`, `https://` or a protocol-relative `url(//...)`, is a **build error** that names the line. prez makes this check, so you can use a theme without reading it first. A URL inside a CSS comment passes.
 
 ---
 
 ## The browser
 
-`pdf` and `present` drive a Chromium-family browser. prez probes for one. `--browser PATH` overrides the probe, and a `--browser` that is not there is refused, never replaced.
+`pdf` and `present` drive a Chromium-family browser. prez probes for one. `prez browser` prints the browser that the probe finds. `--browser PATH` overrides the probe, and a `--browser` that is not there is refused, never replaced.
 
-When the probe finds none, `pdf` refuses **naming every path it tried** -- so the fix is always in front of you. `present` falls back to the platform's opener instead, `open` on macOS and `xdg-open` elsewhere, with a warning that names it: the deck still presents, in a window with the browser's own chrome around it. With no opener on `PATH` either, `present` refuses with the same list of paths, says which opener it lacked, and exits 2.
+When the probe finds none, `pdf` refuses and **names every path it tried**. `present` falls back to the platform's opener instead, `open` on macOS and `xdg-open` elsewhere, with a warning that names it: the deck still presents, in a window with the browser's own chrome around it. With no opener on `PATH` either, `present` refuses with the same list of paths, says which opener it lacked, and exits 2.
 
-**A print has two minutes.** `pdf` waits up to 120 s for Chrome to finish. A print still running then is killed and refused, with what Chrome said and the remedy: run it again. Chrome prints to `<name>.pdf.partial` beside the PDF, which takes the PDF's name only once the print has succeeded, so a refused print leaves no PDF and changes none already there (issue 0131).
+**A print has two minutes.** `pdf` waits up to 120 s for Chrome to finish. A print still running then is killed and refused, with what Chrome said and the remedy: run it again. Chrome prints to `<name>.pdf.partial` beside the PDF, which takes the PDF's name only once the print has succeeded, so a refused print leaves no PDF and changes none already there.
 
 `present` launches the window and exits. It does not stay resident, watch, or manage the browser.
 
@@ -282,13 +282,11 @@ When the probe finds none, `pdf` refuses **naming every path it tried** -- so th
 
 ### The presenting window
 
-`present` opens a de-chromed window sized to the deck's own 16:9 -- `1280x720` by default, or whatever `--window WxH` says. Press `f` for fullscreen.
+`present` opens a de-chromed window sized to the deck's own 16:9: `1280x720` by default, or the size that `--window WxH` gives. Press `f` for fullscreen.
 
-It used to pass `--start-fullscreen` instead, which Chrome does not honour for an `--app` window on macOS and ignores **silently**: no warning, no error, nothing in the exit status. It came up windowed, in whatever shape the browser last remembered, and nothing said why. A flag nobody can observe working is worse than an honest key, so it is gone and `f` is advertised in the key bar.
+**If Chrome is already running, prez cannot set the size.** Chrome forwards a new launch into the instance you already have open and ignores `--window-size` on that path. The new window takes the size of the window already on screen, whatever `--window` says. For example, with a 1024x768 window open, `present --window 640x480` opens another 1024x768 window.
 
-**IF CHROME IS ALREADY RUNNING, THE SIZE IS NOT prez's TO SET, AND THIS IS THE CASE YOU WILL USUALLY BE IN.** Chrome forwards a new launch into the instance you already have open and ignores `--window-size` on that path, so the window arrives carrying the geometry of the window already on screen -- whatever `--window` said. Measured: with a 1024x768 window open, `present --window 640x480` produced another 1024x768.
-
-This is Chrome's behaviour and prez cannot override it; no flag combination changes it. It is also, almost certainly, the original portrait window -- so the default in the row above reaches you on a cold start and not otherwise. **If the shape matters, quit Chrome first, or press `f` for fullscreen once the deck is open.** Documented rather than fixed because there is nothing here to fix: the alternative is a flag that silently means something different depending on what else you have open, which is the thing this page keeps refusing to ship.
+No flag changes this, so the default size applies only on a cold start. **If the shape matters, quit Chrome first, or press `f` for fullscreen once the deck is open.**
 
 ---
 
@@ -297,6 +295,7 @@ This is Chrome's behaviour and prez cannot override it; no flag combination chan
 | Code | Meaning                                                             |
 | ---- | ------------------------------------------------------------------- |
 | 0    | Success.                                                            |
+| 1    | The shim could not build the binary, or an install is missing one.  |
 | 2    | A refusal: unknown theme, missing file, bad flag, no browser found. |
 
 Every failure carries a remedy line. A refused build leaves no partial artifact behind.
@@ -313,16 +312,17 @@ prez build deck.md --watch                # rebuild on every save
 
 # Themes
 prez build deck.md --theme=mono
-prez build deck.md --theme ./house.css
-prez build deck.md --theme ~/themes/house # a directory holding theme.css
+prez build deck.md --theme-file ./house.css
+prez build deck.md --theme-file ~/themes/house # a directory holding theme.css
 
 # PDF and presenting
 prez pdf deck.md                          # 254 x 142.9 mm, one slide per page
 prez pdf deck.md --paper=210x297          # A4 portrait
 prez present deck.md
 prez present deck.md --browser /Applications/Chromium.app/Contents/MacOS/Chromium
+prez browser                              # the browser pdf and present drive
 
-# Try it on the shipped decks
+# In a source checkout, try an example deck
 prez build "$UTILZ_HOME/opt/prez/crate/examples/demo.md" -o /tmp/demo.html
 ```
 
@@ -334,9 +334,9 @@ prez build "$UTILZ_HOME/opt/prez/crate/examples/demo.md" -o /tmp/demo.html
 utilz test prez
 ```
 
-drives all three suites by convention: `cargo test` for the modules, the shim's BATS tests, and the crate's black-box acceptance suite under `--strict`. `--strict` is deliberate: a skipped check is not a pass, and a browserless machine must say so rather than reporting green.
+builds the crate, then runs each suite that it finds: `cargo test` for the workspace, the shim's BATS tests, and each black-box suite in `crate/test/*.sh` with `--strict`. With `--strict`, a skipped check fails the run, so a machine with no browser does not report a pass.
 
-`PREZ_TEST_BROWSER` overrides browser resolution inside the acceptance suite -- set it to a path that does not exist to exercise the browserless refusal path on a machine that has Chrome.
+`PREZ_TEST_BROWSER` overrides browser resolution inside the acceptance suite. Set it to a path that does not exist to test the no-browser refusal on a machine that has Chrome.
 
 ---
 

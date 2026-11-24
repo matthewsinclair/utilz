@@ -15,37 +15,13 @@ outputs CSV to stdout or a file.
 
 ## Installation
 
-As part of the Utilz framework, `expz` is automatically available once the symlink is created:
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz expz
-```
+`expz` comes with Utilz. Once Utilz is installed, as the [README](../../README.md#installation) says, `expz` is on your PATH.
 
 ---
 
 ## Usage
 
-```bash
-expz <directory> [OPTIONS]
-```
-
-For detailed help: `utilz help expz`
-
----
-
-## Examples
-
-```bash
-# Output CSV to stdout
-expz receipts/
-
-# Write to file with progress
-expz receipts/ --out expenses.csv --verbose
-
-# Custom extraction schema
-expz receipts/ --schema custom_schema.json
-```
+The usage home is `help/expz.md`. Run `utilz help expz` or `expz --help` to read it.
 
 ---
 
@@ -56,7 +32,7 @@ expz receipts/ --schema custom_schema.json
 ```
 expz <directory>
   │
-  ├── find *.pdf recursively in <directory>
+  ├── find *.pdf (any case) recursively in <directory>
   │
   ├── for each PDF:
   │     ├── category = parent directory name
@@ -73,7 +49,8 @@ expz <directory>
 ```
 opt/expz/
 ├── expz                       # Bash implementation
-├── expz.yaml                  # Metadata (version, deps)
+├── expz.yaml                  # Metadata (deps)
+├── VERSION                    # Version number
 ├── README.md                  # This file
 ├── lib/
 │   └── expense_schema.json    # Default extraction schema
@@ -85,13 +62,13 @@ opt/expz/
 
 **Required:**
 
-- `xtrct` — Schema-driven semantic data extraction (utilz)
-- `jq` — JSON parsing and CSV assembly (`brew install jq`)
-- `ANTHROPIC_API_KEY` — Environment variable for Claude API
+- `xtrct` - Schema-driven semantic data extraction (utilz)
+- `jq` - JSON parsing and CSV assembly (`brew install jq`)
+- `ANTHROPIC_API_KEY` - Environment variable for Claude API
 
 **Indirect:**
 
-- `pdf2md` — Called internally by xtrct for PDF→Markdown conversion
+- `pdf2md` - Called internally by xtrct for PDF→Markdown conversion
 
 ---
 

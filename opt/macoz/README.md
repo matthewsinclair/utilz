@@ -13,87 +13,13 @@ macOS system utilities - desktop backgrounds and folder icons.
 
 ## Installation
 
-As part of the Utilz framework, `macoz` is automatically available once the symlink is created:
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz macoz
-```
+`macoz` comes with Utilz. Once Utilz is installed, as the [README](../../README.md#installation) says, `macoz` is on your PATH.
 
 ---
 
 ## Usage
 
-```bash
-macoz <command> [OPTIONS] [ARGS]
-```
-
-For detailed help: `utilz help macoz`
-
----
-
-## Commands
-
-### Desktop Backgrounds
-
-Set desktop wallpaper with seasonal auto-selection:
-
-```bash
-# Auto-select current seasonal wallpaper
-macoz bg
-
-# Random autumn wallpaper
-macoz bg autumn
-
-# Specific seasonal wallpaper
-macoz bg autumn 02
-
-# Custom image
-macoz bg ~/Pictures/wallpaper.jpg
-```
-
-### Folder Icons
-
-Set folder icons from image files:
-
-```bash
-# Set icon for current directory
-macoz setpicfor icon.png
-
-# Set icon for specific directory
-macoz setpicfor photo.jpg ~/Documents/Projects
-
-# Set icons for all subdirectories with icon.* files
-macoz setpicfor --all
-
-# Preview changes without applying
-macoz setpicfor --all --dry-run
-
-# Process specific directory tree
-macoz setpicfor --all --data-dir ~/Projects --verbose
-```
-
----
-
-## Examples
-
-```bash
-# Show help
-macoz --help
-
-# Show version
-macoz --version
-
-# Desktop backgrounds
-macoz bg                                # Auto seasonal
-macoz bg winter 01                      # Specific seasonal
-macoz bg ~/Pictures/sunset.jpg          # Custom
-
-# Folder icons
-macoz setpicfor icon.png                # Current directory
-macoz setpicfor --all                   # Batch process subdirectories
-macoz setpicfor --dry-run icon.png      # Preview only
-```
+The usage home is `help/macoz.md`. Run `utilz help macoz` to read it, or `macoz --help` for a short summary.
 
 ---
 
@@ -114,10 +40,12 @@ macoz
 **Required:**
 
 - Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
+- macOS (every command refuses elsewhere)
+- `yq` - Reads `macoz.yaml` to check the platform
 
 **Optional:**
 
-- None
+- `fileicon` - Needed by `setpicfor` (install: `brew install fileicon`)
 
 ---
 

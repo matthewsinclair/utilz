@@ -13,7 +13,7 @@
 It supports two modes of operation:
 
 1. **YAML-driven**: Use a YAML configuration file to specify files, order, titles, and formatting
-2. **Glob-driven**: Use shell glob patterns to quickly concatenate files (alphabetical or natural order)
+2. **Glob-driven**: Use shell glob patterns to quickly concatenate files (natural sort order)
 
 ---
 
@@ -35,7 +35,7 @@ You want to:
 
 - Concatenate them in a specific order
 - Add section dividers and page breaks for PDF generation
-- Include or exclude certain files (e.g., skip the index)
+- Include or exclude certain files (eg skip the index)
 - Add custom titles that differ from filenames
 - Output to a single file for PDF conversion
 
@@ -77,13 +77,17 @@ mdagg --config assembly.yaml
 mdagg -c files.yaml -o output.md
 ```
 
+A positional argument that ends in `.yaml` or `.yml` selects YAML mode. Any other positional argument is a glob pattern.
+
 **Mode 2: Glob Pattern**
 
 ```bash
-mdagg "*.md"                    # All .md files (alphabetical)
+mdagg "*.md"                    # All .md files (natural sort order)
 mdagg "0*.md"                   # All files starting with 0
 mdagg --glob "chapter-*.md"     # Explicit glob mode
 ```
+
+mdagg expands the pattern in the working directory. It sorts the matches with `sort -V`, so `2` comes before `10`. Quote the pattern, so that your shell does not expand it.
 
 **Mode 3: Stdin** (for piping)
 
@@ -91,22 +95,32 @@ mdagg --glob "chapter-*.md"     # Explicit glob mode
 find . -name "*.md" | sort | mdagg --stdin
 ```
 
+mdagg reads one path on each line and skips empty lines. It keeps the order of the lines. It resolves a relative path from the working directory.
+
+**Mode 4: No Input**
+
+```bash
+mdagg -o output.md
+```
+
+With no input, mdagg uses `.mdagg.yaml` or `.mdagg.yml` in the current directory. If neither file is there, mdagg exits 1.
+
 ### Options
 
-| Option                 | Short | Description                                     | Default                |
-| ---------------------- | ----- | ----------------------------------------------- | ---------------------- |
-| `--config FILE`        | `-c`  | Path to YAML config file                        | Auto-detect from input |
-| `--output FILE`        | `-o`  | Output file (if omitted, writes to stdout)      | stdout                 |
-| `--glob PATTERN`       | `-g`  | Glob pattern for files                          | -                      |
-| `--stdin`              | -     | Read file list from stdin (one per line)        | -                      |
-| `--page-breaks`        | `-p`  | Insert page breaks between files                | false                  |
-| `--section-dividers`   | `-d`  | Insert section divider pages with titles        | false                  |
-| `--strip-front-matter` | `-s`  | Strip YAML front matter from each file          | false                  |
-| `--strip-back-links`   | `-b`  | Strip back navigation links (e.g., "[← Index]") | false                  |
-| `--working-dir DIR`    | `-w`  | Working directory for relative paths            | current dir            |
-| `--verbose`            | `-v`  | Verbose output (show files being processed)     | false                  |
-| `--help`               | `-h`  | Show help message                               | -                      |
-| `--version`            | -     | Show version                                    | -                      |
+| Option                 | Short | Description                                  | Default       |
+| ---------------------- | ----- | -------------------------------------------- | ------------- |
+| `--config FILE`        | `-c`  | Path to YAML config file                     | `.mdagg.yaml` |
+| `--output FILE`        | `-o`  | Output file (if omitted, writes to stdout)   | stdout        |
+| `--glob PATTERN`       | `-g`  | Glob pattern for files                       | -             |
+| `--stdin`              | -     | Read file list from stdin (one per line)     | -             |
+| `--page-breaks`        | `-p`  | Insert page breaks between files             | false         |
+| `--section-dividers`   | `-d`  | Insert section divider pages with titles     | false         |
+| `--strip-front-matter` | `-s`  | Strip YAML front matter from each file       | false         |
+| `--strip-back-links`   | `-b`  | Strip back navigation links (eg "[← Index]") | false         |
+| `--working-dir DIR`    | `-w`  | Working directory for relative paths         | current dir   |
+| `--verbose`            | `-v`  | Show progress on stderr                      | false         |
+| `--help`               | `-h`  | Show help message                            | -             |
+| `--version`            | -     | Show version                                 | -             |
 
 ---
 
@@ -147,6 +161,13 @@ files:
   - file: "12-appendices.md"
     title: "Appendices"
 ```
+
+How mdagg reads the settings:
+
+- A setting that is `true` turns its option on. A setting cannot turn off an option that a flag turned on.
+- A `working_dir` other than `"."` replaces the `--working-dir` value. mdagg resolves a relative `working_dir` from the current directory, not from the directory of the config file.
+- A file's `page_break` replaces `page_breaks` for that file. The page break goes after the file.
+- A file with no `title` gets no section divider.
 
 ### Minimal Example
 
@@ -214,20 +235,16 @@ files:
 <div style="page-break-after: always; break-after: page;"></div>
 
 [Content of file 3]
+
+<div style="page-break-after: always; break-after: page;"></div>
 ```
 
-### With `--section-dividers` (implies page breaks)
+mdagg also puts a page break after the last file.
+
+### With `--section-dividers`
 
 ```markdown
----
-
-# Executive Summary
-
-<div style="page-break-after: always; break-after: page;"></div>
-
 [Content of file 1]
-
-<div style="page-break-after: always; break-after: page;"></div>
 
 ---
 
@@ -238,6 +255,8 @@ files:
 [Content of file 2]
 ```
 
+mdagg puts no divider before the first file, so the front matter of that file stays at the top. Each divider ends with its own page break. A divider does not turn on `--page-breaks`.
+
 ---
 
 ## Usage Examples
@@ -245,7 +264,7 @@ files:
 ### Example 1: Quick Concatenation (No Config)
 
 ```bash
-# Concatenate all .md files alphabetically, output to stdout
+# Concatenate all .md files in natural sort order, output to stdout
 mdagg "*.md"
 
 # Same, but output to file
@@ -255,19 +274,17 @@ mdagg "*.md" -o combined.md
 mdagg "*.md" -o combined.md -v
 ```
 
-**Output:**
+**Verbose output** (on stderr):
 
 ```
-Assembling markdown files:
-  Found 13 files matching "*.md"
-  Adding: 00-vistajet-private-dining-sow.md
-  Adding: 01-executive-summary.md
+ℹ Writing to: combined.md
+ℹ Processing glob pattern: *.md
+ℹ Found 13 files
+ℹ   Adding: /path/to/sow/00-vistajet-private-dining-sow.md
+ℹ   Adding: /path/to/sow/01-executive-summary.md
   ...
-  Adding: 12-appendices.md
-
-✓ Assembly complete!
-  Output: combined.md
-  Size: 245,823 bytes (13 files)
+ℹ   Adding: /path/to/sow/12-appendices.md
+✓ Assembly complete! Output: combined.md (245823 bytes)
 ```
 
 ### Example 2: YAML-Driven Assembly with PDF Formatting
@@ -332,17 +349,17 @@ mdagg assembly.yaml -o output.md
 
 ### Stripping Back Links
 
-When `strip_back_links: true`, remove lines matching patterns like:
+When `strip_back_links: true`, mdagg removes lines like these:
 
 - `[← Index](./00-vistajet-private-dining-sow.md)`
 - `[← Back to Index](...)`
 - `[↑ Top](#)`
 
-Regex: `^\[←↑].*\]\(.*\)$` (lines that are purely navigation links)
+Regex: `^[[:space:]]*\[(←|↑)`. mdagg removes each line whose first character that is not a space is `[`, followed by `←` or `↑`. It removes the full line. An arrow in the middle of a line does not cause a removal.
 
 ### Stripping Front Matter
 
-When `strip_front_matter: true`, remove YAML front matter blocks:
+When `strip_front_matter: true`, mdagg removes YAML front matter blocks:
 
 ```markdown
 ---
@@ -353,14 +370,14 @@ author: "Matt"
 [Content starts here...]
 ```
 
-Remove everything from first `---` to second `---` (inclusive) if it appears at the start of the file.
+mdagg removes the first `---` line, the next `---` line, and all lines between them. It does not check that the first `---` is at the start of the file. Thus a file with no front matter loses the text between its first two `---` lines.
 
 ### Section Dividers
 
-When `section_dividers: true` and a title is provided:
+When `section_dividers: true` and the file has a title, mdagg writes this before the file:
 
 ```markdown
----
+***
 
 # [TITLE]
 
@@ -369,54 +386,22 @@ When `section_dividers: true` and a title is provided:
 [File content...]
 ```
 
-If no title provided, use the filename (without extension) as title.
+The first file gets no divider. In YAML mode, a file with no `title` gets no divider. In glob and stdin modes, mdagg makes the title from the filename. It removes the directory, the `.md` extension and the leading digits and hyphens. It changes the other hyphens to spaces and starts each word with a capital letter. Thus `01-executive-summary.md` becomes "Executive Summary".
+
+### Missing Files
+
+If a listed file does not exist, mdagg writes a warning and skips the file. It joins the other files. Then it names the missing files and exits 1.
 
 ---
 
 ## Exit Codes
 
-| Code | Meaning                                           |
-| ---- | ------------------------------------------------- |
-| 0    | Success                                           |
-| 1    | General error (invalid arguments, file not found) |
-| 2    | YAML parsing error                                |
-| 3    | File read error                                   |
-| 4    | Output write error                                |
+| Code | Meaning                                                                                                           |
+| ---- | ----------------------------------------------------------------------------------------------------------------- |
+| 0    | Success                                                                                                           |
+| 1    | Error (unknown option, no input, no glob match, missing file, missing config, missing working directory, no `yq`) |
 
----
-
-## Future Enhancements (v2.0+)
-
-- **Template support**: Custom section divider templates
-- **Conditional inclusion**: Include files based on tags or metadata
-- **Variable substitution**: Replace `{{DATE}}`, `{{VERSION}}` in content
-- **Table of contents generation**: Auto-generate ToC from assembled files
-- **Nested includes**: YAML files can reference other YAML files
-- **Diff mode**: Show what changed between assemblies
-- **Watch mode**: Re-assemble on file changes
-- **Markdown validation**: Lint markdown before assembly
-
----
-
-## Testing Checklist
-
-- [ ] YAML mode with minimal config
-- [ ] YAML mode with full settings
-- [ ] Glob mode with simple pattern
-- [ ] Glob mode with complex pattern
-- [ ] Stdin mode
-- [ ] Output to stdout
-- [ ] Output to file
-- [ ] Page breaks insertion
-- [ ] Section dividers insertion
-- [ ] Strip back links
-- [ ] Strip front matter
-- [ ] Working directory resolution
-- [ ] Missing file handling
-- [ ] Empty file handling
-- [ ] Verbose output
-- [ ] Help message
-- [ ] Version info
+If `yq` cannot read the config file, mdagg stops with the exit status of `yq`.
 
 ---
 

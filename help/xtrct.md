@@ -22,11 +22,13 @@ xtrct --schema <schema-file> [OPTIONS] < input.md
 
 ## Description
 
-xtrct takes a document and a JSON schema template, then uses Claude API to semantically extract structured data as JSON. Works with any document type — you just write a different schema.
+xtrct takes a document and a JSON schema template, then uses Claude API to semantically extract structured data as JSON. It works with any document type: write a different schema for each type.
 
-For PDF input, xtrct automatically converts via `pdf2md` before extraction. For markdown/text input, the content is sent directly to Claude.
+For PDF input, xtrct converts the file with `pdf2md` before extraction. If an argument ends in `.pdf` and `pdf2md` is not on `PATH`, xtrct refuses. For markdown/text input, the content is sent directly to Claude.
 
-The schema is **descriptive, not rigid** — the `description` fields are what Claude uses to semantically locate data. This makes xtrct work for invoices, receipts, contracts, reports, etc.
+The schema is **descriptive, not rigid**: Claude uses the `description` fields to semantically locate data. This makes xtrct work for invoices, receipts, contracts, reports, etc.
+
+xtrct checks for `ANTHROPIC_API_KEY` first, and exits 1 if it is not set.
 
 On first run, xtrct automatically creates a Python virtual environment at `lib/.venv/` and installs dependencies.
 
@@ -41,13 +43,13 @@ On first run, xtrct automatically creates a Python virtual environment at `lib/.
 | `--model <model>` |       | Claude model (default: claude-haiku-4-5-20251001) |
 | `--verbose`       |       | Show progress and token usage to stderr           |
 | `--help`          | `-h`  | Show help message                                 |
-| `--version`       |       | Show version information                          |
+| `--version`       |       | Show version (first argument only)                |
 
 ---
 
 ## Schema Format
 
-The schema is a JSON file describing what data to extract:
+The schema is a JSON file describing what data to extract. It must have a `fields` object. The top-level `description` is optional. xtrct does not check the field types: it sends the `fields` object to Claude as written.
 
 ```json
 {
@@ -55,7 +57,7 @@ The schema is a JSON file describing what data to extract:
   "fields": {
     "field_name": {
       "type": "string|number|boolean|date|array",
-      "description": "What this field means -- Claude uses this to find it"
+      "description": "What this field means. Claude uses this to find it"
     },
     "nested_array": {
       "type": "array",
@@ -95,7 +97,7 @@ Pretty-printed JSON matching the schema field names.
 
 ### csv
 
-Scalar fields as key/value rows. Array fields as sections with header rows followed by data rows.
+Scalar fields as key/value rows. Array fields as sections with header rows followed by data rows. A blank row starts each array section. An empty array is left out.
 
 ### table
 
@@ -230,6 +232,7 @@ pdf2md invoice.pdf --pages 1-3 | xtrct --schema schema.json
 
 - `0` - Success
 - `1` - Error (missing API key, file not found, API failure, invalid JSON)
+- `2` - Usage error (unknown option, missing `--schema`, unknown `--format`)
 
 ---
 

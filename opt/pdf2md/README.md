@@ -13,14 +13,9 @@ PDF to Markdown converter using pdfplumber. Detects headings, list items, and pa
 
 ## Installation
 
-As part of the Utilz framework, `pdf2md` is automatically available once the symlink is created:
+`pdf2md` ships with the Utilz framework. `bin/pdf2md` is a symlink to the `utilz` dispatcher.
 
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz pdf2md
-```
-
-On first run, pdf2md automatically creates a Python venv at `lib/.venv/` and installs pdfplumber.
+On first run, pdf2md creates a Python venv at `lib/.venv/` and installs pdfplumber.
 
 ---
 
@@ -30,25 +25,7 @@ On first run, pdf2md automatically creates a Python venv at `lib/.venv/` and ins
 pdf2md <file> [OPTIONS]
 ```
 
-For detailed help: `utilz help pdf2md`
-
----
-
-## Examples
-
-```bash
-# Convert PDF to stdout
-pdf2md invoice.pdf
-
-# Save to file
-pdf2md invoice.pdf -o invoice.md
-
-# Specific pages only
-pdf2md large.pdf --pages 1-5
-
-# Pipe to xtrct for semantic extraction
-pdf2md invoice.pdf | xtrct --schema invoice_schema.json
-```
+`utilz help pdf2md` holds the options, page ranges, examples and exit codes.
 
 ---
 
@@ -70,19 +47,14 @@ pdf2md
 └── Symlink: bin/pdf2md → utilz
 ```
 
-### Dependencies
-
-**Required:**
-
-- python3
-- pdfplumber (auto-installed in venv)
+The dependencies are in `utilz help pdf2md`.
 
 ---
 
 ## Testing
 
 ```bash
-# Run tests
+# Run tests (tier 2 skips without python3)
 utilz test pdf2md
 
 # Run tests directly

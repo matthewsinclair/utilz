@@ -7,20 +7,15 @@
 
 ## Overview
 
-Schema-driven semantic data extraction using Claude API. Takes a document and a JSON schema template, then uses Claude to semantically extract structured data as JSON. Works with any document type — you just write a different schema.
+Schema-driven semantic data extraction using Claude API. Takes a document and a JSON schema template, then uses Claude to semantically extract structured data as JSON. It works with any document type: write a different schema for each type.
 
 ---
 
 ## Installation
 
-As part of the Utilz framework, `xtrct` is automatically available once the symlink is created:
+`xtrct` ships with the Utilz framework. `bin/xtrct` is a symlink to the `utilz` dispatcher.
 
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz xtrct
-```
-
-On first run, xtrct automatically creates a Python venv at `lib/.venv/` and installs the anthropic SDK.
+On first run, xtrct creates a Python venv at `lib/.venv/` and installs the anthropic SDK.
 
 Requires `ANTHROPIC_API_KEY` environment variable.
 
@@ -32,26 +27,7 @@ Requires `ANTHROPIC_API_KEY` environment variable.
 xtrct <file> --schema <schema-file> [OPTIONS]
 ```
 
-For detailed help: `utilz help xtrct`
-
----
-
-## Examples
-
-```bash
-# Extract from markdown
-xtrct invoice.md --schema invoice_schema.json
-
-# Extract from PDF (auto-converts via pdf2md)
-xtrct invoice.pdf --schema invoice_schema.json
-
-# Pipe from pdf2md
-pdf2md invoice.pdf | xtrct --schema invoice_schema.json
-
-# Different output formats
-xtrct invoice.md --schema schema.json --format csv
-xtrct invoice.md --schema schema.json --format table
-```
+`utilz help xtrct` holds the options, the schema format, the output formats, examples and exit codes.
 
 ---
 
@@ -76,24 +52,14 @@ xtrct
 └── Symlink: bin/xtrct → utilz
 ```
 
-### Dependencies
-
-**Required:**
-
-- python3
-- anthropic SDK (auto-installed in venv)
-- `ANTHROPIC_API_KEY` environment variable
-
-**Optional:**
-
-- pdf2md (for .pdf input)
+The dependencies are in `utilz help xtrct`.
 
 ---
 
 ## Testing
 
 ```bash
-# Run tests (tier 1 always passes, tier 2 requires API key)
+# Run tests (tier 2 skips without ANTHROPIC_API_KEY)
 utilz test xtrct
 
 # Run tests directly

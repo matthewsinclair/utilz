@@ -48,8 +48,8 @@ menuz adds no syntax of its own. A label or a shell line is expanded by the logi
 
 `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}` holds:
 
-- `menuz.yaml` -- the menu, the one file the app reads.
-- `bin/` -- scripts of your own. It is first on `PATH` for every run and every realised label, so `run: backup-notes` finds `bin/backup-notes` with no path.
+- `menuz.yaml`: the menu, the one file the app reads.
+- `bin/`: scripts of your own. It is first on `PATH` for every run and every realised label, so `run: backup-notes` finds `bin/backup-notes` with no path.
 
 `menuz init` creates the directory with an example `menuz.yaml` and an empty `bin/`. It refuses to overwrite a `menuz.yaml` of your own unless `--force` is given, and run again over its own example it changes nothing. The log is not here, because it is state rather than configuration, and a config directory is the kind of thing kept in a dotfiles repository.
 
@@ -244,7 +244,7 @@ A file that fails in the running app keeps the last good menu on screen and show
 
 ### Building and installing
 
-The app's source and its xcodegen project live at `native/macos/Menuz/`. The app runs on macOS 26 or later, and builds with Xcode 27.1 or later, the floor `project.yml`'s `xcodeVersion` names and `menuz doctor` checks. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is. Each build, `install`'s included, then checks its product: the executable is there, `LSUIElement` is true, so the app takes no Dock slot, and it carries the stamps the build was given (below). A miss names itself and is exit 1, and `install` replaces nothing (issue 0118). A failed build prints the log's `error:` and `fatal error:` lines first, the first 20 with a count of the rest, then the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug. Xcode registers each app it builds with Launch Services, so `build`, `test` and `install` drop the product's record after xcodebuild, a failed build's included, and the bundle id opens only the installed app. A record that will not drop is a warning naming the bundle and the `lsregister -u` line that drops it; the build's own exit stands.
+The app's source and its xcodegen project live at `native/macos/Menuz/`. The app runs on macOS 26 or later, and builds with Xcode 27.1 or later, the floor `project.yml`'s `xcodeVersion` names and `menuz doctor` checks. `menuz build` runs xcodegen only when there is no `Menuz.xcodeproj`, `project.yml` changed, or a source file was added or removed, then builds Debug, or Release with `--release`, with every product and intermediate under `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`, off the tree. It prints where xcodebuild's log is. Each build, `install`'s included, then checks its product: the executable is there, `LSUIElement` is true, so the app takes no Dock slot, and it carries the stamps the build was given (below). A miss names itself and is exit 1, and `install` replaces nothing. A failed build prints the log's `error:` and `fatal error:` lines first, the first 20 with a count of the rest, then the log's last 40 lines. `--unsigned` builds with no signing identity, as CI does. `menuz test` runs the app's tests, `MenuzTests` and `MenuzKitTests`, the same way, in Debug. Xcode registers each app it builds with Launch Services, so `build`, `test` and `install` drop the product's record after xcodebuild, a failed build's included, and the bundle id opens only the installed app. A record that will not drop is a warning naming the bundle and the `lsregister -u` line that drops it; the build's own exit stands.
 
 Each build stamps the app with five values, which `menuz stamps` prints one `NAME=value` a line before a build: `MENUZ_VERSION`, from `opt/menuz/VERSION`; `MENUZ_BUILD`, the commit count; `MENUZ_COMMIT`, the commit's first eight characters; `MENUZ_SOURCE_TREE`, the stamp of the app's sources, ending `-dirty` when the working tree differs from the commit there; and `MENUZ_KIND`, the build's kind. The kind is `release` when the source stamp is clean and the release tag that Utilz's root `VERSION` file names (a bare tag, `2.14.0`, never `v2.14.0`) is at the commit, or does not exist yet: a cut stamps `VERSION` in its release commit before it tags that commit, so a build there comes before its tag. It is `dev` for a dirty source, and when the tag is on another commit, as it is for every commit from one release to the next. A clone that holds no tags reads `release`, since no tag of that name exists in it. An empty or unreadable `VERSION`, a git that cannot list the tags, or a tag that is not a commit is exit 1, saying why. `status` compares the installed app's `MENUZ_SOURCE_TREE` with the tree's to say whether it is current.
 
@@ -263,7 +263,7 @@ dirty-3e731d3a · dev
 
 `dirty-` comes before the commit of a build from a dirty source tree, and the kind is the build's `MENUZ_KIND`, by the rule above. The signed release asset is built from a clean tree at its release commit, so a Homebrew install's app shows the first form.
 
-Choosing the row opens menuz's About window. The row and the window are arca_swift's masthead, read from a `masthead.yaml` and an `about.md` in the app's bundle each time the menu opens. A copy of either in `${XDG_CONFIG_HOME:-~/.config}/menuz/`, which `MENUZ_HOME` does not move, replaces the bundle's with no rebuild; one that fails its checks leaves the bundle's in use, the row's second line says what is wrong, and the log says it after `masthead: `. In them, `{name}` and `{version}` are the bundle's name and version, and menuz gives `{app}`, the version with its build and commit, `{tree}`, the source tree stamp at the commit's length with any `-dirty` kept, `{commit}`, `{kind}` and `{menu}`, the path of the menu file it reads. The bundle's About window shows menuz's logo, its name, a line on what it is, the version with its build and commit, the source tree, the menu file, what built it, the repository and the author, as Gtools' does.
+Choosing the row opens menuz's About window. The row and the window are arca_swift's masthead, read from a `masthead.yaml` and an `about.md` in the app's bundle each time the menu opens. A copy of either in `${XDG_CONFIG_HOME:-~/.config}/menuz/`, which `MENUZ_HOME` does not move, replaces the bundle's with no rebuild; one that fails its checks leaves the bundle's in use, the row's second line says what is wrong, and the log says it after `masthead: `. In them, `{name}` and `{version}` are the bundle's name and version, and menuz gives `{app}`, the version with its build and commit, `{tree}`, the source tree stamp at the commit's length with any `-dirty` kept, `{commit}`, `{kind}` and `{menu}`, the path of the menu file it reads. The bundle's About window shows menuz's logo, its name, a line on what it is, the version with its build and commit, the source tree, the menu file, what built it, the repository and the author.
 
 `menuz install` builds Release, quits every running copy, puts the new one at `~/Applications/Menuz.app`, where the other menu bar apps install, registers it with Launch Services, so it, and never a build product, is the one opened for menuz, and launches it with an empty environment but `HOME`, so the app reads your login shell's environment for itself rather than the caller's. The old copy is replaced only once the new one is whole beside it, and put back if the move fails. The installed copy, and only that copy, registers itself as a login item when it launches; `menuz status` reports it.
 
@@ -271,7 +271,7 @@ Choosing the row opens menuz's About window. The row and the window are arca_swi
 
 ### In a Homebrew install
 
-A Homebrew install of Utilz carries no app source. There, `build` and `test` refuse, naming `menuz install` for the release's signed app and the source clone to build from (`git clone https://github.com/matthewsinclair/utilz`), `stamps` prints what the installed app carries, `status` says its source is `homebrew`, with nothing to compare, and `install` takes the app from the release instead: it fetches `Menuz.app.zip` from the GitHub release for the installed Utilz version, then checks its signature, that macOS accepts it as notarised Developer ID, its bundle id and its version against `opt/menuz/VERSION`, before it replaces anything. A check that fails stops the install, naming the check; a release that carries no `Menuz.app.zip` stops it naming the URL it tried. Each release's `Menuz.app` is signed with a Developer ID and notarised, as Intent's app is.
+A Homebrew install of Utilz carries no app source, and nor does any other install that is not a source clone. There, `build` and `test` refuse, naming `menuz install` for the release's signed app and the source clone to build from (`git clone https://github.com/matthewsinclair/utilz`), `stamps` prints what the installed app carries, `status` says its source is `homebrew`, with nothing to compare, and `install` takes the app from the release instead: it fetches `Menuz.app.zip` from the GitHub release for the installed Utilz version, then checks its signature, that macOS accepts it as notarised Developer ID, its bundle id and its version against `opt/menuz/VERSION`, before it replaces anything. A check that fails stops the install, naming the check; a release that carries no `Menuz.app.zip` stops it naming the URL it tried. Each release's `Menuz.app` is signed with a Developer ID and notarised.
 
 ---
 
@@ -330,21 +330,22 @@ menuz use installed           # back to the installed one
 
 ## Files
 
-- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/menuz.yaml` -- the menu.
-- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/bin/` -- your scripts, first on every run's `PATH`.
-- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log` -- every run's output.
-- `native/macos/Menuz/` -- the app's source and its xcodegen project.
-- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/` -- the development build.
-- `~/Applications/Menuz.app` -- the installed app.
+- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/menuz.yaml`: the menu.
+- `${MENUZ_HOME:-${XDG_CONFIG_HOME:-$HOME/.config}/menuz}/bin/`: your scripts, first on every run's `PATH`.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/menuz.log`: every run's output.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/use`: the build `menuz use` selects.
+- `native/macos/Menuz/`: the app's source and its xcodegen project.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/menuz/build/macos/`: the development build.
+- `~/Applications/Menuz.app`: the installed app.
 
 ---
 
 ## Environment
 
-- `MENUZ_HOME` -- the config directory; `${XDG_CONFIG_HOME:-$HOME/.config}/menuz` when unset.
-- `XDG_CONFIG_HOME` -- where the config directory lives when `MENUZ_HOME` is unset; `$HOME/.config` when unset.
-- `XDG_STATE_HOME` -- where the log and the development build live; `$HOME/.local/state` when unset.
-- `VISUAL`, `EDITOR` -- the editor `edit --editor` opens.
+- `MENUZ_HOME`: the config directory; `${XDG_CONFIG_HOME:-$HOME/.config}/menuz` when unset.
+- `XDG_CONFIG_HOME`: where the config directory lives when `MENUZ_HOME` is unset; `$HOME/.config` when unset.
+- `XDG_STATE_HOME`: where the log, the `use` file and the development build live; `$HOME/.local/state` when unset.
+- `VISUAL`, `EDITOR`: the editor `edit --editor` opens.
 
 Every run also has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`, `MENUZ_ITEM`.
 
@@ -352,25 +353,25 @@ Every run also has `MENUZ_HOME`, `MENUZ_LABEL`, `MENUZ_RUN_ID` and, under `each`
 
 ## Exit Status
 
-- `0` -- done.
-- `1` -- failed after something changed, naming the step: xcodegen or xcodebuild (a build failed or a test was red), or `install`'s quit, replace, unclaim, register, launch, fetch, unzip, codesign, spctl, bundle id or version; `stop` or `restart` found a copy still running 5 seconds after asking it to quit; `start` could not launch the app; `uninstall` removed the app but could not unregister it; `stamps` could not read the stamps; `status` found no app installed; or `doctor` found a precondition that does not hold.
-- `2` -- refused before anything changed: `init` over a `menuz.yaml` that is not the example, without `--force`; `edit`, `validate` or `render` with no `menuz.yaml`, or `validate` or `render` given a file that does not exist; `edit --editor` with neither `VISUAL` nor `EDITOR` set; `log` with no log yet, or `-n` without a count; `validate` or `render` with no app built or installed, or a file the validator refuses; `build`, `test` or `install` without Xcode or xcodegen or the app's source, and `build` or `test` in a Homebrew install; `start` or `restart` with no build to launch; `use` with a word that is neither `dev` nor `installed`; `stamps` in a Homebrew install with no app installed; a bad verb or option.
+- `0`: done.
+- `1`: failed after something changed, naming the step: xcodegen or xcodebuild (a build failed or a test was red), the build's product check, or `install`'s quit, replace, register, launch, fetch, unzip, codesign, spctl, bundle id or version; `stop` or `restart` found a copy still running 5 seconds after asking it to quit; `start` could not launch the app; `uninstall` removed the app but could not unregister its login item or its Launch Services record, or could not remove the app; `stamps` could not read the stamps; `status` found no app installed; or `doctor` found a precondition that does not hold.
+- `2`: refused before anything changed: `init` over a `menuz.yaml` that is not the example, without `--force`; `edit`, `validate` or `render` with no `menuz.yaml`, or `validate` or `render` given a file that does not exist; `edit --editor` with neither `VISUAL` nor `EDITOR` set; `log` with no log yet, or `-n` without a count or with one that is not a count; `validate` or `render` with no app built or installed, or a file the validator refuses; `build`, `test` or `install` without Xcode or xcodegen or the app's source, or when the stamps cannot be read; `build` or `test` in a Homebrew install; `start` or `restart` with no build to launch; `use` with a word that is neither `dev` nor `installed`, or a `use` file that holds another word; `stamps` in a Homebrew install with no app installed; a verb off macOS that needs macOS; a bad verb or option.
 
 ---
 
 ## Dependencies
 
-- macOS 26 or later -- for `Menuz.app`, whose top row and About window need it.
-- Xcode 27.1 or later and `xcodegen` (optional) -- needed by `build`, `test` and `install` in a source clone; `utilz doctor` reports them only where the app's source, `native/macos/Menuz/`, is present.
+- macOS 26 or later: for `Menuz.app`, whose top row and About window need it.
+- Xcode 27.1 or later and `xcodegen` (optional): needed by `build`, `test` and `install` in a source clone; `utilz doctor` reports them only on macOS, where the app's source, `native/macos/Menuz/`, is present.
 
 ---
 
 ## See Also
 
-- `utilz doctor` -- reports menuz's dependencies.
-- `menuz doctor` -- every precondition menuz needs.
-- `arngz` -- the first thing on the example menu.
-- `intent/st/ST0027/design.md` -- the design.
+- `utilz doctor`: reports menuz's dependencies.
+- `menuz doctor`: every precondition menuz needs.
+- `arngz`: the first thing on the example menu.
+- The design: `design.md` of steel thread ST0027. `intent st hydrate ST0027` puts it at `intent/st/ST0027/design.md`.
 
 ---
 

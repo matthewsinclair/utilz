@@ -27,9 +27,10 @@ results as CSV.
 
 The parent directory name of each PDF becomes the `Category` column in the
 output. For example, a PDF at `receipts/Travel/train.pdf` gets Category "Travel".
+expz finds files that end in `.pdf` in any case. It processes them in path order.
 
-Each PDF is converted to Markdown via `pdf2md`, then semantically parsed by
-`xtrct` using a JSON schema that describes the fields to extract: date, supplier,
+`xtrct` converts each PDF to Markdown via `pdf2md`, then semantically parses it
+using a JSON schema that describes the fields to extract: date, supplier,
 description, currency, subtotal, VAT, total, and reference number.
 
 ---
@@ -56,15 +57,22 @@ Date,Category,Supplier,Description,Currency,Subtotal,VAT,Total,Reference,File
 | Column      | Source         | Description                                  |
 | ----------- | -------------- | -------------------------------------------- |
 | Date        | xtrct (PDF)    | Receipt/invoice date as YYYY-MM-DD           |
-| Category    | Directory name | Parent directory of the PDF (e.g. Travel)    |
+| Category    | Directory name | Parent directory of the PDF (eg Travel)      |
 | Supplier    | xtrct (PDF)    | Vendor or service provider name              |
 | Description | xtrct (PDF)    | Short one-line summary of the expense        |
 | Currency    | xtrct (PDF)    | ISO 4217 currency code (GBP, USD, EUR, etc.) |
 | Subtotal    | xtrct (PDF)    | Amount before tax/VAT                        |
-| VAT         | xtrct (PDF)    | VAT/tax amount (0 if none)                   |
+| VAT         | xtrct (PDF)    | VAT/tax amount: 0 if none, empty if unclear  |
 | Total       | xtrct (PDF)    | Total amount paid                            |
 | Reference   | xtrct (PDF)    | Invoice/receipt number                       |
 | File        | Filesystem     | Relative path to source PDF                  |
+
+A field that xtrct returns as null is empty in the CSV. If xtrct fails on a PDF,
+or returns JSON that is not valid, expz writes a warning to stderr. It writes a
+row with only Category and File, and goes on to the next PDF.
+
+expz writes progress and warnings to stderr. It always writes the line
+`Found <n> PDF files in <directory>`.
 
 ---
 
@@ -121,14 +129,14 @@ expz receipts/ --schema my_schema.json
 The default extraction schema is bundled at `$UTILZ_HOME/opt/expz/lib/expense_schema.json`.
 It defines 8 fields for `xtrct` to extract from each receipt:
 
-- `date` — Receipt date as YYYY-MM-DD
-- `supplier` — Vendor/merchant name
-- `description` — Short one-line summary (max 80 chars)
-- `currency` — ISO 4217 code (GBP, USD, EUR)
-- `subtotal` — Pre-tax amount, or null
-- `vat` — VAT/tax amount, or 0/null
-- `total` — Total paid
-- `reference` — Invoice/receipt number, or null
+- `date` - Receipt date as YYYY-MM-DD
+- `supplier` - Vendor/merchant name
+- `description` - Short one-line summary (max 80 chars)
+- `currency` - ISO 4217 code (GBP, USD, EUR), or null
+- `subtotal` - Pre-tax amount, or null
+- `vat` - VAT/tax amount, or 0/null
+- `total` - Total paid
+- `reference` - Invoice/receipt number, or null
 
 Override with `--schema <file>` to extract different fields.
 
@@ -155,7 +163,9 @@ Override with `--schema <file>` to extract different fields.
 ## Exit Status
 
 - `0` - Success
-- `1` - Error (missing args, missing tools, API failure, no PDFs found)
+- `1` - Error (bad or missing arguments, missing directory or schema, missing tools, no `ANTHROPIC_API_KEY`, no PDFs found)
+
+A PDF that xtrct cannot extract does not change the exit status. See CSV Output.
 
 ---
 
@@ -163,7 +173,7 @@ Override with `--schema <file>` to extract different fields.
 
 - `xtrct` (required) - Schema-driven semantic data extraction; part of utilz framework
 - `jq` (required) - JSON parsing and CSV assembly; `brew install jq`
-- `pdf2md` (optional) - Called internally by xtrct for PDF input; part of utilz framework
+- `pdf2md` (required by xtrct for PDF input) - Called internally by xtrct; part of utilz framework
 
 ---
 

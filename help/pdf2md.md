@@ -25,19 +25,19 @@ pdf2md converts PDF files to clean markdown using local algorithmic extraction w
 
 The algorithm is a Python port of [pdf2md.morethan.io](https://pdf2md.morethan.io/), using pdfplumber instead of pdfjs-dist for text extraction.
 
-On first run, pdf2md automatically creates a Python virtual environment at `lib/.venv/` and installs dependencies.
+On first run, pdf2md creates a Python virtual environment at `lib/.venv/` and installs its dependencies. A file is a PDF if its name ends in `.pdf`.
 
 ---
 
 ## Options
 
-| Flag              | Short | Description                           |
-| ----------------- | ----- | ------------------------------------- |
-| `--output <file>` | `-o`  | Write to file instead of stdout       |
-| `--pages <range>` |       | Page range (e.g., "1-5", "3,7,10-12") |
-| `--verbose`       |       | Show progress to stderr               |
-| `--help`          | `-h`  | Show help message                     |
-| `--version`       |       | Show version information              |
+| Flag              | Short | Description                        |
+| ----------------- | ----- | ---------------------------------- |
+| `--output <file>` | `-o`  | Write to file instead of stdout    |
+| `--pages <range>` |       | Page range (eg "1-5", "3,7,10-12") |
+| `--verbose`       |       | Show progress to stderr            |
+| `--help`          | `-h`  | Show help message                  |
+| `--version`       |       | Show version (first argument only) |
 
 ---
 
@@ -45,26 +45,28 @@ On first run, pdf2md automatically creates a Python virtual environment at `lib/
 
 The `--pages` option accepts comma-separated page numbers and ranges:
 
-- `--pages 1` — first page only
-- `--pages 1-5` — pages 1 through 5
-- `--pages 1,3,5` — specific pages
-- `--pages 1-3,7,10-12` — mixed ranges and singles
+- `--pages 1`: first page only
+- `--pages 1-5`: pages 1 through 5
+- `--pages 1,3,5`: specific pages
+- `--pages 1-3,7,10-12`: mixed ranges and singles
 
-Page numbers are 1-based.
+Page numbers are 1-based. pdf2md ignores pages past the end of the PDF. If no page in the range exists, pdf2md exits 1.
 
 ---
 
 ## Conversion Pipeline
 
-| Stage | Description                                                          |
-| ----- | -------------------------------------------------------------------- |
-| 1     | Extract text items with position/font metadata via pdfplumber        |
-| 2     | Calculate body text font size (statistical mode) and font name       |
-| 3     | Group characters into lines by Y-position, sort by X within lines    |
-| 4     | Detect headings: font size > body → H1-H6 by descending unique sizes |
-| 5     | Detect list items: bullets, dashes, numbered, lettered patterns      |
-| 6     | Remove repetitive headers/footers (same text+Y on >50% of pages)     |
-| 7     | Compact and emit: merge fragments, join paragraphs, emit markdown    |
+| Stage | Description                                                        |
+| ----- | ------------------------------------------------------------------ |
+| 1     | Extract text items with position/font metadata via pdfplumber      |
+| 2     | Calculate body text font size (statistical mode) and font name     |
+| 3     | Group characters into lines by Y-position, sort by X within lines  |
+| 4     | Detect headings: size > body + 0.5 pt gives H1-H6, largest first   |
+| 5     | Detect list items: bullets, dashes, numbered, lettered, (a) or (1) |
+| 6     | Remove headers/footers: same text+Y on >50% of pages (3+ pages)    |
+| 7     | Emit markdown: one line per text line, headings and lists marked   |
+
+pdf2md does not join lines into paragraphs. A PDF with no text gives empty output.
 
 ---
 
@@ -131,7 +133,8 @@ pdf2md document.pdf --verbose
 ## Exit Status
 
 - `0` - Success
-- `1` - Error (file not found, not a PDF, conversion failure)
+- `1` - Error (file not found, not a PDF, cannot open the PDF, no valid pages in the range)
+- `2` - Usage error (unknown option, missing file argument)
 
 ---
 
