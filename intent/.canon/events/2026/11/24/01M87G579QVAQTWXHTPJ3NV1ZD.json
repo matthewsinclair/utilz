@@ -1,0 +1,15 @@
+{
+  "id": "01M87G579QVAQTWXHTPJ3NV1ZD",
+  "ts": "2026-11-24T19:22:39.287Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "opt/utilz/test/test_helper.bash:34-36 says a fake source holds no bin/devbin; make_fake_src copies it since I59c806c. XS comment fix, on vc's word."
+  }
+}

@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-24 16:54Z
+heartbeat_at: 2026-11-24 19:23Z
 status: active
-focus: "24 Nov: localfold on hv's word, no release. ST0031/02 done; ST0031 rests on AC-01.4 at the first cut. Utilz holds for hv's word."
+focus: "24 Nov EOD: localfold on hv's word, no release. ST0031 rests on AC-01.4 at hv's 2.15.0 cut. Todo 31 for tomorrow. Holding for hv's word via vc."
 claims: [ST0031/01, ST0031/02]
 ---
 
@@ -17,7 +17,7 @@ claims: [ST0031/01, ST0031/02]
 
 ## TODO
 
-_(none)_
+- opt/utilz/test/test_helper.bash:34-36 says a fake source holds no bin/devbin; make_fake_src copies it since I59c806c. XS comment fix, on vc's word.
 
 ## Holds
 
