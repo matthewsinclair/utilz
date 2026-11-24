@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-24 16:54Z
+heartbeat_at: 2026-11-24 19:33Z
 status: active
-focus: "24 Nov 16:54Z: localfold on hv's word via vc, no release. STb8e4fb6 open only for AC .8 (hv's phone scan). Todo 13 watches arca_swift's tag. Holding for hv's word via vc."
+focus: "24 Nov 19:33Z: end of day, localfold on hv's word, no release. Docs landed at c4b1a6c1, records at 1183c682. Open: STb8e4fb6 AC .8 (hv's phone scan); todo 13 watches arca_swift's tag. Holding for hv's word via vc."
 claims: [STb8e4fb60638e2a9c]
 ---
 
@@ -13,7 +13,7 @@ claims: [STb8e4fb60638e2a9c]
 
 ## DOING
 
-- STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED. AC .7 is satisfied by AT-702cceb9.7, green from main's CI run 45374943717 (5e6477c3, ebb1e3f3). Open: AC-702cceb9.8, hv's phone scan. (edited)
+- STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M87GSF2RB95Y9XVHK8BVZSXE",
+  "ts": "2026-11-24T19:33:42.616Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 15,
+    "text": "STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR."
+  }
+}
