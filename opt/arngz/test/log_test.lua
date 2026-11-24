@@ -415,6 +415,7 @@ arm("the tally", function()
   check("tally: a failure on no entry's path carries its fix too",
     tally7.first == "the Dock did not open Mission Control" and tally7.fix == "add the desktop in Mission Control by hand",
     tostring(tally7.first) .. " / " .. tostring(tally7.fix))
+  -- AT-322a6511.5 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 WP6: first_outcome says what the entry first names was, in
   -- the tally's own keys, so the toast can label it.
   local _, _, unseen_first = P.apply_report(desk, { { op = "unseen", path = "displays[0].spaces[0].apps[1]",

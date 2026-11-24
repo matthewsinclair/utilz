@@ -330,6 +330,7 @@ do
   u.window_id_errors, u.window_id_error = 2, "axuielement gone"
   u.window_filter = "failed: no filter"
   local uops, uerr = P.plan(base_desk(), u, {})
+  -- AT-322a6511.2 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 WP6 (issue I7fce35c): a failed filter is said plainly, with
   -- its way out, which travels with the unseen op to Finished.
   check("an unseen reason counts the window id reads that failed, and says plainly that Hammerspoon's window filter failed",
@@ -925,6 +926,7 @@ do
     names = names }
   local rhad = { order = { L = rhad_order }, types = types, active = { L = 5 }, screens = { laptop }, apps = apps }
   local fail, fwhy, ffix, fpassed = P.move_legs(rhad, teams)
+  -- AT-ad94d40b.1 (STca1b7f9 acceptance.md) cites this arm.
   check("WP4: on the laptop alone, the move fails naming its app, the target, every full-screen app and the gap",
     fail == nil and fwhy == "Microsoft Teams not moved to desktop 6 on main: Screen Sharing and Parallels Desktop are full"
       .. " screen between desktop 4 and desktop 6", tostring(fwhy))
@@ -948,6 +950,7 @@ do
       apps = apps }
   end
   local went = P.move_legs(zeopit(8, 9), appgate)
+  -- AT-dca427e7.1 (STca1b7f9 acceptance.md) cites this arm.
   check("WP3: plugged in, a carry past full-screen spaces goes round through a panel, the first by the screens' order",
     went and went.via == "B" and #went == 3, went and (tostring(went.via) .. " / " .. #went))
   local function legs_text(legs)
@@ -998,6 +1001,7 @@ do
     owhy == "Microsoft Teams not moved to desktop 5 on main: Screen Sharing and an app arngz cannot name are full screen"
       .. " between desktop 4 and desktop 5" and string.find(ofix, "take them", 1, true) == 1, tostring(owhy))
 
+  -- AT-dca427e7.2 (STca1b7f9 acceptance.md) cites this arm.
   -- WP3: where a round that failed after its first drag left the window.
   local zs = zeopit(8, 9)
   check("WP3: a round that failed after its first drag says where the window is now, as ic worded it, with no fix",
@@ -1155,6 +1159,7 @@ do
   check("a window on every space wanted on a space it is not on is unmovable, said, and neither moved nor placed",
     kinds(uops) == "unmovable" and uops[1].window == 103 and string.find(uops[1].reason, "on 2 spaces", 1, true) ~= nil,
     uerr or ops_text(uops))
+  -- AT-ad94d40b.3 (STca1b7f9 acceptance.md) cites this arm.
   -- Issue I4eacd29: the reason reaches Finished, so it names the app and
   -- never the title, which the op keeps for the log.
   check("unmovable's reason names the app and no window title, and the op keeps the title for the log",
@@ -1500,6 +1505,7 @@ do
   local w = base_world()
   w.apps_running = { "com.apple.mail", "com.apple.Safari" }
   local ops = P.plan(base_desk(), w, opts)
+  -- AT-322a6511.3 (STca1b7f9 acceptance.md) cites this arm.
   check("WP6: an app read as not running while its window from the start is still listed is planned as running:"
     .. " its window is claimed and already in place, so nothing, and never gone", ops and kinds(ops) == "", ops_text(ops))
   -- A second VSCode window from the start, with a higher id, still listed:
@@ -1521,6 +1527,7 @@ do
   -- The retry rule: the filter's failure is a read that could not be made.
   local ran, failed = { window_filter = "ran" }, { window_filter = "failed: hs/uielement.lua:134" }
   local takes, why = P.retry_takes(ran, failed)
+  -- AT-322a6511.1 (STca1b7f9 acceptance.md) cites this arm.
   check("WP6: a retry from a world whose window filter failed does not replace a plan from one where it ran, saying why",
     takes == false and why == "its window filter failed: hs/uielement.lua:134", tostring(why))
   local pairs_taken = { P.retry_takes(ran, ran), P.retry_takes(failed, ran), P.retry_takes(failed, failed),

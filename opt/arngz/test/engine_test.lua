@@ -281,6 +281,7 @@ end
 -- while it may still be opening. So it is tried once, says what it means with
 -- its fix, and binds every display, Mission Control being one for all of
 -- them: two creates on its display and one on the other.
+-- AT-322a6511.4 (STca1b7f9 acceptance.md) cites this arm.
 do
   local r, log, ctx = drive({
     [SCREEN] = { add = { why = DOCK_WHY }, counts = { 2 } },

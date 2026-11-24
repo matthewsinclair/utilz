@@ -123,6 +123,7 @@ do
     check("step: " .. k[1].kind, p and p.lines[2] == k[2], p and shown(p.lines))
   end
 
+  -- AT-dca427e7.3 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 AC-dca427e7.3: a move round through another display says so,
   -- and the cut takes from the words before the round, never from it.
   local round = {}
@@ -178,6 +179,7 @@ do
     failure and failure.lines[2] == "Failed at step 5 of 12, after 7.1 s: organise: lua error: boom"
       and failure.lines[3] == T.LOG_LINE, failure and shown(failure.lines))
 
+  -- AT-ad94d40b.2 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 AC-ad94d40b.2: a failure's fix is shown as a refusal's is, under
   -- its words and before where the rest is, and only when there is one.
   local fix = "take it out of full screen, or attach a display, then run it again"
@@ -193,6 +195,7 @@ do
     partly and failure and not shown(partly.lines):find("Fix:", 1, true) and not shown(failure.lines):find("Fix:", 1, true),
     partly and failure and (shown(partly.lines) .. " / " .. shown(failure.lines)))
 
+  -- AT-322a6511.9 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 AC-322a6511.9: a partly run's first problem is labelled by what
   -- it was, in the counts' own words, and is bare when the point does not say
   -- or says what toast.lua does not know as a problem.
