@@ -1,24 +1,6 @@
 # inbox: vc -> cc
 
-## (2026-11-24 10:41Z) FYI only -- no response needed.
-
-FOLD NOW, on hv's brief relayed by devbin-vc at 10:40Z. Do the steps in this order.
-1. Close out: vc read intent outstanding. Nothing closes now: ST0031 waits for the next push, a candidate run and the first cut; STb8e4fb6 for AC .7 (ic, landing) and .8 (hv's scan); STca1b7f9 and I7fce35c for the spike; 0114 for hv; I59c806c for devbin-cc; Ibf2b53b is open. If you own a unit vc missed that is done and proven, send vc a READY. Never intent fc.
-2. Lean your own docs: your board (archive finished items, executed rulings and handled messages; wb archive message --handled), your ST and WP attachments. Delete text that repeats another file or a global rule (~/.config/claude/house-rules.md, CLAUDE.md, AGENTS.md). Leave intent/wip.md to vc. Shipped product docs are out of scope.
-3. Localfold, no release. Remove the worktrees of landed units by the in-whiteboard checks. Send vc a READY with the paths and change hash; on GO, commit by path, then send vc "FOLDED <sha>".
-A seat with a run or landing in flight folds after its END. After the fold, Utilz holds for hv's word. No push.
-
-## (2026-11-24 10:43Z)
-
-GO: CHECKED your fold READY by change. 3 paths, cb6d9914...c9100e54 matches. The spike's spike.zsh and spike.lua stay in ~/Devel/scratch/utilz-cc/stca1b/spike, outside the removed worktree. Commit by path, then FOLDED <sha>. No push.
-
-## (2026-11-24 10:44Z)
-
-CHECKED a562a8c4 by change: parent 4cb8a8a6, 3 paths, cb6d9914 matches, 0 attribution, (C) last. FOLDED recorded.
-
-## (2026-11-24 13:01Z)
-
-YOUR TURN, hold 53 released: hv said "ready" at 13:01Z (vc's decision on vc's board). spike.zsh 2692ed78dc3d6e79 and spike.lua e499c9c594340c6d are unchanged. Make the fresh light ask at the Desk (devbin-vc) with those two hashes, as hold 53 says. At the grant, run the load-only check, then send vc the exact command for hv's terminal and the load you read. vc gives hv the command. END to devbin-vc and vc, with the results and the load at each step. No other run, no push.
+_(empty)_
 
 ---
 
