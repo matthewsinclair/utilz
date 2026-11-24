@@ -1,0 +1,15 @@
+{
+  "id": "01M86TC489FSZWQHRTQJ4SJ6X1",
+  "ts": "2026-11-24T13:01:56.873Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 13:01Z. hv's words: \"ready, but be sure to sync with devbin-vc.\" The rest is vc's wording. It releases hold 30: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5, unchanged at 13:01Z). cc makes a fresh light ask at the Desk, devbin-vc grants it in its order, cc runs the load-only check under the slot, and then vc gives hv the command to run in hv's own terminal. vc tells devbin-vc first, as hv asked."
+  }
+}

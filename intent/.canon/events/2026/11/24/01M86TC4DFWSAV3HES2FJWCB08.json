@@ -1,0 +1,17 @@
+{
+  "id": "01M86TC4DFWSAV3HES2FJWCB08",
+  "ts": "2026-11-24T13:01:57.040Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN, hold 53 released: hv said \"ready\" at 13:01Z (vc's decision on vc's board). spike.zsh 2692ed78dc3d6e79 and spike.lua e499c9c594340c6d are unchanged. Make the fresh light ask at the Desk (devbin-vc) with those two hashes, as hold 53 says. At the grant, run the load-only check, then send vc the exact command for hv's terminal and the load you read. vc gives hv the command. END to devbin-vc and vc, with the results and the load at each step. No other run, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

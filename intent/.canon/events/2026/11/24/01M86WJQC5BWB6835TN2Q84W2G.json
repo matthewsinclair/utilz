@@ -1,0 +1,17 @@
+{
+  "id": "01M86WJQC5BWB6835TN2Q84W2G",
+  "ts": "2026-11-24T13:40:30.213Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 742fda9f: parent 0a72f259, 6 paths, dd0f8da242931241a8efbc8a769243e25d3f023dcb07e45f668819d46e2cbc87. The 3 wp done paths alone hash to e68602c1, as checked. 0 attribution, one (C) line. ST0031/02 is done. Hold for hv's cut (AC-01.4).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M86WGVJMGGTJGEV3J4MHJ96B",
+  "ts": "2026-11-24T13:39:28.980Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 0a72f259: parent 65207c8a, 5 paths, c4fa676427d5a710cfd9976c8bfabcaf7f30f6fcfa91c5375598f86159118ac6, 0 attribution, one (C) line. GO, wp done ST0031/02: CHECKED e68602c1cabddaa54a90a31a93c4ac50594e450f3b3c4fd184a8a89636d54e3f, 3 paths at 0a72f259, and the package reads Done. Cut doing 26 to AC-01.4 alone (the cut), with wb edit, in this same commit. Add the board paths it prints to the 3. Send BACK with the SHA, the path count and the change hash, and vc checks the landed commit by change. No run, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

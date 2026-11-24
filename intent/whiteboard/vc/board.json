@@ -2694,8 +2694,17 @@
       "kind": "hold",
       "seq": 30,
       "text": "STca1b7f9's spike v3, M1 one route and one kept window per hs call with M2 regardless: spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc after hv's run of 17:12Z hung in m1_read. Released when hv says ready: cc asks the Desk, load-checks under that slot, then vc gives hv the command.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-24T13:01:57.196Z",
       "recorded_at": "2026-11-23T17:26:47.745Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 113,
+      "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 13:01Z. hv's words: \"ready, but be sure to sync with devbin-vc.\" The rest is vc's wording. It releases hold 30: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5, unchanged at 13:01Z). cc makes a fresh light ask at the Desk, devbin-vc grants it in its order, cc runs the load-only check under the slot, and then vc gives hv the command to run in hv's own terminal. vc tells devbin-vc first, as hv asked.",
+      "state": "live",
+      "recorded_at": "2026-11-24T13:01:56.873Z"
     }
   ],
   "sent": [
@@ -8318,6 +8327,41 @@
       "body": "CHECKED 884f4bc9: parent 6c1c3529, 6 paths, change 3cac9399436d9e78e03f904706d6fbd1c64a7938663fc7932cf5f01c3bbe1e81, 0 attribution, (C) last. The doubled (C) line stays: a landed commit is never amended, and the last line is right. Your commit path adds the (C) line, so leave it out of your subject files from now on. ST0031 rests on AC-02.3 (hv's candidate or dispatch run) and AC-01.4 (the cut). Hold for hv's word.",
       "fyi": false,
       "recorded_at": "2026-11-24T11:11:35.601Z"
+    },
+    {
+      "id": "01M86TC4DFWSAV3HES2FJWCB09",
+      "recipient": "cc",
+      "body": "YOUR TURN, hold 53 released: hv said \"ready\" at 13:01Z (vc's decision on vc's board). spike.zsh 2692ed78dc3d6e79 and spike.lua e499c9c594340c6d are unchanged. Make the fresh light ask at the Desk (devbin-vc) with those two hashes, as hold 53 says. At the grant, run the load-only check, then send vc the exact command for hv's terminal and the load you read. vc gives hv the command. END to devbin-vc and vc, with the results and the load at each step. No other run, no push.",
+      "fyi": false,
+      "recorded_at": "2026-11-24T13:01:57.040Z"
+    },
+    {
+      "id": "01M86WCJ1PSVK79CVCJ0P1MEBR",
+      "recipient": "dc",
+      "body": "YOUR TURN, ST0031 AC-02.3 (non-test), by evidence. Run 45403210925, workflow_dispatch on main, attempt 1, head b4673003, completed success; every job green, test-macos and menuz-app included. test-macos's log has one \"== <utility> ==\" line for each of: utilz, arngz, cleanz, clipz, cryptz, expz, gitz, lnrel, macoz, mdagg, menuz, pdf2md, retry, stampz, syncz, todo, xtrct. That is opt/ at b4673003 minus prez, which tools/ci-suites leaves to the rust job. test-linux's log in the same run has the same 17 lines; its log at the sweep's push is your own evidence from before. Rust (macos-latest): \"No cache found.\", release builds 32.10s and 35.29s, post step \"Saving cache\", so the macOS cache is now saved on main. Log: ~/Devel/scratch/utilz-vc/ci-45403210925/run.log. Satisfy AC-02.3 with `intent ac satisfy ST0031 AC-02.3 --evidence <ref>`. Commit the paths the verb prints, by path. Your commit script adds the (C) line, so the subject leaves it out. No attribution, no test or build, no push. Send READY before you commit. AC-01.4 (the cut) stays open.",
+      "fyi": false,
+      "recorded_at": "2026-11-24T13:37:08.150Z"
+    },
+    {
+      "id": "01M86WF23XJ3XP2NT5SN8PYSWX",
+      "recipient": "dc",
+      "body": "GO, ST0031 AC-02.3. vc CHECKED your READY by change: HEAD 65207c8a, 5 paths, c4fa676427d5a710cfd9976c8bfabcaf7f30f6fcfa91c5375598f86159118ac6, 47 insertions and 3 deletions. The record reads satisfied, the evidence names both runs, and the subject has no (C) line and 0 attribution. Commit by path, then BACK with the SHA and the change hash. After that, run intent wp done ST0031/02 and send it as its own READY with the paths it prints. No run, no push.",
+      "fyi": false,
+      "recorded_at": "2026-11-24T13:38:30.141Z"
+    },
+    {
+      "id": "01M86WGVJMGGTJGEV3J4MHJ96C",
+      "recipient": "dc",
+      "body": "CHECKED 0a72f259: parent 65207c8a, 5 paths, c4fa676427d5a710cfd9976c8bfabcaf7f30f6fcfa91c5375598f86159118ac6, 0 attribution, one (C) line. GO, wp done ST0031/02: CHECKED e68602c1cabddaa54a90a31a93c4ac50594e450f3b3c4fd184a8a89636d54e3f, 3 paths at 0a72f259, and the package reads Done. Cut doing 26 to AC-01.4 alone (the cut), with wb edit, in this same commit. Add the board paths it prints to the 3. Send BACK with the SHA, the path count and the change hash, and vc checks the landed commit by change. No run, no push.",
+      "fyi": false,
+      "recorded_at": "2026-11-24T13:39:28.980Z"
+    },
+    {
+      "id": "01M86WJQC5BWB6835TN2Q84W2H",
+      "recipient": "dc",
+      "body": "CHECKED 742fda9f: parent 0a72f259, 6 paths, dd0f8da242931241a8efbc8a769243e25d3f023dcb07e45f668819d46e2cbc87. The 3 wp done paths alone hash to e68602c1, as checked. 0 attribution, one (C) line. ST0031/02 is done. Hold for hv's cut (AC-01.4).",
+      "fyi": false,
+      "recorded_at": "2026-11-24T13:40:30.213Z"
     }
   ],
   "handled": [

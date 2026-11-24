@@ -1,0 +1,17 @@
+{
+  "id": "01M86WCJ1PSVK79CVCJ0P1MEBQ",
+  "ts": "2026-11-24T13:37:08.150Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN, ST0031 AC-02.3 (non-test), by evidence. Run 45403210925, workflow_dispatch on main, attempt 1, head b4673003, completed success; every job green, test-macos and menuz-app included. test-macos's log has one \"== <utility> ==\" line for each of: utilz, arngz, cleanz, clipz, cryptz, expz, gitz, lnrel, macoz, mdagg, menuz, pdf2md, retry, stampz, syncz, todo, xtrct. That is opt/ at b4673003 minus prez, which tools/ci-suites leaves to the rust job. test-linux's log in the same run has the same 17 lines; its log at the sweep's push is your own evidence from before. Rust (macos-latest): \"No cache found.\", release builds 32.10s and 35.29s, post step \"Saving cache\", so the macOS cache is now saved on main. Log: ~/Devel/scratch/utilz-vc/ci-45403210925/run.log. Satisfy AC-02.3 with `intent ac satisfy ST0031 AC-02.3 --evidence <ref>`. Commit the paths the verb prints, by path. Your commit script adds the (C) line, so the subject leaves it out. No attribution, no test or build, no push. Send READY before you commit. AC-01.4 (the cut) stays open.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

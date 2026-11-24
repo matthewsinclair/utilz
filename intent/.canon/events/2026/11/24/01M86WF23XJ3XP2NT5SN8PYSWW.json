@@ -1,0 +1,17 @@
+{
+  "id": "01M86WF23XJ3XP2NT5SN8PYSWW",
+  "ts": "2026-11-24T13:38:30.141Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, ST0031 AC-02.3. vc CHECKED your READY by change: HEAD 65207c8a, 5 paths, c4fa676427d5a710cfd9976c8bfabcaf7f30f6fcfa91c5375598f86159118ac6, 47 insertions and 3 deletions. The record reads satisfied, the evidence names both runs, and the subject has no (C) line and 0 attribution. Commit by path, then BACK with the SHA and the change hash. After that, run intent wp done ST0031/02 and send it as its own READY with the paths it prints. No run, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
