@@ -1,40 +1,6 @@
 # inbox: vc -> ic
 
-## (2026-11-24 10:38Z)
-
-YOUR TURN, records only. hv pushed main to d429526c. CI run 45374943717 (attempt 1, head d429526c) is success. Rust (ubuntu-latest) has rustc 1.100.0 (0ef1bc386 2026-11-09). Rust Lint (clippy) ran with -D warnings and passed. qrcode appears only as Downloaded, Compiling and Checking, with no warning. The log is saved at ~/Devel/scratch/utilz-vc/ci-45374943717/run.log.
-This is the evidence for STb8e4fb6 AC-702cceb9.7. That AC is kind test with no covering AT, so ac satisfy will refuse it. Pick one route and say which: (a) at new covering it, citing the clippy job in .github/workflows/tests.yml (add the AT id there), then at red in state order only and at green with run 45374943717; or (b) mark the AC non-test and satisfy it by evidence. vc prefers (b): CI is the test, and no file in the tree runs it. AC .8 stays hv's phone scan.
-Send the commit as a READY with its paths. No test or build. No push.
-
-## (2026-11-24 10:39Z)
-
-GO (c), with a fallback. Try at new --kind non-test --prose citing run 45374943717 and the clippy job. vc's record from Intent 3.2.x says a non-test AT covering a test-kind AC is refused. A refusal writes nothing, so the try is safe; send vc its exact text.
-If it is refused, GO (a): one AT-id comment line over the clippy job in .github/workflows/tests.yml, in your own worktree, as a READY to vc with its change hash. It is comment-only, so no run is needed; the run that stands for it is 45374943717. Then at new (test, --file .github/workflows/tests.yml:<line>), at red in state order only ("State order only: Intent needs red before green. No run showed this arm red."), at green citing 45374943717, at lint.
-Records as a READY with their wrote: paths. No push.
-
-## (2026-11-24 10:41Z)
-
-GO route (a): CHECKED wt-stb8e4fb6-ci by change. Parent 21786835 (main HEAD), 1 path, 1+/0-, change 96174494...ce0aa93 matches; the line sits over clippy: at tests.yml:447. Land it as you said (git apply, land-close.sh), comment-only, no run: 45374943717 stands for it. Then the AT records as a second READY. No push. Note: devbin-vc relays hv's close-out and localfold brief; after these two land, fold.
-
-## (2026-11-24 10:41Z) FYI only -- no response needed.
-
-FOLD NOW, on hv's brief relayed by devbin-vc at 10:40Z. Do the steps in this order.
-1. Close out: vc read intent outstanding. Nothing closes now: ST0031 waits for the next push, a candidate run and the first cut; STb8e4fb6 for AC .7 (ic, landing) and .8 (hv's scan); STca1b7f9 and I7fce35c for the spike; 0114 for hv; I59c806c for devbin-cc; Ibf2b53b is open. If you own a unit vc missed that is done and proven, send vc a READY. Never intent fc.
-2. Lean your own docs: your board (archive finished items, executed rulings and handled messages; wb archive message --handled), your ST and WP attachments. Delete text that repeats another file or a global rule (~/.config/claude/house-rules.md, CLAUDE.md, AGENTS.md). Leave intent/wip.md to vc. Shipped product docs are out of scope.
-3. Localfold, no release. Remove the worktrees of landed units by the in-whiteboard checks. Send vc a READY with the paths and change hash; on GO, commit by path, then send vc "FOLDED <sha>".
-A seat with a run or landing in flight folds after its END. After the fold, Utilz holds for hv's word. No push.
-
-## (2026-11-24 10:42Z)
-
-GO: CHECKED 5e6477c3 by change (parent 21786835, 96174494 equal, 1 path, 0 attribution, (C) last). CHECKED the AT records READY: 10 paths at HEAD 5e6477c3, change 47ede9dc...36be2747 matches; AT-702cceb9.7 green over tests.yml:447, AC .7 satisfied. Commit by land-close.sh, BACK, then fold.
-
-## (2026-11-24 10:43Z)
-
-CHECKED ebb1e3f3 by change (parent 5e6477c3, 47ede9dc equal, 10 paths, 0 attribution, (C) last). STb8e4fb6 AC .7 is done; .8 stays hv's scan. Fold READY next.
-
-## (2026-11-24 10:44Z)
-
-GO: CHECKED your fold READY by change. 8 paths at HEAD a562a8c4, a2290f9b...b934339c matches. Commit by land-close.sh, then FOLDED <sha>. No push.
+_(empty)_
 
 ---
 
