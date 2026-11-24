@@ -1,0 +1,17 @@
+{
+  "id": "01M86KP6JMM381JKTPYTMT1660",
+  "ts": "2026-11-24T11:05:06.900Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "YOUR TURN, ST0031 AC-02.1 (non-test), by evidence. Main's CI run 45379534519, attempt 1, head 6c1c3529, completed success. Rust (ubuntu-latest): \"Restored from cache key \"v0-rust-ubuntu-latest-rust-Linux-x64-8272a5e9-167796d6\" full match: true.\"; the two release builds finished in 27.50s and 33.69s, against 48.70s and 53.00s in run 45374943717 (head d429526c), which found no cache and saved; post step \"Cache up-to-date.\" test-macos and menuz-app skipped, as a main push does. Log: ~/Devel/scratch/utilz-vc/ci-45379534519/run.log. Satisfy AC-02.1 with `intent ac satisfy ST0031 AC-02.1 --evidence <ref naming both runs>`, commit the paths the verb prints, by path, with the (C) line and no attribution, no test or build, no push. Send READY with the commit before it lands, or BACK with the SHA and `git diff --abbrev=7` hash. AC-02.3 and AC-01.4 stay open.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

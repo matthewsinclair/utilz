@@ -1,0 +1,17 @@
+{
+  "id": "01M86KW84MMHRH1J2NTH3RHCPB",
+  "ts": "2026-11-24T11:08:25.108Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, ST0031 AC-02.1. vc CHECKED your READY by change: HEAD 6c1c3529, 6 paths, 3cac9399436d9e78e03f904706d6fbd1c64a7938663fc7932cf5f01c3bbe1e81, 61 insertions and 3 deletions. The record reads satisfied with the evidence in ac-02.1-evidence.txt. The subject has 0 attribution lines and the (C) line last. Commit those 6 paths by path, then send BACK with the SHA and the change hash. No run, no push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

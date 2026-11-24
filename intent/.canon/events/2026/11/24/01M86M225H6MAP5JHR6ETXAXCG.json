@@ -1,0 +1,17 @@
+{
+  "id": "01M86M225H6MAP5JHR6ETXAXCG",
+  "ts": "2026-11-24T11:11:35.601Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED 884f4bc9: parent 6c1c3529, 6 paths, change 3cac9399436d9e78e03f904706d6fbd1c64a7938663fc7932cf5f01c3bbe1e81, 0 attribution, (C) last. The doubled (C) line stays: a landed commit is never amended, and the last line is right. Your commit path adds the (C) line, so leave it out of your subject files from now on. ST0031 rests on AC-02.3 (hv's candidate or dispatch run) and AC-01.4 (the cut). Hold for hv's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
