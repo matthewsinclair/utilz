@@ -1,0 +1,14 @@
+{
+  "id": "01M86WDX1XNJ1WR8953ZA792KK",
+  "ts": "2026-11-24T13:37:52.191Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-02.3"
+  },
+  "payload": {
+    "evidence": "Both test jobs run tools/ci-suites' one roster. test-linux at the sweep's push, run 45374943717 (attempt 1, head d429526c, push, success), has one \"== <utility> ==\" line for each of 17 utilities. test-macos at its first run after it, dispatch run 45403210925 (attempt 1, head b4673003, workflow_dispatch on main, success, every job green), has the same 17 lines: utilz, arngz, cleanz, clipz, cryptz, expz, gitz, lnrel, macoz, mdagg, menuz, pdf2md, retry, stampz, syncz, todo, xtrct. That is opt/ at b4673003 minus prez, which the rust job runs. test-linux in run 45403210925 has the same 17 lines. Rust (macos-latest) in that run found no cache, built release in 32.10s and 35.29s, and saved the cache on main. Read by vc and by dc from the logs (vc's ~/Devel/scratch/utilz-vc/ci-45403210925/run.log, sha256 47971548; dc's read of 45374943717 through gh run view --log)."
+  }
+}
