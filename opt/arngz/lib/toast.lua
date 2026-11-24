@@ -187,13 +187,23 @@ local STEP = {
   end,
 }
 
+-- A move that goes round through another display, past a full-screen space,
+-- says so at the end of its line (progress.md's step `via`; STca1b7f9
+-- AC-dca427e7.3). It is the one sign that the window is about to leave its
+-- display, so the cut takes from the words before it, never from it.
+local function round_through(f)
+  if f.kind == "move" and type(f.via) == "string" and f.via ~= "" then return ", round through " .. f.via end
+  return ""
+end
+
 local function step_line(f, name_of)
   local app = T.app_name(f.app, name_of)
   local say = STEP[f.kind]
   local what = say and say(f, app) or (tostring(f.kind) .. (app and (" " .. app) or ""))
   local count = ""
   if type(f.i) == "number" and type(f.n) == "number" then count = int(f.i) .. " of " .. int(f.n) .. ": " end
-  return "Running... " .. count .. what
+  local round = round_through(f)
+  return T.cut("Running... " .. count .. what, T.MAX_LINE - #round) .. round
 end
 
 -- The counts a Finished line names, each only when it is not zero, in the
@@ -216,6 +226,21 @@ local function counts(f)
   return parts
 end
 
+-- What a first problem can have been (progress.md's finished first_outcome).
+local FIRST_OUTCOMES = { failed = true, unseen = true, skipped = true }
+
+-- The label on a partly run's first problem: what it was, in COUNTS' own words,
+-- so the label and the count can never disagree, and an unseen entry reads
+-- "Not found:", never under "failed" (STca1b7f9 AC-322a6511.9). "" when the
+-- point does not say, or says something toast.lua does not know.
+local function first_label(f)
+  if not FIRST_OUTCOMES[f.first_outcome] then return "" end
+  for _, c in ipairs(COUNTS) do
+    if c[1] == f.first_outcome then return c[2]:sub(1, 1):upper() .. c[2]:sub(2) .. ": " end
+  end
+  return ""
+end
+
 local function took(f)
   if type(f.seconds) == "number" then return string.format(" in %.1f s", f.seconds) end
   return ""
@@ -226,10 +251,16 @@ local function said(f)
   return tostring(f.first)
 end
 
-local function refused(f, nothing)
-  local lines = add_wrapped({}, "Refused, nothing " .. nothing .. ": " .. said(f))
+-- The fix a Finished names, under the words it fixes: a refusal's, or the
+-- first failure's (progress.md's finished `fix`; STca1b7f9 AC-ad94d40b.2).
+-- One rule for every outcome that can carry one.
+local function add_fix(lines, f)
   if type(f.fix) == "string" and f.fix ~= "" then add_wrapped(lines, "Fix: " .. f.fix) end
   return lines
+end
+
+local function refused(f, nothing)
+  return add_fix(add_wrapped({}, "Refused, nothing " .. nothing .. ": " .. said(f)), f)
 end
 
 local function failed(run, f)
@@ -237,7 +268,7 @@ local function failed(run, f)
   local stepped = type(run.i) == "number" and type(run.n) == "number"
   if stepped then head = head .. " at step " .. int(run.i) .. " of " .. int(run.n) end
   if type(f.seconds) == "number" then head = head .. (stepped and ", " or " ") .. string.format("after %.1f s", f.seconds) end
-  local lines = add_wrapped({}, head .. ": " .. said(f))
+  local lines = add_fix(add_wrapped({}, head .. ": " .. said(f)), f)
   lines[#lines + 1] = T.LOG_LINE
   return lines
 end
@@ -258,7 +289,8 @@ local APPLY_FINISHED = {
   partly = function(_, f)
     local parts = counts(f)
     local lines = { T.cut("Finished" .. took(f) .. " with problems" .. (#parts > 0 and (": " .. table.concat(parts, ", ")) or "")) }
-    if f.first ~= nil and f.first ~= "" then add_wrapped(lines, tostring(f.first)) end
+    if f.first ~= nil and f.first ~= "" then add_wrapped(lines, first_label(f) .. tostring(f.first)) end
+    add_fix(lines, f)
     lines[#lines + 1] = T.LOG_LINE
     return lines
   end,

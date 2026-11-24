@@ -38,9 +38,10 @@ local POLL_SECONDS = 0.25
 -- How long launch waits for an app's first window (design.md, apply step 8).
 M.LAUNCH_TIMEOUT = 20
 
--- How many times a space creation is tried before it is given up on
--- (issue 0135). The Dock can be momentarily unable to serve Mission Control
--- data, and one attempt made that a failure.
+-- How many times a space creation is tried before it is given up on (issue
+-- 0135): a call that made nothing, for a reason that may pass, and the count
+-- readback, which can lag behind a creation. The Dock's Mission Control
+-- error is not retried, and a vanished display is not either (P.space_error_final).
 M.CREATE_SPACE_TRIES = 4
 
 -- ---------------------------------------------------------------- helpers
@@ -286,7 +287,13 @@ describe_one = function(id, index)
     standard = w:isStandard(),
     minimized = w:isMinimized(),
   }
-  if app then d.bundle = app:bundleID() end
+  if app then
+    d.bundle = app:bundleID()
+    -- The app's display name beside its bundle, read from the toast's own
+    -- source (toast.lua's display_name), so a reason names an app as the
+    -- toast does (STca1b7f9 WP4); P.app_label owns the fallback.
+    if d.bundle then d.app_name = hs.application.nameForBundleID(d.bundle) end
+  end
   return d
 end
 
@@ -597,17 +604,21 @@ end
 local function exec_create_space(op, ctx)
   -- A cause that lasts the whole run is said once per display, not once per
   -- op: run 35 of hv's log asked for seven spaces and reported the same Dock
-  -- failure seven times (issue 0135). The state is the run's, as ctx.unmoved is.
+  -- failure seven times (issue 0135). The state is the run's, as ctx.unmoved
+  -- is: one record per display, its reason and its fix. The Dock's Mission
+  -- Control failure binds every display, since Mission Control is one for all
+  -- of them, and prepare asks for every create in one callback (STca1b7f9 WP6).
   ctx.space_failed = ctx.space_failed or {}
-  local said = ctx.space_failed[op.screen]
-  if said then
-    return { status = "failed", reason = string.format(
-      "creating a space on this display already failed and was not tried again (%s)", said) }
+  local bound = ctx.space_failed[op.screen] or ctx.dock_failed
+  if bound then
+    return { status = "failed", fix = bound.fix, reason = string.format(bound.all
+      and "creating a space failed at the Dock earlier in this run and was not tried again (%s)"
+      or "creating a space on this display already failed and was not tried again (%s)", bound.reason) }
   end
   local before, berr, before_ids = user_space_count(op.screen)
   if not before then
     local reason = "could not count the desktops before: " .. berr
-    ctx.space_failed[op.screen] = reason
+    ctx.space_failed[op.screen] = { reason = reason }
     return { status = "failed", reason = reason }
   end
   -- attempts retries a THROWN error and this call signals by returning nil, so
@@ -624,16 +635,18 @@ local function exec_create_space(op, ctx)
   -- report done with the extras unaccounted for. `made` is captured, so once
   -- the call has returned a space the remaining attempts only re-read the
   -- count, which is what the retry budget is actually buying. A call that
-  -- returned nil made nothing and may honestly be tried again, which is run
-  -- 35's case and the one 0135 was raised for.
+  -- returned nil made nothing and may honestly be tried again, for a reason
+  -- that may pass. Run 35's, the Dock's Mission Control error, which 0135 was
+  -- raised for, is not one: four tries never once rode it out, there or in
+  -- hv's two runs of 23 Nov, so it stops the tries (STca1b7f9 WP6).
   --
   -- ONE HOLE IS LEFT OPEN ON PURPOSE, so it is not mistaken for an oversight:
   -- a call that returns nil and nonetheless creates a desktop leaves `made`
   -- nil, so the next attempt creates again. Closing it needs a count read
-  -- before the first create, which still races, and treating a nil return as
-  -- a single attempt would give up run 35's retry, the case this issue was
-  -- raised for. The overshoot arm below makes it visible instead of silent:
-  -- attempt 2's readback sees before + 2 and says so by name.
+  -- before the first create, which still races, and treating every nil return
+  -- as a single attempt would give up the retry of a reason that may pass.
+  -- The overshoot arm below makes it visible instead of silent: attempt 2's
+  -- readback sees before + 2 and says so by name.
   local made, why, last_ids
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
     if not made then
@@ -662,8 +675,11 @@ local function exec_create_space(op, ctx)
     -- Asked about the CALL's own reason, not about whatever was thrown: a
     -- display that has gone in a way that also breaks spacesForScreen throws
     -- the count's error, and reading that as transient would retry a vanished
-    -- display four times, which is the third thing 0135 set out to stop.
-    return not made and why ~= nil and P.space_error_kind(why) == "gone"
+    -- display four times, which is the third thing 0135 set out to stop. The
+    -- Dock's Mission Control error stops them too (STca1b7f9 WP6): each try
+    -- asks the Dock to open Mission Control while it may still be opening.
+    -- Which reasons stop them is plan's to say.
+    return not made and why ~= nil and P.space_error_final(why)
   end)
   if ok then
     -- `created` names the desktop it added, from the lists the counts were
@@ -677,8 +693,14 @@ local function exec_create_space(op, ctx)
   -- the inner fact on two of its four paths, where the call reported making a
   -- space, and where the desktops overshot. The inner clause is the only part
   -- carrying information, so it stands on its own.
+  -- The Dock's error said as what it means, with its way out (WP6), from the
+  -- call's own reason, which is what the stop read: a count that threw on the
+  -- same try goes beside it, never in place of it.
+  local dock = not made and why ~= nil and P.space_error_kind(why) == "dock"
+  local words, fix = P.create_failure(dock and why or res)
+  if dock and tostring(res) ~= tostring(why) then words = words .. "; and " .. tostring(res) end
   local reason = string.format("%s; user spaces %d before, %s after",
-    tostring(res), before, after and tostring(after) or "a count that could not be read")
+    words, before, after and tostring(after) or "a count that could not be read")
   -- Bind the rest of the run only for a cause that lasts: nothing made, or a
   -- count that cannot be read at all. The `made` test is the point -- a call
   -- that DID report a space, whose registration simply never caught up inside
@@ -688,10 +710,9 @@ local function exec_create_space(op, ctx)
   -- this function had on the ok-true path two commits ago, by the other door.
   -- A count that moved by some other amount is likewise this op's failure
   -- alone, said rather than held against the rest of the run.
-  if after == nil or (after == before and not made) then
-    ctx.space_failed[op.screen] = reason
-  end
-  return { status = "failed", reason = reason }
+  if after == nil or (after == before and not made) then ctx.space_failed[op.screen] = { reason = reason, fix = fix } end
+  if dock then ctx.dock_failed = { reason = reason, fix = fix, all = true } end
+  return { status = "failed", reason = reason, fix = fix }
 end
 
 -- A window plan could claim (named, standard, not minimized): what a launch
@@ -895,8 +916,40 @@ local function hit_test(p, id, pid)
   local win_el = role == "AXWindow" and el or el:attributeValue("AXWindow")
   local hw = win_el and win_el:asHSWindow()
   if not (hw and hw:id() == id) then return "another window" end
-  if GRAB_ROLES[role] then return "grab" end
+  if GRAB_ROLES[role] then return "grab", el, role end
   return "a control (" .. tostring(role) .. ")"
+end
+
+-- How many parents of a grab point's element are read for a web area before
+-- it is taken to be in none: far deeper than a title bar's tree.
+local WEB_AREA_DEPTH = 32
+
+-- The element under a grab point as the log says it (STca1b7f9 WP6): its role,
+-- and whether a web area holds it, read up its parents to its window, so a
+-- hold that does not take says whether it is WP5's class. A parent that cannot
+-- be read is said, never taken for no web area, and the hold goes on.
+-- attributeValue answers an Accessibility error as nil and the error, never a
+-- raise, so each read's error is raised here for the pcall to keep.
+local function element_text(el, role)
+  local function read(element, attribute)
+    local value, err = element:attributeValue(attribute)
+    if err ~= nil then error(tostring(attribute) .. ": " .. tostring(err), 0) end
+    return value
+  end
+  local ok, inside = pcall(function()
+    local cur = el
+    for _ = 1, WEB_AREA_DEPTH do
+      local parent = read(cur, "AXParent")
+      if not parent then return false end
+      local prole = read(parent, "AXRole")
+      if prole == "AXWebArea" then return true end
+      if prole == "AXWindow" then return false end
+      cur = parent
+    end
+    return false
+  end)
+  if not ok then return "an " .. tostring(role) .. " whose parents could not be read: " .. tostring(inside) end
+  return "an " .. tostring(role) .. (inside and " inside a web area" or "")
 end
 
 -- Raising a window activates its app, which can switch its display to
@@ -940,8 +993,10 @@ local function grab_point(id)
     if not still then return nil, why end
     tried = {}
     for _, p in ipairs(P.grab_candidates(frame, zoom)) do
-      local verdict = hit_test(p, id, pid)
-      if verdict == "grab" then return { point = p, frame = frame } end
+      local verdict, el, role = hit_test(p, id, pid)
+      -- The element is kept for the log, which reads its parents only when
+      -- there is a log to write to (pressing).
+      if verdict == "grab" then return { point = p, frame = frame, el = el, role = role } end
       tried[#tried + 1] = string.format("(%d,%d) %s", p.x, p.y, verdict)
     end
     hs.timer.usleep(POLL_US)
@@ -975,9 +1030,11 @@ end
 
 -- Where things are now, as P.move_legs reads them: each screen's order and
 -- its spaces' types from the latest observe (neither changes while windows
--- move), and the active spaces read live.
+-- move), and the active spaces read live. Each space's named apps, and each
+-- named window's app, come from the same observe, for a failed move's words.
 local function now_state(world)
   local state = { order = {}, types = {}, active = {}, active_error = {}, screens = {} }
+  state.apps, state.window_app = P.named_apps(world)
   for _, s in ipairs(world.screens or {}) do
     local ids = {}
     for _, sp in ipairs(s.spaces or {}) do
@@ -1064,10 +1121,22 @@ local function take_hold(hand, id, g, dx)
     tostring(app and app:name() or "an app that could not be read"), tostring(why))
 end
 
+-- In the run log before a hold presses: the point, and the element under it
+-- with whether a web area holds it (STca1b7f9 WP6), so a hold that does not
+-- take says whether it is WP5's class.
+local function pressing(ctx, kind, id, g)
+  -- A caller with no log makes no read for the log alone, as execute's own
+  -- timing does.
+  if not (ctx and ctx.lg) then return end
+  step_note(ctx, string.format("%s: pressing window %s at %s,%s on %s", kind, tostring(id), tostring(g.point.x),
+    tostring(g.point.y), element_text(g.el, g.role)))
+end
+
 function LEG.carry(ctx, leg, id)
   local g, why = held_point(id)
   if not g then return why end
   local hand = ctx.hand
+  pressing(ctx, "carry", id, g)
   local missed = take_hold(hand, id, g, leg.side == "right" and NUDGE_PX or -NUDGE_PX)
   if missed then return missed end
   step_note(ctx, string.format("carry: held window %s at %s,%s", tostring(id), tostring(g.point.x), tostring(g.point.y)))
@@ -1075,8 +1144,7 @@ function LEG.carry(ctx, leg, id)
   for _, step in ipairs(leg.steps) do
     press_key(ctx.keys[leg.side])
     local took = wait_for(hand, STEP_WAIT, "while holding the window", function()
-      local spaces = list(hs.spaces.windowSpaces(id))
-      return #spaces == 1 and spaces[1] == step and hs.spaces.activeSpaceOnScreen(leg.screen) == step
+      return P.landed(list(hs.spaces.windowSpaces(id)), hs.spaces.activeSpaceOnScreen(leg.screen), step, leg.screen) == true
     end)
     if took then
       step_note(ctx, string.format("carry: pressed Move-space %s holding window %s; it is on space %s, which screen %s shows",
@@ -1086,10 +1154,8 @@ function LEG.carry(ctx, leg, id)
       hand:release()
       local spaces, serr = hs.spaces.windowSpaces(id)
       local at, aerr = hs.spaces.activeSpaceOnScreen(leg.screen)
-      return string.format("held and pressed Move-space %s, and after %d s the window is on %s, not space %s alone,"
-        .. " and screen %s shows %s", leg.side, STEP_WAIT,
-        spaces and ("{" .. table.concat(list(spaces), ",") .. "}") or ("what could not be read: " .. tostring(serr)),
-        tostring(step), tostring(leg.screen), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr)))
+      local _, where = P.landed(spaces and list(spaces), at, step, leg.screen, serr, aerr)
+      return string.format("held and pressed Move-space %s, and after %d s %s", leg.side, STEP_WAIT, where)
     end
   end
   hand:hold(0.15, "before letting go")
@@ -1098,6 +1164,9 @@ function LEG.carry(ctx, leg, id)
 end
 
 -- Held: dragged over the shared edges onto the target display's shown space.
+-- With `check`, the window is read back on that space, shown, before the next
+-- leg (STca1b7f9 WP3): a round through another display goes on only from a
+-- window that is there.
 function LEG.drag(ctx, leg, id)
   local chain = P.route(ctx.state.screens, leg.from_screen, leg.screen)
   if not chain then
@@ -1107,6 +1176,7 @@ function LEG.drag(ctx, leg, id)
   if not g then return why end
   local dest = P.drop_point(g.point, g.frame, chain[#chain])
   local hand = ctx.hand
+  pressing(ctx, "drag", id, g)
   local missed = take_hold(hand, id, g, dest.x >= g.point.x and NUDGE_PX or -NUDGE_PX)
   if missed then return missed end
   hand:drag(P.path(chain, g.point, dest))
@@ -1114,7 +1184,21 @@ function LEG.drag(ctx, leg, id)
   hand:release()
   step_note(ctx, string.format("drag: carried window %s from screen %s to screen %s and let go at %s,%s",
     tostring(id), tostring(leg.from_screen), tostring(leg.screen), tostring(dest.x), tostring(dest.y)))
-  return nil
+  if not leg.check then return nil end
+  local landed = wait_for(hand, STEP_WAIT, "while the window lands", function()
+    return P.landed(list(hs.spaces.windowSpaces(id)), hs.spaces.activeSpaceOnScreen(leg.screen), leg.space,
+      leg.screen) == true
+  end)
+  if landed then
+    step_note(ctx, string.format("drag: window %s is on space %s, which screen %s shows", tostring(id),
+      tostring(leg.space), tostring(leg.screen)))
+    return nil
+  end
+  local spaces, serr = hs.spaces.windowSpaces(id)
+  local shown, aerr = hs.spaces.activeSpaceOnScreen(leg.screen)
+  local _, where = P.landed(spaces and list(spaces), shown, leg.space, leg.screen, serr, aerr)
+  return string.format("dragged window %s to screen %s, and after %d s %s", tostring(id), tostring(leg.screen),
+    STEP_WAIT, where)
 end
 
 -- Where a window is, as macOS says: each of its spaces with that space's
@@ -1174,10 +1258,10 @@ local function move_readback(op, origin)
 end
 
 -- Run legs in order, keeping ctx.state's shown spaces current. Returns nil
--- when they all took, or why not; a stop marks ctx.stopped for every move
--- after this one.
+-- when they all took, or why not and the index of the leg that did not; a
+-- stop marks ctx.stopped for every move after this one.
 local function run_legs(ctx, legs, id)
-  for _, leg in ipairs(legs) do
+  for i, leg in ipairs(legs) do
     step_note(ctx, string.format("leg %s: screen %s%s, steps %s, Move-space %s", tostring(leg.kind), tostring(leg.screen),
       leg.from_screen and (" from screen " .. tostring(leg.from_screen)) or "", L.ids(leg.steps), tostring(leg.side)))
     local ok, err = pcall(LEG[leg.kind], ctx, leg, id)
@@ -1186,11 +1270,11 @@ local function run_legs(ctx, legs, id)
       local let_go = released and "" or ("; and letting go of the button failed: " .. tostring(rerr))
       if type(err) == "table" and err.stop then
         ctx.stopped = "the pointer was taken back during an earlier move (" .. err.stop .. ")"
-        return "stopped: " .. err.stop .. let_go
+        return "stopped: " .. err.stop .. let_go, i
       end
-      return "lua error in the " .. leg.kind .. " leg: " .. tostring(err) .. let_go
+      return "lua error in the " .. leg.kind .. " leg: " .. tostring(err) .. let_go, i
     end
-    if err then return leg.kind .. ": " .. err end
+    if err then return leg.kind .. ": " .. err, i end
     for _, screen in ipairs({ leg.screen, leg.from_screen }) do
       ctx.state.active[screen], ctx.state.active_error[screen] = hs.spaces.activeSpaceOnScreen(screen)
     end
@@ -1279,6 +1363,36 @@ local function give_back(ctx, results)
   end
 end
 
+-- A move's legs, from where its window is now and from ctx.state: the one
+-- reading that exec_move and the move's step point share (STca1b7f9 WP3), so
+-- the step says the route the op will take. Returns the move and
+-- P.move_legs' answer, or nil, nil and why the window's place was not read.
+local function move_plan(op, ctx)
+  local home, herr = window_home(op.window)
+  if not home then return nil, nil, herr end
+  local move = {
+    screen = op.screen, space = op.space, ordinal = op.ordinal, from_screen = home.screen, from_space = home.space,
+    app = ctx.state.window_app[op.window] or P.app_label(nil, op.bundle), names = ctx.names or {},
+  }
+  return move, P.move_legs(ctx.state, move)
+end
+
+-- The display a move's step point says it goes round through, from the state
+-- the op will see. The op keeps what was said, false for a move the step did
+-- not route round, so that the op can say so if it routes otherwise when it
+-- runs; a move the step could not route says why in the log.
+local function step_via(op, ctx)
+  if not (ctx and ctx.state) then return nil end
+  local move, legs, why = move_plan(op, ctx)
+  op.step_via = (legs and legs.via) or false
+  if not legs then
+    step_note(ctx, "route: the step could not route the move: " .. tostring(why))
+    return nil
+  end
+  if not legs.via then return nil end
+  return P.display_label(move.names, legs.via)
+end
+
 local function exec_move(op, ctx)
   if ctx.stopped then
     return { status = "failed", reason = "not tried: " .. ctx.stopped }
@@ -1286,19 +1400,31 @@ local function exec_move(op, ctx)
   if not ctx.keys then
     return { status = "failed", reason = "not tried: " .. tostring(ctx.keys_error) }
   end
-  local home, herr = window_home(op.window)
-  if not home then return { status = "failed", reason = herr } end
-  local legs, why = P.move_legs(ctx.state, {
-    screen = op.screen, space = op.space, ordinal = op.ordinal, from_screen = home.screen, from_space = home.space,
-  })
-  if not legs then return { status = "failed", reason = why } end
-  local failed = run_legs(ctx, legs, op.window)
-  if failed then return { status = "failed", reason = failed } end
+  local move, legs, why, fix, passed = move_plan(op, ctx)
+  if not legs then return { status = "failed", reason = why, fix = fix, passed = passed } end
+  -- The displays can change between the step point and this callback, so the
+  -- op routes again, and the log says when the two differ.
+  if op.step_via ~= nil and op.step_via ~= (legs.via or false) then
+    step_note(ctx, string.format("route: the step said %s, and the move goes %s", P.route_said(move.names, op.step_via),
+      P.route_said(move.names, legs.via)))
+  end
+  local failed, at = run_legs(ctx, legs, op.window)
+  if failed then
+    -- From the drag to B on, the window may wait on B: the failure says where
+    -- it is now, read, never assumed.
+    if P.round_moved(legs, at) then
+      local where, werr = window_home(op.window)
+      return { status = "failed", reason = P.round_failure(ctx.state, move, where, werr, failed) }
+    end
+    return { status = "failed", reason = failed }
+  end
   -- The readback (design.md, "Moving a window"): a gesture has no return
   -- value, so this is the only evidence the move happened.
   if #legs > 0 then pause(0.5) end
-  local rb = move_readback(op, home.space)
+  local rb = move_readback(op, move.from_space)
   local status, reason = P.move_verdict(rb, op, #legs > 0)
+  -- A done round says in the op's record that it went round (WP3).
+  if status == "done" and legs.via then reason = P.route_said(move.names, legs.via) end
   return { status = status, reason = reason, readback = rb }
 end
 
@@ -1331,7 +1457,8 @@ function M.execute(ops, ctx)
     -- Timed only for the run log, so a caller with no log makes no clock read.
     local t0 = ctx.lg and now()
     if REPORT_ONLY[op.op] then
-      r = { status = REPORT_ONLY[op.op], reason = op.reason }
+      -- A report-only op's fix goes with its reason (STca1b7f9 WP6).
+      r = { status = REPORT_ONLY[op.op], reason = op.reason, fix = op.fix }
     elseif EXEC[op.op] then
       local ok, res = pcall(EXEC[op.op], op, ctx)
       if ok then r = res else r = { status = "failed", reason = "lua error: " .. tostring(res) } end
@@ -1387,6 +1514,22 @@ local UNSEEN_SECONDS = 1.5
 
 local function has_unseen(ops) return #only(ops, { unseen = true }) > 0 end
 
+-- In the run log, each app a plan took as running though it read as not
+-- running, by the window from the start still listed (STca1b7f9 WP6). HELD
+-- carries options, world and lg: the job, or the plan verb's own.
+local function note_taken(held)
+  local options = held.options or {}
+  if not options.running_before then return end
+  local taken = P.taken_in(held.world, options)
+  local keys = {}
+  for key in pairs(taken) do keys[#keys + 1] = key end
+  table.sort(keys)
+  for _, key in ipairs(keys) do
+    note(held.lg, "running", string.format("%s read as not running, but its window %s from the start is still listed,"
+      .. " so it is taken as running", key, tostring(taken[key])))
+  end
+end
+
 -- One retry of a plan that found an entry unseen, from WORLD. held carries
 -- desk, options, and the ops and world in hand. The plan in hand is the last
 -- one plan made from a world it could read: a retry plan refuses (a listing
@@ -1394,9 +1537,23 @@ local function has_unseen(ops) return #only(ops, { unseen = true }) > 0 end
 -- crash in plan is raised, never taken for an unseen entry. True once
 -- nothing is unseen.
 local function retry_unseen(held, world)
-  local o = P.plan(held.desk, world, held.options)
-  if not o then return false end
+  -- Nor does a retry from a world whose window filter failed, when the plan
+  -- in hand's world had it run (STca1b7f9 WP6, issue I7fce35c): that read
+  -- unnamed every window on a desktop not shown, which is no news of them.
+  local takes, why = P.retry_takes(held.world, world)
+  if not takes then
+    note(held.lg, "wait", "unseen: a retry's read is not taken: " .. tostring(why))
+    return false
+  end
+  local o, err = P.plan(held.desk, world, held.options)
+  if not o then
+    note(held.lg, "wait", "unseen: a retry's plan refused, so the plan in hand stands: " .. tostring(err))
+    return false
+  end
   held.ops, held.world = o, world
+  -- The plan in hand changed, so the log shows the plan organise will run.
+  write_log(held.lg, "engine", function() return L.plan_pairs(o, P.plan_report(o)) end)
+  note_taken(held)
   return not has_unseen(o)
 end
 
@@ -1514,6 +1671,7 @@ local function plan_then(job, after)
     return nil, err, fix
   end
   write_log(job.lg, "engine", function() return L.plan_pairs(ops, P.plan_report(ops)) end)
+  note_taken(job)
   if not job.planned then point(job.lg, "planned", function() return L.planned_fields(ops) end) end
   job.planned = true
   job.ops, job.after_unseen = ops, after
@@ -1623,6 +1781,9 @@ function PHASE.replan(job)
     no_launch = job.request_options.no_launch, map = job.request_options.map,
     own_sizes = job.request_options.own_sizes,
     launched = job.ctx.launched, running_before = P.running_set(job.ctx.world_before),
+    -- The windows named at the start, by app, against which a read that says
+    -- an app is not running is set (STca1b7f9 WP6).
+    windows_before = P.app_windows(job.ctx.world_before),
   }
   local nxt, err = plan_then(job, "organise_start")
   if not nxt then error("the plan after creating and launching refused: " .. tostring(err), 0) end
@@ -1634,6 +1795,9 @@ end
 function PHASE.organise_start(job)
   local ctx = job.ctx
   ctx.world = job.world
+  -- Each display by the desk's name for it, else its own, for a step's `via`
+  -- and a failed move's words (STca1b7f9).
+  ctx.names = P.display_names(job.desk, ctx.world, job.options)
   job.rest = except(job.ops, { create_space = true, launch = true })
   job.next_op = 1
   if P.needs_hand(job.rest, ctx.world) then
@@ -1747,8 +1911,9 @@ end
 -- draws only between callbacks, so each is emitted here, before the callback
 -- that does it is scheduled. prepare's creates and launch's launches run as
 -- one batch each, so their steps all go out before it. A move's step carries
--- the window's frame now, for the toast to keep clear of the grab. A point
--- that cannot be made is an error record, never a failed run.
+-- the window's frame now, for the toast to keep clear of the grab, and the
+-- display it goes round through, if it does (STca1b7f9 WP3). A point that
+-- cannot be made is an error record, never a failed run.
 local function steps_before(job, nxt)
   local batch
   if nxt == "prepare" then
@@ -1764,12 +1929,13 @@ local function steps_before(job, nxt)
   local ok, err = pcall(function()
     for _, op in ipairs(batch or {}) do
       job.step_i = (job.step_i or 0) + 1
-      local frame
+      local frame, via
       if op.op == "move" then
         local w = hs.window.get(op.window)
         frame = w and rect(w:frame())
+        via = step_via(op, job.ctx)
       end
-      point(job.lg, "step", L.step_fields(job.desk, op, job.step_i, steps_total(job), frame))
+      point(job.lg, "step", L.step_fields(job.desk, op, job.step_i, steps_total(job), frame, via))
     end
   end)
   if not ok then note(job.lg, "error", "a step point could not be made: " .. tostring(err)) end

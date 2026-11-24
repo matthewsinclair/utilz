@@ -134,6 +134,10 @@ local SLEEPS = TRIES - 1
 check("0 the fake's space type is the one plan counts as a user space", P.is_user_space("user") == true)
 check("0 the gone reason is the one plan classifies as gone", P.space_error_kind(GONE_WHY) == "gone")
 check("0 a transient reason is not classified as gone", P.space_error_kind("the Dock is not answering") == "transient")
+-- Hammerspoon's own words when the Dock does not open Mission Control, from
+-- hv's runs of 23 Nov 2026 (issue I7fce35c), which STca1b7f9 WP6 stops on.
+local DOCK_WHY = "unable to get Mission Control data from the Dock"
+check("0 the Dock's reason is the one plan classifies as the Dock's", P.space_error_kind(DOCK_WHY) == "dock")
 
 -- ------------------------------------------------------------- arm 1: clean
 
@@ -197,9 +201,11 @@ end
 
 -- -------------------------------------- arm 5: nothing made, a transient cause
 
--- Run 35 of hv's log: the Dock momentarily could not serve Mission Control
--- data. A call that reported nothing made nothing and may honestly be tried
--- again, which is the one case the retry budget is for.
+-- A call that reported nothing made nothing, for a reason that may pass, and
+-- may honestly be tried again: the case the retry budget is for, beside the
+-- count's lag (arm 2). Run 35's own reason, the Dock not opening Mission
+-- Control, is not one since STca1b7f9 WP6 (arm 10), so this reason is a
+-- made-up transient.
 do
   local why = "the Dock is not answering"
   local r, log, ctx = drive({ [SCREEN] = { add = { why = why }, counts = { 2 } } }, { create_on(SCREEN) })
@@ -266,6 +272,32 @@ do
   check("9 the other display is not bound by its neighbour", bound(ctx, OTHER) == nil, tostring(bound(ctx, OTHER)))
   check("9 each display is counted on its own", log.add[SCREEN] == TRIES and log.add[OTHER] == 1,
     tostring(log.add[SCREEN]) .. " / " .. tostring(log.add[OTHER]))
+end
+
+-- ----------------------- arm 10: the Dock did not open Mission Control
+--
+-- STca1b7f9 WP6 (issue I7fce35c): four tries in one callback never once rode
+-- the Dock's failure out, and each asks the Dock to open Mission Control again
+-- while it may still be opening. So it is tried once, says what it means with
+-- its fix, and binds every display, Mission Control being one for all of
+-- them: two creates on its display and one on the other.
+do
+  local r, log, ctx = drive({
+    [SCREEN] = { add = { why = DOCK_WHY }, counts = { 2 } },
+    [OTHER] = { add = { id = 9 }, counts = { 2, 3 } },
+  }, { create_on(SCREEN), create_on(SCREEN), create_on(OTHER) })
+  check("10 the Dock's failure is tried exactly ONCE, and nothing sleeps", log.add[SCREEN] == 1 and log.usleep == 0,
+    tostring(log.add[SCREEN]) .. " / " .. tostring(log.usleep))
+  check("10 it says the Dock did not open Mission Control, with the call's own words",
+    r[1].status == "failed" and says(r[1], "the Dock did not open Mission Control for Hammerspoon (" .. DOCK_WHY .. ")"),
+    tostring(r[1].reason))
+  check("10 its fix is to add the desktop by hand", r[1].fix == P.DOCK_FIX, tostring(r[1].fix))
+  check("10 its display is bound, with the same fix on the next create there",
+    bound(ctx, SCREEN) ~= nil and r[2].status == "failed" and says(r[2], "already failed and was not tried again")
+      and r[2].fix == P.DOCK_FIX, tostring(r[2].reason))
+  check("10 the other display is not asked either: the Dock failed for the run",
+    log.add[OTHER] == nil and r[3].status == "failed" and says(r[3], "failed at the Dock earlier in this run")
+      and r[3].fix == P.DOCK_FIX, tostring(r[3].reason) .. " / " .. tostring(log.add[OTHER]))
 end
 
 

@@ -318,11 +318,31 @@ function L.readback_text(rb)
   return #out > 0 and table.concat(out, ", ") or "nothing"
 end
 
--- One op's outcome: kind and path, the status and reason the report has, a
--- note, what it read back, the desktops it created, and how long it took.
+-- The full-screen windows a move with no route would have passed, with their
+-- titles, which go to the log and never to the toast (STca1b7f9 WP4).
+local function passed_text(passed)
+  local out = {}
+  for _, w in ipairs(passed or {}) do
+    if w.app then
+      out[#out + 1] = string.format("%s %s on %s", tostring(w.app), quoted(w.title, 40), tostring(w.space))
+    else
+      out[#out + 1] = "a window arngz cannot name on " .. tostring(w.space)
+    end
+  end
+  return table.concat(out, ", ")
+end
+
+-- One op's outcome: kind and path, the window's title where the op keeps it
+-- for the log alone (issue I4eacd29), the status and reason the report has,
+-- its fix as a refused plan's is written, the full-screen windows a move
+-- could not pass, a note, what it read back, the desktops it created, and how
+-- long it took.
 function L.result_text(op, r, ms)
   local parts = { string.format("%s %s", tostring(op.op), tostring(op.path or op.bundle or "")) }
+  if op.title then parts[#parts + 1] = string.format("window %s %s", tostring(op.window), quoted(op.title, 60)) end
   parts[#parts + 1] = tostring(r.status) .. (r.reason and (": " .. tostring(r.reason)) or "")
+  if r.fix then parts[#parts + 1] = "fix: " .. tostring(r.fix) end
+  if r.passed and #r.passed > 0 then parts[#parts + 1] = "full screen: " .. passed_text(r.passed) end
   if r.note then parts[#parts + 1] = "note: " .. tostring(r.note) end
   if r.readback then parts[#parts + 1] = "read back: " .. L.readback_text(r.readback) end
   if r.created then parts[#parts + 1] = "created desktop " .. (#r.created > 0 and ids(r.created) or "none seen") end
@@ -351,12 +371,15 @@ function L.path_place(desk, path)
 end
 
 -- The step point's fields (progress.md) for OP, the I-th step of N on DESK.
--- FRAME is a move's window frame as read just now, or nil.
-function L.step_fields(desk, op, i, n, frame)
+-- FRAME is a move's window frame as read just now, or nil. VIA is the display
+-- a move goes round through, by the desk's name for it or the screen's own
+-- (STca1b7f9 WP3), or nil for a move that goes straight.
+function L.step_fields(desk, op, i, n, frame, via)
   local display, desktop = L.path_place(desk, op.path)
   local f = { i = i, n = n, kind = tostring(op.op), app = tostring(op.bundle or ""), display = display,
     desktop = op.ordinal or desktop }
   if type(frame) == "table" then f.x, f.y, f.w, f.h = frame.x, frame.y, frame.w, frame.h end
+  if type(via) == "string" and via ~= "" then f.via = via end
   return f
 end
 
@@ -397,7 +420,13 @@ function L.finished_fields(response, seconds, log_path)
     created = t.created or 0,
     seconds = seconds or 0,
     first = tostring(response.error or t.first or ""),
-    fix = tostring(response.fix or ""),
+    -- What the entry `first` names was, in the tally's own keys ("failed",
+    -- "unseen" or "skipped"), so the toast can label it; absent when first
+    -- is a refusal's or a failed run's words (STca1b7f9 WP6, ic's words).
+    first_outcome = response.error == nil and t.first_outcome or nil,
+    -- A refusal's fix, or the first failure's, which the tally carries with
+    -- `first` (STca1b7f9 WP4).
+    fix = tostring(response.fix or (response.error == nil and t.fix) or ""),
     log = tostring(log_path or ""),
   }
 end

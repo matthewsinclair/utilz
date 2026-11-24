@@ -123,6 +123,28 @@ do
     check("step: " .. k[1].kind, p and p.lines[2] == k[2], p and shown(p.lines))
   end
 
+  -- STca1b7f9 AC-dca427e7.3: a move round through another display says so,
+  -- and the cut takes from the words before the round, never from it.
+  local round = {}
+  for k, v in pairs(MOVE) do round[k] = v end
+  round.via = "laptop"
+  p = T.on_point(st, "step", round, name_of)
+  check("step: a move round through another display ends with the display it goes through",
+    p and p.lines[2] == "Running... 5 of 12: moving Slack to desktop 2 on left, round through laptop", p and shown(p.lines))
+  round.app = string.rep("A long app name ", 8)
+  p = T.on_point(st, "step", round, name_of)
+  local cut = p and p.lines[2] or ""
+  check("step: a line too long is cut before the round, which stays in view",
+    #cut <= T.MAX_LINE and cut:find("%.%.%., round through laptop$") ~= nil, cut)
+  round.app, round.via = MOVE.app, ""
+  p = T.on_point(st, "step", round, name_of)
+  check("step: an empty via is no round",
+    p and p.lines[2] == "Running... 5 of 12: moving Slack to desktop 2 on left", p and shown(p.lines))
+  p = T.on_point(st, "step", { run = "r1", i = 6, n = 12, kind = "place", app = "com.apple.Safari", display = "laptop",
+    via = "left" }, name_of)
+  check("step: only a move goes round", p and p.lines[2] == "Running... 6 of 12: placing Safari on laptop",
+    p and shown(p.lines))
+
   local function finish(fields)
     local s = fresh()
     apply_start(s, "r9")
@@ -155,6 +177,39 @@ do
   check("finished, failed: where it stopped, the first failure, and where the rest is",
     failure and failure.lines[2] == "Failed at step 5 of 12, after 7.1 s: organise: lua error: boom"
       and failure.lines[3] == T.LOG_LINE, failure and shown(failure.lines))
+
+  -- STca1b7f9 AC-ad94d40b.2: a failure's fix is shown as a refusal's is, under
+  -- its words and before where the rest is, and only when there is one.
+  local fix = "take it out of full screen, or attach a display, then run it again"
+  local fixed = finish({ outcome = "partly", exit = 1, placed = 9, failed = 1, seconds = 13.2,
+    first = "Teams not moved to desktop 6 on main: Safari is full screen between desktop 4 and desktop 6", fix = fix })
+  check("finished, partly: the first failure's fix under its words, then where the rest is, each line within the limit",
+    fixed and fixed.lines[#fixed.lines - 1] == "Fix: " .. fix and fixed.lines[#fixed.lines] == T.LOG_LINE
+      and longest(fixed.lines) <= T.MAX_LINE, fixed and shown(fixed.lines))
+  local stopped = finish({ outcome = "failed", exit = 1, seconds = 7.1, first = "organise: lua error: boom", fix = fix })
+  check("finished, failed: a fix it carries comes before where the rest is",
+    stopped and stopped.lines[3] == "Fix: " .. fix and stopped.lines[4] == T.LOG_LINE, stopped and shown(stopped.lines))
+  check("finished: a partly or failed run with no fix has no Fix line",
+    partly and failure and not shown(partly.lines):find("Fix:", 1, true) and not shown(failure.lines):find("Fix:", 1, true),
+    partly and failure and (shown(partly.lines) .. " / " .. shown(failure.lines)))
+
+  -- STca1b7f9 AC-322a6511.9: a partly run's first problem is labelled by what
+  -- it was, in the counts' own words, and is bare when the point does not say
+  -- or says what toast.lua does not know as a problem.
+  local labelled = {
+    { "unseen", "Not found: " },
+    { "failed", "Failed: " },
+    { "skipped", "Skipped: " },
+    { nil, "" },
+    { "placed", "" },
+  }
+  for _, want in ipairs(labelled) do
+    local fields = { outcome = "partly", exit = 1, placed = 9, unseen = 1, skipped = 1, failed = 1, seconds = 13.2,
+      first = "Mail: no window of it could be named", first_outcome = want[1] }
+    local got = finish(fields)
+    check("finished, partly: a first " .. tostring(want[1]) .. " reads " .. (want[2] ~= "" and want[2] or "bare"),
+      got and got.lines[3] == want[2] .. fields.first, got and shown(got.lines))
+  end
 
   local long_desk = fresh()
   local lp = apply_start(long_desk, "r8", string.rep("d", 120))

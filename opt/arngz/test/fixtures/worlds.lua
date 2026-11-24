@@ -198,9 +198,10 @@ function F.unseen_world()
   return w
 end
 
--- The unseen world while the window filter that names windows on other
--- spaces failed (issue 0132): the plan is still one unseen op, but counted,
--- since the window not read may be Safari's.
+-- The unseen world while Hammerspoon's window filter, the one route to
+-- windows on desktops not shown, failed (issue 0132; its words, STca1b7f9
+-- WP6): the plan is still one unseen op, but counted, since the window not
+-- read may be Safari's.
 function F.unseen_unread_world()
   local w = F.unseen_world()
   w.window_filter = "failed: no filter"

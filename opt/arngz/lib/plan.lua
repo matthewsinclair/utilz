@@ -558,6 +558,91 @@ end
 -- that asked for it. Order is the order apply executes in: create_space, then
 -- launch, then for each window move before place (D14). There is no --bind
 -- in v1 (D10, AC-05.6).
+-- A desk display is named by its name, else by its place in the desk from 1,
+-- as the step point's `display` names it (log.lua's L.path_place). It is the
+-- one rule P.plan's reasons and P.display_names name a desk display by: a desk
+-- may leave a display unnamed, and its reasons said "display nil" (issue
+-- Ib12d894). Said on its own, as "on <A>" says it: "left", or "display 2".
+function P.desk_display_name(desk, di)
+  local d = ((desk or {}).displays or {})[di]
+  return (d and d.name) or ("display " .. tostring(di))
+end
+
+-- The same display after the word "display", as P.plan's older reasons say
+-- it: "display left", or "display 2", never "display display 2".
+function P.desk_display_phrase(desk, di)
+  local d = ((desk or {}).displays or {})[di]
+  return "display " .. tostring((d and d.name) or di)
+end
+
+-- The way out when Hammerspoon's window filter failed (STca1b7f9 WP6). It
+-- names the menu's Reload Config, so plan.lua names no Hammerspoon call
+-- (AT-03.2's purity grep).
+P.FILTER_FIX = "run it again; if it fails again, reload Hammerspoon's config (Reload Config in its menu)"
+
+-- The windows named in WORLD, by id, each with its app's key: what apply keeps
+-- from its start, so that a later read saying an app is not running can be
+-- set against its windows (WP6).
+function P.app_windows(world)
+  local out = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        if w.named and w.bundle then out[w.id] = app_key(w.bundle) end
+      end
+    end
+  end
+  return out
+end
+
+-- The apps that ran when apply began (options.running_before), read as not
+-- running now (RUNNING), and have a window from the start
+-- (options.windows_before) still listed on a space (LISTED, P.listings): each
+-- with the lowest such window's id. The WindowServer lists an app's windows
+-- only while it runs, so such an app is taken as running, never as gone
+-- (WP6, issue I7fce35c's false gone).
+function P.taken_as_running(options, running, listed)
+  local out = {}
+  options = options or {}
+  for key in pairs(options.running_before or {}) do
+    if not running[key] then
+      local id
+      for wid, k in pairs(options.windows_before or {}) do
+        if k == key and listed[wid] and (id == nil or wid < id) then id = wid end
+      end
+      if id then out[key] = id end
+    end
+  end
+  return out
+end
+
+-- The apps a plan from WORLD with OPTIONS takes as running: the one
+-- composition P.plan and the run log both read (WP6).
+function P.taken_in(world, options)
+  return P.taken_as_running(options, running_set(world), P.listings(world))
+end
+
+-- Whether WORLD's read of Hammerspoon's window filter failed: observe notes
+-- "ran" or "failed: <error>", and nothing when the windows could not be
+-- listed at all, which plan refuses on its own (unread). The one reading
+-- P.plan and P.retry_takes share (WP6).
+function P.filter_failed(world)
+  local filter = (world or {}).window_filter
+  return filter ~= nil and filter ~= "ran"
+end
+
+-- Whether a retry in the unseen wait may replace the plan in hand (WP6): not
+-- from a world whose window filter failed when the plan in hand's world's did
+-- not. The filter is the one route to windows on desktops not shown, so its
+-- failure unnames them, which says nothing about the windows: it is a read
+-- that could not be made, as a refusing retry's is. true, or false and why.
+function P.retry_takes(held_world, world)
+  if P.filter_failed(world) and not P.filter_failed(held_world) then
+    return false, "its window filter " .. tostring(world.window_filter)
+  end
+  return true
+end
+
 function P.plan(desk, world, options)
   options = options or {}
   local grid = P.parse_grid(desk.grid)
@@ -580,7 +665,7 @@ function P.plan(desk, world, options)
         creates[#creates + 1] = {
           op = "create_space", screen = s.uuid,
           path = string.format("displays[%d].spaces[%d]", di - 1, n - 1),
-          reason = string.format("display %s needs %d spaces and has %d", tostring(d.name), need, have),
+          reason = string.format("%s needs %d spaces and has %d", P.desk_display_phrase(desk, di), need, have),
         }
       end
     end
@@ -608,14 +693,22 @@ function P.plan(desk, world, options)
     unread_note = unread_note .. string.format("; %d window id read(s) failed (%s)",
       world.window_id_errors, tostring(world.window_id_error))
   end
-  if world.window_filter and world.window_filter ~= "ran" then
-    unread_note = unread_note .. "; the window filter that names windows on other spaces " .. world.window_filter
+  -- Hammerspoon's window filter is the one route to windows on desktops not
+  -- shown, so when it failed, each entry it leaves unseen says so plainly,
+  -- with the way out (STca1b7f9 WP6, issue I7fce35c).
+  local filter_failed = P.filter_failed(world)
+  if filter_failed then
+    unread_note = unread_note .. string.format("; Hammerspoon's window filter failed (%s), so windows on desktops"
+      .. " not shown could not be named", (tostring(world.window_filter):gsub("^failed: ", "")))
   end
   local listed = P.listings(world)
+  -- An app read as not running while a window it had when apply began is
+  -- still listed is taken as running (WP6): the window outweighs the read.
+  local taken = P.taken_in(world, options)
   for _, e in ipairs(entries(desk)) do
     local a, s = e.app, screens[e.display]
     local bundle = a.app
-    if not running[app_key(bundle)] then
+    if not (running[app_key(bundle)] or taken[app_key(bundle)]) then
       if already[app_key(bundle)] ~= nil then
         -- Launched by this apply, and not running now: when its launch failed
         -- or was skipped, that result is the report's line; when it showed a
@@ -662,10 +755,13 @@ function P.plan(desk, world, options)
         if fits and a.window then
           -- The match itself is protected: a malformed pattern can pass
           -- bad_pattern's probes and still fail on a real title.
+          -- A refusal is Finished's first, so it names the window by its id
+          -- and never its title, which the run log's windows records keep
+          -- beside that id (issue I4eacd29).
           local ok, hit = pcall(string.find, w.title or "", a.window)
           if not ok then
-            return nil, string.format("%s.window is not a valid Lua pattern on window title %q: %s",
-              e.path, w.title or "", tostring(hit))
+            return nil, string.format("%s.window is not a valid Lua pattern on the title of window %s: %s",
+              e.path, tostring(w.id), tostring(hit))
           end
           fits = hit ~= nil
         end
@@ -686,20 +782,26 @@ function P.plan(desk, world, options)
             elseif options.user_no_create == false then
               why = "and it has gone since apply began"
             end
-            said = { op = "no_space", reason = string.format("space %d of display %s does not exist, %s", e.space,
-              tostring(desk.displays[e.display].name), why) }
+            -- It can be Finished's first, so it says the target as the
+            -- toast's lines do (ic's read of ee8337da).
+            said = { op = "no_space", reason = string.format("desktop %d on %s does not exist, %s", e.space,
+              P.desk_display_name(desk, e.display), why) }
           elseif moving and target == nil and several then
             -- A window on every space is on the space about to be created
             -- too; the plan after creating it decides, and diff says so.
             said = { op = "pending", reason = string.format("%s %q is on every space, so it will be on space %d of"
-              .. " display %s once that is created; the plan after creating it decides", bundle, w.title or "",
-              e.space, tostring(desk.displays[e.display].name)) }
+              .. " %s once that is created; the plan after creating it decides", bundle, w.title or "",
+              e.space, P.desk_display_phrase(desk, e.display)) }
           elseif moving and several then
             -- On every space but the target's: no gesture carries it, so it
             -- is said here rather than failed at execute.
-            said = { op = "unmovable", reason = string.format("%s %q is on %d spaces and not on space %d of display %s;"
-              .. " arngz does not move a window on every space", bundle, w.title or "", listed[w.id].count, e.space,
-              tostring(desk.displays[e.display].name)) }
+            -- The app by its display name and no title, which can carry a
+            -- page or a mail subject onto the toast's Finished line; the
+            -- title goes to the log with the op (issue I4eacd29).
+            -- It says "desktop <n> on <A>", as the toast's other lines do.
+            said = { op = "unmovable", title = w.title, reason = string.format("%s is on %d spaces and not on desktop %d"
+              .. " on %s; arngz does not move a window on every space", P.app_label(w.app_name, w.bundle),
+              listed[w.id].count, e.space, P.desk_display_name(desk, e.display)) }
           end
           if said then
             said.window, said.bundle, said.path = w.id, bundle, e.path
@@ -711,9 +813,9 @@ function P.plan(desk, world, options)
               windows[#windows + 1] = {
                 op = "move", window = w.id, screen = s.uuid, ordinal = e.space, path = e.path, bundle = bundle,
                 space = target and target.id or nil, from_screen = cand.screen.uuid, from_space = cand.space.id,
-                reason = string.format("%s %q is on %s space %d, not space %d of display %s",
+                reason = string.format("%s %q is on %s space %d, not space %d of %s",
                   bundle, w.title or "", cand.screen.name or cand.screen.uuid, cand.space.ordinal or 0,
-                  e.space, tostring(desk.displays[e.display].name)),
+                  e.space, P.desk_display_phrase(desk, e.display)),
               }
             end
             if moving or not P.frames_agree(w.frame, frame) then
@@ -727,8 +829,8 @@ function P.plan(desk, world, options)
               windows[#windows + 1] = {
                 op = held and "recheck" or "place", window = w.id, frame = frame, path = e.path, bundle = bundle,
                 size = held and { w = w.frame.w, h = w.frame.h } or nil,
-                reason = string.format("%s %q to %s on display %s", bundle, w.title or "", a.layout,
-                  tostring(desk.displays[e.display].name)),
+                reason = string.format("%s %q to %s on %s", bundle, w.title or "", a.layout,
+                  P.desk_display_phrase(desk, e.display)),
               }
             end
           end
@@ -747,6 +849,7 @@ function P.plan(desk, world, options)
           reason = string.format("%s is running and no standard window of it on a desktop space%s could be named"
             .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)%s", bundle,
             a.window and (" matching " .. string.format("%q", a.window)) or "", unread_note),
+          fix = filter_failed and P.FILTER_FIX or nil,
         }
       end
     end
@@ -1084,14 +1187,197 @@ function P.walk(order, from, to)
   return steps, side
 end
 
+-- An app as a person reads it: the display name observe read for its bundle,
+-- by the toast's own source (Hammerspoon's nameForBundleID), else the bundle
+-- id, never an empty name, as toast.lua's T.app_name gives it. The one
+-- fallback plan's words use (STca1b7f9).
+function P.app_label(name, bundle)
+  if type(name) == "string" and name ~= "" then return name end
+  return tostring(bundle or "an app")
+end
+
+-- Each screen's name as a person reads it: for a display the desk matches,
+-- the desk's name for it, or "display N" for one it does not name, as the
+-- step point's `display` says it (log.lua's L.path_place); for any other
+-- screen, the screen's own name (STca1b7f9: a step's `via`, and a failed
+-- move's words). A desk that matches no screen leaves every screen its own.
+function P.display_names(desk, world, options)
+  local names = {}
+  for _, s in ipairs(world.screens or {}) do names[s.uuid] = s.name end
+  for di, s in ipairs(P.match_displays(desk, world, options) or {}) do names[s.uuid] = P.desk_display_name(desk, di) end
+  return names
+end
+
+-- A display by its name in NAMES (P.display_names), else as a screen.
+function P.display_label(names, uuid)
+  return tostring((names or {})[uuid] or ("screen " .. tostring(uuid)))
+end
+
+-- Each space's named windows as { app, title }, and each named window's app
+-- (P.app_label), for a failed move's words (STca1b7f9 WP4).
+function P.named_apps(world)
+  local by_space, by_window = {}, {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      local apps = {}
+      for _, w in ipairs(sp.windows or {}) do
+        if w.named then
+          local app = P.app_label(w.app_name, w.bundle)
+          apps[#apps + 1] = { app = app, title = w.title }
+          by_window[w.id] = app
+        end
+      end
+      by_space[sp.id] = apps
+    end
+  end
+  return by_space, by_window
+end
+
+-- A desktop's ordinal as a desk counts it: its place among its display's user
+-- desktops in Mission Control's order, full-screen spaces not counted.
+-- observe's own `ordinal` counts every space, so it is not this. nil when the
+-- id is not one of the display's user desktops.
+function P.desktop_ordinal(order, types, id)
+  local n = 0
+  for _, s in ipairs(order or {}) do
+    if P.is_user_space((types or {})[s]) then
+      n = n + 1
+      if s == id then return n end
+    end
+  end
+  return nil
+end
+
+-- A desktop as a person reads it: "desktop N", N as the desk counts it on its
+-- display, else the desk's ORDINAL where the caller has one, else "space
+-- <id>", which says it is macOS's id and not a desktop's number.
+function P.desktop_label(now, screen, space, ordinal)
+  local n = P.desktop_ordinal((now.order or {})[screen], now.types, space) or ordinal
+  if n then return "desktop " .. tostring(n) end
+  return "space " .. tostring(space)
+end
+
+-- "a", "a and b", "a, b and c".
+local function and_list(items)
+  if #items <= 1 then return items[1] or "" end
+  return table.concat(items, ", ", 1, #items - 1) .. " and " .. items[#items]
+end
+
+-- What a failed move says before its why (STca1b7f9, ic's words): the
+-- window's app by its display name, the target's desktop as the desk counts
+-- it, and the target's display by the desk's name for it.
+local function not_moved(now, move)
+  return string.format("%s not moved to %s on %s", tostring(move.app or "a window"),
+    P.desktop_label(now, move.screen, move.space, move.ordinal), P.display_label(move.names, move.screen))
+end
+
+-- The display a move on A goes round through (WP3): one joined to A by a
+-- chain of shared edges that shows a user desktop, the fewest crossings
+-- first, then the order of the screens. Also every other display such a
+-- chain reaches whose shown desktop was read, with its crossings, for the fix
+-- when none shows a user desktop; and each one whose shown desktop was not
+-- read, or has no type in the last observe, with why, since it may be the way
+-- round and nothing says it is not.
+local function round_display(now, a)
+  local best, best_hops, reachable, unread = nil, nil, {}, {}
+  for _, s in ipairs(now.screens or {}) do
+    if s.uuid ~= a then
+      local chain = P.route(now.screens, a, s.uuid)
+      if chain then
+        local hops, shown = #chain - 1, now.active[s.uuid]
+        local kind = shown ~= nil and now.types[shown] or nil
+        if kind == nil then
+          unread[#unread + 1] = { uuid = s.uuid, why = shown == nil and tostring((now.active_error or {})[s.uuid])
+            or ("it shows space " .. tostring(shown) .. ", which the last observe gave no type") }
+        else
+          reachable[#reachable + 1] = { uuid = s.uuid, hops = hops }
+          if P.is_user_space(kind) and (best_hops == nil or hops < best_hops) then best, best_hops = s, hops end
+        end
+      end
+    end
+  end
+  return best, reachable, unread
+end
+
+-- The full-screen apps a walk would pass, by display name, each said once, in
+-- the walk's order; how many there are; and each one's window, title
+-- included, for the log alone, since a toast shows no title (WP4). A space
+-- whose window arngz cannot name is said as such.
+local function full_screen_apps(now, passed)
+  local names, seen, unnamed, windows = {}, {}, 0, {}
+  for _, id in ipairs(passed) do
+    local apps = (now.apps or {})[id] or {}
+    if #apps == 0 then
+      unnamed = unnamed + 1
+      windows[#windows + 1] = { space = id }
+    end
+    for _, w in ipairs(apps) do
+      local app = tostring(w.app or "an app")
+      windows[#windows + 1] = { space = id, app = app, title = w.title }
+      if not seen[app] then
+        seen[app] = true
+        names[#names + 1] = app
+      end
+    end
+  end
+  local count = #names + unnamed
+  if unnamed == 1 then
+    names[#names + 1] = "an app arngz cannot name"
+  elseif unnamed > 1 then
+    names[#names + 1] = unnamed .. " apps arngz cannot name"
+  end
+  return and_list(names), count, windows
+end
+
+-- The way out of a move with no route past full-screen apps, by the case
+-- (WP4, ic's read r2, 2): attach a display when there is no other; show a
+-- desktop on the display the route would take when others are reached and
+-- each shows a full-screen space; arrange one to share an edge when none is
+-- reached, the first by the screens' order that shows no full-screen space,
+-- or the first, and show a desktop on it, when every one shows one.
+local function way_out(now, a, names, count, reachable)
+  local it = count == 1 and "it" or "them"
+  local function name(uuid) return P.display_label(names, uuid) end
+  local others = {}
+  for _, s in ipairs(now.screens or {}) do
+    if s.uuid ~= a then others[#others + 1] = s end
+  end
+  if #others == 0 then
+    return string.format("take %s out of full screen, or attach a display, then run it again", it)
+  end
+  if #reachable > 0 then
+    local pick = reachable[1]
+    for _, r in ipairs(reachable) do
+      if r.hops < pick.hops then pick = r end
+    end
+    return string.format("take %s out of full screen, or show a desktop on %s, then run it again", it, name(pick.uuid))
+  end
+  local pick, also = nil, ""
+  for _, s in ipairs(others) do
+    if P.is_user_space(now.types[now.active[s.uuid]]) then
+      pick = s
+      break
+    end
+  end
+  if not pick then pick, also = others[1], " and show a desktop on it" end
+  return string.format("take %s out of full screen, or arrange %s to share an edge with %s%s, then run it again",
+    it, name(pick.uuid), name(a), also)
+end
+
 -- The legs of one move (design.md, "Moving a window"), from where things are
 -- now. now = { order = {[screen] = {ids}}, types = {[id] = type},
--- active = {[screen] = id} }; move = { screen, space, from_screen,
--- from_space }. Each leg is one of
+-- active = {[screen] = id}, screens = {{ uuid, full, frame }},
+-- apps = {[space] = {{ app, title }}} }; move = { screen, space, ordinal,
+-- from_screen, from_space, app, names = {[screen] = name} }. Each leg is one of
 --   { kind = "switch", screen, steps, side }  nothing held: show a desktop
 --   { kind = "carry", screen, steps, side, from }  held: carry the window
---   { kind = "drag", from_screen, screen, space }  held: across displays
--- Returns the legs, {} when the window is already there, or nil and why.
+--   { kind = "drag", from_screen, screen, space, check }  held: across
+--     displays; with `check`, read back on that space before the next leg
+-- A carry on one display that would pass a non-user space goes round through
+-- another display (STca1b7f9 WP3): legs.via names it, and legs.checked is the
+-- drag to it. With none to go through, the move fails naming the way out
+-- (WP4). Returns the legs, {} when the window is already there, or nil, why,
+-- the fix where there is one, and the full-screen windows passed, for the log.
 function P.move_legs(now, move)
   local legs = {}
   local function switch(screen, to)
@@ -1128,14 +1414,77 @@ function P.move_legs(now, move)
     return nil, string.format("space %s or %s is not in screen %s's order", tostring(move.from_space),
       tostring(move.space), tostring(move.screen))
   end
+  local passed = {}
   for _, id in ipairs(steps) do
-    if not P.is_user_space(now.types[id]) then
-      return nil, string.format("a %s space (%s) lies between space %s and space %s, and a held window cannot be"
-        .. " carried into one", tostring(now.types[id]), tostring(id), tostring(move.from_space), tostring(move.space))
-    end
+    if not P.is_user_space(now.types[id]) then passed[#passed + 1] = id end
   end
-  legs[#legs + 1] = { kind = "carry", screen = move.screen, steps = steps, side = side, from = move.from_space }
-  return legs
+  if #passed == 0 then
+    legs[#legs + 1] = { kind = "carry", screen = move.screen, steps = steps, side = side, from = move.from_space }
+    return legs
+  end
+  -- A held window cannot be carried into a full-screen space, but nothing
+  -- held steps through one (walk 2, 23 Nov), and a drag across displays lands
+  -- (ST0026, 16 Oct). So the window waits on B while A steps past.
+  local b, reachable, unread = round_display(now, move.screen)
+  if b then
+    legs[#legs + 1] = { kind = "drag", from_screen = move.screen, screen = b.uuid, space = now.active[b.uuid], check = true }
+    legs.checked = #legs
+    legs[#legs + 1] = { kind = "switch", screen = move.screen, steps = steps, side = side }
+    legs[#legs + 1] = { kind = "drag", from_screen = b.uuid, screen = move.screen, space = move.space }
+    legs.via = b.uuid
+    return legs
+  end
+  local apps, count, windows = full_screen_apps(now, passed)
+  local gap = string.format("%s %s full screen between %s and %s", apps, count == 1 and "is" or "are",
+    P.desktop_label(now, move.screen, move.from_space), P.desktop_label(now, move.screen, move.space, move.ordinal))
+  -- A display the route could take whose desktop was not read may be the way
+  -- round, so the move fails on that read, as it does on A's own, with no fix.
+  if #unread > 0 then
+    return nil, string.format("%s: %s, and what %s shows could not be read: %s", not_moved(now, move), gap,
+      P.display_label(move.names, unread[1].uuid), unread[1].why), nil, windows
+  end
+  return nil, string.format("%s: %s", not_moved(now, move), gap),
+    way_out(now, move.screen, move.names or {}, count, reachable), windows
+end
+
+-- Whether a failed move's window may be off its own display: from the drag to
+-- B on, it may wait on B, so its failure reads where it is (WP3). A stop or an
+-- error during that drag may leave it on either display, so that leg counts.
+function P.round_moved(legs, at)
+  return legs.checked ~= nil and at ~= nil and at >= legs.checked
+end
+
+-- A move's route as its record and the route note say it: round through the
+-- display VIA, by its name in NAMES, or straight.
+function P.route_said(names, via)
+  if not via then return "straight" end
+  return "round through " .. P.display_label(names, via)
+end
+
+-- A round through another display that failed from its drag to B on (WP3):
+-- where it left the window, in ic's words, and no fix, since whether a run
+-- again helps depends on the why. It is not dragged back: after a failure,
+-- more gestures risk more. WHERE is the window's one space and its screen,
+-- read after the failure, or nil and why it could not be read.
+function P.round_failure(now, move, where, werr, why)
+  if not where then
+    return string.format("%s, and where it is now could not be read (%s): %s", not_moved(now, move), tostring(werr),
+      tostring(why))
+  end
+  return string.format("%s, and now on %s's %s: %s", not_moved(now, move), P.display_label(move.names, where.screen),
+    P.desktop_label(now, where.screen, where.space), tostring(why))
+end
+
+-- Whether a held window is on the one space it was taken to, and that space
+-- is the one SCREEN shows: a carry's step and a drag's check both ask this
+-- (STca1b7f9 WP3). true, or nil and where it is, a value that could not be
+-- read said as such with its error.
+function P.landed(spaces, shown, space, screen, spaces_error, shown_error)
+  if spaces and #spaces == 1 and spaces[1] == space and shown == space then return true end
+  return nil, string.format("the window is on %s, not space %s alone, and screen %s shows %s",
+    spaces and ("{" .. table.concat(spaces, ",") .. "}") or ("what could not be read: " .. tostring(spaces_error)),
+    tostring(space), tostring(screen),
+    shown ~= nil and ("space " .. tostring(shown)) or ("what could not be read: " .. tostring(shown_error)))
 end
 
 -- Whether a moved window is where it was sent (design.md, "Moving a
@@ -1243,7 +1592,9 @@ function P.apply_report(desk, results)
   end
   for _, e in ipairs(ordered) do
     local launch = by_app[app_key(e.app.app)]
-    local outcome, why, moved, counts = "placed", {}, false, false
+    -- first_fix is the fix of why[1], the words the tally may name first:
+    -- a failure's way out travels with its reason (STca1b7f9 WP4).
+    local outcome, why, moved, counts, first_fix = "placed", {}, false, false, nil
     -- What a done result had worth saying: said, and counting against
     -- nothing, which is a loose result's `note` status on an entry that was
     -- placed (issue 0133's window held at the app's own size). Kept apart from
@@ -1253,6 +1604,7 @@ function P.apply_report(desk, results)
     if launch and launch.status ~= "done" then
       outcome = launch.status
       why[#why + 1] = tostring(launch.reason)
+      first_fix = launch.fix
     end
     for _, r in ipairs(by_path[e.path] or {}) do
       if r.status == "done" then
@@ -1262,6 +1614,7 @@ function P.apply_report(desk, results)
         if not r.uncounted then counts = true end
         if outcome == "placed" or r.status == "failed" then
           outcome = r.status
+          if #why == 0 then first_fix = r.fix end
           why[#why + 1] = tostring(r.reason)
         end
       end
@@ -1281,7 +1634,9 @@ function P.apply_report(desk, results)
       -- unseen entry is tallied, and never named as what went wrong.
       if counts or launch then
         code = 1
-        tally.first = tally.first or why[1] or outcome
+        -- first_outcome says what the entry `first` names was, in the
+        -- tally's own keys, so the toast can label it (STca1b7f9 WP6).
+        if tally.first == nil then tally.first, tally.fix, tally.first_outcome = why[1] or outcome, first_fix, kind end
       end
     end
     local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
@@ -1294,7 +1649,9 @@ function P.apply_report(desk, results)
   for _, r in ipairs(loose) do
     if r.status ~= "note" then
       code = 1
-      tally.first = tally.first or tostring(r.reason)
+      if tally.first == nil then
+        tally.first, tally.fix, tally.first_outcome = tostring(r.reason), r.fix, TALLIED[r.status] and r.status or "failed"
+      end
     end
     lines[#lines + 1] = string.format("%s%s: %s: %s", tostring(r.op), r.path and (" (" .. r.path .. ")") or "",
       tostring(r.status), tostring(r.reason))
@@ -1358,11 +1715,14 @@ function P.snap(frame, screen_frame, grid)
   return string.format("%d,%d %dx%d", x, y, w, h), round(math.max(mx, my)), px or py
 end
 
--- Whether a space creation that failed is worth trying again (issue 0135).
--- Hammerspoon's addSpaceToScreen signals failure by returning nil with a
--- reason, and the reasons differ in kind: the Dock being momentarily unable to
--- serve Mission Control data passes, while a display the plan named and which
--- is no longer there cannot be retried into existence.
+-- What kind of failure a space creation's reason is (issue 0135; STca1b7f9
+-- WP6). Hammerspoon's addSpaceToScreen signals failure by returning nil with
+-- a reason, and the reasons differ in kind: a display the plan named and
+-- which is no longer there ("gone") cannot be retried into existence; the
+-- Dock not opening Mission Control for Hammerspoon ("dock") was never once
+-- ridden out by trying again (0135's run 35, hv's two runs of 23 Nov), and
+-- each try asks the Dock to open it again while it may still be opening; any
+-- other reason may pass.
 --
 -- An unrecognised reason is TRANSIENT on purpose. Treating an unknown
 -- transient as permanent fails a run that would have come right on its own,
@@ -1371,7 +1731,31 @@ end
 function P.space_error_kind(why)
   local text = string.lower(tostring(why or ""))
   if string.find(text, "no display with specified id found", 1, true) then return "gone" end
+  -- Hammerspoon's spaces module polls for Mission Control's group in the
+  -- Dock for between 1 and 2 s, on whole seconds, and the group never came.
+  if string.find(text, "unable to get mission control data from the dock", 1, true) then return "dock" end
   return "transient"
+end
+
+-- Whether a create's reason ends its tries at once: a display that is gone,
+-- or the Dock not opening Mission Control. The one rule exec_create_space's
+-- stop asks (STca1b7f9 WP6).
+function P.space_error_final(why)
+  local kind = P.space_error_kind(why)
+  return kind == "gone" or kind == "dock"
+end
+
+-- The way out of a create that failed at the Dock (WP6).
+P.DOCK_FIX = "add the desktop in Mission Control by hand, then run it again"
+
+-- A create's failure as a person reads it, and its fix where it has one: the
+-- Dock's error says that the Dock did not open Mission Control for
+-- Hammerspoon (WP6). Any other reason is as Hammerspoon gave it.
+function P.create_failure(why)
+  if P.space_error_kind(why) == "dock" then
+    return "the Dock did not open Mission Control for Hammerspoon (" .. tostring(why) .. ")", P.DOCK_FIX
+  end
+  return tostring(why), nil
 end
 
 -- Whether a window lies mostly off the display it was found on (issue 0134).

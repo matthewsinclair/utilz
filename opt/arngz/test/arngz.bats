@@ -801,7 +801,7 @@ engine_response() {
   run_arngz diff zeop1
   assert_exit_code 1
   assert_output_contains "unseen com.apple.Safari (displays[0].spaces[0].apps[1]):"
-  assert_output_contains "the window filter that names windows on other spaces failed: no filter"
+  assert_output_contains "Hammerspoon's window filter failed (no filter), so windows on desktops not shown could not be named"
 }
 
 @test "0132: diff refuses a plan whose exit is not 0 or 1, exit 2, its response kept" {

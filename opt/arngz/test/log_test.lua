@@ -311,6 +311,33 @@ arm("the formatters", function()
     L.point_text("step", f))
   check("step fields: a move carries the window's frame", f.x == 10 and f.y == 20 and f.w == 300 and f.h == 400,
     L.point_text("step", f))
+  -- STca1b7f9 WP3: steps_before routes a move and gives its step the display
+  -- it goes round through, so the toast can say so.
+  check("step fields: a move that goes straight carries no via", f.via == nil, L.point_text("step", f))
+  local round = L.step_fields({ displays = { { name = "main" } } },
+    { op = "move", path = "displays[0].spaces[6].apps[0]", bundle = "com.appgate.sdp", ordinal = 5 }, 4, 9, nil, "above-left")
+  check("step fields: a move that goes round through another display carries via, by the name it was given",
+    round.via == "above-left" and round.display == "main" and round.desktop == 5, L.point_text("step", round))
+  check("step fields: via goes in the record with the other fields",
+    string.find(L.point_text("step", round), " via=above-left", 1, true) ~= nil, L.point_text("step", round))
+  -- STca1b7f9 WP4 and issue I4eacd29: a failure's fix in the op's record,
+  -- written as a refused plan's is, and the titles a toast never shows.
+  local stuck = L.result_text({ op = "move", path = "displays[0].spaces[5].apps[2]" },
+    { status = "failed", reason = "Microsoft Teams not moved to desktop 6 on main: Screen Sharing and Parallels Desktop"
+      .. " are full screen between desktop 4 and desktop 6", fix = "take them out of full screen, or attach a display,"
+      .. " then run it again", passed = { { space = 423, app = "Screen Sharing", title = "gyges" },
+      { space = 121, app = "Parallels Desktop", title = "kovacs" }, { space = 7 } } }, 12)
+  check("op record: a failure's fix follows its reason, as a refused plan's does",
+    string.find(stuck, "between desktop 4 and desktop 6; fix: take them out of full screen, or attach a display, then"
+      .. " run it again", 1, true) ~= nil, stuck)
+  check("op record: the full-screen windows a move could not pass, with their titles, which the reason never carries",
+    string.find(stuck, 'full screen: Screen Sharing "gyges" on 423, Parallels Desktop "kovacs" on 121, a window arngz'
+      .. " cannot name on 7", 1, true) ~= nil, stuck)
+  local unmovable = L.result_text({ op = "unmovable", path = "displays[0].spaces[1].apps[0]", window = 103,
+    title = "arngz.lua - Utilz" }, { status = "failed", reason = "com.microsoft.VSCode is on 2 spaces" }, 0)
+  check("op record: an unmovable op's window and title go to the log, as its reason does not carry them",
+    string.find(unmovable, 'window 103 "arngz.lua - Utilz"; failed: com.microsoft.VSCode is on 2 spaces', 1, true) ~= nil,
+    unmovable)
   local pairs_out = L.report_pairs({ "a (p): placed" }, 1, { placed = 2, in_place = 1, failed = 1, unseen = 0, skipped = 0, created = 1 })
   check("report pairs: each line, then the exit and the tally",
     #pairs_out == 2 and pairs_out[1][2] == "a (p): placed"
@@ -352,6 +379,81 @@ arm("the tally", function()
     status = "unseen", reason = "no window to name", uncounted = true } })
   check("tally: an uncounted unseen entry is tallied and is not the first failure",
     tally2.unseen == 1 and tally2.first == nil and code2 == 0, tostring(tally2.first) .. " / " .. tostring(code2))
+  -- STca1b7f9 WP4: a failure's fix travels with its words to Finished.
+  local _, _, tally3 = P.apply_report(desk, {
+    { op = "move", path = "displays[0].spaces[0].apps[0]", status = "failed", reason = "not moved: full screen",
+      fix = "take it out of full screen, or attach a display, then run it again" },
+    { op = "move", path = "displays[0].spaces[0].apps[2]", status = "failed", reason = "a later one", fix = "later" },
+  })
+  check("tally: the first failure's fix goes with its words", tally3.first == "not moved: full screen"
+    and tally3.fix == "take it out of full screen, or attach a display, then run it again",
+    tostring(tally3.first) .. " / " .. tostring(tally3.fix))
+  local _, _, tally4 = P.apply_report(desk, { { op = "move", path = "displays[0].spaces[0].apps[0]", status = "failed",
+    reason = "no fix for this one" }, { op = "move", path = "displays[0].spaces[0].apps[2]", status = "failed",
+    reason = "a later one", fix = "later" } })
+  check("tally: a first failure with no fix carries none, not a later failure's",
+    tally4.first == "no fix for this one" and tally4.fix == nil, tostring(tally4.fix))
+  -- WP4's main path: every move is planned with a place on its path, and
+  -- after a failed move that place fails too, with no fix of its own. The
+  -- fix stays with the words named first, the move's.
+  local _, _, tally5 = P.apply_report(desk, {
+    { op = "move", path = "displays[0].spaces[0].apps[0]", status = "failed", reason = "not moved: full screen",
+      fix = "take it out of full screen, or attach a display, then run it again" },
+    { op = "place", path = "displays[0].spaces[0].apps[0]", status = "failed",
+      reason = "not placed: its move did not take, so the frame would be on the wrong space" },
+  })
+  check("tally: a failed move's fix stays with its words when its place fails after it on the same path",
+    tally5.first == "not moved: full screen"
+      and tally5.fix == "take it out of full screen, or attach a display, then run it again",
+    tostring(tally5.first) .. " / " .. tostring(tally5.fix))
+  local _, _, tally6 = P.apply_report(desk, { { op = "launch", path = "displays[0].spaces[0].apps[1]", bundle = "com.b",
+    status = "failed", reason = "open -b exited 1", fix = "install it" } })
+  check("tally: a failed launch's fix goes with its words", tally6.first == "open -b exited 1" and tally6.fix == "install it",
+    tostring(tally6.first) .. " / " .. tostring(tally6.fix))
+  local _, _, tally7 = P.apply_report(desk, { { op = "create_space", path = "displays[0].spaces[2]", status = "failed",
+    reason = "the Dock did not open Mission Control", fix = "add the desktop in Mission Control by hand" } })
+  check("tally: a failure on no entry's path carries its fix too",
+    tally7.first == "the Dock did not open Mission Control" and tally7.fix == "add the desktop in Mission Control by hand",
+    tostring(tally7.first) .. " / " .. tostring(tally7.fix))
+  -- STca1b7f9 WP6: first_outcome says what the entry first names was, in
+  -- the tally's own keys, so the toast can label it.
+  local _, _, unseen_first = P.apply_report(desk, { { op = "unseen", path = "displays[0].spaces[0].apps[1]",
+    status = "unseen", reason = "no window to name", uncounted = false } })
+  local _, _, skipped_first = P.apply_report(desk, { { op = "not_launched", path = "displays[0].spaces[0].apps[1]",
+    status = "skipped", reason = "--no-launch leaves it so" } })
+  check("tally: first_outcome is what the entry first names was: failed, unseen or skipped",
+    tally3.first_outcome == "failed" and unseen_first.first_outcome == "unseen"
+      and skipped_first.first_outcome == "skipped" and tally7.first_outcome == "failed",
+    table.concat({ tostring(tally3.first_outcome), tostring(unseen_first.first_outcome),
+      tostring(skipped_first.first_outcome), tostring(tally7.first_outcome) }, " / "))
+  local partly = L.finished_fields({ status = "ok", verb = "apply", exit = 1, tally = unseen_first }, 2, "/tmp/arngz.log")
+  check("finished: first_outcome goes with a first the tally names", partly.first_outcome == "unseen"
+    and partly.first == "no window to name", tostring(partly.first_outcome))
+  local refusal = L.finished_fields({ status = "error", kind = "refused", verb = "apply",
+    error = "the desk fits no display", tally = unseen_first }, 1, "/tmp/arngz.log")
+  local lua_error = L.finished_fields({ status = "error", kind = "lua_error", verb = "apply", error = "boom",
+    tally = unseen_first }, 1, "/tmp/arngz.log")
+  check("finished: none with a refusal's words, nor with a failed run's own error",
+    refusal.first_outcome == nil and lua_error.first_outcome == nil,
+    tostring(refusal.first_outcome) .. " / " .. tostring(lua_error.first_outcome))
+  -- A report-only op's fix reaches its result: execute passes it, and needs
+  -- no Hammerspoon to do so (WP6, the failed filter's fix).
+  local executed = M.execute({ { op = "unseen", path = "displays[0].spaces[0].apps[1]", reason = "no window to name",
+    fix = "run it again" } }, {})
+  check("execute: a report-only op's fix goes on its result with its reason",
+    executed[1] and executed[1].status == "unseen" and executed[1].fix == "run it again"
+      and executed[1].reason == "no window to name", executed[1] and tostring(executed[1].fix))
+  local done = L.finished_fields({ status = "ok", verb = "apply", exit = 1, tally = tally3 }, 3, "/tmp/arngz.log")
+  check("finished: a failed or partly run shows the first failure's fix",
+    done.fix == "take it out of full screen, or attach a display, then run it again" and done.first == "not moved: full screen",
+    done.fix)
+  local refused = L.finished_fields({ status = "error", kind = "refused", verb = "apply", error = "the desk fits no display",
+    fix = "attach the desk's display", tally = tally3 }, 1, "/tmp/arngz.log")
+  check("finished: a refusal shows its own fix, never a tally's",
+    refused.fix == "attach the desk's display" and refused.first == "the desk fits no display", refused.fix)
+  local errored = L.finished_fields({ status = "error", kind = "lua_error", verb = "apply", error = "boom", tally = tally3 },
+    1, "/tmp/arngz.log")
+  check("finished: a run that failed on its own error shows no fix of a tally's", errored.fix == "", errored.fix)
 end)
 
 -- -------------------------------- arm 4: every acting kind has its field

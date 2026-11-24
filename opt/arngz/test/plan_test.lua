@@ -318,6 +318,8 @@ do
     and string.find(tostring(err), "could not be listed", 1, true) ~= nil, err or ops_text(ops))
   local v = base_world()
   space(v, 1).windows[2] = { id = 102, named = false, read_error = "incorrect type 'nil'" }
+  -- The filter ran, as observe notes it: the WP6 check below reads this world.
+  v.window_filter = "ran"
   local vops, verr = P.plan(base_desk(), v, {})
   check("plan does not refuse on a window record carrying read_error, and its unseen reason says so",
     kinds(vops) == "unseen" and vops[1].bundle == "com.apple.Safari"
@@ -328,11 +330,24 @@ do
   u.window_id_errors, u.window_id_error = 2, "axuielement gone"
   u.window_filter = "failed: no filter"
   local uops, uerr = P.plan(base_desk(), u, {})
-  check("an unseen reason counts the window id reads that failed, and names a window filter that failed",
+  -- STca1b7f9 WP6 (issue I7fce35c): a failed filter is said plainly, with
+  -- its way out, which travels with the unseen op to Finished.
+  check("an unseen reason counts the window id reads that failed, and says plainly that Hammerspoon's window filter failed",
     kinds(uops) == "unseen"
       and string.find(uops[1].reason, "2 window id read(s) failed (axuielement gone)", 1, true) ~= nil
-      and string.find(uops[1].reason, "names windows on other spaces failed: no filter", 1, true) ~= nil,
+      and string.find(uops[1].reason, "; Hammerspoon's window filter failed (no filter), so windows on desktops not shown"
+        .. " could not be named", 1, true) ~= nil,
     uerr or ops_text(uops))
+  check("WP6: with the filter failed, an unseen op carries the fix: run it again, then reload Hammerspoon's config",
+    uops and uops[1] and uops[1].fix
+      == "run it again; if it fails again, reload Hammerspoon's config (Reload Config in its menu)",
+    uops and uops[1] and tostring(uops[1].fix))
+  check("WP6: with the filter run, as observe notes it, an unseen op carries no fix and names no filter",
+    vops and vops[1] and vops[1].fix == nil and not string.find(vops[1].reason, "window filter", 1, true),
+    vops and vops[1] and tostring(vops[1].fix))
+  check("WP6: the filter failed is read one way: a note that is not 'ran', and not a missing one",
+    P.filter_failed({ window_filter = "failed: x" }) and not P.filter_failed({ window_filter = "ran" })
+      and not P.filter_failed({}))
 end
 
 -- Which unseen op counts (issue 0132): plan marks one uncounted only when no
@@ -509,9 +524,11 @@ do
   local w = base_world()
   space(w, 2).windows[1].title = "Utilz 1"
   local ok, ops, err = pcall(P.plan, d, w, {})
-  check("a pattern that fails only on a real title is refused naming its path",
-    ok and ops == nil and err ~= nil and string.find(err, "displays[0].spaces[1].apps[0].window", 1, true) ~= nil
-      and string.find(err, 'on window title "Utilz 1"', 1, true) ~= nil,
+  -- A refusal is Finished's first, so it names the window by its id and never
+  -- its title (issue I4eacd29).
+  check("a pattern that fails only on a real title is refused naming its path and window id, with no title",
+    ok and ops == nil and err ~= nil and string.find(err, "displays[0].spaces[1].apps[0].window is not a valid Lua"
+      .. " pattern on the title of window 103: ", 1, true) == 1 and not string.find(err, "Utilz 1", 1, true),
     tostring(ok) .. " " .. tostring(err or ops))
 end
 
@@ -869,8 +886,13 @@ do
   check("within a display, off the space shown: switch to the window's space, then carry",
     legs and #legs == 2 and legs[1].kind == "switch" and legs[1].steps[1] == 3 and legs[2].kind == "carry"
       and legs[2].side == "left")
-  local none, why = P.move_legs(now, { screen = "L", space = 2588, from_screen = "L", from_space = 3 })
-  check("a held carry across a full-screen space is refused, named", none == nil and string.find(why, "fullscreen", 1, true) ~= nil, why)
+  -- The names a real move carries are P.display_names' (arngz.lua sets them
+  -- from ctx.names), so the display reads as the desk names it.
+  local none, why, nfix = P.move_legs(now, { screen = "L", space = 2588, from_screen = "L", from_space = 3,
+    names = { L = "left" } })
+  check("a carry past a full-screen space with no display to go round through fails, saying so, desktops as the desk counts them",
+    none == nil and why == "a window not moved to desktop 3 on left: an app arngz cannot name is full screen between desktop 2 and desktop 3"
+      and nfix == "take it out of full screen, or attach a display, then run it again", tostring(why) .. " / " .. tostring(nfix))
   legs = P.move_legs(now, { screen = "A", space = 8, from_screen = "L", from_space = 3 })
   check("across displays: the target shows the target space, the origin shows the window, then the drag",
     legs and #legs == 3 and legs[1].kind == "switch" and legs[1].screen == "A" and legs[1].steps[1] == 8
@@ -886,6 +908,179 @@ do
   local nolegs, bwhy = P.move_legs(blind, { screen = "L", space = 3, from_screen = "L", from_space = 1 })
   check("a display whose shown space could not be read refuses the move with the read's error",
     nolegs == nil and string.find(bwhy, "activeSpaceOnScreen failed", 1, true) ~= nil, bwhy)
+
+  -- STca1b7f9 WP3 and WP4, on the orders hv's runs of 23 Nov logged. rhad's
+  -- re-run (20261123T104723Z-91703), the built-in alone: Screen Sharing's
+  -- gyges full screen on 423 and Parallels' kovacs on 121, and Teams wanted
+  -- from 5 on 7. zeopit's run (20261123T105242Z-55488), plugged in under two
+  -- panels: Appgate wanted from 6 on 7, past 121 and 423.
+  local rhad_order = { 1, 3, 1431, 5, 423, 121, 6, 7, 1271, 1442 }
+  local types = {}
+  for _, id in ipairs(rhad_order) do types[id] = "user" end
+  types[423], types[121] = "fullscreen", "fullscreen"
+  local apps = { [423] = { { app = "Screen Sharing", title = "gyges" } },
+    [121] = { { app = "Parallels Desktop", title = "kovacs" } } }
+  local names = { L = "main", B = "above-left", A = "above-right", F = "far" }
+  local teams = { screen = "L", space = 7, ordinal = 6, from_screen = "L", from_space = 5, app = "Microsoft Teams",
+    names = names }
+  local rhad = { order = { L = rhad_order }, types = types, active = { L = 5 }, screens = { laptop }, apps = apps }
+  local fail, fwhy, ffix, fpassed = P.move_legs(rhad, teams)
+  check("WP4: on the laptop alone, the move fails naming its app, the target, every full-screen app and the gap",
+    fail == nil and fwhy == "Microsoft Teams not moved to desktop 6 on main: Screen Sharing and Parallels Desktop are full"
+      .. " screen between desktop 4 and desktop 6", tostring(fwhy))
+  check("WP4: with no other display the fix is to attach one",
+    ffix == "take them out of full screen, or attach a display, then run it again", tostring(ffix))
+  check("WP4: the failure's words carry no window title, and the full-screen windows go to the log with theirs",
+    not string.find(fwhy, "gyges", 1, true) and not string.find(ffix, "kovacs", 1, true) and fpassed and #fpassed == 2
+      and fpassed[1].title == "gyges" and fpassed[1].space == 423 and fpassed[2].app == "Parallels Desktop",
+    fpassed and #fpassed)
+
+  local zeopit_order = { 1, 3, 1431, 5, 7, 423, 121, 6 }
+  -- The panels' desktops: 8 and 9 user, 10 and 12 full screen; 13 the far
+  -- display's user desktop.
+  local ztypes = { [8] = "user", [9] = "user", [10] = "fullscreen", [11] = "user", [12] = "fullscreen", [13] = "user" }
+  for _, id in ipairs(zeopit_order) do ztypes[id] = types[id] or "user" end
+  local appgate = { screen = "L", space = 7, ordinal = 5, from_screen = "L", from_space = 6, app = "Appgate SDP",
+    names = names }
+  local function zeopit(left_shows, right_shows, screens)
+    return { order = { L = zeopit_order, B = { 8, 10 }, A = { 9, 11, 12 }, F = { 13, 10 } }, types = ztypes,
+      active = { L = 6, B = left_shows, A = right_shows, F = 13 }, screens = screens or { laptop, left, right },
+      apps = apps }
+  end
+  local went = P.move_legs(zeopit(8, 9), appgate)
+  check("WP3: plugged in, a carry past full-screen spaces goes round through a panel, the first by the screens' order",
+    went and went.via == "B" and #went == 3, went and (tostring(went.via) .. " / " .. #went))
+  local function legs_text(legs)
+    local out = {}
+    for i, leg in ipairs(legs or {}) do
+      out[i] = string.format("%s %s>%s %s [%s]%s", tostring(leg.kind), tostring(leg.from_screen), tostring(leg.screen),
+        tostring(leg.space), table.concat(leg.steps or {}, ","), leg.check and " check" or "")
+    end
+    return table.concat(out, " | ") .. " (checked " .. tostring(legs and legs.checked) .. ")"
+  end
+  check("WP3: the legs are a drag to B, read back, then A steps past with nothing held, then a drag back",
+    went and went[1].kind == "drag" and went[1].from_screen == "L" and went[1].screen == "B" and went[1].space == 8
+      and went[1].check == true and went.checked == 1
+      and went[2].kind == "switch" and went[2].screen == "L" and table.concat(went[2].steps, ",") == "121,423,7"
+      and went[2].side == "left"
+      and went[3].kind == "drag" and went[3].from_screen == "B" and went[3].screen == "L" and went[3].space == 7
+      and not went[3].check, legs_text(went))
+  local shown_elsewhere = zeopit(8, 9)
+  shown_elsewhere.active.L = 1
+  local first_switch = P.move_legs(shown_elsewhere, appgate)
+  check("WP3: a window on a desktop its display is not showing: A shows it first, nothing held",
+    first_switch and #first_switch == 4 and first_switch[1].kind == "switch" and first_switch[1].screen == "L"
+      and first_switch.checked == 2 and first_switch[2].check == true, first_switch and #first_switch)
+  local right_only = P.move_legs(zeopit(10, 9), appgate)
+  check("WP3: a panel showing a full-screen space is not gone round through",
+    right_only and right_only.via == "A" and right_only[1].screen == "A" and right_only[1].space == 9,
+    right_only and tostring(right_only.via))
+  local both, bwhy2, bfix = P.move_legs(zeopit(10, 12), appgate)
+  check("WP4: panels that each show a full-screen space: the fix names the one the route would take",
+    both == nil and bfix == "take them out of full screen, or show a desktop on above-left, then run it again"
+      and string.find(bwhy2, "Appgate SDP not moved to desktop 5 on main: ", 1, true) == 1,
+    tostring(bwhy2) .. " / " .. tostring(bfix))
+  local apart, _, afix = P.move_legs(zeopit(8, 9, { laptop, far }), appgate)
+  check("WP4: a display that shares no edge with A: the fix is to arrange it to",
+    apart == nil and afix == "take them out of full screen, or arrange far to share an edge with main, then run it again",
+    tostring(afix))
+  local far_full = zeopit(8, 9, { laptop, far })
+  far_full.active.F = 10
+  local _, _, ffull = P.move_legs(far_full, appgate)
+  check("WP4: and to show a desktop on it, when it shows a full-screen space too",
+    ffull == "take them out of full screen, or arrange far to share an edge with main and show a desktop on it, then run it again",
+    tostring(ffull))
+  local one = { order = rhad.order, types = types, active = rhad.active, screens = { laptop },
+    apps = { [423] = apps[423] } }
+  local _, owhy, ofix = P.move_legs(one, { screen = "L", space = 6, ordinal = 5, from_screen = "L", from_space = 5,
+    app = "Microsoft Teams", names = names })
+  check("WP4: one full-screen app named, one that cannot be: both said, and 'them'",
+    owhy == "Microsoft Teams not moved to desktop 5 on main: Screen Sharing and an app arngz cannot name are full screen"
+      .. " between desktop 4 and desktop 5" and string.find(ofix, "take them", 1, true) == 1, tostring(owhy))
+
+  -- WP3: where a round that failed after its first drag left the window.
+  local zs = zeopit(8, 9)
+  check("WP3: a round that failed after its first drag says where the window is now, as ic worded it, with no fix",
+    P.round_failure(zs, appgate, { screen = "B", space = 8 }, nil, "drag: the hold did not take window 166")
+      == "Appgate SDP not moved to desktop 5 on main, and now on above-left's desktop 1: drag: the hold did not take window 166",
+    P.round_failure(zs, appgate, { screen = "B", space = 8 }, nil, "x"))
+  local unread_where = P.round_failure(zs, appgate, nil, "windowSpaces(166): nil", "switch: x")
+  check("WP3: and says so when where it is could not be read",
+    unread_where
+      == "Appgate SDP not moved to desktop 5 on main, and where it is now could not be read (windowSpaces(166): nil): switch: x",
+    unread_where)
+  local off_map = P.round_failure(zs, appgate, { screen = "B", space = 77 }, nil, "x")
+  check("WP3: a desktop not in the display's order is said as a space id, never as a desktop's number",
+    off_map == "Appgate SDP not moved to desktop 5 on main, and now on above-left's space 77: x", off_map)
+  check("WP3: from the drag to B on, a failed round reads where its window is; before it, the window is on A",
+    P.round_moved(went, 1) and P.round_moved(went, 3) and not P.round_moved(first_switch, 1)
+      and P.round_moved(first_switch, 2) and not P.round_moved({ { kind = "carry" } }, 1))
+  check("WP3: a round says the display it went through, by its name; a straight move says so",
+    P.route_said(names, "B") == "round through above-left" and P.route_said(names, false) == "straight"
+      and P.route_said({}, "X") == "round through screen X", P.route_said(names, "B"))
+
+  -- The landing check a carry's step and a drag's check share.
+  check("a held window is read back on the shown space it was taken to", P.landed({ 8 }, 8, 8, "B") == true)
+  local _, lwhy = P.landed({ 6 }, 8, 8, "B")
+  check("and is not, while it is still on its old space, saying where it is",
+    P.landed({ 6 }, 8, 8, "B") == nil and lwhy == "the window is on {6}, not space 8 alone, and screen B shows space 8",
+    tostring(lwhy))
+  check("nor when its display shows another space", P.landed({ 8 }, 10, 8, "B") == nil)
+  local _, uwhy = P.landed(nil, nil, 8, "B", "windowSpaces failed", "activeSpaceOnScreen failed")
+  check("a read that failed is said with its error, never as nil",
+    uwhy == "the window is on what could not be read: windowSpaces failed, not space 8 alone, and screen B shows what could"
+      .. " not be read: activeSpaceOnScreen failed", tostring(uwhy))
+
+  -- A panel whose shown desktop was not read may be the way round: the move
+  -- fails on that read, as it does on A's own, with no fix.
+  local blind_panel = zeopit(10, 9)
+  blind_panel.active.A, blind_panel.active_error = nil, { A = "activeSpaceOnScreen(A) failed" }
+  local bp, bpwhy, bpfix = P.move_legs(blind_panel, appgate)
+  check("WP3: a panel whose desktop could not be read, and no other way round: the move fails on the read, with no fix",
+    bp == nil and bpfix == nil and bpwhy == "Appgate SDP not moved to desktop 5 on main: Parallels Desktop and Screen"
+      .. " Sharing are full screen between desktop 6 and desktop 5, and what above-right shows could not be read:"
+      .. " activeSpaceOnScreen(A) failed", tostring(bpwhy))
+  local untyped = zeopit(10, 9)
+  untyped.active.A = 99
+  local _, uwhy2 = P.move_legs(untyped, appgate)
+  check("WP3: and a panel showing a space the last observe gave no type is not taken for a full-screen one",
+    string.find(tostring(uwhy2), "what above-right shows could not be read: it shows space 99, which the last observe gave"
+      .. " no type", 1, true) ~= nil, tostring(uwhy2))
+  check("desk ordinals count user desktops only", P.desktop_ordinal(rhad_order, types, 7) == 6
+    and P.desktop_ordinal(rhad_order, types, 423) == nil and P.desktop_ordinal(rhad_order, types, 99) == nil)
+  check("a desktop is said by its ordinal, else the desk's, else as a space id",
+    P.desktop_label(rhad, "L", 7) == "desktop 6" and P.desktop_label(rhad, "L", 99, 4) == "desktop 4"
+      and P.desktop_label(rhad, "L", 99) == "space 99", P.desktop_label(rhad, "L", 99))
+
+  -- STca1b7f9: displays and apps named as a person reads them, one rule each.
+  local nw = base_world()
+  table.insert(nw.screens, { uuid = "SCREEN-B", name = "Built-in Retina Display", spaces = {},
+    frame = { x = 0, y = 825, w = 1800, h = 1144 }, full_frame = { x = 0, y = 825, w = 1800, h = 1169 } })
+  local dn = P.display_names(base_desk(), nw, {})
+  check("display names: the desk's name for a display it matches, a screen's own for one it does not describe",
+    dn["SCREEN-A"] == "left" and dn["SCREEN-B"] == "Built-in Retina Display",
+    tostring(dn["SCREEN-A"]) .. " / " .. tostring(dn["SCREEN-B"]))
+  local unnamed = base_desk()
+  unnamed.displays[1].name = nil
+  local un = P.display_names(unnamed, nw, {})
+  check("display names: a desk display with no name is 'display N', as a step's display says it",
+    un["SCREEN-A"] == "display 1", tostring(un["SCREEN-A"]))
+  local unmatched = base_desk()
+  unmatched.displays[1].match = { uuid = "NOPE", name = "NOPE", size = "1x1", position = "nowhere" }
+  local um = P.display_names(unmatched, nw, {})
+  check("display names: a desk that matches no screen leaves every screen its own name",
+    um["SCREEN-A"] == "VY229HF" and um["SCREEN-B"] == "Built-in Retina Display", tostring(um["SCREEN-A"]))
+  check("app label: a display name, else the bundle, never an empty name",
+    P.app_label("Mail", "com.apple.mail") == "Mail" and P.app_label("", "com.apple.mail") == "com.apple.mail"
+      and P.app_label(nil, "com.apple.mail") == "com.apple.mail", P.app_label("", "com.apple.mail"))
+  local aw = base_world()
+  aw.screens[1].spaces[1].windows[1].app_name = "Mail"
+  aw.screens[1].spaces[1].windows[2].app_name = ""
+  local by_space, by_window = P.named_apps(aw)
+  check("named apps: each space's named windows by app and title, and each window's app, by the one fallback",
+    by_space[11][1].app == "Mail" and by_space[11][1].title == "Inbox" and by_space[11][2].app == "com.apple.Safari"
+      and by_window[101] == "Mail" and by_window[102] == "com.apple.Safari" and by_window[103] == "com.microsoft.VSCode",
+    tostring(by_window[101]) .. " / " .. tostring(by_window[102]))
 
   local op = { screen = "L", space = 3 }
   local good = { window_spaces = { 3 }, shown = 3, listed_at_destination = true, listed_at_origin = false, origin = 1 }
@@ -960,6 +1155,52 @@ do
   check("a window on every space wanted on a space it is not on is unmovable, said, and neither moved nor placed",
     kinds(uops) == "unmovable" and uops[1].window == 103 and string.find(uops[1].reason, "on 2 spaces", 1, true) ~= nil,
     uerr or ops_text(uops))
+  -- Issue I4eacd29: the reason reaches Finished, so it names the app and
+  -- never the title, which the op keeps for the log.
+  check("unmovable's reason names the app and no window title, and the op keeps the title for the log",
+    uops and string.find(uops[1].reason, "com.microsoft.VSCode is on 2 spaces", 1, true) == 1
+      and not string.find(uops[1].reason, "arngz.lua - Utilz", 1, true) and uops[1].title == "arngz.lua - Utilz",
+    uops and uops[1] and uops[1].reason)
+  local named = base_world()
+  table.insert(space(named, 1).windows, space(named, 2).windows[1])
+  table.insert(named.screens[1].spaces, { id = 13, ordinal = 3, type = "user", uuid = "SPACE-13", windows = {} })
+  space(named, 2).windows[1].app_name = "Visual Studio Code"
+  local nops = P.plan(d, named, {})
+  check("unmovable's reason names the app by its display name where observe read one",
+    nops and nops[1] and string.find(nops[1].reason, "Visual Studio Code is on 2 spaces", 1, true) == 1,
+    nops and nops[1] and nops[1].reason)
+  check("unmovable's reason says the target as the toast's lines do: desktop <n> on <A>",
+    uops and uops[1] and string.find(uops[1].reason, "and not on desktop 3 on left;", 1, true) ~= nil,
+    uops and uops[1] and uops[1].reason)
+
+  -- Issue Ib12d894: a desk display with no name, which the validator allows,
+  -- is said by its place in the desk, never "display nil", in each reason.
+  local function unnamed_desk()
+    local u = base_desk()
+    table.insert(u.displays[1].spaces, { apps = { { app = "com.microsoft.VSCode", window = "Utilz", layout = "0,0 12x8" } } })
+    table.remove(u.displays[1].spaces[2].apps, 1)
+    u.displays[1].name = nil
+    return u
+  end
+  local zops = P.plan(unnamed_desk(), base_world(), {})
+  local said_all, nil_said = {}, false
+  for _, op in ipairs(zops or {}) do
+    said_all[#said_all + 1] = op.op .. ": " .. tostring(op.reason)
+    if string.find(tostring(op.reason), "nil", 1, true) then nil_said = true end
+  end
+  local joined = table.concat(said_all, " | ")
+  check("Ib12d894: an unnamed desk display is 'display 1' in a create's, a move's and a place's reason, never nil",
+    zops and not nil_said and kinds(zops) == "create_space,move,place"
+      and string.find(joined, "create_space: display 1 needs 3 spaces and has 2", 1, true) ~= nil
+      and string.find(joined, "not space 3 of display 1", 1, true) ~= nil
+      and string.find(joined, "to 0,0 12x8 on display 1", 1, true) ~= nil, joined)
+  local uz = P.plan(unnamed_desk(), far, {})
+  check("Ib12d894: and unmovable's reason says it on its own, as 'on <A>' does: desktop 3 on display 1",
+    uz and uz[1] and string.find(uz[1].reason, "and not on desktop 3 on display 1;", 1, true) ~= nil,
+    uz and uz[1] and uz[1].reason)
+  check("Ib12d894: a display is named by its name, else its place, on its own or after the word display",
+    P.desk_display_name(base_desk(), 1) == "left" and P.desk_display_phrase(base_desk(), 1) == "display left"
+      and P.desk_display_name(unnamed_desk(), 1) == "display 1" and P.desk_display_phrase(unnamed_desk(), 1) == "display 1")
   -- Wanted on a space still to be created: the plan after creating it
   -- decides, so nothing is predicted for the window now.
   local soon = base_world()
@@ -1245,14 +1486,76 @@ do
     entry_for(off_desk, "com.apple.Safari") ~= nil)
 end
 
+-- ------------------------- windows lost mid-run (STca1b7f9 WP6, I7fce35c)
+
+print("windows lost mid-run")
+do
+  -- VSCode ran when apply began, and a read now says it does not, while its
+  -- window 103 from the start is still listed: hv's false gone of 13:51Z.
+  local before = P.app_windows(base_world())
+  check("WP6: the windows named at the start, by id, each with its app's key",
+    before[101] == "com.apple.mail" and before[102] == "com.apple.safari" and before[103] == "com.microsoft.vscode",
+    tostring(before[103]))
+  local opts = { running_before = { ["com.microsoft.vscode"] = true }, windows_before = before }
+  local w = base_world()
+  w.apps_running = { "com.apple.mail", "com.apple.Safari" }
+  local ops = P.plan(base_desk(), w, opts)
+  check("WP6: an app read as not running while its window from the start is still listed is planned as running:"
+    .. " its window is claimed and already in place, so nothing, and never gone", ops and kinds(ops) == "", ops_text(ops))
+  -- A second VSCode window from the start, with a higher id, still listed:
+  -- the lowest is the one named.
+  local two = base_world()
+  two.apps_running = { "com.apple.mail", "com.apple.Safari" }
+  table.insert(space(two, 1).windows, win(150, "com.microsoft.VSCode", "notes - Utilz", 0, 25, 600, 800))
+  local opts2 = { running_before = opts.running_before, windows_before = P.app_windows(two) }
+  local taken = P.taken_in(two, opts2)
+  check("WP6: it is taken as running by its lowest window from the start still listed",
+    taken["com.microsoft.vscode"] == 103, tostring(taken["com.microsoft.vscode"]))
+  local gone_w = base_world()
+  gone_w.apps_running = { "com.apple.mail", "com.apple.Safari" }
+  table.remove(space(gone_w, 2).windows, 1)
+  local gops = P.plan(base_desk(), gone_w, opts)
+  check("WP6: one with no window from the start still listed is gone, as before", gops and kinds(gops) == "gone",
+    ops_text(gops))
+
+  -- The retry rule: the filter's failure is a read that could not be made.
+  local ran, failed = { window_filter = "ran" }, { window_filter = "failed: hs/uielement.lua:134" }
+  local takes, why = P.retry_takes(ran, failed)
+  check("WP6: a retry from a world whose window filter failed does not replace a plan from one where it ran, saying why",
+    takes == false and why == "its window filter failed: hs/uielement.lua:134", tostring(why))
+  local pairs_taken = { P.retry_takes(ran, ran), P.retry_takes(failed, ran), P.retry_takes(failed, failed),
+    P.retry_takes(ran, {}) }
+  check("WP6: a retry from a world where it ran replaces the plan in hand, as one does when both failed, and one"
+    .. " whose windows were not listed at all is left to plan's own refusal",
+    pairs_taken[1] == true and pairs_taken[2] == true and pairs_taken[3] == true and pairs_taken[4] == true,
+    table.concat({ tostring(pairs_taken[1]), tostring(pairs_taken[2]), tostring(pairs_taken[3]),
+      tostring(pairs_taken[4]) }, " / "))
+end
+
 -- --------------------------------------------- space creation (issue 0135)
 
 print("space creation")
 do
   -- Hammerspoon's own strings, taken from runs 35 and 32 of hv's menuz log
   -- rather than invented, since the classifier matches on them.
-  check("a Dock that could not serve Mission Control data is worth waiting for",
-    P.space_error_kind("unable to get Mission Control data from the Dock") == "transient")
+  -- STca1b7f9 WP6 narrows 0135 for this one reason: four tries in one
+  -- callback never once rode it out (0135's run 35, hv's two runs of 23 Nov),
+  -- and each try asks the Dock to open Mission Control again while it may
+  -- still be opening. So it is its own kind, which stops the tries.
+  check("WP6: a Dock that did not open Mission Control is its own kind, whatever the case",
+    P.space_error_kind("unable to get Mission Control data from the Dock") == "dock"
+      and P.space_error_kind("Unable To Get Mission Control Data From The Dock") == "dock")
+  check("WP6: the Dock's kind and a gone display end the tries at once; any other reason does not",
+    P.space_error_final("unable to get Mission Control data from the Dock")
+      and P.space_error_final("no display with specified id found")
+      and not P.space_error_final("the Dock is not answering") and not P.space_error_final(nil))
+  local dwords, dfix = P.create_failure("unable to get Mission Control data from the Dock")
+  check("WP6: its words say the Dock did not open Mission Control for Hammerspoon, and its fix is to add the desktop by hand",
+    dwords == "the Dock did not open Mission Control for Hammerspoon (unable to get Mission Control data from the Dock)"
+      and dfix == "add the desktop in Mission Control by hand, then run it again", tostring(dwords) .. " / " .. tostring(dfix))
+  local owords, ofix2 = P.create_failure("no display with specified id found")
+  check("WP6: any other create failure is said as Hammerspoon gave it, with no fix",
+    owords == "no display with specified id found" and ofix2 == nil, tostring(owords))
   -- AT-03.1 (ST0032)
   check("a display the plan named and which is gone cannot be retried into existence",
     P.space_error_kind("no display with specified id found") == "gone")
