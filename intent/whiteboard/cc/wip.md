@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-23 17:27Z
+heartbeat_at: 2026-11-24 04:28Z
 status: active
 focus: "23 Nov, localfold for hv's estate-wide compact (vc's FOLD NOW, 17:26Z), no release. STca1b7f9's branch cc/stca1b7f9 at 3efc3397 (WP3, WP4's failure half, Ib12d894, WP6 but its create's M2 part), ic's toasts stacked, no run; spike v3 read SOUND and held for hv's ready (hold); its code (WP1, WP2, the mission leg, WP6's create) then the one booked run by stca1b/run-stca1b.sh. Records landed and checked: 0ca14af6, 3e9e7dd5, 3f0791ee, 931daea3, cd47793f. No test or build (vc decision 74). Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]

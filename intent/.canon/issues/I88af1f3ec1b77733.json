@@ -2,12 +2,12 @@
   "schema": "intent/issue@4.0",
   "id": "I88af1f3ec1b77733",
   "origin": "01M84BYYF1T5QPBWBCR84A2BYV",
-  "realised": true,
   "slug": "showreel-s-build-silently-drops-a-socials-qr-tha",
   "title": "showreel's build silently drops a socials QR that is there but cannot be read as text",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-11-23",
+  "closed": "2026-11-24",
   "reporter": "Matthew Sinclair",
   "body": "showreel's build reads each socials QR in `payload::socials` (opt/prez/crate/crates/showreel/src/payload.rs:110-141) with `if let Ok(svg) = std::fs::read_to_string(&path)` (payload.rs:123). Any error makes the row carry no QR, and nothing is said. A missing file is right to pass in silence, since an absent QR is a valid configuration (AC-3.3). But a file that is there and cannot be read as text, because it is not UTF-8, has no read permission, or is a directory, is dropped in the same silence. The reel then plays with no QR for that social, and neither check nor build says why. Nothing earlier catches it: `plan.reel_level` feeds `Plan::used` alone (plan.rs:126-134) and admits nothing. That breaks No Silent Errors (IN-AG-NO-SILENT-001) in ST0017's shipped code, whose stamp contract (AC-4.2) is cc's.\n\nThe fix: a read that fails for any reason but the file not being there warns, beside the build's two QR warnings, and the row still embeds nothing. The warning's words, in the shape of the other two (payload.rs:125-133):\n\n```\nQR for <label> could not be read as text, so it is not embedded\n    <path>: <the read's error>\n  fix: showreel qr <dir> --force\n```\n\n`<label>` is the social's label as the other two warnings give it, `<path>` is `plan::qr_path`'s path, and `<the read's error>` is the io error as Rust displays it. A file that is not there is still said nothing about.\n\nIt rides STb8e4fb6's WP 702cceb9 (`showreel qr`), by vc's ruling of 23 Nov 2026, since that change touches payload.rs and its one booked run proves both. ic adds the criterion that holds the warning, citing this issue, and builds it with these words. The `showreel qr` verb's keep report names the same state for a file it keeps.\n\nFound by cc in its read of ic's `showreel qr` design, 23 Nov 2026 (~/Devel/scratch/utilz-cc/showreel-qr-read.md, sha256 4dc3717e, item 4).\n"
 }
