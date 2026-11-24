@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-24 13:37Z
+heartbeat_at: 2026-11-24 16:54Z
 status: active
-focus: "24 Nov: localfold, no release; Utilz holds for hv's word. ST0031 rests until the next push, a candidate run and the first cut."
+focus: "24 Nov: localfold on hv's word, no release. ST0031/02 done; ST0031 rests on AC-01.4 at the first cut. Utilz holds for hv's word."
 claims: [ST0031/01, ST0031/02]
 ---
 
