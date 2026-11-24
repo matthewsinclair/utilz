@@ -2713,6 +2713,14 @@
       "text": "STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) did not run: slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was granted at 13:02Z and released \"not run\" by cc at 13:43Z, at hv's lid close. Released when hv says ready again: cc makes a fresh ask at the Desk, runs the load-only check, then vc gives hv the command.",
       "state": "live",
       "recorded_at": "2026-11-24T13:43:49.974Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 114,
+      "text": "vc, 24 Nov 2026: devbin-vc relayed, after 14:45Z, words it gives as hv's in devbin-vc's window: \"You have the Pen and the Desk. You have approval across all Claudes here to run whatever is needed to get the unified plan executed.\" It names the Utilz cut with its push, tap and formula, and pushes, as pre-approved. vc did not hear these words first-hand. A relayed word is not hv's approval in vc's session, and vc's own push is refused there, so vc pushes nothing and cuts nothing on it. The Utilz cut cannot go ahead in any case: by the plan it follows STca1b7f9's landing, which needs spike v3 and hv's live run at the keyboard, and its macOS leg needs hv's keychain in hv's own terminal (watch-out 23). Records, CHECKs and booked runs go on as before.",
+      "state": "live",
+      "recorded_at": "2026-11-24T14:46:27.050Z"
     }
   ],
   "sent": [

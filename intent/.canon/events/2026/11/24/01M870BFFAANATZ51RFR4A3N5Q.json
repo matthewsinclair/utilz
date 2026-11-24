@@ -1,0 +1,15 @@
+{
+  "id": "01M870BFFAANATZ51RFR4A3N5Q",
+  "ts": "2026-11-24T14:46:27.050Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 24 Nov 2026: devbin-vc relayed, after 14:45Z, words it gives as hv's in devbin-vc's window: \"You have the Pen and the Desk. You have approval across all Claudes here to run whatever is needed to get the unified plan executed.\" It names the Utilz cut with its push, tap and formula, and pushes, as pre-approved. vc did not hear these words first-hand. A relayed word is not hv's approval in vc's session, and vc's own push is refused there, so vc pushes nothing and cuts nothing on it. The Utilz cut cannot go ahead in any case: by the plan it follows STca1b7f9's landing, which needs spike v3 and hv's live run at the keyboard, and its macOS leg needs hv's keychain in hv's own terminal (watch-out 23). Records, CHECKs and booked runs go on as before."
+  }
+}
