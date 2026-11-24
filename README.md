@@ -633,8 +633,10 @@ This section is for the maintainer of a dev checkout, a clone of this repository
 Utilz follows the dev, opt, brew contract that every tool released through Homebrew follows (devbin's `docs/dev-opt-brew.md`, at devbin commit aeed31e4), as dev, stage and prod:
 
 - **dev** is the checkout, where the work happens: the bleeding edge.
-- **opt** is a working copy the checkout publishes with `utilz install`, kept apart from dev so what works is not disturbed by what is in progress. It lives at `$UTILZ_INSTALL_PREFIX`, which names its directory; there is no default, and unset is refused by name.
-- **brew** is the one prod publish: the Homebrew formula, rendered from a release tag ([docs/releasing.md](docs/releasing.md)). Inside it, `utilz install` refuses and names `brew upgrade utilz`.
+- **opt** is a working copy the checkout publishes with devbin's `bin/devbin install`, kept apart from dev so what works is not disturbed by what is in progress. It lives at `install.prefix` in `bin/.devbin/config.yaml`.
+- **brew** is the one prod publish: the Homebrew formula, rendered from a release tag ([docs/releasing.md](docs/releasing.md)). devbin's publish refuses to write into it and names `brew upgrade utilz`.
+
+devbin publishes and switches Utilz, as it does every tool it drives (devbin#0326): `bin/devbin install` and `bin/devbin use`, each run in this checkout. Utilz keeps no `install` or `use` of its own, and `utilz install` and `utilz use` refuse, naming them.
 
 `utilz version` names the tree that answered, on one line:
 
@@ -644,35 +646,33 @@ utilz <version> (opt, 0123456789ab)
 utilz <version> (brew, 0123456789ab)
 ```
 
-The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`. The line names no path: where the running copy lives is the answer `command -v utilz` gives. `utilz doctor` prints the same line first, and checks the manifest: every file it names, each dispatcher link's target, and CI's verdict on the commit as the publish recorded it.
+The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`, which devbin writes with the tree's line. The line names no path: where the running copy lives is the answer `command -v utilz` gives. `utilz doctor` prints the same line first, and checks the manifest: every file it names, and each dispatcher link's target.
 
 ### Switching the shell between trees
 
-`utilz use` points the links in `~/.local/bin` -- `utilz` and every utility -- at one tree:
+devbin's `use`, run in this checkout, points the links in `~/.local/bin` -- `utilz` and every utility -- at one tree:
 
 ```bash
-utilz use dev     # point every link at the dev checkout
-utilz use opt     # point every link at the opt install
-utilz use brew    # remove them, so Homebrew's own links answer
-utilz use         # report which tree they serve, and change nothing
+bin/devbin use dev     # point every link at the dev checkout
+bin/devbin use opt     # point every link at the opt install
+bin/devbin use brew    # remove them, so Homebrew's own links answer
+bin/devbin use         # report which tree they serve, and change nothing
 ```
 
-**No link means brew**: a user who never runs `use` has Homebrew's links, and `use brew` returns a maintainer to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on PATH, which the sleeve sets. `utilz use` with no word, and `utilz doctor`, fail when a link is shadowed by an earlier entry on PATH, or when the links serve more than one tree, and name what shadows or splits them. `use` is the one verb that points links: `relink` is retired, and install and upgrade never touch them.
-
-`use brew` asks first: it removes the links only when Homebrew's own copy would then answer `utilz` and every name whose link it removes. Otherwise it refuses, removing nothing, and names each link and the tree it serves, why no Homebrew copy would answer (Homebrew is not installed or not on PATH, the formula is not, the formula has no such utility, its keg is not linked, Homebrew's bin is not on PATH, or another copy comes first on PATH), and the remedy: install, link or upgrade the formula, remove a dead link, or stay on dev or opt. It also refuses, removing nothing, when the check for a name cannot finish, and names that name and its check's exit status.
+**No link means brew**: a user who never runs `use` has Homebrew's links, and `use brew` returns a maintainer to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on PATH, which the sleeve sets. `bin/devbin use` with no word, `bin/devbin doctor` and `utilz doctor` fail when a link is shadowed by an earlier entry on PATH, or when the links serve more than one tree, and name what shadows or splits them. After a switch, an open shell keeps the path it found: run `hash -r` in bash, or `rehash` in zsh, as `use` says.
 
 ### Publishing and upgrading
 
 ```bash
-utilz install                 # publish the checkout to $UTILZ_INSTALL_PREFIX
-utilz install --prefix DIR    # publish somewhere else
-utilz install --force         # republish over an existing install
-utilz upgrade                 # upgrade the tree this utilz runs from
+bin/devbin install                 # publish the checkout to install.prefix
+bin/devbin install --prefix DIR    # publish somewhere else
+bin/devbin install --force         # republish over an existing install
+utilz upgrade                      # upgrade the tree this utilz runs from
 ```
 
-`install` runs only in a dev checkout, and refuses a dirty runtime set -- what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests -- with no flag to override it, because the manifest records the commit the bytes came from. A doc or a board being edited beside it is not in the runtime set. `--force` is the one republish, and it replaces only a prefix whose manifest Utilz wrote.
+`bin/devbin install` runs `bin/devbin build` first, which builds prez and showreel, and refuses a dirty runtime set -- what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests -- because the manifest records the commit the bytes came from. A doc or a board being edited beside it is not in the runtime set. `--force` is the one republish, and it replaces only a prefix whose manifest says Utilz.
 
-`upgrade` does the running tree's own upgrade. In dev it runs `git pull --ff-only` and builds prez and showreel. In opt it changes nothing and names `utilz install --force` in the dev checkout, saying when dev is ahead. In brew it runs `brew update`, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated.
+`upgrade` does the running tree's own upgrade. In dev it runs `git pull --ff-only`, then `bin/devbin build`. In opt it changes nothing and names `bin/devbin install --force` in the dev checkout, saying when dev is ahead. In brew it runs `brew update`, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated.
 
 `utilz test` refuses in an install: the suite rewrites `bin/`, which is exactly what the manifest checksums, so an install would report drift nobody caused. The refusal names the dev tree to run it in.
 

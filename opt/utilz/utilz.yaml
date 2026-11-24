@@ -28,11 +28,10 @@ optional_dependencies:
     install: brew install bats-core
     purpose: Run test suite with 'utilz test'
 
-# Where `utilz install` publishes to is NOT here (issue 0105): it is
-# UTILZ_INSTALL_PREFIX, which a sleeve sets, as the dev, opt, brew contract
-# names it for every tool. This file ships in every install, so a key here was
-# one machine's path read on every machine. There is no default, and unset is
-# refused by name (ST0014 AC05).
+# Where the opt tree is published to is NOT here: it is install.prefix in
+# bin/.devbin/config.yaml, which devbin's `bin/devbin install` reads (devbin#0326,
+# issue I59c806c). This file ships in every install, so a key here was one
+# machine's path read on every machine (issue 0105).
 
 # Framework metadata
 framework:

@@ -1,7 +1,8 @@
 #!/usr/bin/env bats
 # upgrade.bats - `utilz upgrade`, by tree (dev, opt, brew contract T6, issue 0105)
 #
-# It never publishes: `install --force` is the one republish (T2), and ST0014's
+# It never publishes: devbin's `bin/devbin install --force`, run in the dev
+# checkout, is the one republish (T2; devbin#0326, issue I59c806c), and ST0014's
 # upgrade -- the mirror of install, which kept a file edited in place at its
 # install-time row (AC08) -- retired with that. What it does is the tree's own
 # upgrade: dev pulls and builds, opt says it is republished from dev, brew runs
@@ -48,6 +49,9 @@ EOF
   chmod +x "$stub"
 }
 
+# AT09 (AC08): dev pulls fast-forward, builds with devbin's build, and prints
+# the version line. The build is `bin/devbin build`, which needs bash 5, so the
+# arm puts a bash at devbin's floor first on PATH, as a maintainer's shell has.
 @test "upgrade in dev pulls fast-forward and ends with the version line (issue 0105)" {
   local remote="$BATS_TEST_TMPDIR/remote.git" dev="$BATS_TEST_TMPDIR/dev"
   make_dev_clone "$remote" "$dev"
@@ -55,7 +59,9 @@ EOF
   local want
   want=$(git -C "$remote" rev-parse --short=12 HEAD)
 
-  run run_install_function "set -euo pipefail; UTILZ_HOME='$dev'; install_verb_upgrade"
+  local floor
+  floor=$(devbin_bash) || fail "no bash at devbin's floor on this machine"
+  PATH="${floor%/bash}:$PATH" run run_install_function "set -euo pipefail; UTILZ_HOME='$dev'; install_verb_upgrade"
   assert_success
   assert_output_contains "git pull --ff-only in $dev"
   [[ "$(git -C "$dev" rev-parse --short=12 HEAD)" == "$want" ]] || fail "dev is at $(git -C "$dev" rev-parse --short=12 HEAD), not $want"
@@ -77,6 +83,7 @@ EOF
   [[ "$(git -C "$dev" rev-parse HEAD)" == "$before" ]] || fail "a refused upgrade pulled"
 }
 
+# AT05 (AC04): opt writes nothing and names devbin's republish in the checkout.
 @test "upgrade in opt writes nothing, names install --force in the dev checkout, and says when dev is ahead (issue 0105)" {
   local src="$BATS_TEST_TMPDIR/src" opt="$BATS_TEST_TMPDIR/opt"
   make_fake_src "$src"
@@ -84,12 +91,13 @@ EOF
   assert_success
   printf 'more\n' >> "$src/help/alpha.md"
   fixture_commit "$src" more
+  manifest_with_source_tree "$opt/manifest.sha256" "$src" || fail "the opt manifest records no source_tree"
   local before
   before=$(shasum "$opt/manifest.sha256")
 
   run run_install_function "UTILZ_HOME='$opt'; install_verb_upgrade"
   assert_exit_code 2
-  assert_output_contains "cd $src && bin/utilz install --force"
+  assert_output_contains "cd $src && bin/devbin install --force"
   assert_output_contains "The dev checkout is at $(git -C "$src" rev-parse --short=12 HEAD)"
   [[ "$(shasum "$opt/manifest.sha256")" == "$before" ]] || fail "upgrade in opt rewrote the install"
 }
@@ -179,6 +187,7 @@ EOF
   printf '%s\n' "$output" | grep -qxF "  Install it: brew install matthewsinclair/utilz/utilz" || fail "no install line: $output"
 }
 
+# AT04 (AC04): an old opt install is refused, naming devbin's republish.
 @test "upgrade in an old opt install refuses, naming install --force (issue 0105)" {
   local old="$BATS_TEST_TMPDIR/oldopt"
   mkdir -p "$old"
@@ -186,7 +195,7 @@ EOF
 
   run run_install_function "UTILZ_HOME='$old'; install_verb_upgrade"
   assert_exit_code 2
-  assert_output_contains "utilz install --force"
+  assert_output_contains "bin/devbin install --force"
 }
 
 @test "upgrade takes no arguments, and --help says what it does in each tree" {

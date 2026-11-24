@@ -47,7 +47,7 @@ load "test_helper.bash"
   # mktemp writes to the system temp dir whatever TMPDIR says unless given a
   # template, so that dir is read for what the call left, as well as TMPDIR.
   local page="$UTILZ_HOME/help/utilz.md" start end farm tmp sys before after
-  start=$(grep -n '^### `utilz use ' "$page" | cut -d: -f1 || true)
+  start=$(grep -n '^### `utilz use`' "$page" | cut -d: -f1 || true)
   end=$(grep -n '^### `utilz upgrade' "$page" | cut -d: -f1 || true)
   [[ -n "$start" && -n "$end" && "$end" -gt "$start" ]] || fail "use's section is not followed by upgrade's in $page -- the test's reading is wrong, not the tree"
   farm=$(path_without glow bat)
@@ -190,6 +190,22 @@ load "test_helper.bash"
 # `integration` and `emacs` verbs accept --help/-h. The top level accepted only
 # the bare words, so `utilz --version` -- the form a first-time user and a
 # probing script both reach for -- exited 1 with "Unknown command".
+
+# ST0014 AT02, AT03, AT06, AT11, AT12, AT16 and AT17, and ST0019 AT01: their
+# criteria were withdrawn for I59c806c, as devbin publishes and switches Utilz
+# (devbin#0326), and devbin's own arms prove what they asked. What stays
+# Utilz's is that its own verbs are retired, and say where to go.
+@test "utilz install and utilz use refuse, naming bin/devbin install and bin/devbin use, run in a checkout (issue I59c806c)" {
+  local verb
+  for verb in install use; do
+    run "$UTILZ_BIN_DIR/utilz" "$verb"
+    assert_exit_code 2
+    assert_output_contains "utilz $verb is retired: run 'bin/devbin $verb' in a Utilz checkout"
+  done
+  run "$UTILZ_BIN_DIR/utilz" relink
+  assert_exit_code 2
+  assert_output_contains "'bin/devbin use dev|opt|brew', run in a Utilz checkout, points the links"
+}
 
 @test "utilz --version - flag form of 'version' (issue 0003)" {
   run_utilz --version

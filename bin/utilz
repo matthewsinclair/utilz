@@ -142,32 +142,35 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
       generate_utility "$@"
       ;;
 
-    install|upgrade|relink|use)
-      # The install library is sourced HERE and nowhere else. The block above
-      # sources common.sh unconditionally for every one of the fifteen
-      # utilities on every invocation; folding the install machinery in would
-      # roughly double what cleanz parses in order to do something cleanz will
-      # never call (ST0014 design.md D1).
-      if [[ ! -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
-        error "Cannot find install library"
-        echo "Expected: $UTILZ_HOME/opt/utilz/lib/install.sh" >&2
+    install|use)
+      # RETIRED (devbin#0326, issue I59c806c): devbin publishes and switches
+      # Utilz, as it does every tool it drives. `bin/devbin install` publishes
+      # the opt tree and `bin/devbin use dev|opt|brew` points the link set,
+      # each run in a Utilz checkout, so no tool keeps a verb of its own for
+      # either.
+      error "utilz $COMMAND is retired: run 'bin/devbin $COMMAND' in a Utilz checkout"
+      exit 2
+      ;;
+
+    relink)
+      # RETIRED AS A PUBLIC VERB (dev, opt, brew contract T5, issue 0105).
+      error "utilz relink is retired: 'bin/devbin use dev|opt|brew', run in a Utilz checkout, points the links"
+      exit 2
+      ;;
+
+    upgrade)
+      # The tree library is sourced HERE and in doctor, nowhere else. The block
+      # above sources common.sh unconditionally for every utility on every
+      # invocation, and this is not on that path (ST0014 design.md D1).
+      if [[ ! -f "$UTILZ_HOME/opt/utilz/lib/trees.sh" ]]; then
+        error "Cannot find the tree library"
+        echo "Expected: $UTILZ_HOME/opt/utilz/lib/trees.sh" >&2
         exit 1
       fi
-      # shellcheck source=opt/utilz/lib/install.sh
-      source "$UTILZ_HOME/opt/utilz/lib/install.sh"
-      VERB="$COMMAND"
+      # shellcheck source=opt/utilz/lib/trees.sh
+      source "$UTILZ_HOME/opt/utilz/lib/trees.sh"
       shift  # Remove the verb from arguments
-      case "$VERB" in
-        install) install_verb_install "$@" ;;
-        upgrade) install_verb_upgrade "$@" ;;
-        # RETIRED AS A PUBLIC VERB (dev, opt, brew contract T5, issue 0105):
-        # `use` is the one verb that points links, and relink's logic is its.
-        relink)
-          error "utilz relink is retired: 'utilz use dev|opt|brew' points the links"
-          exit 2
-          ;;
-        use)     install_verb_use "$@" ;;
-      esac
+      install_verb_upgrade "$@"
       ;;
 
     integration)
@@ -260,12 +263,12 @@ EOF
         echo "  utilz list                - List available utilities"
         echo "  utilz version             - Show version"
         echo "  utilz upgrade             - Upgrade the tree this runs from"
-        echo "  utilz use [dev|opt|brew]  - Switch which tree the links serve"
         echo ""
         echo "In a dev checkout (a clone of the repository):"
         echo "  utilz test [utility]      - Run tests"
         echo "  utilz generate <name>     - Generate new utility"
-        echo "  utilz install [--force]   - Publish the checkout to opt"
+        echo "  bin/devbin install         - Publish the checkout to opt (devbin)"
+        echo "  bin/devbin use [dev|opt|brew] - Switch which tree the links serve (devbin)"
         echo ""
         echo "Installed utilities:"
 

@@ -154,7 +154,7 @@ This allows flexible installation:
 # brew links $(brew --prefix)/bin/mdagg into the keg's libexec/bin
 $ mdagg file.md  # Works - symlink chain followed to find UTILZ_HOME
 
-# Scenario 2: the maintainer's links, made by `utilz use dev` or `use opt`
+# Scenario 2: the maintainer's links, made by `bin/devbin use dev` or `use opt`
 # ~/.local/bin/mdagg -> ~/Devel/prj/Utilz/bin/mdagg
 $ mdagg file.md  # Works - symlink followed to find UTILZ_HOME
 
@@ -299,7 +299,7 @@ This allows a single source of truth for the framework version (`/VERSION` file)
 
 ### Reading Metadata
 
-The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list` and doctor's installed utilities check. (install read `install.prefix` through it until issue 0105 made the opt prefix `UTILZ_INSTALL_PREFIX`.) It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
+The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list` and doctor's installed utilities check. It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
 
 ```bash
 # Get utility version

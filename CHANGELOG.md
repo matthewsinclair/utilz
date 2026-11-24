@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. Devbin's release core finds a section by its version and dates it at the cut; an unnamed section is one it cannot find (ST0019 D2).
 
+## [2.15.0] - unreleased
+
+### Changed
+
+- **devbin publishes and switches Utilz** (issue I59c806c, devbin#0326). `bin/devbin install`, run in a Utilz checkout, publishes the opt tree, and `bin/devbin use dev|opt|brew` points the link set in `~/.local/bin`, as devbin does for every tool it drives. The opt prefix is `install.prefix` in `bin/.devbin/config.yaml`. The formula's install is the core's `@@INSTALL@@`, and the release's formula step is the core's, under `release.formula`. A tree's manifest is devbin's T3 form, which records the tree's version line under `line`.
+- **`utilz upgrade` builds with devbin in dev, and names devbin's republish in opt.** In dev it runs `git pull --ff-only`, then `bin/devbin build`. In opt it names `bin/devbin install --force` in the dev checkout.
+- **A manifest with no `line` is an old one**, as devbin's contract reads it: Utilz's own header from before this release included. In opt doctor fails it, naming `bin/devbin install --force`. Homebrew's keg with one is noted, naming `brew upgrade utilz`, and fails nothing.
+- **doctor no longer shows CI's verdict on the published commit.** devbin's manifest does not record it; the cut reads CI through the core's `ci-state`.
+
+### Removed
+
+- **`utilz install` and `utilz use`.** Each refuses, naming `bin/devbin install` or `bin/devbin use`, run in a checkout. `utilz relink` names `bin/devbin use`.
+- **`UTILZ_INSTALL_PREFIX`.** The opt prefix is `install.prefix` in `bin/.devbin/config.yaml`.
+- **`tools/formula`.** devbin's formula built-in renders and publishes the template.
+
 ## [2.14.10] - 2026-11-10
 
 ### Fixed

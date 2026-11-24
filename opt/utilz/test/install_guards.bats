@@ -4,12 +4,11 @@
 # AT10 (AC09, the prez shim), AT13 (AC13, utilz test), AT14 (AC18, the venv),
 # AT15 (AC19, an inherited UTILZ_HOME), and AC12's provenance at the prompt.
 #
-# THE INSTALL HERE IS BUILT BY COPYING, NOT BY PUBLISHING, AND THAT IS
-# DELIBERATE. install_copy_owned + install_manifest_write produce the same tree
-# `utilz install` produces, without going through the dirty gate -- so this
-# suite runs against a working checkout instead of only against a committed
-# one. The gates themselves are WP-02's and are covered in install.bats; what
-# is under test here is how the resulting tree BEHAVES.
+# THE INSTALL HERE IS devbin'S PUBLISH OF A COMMITTED COPY of this checkout
+# (setup_file, below), the one publish that writes Utilz's trees (devbin#0326,
+# issue I59c806c). The copy is committed, so this suite runs against a working
+# checkout too; the publish's own gates are devbin's, and devbin's arms cover
+# them. What is under test here is how the resulting tree BEHAVES.
 
 load "test_helper.bash"
 load "population_helper.bash"
@@ -23,35 +22,24 @@ bats_require_minimum_version 1.5.0
 # VERSION straight into it, and every test after them then inherited an install
 # whose VERSION no longer matched its manifest -- which made doctor's integrity
 # check fail in a full run and pass in isolation. Measured 8 Sep.
-# HEAD IS CAPTURED EITHER SIDE OF THE PUBLISH, AND THAT IS THE POINT OF THE
-# TWO EXTRA LINES. AC12's claim is about the commit the install was BUILT from,
-# so the reading has to be pinned to the publish itself. Re-reading `git HEAD`
-# later in the run measures a different moment: this tree has three concurrent
-# writers, and a commit landing mid-run used to redden AT12 for a reason that
-# had nothing to do with what AT12 measures (issue 0011). Capturing both ends
-# lets that test say "the record could not be taken" instead of "the code is
-# wrong", which are not the same finding.
+# THE SHARED INSTALL IS A devbin PUBLISH OF A COMMITTED COPY of this checkout
+# (publish_checkout_copy, test_helper.bash; devbin#0326, issue I59c806c), so
+# the commit it records is the copy's HEAD, which nothing else writes: the
+# copy holds still while this checkout's concurrent writers move its HEAD
+# (issue 0011), and that reading is always taken.
 setup_file() {
+  no_git_signing
   export GUARD_SRC="$UTILZ_HOME"
   export GUARD_INSTALL="${BATS_FILE_TMPDIR:-/tmp}/guard-install"
-  rm -rf "$GUARD_INSTALL"
-
-  export GUARD_SRC_HEAD_BEFORE
-  GUARD_SRC_HEAD_BEFORE=$(git -C "$UTILZ_HOME" rev-parse HEAD 2>/dev/null) || GUARD_SRC_HEAD_BEFORE=""
-
-  bash -c "
-    source '$UTILZ_HOME/opt/utilz/lib/common.sh'
-    source '$UTILZ_HOME/opt/utilz/lib/install.sh'
-    install_copy_owned '$UTILZ_HOME' '$GUARD_INSTALL' >/dev/null
-    install_manifest_write '$UTILZ_HOME' '$GUARD_INSTALL/manifest.sha256'
-  " || return 1
-
-  export GUARD_SRC_HEAD_AFTER
-  GUARD_SRC_HEAD_AFTER=$(git -C "$UTILZ_HOME" rev-parse HEAD 2>/dev/null) || GUARD_SRC_HEAD_AFTER=""
+  export GUARD_COPY="${BATS_FILE_TMPDIR:-/tmp}/guard-src"
+  publish_checkout_copy "$GUARD_COPY" "$GUARD_INSTALL" "${BATS_FILE_TMPDIR:-/tmp}/guard-publish.log" "guards setup" || return 1
+  export GUARD_COPY_HEAD
+  GUARD_COPY_HEAD=$(git -C "$GUARD_COPY" rev-parse HEAD) || return 1
 }
 
 teardown_file() {
   [[ -n "${GUARD_INSTALL:-}" ]] && rm -rf "$GUARD_INSTALL"
+  [[ -n "${GUARD_COPY:-}" ]] && rm -rf "$GUARD_COPY"
   return 0
 }
 
@@ -151,7 +139,14 @@ teardown_file() {
 # ============================================================================
 
 @test "utilz test refuses from an install tree and names the source tree" {
-  run env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" test
+  # A copy whose manifest records source_tree, the checkout, as devbin's opt
+  # publish writes it from devbin 0.1.31 (devbin I79fb280), so the refusal's
+  # reading is held whatever devbin this tree vendors.
+  local sandbox="$BATS_TEST_TMPDIR/src-install" m
+  cp -R "$GUARD_INSTALL" "$sandbox"
+  m="$sandbox/manifest.sha256"
+  manifest_with_source_tree "$m" "$GUARD_SRC" || fail "the sandbox manifest records no source_tree"
+  run env UTILZ_HOME="$sandbox" "$sandbox/bin/utilz" test
   assert_failure
   assert_output_contains "cannot run from an install tree"
   # AT13: the message NAMES the source tree as where to run it -- and NAMES
@@ -170,10 +165,12 @@ teardown_file() {
   # T3, issue 0105). The refusal must still say where to go rather than
   # printing an empty path -- the failure mode a naive awk-and-interpolate
   # would produce, silently.
-  grep -v '^# source_tree: ' "$GUARD_INSTALL/manifest.sha256" > "$GUARD_INSTALL/manifest.tmp"
-  mv "$GUARD_INSTALL/manifest.tmp" "$GUARD_INSTALL/manifest.sha256"
+  local sandbox="$BATS_TEST_TMPDIR/prose-install"
+  cp -R "$GUARD_INSTALL" "$sandbox"
+  grep -v '^# source_tree: ' "$sandbox/manifest.sha256" > "$sandbox/manifest.tmp"
+  mv "$sandbox/manifest.tmp" "$sandbox/manifest.sha256"
 
-  run env UTILZ_HOME="$GUARD_INSTALL" "$GUARD_INSTALL/bin/utilz" test
+  run env UTILZ_HOME="$sandbox" "$sandbox/bin/utilz" test
   assert_failure
   assert_output_contains "cannot run from an install tree"
   assert_output_contains "Run it from the Utilz SOURCE tree"
@@ -332,37 +329,10 @@ teardown_file() {
 # half live HEAD used to cover, so it is kept, in its own test: a skip here
 # must not be able to take the provenance assertions above down with it.
 @test "the commit the manifest recorded is the one the install was copied from" {
-  # A publish is pinned to a commit only if HEAD held still across it. If it
-  # moved, this reading cannot be taken -- which is a skip, because "the
-  # instrument could not measure" and "the code is wrong" are different
-  # findings and only one of them is worth waking someone for (issue 0011).
-  if [ -z "$GUARD_SRC_HEAD_BEFORE" ] || [ "$GUARD_SRC_HEAD_BEFORE" != "$GUARD_SRC_HEAD_AFTER" ]; then
-    skip "HEAD moved across the fixture publish ($GUARD_SRC_HEAD_BEFORE -> $GUARD_SRC_HEAD_AFTER); the built-from commit is not pinned"
-  fi
-
   local recorded
   recorded=$(manifest_source_commit "$GUARD_INSTALL")
-  [ "$recorded" = "$GUARD_SRC_HEAD_BEFORE" ]
-}
-
-@test "doctor names CI's recorded verdict on the commit, and says when none was recorded (issues 0016, 0105)" {
-  # A copy, because the shared install is read-only.
-  local sandbox="$BATS_TEST_TMPDIR/ci-install"
-  cp -R "$GUARD_INSTALL" "$sandbox"
-  local m="$sandbox/manifest.sha256"
-
-  # CI's verdict moved from the version line to doctor with the contract (T4).
-  sed -i.bak -e 's/^# ci_state: .*/# ci_state: green/' -e 's/^# ci_detail: .*/# ci_detail: run 101/' "$m" && rm -f "$m.bak"
-  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
-  assert_output_contains "CI on that commit, as published: green (run 101)"
-  run env -u UTILZ_HOME "$sandbox/bin/utilz" version
-  refute_output_contains "CI"
-
-  # A manifest with no ci_state line. Absent is neither unknown nor green,
-  # and the line says which.
-  grep -v '^# ci_state: ' "$m" > "$m.tmp" && mv "$m.tmp" "$m"
-  run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
-  assert_output_contains "CI on that commit, as published: not recorded"
+  [ -n "$recorded" ] || fail "the manifest records no source_commit"
+  [ "$recorded" = "$GUARD_COPY_HEAD" ] || fail "the manifest records $recorded, where the published copy is at $GUARD_COPY_HEAD"
 }
 
 # ============================================================================
@@ -395,7 +365,7 @@ teardown_file() {
   assert_output_contains "opt/gitz/gitz"
   assert_output_contains "not-a-link"
   assert_output_contains "bin/cleanz"
-  assert_output_contains "utilz install --force"
+  assert_output_contains "bin/devbin install --force"
 }
 
 @test "doctor says NOT APPLICABLE in a source tree rather than skipping" {

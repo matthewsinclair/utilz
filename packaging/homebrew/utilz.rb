@@ -1,9 +1,9 @@
 # The Homebrew formula's TEMPLATE for matthewsinclair/homebrew-utilz (ST0019
 # design D3; dev, opt, brew contract T8, issue 0105). It is never installed
-# from: `tools/formula render <tag> <out>` fills the one tag and the one
-# revision placeholder from git, and `tools/formula publish` renders the newest
-# release into the tap and pushes it (docs/releasing.md). Nobody types a tag or
-# a commit.
+# from: devbin's `bin/devbin formula render <tag> <out>` fills the one tag and
+# the one revision placeholder from git and @@@ with the core's install,
+# and the cut's formula step publishes the release into the tap
+# (docs/releasing.md). Nobody types a tag or a commit.
 class Utilz < Formula
   desc "Small command-line utilities behind one dispatcher"
   homepage "https://github.com/matthewsinclair/utilz"
@@ -26,13 +26,14 @@ class Utilz < Formula
   depends_on "lua"
 
   def install
-    # Utilz's own publish: it builds prez and showreel, copies the runtime set
-    # git names, and writes the manifest, recording that brew owns the tree.
-    system "bin/utilz", "install", "--prefix", libexec, "--managed-by", "brew"
-    # The link set, one link per dispatcher link (contract T8). The dispatcher
-    # finds libexec from its own resolved path, so no environment variable is
-    # needed. A maintainer's links in ~/.local/bin come first on PATH.
-    bin.install_symlink Dir[libexec/"bin/*"]
+    # devbin's one install form (T8), filled by render: the vendored
+    # `bin/devbin install` publishes the runtime set into libexec from the
+    # tag's checkout, building prez and showreel first, with the manifest
+    # managed_by brew, then links the tool's link set into bin/. render also
+    # writes the bash this needs to build, and the step that hashes the
+    # manifest again once brew has changed the keg. The dispatcher finds
+    # libexec from its own resolved path, so bin/ needs only links.
+    @@INSTALL@@
   end
 
   def caveats
@@ -41,9 +42,10 @@ class Utilz < Formula
       how to install them:
         utilz doctor
       Upgrade with: brew upgrade utilz
-      A maintainer with a dev checkout or an opt install switches the shell
-      between them and this install with utilz use dev, opt or brew; no link
-      in ~/.local/bin means this install answers.
+      A maintainer with a dev checkout or an opt install chooses between
+      them and this install with bin/devbin use dev, opt or brew, run in
+      the checkout; no link in ~/.local/bin means this install answers.
+      After a switch, run hash -r in an open bash, or rehash in zsh.
       On Linux, macoz and menuz's app need macOS, and arngz's apply, diff and
       discover need macOS and Hammerspoon; utilz doctor names what this
       machine lacks.

@@ -23,19 +23,19 @@ Everything here was read from the copy vendored at `bin/.devbin/`, which is the 
 2. **`bin/devbin release --minor --dry-run`** -- every read of the cut and none of its writes: no stamp, commit, tag, push or release object, **and no gate and no `after:`**. It runs `release.preflight`'s commands as the cut does, so it refuses wherever the cut would, and prints each step as what it would do. `--patch` and `--major` choose the other bumps, and `X.Y.Z` or `vX.Y.Z` names a version outright.
 3. **`bin/devbin release --minor --yes`**, run by hv. `--yes` answers the confirm step, which names what the cut will push and run and carries on, so from here to the tap nobody is asked anything (ST0030). Without it, the cut stops at step 3 to ask. Eleven steps, each with a postcondition it reads first, so a re-run continues where it stopped rather than starting again (Devbin 0.1.28):
 
-| Step | Name       | What it does                                                                         |
-| ---- | ---------- | ------------------------------------------------------------------------------------ |
-| 1    | resolve    | the version and the tag                                                              |
-| 2    | pre-flight | the branch, the tree, the note, every remote, and that the candidate's push runs CI  |
-| 3    | confirm    | asks once, naming the tag, the candidate, the pushes, the object and the after: line |
-| 4    | stamp      | the version files and the CHANGELOG's date                                           |
-| 5    | commit     | the release commit                                                                   |
-| 6    | legs       | `check all`, the macOS stage signing Menuz.app, and the candidate's CI               |
-| 7    | tag        | bare, annotated, once every leg is green                                             |
-| 8    | push       | every remote (see below), then the candidate is deleted                              |
-| 9    | object     | the release object, then `Menuz.app.zip` attached (issue 0329)                       |
-| 10   | formula    | off: `release.formula` stays undeclared until issue I59c806c                         |
-| 11   | after      | `tools/formula publish --pull`: the formula to the tap, then this machine's clone    |
+| Step | Name       | What it does                                                                        |
+| ---- | ---------- | ----------------------------------------------------------------------------------- |
+| 1    | resolve    | the version and the tag                                                             |
+| 2    | pre-flight | the branch, the tree, the note, every remote, and that the candidate's push runs CI |
+| 3    | confirm    | asks once, naming the tag, the candidate, the pushes, the object and the formula    |
+| 4    | stamp      | the version files and the CHANGELOG's date                                          |
+| 5    | commit     | the release commit                                                                  |
+| 6    | legs       | `check all`, the macOS stage signing Menuz.app, and the candidate's CI              |
+| 7    | tag        | bare, annotated, once every leg is green                                            |
+| 8    | push       | every remote (see below), then the candidate is deleted                             |
+| 9    | object     | the release object, then `Menuz.app.zip` attached (issue 0329)                      |
+| 10   | formula    | `formula publish --pull`: the formula to the tap, then this machine's clone         |
+| 11   | after      | none: the formula step is the core's, under `release.formula` (issue I59c806c)      |
 
 **Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's sixteen older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped: the newest match is `2.11.0`, and `--minor` resolves `2.12.0`.
 
@@ -87,20 +87,20 @@ The icon is Utilz's own, not the built-in's: `bin/devbin macos app-icons` raster
 
 ## After the cut: the Homebrew formula
 
-Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The repository keeps the formula as a template, `packaging/homebrew/utilz.rb`, with one `@@TAG@@` and one `@@REVISION@@`, and is never installed from. `tools/formula` fills them from git, as the dev, opt, brew contract has every tool's formula rendered (T8, devbin's `docs/dev-opt-brew.md` at devbin commit aeed31e4; issue 0105).
+Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The repository keeps the formula as a template, `packaging/homebrew/utilz.rb`, with one `@@TAG@@`, one `@@REVISION@@` and one `@@INSTALL@@`, and is never installed from. devbin's formula built-in fills them, as the dev, opt, brew contract has every tool's formula rendered (T8, devbin's `docs/dev-opt-brew.md`; issues 0105 and I59c806c): the tag and its commit from git, and `@@INSTALL@@` with the core's one install form, `bin/devbin install --prefix libexec --managed-by brew` from the tag's checkout, then the link set. Render also writes the bash the build needs and the step that hashes the manifest again after brew changes the keg. The template's declaration is the `formula:` block in `bin/.devbin/config.yaml`: source mode, and the tap.
 
-- `tools/formula render <tag> <out>` writes the formula for an annotated tag to `<out>`. It refuses a tag that does not exist, a lightweight one, and a template without exactly one of each placeholder, and writes nothing in this tree.
-- `tools/formula publish [--tap <url>]` renders the newest release, the highest annotated tag of Utilz's bare-semver form, into a fresh clone of the tap, commits it and pushes it. It refuses a template with changes no commit holds, and leaves a tap that already carries the formula as it is. It pushes, so it runs in hv's cut, as the release's one `after:` line, `tools/formula publish --pull`, once the object step has attached `Menuz.app.zip` (ST0030, hv's ruling of 28 Oct 2026, replacing that of 2026-09-21 in ST0019 WP-05 that no release hook runs it). With `--pull` it then brings this machine's clone of the tap forward, where Homebrew keeps one, and names a clone it cannot fast-forward, to be pulled by hand. It stays Utilz's until issue I59c806c moves the template to the core's install, when the core's own formula step takes its place.
+- `bin/devbin formula render <tag> <out>` writes the formula for an annotated tag to `<out>`, and writes nothing in this tree. `bin/devbin formula check` makes every check render makes that needs no tag, and Utilz's formula.bats runs it.
+- `bin/devbin formula publish --pull` renders the release into a fresh clone of the tap, commits it and pushes it, then brings this machine's clone of the tap forward, where Homebrew keeps one. It pushes, so it runs in hv's cut, as the core's formula step under `release.formula`, once the object step has attached `Menuz.app.zip`. `tools/formula`, which did this until issue I59c806c, is retired.
 
-**Never type the commit by hand.** The offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install. The commit comes from `git rev-parse <tag>^{commit}`, inside `tools/formula`.
+**Never type the commit by hand.** The offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install. The commit comes from `git rev-parse <tag>^{commit}`, inside devbin's render.
 
 ### After every cut
 
-The core's object step attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives. Then the `after:` line publishes the formula to the tap and pulls this machine's clone, with `tools/formula publish --pull`. Nothing is committed in this repository: the template does not change from one release to the next.
+The core's object step attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives. Then the core's formula step publishes the formula to the tap and pulls this machine's clone, with `bin/devbin formula publish --pull`. Nothing is committed in this repository: the template does not change from one release to the next.
 
 Then hv:
 
-1. **Audits this machine's tap**, which `tools/formula publish --pull` has pulled (brew's own auto-update can leave a third-party tap behind, as it left 2.14.4 after 2.14.5's publish), with Homebrew's auto-update off, as every scripted brew call runs:
+1. **Audits this machine's tap**, which the formula step's `--pull` has pulled (brew's own auto-update can leave a third-party tap behind, as it left 2.14.4 after 2.14.5's publish), with Homebrew's auto-update off, as every scripted brew call runs:
 
    ```bash
    HOMEBREW_NO_AUTO_UPDATE=1 brew audit --strict matthewsinclair/utilz/utilz
@@ -116,7 +116,7 @@ Then hv:
 
    An install from before the contract's manifest reads as `brew (old manifest)`, which doctor notes, and this upgrade replaces it.
 
-3. **Proves the switch on rhadamanth** (contract T10): `utilz use dev`, `utilz use opt`, `utilz use brew` in turn, each followed by `utilz version` and `utilz doctor`, whose PATH check fails if a link is shadowed. It needs `~/.local/bin` before Homebrew's bin on PATH, which Molt-matts' sleeve config sets.
+3. **Proves the switch on rhadamanth** (contract T10): `bin/devbin use dev`, `bin/devbin use opt`, `bin/devbin use brew` in turn, run in the checkout, each followed by `utilz version` and `utilz doctor`, whose PATH check fails if a link is shadowed. It needs `~/.local/bin` before Homebrew's bin on PATH, which Molt-matts' sleeve config sets.
 
 A formula that names a commit brew cannot fetch fails every install, so the tap is published only after this repository's tag is pushed.
 
@@ -126,4 +126,4 @@ A formula that names a commit brew cannot fetch fails every install, so the tap 
 
 The tap's repository is `matthewsinclair/homebrew-utilz` on GitHub. On a machine that has tapped it, brew keeps its clone at `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`, as hv's Intent tap is kept.
 
-It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed: the formula then committed here, written by the tool `tools/formula` replaced, was staged as `Formula/utilz.rb` in a new repository, created with `gh repo create matthewsinclair/homebrew-utilz --source . --push`, then tapped with `brew tap matthewsinclair/utilz`, audited clean, installed and checked with `utilz doctor` (ST0019 AC-05.2).
+It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed: the formula then committed here, written by the tool `tools/formula` replaced (itself retired by issue I59c806c for devbin's formula built-in), was staged as `Formula/utilz.rb` in a new repository, created with `gh repo create matthewsinclair/homebrew-utilz --source . --push`, then tapped with `brew tap matthewsinclair/utilz`, audited clean, installed and checked with `utilz doctor` (ST0019 AC-05.2).

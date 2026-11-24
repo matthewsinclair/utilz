@@ -87,11 +87,6 @@ setup() {
 
   isolate_tool_homes
 
-  # THE OPT PREFIX IS THE SLEEVE'S (issue 0105), so a maintainer's own
-  # UTILZ_INSTALL_PREFIX must never reach a test: a publish with no --prefix
-  # would write into the real opt tree. A test that wants one sets it, with
-  # set_prefix_key.
-  unset UTILZ_INSTALL_PREFIX
   # AND THE LINK DIRECTORY IS THE TEST'S (issue 0105): doctor and `use` read
   # ~/.local/bin, which on a maintainer's machine holds the live link set.
   # UTILZ_LINK_DIR names it for tests only, here a directory no test has made.
@@ -757,17 +752,116 @@ debug() {
 # with a `|| true` that turned a refused commit into the publish's "source
 # tree is dirty", a step later.
 
-# install.sh's functions, in a fresh bash with common.sh and install.sh sourced
-# from the tree under test.
+# trees.sh's functions, in a fresh bash with common.sh and trees.sh sourced
+# from the tree under test (issue I59c806c: install.sh's link, manifest and
+# upgrade functions, now opt/utilz/lib/trees.sh).
 run_install_function() {
-  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/install.sh'; $*"
+  bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/trees.sh'; $*"
 }
 
-# Publish from $1 to $2, with any extra args appended.
+# devbin_bash -- a bash at devbin's floor, 5 or later, found where devbin's own
+# floor search looks (HOMEBREW_PREFIX's, else Homebrew's two macOS places),
+# then the PATH's; rc 1 when there is none. devbin publishes and switches Utilz
+# now (devbin#0326, issue I59c806c), and devbin needs bash 5 where Utilz's
+# estate gate runs its suites under macOS's /bin/bash 3.2 (issue 0051), so an
+# arm runs devbin under this bash, never the PATH's (devbin I5a905ad's split).
+devbin_bash() {
+  local b v
+  for b in "${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/bash}" /opt/homebrew/bin/bash /usr/local/bin/bash "$(command -v bash)"; do
+    [[ -n "$b" && -x "$b" ]] || continue
+    # shellcheck disable=SC2016 # the child bash expands its own BASH_VERSINFO
+    v=$("$b" -c 'printf %s "${BASH_VERSINFO[0]}"' 2>/dev/null) || continue
+    [[ "$v" =~ ^[0-9]+$ && "$v" -ge 5 ]] || continue
+    printf '%s\n' "$b"
+    return 0
+  done
+  return 1
+}
+
+# run_devbin <tree> <arg>... -- <tree>'s own bin/devbin, run in <tree> under
+# devbin_bash, its directory first on PATH so each of devbin's handlers, which
+# start through `env bash`, runs under it too.
+run_devbin() {
+  local tree="$1" b
+  shift
+  b=$(devbin_bash) || {
+    echo "run_devbin: no bash at devbin's floor (5 or later) on this machine" >&2
+    return 1
+  }
+  (cd "$tree" && PATH="${b%/bash}:$PATH" "$b" bin/devbin "$@")
+}
+
+# Publish from $1 to $2 with devbin's publish, with any extra args appended
+# (devbin#0326: `bin/devbin install`, run in the checkout).
 run_publish() {
   local src="$1" prefix="$2"
   shift 2
-  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
+  run run_devbin "$src" install --prefix "$prefix" "$@"
+}
+
+# publish_checkout_copy <copy> <prefix> <log> <who> [<publish arg>...] -- copy
+# this checkout to <copy>, commit the copy, and publish it to <prefix> with
+# devbin's publish (devbin#0326, issue I59c806c), handed each <publish arg>
+# (eg --managed-by brew), its output kept in <log>. <who> names the
+# caller in what it says. The real checkout is hv's working tree, with
+# concurrent writers, so it is never committed in or published from. Returns 1,
+# saying why, on any step that fails.
+#
+# A LINKED WORKTREE'S .git IS A POINTER, NOT A REPOSITORY (issue 0043). A copy
+# of it still points into the real repository, so the fixture commit would
+# land there, on that worktree's HEAD. Refused before anything is copied, and
+# loudly: a skip would read as clean.
+#
+# cp -a preserves mtimes, so cargo's fingerprints still match and the
+# publish's build is a no-op rather than a cold compile.
+#
+# .GIT IS COPIED FIRST AND THE WORKTREE SECOND, AND THE ORDER IS THE FIX FOR
+# ISSUE 0042. The copy is not atomic, and a peer committing during it leaves a
+# .git and a worktree from different instants. Worktree first made the
+# worktree OLDER than HEAD, so the fixture commit staged deletions of the newly
+# committed event files and the append-only guard refused it. .git first makes
+# any tear leave the worktree NEWER, which stages additions, and the guard
+# permits those.
+#
+# A COPY OF A CLEAN CHECKOUT HAS NOTHING TO COMMIT, AND THAT IS NOT THE ONLY
+# WAY THIS COMMIT ENDS (issue 0028): fixture_commit tells the two apart.
+#
+# THE PUBLISH'S OUTPUT IS NOT SWALLOWED. A setup that hides why it failed
+# reports "setup_file failed" and nothing else (8 Sep).
+publish_checkout_copy() {
+  local src="$1" prefix="$2" log="$3" who="$4"
+  shift 4
+  if [[ ! -d "$UTILZ_HOME/.git" ]]; then
+    echo "$who: $UTILZ_HOME/.git is not a directory (a linked worktree?)." >&2
+    echo "  The fixture copies .git and commits inside the copy; a worktree's" >&2
+    echo "  .git points into the real repository, so that commit would land" >&2
+    echo "  there. Run this file from a primary checkout." >&2
+    return 1
+  fi
+  rm -rf "$src" "$prefix"
+  if ! {
+    mkdir -p "$src" && cp -a "$UTILZ_HOME/.git" "$src/.git" && (
+      shopt -s dotglob nullglob
+      for entry in "$UTILZ_HOME"/*; do
+        if [[ "${entry##*/}" != ".git" ]]; then
+          cp -a "$entry" "$src/" || exit 1
+        fi
+      done
+    )
+  }; then
+    echo "$who: cp -a of $UTILZ_HOME failed" >&2
+    return 1
+  fi
+  # A copied .git can carry a lock file that was live in the real tree at the
+  # instant of the copy. Clearing it is safe because this IS a throwaway copy.
+  rm -f "$src/.git/index.lock" "$src/.git/HEAD.lock"
+  fixture_commit "$src" "$who fixture" || return 1
+  if ! run_devbin "$src" install --prefix "$prefix" "$@" >"$log" 2>&1; then
+    echo "$who: the publish failed. Its output:" >&2
+    cat "$log" >&2
+    echo "$who: source tree state was: $(git -C "$src" status --porcelain | head -5)" >&2
+    return 1
+  fi
 }
 
 # Echo the commit the manifest of the install at <prefix> records as its
@@ -815,9 +909,13 @@ fixture_commit() {
 # A minimal source tree: a git repo whose bin/ is the dispatcher and two links
 # to it, the shape git names in Utilz's own bin/ (every link is
 # bin/<name> -> utilz, which the manifest's structural check holds, issue 0105).
+# It vendors the checkout's devbin and declares its tool in an install: block,
+# as Utilz's own does, so run_publish publishes it with devbin's publish
+# (devbin#0326, issue I59c806c): the link set, and the runtime set less the
+# vendored devbin and each utility's test/.
 make_fake_src() {
   local home="$1"
-  mkdir -p "$home/bin" "$home/opt/utilz/lib" "$home/opt/alpha/test" "$home/help"
+  mkdir -p "$home/bin/.devbin" "$home/opt/utilz/lib" "$home/opt/alpha/test" "$home/help"
   echo "9.9.9" > "$home/VERSION"
   printf '#!/usr/bin/env bash\necho dispatcher\n' > "$home/bin/utilz"
   chmod +x "$home/bin/utilz"
@@ -828,16 +926,29 @@ make_fake_src() {
   printf 'this must not ship\n' > "$home/opt/alpha/test/alpha.bats"
   printf 'name: utilz\n' > "$home/opt/utilz/utilz.yaml"
   printf '# help\n' > "$home/help/alpha.md"
+  cp "$UTILZ_HOME/bin/devbin" "$home/bin/devbin"
+  cp -R "$UTILZ_HOME/bin/.devbin/lib" "$home/bin/.devbin/lib"
+  cp "$UTILZ_HOME/bin/.devbin/manifest.sha256" "$home/bin/.devbin/manifest.sha256"
+  printf '%s\n' 'project:' '  name: utilz' 'install:' "  prefix: $home.opt" '  manifest: manifest.sha256' \
+    '  links:' '    utilz: bin/utilz' '    alpha: bin/alpha' '    beta: bin/beta' '  files:' \
+    '    bin:' '      path: bin' '      excludes:' '        - devbin' '        - ".devbin/**"' \
+    '    opt:' '      path: opt' '      excludes:' '        - "*/test/**"' \
+    '    help:' '      path: help' '    version:' '      path: VERSION' \
+    'commands:' '  build:' '    run: "true"' >"$home/bin/.devbin/config.yaml"
   git -C "$home" init -q >/dev/null 2>&1
   fixture_commit "$home" init
 }
 
-# The opt prefix for this test, as a sleeve sets it: UTILZ_INSTALL_PREFIX,
-# exported so every command the test runs reads it (issue 0105). <tree> is
-# the fixture it is for, kept so each call still reads as which tree it
-# configures; the variable names no tree.
-set_prefix_key() {
-  local tree="$1" value="$2"
-  : "$tree"
-  export UTILZ_INSTALL_PREFIX="$value"
+# manifest_with_source_tree <manifest> <path> -- <manifest> with one
+# `source_tree: <path>` line after its `line`, any it had dropped first: the
+# checkout an opt tree came from, as devbin's opt publish records it from devbin
+# 0.1.31 (devbin I79fb280), so an arm that reads it holds whatever devbin this
+# tree vendors. Returns 1, saying so, when the line did not land.
+manifest_with_source_tree() {
+  local m="$1" path="$2"
+  grep -v '^# source_tree: ' "$m" | awk -v s="$path" '{ print } /^# line: / { print "# source_tree: " s }' >"$m.tmp" && mv "$m.tmp" "$m" || return 1
+  grep -qxF "# source_tree: $path" "$m" || {
+    echo "manifest_with_source_tree: $m has no line: to put source_tree after" >&2
+    return 1
+  }
 }

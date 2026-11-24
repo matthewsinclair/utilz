@@ -41,7 +41,7 @@ utilz doctor
 brew upgrade utilz
 ```
 
-A clone of the repository is the maintainer's dev checkout; `utilz use` switches the shell between it, an opt install and this one, and the commands that only work there are under "Commands for a dev checkout" below.
+A clone of the repository is the maintainer's dev checkout; devbin's `bin/devbin use`, run there, switches the shell between it, an opt install and this one, and the commands that only work there are under "Commands for a dev checkout" below.
 
 **Do NOT export `UTILZ_HOME`.** The dispatcher derives it from its own location
 and ignores an inherited value. This page told you to export it until v2.5.1;
@@ -71,8 +71,8 @@ utilz help
 # Show help for mdagg utility
 utilz help mdagg
 
-# Show the section on utilz use
-utilz help use
+# Show the section on utilz upgrade
+utilz help upgrade
 ```
 
 `-h` and `--help` are accepted as aliases, and take the same optional utility or verb argument:
@@ -97,8 +97,8 @@ It prints the version line first, as `utilz version` does, then its checks, each
 - **installed utilities**: each is properly configured
 - **external dependencies**: they are installed (eg `yq`)
 - **install integrity**: every file of the runtime set matches the manifest it was published
-  with, each dispatcher link still targets `utilz`, and CI's verdict on the commit is shown as the publish recorded it. In a source checkout there is no manifest, and doctor says so rather
-  than passing silently. An opt install with a manifest from before the dev, opt, brew contract fails, naming `utilz install --force`; a Homebrew install with one is noted, naming `brew upgrade utilz`.
+  with, each dispatcher link still targets `utilz`,. In a source checkout there is no manifest, and doctor says so rather
+  than passing silently. An opt install with a manifest in an old form fails, naming `bin/devbin install --force`; a Homebrew install with one is noted, naming `brew upgrade utilz`, and fails nothing.
 
 What is not available on this platform is said, never counted as missing. A utility whose `platforms` leave this one out reads, in the installed utilities check, as `macoz: macOS only, not available on Linux`, and the external dependencies check skips its dependencies; a dependency whose `platforms` leave this one out, or a macOS app anywhere but macOS, is one line saying so, with no install line.
 
@@ -143,22 +143,18 @@ Utilz's own answer is **one line**, the version line every tool released through
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 
-### `utilz use [dev|opt|brew]`
+### `utilz use` (retired)
 
-Switch which tree the links in `~/.local/bin` -- `utilz` and every utility -- serve.
+devbin switches the shell between Utilz's trees, as it does for every tool it drives (devbin#0326). Run it in a Utilz checkout:
 
 ```bash
-utilz use dev     # point every link at the dev checkout
-utilz use opt     # point every link at the opt install
-utilz use brew    # remove them, so Homebrew's own links answer
-utilz use         # report which tree they serve, and change nothing
+bin/devbin use dev     # point every link at the dev checkout
+bin/devbin use opt     # point every link at the opt install
+bin/devbin use brew    # remove them, so Homebrew's own links answer
+bin/devbin use         # report which tree they serve, and change nothing
 ```
 
-**No link means brew**: a Homebrew user who never runs `use` has brew's links, and `use brew` returns to them. `use dev` and `use opt` link every utility of the tree, making the links that are missing; each reaches the other tree with no path typed (opt is `$UTILZ_INSTALL_PREFIX`; dev is the checkout the opt install was published from), and from the Homebrew install `use dev` is run from the checkout instead. A link that is not Utilz's, and a file in a utility's place, are left alone and reported. Each switch ends with the version line of the tree it reaches.
-
-`use brew` asks first: it removes the links only when Homebrew's own copy would then answer `utilz` and every name whose link it removes. Otherwise it refuses, removing nothing, and names each link and the tree it serves, why no Homebrew copy would answer (Homebrew is not installed or not on `$PATH`, the formula is not, the formula has no such utility, its keg is not linked, Homebrew's bin is not on `$PATH`, or another copy comes first on `$PATH`), and the remedy: install, link or upgrade the formula, remove a dead link, or stay on dev or opt. It also refuses, removing nothing, when the check for a name cannot finish, and names that name and its check's exit status.
-
-For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on `$PATH`. `utilz use` with no word fails, as doctor does, when a link is shadowed or the links serve more than one tree, and names what shadows or splits them. `use` is the one verb that points links; `utilz relink` is retired, and names `use`.
+`utilz use` refuses, naming it, and so does `utilz relink`. **No link means brew**: a Homebrew user who never runs `use` has brew's links, and `bin/devbin use brew` returns to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on `$PATH`; `utilz doctor` fails, naming what shadows or splits the links, when a link is shadowed or the links serve more than one tree. After a switch, run `hash -r` in an open bash, or `rehash` in zsh.
 
 ### `utilz upgrade`
 
@@ -168,7 +164,7 @@ Upgrade the tree this utilz runs from, as that tree is upgraded.
 utilz upgrade
 ```
 
-In the Homebrew install it runs `brew update` first, as a step of its own, so that `brew outdated` reads the current tap, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated. A failed update fails the upgrade, by name. In a dev checkout it runs `git pull --ff-only`, refused while the runtime set is dirty, then builds prez and showreel. In an opt install it changes nothing, names `utilz install --force` in the dev checkout, and says when that checkout is ahead.
+In the Homebrew install it runs `brew update` first, as a step of its own, so that `brew outdated` reads the current tap, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated. A failed update fails the upgrade, by name. In a dev checkout it runs `git pull --ff-only`, refused while the runtime set is dirty, then runs `bin/devbin build`, which builds prez and showreel. In an opt install it changes nothing, names `bin/devbin install --force` in the dev checkout, and says when that checkout is ahead.
 
 ### `utilz integration <verb>`
 
@@ -215,23 +211,19 @@ Future integration targets (VSCode, Zed, Vim) are expected to land as parallel `
 
 These are the maintainer's, in a dev checkout (a clone of the repository).
 
-### `utilz install`
+### `utilz install` (retired)
 
-Publish the checkout as an opt install, so the source can be worked on without disturbing the copy you use.
+devbin publishes the checkout as an opt install, so the source can be worked on without disturbing the copy you use (devbin#0326). Run it in the checkout:
 
 ```bash
-utilz install                 # publish to $UTILZ_INSTALL_PREFIX
-utilz install --prefix DIR    # publish somewhere else
-utilz install --force         # republish over an existing install
+bin/devbin install                 # publish to install.prefix
+bin/devbin install --prefix DIR    # publish somewhere else
+bin/devbin install --force         # republish over an existing install
 ```
 
-Where it publishes is `UTILZ_INSTALL_PREFIX`, the opt install's directory: set it to name one, or pass `--prefix DIR` for a single publish. There is no default: unset is refused by name rather than guessed, because a publish to the wrong place looks exactly like a publish to the right one.
+`utilz install` refuses, naming it. Where it publishes is `install.prefix` in `bin/.devbin/config.yaml`, and `--prefix DIR` serves a single publish. It runs `bin/devbin build` first, which builds prez and showreel, and **the checkout's runtime set must be clean**: what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests, because the manifest records the commit the bytes came from. A file outside the runtime set, such as a doc or a board, does not block a publish. `--force` is the one republish.
 
-**It runs only in a dev checkout, and the checkout's runtime set must be clean**: what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests. No flag overrides that, `--force` included, because the manifest records the commit the bytes came from. A file outside the runtime set, such as a doc or a board, does not block a publish.
-
-`--force` is the one republish, and it replaces only a prefix whose manifest Utilz wrote, an old one included. install never touches the links in `~/.local/bin`: switching the shell is `utilz use`.
-
-**A Homebrew keg is brew's.** The formula publishes with `utilz install --managed-by brew`, which records that in the manifest's header. From a keg or onto one, `install` refuses and names `brew upgrade utilz`, and `utilz test` names a clone of the repository to run the suites from.
+**A Homebrew keg is brew's.** The formula publishes with `bin/devbin install --managed-by brew`, which records that in the manifest's header. devbin refuses to write into a keg, naming `brew upgrade utilz`, and `utilz test` in a keg names a clone of the repository to run the suites from.
 
 ### `utilz test [utility]`
 
@@ -431,8 +423,7 @@ The dispatcher doesn't care about the implementation language - it just needs an
 
 None is required. `$UTILZ_HOME` is not one to set: the dispatcher works it out from its own path and ignores an inherited value.
 
-- `$UTILZ_INSTALL_PREFIX` - where `utilz install` publishes a dev checkout, set by the maintainer's sleeve; unset, a publish is refused by name
-- `$UTILZ_LINK_DIR` - for Utilz's own tests only: the link directory `use` and doctor read in place of `~/.local/bin`
+- `$UTILZ_LINK_DIR` - for Utilz's own tests only: the link directory doctor reads in place of `~/.local/bin`
 
 ### Optional
 
@@ -479,7 +470,7 @@ brew link utilz
 echo "$PATH" | tr ':' '\n' | grep -Fx "$(brew --prefix)/bin"   # prints the line when it is on PATH
 ```
 
-If brew's `bin` is not on `$PATH`, add the line Homebrew's own installer gives, `eval "$(<brew's path>/brew shellenv)"`, to your shell config. In a dev checkout, `bin/utilz use dev` links it into `~/.local/bin`, which must come before Homebrew's bin on `$PATH`; `bin/utilz doctor` names the fix for whichever tree it runs in.
+If brew's `bin` is not on `$PATH`, add the line Homebrew's own installer gives, `eval "$(<brew's path>/brew shellenv)"`, to your shell config. In a dev checkout, `bin/devbin use dev` links it into `~/.local/bin`, which must come before Homebrew's bin on `$PATH`; `bin/utilz doctor` names the fix for whichever tree it runs in.
 
 ### "Utility implementation not found"
 

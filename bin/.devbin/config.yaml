@@ -87,7 +87,18 @@ commands:
   # Devbin's release core, switched on by hv's OK of 2026-09-21 (ST0019 D1,
   # Devbin ST0007 WP-08). Its first act, before any cut, is the read-only
   # `bin/devbin release check`. Its declaration is the release: block below.
+  # The build bin/devbin build runs, and bin/devbin install before it
+  # publishes (devbin#0326): prez and showreel, the one crate's two binaries,
+  # which the runtime set ships. --workspace builds both, as utilz test
+  # reads them, and --locked holds the build to Cargo.lock.
+  build:
+    run: cargo build --release --workspace --locked --manifest-path opt/prez/crate/Cargo.toml
   release:
+    enabled: true
+  # devbin's formula built-in, opt-in as release is: it renders
+  # packaging/homebrew/utilz.rb for a release and publishes it to the tap.
+  # Its declaration is the formula: block below.
+  formula:
     enabled: true
   # Menuz.app's release half is devbin's built-in macos, declared in the macos:
   # block below (issue 0118). Rasterising its icon is Utilz's own, so it is a
@@ -134,22 +145,91 @@ macos:
 # alone (hv, 28 Oct 2026, ST0030), test estate running before a cut and not in
 # it; the ruling rested on the dry run and the twins running the suites, and at
 # devbin 0.1.28 a dry run runs no gate, so that is the twins' run (ST0031/01).
-# after: one line, `tools/formula publish --pull` (ST0031/01),
-# which publishes the formula to the tap, then pulls this machine's clone of
-# it. The Menuz.app the cut's macos leg signed is attached before it, by the
-# core's own object step (issue 0329, from devbin 0.1.22), and a failed attach
-# ends the cut before any after: command runs, so the formula never reaches
-# the tap ahead of the app. No formula: key, so release.formula stays false
-# and the core's formula step stays off until issue I59c806c: the core's render
-# refuses Utilz's template, whose install is Utilz's own publish rather than the
-# core's @@INSTALL@@, and once the template takes the core's install, the
-# core's step replaces this line. No ci block: from devbin 0.1.19 the core's
-# built-in ci-state reads CI itself, on the candidate's run of tests.yml, its
-# default workflow.
+# formula: true, the core's formula step (issue I59c806c), which runs
+# `bin/devbin formula publish --pull` once the release object has succeeded:
+# it publishes the formula to the tap, then pulls this machine's clone of it.
+# The Menuz.app the cut's macos leg signed is attached before it, by the
+# core's own object step (issue 0329), and a failed attach ends the cut before
+# the formula step, so the formula never reaches the tap ahead of the app. No
+# after: line, since the step is the core's. No ci block: from devbin 0.1.19
+# the core's built-in ci-state reads CI itself, on the candidate's run of
+# tests.yml, its default workflow.
 release:
   tag: "{version}"
   repo: matthewsinclair/utilz
   gates:
     - check all
-  after:
-    - tools/formula publish --pull
+  formula: true
+
+# The formula built-in's declaration, in source mode: brew builds from the
+# release tag's checkout, so packaging/homebrew/utilz.rb, the default template,
+# holds one placeholder for the tag and one for its commit, and its install is
+# @@INSTALL@@, which render fills with the core's publish. tap: Utilz's tap,
+# over https, as Homebrew names it (brew tap matthewsinclair/utilz).
+formula:
+  mode: source
+  tap: https://github.com/matthewsinclair/homebrew-utilz.git
+
+# utilz itself, for devbin's dev/opt/brew (devbin#0326): run in this checkout,
+# `bin/devbin install` publishes the opt tree at the prefix, and
+# `bin/devbin use dev|opt|brew` points the link set in ~/.local/bin at a tree.
+# The formula's @@INSTALL@@ publishes the keg the same way.
+#
+# manifest: manifest.sha256, the name every reader already takes (prez's
+# shim, menuz, run_tests' refusal, doctor and the version line), as
+# UTILZ_MANIFEST_NAME in opt/utilz/lib/common.sh.
+#
+# links: utilz and every bin/<name> link to it, the utilities each_utility
+# finds. Each is a link in the tree, so every one runs the one dispatcher.
+#
+# files: the runtime set, as utilz_runtime_set in common.sh names it: what git
+# tracks under bin, opt, help, static and VERSION, less bin/devbin, bin/.devbin,
+# each utility's test/ and the prez crate, and then the crate's two binaries,
+# which commands.build makes, and its Cargo.toml, which prez.yaml reads its
+# version from. Each directory entry ships what git tracks below it, less its
+# excludes (devbin I2bae9ce).
+install:
+  prefix: ~/Devel/opt/utilz
+  manifest: manifest.sha256
+  links:
+    utilz: bin/utilz
+    arngz: bin/arngz
+    cleanz: bin/cleanz
+    clipz: bin/clipz
+    cryptz: bin/cryptz
+    expz: bin/expz
+    gitz: bin/gitz
+    lnrel: bin/lnrel
+    macoz: bin/macoz
+    mdagg: bin/mdagg
+    menuz: bin/menuz
+    pdf2md: bin/pdf2md
+    prez: bin/prez
+    retry: bin/retry
+    stampz: bin/stampz
+    syncz: bin/syncz
+    todo: bin/todo
+    xtrct: bin/xtrct
+  files:
+    bin:
+      path: bin
+      excludes:
+        - devbin
+        - ".devbin/**"
+    opt:
+      path: opt
+      excludes:
+        - "*/test/**"
+        - "prez/crate/**"
+    help:
+      path: help
+    static:
+      path: static
+    version:
+      path: VERSION
+    prez-toml:
+      path: opt/prez/crate/Cargo.toml
+    prez:
+      path: opt/prez/crate/target/release/prez
+    showreel:
+      path: opt/prez/crate/target/release/showreel

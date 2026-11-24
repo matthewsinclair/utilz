@@ -25,71 +25,10 @@ setup_file() {
   local src="${BATS_FILE_TMPDIR:-/tmp}/e2e-src"
 
   export E2E_SRC_PATH="$src"
-  rm -rf "$src" "$E2E_PREFIX"
 
-  # A LINKED WORKTREE'S .git IS A POINTER, NOT A REPOSITORY (issue 0043). A
-  # copy of it still points into the real repository, so the fixture commit
-  # below would land there, on that worktree's HEAD. Refused before anything
-  # is copied, and loudly: a skip would read as clean.
-  if [[ ! -d "$UTILZ_HOME/.git" ]]; then
-    echo "e2e setup: $UTILZ_HOME/.git is not a directory (a linked worktree?)." >&2
-    echo "  The fixture copies .git and commits inside the copy; a worktree's" >&2
-    echo "  .git points into the real repository, so that commit would land" >&2
-    echo "  there. Run this file from a primary checkout." >&2
-    return 1
-  fi
-
-  # cp -a preserves mtimes, so cargo's fingerprints still match and the
-  # publish build is a no-op rather than a cold compile.
-  #
-  # .GIT IS COPIED FIRST AND THE WORKTREE SECOND, AND THE ORDER IS THE FIX FOR
-  # ISSUE 0042. The copy is not atomic, and a peer committing during it leaves
-  # a .git and a worktree from different instants. Worktree first made the
-  # worktree OLDER than HEAD, so the fixture commit staged deletions of the
-  # newly committed event files and the append-only guard refused it. .git
-  # first makes any tear leave the worktree NEWER, which stages additions,
-  # and the guard permits those.
-  mkdir -p "$src" && cp -a "$UTILZ_HOME/.git" "$src/.git" && (
-    shopt -s dotglob nullglob
-    for entry in "$UTILZ_HOME"/*; do
-      if [[ "${entry##*/}" != ".git" ]]; then
-        cp -a "$entry" "$src/" || exit 1
-      fi
-    done
-  ) || {
-    echo "e2e setup: cp -a of $UTILZ_HOME failed" >&2
-    return 1
-  }
-
-  # A copied .git can carry a lock file that was live in the real tree at the
-  # instant of the copy, which makes every git call in the copy fail. Clearing
-  # it is safe here precisely because this IS a throwaway copy.
-  rm -f "$src/.git/index.lock" "$src/.git/HEAD.lock"
-
-  # Commit inside the COPY so the publish's dirty gate is satisfied without
-  # anything being done to the real checkout. A throwaway clone, so this is
-  # free; doing it upstream would not be.
-  #
-  # A COPY OF A CLEAN CHECKOUT HAS NOTHING TO COMMIT, AND THAT IS NOT THE ONLY
-  # WAY THIS COMMIT ENDS. The copy carries the checkout's hooks, and a commit
-  # one of them refused used to be swallowed by a `|| true` written for the
-  # clean case, then reported a step later as the publish's "source tree is
-  # dirty" (issue 0028). fixture_commit tells the two apart: it commits nothing
-  # when nothing differs, and anything else that stops the commit fails the
-  # setup here, by name.
-  fixture_commit "$src" "e2e fixture" || return 1
-
-  # THE PUBLISH'S OUTPUT IS NOT SWALLOWED. A setup that hides why it failed
-  # reports "setup_file failed" and nothing else, which is the exact shape
-  # this whole thread exists to avoid -- and it made a flaky failure here
-  # undiagnosable on 8 Sep.
-  local publish_log="${BATS_FILE_TMPDIR:-/tmp}/e2e-publish.log"
-  if ! env -u UTILZ_HOME "$src/bin/utilz" install --prefix "$E2E_PREFIX" > "$publish_log" 2>&1; then
-    echo "e2e setup: the publish failed. Its output:" >&2
-    cat "$publish_log" >&2
-    echo "e2e setup: source tree state was: $(git -C "$src" status --porcelain | head -5)" >&2
-    return 1
-  fi
+  # A copy of this checkout, committed and published with devbin's publish
+  # (publish_checkout_copy, test_helper.bash), its output kept in the log.
+  publish_checkout_copy "$src" "$E2E_PREFIX" "${BATS_FILE_TMPDIR:-/tmp}/e2e-publish.log" "e2e setup" || return 1
 
   # THE SOURCE GOES AWAY. Everything below runs against an install whose
   # source tree no longer exists.
@@ -119,6 +58,7 @@ teardown_file() {
   assert_file_exists "$E2E_PREFIX/manifest.sha256"
 }
 
+# AT01 (AC01): the install runs with its source tree gone.
 @test "AC01: utilz version runs from the install with no source tree" {
   run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" version
   assert_success
@@ -199,7 +139,7 @@ teardown_file() {
 
 @test "AC01: the install verifies against its own manifest" {
   run bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'
-    source '$UTILZ_HOME/opt/utilz/lib/install.sh'
+    source '$UTILZ_HOME/opt/utilz/lib/trees.sh'
     install_manifest_check '$E2E_PREFIX'"
   assert_success
   assert_output ""
@@ -220,17 +160,16 @@ teardown_file() {
   done
 }
 
-@test "only the MANIFEST names the tree the install was published from" {
+@test "only the MANIFEST may name the tree the install was published from, and only as its source_tree" {
   # The case a copy-and-delete cannot see: a path hardcoded to the source would
   # survive the source going away if that source were the REAL checkout, which
   # is still there. Grepping the artefact is the only thing that catches it.
   #
-  # THE MANIFEST IS EXEMPT AND THE DISTINCTION IS THE POINT, not a concession.
-  # Its source_tree line is a RECORD of where the bytes came from; a path in
-  # code would be a DEPENDENCY on that tree still existing. The row is what
-  # makes `utilz use dev` turnkey (AC21), and the eight tests above this one
-  # prove it is inert for running: every one of them passes against an install
-  # whose source_tree names a directory that no longer exists.
+  # THE MANIFEST'S source_tree LINE IS EXEMPT, AND ONLY IT. It is a RECORD of
+  # where the bytes came from; a path in code would be a DEPENDENCY on that
+  # tree still existing. devbin's publish writes it in an opt manifest from
+  # devbin 0.1.31 (devbin I79fb280), for information only, and the tests above
+  # prove the install runs with that tree gone. No other line names the tree.
   run bash -c "grep -rIl -e '$E2E_SRC_PATH' '$E2E_PREFIX' 2>/dev/null || true"
   assert_success
 
@@ -242,12 +181,27 @@ teardown_file() {
     return 1
   }
 
-  # And the manifest really does carry it, so the exemption is covering a row
-  # that exists rather than quietly covering nothing.
-  grep -q "^# source_tree: $E2E_SRC_PATH$" "$E2E_PREFIX/manifest.sha256" || {
-    echo "the manifest does not record source_tree, so this exemption is vacuous" >&2
+  offenders=$(grep -n -e "$E2E_SRC_PATH" "$E2E_PREFIX/manifest.sha256" | grep -v '^[0-9]*:# source_tree: ' || true)
+  [[ -z "$offenders" ]] || {
+    echo "the manifest names the tree it was published from on a line that is not its source_tree:" >&2
+    printf '%s\n' "$offenders" >&2
     return 1
   }
+}
+
+# AT08 (AC07): the manifest is in devbin's T3 form, and the install prints the
+# line it records.
+@test "AT08 (AC07): the install's manifest is in devbin's T3 form, and utilz --version prints its line" {
+  local m="$E2E_PREFIX/manifest.sha256" key line
+  for key in tool version source_commit managed_by line; do
+    grep -qE "^# $key: .+" "$m" || fail "the manifest records no $key: $(sed -n '1,8p' "$m")"
+  done
+  [[ "$(sed -n '1p' "$m")" == "# tool: utilz" ]] || fail "the manifest's first line is not its tool: $(sed -n '1p' "$m")"
+  line=$(sed -n 's/^# line: //p' "$m")
+  [[ "$line" == "utilz $(cat "$E2E_PREFIX/VERSION") (opt, "* ]] || fail "the recorded line is not an opt line for this version: $line"
+  run env -u UTILZ_HOME "$E2E_PREFIX/bin/utilz" --version
+  assert_success
+  assert_output "$line"
 }
 
 @test "nothing in the install names an absolute home path" {

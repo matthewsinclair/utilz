@@ -9,12 +9,14 @@
 
 load "test_helper.bash"
 
-# <dir>/manifest.sha256 in the current form, managed by <manager>, recording
-# <commit> as source_commit.
+# <dir>/manifest.sha256 in the current form, devbin's T3 (devbin#0326, issue
+# I59c806c), managed by <manager>, recording <commit> as source_commit and the
+# tree's version line under `line`, which the current form carries.
 current_manifest() {
-  local dir="$1" manager="$2" commit="$3"
+  local dir="$1" manager="$2" commit="$3" tree=opt
+  [[ "$manager" != brew ]] || tree=brew
   mkdir -p "$dir"
-  printf '# tool: utilz\n# version: 9.9.9\n# source_commit: %s\n# managed_by: %s\n' "$commit" "$manager" > "$dir/manifest.sha256"
+  printf '# tool: utilz\n# version: 9.9.9\n# source_commit: %s\n# managed_by: %s\n# line: utilz 9.9.9 (%s, %s)\n' "$commit" "$manager" "$tree" "${commit:0:12}" > "$dir/manifest.sha256"
 }
 
 # Echo utilz_tree's answer for <dir>.
@@ -217,7 +219,7 @@ refute_passing_line_names() {
 @test "an install whose manifest records no commit says (opt, unknown), never (opt, ) (utilz-vc's recommendation 3)" {
   local opt="$BATS_TEST_TMPDIR/opt-nosha"
   mkdir -p "$opt"
-  printf '# tool: utilz\n# version: 9.9.9\n# managed_by: utilz\n' > "$opt/manifest.sha256"
+  printf '# tool: utilz\n# version: 9.9.9\n# managed_by: utilz\n# line: utilz 9.9.9 (opt, unknown)\n' > "$opt/manifest.sha256"
   echo 9.9.9 > "$opt/VERSION"
 
   run run_install_function "UTILZ_HOME='$opt'; utilz_version_line"
@@ -283,7 +285,32 @@ old_install() {
   run run_install_function "UTILZ_HOME='$oldopt'; run_doctor"
   assert_failure
   assert_output_contains "✗ The manifest at $oldopt is in the old form"
-  assert_output_contains "'utilz install --force' from the dev checkout"
+  assert_output_contains "'bin/devbin install --force' from the dev checkout"
+}
+
+@test "today's Homebrew keg, whose manifest is Utilz's own header with no line, is brew old: doctor notes it with brew upgrade utilz and fails no row of it (issue I59c806c)" {
+  # The keg every user has until the next release: `utilz install
+  # --managed-by brew` wrote the contract's header with no `line`, which devbin's
+  # T3 old-manifest rule reads as old. A notice with its remedy, never a
+  # failure: only that release replaces it, and its own cut runs doctor on a
+  # machine that still holds it (devbin issue 0213).
+  local keg="$BATS_TEST_TMPDIR/hdrbrew"
+  old_install "$keg" '# tool: utilz' '# version: 2.14.2' "# source_commit: $(git -C "$UTILZ_HOME" rev-parse HEAD)" '# managed_by: brew'
+
+  [[ "$(tree_of "$keg")" == "brew old" ]] || fail "today's keg is $(tree_of "$keg")"
+  run run_install_function "UTILZ_HOME='$keg'; utilz_version_line"
+  assert_output "utilz 2.14.2 (brew, old manifest)"
+
+  # The keg's bin first on PATH and a HOME with no links, as a brew user's
+  # shell has, so the exit is the keg's own: 0, the old manifest a notice.
+  mkdir -p "$BATS_TEST_TMPDIR/home"
+  HOME="$BATS_TEST_TMPDIR/home" PATH="$keg/bin:$PATH" run run_install_function "UTILZ_HOME='$keg'; run_doctor"
+  assert_success
+  printf '%s\n' "$output" | grep -qxF "✓ brew: an install, with an old manifest (see install integrity)" || fail "no line '✓ brew: an install, with an old manifest (see install integrity)': $output"
+  assert_output_contains "ℹ The manifest is in the old form"
+  assert_output_contains "'brew upgrade utilz' replaces it"
+  refute_output_contains "✗ The manifest at $keg"
+  refute_passing_line_names "$keg"
 }
 
 @test "a keg under brew's opt link with no manifest at all is an old brew one, noted (T3 amendment)" {

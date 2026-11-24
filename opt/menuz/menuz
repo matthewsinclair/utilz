@@ -208,7 +208,7 @@ drop_record() {
 # SOURCE CLONE OR INSTALL
 # ============================================================================
 
-# An install (a brew keg or a utilz install publish) leaves native/macos out
+# An install (a brew keg, or an opt tree devbin's publish wrote) leaves native/macos out
 # (ST0014 D5). Which tree this is, is utilz_tree's to say: the one function
 # that names a tree (dev, opt, brew contract T4, issue 0105). Until 0105 menuz
 # spelt the manifest's name out here, a second home for it.

@@ -87,7 +87,7 @@ util_yaml_path() {
 # form bound it ambiently -- `raw=$( export UTILZ_HOME="$tree"; ... )`. That was
 # correct and it made shellcheck -x report SC2031 on EVERY later read of
 # UTILZ_HOME in EVERY file that reaches this one: common.sh started sourcing
-# install.sh for doctor's install-integrity check, so one deliberate subshell
+# its install library (now trees.sh) for doctor's install-integrity check, so one deliberate subshell
 # propagated 39 findings across 18 files and reddened a gate that had been green.
 # Passing the root is also simply better than rebinding a global to fake it.
 #
@@ -792,9 +792,8 @@ dependency_entry_fault() {
 # and every later command then finds it exactly where it looked -- silent and
 # self-consistent.
 #
-# Two callers: emacs_install's --dest, and install_prefix_configured's
-# install.prefix (ST0014 design.md D10). The MECHANISM is shared; the refusal
-# policy around it deliberately is not.
+# Its caller is emacs_install's --dest. The opt prefix it once expanded too is
+# devbin's install.prefix now (devbin#0326, issue I59c806c), which devbin reads.
 #
 # `~user` is not handled -- it becomes "$HOMEuser". That is the pre-existing
 # behaviour of the one implementation this was extracted from, recorded here
@@ -806,19 +805,11 @@ expand_tilde() {
 }
 
 # The manifest's filename at an install root. It is NOT install machinery: it
-# is the discriminator between an install tree and a source tree, and both the
-# installer that writes it and the runtime that reports provenance need this
-# one name. install.sh reads it from here rather than carrying a second copy.
+# is the discriminator between an install tree and a source tree, and the
+# runtime that reports provenance reads it. It is a copy of install.manifest in
+# bin/.devbin/config.yaml, since an installed tree carries no bin/.devbin; the
+# publish that writes it is devbin's (devbin#0326).
 UTILZ_MANIFEST_NAME="manifest.sha256"
-
-# THE MANIFEST'S HEADER KEYS, DEFINED ONCE (issue 0016; dev, opt, brew contract
-# T3, issue 0105). The contract fixes the first four, under these names, and
-# Utilz keeps three of its own after them: source_tree is what makes `use dev`
-# from opt turnkey, and ci_state with ci_detail is CI's verdict on the commit,
-# split in two because a `key: value` line cannot hold the tab that joined them.
-# The writer, the reader and the checker all read this list.
-# shellcheck disable=SC2034 # read by install.sh, which sources this file
-UTILZ_MANIFEST_HEADER_KEYS=(tool version source_commit managed_by source_tree ci_state ci_detail)
 
 # ============================================================================
 # THE RUNTIME SET (dev, opt, brew contract T1, issue 0105)
@@ -828,7 +819,7 @@ UTILZ_MANIFEST_HEADER_KEYS=(tool version source_commit managed_by source_tree ci
 # roots, less what is tracked but not ours to publish, plus the build products
 # the publish makes. ONE function lists it, and install and doctor both read
 # that function: install to publish it, doctor and the version line to ask
-# whether a dev tree's runtime set is dirty. Here, not in install.sh, because
+# whether a dev tree's runtime set is dirty. Here, not in trees.sh, because
 # the version line asks it on the dispatcher's own path.
 
 # The roots git is asked about. A file outside them (intent/, docs/, a board
@@ -988,24 +979,42 @@ utilz_runtime_state() {
 }
 
 # Succeed when <manifest> is in the contract's form: its first line names the
-# tool (contract T3). A manifest from before the contract -- Utilz's old
-# tab-separated rows, first `utilz-version` -- is NOT read as a second format.
-# Its tree is named as one with an old manifest, and doctor fails with the
-# remedy, until it is republished.
+# tool, and its header records the tree's version line under `line` (contract
+# T3), as devbin's publish writes it (devbin#0326). A manifest from before that
+# -- Utilz's own header with no `line`, or its tab-separated rows before the
+# contract, first `utilz-version` -- is NOT read as a second format. Its tree
+# is named as one with an old manifest, and doctor fails with the remedy until
+# it is republished, or notes it in brew until the next release.
 utilz_manifest_is_current() {
   local first=""
   IFS= read -r first < "$1" 2>/dev/null || true
-  [[ "$first" == "# tool: utilz" ]]
+  [[ "$first" == "# tool: utilz" ]] || return 1
+  [[ -n "$(utilz_manifest_value "$1" line 2>/dev/null)" ]]
 }
 
-# Succeed when <manifest> is Utilz's in the OLD form, before the contract: the
-# one thing the old form is read for is that Utilz wrote it, so `install
-# --force` may republish over it and the tree can be named with its remedy.
+# Succeed when <manifest> is Utilz's in an OLD form: the rows from before the
+# contract, first `utilz-version`, or Utilz's own header with no `line`, which
+# `utilz install` wrote before devbin's publish. The one thing an old form is
+# read for is that Utilz wrote it, so `bin/devbin install --force` may republish
+# over it and the tree can be named with its remedy.
 utilz_manifest_is_old() {
   local first="" key=""
   IFS= read -r first < "$1" 2>/dev/null || true
   key="${first%%$'\t'*}"
-  [[ "$key" == "utilz-version" ]]
+  [[ "$key" == "utilz-version" ]] && return 0
+  [[ "$first" == "# tool: utilz" && -z "$(utilz_manifest_value "$1" line 2>/dev/null)" ]]
+}
+
+# Echo who an old-form <manifest> says manages its tree: its `managed_by` header
+# value, or the old rows' `managed-by`, whichever form it is in.
+utilz_manifest_old_manager() {
+  local first=""
+  IFS= read -r first < "$1" 2>/dev/null || true
+  if [[ "$first" == "# tool: utilz" ]]; then
+    utilz_manifest_value "$1" managed_by 2>/dev/null
+  else
+    awk -F'\t' '$1 == "managed-by" { print $2; exit }' "$1" 2>/dev/null
+  fi
 }
 
 # Echo the value of header <key> in a current-form <manifest>, or nothing when
@@ -1045,7 +1054,7 @@ utilz_manifest_value() {
 # issue 0105). A keg in the old form is still brew's, and a write into it is
 # still refused: the old form is read for who wrote it and nothing else (T3).
 #
-# Here, not in install.sh, because run_tests asks it where install.sh is not
+# Here, not in trees.sh, because run_tests asks it where trees.sh is not
 # loaded, and the install verbs read it from here as they read the name.
 install_tree_manager() {
   case "$(utilz_tree "$1")" in
@@ -1065,7 +1074,7 @@ brew_keg_prefix() {
 
 # Echo the Utilz tree brew keeps under <prefix> by its opt link,
 # <prefix>/opt/utilz/libexec. THE ONE SPELLING of that path (issue 0112):
-# brew_stable_home and install.sh's _install_brew_find read it.
+# brew_stable_home and trees.sh's _install_brew_find read it.
 brew_opt_root() {
   printf '%s\n' "$1/opt/utilz/libexec"
 }
@@ -1112,7 +1121,7 @@ brew_stable_home() {
 # THE OLD MARK IS NOT A FAILURE IN BREW (T3 amendment, devbin issue 0213). An
 # old keg is still brew, and doctor notes it with `brew upgrade utilz`, since
 # that remedy arrives only with the next release; an old opt install fails,
-# since its remedy, `utilz install --force` from dev, is there now.
+# since its remedy, `bin/devbin install --force` from dev, is there now.
 utilz_tree() {
   local root="${1:-$UTILZ_HOME}"
   local manifest="$root/$UTILZ_MANIFEST_NAME"
@@ -1127,7 +1136,7 @@ utilz_tree() {
         printf 'opt\n'
       fi
     elif utilz_manifest_is_old "$manifest"; then
-      manager=$(awk -F'\t' '$1 == "managed-by" { print $2; exit }' "$manifest" 2>/dev/null) || manager=""
+      manager=$(utilz_manifest_old_manager "$manifest") || manager=""
       if [[ "$manager" == "brew" ]]; then
         printf 'brew old\n'
       else
@@ -1201,7 +1210,7 @@ utilz_tree_provenance() {
 # The brew commands a remedy names, each printed from a literal and never run:
 # install, link and upgrade the formula, and put brew's bin under <prefix> on
 # PATH from a shell config. ONE WORDING EACH (issue 0112): print_path_remedy,
-# doctor's notes on a manifest, and install.sh's refusals read them, so each
+# doctor's notes on a manifest, and trees.sh's refusals read them, so each
 # remedy is worded the same wherever it is named.
 brew_install_command() {
   printf '%s\n' "brew install matthewsinclair/utilz/utilz"
@@ -1244,12 +1253,13 @@ print_path_remedy() {
     "opt old")
       # `use opt` refuses an old manifest, so the remedy is the republish.
       echo "  This opt install has an old manifest. Republish it from the dev"
-      echo "  checkout with 'utilz install --force', then 'utilz use opt'."
+      echo "  checkout with 'bin/devbin install --force', then 'bin/devbin use opt'."
       ;;
     dev* | opt)
       echo "  Link this tree into ~/.local/bin, and put ~/.local/bin on \$PATH"
       echo "  before Homebrew's bin:"
-      echo "    $UTILZ_HOME/bin/utilz use ${tree% *}"
+      echo "  run in the dev checkout:"
+      echo "    bin/devbin use ${tree% *}"
       ;;
     *)
       echo "  Install Utilz with Homebrew, which puts it on \$PATH:"
@@ -1569,10 +1579,10 @@ _doctor_check_path() {
 
   # THE LINK SET'S HEALTH (contract T5, issue 0105): a link in ~/.local/bin
   # that a Homebrew link shadows, or a set split across trees, is named here
-  # and by `utilz use`, from the one check both read.
-  if [[ -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
-    # shellcheck source=opt/utilz/lib/install.sh
-    source "$UTILZ_HOME/opt/utilz/lib/install.sh"
+  # and by `bin/devbin use` and devbin's doctor in the checkout.
+  if [[ -f "$UTILZ_HOME/opt/utilz/lib/trees.sh" ]]; then
+    # shellcheck source=opt/utilz/lib/trees.sh
+    source "$UTILZ_HOME/opt/utilz/lib/trees.sh"
     local link_dir health
     link_dir=$(install_link_dir)
     if ! health=$(install_link_health "$link_dir"); then
@@ -2004,30 +2014,23 @@ _doctor_check_integrity() {
   # silently skipping -- "nothing to check" and "checked, clean" must not
   # render as the same line.
   if [[ -f "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ]]; then
-    if [[ -f "$UTILZ_HOME/opt/utilz/lib/install.sh" ]]; then
+    if [[ -f "$UTILZ_HOME/opt/utilz/lib/trees.sh" ]]; then
       local drift check_rc=0
-      # Sourced here and nowhere else in this function: install.sh is not
+      # Sourced here and nowhere else in this function: trees.sh is not
       # loaded for the utilities' hot path (ST0014 design.md D1).
-      # shellcheck source=opt/utilz/lib/install.sh
-      source "$UTILZ_HOME/opt/utilz/lib/install.sh"
+      # shellcheck source=opt/utilz/lib/trees.sh
+      source "$UTILZ_HOME/opt/utilz/lib/trees.sh"
       drift=$(install_manifest_check "$UTILZ_HOME") || check_rc=$?
 
       # THE REMEDY IS THE TREE'S (contract T3, issue 0105): an opt install is
       # republished from its dev tree, and brew's is brew's to replace.
-      local republish="'utilz install --force' from the dev checkout"
+      local republish="'bin/devbin install --force' from the dev checkout"
       if [[ "$(install_tree_manager "$UTILZ_HOME" 2>/dev/null)" == "brew" ]]; then
         republish="'$(brew_upgrade_command)', or 'brew reinstall utilz' at the same version"
       fi
 
       if [[ $check_rc -eq 0 ]]; then
         success "Install matches its manifest"
-        # CI's verdict on the commit, as the publish recorded it (issue 0016).
-        # It moved here from the version line with the contract (T4): a record,
-        # never a gate.
-        local ci_state ci_detail
-        ci_state=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ci_state 2>/dev/null) || ci_state=""
-        ci_detail=$(utilz_manifest_value "$UTILZ_HOME/$UTILZ_MANIFEST_NAME" ci_detail 2>/dev/null) || ci_detail=""
-        info "CI on that commit, as published: ${ci_state:-not recorded}${ci_detail:+ ($ci_detail)}"
       elif [[ $check_rc -eq 3 && "$(utilz_tree)" == "brew old" ]]; then
         # Noted, not counted (T3 amendment, devbin issue 0213): the fix for an
         # old keg is the next release, which nothing on this machine can make.
@@ -2742,7 +2745,7 @@ emacs_install() {
     return 1
   fi
 
-  # Expand leading ~ in dest. Shared with install_prefix_configured.
+  # Expand leading ~ in dest (expand_tilde, above).
   dest=$(expand_tilde "$dest")
 
   local dest_dir

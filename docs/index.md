@@ -35,7 +35,7 @@ Start here if you want to build your own utilities with Utilz:
 - **[Architecture](architecture.md)** - Dispatcher pattern, common library, metadata system, integration manifest.
 - **[Testing Guide](../opt/utilz/test/README.md)** - Test framework and best practices.
 - **[CI/CD Workflows](../.github/workflows/README.md)** - GitHub Actions setup.
-- **[Releasing](releasing.md)** - Before a cut, and the Homebrew formula after it (`tools/formula`).
+- **[Releasing](releasing.md)** - Before a cut, and the Homebrew formula the cut publishes (devbin's formula built-in).
 
 ## Quick Reference
 
