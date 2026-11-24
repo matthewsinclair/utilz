@@ -1,6 +1,6 @@
 {
   "id": "AC07",
-  "text": "The install carries a manifest recording the utilz version, the source commit and a checksum for every owned file, and the recorded commit describes the bytes actually shipped.",
+  "text": "The install carries its manifest in devbin's T3 form: tool, version, source_commit, managed_by and line, the tree's version line, then a checksum for every owned file. The recorded commit describes the bytes shipped, and `utilz --version` in the install prints the recorded line.",
   "kind": "test",
   "state": {
     "is": "computed"

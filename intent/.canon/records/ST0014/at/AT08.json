@@ -1,7 +1,7 @@
 {
   "id": "AT08",
   "kind": "test",
-  "file": "opt/utilz/test/install_lib.bats",
+  "file": "opt/utilz/test/install_e2e.bats:192",
   "covers": [
     "AC07"
   ],

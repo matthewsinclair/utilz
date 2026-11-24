@@ -1,0 +1,14 @@
+{
+  "id": "01M871FMEBPBFA083R6H0MRWG8",
+  "ts": "2026-11-24T15:06:11.789Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC06"
+  },
+  "payload": {
+    "text": "The utilities' bin/ symlinks arrive as SYMLINKS, not as dereferenced copies, and doctor's manifest check (install_manifest_check, opt/utilz/lib/trees.sh) names a bin/<name> that arrived as a copy as not-a-link, and a link that names another target as retargeted. Every link names the same five characters, 'utilz': dispatch keys on basename $0, so the links are told apart by their PATH. THE SYMLINKS ARE THE DISPATCH PREDICATE: bin/utilz dispatches only when -L \"$UTILZ_HOME/bin/$UTIL_NAME\" holds, so a utility whose link did not arrive does not dispatch at all. The manifest records each file's checksum, a link's as its target's (devbin's T3 manifest)."
+  }
+}

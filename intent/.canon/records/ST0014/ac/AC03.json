@@ -3,6 +3,8 @@
   "text": "Publishing into a Utilz SOURCE tree is refused, whatever the source. The predicate is a property of the TARGET, never src-equals-dst: devbin's guard compared the two and a vendored copy landed in their dev tree past it on 2026-09-07.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "withdrawn",
+    "reason": "devbin#0326 retired Utilz's own publish and switch: bin/devbin install and bin/devbin use do this, and devbin's own arms prove it (Utilz I59c806c)",
+    "by": "utilz-vc"
   }
 }

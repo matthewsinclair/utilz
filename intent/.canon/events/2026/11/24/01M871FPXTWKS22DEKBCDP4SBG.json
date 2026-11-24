@@ -1,0 +1,14 @@
+{
+  "id": "01M871FPXTWKS22DEKBCDP4SBG",
+  "ts": "2026-11-24T15:06:14.332Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-01.4"
+  },
+  "payload": {
+    "text": "Utilz's first cut in this shape fires every leg on its candidate's run, and its RELEASE seal names each one; the core's object step attaches Menuz.app.zip before the formula step runs; and the core's formula step, `bin/devbin formula publish --pull` under release.formula, moves homebrew-utilz to the new tag and pulls this machine's clone of it, rendering the formula from packaging/homebrew/utilz.rb through the core's @@INSTALL@@ alone. tools/formula is retired. Reworded on hv decision 14 (23 Nov 2026), and reworded for I59c806c."
+  }
+}

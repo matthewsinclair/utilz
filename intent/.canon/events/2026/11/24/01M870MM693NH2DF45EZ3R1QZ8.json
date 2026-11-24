@@ -1,0 +1,14 @@
+{
+  "id": "01M870MM693NH2DF45EZ3R1QZ8",
+  "ts": "2026-11-24T14:51:26.862Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.withdraw",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC05"
+  },
+  "payload": {
+    "reason": "devbin#0326 retired Utilz's own publish and switch: bin/devbin install and bin/devbin use do this, and devbin's own arms prove it (Utilz I59c806c)"
+  }
+}

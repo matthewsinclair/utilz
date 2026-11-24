@@ -1,0 +1,14 @@
+{
+  "id": "01M871FKBX6WPXBEHG3VKVW00T",
+  "ts": "2026-11-24T15:06:10.687Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC01"
+  },
+  "payload": {
+    "text": "`bin/devbin install`, run in a Utilz checkout (devbin#0326), publishes a runnable install to the configured prefix, and the installed tree RUNS with the source tree absent. Devbin's own install tree is not runnable (D33); Utilz's is, so the test is that the install works when the source is moved aside, not merely that files arrived."
+  }
+}

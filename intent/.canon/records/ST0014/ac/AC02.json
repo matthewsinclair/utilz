@@ -3,6 +3,8 @@
   "text": "Publishing from a dirty source tree is REFUSED, and no flag overrides it. An install cut from a dirty tree launders the bytes through one more hop and gives them the look of provenance; devbin measured five of thirteen estates running bytes that matched no commit.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "withdrawn",
+    "reason": "devbin#0326 retired Utilz's own publish and switch: bin/devbin install and bin/devbin use do this, and devbin's own arms prove it (Utilz I59c806c)",
+    "by": "utilz-vc"
   }
 }

@@ -3,6 +3,8 @@
   "text": "install and upgrade write nothing a person authored and nothing outside the prefix. In particular the ~/.local/bin PATH symlinks are NEVER relinked implicitly -- that is mutating hv's environment and needs a verb or flag they typed.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "withdrawn",
+    "reason": "devbin#0326 retired Utilz's own publish and switch: bin/devbin install and bin/devbin use do this, and devbin's own arms prove it (Utilz I59c806c)",
+    "by": "utilz-vc"
   }
 }

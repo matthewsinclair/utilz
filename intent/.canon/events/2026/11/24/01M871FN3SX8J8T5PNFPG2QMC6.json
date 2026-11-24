@@ -1,0 +1,14 @@
+{
+  "id": "01M871FN3SX8J8T5PNFPG2QMC6",
+  "ts": "2026-11-24T15:06:12.479Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC07"
+  },
+  "payload": {
+    "text": "The install carries its manifest in devbin's T3 form: tool, version, source_commit, managed_by and line, the tree's version line, then a checksum for every owned file. The recorded commit describes the bytes shipped, and `utilz --version` in the install prints the recorded line."
+  }
+}

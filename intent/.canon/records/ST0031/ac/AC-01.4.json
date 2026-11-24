@@ -1,6 +1,6 @@
 {
   "id": "AC-01.4",
-  "text": "Utilz's first cut in this shape fires every leg on its candidate's run, and its RELEASE seal names each one; the core's object step attaches Menuz.app.zip before any after: command runs; and `tools/formula publish --pull`, the one after: command, moves homebrew-utilz to the new tag and pulls this machine's clone of it. The formula through the core alone goes to issue I59c806c. Reworded on hv decision 14 (23 Nov 2026).",
+  "text": "Utilz's first cut in this shape fires every leg on its candidate's run, and its RELEASE seal names each one; the core's object step attaches Menuz.app.zip before the formula step runs; and the core's formula step, `bin/devbin formula publish --pull` under release.formula, moves homebrew-utilz to the new tag and pulls this machine's clone of it, rendering the formula from packaging/homebrew/utilz.rb through the core's @@INSTALL@@ alone. tools/formula is retired. Reworded on hv decision 14 (23 Nov 2026), and reworded for I59c806c.",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"

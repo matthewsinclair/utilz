@@ -3,6 +3,8 @@
   "text": "tools/formula-bump <tag> refuses a missing tag, a lightweight tag, a wrong argument count, and a formula without exactly one tag: and one revision: line, changing nothing in each case. For an annotated tag it rewrites exactly those two lines, to the tag and git rev-parse <tag>^{commit}, and prints the diff.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "withdrawn",
+    "reason": "devbin#0326 retired Utilz's own formula tool: devbin's formula built-in renders and publishes the template, and devbin's own arms prove it (Utilz I59c806c)",
+    "by": "utilz-vc"
   }
 }

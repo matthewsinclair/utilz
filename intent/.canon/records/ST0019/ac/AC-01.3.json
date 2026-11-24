@@ -3,6 +3,8 @@
   "text": "tools/ci-state answers green, failed, pending, none and unknown for the corresponding install_ci_state answers under a stubbed gh, asks through install_ci_state alone, ships to no install or keg, and is linted by CI's shellcheck step.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "withdrawn",
+    "reason": "devbin#0326 retired Utilz's own publish and switch: bin/devbin install and bin/devbin use do this, and devbin's own arms prove it (Utilz I59c806c)",
+    "by": "utilz-vc"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "id": "01M871FM13XSS8DG15SJPW71S3",
+  "ts": "2026-11-24T15:06:11.365Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC04"
+  },
+  "payload": {
+    "text": "In an opt install, `utilz upgrade` writes nothing and names the republish, `bin/devbin install --force` in the dev checkout, and says when the dev checkout is ahead; in an opt install with an old manifest it refuses, naming the same republish. The other half, that a publish over an existing install is refused without --force, is devbin's publish, and devbin's own arms prove it (devbin#0326)."
+  }
+}

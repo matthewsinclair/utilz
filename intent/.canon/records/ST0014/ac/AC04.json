@@ -1,6 +1,6 @@
 {
   "id": "AC04",
-  "text": "install and upgrade mirror each other: install refuses when an install exists and names upgrade; upgrade refuses when none exists and names install. Whichever verb is reached for, the wrong one names the right one.",
+  "text": "In an opt install, `utilz upgrade` writes nothing and names the republish, `bin/devbin install --force` in the dev checkout, and says when the dev checkout is ahead; in an opt install with an old manifest it refuses, naming the same republish. The other half, that a publish over an existing install is refused without --force, is devbin's publish, and devbin's own arms prove it (devbin#0326).",
   "kind": "test",
   "state": {
     "is": "computed"

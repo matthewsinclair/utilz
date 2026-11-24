@@ -1,0 +1,14 @@
+{
+  "id": "01M871FNRWYMGKS62Q57N4Y03Z",
+  "ts": "2026-11-24T15:06:13.156Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST0014/AC08"
+  },
+  "payload": {
+    "text": "`utilz upgrade` upgrades the tree it runs from, as that tree is upgraded. In dev it pulls fast-forward, refusing over a dirty runtime set, then runs `bin/devbin build` and prints the version line. In opt it writes nothing and names the republish. In brew it runs `brew update`, then `brew upgrade utilz` with HOMEBREW_NO_AUTO_UPDATE=1 only when brew names utilz as outdated, and it fails by name when either step fails."
+  }
+}
