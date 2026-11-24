@@ -23,7 +23,7 @@ gitz <command> [args]
 
 Git multi-repository operations - recursively find and check git repositories.
 
-Excludes repositories with '\_' or '.work' in their path.
+gitz finds each `.git` directory under the path and runs `git status` in its repository. It skips a repository when a path component starts with `_`, or when the path contains `.work`. A `.git` file (eg a linked worktree or a submodule) is not a match. When it finds no repository, gitz warns and exits 0.
 
 ---
 
@@ -77,15 +77,13 @@ gitz status
 ## Exit Status
 
 - `0` - Success
-- `1` - General error
+- `1` - Error, eg unknown command or `git` not found
 
 ---
 
 ## See Also
 
-- `utilz(1)` - Utilz framework dispatcher
-- `utilz-help(1)` - Show help for utilities
-- [gitz README]($UTILZ_HOME/opt/gitz/README.md) - Detailed documentation
+- `utilz help` - Utilz framework help
 
 ---
 

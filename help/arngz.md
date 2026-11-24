@@ -37,11 +37,11 @@ arngz --version
 
 A **desk** is a named arrangement of windows: for each display, for each space on it, which apps live there and where on a grid their windows sit. `arngz <desk>` puts this machine's windows where the desk says; `arngz discover --save <desk>` records the arrangement on screen now as a desk.
 
-`apply`, `discover`, `diff` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
+`apply`, `discover`, `diff`, `which`, `auto` and `doctor`'s IPC check reach Hammerspoon through its `hs` tool, so they need Hammerspoon running with `hs.ipc` loaded, which `arngz init --yes` sets up.
 
-**Platform**: the engine (`apply`, a bare desk, `diff`, `discover` and `init --yes`) needs macOS and Hammerspoon. Elsewhere each refuses, exit 2, before it reads or asks anything, saying it needs macOS and Hammerspoon and that list, show, delete and current work here. There, `init` makes the catalogue alone, and `doctor` says the engine is not available and checks the catalogue alone.
+**Platform**: the engine (`apply`, a bare desk, `diff`, `discover`, `which`, `auto` and `init --yes`) needs macOS and Hammerspoon. Elsewhere each refuses, exit 2, before it reads or asks anything, saying it needs macOS and Hammerspoon and that list, show, delete, current and log work here. There, `init` makes the catalogue alone, and `doctor` says the engine is not available and checks the catalogue alone.
 
-**`apply` takes the pointer.** macOS gives no working call to move a window to another space, so apply moves a window the way a person does: it holds the window by its title bar and presses Mission Control's Move left/right a space shortcut, once per step, or drags it over the edge two displays share. A move that would carry a window past a full-screen space goes round through another display instead, as the Full-screen windows note below says. Keep your hands off the mouse and keyboard while it runs. Moving the pointer stops it, and every move left is reported as stopped. It puts the pointer back and gives focus back when it is done. The two shortcuts must be set in System Settings > Keyboard > Keyboard Shortcuts > Mission Control, or apply refuses. Some apps' windows do not follow a held pointer, Dictionary's and Stickies' among them, so apply checks that the window moved with the pointer before it presses a key; when it did not, apply lets go and reports that entry as failed. Every step is read back, and a move macOS did not make is reported as failed. One apply runs at a time: a second, asked for while one runs, is refused.
+**`apply` takes the pointer.** macOS gives no working call to move a window to another space, so apply moves a window the way a person does: it holds the window by its title bar and presses Mission Control's Move left/right a space shortcut, once per step, or drags it over the edge two displays share. A move that would carry a window past a full-screen space goes round through another display instead, as the Full-screen windows note below says. Keep your hands off the mouse and keyboard while it runs. Moving the pointer stops it, and every move left is reported as stopped. It puts the pointer back and gives focus back when it is done. The two shortcuts must be set in System Settings > Keyboard > Keyboard Shortcuts > Mission Control, or apply refuses. Some apps' windows do not follow a held pointer, Dictionary's and Stickies' among them, so apply checks that the window moved with the pointer before it presses a key; when it did not, apply lets go and reports that entry as failed. Every step is read back, and a move macOS did not make is reported as failed.
 
 ### The catalogue
 
@@ -108,7 +108,6 @@ displays:
 The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed or unseen, 1 when any is skipped or failed, and 2 when it refused before changing anything. An unseen entry has nothing to arrange, so it is reported and counts against nothing, except when `apply` launched its app, or when a window could not be read at that moment, since it may have been the entry's: then the entry counts as not placed. Hammerspoon's window filter is the one way to name a window on a desktop not shown, and it can fail for a moment. When it fails, each entry left unseen says so, and its fix is to run it again, then, if it fails again, to reload Hammerspoon's config (Reload Config in its menu). A read in which the filter failed never replaces a plan made from one in which it ran.
 
 - **An app that fixes its own window size** cannot fill the cells the desk gives it. A window that reached the origin the desk put it at, at a size the app enforces, is `placed`, and the report says so in brackets after the outcome: `placed (placed at the app's own size, 375x667)`. It is as well placed as it can be, so it counts against nothing. A window that reached the wrong origin is `failed` whatever its size.
-- **`diff` still reports such a window as a difference**, and `apply` does not. This is a known limitation, not an inconsistency to work around: `diff` plans from one observation, and that the app enforces this size is not something an observation shows. It is learnable only by placing the window and reading the frame back, which is where `apply` learns it. So on a desk holding such an app, `apply` exits 0 reporting every entry placed while `diff` run straight afterwards still exits 1 naming that window. Closing it would need arngz to remember the outcome, or the desk to record an enforced size, and neither belongs in a patch release.
 - **Creating a space** asks the Dock through Mission Control. When the Dock does not open Mission Control for Hammerspoon ("unable to get Mission Control data from the Dock"), the create is not tried again, since each try asks the Dock to open it again while it may still be opening, and no other desktop is asked for in that run, on any display, since Mission Control is one for all of them. The failure says the Dock did not open Mission Control, and its fix is to add the desktop in Mission Control by hand, then run it again. Any other call that reports no space made none, and is tried up to four times, a fifth of a second apart. A call that reports a space is made **once**, and the attempts after it only re-read the desktop count, because the desktop list can lag behind a creation and a count read in the same breath as one cannot be the trigger for another. A cause that lasts is said once for the display, not once for every space the desk asks for, and the later ones say they were not tried again. A display the plan named and which is no longer there is not retried, since waiting cannot bring it back. If the desktops go up by more than the one asked for, apply says so by name rather than counting it a success.
 
 - **Displays.** A desk display that matches no screen, or more than one, is refused, with every candidate screen named. `--map <name>=<uuid>` binds the desk display called `<name>` to the screen with that UUID, for this run only.
@@ -118,7 +117,7 @@ The report names every app entry in the desk with its outcome: `placed`, `launch
 - **`--dry-run`** prints the plan, one line per change with its reason, exactly as `diff` does, changes nothing, and exits 0; `diff` is the one whose exit says whether anything would change.
 - **The CLI waits** up to `ARNGZ_APPLY_TIMEOUT` seconds, 600 unless set, for apply's report. If it gives up, apply may still be running, so it says so and exits 1, naming the request it kept.
 - **The current desk.** An apply that ran makes its desk the current one, which `arngz current` prints. A `--dry-run` and a refusal do not.
-- **The sizes apps hold their windows at.** Some apps fix their window's size and will not fill the cells a desk gives them. When an apply reads such a window back at its cells' origin, it records the app, the cells' size and the size held in `$XDG_STATE_HOME/arngz/own-sizes`. `diff` then reads a window at its recorded size as in place, and `apply` rechecks it, setting its frame and reading it back rather than counting it a change, so an app that lets go is re-sized and its record cleared. Deleting the file is safe: until the next apply, `diff` reports those windows as differences again, and that apply places them and records them afresh.
+- **The sizes apps hold their windows at.** When an apply reads a window back at its cells' origin at a size its app holds, it records the app, the cells' size and the size held in `$XDG_STATE_HOME/arngz/own-sizes`. `diff` then reads a window at its recorded size as in place, and `apply` rechecks it, setting its frame and reading it back rather than counting it a change, so an app that lets go is re-sized and its record cleared. Deleting the file is safe: until the next apply, `diff` reports those windows as differences again, and that apply places them and records them afresh.
 - **One apply at a time.** A second `apply` asked for while one is running is refused, exit 2, with the time the first was asked for. If arngz says an apply is running when none is, a crashed apply left that mark: reload Hammerspoon's config (`hs.reload()` in its console) to clear it.
 - **Reads during an apply.** `doctor`, `diff`, `discover` and `apply --dry-run` are answered between apply's phases, so what they report is a machine whose windows are still being moved: a `diff` asked for during an apply names the moves it has still to make.
 
@@ -269,46 +268,47 @@ arngz current                 # the desk applied or saved last
 
 ## Files
 
-- `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml` -- one desk.
-- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/current` -- the current desk's name, which `apply` and `discover --save` write and `delete` clears.
-- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/arngz.log`, and `arngz.log.1` before it -- the run log, which `arngz log` reads.
-- `${TMPDIR:-/tmp}/arngz.XXXXXX/` -- one call to Hammerspoon: its `request.json` and `response.json`. It is removed after a call that went well, and kept and named after one that did not.
+- `${XDG_CONFIG_HOME:-$HOME/.config}/arngz/desks/<desk>.yaml`: one desk.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/current`: the current desk's name, which `apply` and `discover --save` write and `delete` clears.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/own-sizes`: the sizes apps hold their windows at, which `apply` writes and `apply` and `diff` read.
+- `${XDG_STATE_HOME:-$HOME/.local/state}/arngz/arngz.log`, and `arngz.log.1` before it: the run log, which `arngz log` reads.
+- `${TMPDIR:-/tmp}/arngz.XXXXXX/`: one call to Hammerspoon, with its `request.json` and `response.json`. It is removed after a call that went well, and kept and named after one that did not.
 
 ---
 
 ## Environment
 
-- `XDG_CONFIG_HOME` -- where the catalogue lives; `$HOME/.config` when unset.
-- `XDG_STATE_HOME` -- where the current desk is recorded and the run log kept; `$HOME/.local/state` when unset.
-- `ARNGZ_LOG_MAX` -- how many bytes the run log may reach before a run moves it to `arngz.log.1`; 4194304 (4 MiB) when unset.
-- `ARNGZ_HS_PREFIX` -- where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
-- `ARNGZ_HS_TIMEOUT` -- how many seconds one call to Hammerspoon may take; 60 when unset, and 180 for `discover`, which reads every window on every desktop in one call.
-- `ARNGZ_APPLY_TIMEOUT` -- how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
-- `TMPDIR` -- where each call's request and response are written; `/tmp` when unset.
+- `XDG_CONFIG_HOME`: where the catalogue lives; `$HOME/.config` when unset.
+- `XDG_STATE_HOME`: where the current desk and the own sizes are recorded and the run log kept; `$HOME/.local/state` when unset.
+- `ARNGZ_LOG_MAX`: how many bytes the run log may reach before a run moves it to `arngz.log.1`; 4194304 (4 MiB) when unset.
+- `ARNGZ_HS_PREFIX`: where `init --yes` links the `hs` tool; `/opt/homebrew` when unset.
+- `ARNGZ_HS_TIMEOUT`: how many seconds one call to Hammerspoon may take; 60 when unset, and 180 for `discover`, which reads every window on every desktop in one call.
+- `ARNGZ_APPLY_TIMEOUT`: how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
+- `TMPDIR`: where each call's request and response are written; `/tmp` when unset.
 
 ---
 
 ## Exit Status
 
-- `0` -- done.
-- `1` -- `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `log` found no run logged, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
-- `2` -- refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering. For `which` and `auto` it is also the question having no one answer: more than one desk fits the screens present and none of them is the current desk, so `auto` moves nothing.
+- `0`: done.
+- `1`: `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `log` found no run logged, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
+- `2`: refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering. For `which` and `auto` it is also the question having no one answer: more than one desk fits the screens present and none of them is the current desk, so `auto` moves nothing.
 
 ---
 
 ## Dependencies
 
-- `yq` (required) -- reads and validates desks.
-- `hs` (optional) -- Hammerspoon's command-line tool; needed by `apply`, `discover`, `diff` and `doctor`'s IPC check. `arngz init --yes` links it.
-- Hammerspoon (optional, a macOS app) -- the engine; needed by the same verbs. `utilz doctor` and `arngz doctor` look it up by bundle id.
+- `yq` (required): reads and validates desks.
+- `hs` (optional): Hammerspoon's command-line tool; needed by `apply`, `discover`, `diff`, `which`, `auto` and `doctor`'s IPC check. `arngz init --yes` links it.
+- Hammerspoon (optional, a macOS app): the engine; needed by the same verbs. `utilz doctor` and `arngz doctor` look it up by bundle id.
 
 ---
 
 ## See Also
 
-- `utilz doctor` -- reports arngz's dependencies.
-- `arngz doctor` -- every precondition arngz's engine verbs need.
-- `intent/st/ST0026/design.md` -- the design.
+- `utilz doctor`: reports arngz's dependencies.
+- `arngz doctor`: every precondition arngz's engine verbs need.
+- `intent/st/ST0026/design.md`: the design, in a Utilz checkout; `intent st hydrate ST0026` puts it on disk.
 
 ---
 

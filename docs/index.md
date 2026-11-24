@@ -1,6 +1,6 @@
 # Utilz Documentation
 
-**Version**: see `VERSION` at the repo root, or run `utilz version`. It is not restated here -- this file read `2.2.0` for three releases, because a version copied into prose goes stale silently.
+**Version**: see `VERSION` at the repo root, or run `utilz version`.
 
 Utilz is a bash/zsh framework for building and managing command-line utilities with a single dispatcher pattern. All utilities are symlinks to `bin/utilz`, which routes execution to the appropriate implementation.
 
@@ -12,15 +12,13 @@ Start here if you want to install and use Utilz utilities:
 
 - **[README](../README.md)** - Installation, quick start, basic usage, and the Emacs bridge.
 - **[Framework Help](../help/utilz.md)** - Complete command reference (`utilz help`, `test`, `doctor`, `integration`, `emacs`, etc.).
-- **Per-utility help** - Run `utilz help <name>` or see `help/<name>.md` directly. Every shipped utility has its own help file; `utilz list` is the roster. The roster is deliberately NOT enumerated here: this line said "All 12" and listed twelve names while the tree held fifteen, which is the same count-pinned-to-a-moment defect as issue 0006.
+- **Per-utility help** - Run `utilz help <name>` or see `help/<name>.md` directly. Every shipped utility has its own help file; `utilz list` is the roster.
 
 ### I want to integrate Utilz with my editor
 
 - **[README - Using Utilz from Emacs](../README.md#using-utilz-from-emacs)** - Installer invocation, `(load ...)` line, usage table, prefix-arg semantics.
-- **[ST0007 Design](../intent/st/ST0007/design.md)** - Editor-neutral `integration:` YAML block, `utilz integration commands` TSV surface, PFIC/Thin-Coordinator shape of the bridge.
-- **[Bridge source](../static/emacs/utilz.el)** - The canonical elisp bridge (~270 lines).
-
-Future integration targets (VSCode, Zed, Vim) slot in as parallel `utilz <editor>` subcommand families that consume the same `utilz integration commands` TSV - no per-editor YAML walker.
+- **[Developer Guide](developer-guide.md)** - The `integration:` YAML block.
+- **[Bridge source](../static/emacs/utilz.el)** - The canonical elisp bridge. It reads the `utilz integration commands` TSV.
 
 ### I want to create utilities
 
@@ -46,6 +44,7 @@ utilz help [utility|verb]     # Show help documentation
 utilz list                    # List available utilities
 utilz version                 # Show framework version
 utilz doctor                  # Run system diagnostics
+utilz upgrade                 # Upgrade the tree this utilz runs from
 utilz test [utility]          # Run test suite
 utilz generate <name>         # Create new utility scaffold
 utilz integration commands    # Emit the editor-neutral TSV manifest
@@ -70,15 +69,7 @@ Utilz/
 
 ### Common Library Functions
 
-The common library (`opt/utilz/lib/common.sh`) provides shared functions for all utilities:
-
-- **Logging**: `info()`, `success()`, `warn()`, `error()`, `debug()`
-- **Help**: `show_help()`, `show_version()`
-- **Validation**: `check_command()`, `require_command()`
-- **Metadata**: `get_util_metadata()`
-- **Testing**: `run_tests()`, `run_doctor()`
-
-See [Framework Help](../help/utilz.md) for complete function documentation.
+The common library (`opt/utilz/lib/common.sh`) provides shared functions for all utilities. The [Developer Guide](developer-guide.md#using-the-common-library) lists them.
 
 ## What Problems Does Utilz Solve?
 
@@ -96,25 +87,7 @@ See [Framework Help](../help/utilz.md) for complete function documentation.
 3. List utilities: `utilz list`
 4. Get help: `utilz help`
 
-For detailed installation instructions, see the [README](../README.md).
-
-## Creating Your First Utility
-
-```bash
-# Generate scaffold
-utilz generate myutil "Does something useful" "Your Name"
-
-# Edit implementation
-vim opt/myutil/myutil
-
-# Test it
-utilz test myutil
-
-# Use it
-myutil --help
-```
-
-See [Developer Guide](developer-guide.md) for comprehensive utility creation documentation.
+To create your first utility, see the [Developer Guide](developer-guide.md#quick-start).
 
 ## Support
 

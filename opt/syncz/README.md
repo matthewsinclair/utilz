@@ -7,7 +7,7 @@
 
 ## Overview
 
-Simple directory-to-directory syncer with dual-backend architecture. Uses rsync for unidirectional sync and unison (when available) for state-tracked bidirectional sync. Provides conflict resolution strategies, confirmation prompts, and dry-run support.
+Simple directory-to-directory syncer. It uses rsync for one-way sync, and unison, when it is available, for state-tracked two-way sync.
 
 ---
 
@@ -30,45 +30,6 @@ syncz --bidi [OPTIONS] <dir1> <dir2>
 ```
 
 For detailed help: `utilz help syncz`
-
----
-
-## Examples
-
-```bash
-# Preview what would be synced
-syncz --dry-run ~/src /dst
-
-# Sync with confirmation prompts
-syncz --confirm ~/src /dst
-
-# Force sync with deletions and backups
-syncz --force --delete --backup ~/src /dst
-
-# Quick confirm-and-go
-syncz --just-do-it --delete ~/src /dst
-
-# Source always wins, exclude .git
-syncz --source-wins --exclude ".git" ~/src /dst
-
-# Two-way sync (auto-selects unison if available)
-syncz --bidi ~/dir1 ~/dir2
-
-# Preview bidi sync
-syncz --bidi --dry-run ~/dir1 ~/dir2
-
-# Cloud filesystem sync (ignore xattrs/resource forks)
-syncz --bidi --no-metadata ~/Dropbox/project ~/GDrive/project
-
-# Force dir1 to win all conflicts
-syncz --bidi --fresh --prefer d1 ~/dir1 ~/dir2
-
-# Use an ignore file for exclude patterns
-syncz --bidi --ignore .synczignore ~/dir1 ~/dir2
-
-# Force rsync backend
-syncz --bidi --backend rsync ~/dir1 ~/dir2
-```
 
 ---
 
@@ -103,29 +64,15 @@ syncz
 
 ### Dependencies
 
-**Required:**
-
-- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
-- rsync
-
-**Optional:**
-
-- unison — Bidirectional sync engine with state tracking (`brew install unison`)
+`syncz.yaml` declares them: `rsync` (required) and `unison` (optional). The script runs under bash 3.2, the bash that macOS ships.
 
 ---
 
 ## Testing
 
 ```bash
-# Run tests
 utilz test syncz
-
-# Run tests directly
-cd opt/syncz/test
-bats syncz.bats
 ```
-
-78 tests covering: basic flags, validation, core sync, conflict resolution, features, confirmation prompts, just-do-it mode, edge cases, bidirectional sync, --confirm optional argument, backend selection, and unison bidi sync.
 
 ---
 

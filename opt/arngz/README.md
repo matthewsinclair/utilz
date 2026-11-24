@@ -7,7 +7,7 @@
 
 ## Overview
 
-Named window arrangements (desks) across displays and spaces. A desk says, for each display and each space on it, which apps live there and where on a grid their windows sit; `arngz <desk>` restores it. Hammerspoon is the engine, through its `hs` tool, and `apply` moves windows the way a person does, so it takes the pointer while it runs. ST0026 built it: the desk catalogue and its validator (WP-02), the engine (WP-03), `discover` and `diff` (WP-04), `apply` (WP-05), and `doctor` and `init` (WP-06).
+Named window arrangements (desks) across displays and spaces. Hammerspoon is the engine, through its `hs` tool.
 
 ---
 
@@ -26,24 +26,10 @@ ln -s utilz arngz
 
 ```bash
 arngz <desk>
-arngz <apply|discover|diff|list|show|delete|current|init|doctor> [ARGS]
+arngz <apply|discover|diff|list|show|delete|current|which|auto|init|doctor|log> [ARGS]
 ```
 
 For detailed help: `utilz help arngz`
-
----
-
-## Examples
-
-```bash
-arngz init          # create the catalogue
-arngz doctor        # every precondition, each with its state
-arngz list          # each desk, with display and app counts
-arngz show zeop1    # one desk, validated
-arngz discover --save zeop1   # record what is on screen now
-arngz diff zeop1    # what apply would change
-arngz zeop1         # arrange the windows; hands off the mouse
-```
 
 ---
 
@@ -56,33 +42,20 @@ arngz
 ├── Invoked via: $UTILZ_HOME/bin/arngz (symlink)
 ├── Dispatched by: $UTILZ_HOME/bin/utilz
 ├── Has access to: $UTILZ_HOME/opt/utilz/lib/common.sh
+├── Engine: $UTILZ_HOME/opt/arngz/lib/*.lua, loaded by Hammerspoon
 └── Help from: $UTILZ_HOME/help/arngz.md
 ```
 
 ### Dependencies
 
-**Required:**
-
-- `yq`, which reads and validates desks
-
-**Optional** (needed by `apply`, `discover`, `diff` and `doctor`'s IPC check):
-
-- Hammerspoon, the engine, a macOS app that `utilz doctor` looks up by bundle id
-- `hs`, Hammerspoon's command-line tool, which `arngz init --yes` links under `/opt/homebrew`
-
-The CLI runs under bash 3.2.
+`arngz.yaml` declares them, and `help/arngz.md` says what each one is for. The CLI runs under bash 3.2.
 
 ---
 
 ## Testing
 
 ```bash
-# Run tests
 utilz test arngz
-
-# Run tests directly
-cd opt/arngz/test
-bats arngz.bats
 ```
 
 ---
@@ -91,7 +64,7 @@ bats arngz.bats
 
 ### Making Changes
 
-1. Edit `opt/arngz/arngz`
+1. Edit `opt/arngz/arngz`, or the engine in `opt/arngz/lib/`
 2. Test changes: `arngz --help`
 3. Run tests: `utilz test arngz`
 4. Update help if needed: `help/arngz.md`

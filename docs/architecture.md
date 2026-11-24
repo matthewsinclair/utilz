@@ -2,6 +2,8 @@
 
 This document explains how the Utilz framework works internally, focusing on the dispatcher pattern, common library integration, and metadata system.
 
+For the reasons behind this design, and its trade-offs, see [Design Principles](design-principles.md).
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -9,10 +11,7 @@ This document explains how the Utilz framework works internally, focusing on the
 - [UTILZ_HOME Detection](#utilz_home-detection)
 - [Common Library Integration](#common-library-integration)
 - [Metadata System](#metadata-system)
-- [Version Management](#version-management)
 - [Test Runner Architecture](#test-runner-architecture)
-- [Why This Design?](#why-this-design)
-- [Trade-offs and Limitations](#trade-offs-and-limitations)
 
 ## Overview
 
@@ -23,7 +22,7 @@ Utilz uses a **single dispatcher** pattern where all utilities are symlinks to a
 3. Routes execution to the appropriate implementation in `opt/<utility>/<utility>`
 4. Uses `exec` to replace itself with the utility (zero overhead)
 
-This provides a consistent entry point while allowing utilities to be written in any language that can be executed as a script.
+Each implementation is a bash script. A script can call code in another language, eg prez calls its Rust crate in `opt/prez/crate/`.
 
 ## The Dispatcher Pattern
 
@@ -49,19 +48,19 @@ $ mdagg file.md → bin/mdagg → bin/utilz → $0 = "mdagg" → exec opt/mdagg/
    ```
 
 3. **Dispatcher starts** (`bin/utilz`):
-   - Detects `UTILZ_HOME` (if not set)
+   - Derives `UTILZ_HOME` from `$0`
    - Examines `basename "$0"` → `"mdagg"`
    - Sources common library
 
 4. **Dispatcher validates**:
    - Checks if `opt/mdagg/mdagg` exists
    - Checks if it's executable
-   - Handles `--help` and `--version` flags
+   - Calls `predispatch_intercept`, which answers `--help`, `-h` and `--version`
 
 5. **Dispatcher executes**:
 
    ```bash
-   exec "$UTILZ_HOME/opt/mdagg/mdagg" "$@"
+   exec "$UTIL_IMPL" "$@"
    ```
 
    - Uses `exec` to replace the dispatcher process
@@ -86,33 +85,41 @@ $ utilz help mdagg
 # Calls: show_help "mdagg"
 ```
 
+`utilz <utility> [args]` also dispatches to a utility. It calls the same `predispatch_intercept` as Mode 1, so the two forms give the same `--help` and `--version` answers.
+
 ### Dispatcher Code Structure
 
 The dispatcher (`bin/utilz`) has two main sections:
 
-**Section 1: Framework Commands** (lines 60-136)
+**Section 1: Framework Commands**
 
 ```bash
 if [[ "$INVOKED_AS" == "utilz" ]]; then
     case "$COMMAND" in
-        help|doctor|list|test|version|generate)
+        help|doctor|list|test|version|generate|upgrade|integration|emacs)
             # Handle framework commands
             ;;
+        install|use|relink)
+            # Retired: refer the user to bin/devbin, exit 2
+            ;;
         *)
-            # Unknown command error
+            # Dispatch to a utility, or report an unknown command
             ;;
     esac
 fi
 ```
 
-**Section 2: Utility Dispatch** (lines 138-179)
+`utilz help` gives the full list of verbs. Only `upgrade` sources the tree library, `opt/utilz/lib/trees.sh`. `utilz doctor` also sources it for its install checks.
+
+**Section 2: Utility Dispatch**
 
 ```bash
-# At this point, invoked via symlink (e.g., 'mdagg')
+# At this point, invoked via symlink (eg 'mdagg')
 UTIL_NAME="$INVOKED_AS"
 UTIL_IMPL="$UTILZ_HOME/opt/$UTIL_NAME/$UTIL_NAME"
 
-# Validate and execute
+# Validate, answer --help/--version, and execute
+predispatch_intercept "$UTIL_NAME" "$@"
 exec "$UTIL_IMPL" "$@"
 ```
 
@@ -128,7 +135,8 @@ determine_utilz_home() {
 
     # Follow symlink chain to find real script
     while [[ -L "$script" ]]; do
-        local link_target=$(readlink "$script")
+        local link_target
+        link_target=$(readlink "$script")
         # Handle relative symlinks
         if [[ "$link_target" != /* ]]; then
             script="$(dirname "$script")/$link_target"
@@ -138,10 +146,11 @@ determine_utilz_home() {
     done
 
     # Get directory containing real script
-    local script_dir="$(cd "$(dirname "$script")" && pwd)"
+    local script_dir
+    script_dir=$(cd "$(dirname "$script")" && pwd) || return 1
 
     # UTILZ_HOME is parent of bin/
-    echo "$(cd "$script_dir/.." && pwd)"
+    cd "$script_dir/.." && pwd
 }
 ```
 
@@ -163,7 +172,7 @@ export PATH="$HOME/Devel/prj/Utilz/bin:$PATH"
 $ mdagg file.md  # Works - UTILZ_HOME detected
 ```
 
-An exported `UTILZ_HOME` is ignored: the dispatcher always works its tree out from its own path.
+An exported `UTILZ_HOME` is ignored: the dispatcher always works its tree out from its own path. The dispatcher then exports `UTILZ_HOME` for the utilities and `common.sh`.
 
 ## Common Library Integration
 
@@ -171,7 +180,7 @@ The common library (`opt/utilz/lib/common.sh`) provides shared functions for all
 
 ### Loading Strategy
 
-**In the dispatcher** (`bin/utilz` line 48):
+**In the dispatcher** (`bin/utilz`):
 
 ```bash
 # Source common functions
@@ -183,7 +192,7 @@ else
 fi
 ```
 
-**In each utility** (e.g., `opt/mdagg/mdagg` lines 11-23):
+**In each utility** (eg the head of `opt/mdagg/mdagg`):
 
 ```bash
 # Source common functions if not already loaded
@@ -215,14 +224,14 @@ The library provides these categories of functions:
 
 1. **Logging**: `info()`, `success()`, `warn()`, `error()`, `debug()`
    - All write to stderr (>&2) to avoid polluting utility output
-   - Color-aware (detects TTY)
+   - `debug()` prints only when `UTILZ_DEBUG=1`
 
-2. **Help System**: `show_help()`, `show_version()`
-   - Uses glow → bat → cat fallback for markdown rendering
-   - Reads from `help/<utility>.md` files
+2. **Help System**: `show_help()`, `show_version()`, `predispatch_intercept()`
+   - `render_help()` uses glow → bat → cat fallback for markdown rendering
+   - Reads from `help/<utility>.md` files, or from a verb's section of `help/utilz.md`
 
-3. **Validation**: `check_command()`, `require_command()`
-   - Check for external dependencies
+3. **Validation**: `check_command()`, `require_command()`, `require_platform()`
+   - Check for external dependencies and for the platform a utility needs
    - Provide helpful error messages
 
 4. **Metadata**: `get_util_metadata()`, `require_yq()`
@@ -231,75 +240,27 @@ The library provides these categories of functions:
    - Returns non-zero when the YAML file or `yq` is missing, rather than an empty string a caller would read as an absent key
 
 5. **Discovery**: `each_utility()`
-   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line, from the running tree's `bin/` or from the tree it is given, as relink gives the tree it links into
+   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line, from the running tree's `bin/` or from the tree it is given
    - Consume with process substitution (`< <(each_utility)`), never a pipe, so accumulator variables survive the loop
 
-6. **Testing**: `run_tests()`, `run_doctor()`
-   - Auto-discovers test suites
-   - Validates framework installation
-   - `run_doctor()` deliberately does not gate on `require_yq()` -- it is the command you run to discover that `yq` is missing
+6. **Framework commands**: `list_utilities()`, `run_tests()`, `run_doctor()`, `generate_utility()`
+   - `run_doctor()` deliberately does not gate on `require_yq()`: it is the command you run to discover that `yq` is missing
 
 ## Metadata System
 
-Each utility has a YAML metadata file describing its configuration and dependencies.
+Each utility has a YAML metadata file at `opt/<utility>/<utility>.yaml`, eg `opt/mdagg/mdagg.yaml`. The [Developer Guide](developer-guide.md#metadata-files) gives its fields.
 
-### Metadata File Location
+### Version Resolution
 
-```
-opt/<utility>/<utility>.yaml
-```
+The framework version is in `/VERSION`. `opt/utilz/utilz.yaml` points to it with `version_file: ../../VERSION`.
 
-Example: `opt/mdagg/mdagg.yaml`
+Each utility also uses `version_file:`, with a path relative to its YAML. Most point to `opt/<utility>/VERSION`. prez points to `crate/Cargo.toml`, which carries the version in `[package]`. An inline `version:` key also works.
 
-### Metadata Schema
-
-```yaml
-name: mdagg
-version: 1.0.0
-utilz_version: "^1.0.0" # Compatible framework version
-description: Markdown aggregator for concatenating multiple markdown files
-author: Matthew Sinclair
-website: https://matthewsinclair.com
-help_file: ../../help/mdagg.md
-
-# Required external dependencies
-dependencies:
-  - name: yq
-    required: true
-    install: brew install yq
-    purpose: YAML configuration file parsing
-
-# Optional dependencies for enhanced functionality
-optional_dependencies:
-  - name: glow
-    install: brew install glow
-    purpose: Beautiful markdown rendering for help documentation
-
-# Editor integration manifest (optional; absence means the utility is not
-# auto-exposed to editor bridges like Emacs/VSCode/Zed/Vim).
-integration:
-  input: stdin # stdin | file | path | none
-  output: buffer # replace | buffer | message | discard
-  flags: [] # always-pass flags (rare)
-  prompts: [] # optional suggestions for the C-u flag prompt
-```
-
-### Version File References
-
-The framework itself uses a version file reference:
-
-```yaml
-# opt/utilz/utilz.yaml
-name: utilz
-version_file: ../../VERSION # Points to /VERSION file
-description: Universal utilities framework and dispatcher
-```
-
-This allows a single source of truth for the framework version (`/VERSION` file).
+A utility declares the framework major version it needs with `utilz_version` (eg `"^2.0.0"`). `utilz doctor` compares that major version with the major version in `/VERSION`.
 
 ### Reading Metadata
 
-The framework reads utility metadata through `get_util_metadata()` -- it backs `--version`, `utilz list` and doctor's installed utilities check. It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer (issue 0081): 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
+The framework reads utility metadata through `get_util_metadata()`. It backs `--version`, `utilz list` and doctor's installed utilities check. It is a framework-internal helper, not a utility-facing API; utilities do not call it. Its status is an answer: 0 prints the value, and yq's `null` for a key the yaml lacks; 1 means no yaml, no yq, or a `version_file` the tree does not carry or cannot open; 2 means the yaml cannot be read, and `yaml_read_error` says why:
 
 ```bash
 # Get utility version
@@ -323,211 +284,25 @@ Utilities that want to be auto-exposed to editor bridges (Emacs, and future VSCo
 - `flags`: a list of always-pass flags (rarely used).
 - `prompts`: optional suggestions shown to the user when they hit `C-u` to add extra flags.
 
-The manifest is exposed as TSV via `utilz integration commands` — one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh`, and the integration block's rules live in one function beside it, `integration_fields`, which `emacs_doctor` asks too (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
+The manifest is exposed as TSV via `utilz integration commands`: one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh`, and the integration block's rules live in one function beside it, `integration_fields`, which `emacs_doctor` asks too (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
 
-Editor-specific installers live alongside the neutral manifest: `utilz emacs install` and `utilz emacs doctor` ship today; additional editor families (`utilz vscode …`, `utilz vim …`, `utilz zed …`) slot in parallel without needing a new walker.
+Editor-specific installers live alongside the neutral manifest: `utilz emacs install` and `utilz emacs doctor` ship today. Other editor families can add verbs that use the same walker.
 
-The canonical Emacs bridge lives in the repo at `static/emacs/utilz.el` and is distributed by symlinking into the user's Doom custom directory. See [ST0007 design](../intent/st/ST0007/design.md) for the full design rationale and the [README Emacs section](../README.md#using-utilz-from-emacs) for installer invocation and usage.
-
-## Version Management
-
-Utilz supports two versioning strategies:
-
-### Framework Version
-
-The framework version is stored in `/VERSION`:
-
-```bash
-$ cat VERSION
-1.0.0
-```
-
-Referenced in `opt/utilz/utilz.yaml`:
-
-```yaml
-version_file: ../../VERSION
-```
-
-### Utility Versions
-
-Utilities can specify their own version:
-
-```yaml
-# opt/mdagg/mdagg.yaml
-version: 1.0.0
-```
-
-### Version Compatibility
-
-Utilities declare framework version compatibility using caret notation:
-
-```yaml
-utilz_version: "^1.0.0" # Compatible with 1.x.x
-```
-
-The `run_doctor()` function checks compatibility:
-
-```bash
-# Extract major version from requirement (e.g., "^1.0.0" -> "1")
-local required_major=$(echo "$required_utilz_version" | sed 's/^\^//' | sed 's/[^0-9].*//')
-
-# Extract framework major version
-local framework_major=$(echo "$framework_version" | cut -d. -f1)
-
-# Compare major versions
-if [[ "$required_major" != "$framework_major" ]]; then
-    # Report incompatibility
-fi
-```
+The canonical Emacs bridge lives in the repo at `static/emacs/utilz.el`. See the [README Emacs section](../README.md#using-utilz-from-emacs) for installer invocation and usage.
 
 ## Test Runner Architecture
 
-The test runner (`run_tests()` in common.sh) auto-discovers and runs tests for all utilities.
+The test runner (`run_tests()` in common.sh) runs the framework's tests and the tests of every utility that `each_utility()` names. `utilz test <utility>` runs one utility.
 
-### Test Discovery
+`run_tests()` refuses to run in an install tree, because the suites change `$UTILZ_HOME/bin`.
 
-```bash
-# Find all utilities with test directories
-for symlink in "$UTILZ_HOME"/bin/*; do
-    name=$(basename "$symlink")
-    test_dir="$UTILZ_HOME/opt/$name/test"
+### Test Sources
 
-    if [[ -d "$test_dir" ]]; then
-        # Found tests for this utility
-        cd "$test_dir"
-        bats *.bats
-    fi
-done
-```
+For each utility, the runner uses these sources in this order:
 
-### Test Organization
+1. The release build, when `opt/<utility>/crate/Cargo.toml` exists. A failed build stops the other sources for that utility.
+2. The crate's Rust unit tests.
+3. Every `*.bats` file under `opt/<utility>/test/`.
+4. The crate's black-box suites, found by the glob `opt/<utility>/crate/test/*.sh`. A suite that is not executable fails.
 
-```
-opt/<utility>/test/
-├── <utility>.bats          # Test file
-└── fixtures/               # Test data (optional)
-```
-
-Each test file loads the common test helper:
-
-```bash
-load "../../utilz/test/test_helper.bash"
-```
-
-### Running Tests
-
-```bash
-# All tests
-$ utilz test
-
-# Specific utility
-$ utilz test mdagg
-
-# Direct invocation
-$ cd opt/mdagg/test && bats mdagg.bats
-```
-
-## Why This Design?
-
-### Problem: Utility Sprawl
-
-Before Utilz:
-
-```
-~/bin/
-├── aggregate-markdown
-├── process-logs
-├── backup-notes
-├── sync-configs
-└── ... (each with different help, error handling, etc.)
-```
-
-### Solution: Unified Framework
-
-With Utilz:
-
-```
-~/Devel/prj/Utilz/
-├── bin/utilz (single dispatcher)
-├── bin/mdagg -> utilz (symlink)
-├── bin/logtool -> utilz (symlink)
-└── opt/
-    ├── mdagg/mdagg (implementation)
-    └── logtool/logtool (implementation)
-```
-
-### Benefits
-
-1. **Single Point of Entry**: All utilities go through dispatcher
-2. **Consistent UX**: Unified help, error handling, output formatting
-3. **Code Reuse**: Common library shared across all utilities
-4. **Easy Discovery**: `utilz list` shows all available utilities
-5. **Portable**: One Homebrew install per machine puts every utility on PATH
-6. **Testable**: Built-in test framework with `utilz test`
-7. **Maintainable**: Update common library once, all utilities benefit
-8. **Zero Overhead**: Uses `exec`, not subprocesses
-
-### Design Principles
-
-1. **Simple**: Bash/zsh only, no complex dependencies
-2. **Consistent**: All utilities follow same patterns
-3. **Portable**: Works on any Unix-like system
-4. **Extensible**: Easy to add new utilities
-5. **Self-Contained**: Auto-detects installation directory
-
-## Trade-offs and Limitations
-
-### Trade-offs
-
-**Symlinks Required**
-
-- Pros: Zero overhead, simple routing
-- Cons: Requires filesystem that supports symlinks (won't work on some Windows setups without WSL)
-
-**Framework Dependency**
-
-- Pros: Shared code, consistent UX
-- Cons: Utilities depend on framework structure
-
-**Bash/Zsh Only**
-
-- Pros: Available everywhere, no installation needed
-- Cons: Not as feature-rich as Python/Ruby for complex tasks
-- Note: Utilities can be written in any language, just invoked via bash wrapper
-
-### Limitations
-
-1. **Not a Package Manager**: Doesn't handle external dependencies
-2. **Not for Distribution**: Designed for personal/team use, not public distribution
-3. **No Versioned Dependencies**: Utilities use whatever framework version is installed
-4. **Filesystem Requirements**: Requires symlink support
-5. **PATH Configuration**: Requires adding `$UTILZ_HOME/bin` to PATH
-
-### When Not to Use Utilz
-
-- Distributing utilities to end users (use Homebrew, npm, etc.)
-- Utilities with complex dependencies (use proper package manager)
-- Cross-platform GUI applications (use appropriate framework)
-- High-performance requirements (use compiled language)
-- Team needs versioned utility distribution (use proper package system)
-
-### When to Use Utilz
-
-- Personal collection of CLI utilities
-- Team-shared internal tools
-- Rapid prototyping of command-line utilities
-- Learning bash best practices
-- Multi-machine utility synchronization (via git)
-
-## Summary
-
-Utilz provides a simple, consistent framework for managing command-line utilities through:
-
-- **Dispatcher pattern**: Single entry point routing to implementations
-- **Common library**: Shared functions for consistent UX
-- **Metadata system**: YAML files for configuration and dependencies
-- **Auto-detection**: Finds installation directory automatically
-- **Zero overhead**: Uses `exec` for direct execution
-- **Built-in testing**: Test runner with BATS framework
-
-The design prioritizes simplicity, consistency, and portability over features, making it ideal for personal productivity and team-shared internal tools.
+The [Developer Guide](developer-guide.md#writing-tests) says how to write a suite.

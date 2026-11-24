@@ -35,7 +35,7 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 ### Output Options
 
 - `-o, --output FILE` - Write to specified file
-- `-i, --in-place` - Edit input file in place
+- `-i, --in-place` - Edit input file in place; needs `FILE`, and cannot be used with `-o`
 
 ### Modes
 
@@ -96,11 +96,10 @@ With `--normalize-quotes`:
 
 ### Image Mode (--image)
 
-With `--image`, strips C2PA and AI-related metadata from images:
+With `--image`, cleanz reads one image `FILE` and needs `exiftool`. It does not read stdin or the clipboard, and it does not take `--detrope`.
 
-- C2PA content credentials manifest
-- AI generation provenance data
-- Creator/credit metadata from DALL-E, ChatGPT, Sora, Midjourney
+- With `--detect`, it lists the C2PA and AI-related metadata: C2PA, JUMBF, creator and credit fields, and names such as DALL-E, ChatGPT, Sora and Midjourney. With `-v`, it also prints all the metadata.
+- Without `--detect`, it strips all metadata from the image (`exiftool -all=`), C2PA included. It needs `-o FILE` or `-i`.
 
 ---
 

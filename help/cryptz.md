@@ -22,9 +22,9 @@ cryptz decrypt <input> [output]
 
 ## Description
 
-A thin, predictable wrapper over GPG for the two things you actually do with it: encrypt a file to a recipient, and decrypt one back. It decides the output filename for you unless you name one -- `encrypt` appends `.gpg`, `decrypt` strips it (or appends `.decrypted` when the input was not named `.gpg`) -- so the round trip needs no bookkeeping.
+A thin wrapper over GPG. It encrypts a file to a recipient, and decrypts a file back. If you do not name an output file, cryptz names it: `encrypt` appends `.gpg`, and `decrypt` strips `.gpg`. If the input name does not end in `.gpg`, `decrypt` appends `.decrypted`.
 
-It is not a key manager. It creates no keys, imports none, and edits no GPG configuration; the recipient must already be in your keyring. `gpg` itself is a hard requirement and is reported by `utilz doctor`.
+It is not a key manager. It creates no keys, imports no keys, and changes no GPG configuration. The recipient key must be in your keyring. cryptz requires `gpg`, and `utilz doctor` reports it.
 
 ---
 
@@ -39,9 +39,9 @@ It is not a key manager. It creates no keys, imports none, and edits no GPG conf
 
 ### Encrypt Options
 
-| Option              | Description                                              |
-| ------------------- | -------------------------------------------------------- |
-| `--email <address>` | Recipient key to encrypt to. Defaults to `$CRYPTZ_EMAIL` |
+| Option              | Description                                                                |
+| ------------------- | -------------------------------------------------------------------------- |
+| `--email <address>` | Recipient key. Defaults to `$CRYPTZ_EMAIL`, else to an address in the code |
 
 ### General Options
 
@@ -57,11 +57,14 @@ It is not a key manager. It creates no keys, imports none, and edits no GPG conf
 ### Basic Usage
 
 ```bash
-# Show help
-cryptz --help
+# Encrypt file.txt to file.txt.gpg, for the default recipient
+cryptz encrypt file.txt
 
-# Show version
-cryptz --version
+# Encrypt to a named output, for a named recipient
+cryptz encrypt --email user@example.com file.txt encrypted.gpg
+
+# Decrypt file.txt.gpg to file.txt
+cryptz decrypt file.txt.gpg
 ```
 
 ---
@@ -77,21 +80,21 @@ cryptz --version
 ## Environment
 
 - `UTILZ_HOME` - Root directory of Utilz framework
+- `CRYPTZ_EMAIL` - Default recipient for `encrypt`
 
 ---
 
 ## Exit Status
 
 - `0` - Success
-- `1` - General error
+- `1` - Error: no input, input not found, too many arguments, `gpg` not found, or `gpg` failed
 
 ---
 
 ## See Also
 
-- `utilz(1)` - Utilz framework dispatcher
-- `utilz-help(1)` - Show help for utilities
-- [cryptz README]($UTILZ_HOME/opt/cryptz/README.md) - Detailed documentation
+- `utilz help` - Utilz framework help
+- `gpg(1)` - GnuPG
 
 ---
 

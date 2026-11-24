@@ -1,13 +1,12 @@
 # Design Principles
 
-This document explains the philosophy behind Utilz, what problems it solves, and when to use it.
+This document explains the philosophy behind Utilz, what problems it solves, and when to use it. [Architecture](architecture.md) explains how it works.
 
 ## Table of Contents
 
 - [Core Philosophy](#core-philosophy)
 - [Design Principles](#design-principles)
 - [Problems Utilz Solves](#problems-utilz-solves)
-- [Target Use Cases](#target-use-cases)
 - [When to Use Utilz](#when-to-use-utilz)
 - [When NOT to Use Utilz](#when-not-to-use-utilz)
 - [Design Decisions](#design-decisions)
@@ -18,7 +17,7 @@ This document explains the philosophy behind Utilz, what problems it solves, and
 
 The framework prioritizes:
 
-1. **Simplicity**: Bash/zsh only, minimal dependencies
+1. **Simplicity**: A bash dispatcher and bash entry points, minimal dependencies
 2. **Consistency**: All utilities follow the same patterns
 3. **Portability**: One Homebrew install per machine
 4. **Maintainability**: Shared code in common library
@@ -30,9 +29,11 @@ Utilz is NOT trying to be a package manager, distribution system, or general-pur
 
 ### 1. Simple Over Feature-Rich
 
-**Principle**: Use bash/zsh and simple patterns over complex abstractions.
+**Principle**: Use bash and simple patterns over complex abstractions.
 
 **Why**: Bash is available on every Unix-like system. No installation, no version conflicts, no dependency hell.
+
+A utility's entry point is always a bash script. The script can call code in another language when the task needs it, eg prez calls a Rust crate and arngz loads Lua into Hammerspoon.
 
 **Example**:
 
@@ -59,9 +60,11 @@ help/<utility>.md            # Always: Help docs
 
 ### 3. Portable Over Optimized
 
-**Principle**: Works the same on macOS, Linux, BSD without modification.
+**Principle**: Works the same on macOS and Linux without modification.
 
 **Why**: Personal utilities should work on all your machines without tweaking.
+
+A utility that needs macOS declares it, and refuses by name on another platform. The [README](../README.md) lists which utilities need macOS.
 
 **Example**:
 
@@ -85,8 +88,8 @@ grep --perl-regexp "pattern" file.txt
 $ utilz list
 Available utilities:
 
-  mdagg           Markdown aggregator
-  logtool         Process log files
+  mdagg           Markdown aggregator for concatenating multiple markdown files into a single document
+  ...
 ```
 
 ### 5. Testable Over Quick-and-Dirty
@@ -98,8 +101,8 @@ Available utilities:
 **Example**:
 
 ```bash
-$ utilz test
-✓ All tests passed! (82 total)
+utilz test          # every suite, in a dev checkout
+utilz test mdagg    # one utility
 ```
 
 ### 6. Zero Overhead
@@ -124,7 +127,7 @@ exec "$UTIL_IMPL" "$@"  # Replace process, don't create subprocess
 
 ```bash
 # Framework finds itself
-UTILZ_HOME="$(determine_utilz_home)"
+UTILZ_HOME=$(determine_utilz_home)
 ```
 
 ## Problems Utilz Solves
@@ -139,8 +142,6 @@ UTILZ_HOME="$(determine_utilz_home)"
 ├── backup-notes
 ├── process-logs.py
 ├── sync-config
-├── convert-images
-├── cleanup-old-files
 └── ... (30+ scripts, different styles, no consistency)
 ```
 
@@ -149,19 +150,9 @@ UTILZ_HOME="$(determine_utilz_home)"
 - Hard to find utilities
 - Different help formats (some have --help, some don't)
 - Different error messages
-- Code duplication (every script parses args differently)
+- Code duplication
 
-**With Utilz**:
-
-```
-$ utilz list
-Available utilities:
-  mdagg - Markdown aggregator
-  backup - Backup notes to archive
-  logtool - Process and analyze logs
-  sync - Sync configuration files
-  ...
-```
+**With Utilz**: one dispatcher, one layout, and `utilz list` names every utility.
 
 ### Problem 2: Inconsistent UX
 
@@ -187,7 +178,6 @@ script1 -h            # Always works
 
 **Before**: Every script reimplements:
 
-- Argument parsing
 - Error handling
 - Logging
 - Color output
@@ -219,20 +209,9 @@ show_help "myutil"          # Consistent help display
 
 ### Problem 5: No Testing
 
-**Before**:
+**Before**: no test framework, ad-hoc manual testing, and fear of breaking existing utilities.
 
-- No test framework
-- Ad-hoc manual testing
-- Fear of breaking existing utilities
-
-**After**:
-
-```bash
-$ utilz test
-Testing: utilz (55 tests)
-Testing: mdagg (27 tests)
-✓ All tests passed!
-```
+**After**: every utility has a suite under `opt/<utility>/test/`, and `utilz test` runs them all.
 
 ### Problem 6: Poor Discoverability
 
@@ -250,93 +229,6 @@ utilz help mdagg          # How does it work?
 utilz doctor              # Is everything working?
 ```
 
-## Target Use Cases
-
-### Use Case 1: Personal Productivity Tools
-
-**Scenario**: You have 20+ small scripts for personal use across multiple machines.
-
-**Solution**: Put them all in Utilz framework for consistency and portability.
-
-**Example Utilities**:
-
-- Backup notes to archive
-- Convert image formats
-- Process log files
-- Sync configuration files
-- Generate project scaffolds
-
-### Use Case 2: Multi-Machine Synchronization
-
-**Scenario**: You work on MacBook, Linux desktop, and remote servers. Want same tools everywhere.
-
-**Solution**: Keep Utilz in git, clone to each machine.
-
-**Workflow**:
-
-```bash
-# Machine 1: Add new utility
-$ utilz generate cleanup "Clean old files"
-$ git commit -am "Add cleanup utility"
-$ git push
-
-# Machine 2: Get new utility
-$ git pull
-$ cleanup --help  # Works immediately
-```
-
-### Use Case 3: Team-Shared Internal Tools
-
-**Scenario**: Team needs shared utilities for internal workflows.
-
-**Solution**: Team git repository with Utilz utilities.
-
-**Example**:
-
-```bash
-# Team repo
-git clone https://github.com/company/team-utils
-cd team-utils
-export PATH="$(pwd)/bin:$PATH"   # the dispatcher finds its tree from its own path
-
-# Everyone has same tools
-$ utilz list
-deploy-staging
-generate-report
-check-services
-backup-database
-```
-
-### Use Case 4: Rapid Prototyping
-
-**Scenario**: Need to create a quick utility to process some files.
-
-**Solution**: Use generator to scaffold, write implementation, test.
-
-**Workflow**:
-
-```bash
-$ utilz generate process-csv "Process CSV files"
-# 30 seconds later: complete utility scaffold
-$ vim opt/process-csv/process-csv
-# Write implementation
-$ utilz test process-csv
-$ process-csv data.csv  # Done!
-```
-
-### Use Case 5: Learning Best Practices
-
-**Scenario**: Want to learn bash best practices.
-
-**Solution**: Study Utilz framework and existing utilities.
-
-**Benefits**:
-
-- See proper error handling (`set -euo pipefail`)
-- Learn argument parsing patterns
-- Understand testing with BATS
-- See consistent code organization
-
 ## When to Use Utilz
 
 Use Utilz when:
@@ -347,7 +239,7 @@ Use Utilz when:
 4. **Consistency matters**: You want all utilities to work the same way
 5. **Portability matters**: Need utilities to work on macOS, Linux, etc.
 6. **Testing matters**: You want your utilities to be tested
-7. **Quick prototyping**: Need to create new utility quickly
+7. **Quick prototyping**: Need to create new utility quickly (`utilz generate` makes the scaffold)
 
 ## When NOT to Use Utilz
 
@@ -370,7 +262,7 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Wrong**: Utility with 20 npm packages, Python venvs, etc.
 
-**Why Not**: Utilz doesn't manage dependencies beyond checking if commands exist.
+**Why Not**: Utilz checks that commands exist. Beyond that, it gives only `ensure_venv` for a utility that needs a Python venv.
 
 **Instead**: Use language-specific package managers (npm, pip, cargo, etc.)
 
@@ -378,7 +270,7 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Wrong**: Desktop applications with UI
 
-**Why Not**: Utilz is for command-line utilities only.
+**Why Not**: Utilz is for command-line utilities. A utility can install and launch a small companion app, as menuz does, but the utility stays the command-line entry point.
 
 **Instead**: Use appropriate GUI framework (Electron, Qt, etc.)
 
@@ -388,13 +280,13 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Why Not**: Bash is not optimized for heavy computation.
 
-**Instead**: Use compiled language (Rust, Go, C++) or specialized tools.
+**Instead**: Use compiled language (Rust, Go, C++) or specialized tools. A utility's bash entry point can call compiled code, as prez does.
 
 ### 5. Cross-Platform (Windows Native)
 
 **Wrong**: Need native Windows support (without WSL)
 
-**Why Not**: Requires symlinks, bash/zsh runtime.
+**Why Not**: Requires symlinks and a bash runtime.
 
 **Instead**: Use PowerShell, or language with native Windows support.
 
@@ -453,9 +345,9 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Trade-off**: Dispatcher must validate routing.
 
-### Why Bash/Zsh?
+### Why Bash?
 
-**Decision**: Framework written in bash/zsh.
+**Decision**: Framework written in bash.
 
 **Alternatives Considered**:
 
@@ -463,7 +355,7 @@ brew install myutil  # one utility, carrying the whole framework with it
 - Ruby
 - Node.js
 
-**Why Bash/Zsh**:
+**Why Bash**:
 
 - Available on every Unix-like system
 - No installation required
@@ -546,23 +438,3 @@ brew install myutil  # one utility, carrying the whole framework with it
 - Common library provides extensibility
 
 **Trade-off**: Can't customize dispatcher behavior per utility.
-
-## Summary
-
-Utilz is designed for **personal and team-internal CLI utilities** that prioritize:
-
-- **Simplicity**: Bash/zsh, minimal dependencies
-- **Consistency**: Same structure for all utilities
-- **Portability**: Works on all Unix-like systems
-- **Discoverability**: Easy to find and use utilities
-- **Testability**: Built-in testing framework
-
-It's NOT designed for:
-
-- Public distribution
-- Complex dependencies
-- GUI applications
-- High-performance computing
-- Native Windows support
-
-The framework makes trade-offs to optimize for the 80% use case: personal productivity utilities that you use across multiple machines.

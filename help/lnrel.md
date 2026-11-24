@@ -23,9 +23,11 @@ lnrel <target> [<link_name>]
 
 lnrel creates symlinks using relative paths instead of absolute ones. Given a target and an optional link name, it computes the relative path from the link's directory to the target using GNU `realpath`, then creates a symlink with that relative path.
 
-Relative symlinks are portable — they survive directory tree moves, making them ideal for projects, dotfile repos, and any situation where absolute paths would break.
+A relative symlink still resolves when you move the whole tree that holds the link and its target.
 
-The target does not need to exist; `lnrel` uses `realpath -m` to resolve paths without requiring the file to be present, allowing creation of dangling symlinks for future targets.
+The target does not need to exist. `lnrel` uses `realpath -m`, which resolves a path that is not present, so you can make a dangling symlink for a future target.
+
+lnrel removes every backslash from both arguments, so a tab-completed path such as `"foo\ bar"` names `foo bar`. lnrel does not replace a file that is already at the link name: `ln` refuses, and lnrel exits 1.
 
 ---
 
@@ -109,7 +111,7 @@ macOS ships BSD `realpath` which lacks the `-m` and `--relative-to` flags. `lnre
 ## Exit Status
 
 - `0` - Success
-- `1` - Error (missing arguments, directory not found, realpath not available, ln failed)
+- `1` - Error (no target, too many arguments, unknown option, link directory not found, GNU realpath not available, ln failed)
 
 ---
 

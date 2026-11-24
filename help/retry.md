@@ -25,12 +25,14 @@ Retry command until success with configurable wait time.
 
 Executes a command repeatedly until it succeeds or max retries is reached.
 
+retry joins all its remaining arguments with spaces and runs the result with `eval` in a subshell. The command's stderr goes to stdout. The first run counts as one attempt.
+
 ---
 
 ## Options
 
-- `-w, --wait <seconds>` - Wait time between retries (default: 10)
-- `-r, --retries <count>` - Maximum retry attempts, 0 for unlimited (default: 0)
+- `-w, --wait <seconds>` - Wait time between retries, a whole number (default: 10)
+- `-r, --retries <count>` - Maximum attempts, including the first run, 0 for unlimited (default: 0)
 - `-h, --help` - Show help message
 - `--version` - Show version information
 
@@ -73,15 +75,14 @@ retry -w 5 -r 10 "npm install"
 ## Exit Status
 
 - `0` - Success
-- `1` - General error
+- `1` - Error: no command, unknown option, or a bad `--wait` or `--retries` value
+- Other - The command's own exit status from the last attempt, when the attempts run out
 
 ---
 
 ## See Also
 
-- `utilz(1)` - Utilz framework dispatcher
-- `utilz-help(1)` - Show help for utilities
-- [retry README]($UTILZ_HOME/opt/retry/README.md) - Detailed documentation
+- `utilz help` - Utilz framework help
 
 ---
 
