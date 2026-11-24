@@ -3,6 +3,7 @@
   "text": "The rust job carries `timeout-minutes: 25` (issue 0131's point 5), with the measured leg durations in its comment.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "tests.yml:246 at d429526c carries timeout-minutes: 25 on the rust job, with the measured leg durations in its comment at 242-245 (runs 41127529723, 41140741047 and 41127538028; issue 0131's point 5). Landed by ST0031/02 at 7c0b9538, pushed by hv in 60dd49a0..d429526c, and read by vc in CI run 45374943717 (attempt 1, success)."
   }
 }
