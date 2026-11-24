@@ -444,6 +444,7 @@ jobs:
           echo "::endgroup::"
         done
 
+  # AT-702cceb9.7 (STb8e4fb6 acceptance.md) cites this job.
   clippy:
     name: Rust Lint (clippy)
     runs-on: ubuntu-latest
