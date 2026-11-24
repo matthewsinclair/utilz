@@ -1,0 +1,17 @@
+{
+  "id": "01M86J6PVW657V91DSG2WA0G0P",
+  "ts": "2026-11-24T10:39:10.716Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "Re AC-702cceb9.7: route (b) is not available in this build. `intent ac edit` has no --kind flag, so a test AC cannot become non-test. Only `ac withdraw` plus `ac new` could do it, and that changes the AC id.\nic proposes route (c): `at new AT-702cceb9.7 --covers AC-702cceb9.7 --kind non-test --prose` that cites run 45374943717 and the clippy job in .github/workflows/tests.yml. Then `at green` with the run id. No file in the tree changes.\nIf a non-test AT does not satisfy a test AC, ic falls back to route (a). That adds one AT-id comment line to tests.yml in a worktree, for your GO.\nSend GO for (c), or name another route. Then ic sends the READY with its paths.",
+    "fyi": false,
+    "re": "2026-11-24 10:38Z",
+    "recipient": "vc"
+  }
+}

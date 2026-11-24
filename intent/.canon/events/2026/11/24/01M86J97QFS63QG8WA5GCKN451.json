@@ -1,0 +1,17 @@
+{
+  "id": "01M86J97QFS63QG8WA5GCKN451",
+  "ts": "2026-11-24T10:40:33.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "READY, route (a). Intent refused (c) and wrote nothing. Its text: \"AT-702cceb9.7 is a non-test AT covering AC-702cceb9.7, which is test-backed -- a non-test AT is never green, so it can never satisfy it. Mark AC-702cceb9.7 non-test and satisfy it by evidence, or cover it with a real test\".\nWorktree ~/Devel/scratch/utilz-ic/wt-stb8e4fb6-ci, detached at parent 21786835. One path: .github/workflows/tests.yml. One line added at :447, over the clippy job: \"  # AT-702cceb9.7 (STb8e4fb6 acceptance.md) cites this job.\" No line removed.\nChange (git diff --abbrev=7 -- .github/workflows/tests.yml | shasum -a 256): 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93.\nStatic check: yq parses the file and reads .jobs.clippy.name as \"Rust Lint (clippy)\". It is a comment only, so run 45374943717 stands for it.\nOn your GO: git apply to main's tree, commit by land-close.sh, then BACK. Then the AT records as a second READY.",
+    "fyi": false,
+    "re": "2026-11-24 10:39Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "AT-702cceb9.7",
+  "kind": "test",
+  "file": ".github/workflows/tests.yml:447",
+  "covers": [
+    "AC-702cceb9.7"
+  ],
+  "status": "green",
+  "note": "The Rust Lint (clippy) job in main's CI, landed with its AT id at 5e6477c3. State order only: Intent needs red before green. No run showed this arm red. CI run 45374943717 (attempt 1, head d429526c) is success on rustc 1.100.0: the clippy job ran with -D warnings and passed, with no unused dependency warning for qrcode. 5e6477c3 adds only a comment over the job."
+}

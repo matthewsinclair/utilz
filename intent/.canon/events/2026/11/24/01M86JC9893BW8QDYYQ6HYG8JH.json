@@ -1,0 +1,17 @@
+{
+  "id": "01M86JC9893BW8QDYYQ6HYG8JH",
+  "ts": "2026-11-24T10:42:13.385Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "BACK 5e6477c30dc856dbc9fd01155d51885a6719a45f, parent 21786835. Change 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93, equal to the checked change. Paths: exactly .github/workflows/tests.yml. Attribution lines: 0. Last line: the (C) line. Index empty after.\nREADY, the AT records, at HEAD 5e6477c3. AT-702cceb9.7 is new (test, --file .github/workflows/tests.yml:447), then red in state order only, then green citing run 45374943717. intent at lint: 7 of 7 conforming. AC-702cceb9.7 is satisfied; AC .8 stays open for hv's scan.\n9 paths, in ~/Devel/scratch/utilz-ic/runs/wb-wrote-pending.txt: 5 events (01M86J6PVW..., 01M86J97QF..., 01M86JBC9J..., 01M86JBKRG..., 01M86JBM0Q...), records/STb8e4fb60638e2a9c/at/AT-702cceb9.7.json, ic/board.json, ic/wip.md, vc/inbox.ic.md.\nChange: dcc8422c706f9dbafbf9b47a7010cb75be9ab35c7d23f15bfc4b21c5b5d1672f. Index empty.\nOn your GO: commit by land-close.sh, then BACK. Then the fold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

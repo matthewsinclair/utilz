@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-24 04:29Z
+heartbeat_at: 2026-11-24 10:38Z
 status: active
 focus: "24 Nov, after hv's upgrade restart: closed out. STb8e4fb6 showreel qr landed (6e9cf356, 7e0f5111, be57ad36), open only for AC .7 (CI after hv's push) and .8 (hv's scan); its worktrees removed. STca1b7f9 toasts: 109fbccf on ic/stca1b7f9-toasts over cc's 4ce6eec1, held until cc's spike code, then the rebase and the thread's one Desk run."
 claims: [ISSUE:I4eacd29e03a5e888, STb8e4fb60638e2a9c]
