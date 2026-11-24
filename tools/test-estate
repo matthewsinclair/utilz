@@ -24,8 +24,8 @@
 # 3.2.57, and Homebrew stays behind it on the path, so git, yq and gh still
 # resolve.
 #
-# IT LIVES IN tools/, NOT bin/, BECAUSE bin/ IS PUBLISHED, the same reason
-# ci-state does: a release tool under bin/ would ship to every install.
+# IT LIVES IN tools/, NOT bin/, BECAUSE bin/ IS PUBLISHED: a release tool
+# under bin/ would ship to every install.
 #
 set -euo pipefail
 

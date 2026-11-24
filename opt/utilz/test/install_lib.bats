@@ -307,35 +307,26 @@ EOF
 # ci-state (issue 0016): CI's verdict on the published commit, recorded
 # ============================================================================
 
-# A gh that waits <delay> seconds, answers <stdout>, says <stderr> and exits
-# <rc>, and records the directory it was asked from and the arguments.
-make_gh_stub() {
-  local stub="$1" answer="$2" rc="${3:-0}" message="${4:-}" delay="${5:-0}" jobs="${6:-}"
-  cat > "$stub" <<EOF
+# A bin/devbin in <src> that waits <delay> seconds, answers <stdout>, says
+# <stderr> and exits <rc>. It records the directory it was asked from and its
+# arguments in $BATS_TEST_TMPDIR/devbin.asked, and the cut's ref it was handed,
+# DEVBIN_RELEASE_TAG and DEVBIN_RELEASE_PASSED_OVER or `unset` for each, in
+# devbin.env. A publish asks the release core's reader, `bin/devbin ci-state`,
+# in the tree it publishes (ST0031/01). Left untracked, the stub is no part of
+# the runtime set, which leaves bin/devbin out (UTILZ_RUNTIME_EXCLUDE_RE), so
+# the tree stays clean.
+make_devbin_stub() {
+  local src="$1" answer="$2" rc="${3:-0}" message="${4:-}" delay="${5:-0}"
+  cat > "$src/bin/devbin" <<EOF
 #!/bin/sh
-# TWO QUESTIONS, TWO ANSWERS (issue 0062). install_ci_state asks \`run list\`
-# for the runs on a commit; install_ci_jobs asks \`run view\` for one run's
-# jobs, and only when the verdict is a conclusion that is not success. A stub
-# that answered the run list to both would feed the jobs reader rows it was
-# never given, so the arms are told apart here rather than by luck.
-case "\$*" in
-  *"run view"*)
-    { pwd -P; printf '%s\n' "\$*"; } > "$stub.asked-jobs"
-    # No jobs answer configured means "this read did not work", which is the
-    # case that must add NOTHING to the detail. It keeps every expectation
-    # written before 0062 exactly as it was.
-    [ -n "$jobs" ] || exit 1
-    printf '%s\n' "$jobs"
-    exit 0
-    ;;
-esac
-{ pwd -P; printf '%s\n' "\$*"; } > "$stub.asked"
+{ pwd -P; printf '%s\n' "\$*"; } > "$BATS_TEST_TMPDIR/devbin.asked"
+printf '%s %s\n' "\${DEVBIN_RELEASE_TAG-unset}" "\${DEVBIN_RELEASE_PASSED_OVER-unset}" > "$BATS_TEST_TMPDIR/devbin.env"
 sleep $delay
 [ -n "$answer" ] && printf '%s\n' "$answer"
 [ -n "$message" ] && printf '%s\n' "$message" >&2
 exit $rc
 EOF
-  chmod +x "$stub"
+  chmod +x "$src/bin/devbin"
 }
 
 # Echo <manifest>'s CI verdict as "<state> <detail>", or nothing.
@@ -346,191 +337,152 @@ ci_state_row() {
   [[ -n "$state" ]] && printf '%s %s\n' "$state" "$detail"
 }
 
-@test "AT08: a publish asks CI about the commit it publishes and records the answer (issue 0016)" {
-  local src="$BATS_TEST_TMPDIR/src-ci-publish" dst="$BATS_TEST_TMPDIR/dst-ci-publish" gh="$BATS_TEST_TMPDIR/gh"
-  make_fake_src "$src"
-  make_gh_stub "$gh" "completed|success|105"
+# The verdict words <function>'s case in <file> takes, as "a|b|c": the first
+# line in the function whose first word is green.
+verdict_list() {
+  awk -v fn="$2() {" 'index($0, fn) == 1 { f = 1 } f && $1 == "green" { sub(/\).*/, ""); gsub(/[ \t]/, ""); print; exit }' "$1"
+}
 
-  run run_install_function "UTILZ_HOME='$src'; INSTALL_GH='$gh'; install_verb_install --prefix '$dst'"
+# Assert the reader was asked about <src>'s HEAD alone, from inside <src>.
+assert_ci_asked() {
+  local src="$1"
+  run cat "$BATS_TEST_TMPDIR/devbin.asked"
   assert_success
-  [ "$(ci_state_row "$dst/manifest.sha256")" = "success 105" ] \
-    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_output "$(cd "$src" && pwd -P)
+ci-state $(git -C "$src" rev-parse HEAD)"
+}
 
-  # It asked about the commit being published, of the workflow CI runs, from
-  # inside the tree, so gh finds the repository from the tree's own remotes.
-  run cat "$gh.asked"
-  assert_output_contains "$(cd "$src" && pwd -P)"
-  assert_output_contains "run list --commit $(git -C "$src" rev-parse HEAD) --workflow tests.yml"
+@test "AT08: a publish asks the release core's reader about the commit it publishes, from the tree, and records its word and detail (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-publish" dst="$BATS_TEST_TMPDIR/dst-ci-publish"
+  make_fake_src "$src"
+  make_devbin_stub "$src" "$(printf 'green\trun 105')"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "green run 105" ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_ci_asked "$src"
+}
+
+@test "AT08: a reader that exits non-zero records unknown with its own first line, never the verdict it printed (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-refused" dst="$BATS_TEST_TMPDIR/dst-ci-refused"
+  make_fake_src "$src"
+  make_devbin_stub "$src" "$(printf 'green\trun 106')" 1 "release.repo cannot be read"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "unknown bin/devbin ci-state exited 1: release.repo cannot be read" ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_ci_asked "$src"
+
+  # With nothing on stderr, what it printed is what it said.
+  make_devbin_stub "$src" "$(printf 'green\trun 109')" 1
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst-quiet'"
+  assert_success
+  [ "$(ci_state_row "$dst-quiet/manifest.sha256")" = "unknown bin/devbin ci-state exited 1: green run 109" ] \
+    || fail "recorded: $(ci_state_row "$dst-quiet/manifest.sha256")"
+}
+
+@test "AT08: a reader that prints nothing records unknown, and says so (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-silent" dst="$BATS_TEST_TMPDIR/dst-ci-silent"
+  make_fake_src "$src"
+  make_devbin_stub "$src" "" 0 "devbin: nothing to say"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "unknown bin/devbin ci-state printed nothing" ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_ci_asked "$src"
+}
+
+@test "AT08: a reader that prints a word that is no verdict records unknown with the line it printed (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-wordless" dst="$BATS_TEST_TMPDIR/dst-ci-wordless"
+  make_fake_src "$src"
+  # gh's own word for a green run, which is no verdict of the core's.
+  make_devbin_stub "$src" "$(printf 'success\t107')"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = 'unknown bin/devbin ci-state printed "success 107", which is no verdict' ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_ci_asked "$src"
+}
+
+@test "AT08: each verdict word the core takes from a query is recorded as itself, with its detail (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-words" words word row
+  local -a list
+  make_fake_src "$src"
+  words=$(verdict_list "$UTILZ_HOME/bin/.devbin/lib/release.steps" release_ci_verdict)
+  [ -n "$words" ] || fail "found no verdict list in the core's release_ci_verdict"
+  IFS='|' read -r -a list <<<"$words"
+  for word in "${list[@]}"; do
+    make_devbin_stub "$src" "$(printf '%s\trun for %s' "$word" "$word")"
+    run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$BATS_TEST_TMPDIR/dst-ci-$word'"
+    assert_success
+    row=$(ci_state_row "$BATS_TEST_TMPDIR/dst-ci-$word/manifest.sha256")
+    [ "$row" = "$word run for $word" ] || fail "the reader said $word, and the publish recorded: $row"
+  done
+}
+
+@test "AT08: the publish takes the very verdict words the core's release_ci_verdict takes (ST0031/01)" {
+  local core mine
+  core=$(verdict_list "$UTILZ_HOME/bin/.devbin/lib/release.steps" release_ci_verdict)
+  mine=$(verdict_list "$UTILZ_HOME/opt/utilz/lib/install.sh" install_ci_verdict)
+  [ -n "$core" ] || fail "found no verdict list in the core's release_ci_verdict"
+  [ "$mine" = "$core" ] || fail "install_ci_verdict takes $mine, and the core's release_ci_verdict takes $core"
+}
+
+@test "AT08: a cut's ref left in the environment never reaches the reader, so it reads the commit's own runs (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-env" dst="$BATS_TEST_TMPDIR/dst-ci-env"
+  make_fake_src "$src"
+  make_devbin_stub "$src" "$(printf 'green\trun 108')"
+
+  run run_install_function "export DEVBIN_RELEASE_TAG=candidate/9.9.9 DEVBIN_RELEASE_PASSED_OVER=1; UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "green run 108" ] || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  run cat "$BATS_TEST_TMPDIR/devbin.env"
+  assert_success
+  assert_output "unset unset"
+}
+
+@test "AT08: a reader that outlives INSTALL_CI_DEADLINE is stopped and records unknown, the publish not waiting on it (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-slow" dst="$BATS_TEST_TMPDIR/dst-ci-slow" deadline=1 delay=10 t0
+  make_fake_src "$src"
+  make_devbin_stub "$src" "$(printf 'green\trun 104')" 0 "" "$delay"
+
+  t0=$SECONDS
+  run run_install_function "UTILZ_HOME='$src'; INSTALL_CI_DEADLINE=$deadline; install_verb_install --prefix '$dst'"
+  assert_success
+  [ $((SECONDS - t0)) -lt "$delay" ] || fail "the publish waited $((SECONDS - t0))s on a reader given ${deadline}s"
+  [ "$(ci_state_row "$dst/manifest.sha256")" = "unknown bin/devbin ci-state did not answer within ${deadline}s" ] \
+    || fail "recorded: $(ci_state_row "$dst/manifest.sha256")"
+  assert_ci_asked "$src"
+}
+
+@test "AT08: a tree with no reader to run records unknown, naming the tree (ST0031/01)" {
+  local src="$BATS_TEST_TMPDIR/src-ci-none" dst="$BATS_TEST_TMPDIR/dst-ci-none" row
+  make_fake_src "$src"
+
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$dst'"
+  assert_success
+  row=$(ci_state_row "$dst/manifest.sha256")
+  [[ "$row" == "unknown bin/devbin ci-state could not run in $src (exit 127)"* ]] || fail "recorded: $row"
 }
 
 @test "AT08: install_manifest_write records the CI state it is handed, and unknown when handed none (issue 0016)" {
   local src="$BATS_TEST_TMPDIR/src-ci-write" out="$BATS_TEST_TMPDIR/m" state
   make_fake_src "$src"
-  state=$(printf 'failure\t106')
+  state=$(printf 'failed\trun 106')
 
   run run_install_function "install_manifest_write '$src' '$out' '$state'"
   assert_success
-  [ "$(ci_state_row "$out")" = "failure 106" ] || fail "recorded: $(ci_state_row "$out")"
+  [ "$(ci_state_row "$out")" = "failed run 106" ] || fail "recorded: $(ci_state_row "$out")"
 
   # Written outside a publish, with no answer to record: unknown, and why.
   run run_install_function "install_manifest_write '$src' '$out'"
   assert_success
   [ "$(ci_state_row "$out")" = "unknown not asked: this manifest was not written by a publish" ] \
     || fail "recorded: $(ci_state_row "$out")"
-}
-
-@test "AT08: install_ci_state reads each answer CI gives as itself (issue 0016)" {
-  local src="$BATS_TEST_TMPDIR/src-ci-answers" gh="$BATS_TEST_TMPDIR/gh" sha
-  make_fake_src "$src"
-  sha=$(git -C "$src" rev-parse HEAD)
-
-  local answer want
-  while IFS=';' read -r answer want; do
-    make_gh_stub "$gh" "$answer"
-    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
-    assert_success
-    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
-      || fail "gh answering '$answer' gave '$output', not '$want'"
-  done <<'ROWS'
-completed|success|101;success 101
-completed|failure|102;failure 102
-in_progress||103;pending 103
-completed|null|104;unknown a completed run with no conclusion: 104
-;none no run
-ROWS
-}
-
-@test "AT08: install_ci_state reads every run on the commit and answers with the worst (issue 0052)" {
-  # A release commit carries TWO runs since the macOS legs moved to release
-  # tags (0046): the branch push, and the tag push that runs them. GitHub
-  # documents no order between the two push events of one `git push`, so the
-  # verdict is the worst of every run on the commit and never the newest one.
-  local src="$BATS_TEST_TMPDIR/src-ci-many" gh="$BATS_TEST_TMPDIR/gh" sha
-  make_fake_src "$src"
-  sha=$(git -C "$src" rev-parse HEAD)
-
-  local rows want
-  while IFS=';' read -r rows want; do
-    make_gh_stub "$gh" "$(printf '%b' "$rows")"
-    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
-    assert_success
-    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
-      || fail "runs '$rows' gave '$output', not '$want'"
-  done <<'ROWS'
-completed|success|201\ncompleted|failure|202;failure 202 of 2 runs on this commit
-completed|failure|203\ncompleted|success|204;failure 203 of 2 runs on this commit
-completed|success|205\nin_progress||206;pending 206 of 2 runs on this commit
-completed|success|207\ncompleted|success|208;success 207 of 2 runs on this commit
-completed|success|209;success 209
-ROWS
-
-  # AND THE REQUEST ITSELF, because no answer can prove it: the stub prints
-  # what it is told whatever it was asked, so a `--limit 1` that reads one run
-  # of two passes every case above. The number here is the guard.
-  run cat "$gh.asked"
-  assert_output_contains "--limit 20"
-}
-
-@test "AT08: a run that concluded without success is asked WHICH jobs failed (issue 0062)" {
-  # RED-FIRST SHAPE: before 0062 every row below answered `failure 301` and
-  # nothing else, so "the suite went red" and "no job ran at all" -- opposite
-  # actions for whoever is reading mid-cut -- were the same string.
-  #
-  # The last two rows are the ones a run-level read can never give. A run that
-  # concluded `failure` with no FAILING job in it was refused rather than
-  # tested, and nothing about the code was measured.
-  local src="$BATS_TEST_TMPDIR/src-ci-jobs" gh="$BATS_TEST_TMPDIR/gh" sha
-  make_fake_src "$src"
-  sha=$(git -C "$src" rev-parse HEAD)
-
-  local jobs want
-  while IFS=';' read -r jobs want; do
-    make_gh_stub "$gh" "completed|failure|301" 0 "" 0 "$(printf '%b' "$jobs")"
-    run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
-    assert_success
-    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
-      || fail "jobs '$jobs' gave '$output', not '$want'"
-  done <<'ROWS'
-failure|Rust (ubuntu-latest);failure 301 (failed: Rust (ubuntu-latest))
-success|Test on Ubuntu\nfailure|Rust (ubuntu-latest);failure 301 (failed: Rust (ubuntu-latest))
-failure|a\nfailure|b\nfailure|c\nfailure|d;failure 301 (failed: a, b, c and 1 more)
-success|Test on Ubuntu\nskipped|Test on macOS;failure 301 (no job failed, so the run was refused rather than tested)
-ROWS
-}
-
-@test "AT08: a run whose jobs cannot be read still answers, and adds nothing (issue 0062)" {
-  # THE CONTROL FOR THE TEST ABOVE. install_ci_state's contract is that it
-  # never fails and never guesses, so a second question it could not get an
-  # answer to must leave the first answer exactly as it was -- the run id is
-  # still there for a human to follow. Without this, a gh that answers the run
-  # list and refuses the job list would turn a usable verdict into a worse one.
-  local src="$BATS_TEST_TMPDIR/src-ci-nojobs" gh="$BATS_TEST_TMPDIR/gh" sha
-  make_fake_src "$src"
-  sha=$(git -C "$src" rev-parse HEAD)
-
-  # No sixth argument: the stub refuses `run view`.
-  make_gh_stub "$gh" "completed|failure|302"
-  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
-  assert_success
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "failure 302" ] \
-    || fail "an unreadable job list gave '$output', not 'failure 302'"
-
-  # AND IT ASKED: the enrichment is attempted rather than quietly skipped.
-  [ -f "$gh.asked-jobs" ] || fail "install_ci_state never asked for the jobs"
-  run cat "$gh.asked-jobs"
-  assert_output_contains "run view 302"
-}
-
-@test "AT08: a SUCCESS verdict asks no second question (issue 0062)" {
-  # The enrichment is on the not-success path alone, so the common case costs
-  # exactly the one call it always did. Without this the green path would grow
-  # a per-release gh call nobody asked for and nobody would notice.
-  local src="$BATS_TEST_TMPDIR/src-ci-green" gh="$BATS_TEST_TMPDIR/gh" sha
-  make_fake_src "$src"
-  sha=$(git -C "$src" rev-parse HEAD)
-
-  make_gh_stub "$gh" "completed|success|303" 0 "" 0 "failure|Should Not Be Read"
-  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' '$sha'"
-  assert_success
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "success 303" ] \
-    || fail "green gave '$output', not 'success 303'"
-  [ ! -f "$gh.asked-jobs" ] || fail "a green verdict asked for jobs: $(cat "$gh.asked-jobs")"
-}
-
-@test "AT08: install_ci_state answers unknown when gh is not installed, and says so (issue 0016)" {
-  local src="$BATS_TEST_TMPDIR/src-ci-absent"
-  make_fake_src "$src"
-
-  run run_install_function "INSTALL_GH='$BATS_TEST_TMPDIR/no-such-gh'; install_ci_state '$src' deadbeef"
-  assert_success
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $BATS_TEST_TMPDIR/no-such-gh is not installed" ] \
-    || fail "answered: $output"
-}
-
-@test "AT08: install_ci_state answers unknown with gh's own first line when gh refuses, never success (issue 0016)" {
-  # The refusal gh gives non-interactively when two remotes point at GitHub
-  # and no default is set: the failure the design names.
-  local src="$BATS_TEST_TMPDIR/src-ci-refused" gh="$BATS_TEST_TMPDIR/gh"
-  local refusal="multiple remotes detected [origin upstream]. please specify which repo to use with -R"
-  make_fake_src "$src"
-  make_gh_stub "$gh" "" 1 "$refusal"
-
-  run run_install_function "INSTALL_GH='$gh'; install_ci_state '$src' deadbeef"
-  assert_success
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $refusal" ] || fail "answered: $output"
-}
-
-@test "AT08: install_ci_state kills a gh that outlives the deadline and answers unknown, without waiting on it (issue 0016)" {
-  local src="$BATS_TEST_TMPDIR/src-ci-slow" gh="$BATS_TEST_TMPDIR/gh"
-  make_fake_src "$src"
-  make_gh_stub "$gh" "completed|success|104" 0 "" 5
-
-  local t0=$SECONDS
-  run run_install_function "INSTALL_GH='$gh'; INSTALL_CI_DEADLINE=1; install_ci_state '$src' deadbeef"
-  assert_success
-  [ $((SECONDS - t0)) -lt 4 ] || fail "the query waited $((SECONDS - t0))s on a gh given 1s"
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $gh did not answer within 1s" ] \
-    || fail "answered: $output"
 }
 
 @test "AT08: the verifier reads the CI lines as header, and the publish's path count leaves them out (issue 0016)" {
@@ -545,7 +497,7 @@ ROWS
 
   # The lines written here rather than by the writer, so this half does not
   # rest on the writer's: a header line in another value is still a header.
-  sed -i.bak -e 's/^# ci_state: .*/# ci_state: success/' -e 's/^# ci_detail: .*/# ci_detail: 101/' "$m" && rm -f "$m.bak"
+  sed -i.bak -e 's/^# ci_state: .*/# ci_state: green/' -e 's/^# ci_detail: .*/# ci_detail: run 101/' "$m" && rm -f "$m.bak"
   run run_install_function "install_manifest_check '$dst'"
   assert_success
   assert_output ""
@@ -764,74 +716,14 @@ make_fake_install() {
 }
 
 # ============================================================================
-# tools/ci-state: install_ci_state in the release core's words (ST0019 WP-01)
+# ST0019's AT01 (AC-01.3), retired with Utilz's own CI reader (ST0031/01)
 # ============================================================================
-#
-# The stub is found on PATH under the name `gh`, because the script is run as
-# the release core runs it, as a command, and INSTALL_GH can only be moved by
-# code that has sourced install.sh. Put first on PATH, it is the gh the real
-# install_ci_state asks, so these drive the whole path the core will drive.
 
-# Run tools/ci-state on <sha> with a gh stub on PATH that answers <answer>,
-# exiting <rc> with <message> on stderr.
-run_ci_state() {
-  local sha="$1" answer="$2" rc="${3:-0}" message="${4:-}"
-  local dir="$BATS_TEST_TMPDIR/gh-on-path"
-  mkdir -p "$dir"
-  make_gh_stub "$dir/gh" "$answer" "$rc" "$message"
-  run env PATH="$dir:$PATH" "$UTILZ_HOME/tools/ci-state" "$sha"
-}
-
-@test "AT01 (ST0019 AC-01.3): tools/ci-state answers each of the core's five verdicts, one per CI answer" {
-  local answer want
-  while IFS=';' read -r answer want; do
-    run_ci_state deadbeef "$answer"
-    assert_success
-    [ "$(printf '%s' "$output" | tr '\t' ' ')" = "$want" ] \
-      || fail "gh answering '$answer' gave '$output', not '$want'"
-  done <<'ROWS'
-completed|success|101;green 101
-completed|failure|102;failed failure: 102
-completed|cancelled|103;failed cancelled: 103
-in_progress||104;pending 104
-;none no run
-ROWS
-}
-
-@test "AT01 (ST0019 AC-01.3): tools/ci-state answers unknown with gh's own reason when gh refuses, never green" {
-  local refusal="multiple remotes detected [origin upstream]. please specify which repo to use with -R"
-  run_ci_state deadbeef "" 1 "$refusal"
-  assert_success
-  [ "$(printf '%s' "$output" | tr '\t' ' ')" = "unknown $refusal" ] || fail "answered: $output"
-}
-
-@test "AT01 (ST0019 AC-01.3): tools/ci-state asks through install_ci_state, about the sha it is given, from the tree" {
-  local sha
-  sha=$(git -C "$UTILZ_HOME" rev-parse HEAD)
-  run_ci_state "$sha" "completed|success|105"
-  assert_success
-
-  # The query install_ci_state makes, word for word: no second gh query exists.
-  run cat "$BATS_TEST_TMPDIR/gh-on-path/gh.asked"
-  assert_output_contains "$(cd "$UTILZ_HOME" && pwd -P)"
-  assert_output_contains "run list --commit $sha --workflow tests.yml"
-}
-
-@test "AT01 (ST0019 AC-01.3): tools/ci-state refuses anything but one sha, exiting non-zero so the core reads unknown" {
-  run "$UTILZ_HOME/tools/ci-state"
-  [ "$status" -eq 2 ] || fail "no argument exited $status"
-  run "$UTILZ_HOME/tools/ci-state" a b
-  [ "$status" -eq 2 ] || fail "two arguments exited $status"
-}
-
-@test "AT01 (ST0019 AC-01.3): tools/ci-state is in no install: the owned set names nothing under tools/" {
-  [ -x "$UTILZ_HOME/tools/ci-state" ] || fail "tools/ci-state is missing, so this would pass vacuously"
-  run run_install_function "utilz_runtime_set '$UTILZ_HOME'"
-  assert_success
-  if printf '%s\n' "$output" | grep -q '^tools/'; then
-    fail "the publish would ship: $(printf '%s\n' "$output" | grep '^tools/')"
-  fi
-}
+# AT01 held the reader Utilz kept as the release core's ci.query: five arms
+# for its verdicts, its refusal, its one query, its usage and its place in no
+# install. ST0031/01 retired that reader with its arms, since CI's verdict is
+# now the core's own `bin/devbin ci-state`, for the cut and the publish alike;
+# the publish's side of it is AT08's arms above.
 
 # ============================================================================
 # issue 0044: the announced commit is the tree's own, or none
@@ -847,7 +739,7 @@ ROWS
   [ -n "$(git -C "$inner" rev-parse --short HEAD 2>/dev/null)" ] \
     || fail "git reads no enclosing HEAD from the nested tree, so this would pass vacuously"
 
-  run run_install_function "UTILZ_HOME='$inner'; INSTALL_GH='$BATS_TEST_TMPDIR/no-gh'; install_verb_install --prefix '$BATS_TEST_TMPDIR/dst'"
+  run run_install_function "UTILZ_HOME='$inner'; install_verb_install --prefix '$BATS_TEST_TMPDIR/dst'"
   assert_failure
   assert_output_contains "source: $inner (unknown, none)"
 }

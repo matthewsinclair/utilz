@@ -352,13 +352,13 @@ teardown_file() {
   local m="$sandbox/manifest.sha256"
 
   # CI's verdict moved from the version line to doctor with the contract (T4).
-  sed -i.bak -e 's/^# ci_state: .*/# ci_state: success/' -e 's/^# ci_detail: .*/# ci_detail: 101/' "$m" && rm -f "$m.bak"
+  sed -i.bak -e 's/^# ci_state: .*/# ci_state: green/' -e 's/^# ci_detail: .*/# ci_detail: run 101/' "$m" && rm -f "$m.bak"
   run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor
-  assert_output_contains "CI on that commit, as published: success (101)"
+  assert_output_contains "CI on that commit, as published: green (run 101)"
   run env -u UTILZ_HOME "$sandbox/bin/utilz" version
   refute_output_contains "CI"
 
-  # A manifest with no ci_state line. Absent is neither unknown nor success,
+  # A manifest with no ci_state line. Absent is neither unknown nor green,
   # and the line says which.
   grep -v '^# ci_state: ' "$m" > "$m.tmp" && mv "$m.tmp" "$m"
   run env -u UTILZ_HOME "$sandbox/bin/utilz" doctor

@@ -273,3 +273,23 @@ run_macos() {
   [ -n "$id" ] || fail "no MENUZ_BUNDLE_ID in $lib"
   [ "$(cfg_macos bundle_id)" = "$id" ] || fail "macos.bundle_id is $(cfg_macos bundle_id), and the lib's MENUZ_BUNDLE_ID is $id"
 }
+
+@test "issue Ie8e55e8: the release asset's name has one home, the lib menuz sources, and it is the core's own derivation" {
+  [ -n "$BASH5" ] || skip "devbin needs bash 5 and none is on PATH"
+  local lib="$UTILZ_HOME/opt/menuz/lib/launch-services.sh" f="$UTILZ_HOME/opt/menuz/menuz" asset body core
+  asset="$(sed -n 's/^MENUZ_ASSET="\(.*\)"$/\1/p' "$lib")"
+  [ -n "$asset" ] || fail "no MENUZ_ASSET in $lib"
+  [ "$(grep -cF "$asset" "$lib")" -eq 1 ] || fail "the lib does not hold the asset's name once"
+  ! grep -nF "$asset" "$f" || fail "$f names $asset by a literal the lib owns"
+  # fetch_asset, the keg's install of the app, fetches it through the lib's name.
+  body="$(awk 'index($0, "fetch_asset() {") == 1 { f = 1 } f { print } f && $0 == "}" { exit }' "$f")"
+  [ -n "$body" ] || fail "no fetch_asset in $f"
+  # shellcheck disable=SC2016 # the variable's name, as fetch_asset spells it
+  grep -qF '$MENUZ_ASSET' <<<"$body" || fail "fetch_asset does not name the asset through MENUZ_ASSET"
+  # The core's own derivation, through its own config reader, never re-derived
+  # here: the name it attaches the app under at a cut.
+  # shellcheck disable=SC2016 # bash -c's own script, its $1 the tree
+  core="$("$BASH5" -c 'source "$1/bin/.devbin/lib/config" && cfg_load "$1/bin/.devbin/config.yaml" && cfg_macos_app_asset' _ "$UTILZ_HOME")" ||
+    fail "the core's cfg_macos_app_asset could not be read (above)"
+  [ "$core" = "$asset" ] || fail "the core attaches the app as $core, and menuz fetches $asset"
+}

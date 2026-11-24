@@ -201,7 +201,7 @@ jobs:
         # working if devbin is ever vendored somewhere other than bin/.
         #
         # tools/ is collected beside bin and opt (ST0019 WP-01). It holds the
-        # maintainer's release tools, eg tools/post-cut, the release core's
+        # maintainer's release tools, eg tools/formula, the release core's
         # after: line, and lives outside bin/ because bin/ is published. A new
         # top-level directory is invisible to a collector that names its
         # roots, so it is named here or its scripts ship unlinted.

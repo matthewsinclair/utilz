@@ -18,6 +18,13 @@
 # shellcheck disable=SC2034 # read by menuz, which sources this
 MENUZ_BUNDLE_ID="com.matthewsinclair.utilz.menuz"
 
+# The release asset `menuz install` fetches in a keg: the zip of Menuz.app a
+# cut attaches, under the name devbin's core derives from
+# bin/.devbin/config.yaml in cfg_macos_app_asset (macos.asset, else the app's
+# own name with .zip), held equal to it by macos.bats (issue Ie8e55e8).
+# shellcheck disable=SC2034 # read by menuz, which sources this
+MENUZ_ASSET="Menuz.app.zip"
+
 # Launch Services' registrar, not on PATH on macOS.
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
 

@@ -4,8 +4,11 @@
 # to the tap (dev, opt, brew contract T8, issue 0105; docs/releasing.md).
 #
 #   tools/formula render <tag> <out>     write the formula for <tag> to <out>
-#   tools/formula publish [--tap <url>]  render the newest release into a fresh
-#                                        clone of the tap, commit it, push it
+#   tools/formula publish [--tap <url>] [--pull]
+#                                        render the newest release into a fresh
+#                                        clone of the tap, commit it, push it;
+#                                        with --pull, then bring this
+#                                        machine's clone of the tap forward
 #
 # The formula is kept as a TEMPLATE at packaging/homebrew/utilz.rb, never
 # installed from, holding exactly one @@TAG@@ and one @@REVISION@@. It replaced
@@ -20,14 +23,27 @@
 # `git rev-parse <tag>^{commit}`. A tag that does not exist, and a lightweight
 # one, are refused: every release tag is annotated.
 #
-# PUBLISH PUSHES THE TAP, SO IT RUNS IN HV'S CUT: tools/post-cut, the release's
-# after: line, runs it once Menuz.app.zip is attached (ST0030, hv's ruling of
-# 28 Oct 2026, replacing ST0019 WP-05's that no release hook runs it). It
-# publishes the newest release, the highest tag of the bare-semver form Utilz
-# tags with, rendered from the template that tag carries, so an edit no commit
-# holds never reaches the tap. It writes nothing in this tree; its clone of the
-# tap is a temporary, removed when it exits. A tap that already
-# carries the formula is left as it is.
+# PUBLISH PUSHES THE TAP, SO IT RUNS IN HV'S CUT: `tools/formula publish
+# --pull` is the release's one after: line (bin/.devbin/config.yaml), run once
+# the cut's object step has attached Menuz.app.zip (ST0030, hv's ruling of 28
+# Oct 2026; ST0031/01). It publishes the newest release, the highest tag of
+# the bare-semver form Utilz tags with, rendered from the template that tag
+# carries, so an edit no commit holds never reaches the tap. It writes nothing
+# in this tree; its clone of the tap is a temporary, removed when it exits. A
+# tap that already carries the formula is left as it is.
+#
+# --PULL IS THE CORE'S OWN FLAG, AND DOES WHAT THE CORE'S DOES (its formula
+# command's tap_pull): once the tap carries the release, this machine's clone
+# of it, where Homebrew keeps one, is brought forward, so brew upgrade sees the
+# release, since brew's own update can leave a third-party tap behind, as it
+# left 2.14.4 after 2.14.5's publish. The upgrade itself is hv's. It is a
+# copy, since the core needs bash 5 and this runs on 3.2, and it differs from
+# the core's in two ways. It reads the tap's owner and name off the url's last
+# two path segments, where the core's _release_url_named reads only a url with
+# a host, so a local path names a clone here and none there. And it pulls with
+# plain git, where the core goes through its release_git_remote. This tool
+# goes, and the after: line becomes the core's `formula publish --pull`, when
+# the template moves to the core's install (issue I59c806c).
 #
 # It lives in tools/, not bin/, because bin/ is published.
 #
@@ -48,13 +64,15 @@ die() {
 usage() {
   cat <<EOF
 usage: tools/formula render <tag> <out>
-       tools/formula publish [--tap <url>]
+       tools/formula publish [--tap <url>] [--pull]
 
   render <tag> <out>     write Utilz's Homebrew formula for <tag>, an annotated
                          tag in this checkout, to <out>
   publish [--tap <url>]  render the newest release into a fresh clone of the
                          tap, commit it and push it; a tap that already carries
                          it is left as it is (default tap: $TAP_URL)
+    --pull               then bring this machine's clone of the tap, where
+                         Homebrew keeps one, forward
 EOF
 }
 
@@ -128,8 +146,46 @@ newest_release_tag() {
   printf '%s\n' "$releases" | sort -t. -k1,1n -k2,2n -k3,3n | tail -1
 }
 
+# tap_pull <tap-url> -- publish --pull's last act: this machine's clone of the
+# tap at <tap-url>, where Homebrew keeps it, brought forward. Homebrew keeps a
+# tap at <brew --repository>/Library/Taps/<owner>/<name>, <owner> and <name>
+# being the url's last two path segments, <name> without .git, both in the
+# lower case Homebrew keeps a tap's name in. No brew on PATH, and no clone
+# there, each say so and do not fail: this machine is not the tap, and the
+# formula is published either way. It dies, the formula published, where brew
+# cannot name its repository or the clone cannot be brought forward without a
+# merge, so that the clone is pulled by hand before brew upgrade.
+tap_pull() {
+  local url="${1%/}" path owner name repo dir subject
+  if ! command -v brew >/dev/null 2>&1; then
+    printf 'formula: no brew on PATH, so no clone of the tap here to pull\n'
+    return 0
+  fi
+  path="${url%.git}"
+  name="${path##*/}"
+  path="${path%/*}"
+  owner="${path##*[/:]}"
+  owner="$(printf '%s' "$owner" | tr '[:upper:]' '[:lower:]')"
+  name="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
+  if ! repo="$(brew --repository)" || [[ -z "$repo" ]]; then
+    die "brew cannot name its repository (above), so its clone of the tap cannot be found; the formula is published"
+  fi
+  dir="$repo/Library/Taps/$owner/$name"
+  if [[ ! -d "$dir/.git" ]]; then
+    printf 'formula: no clone of the tap at %s, so nothing here to pull\n' "$dir"
+    return 0
+  fi
+  git -C "$dir" pull -q --ff-only ||
+    die "cannot bring $dir forward without a merge (above); the formula is published, so pull it by hand before brew upgrade"
+  # Read with its own status, never inside the line it is printed in, where a
+  # git log that failed would print as an empty subject.
+  subject="$(git -C "$dir" log -1 --format=%s)" ||
+    die "pulled $dir, but cannot read its last commit (above); the formula is published"
+  printf "formula: this machine's clone of the tap at %s pulled, its last commit %s\n" "$dir" "$subject"
+}
+
 cmd_publish() {
-  local tap="$TAP_URL" tag work clone commit dirt
+  local tap="$TAP_URL" pull=no tag work clone commit dirt
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --tap)
@@ -137,7 +193,11 @@ cmd_publish() {
         tap="$2"
         shift 2
         ;;
-      *) die "publish takes --tap <url> and nothing else, not '$1'" ;;
+      --pull)
+        pull=yes
+        shift
+        ;;
+      *) die "publish takes --tap <url> and --pull and nothing else, not '$1'" ;;
     esac
   done
 
@@ -157,6 +217,7 @@ cmd_publish() {
     die "cannot read the tap's clone, so nothing was published"
   if [[ -z "$dirt" ]]; then
     printf 'formula: the tap at %s already carries utilz %s at %s, so nothing was published\n' "$tap" "$tag" "$commit"
+    [[ "$pull" == no ]] || tap_pull "$tap"
     return 0
   fi
 
@@ -166,6 +227,7 @@ cmd_publish() {
   git -C "$clone" push -q origin HEAD ||
     die "cannot push the tap to $tap; the formula for utilz $tag is not published"
   printf 'formula: published utilz %s at %s to %s\n' "$tag" "$commit" "$tap"
+  [[ "$pull" == no ]] || tap_pull "$tap"
 }
 
 case "${1:-}" in

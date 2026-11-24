@@ -197,8 +197,9 @@ install_manifest_path_count() {
 # Write the manifest for a SOURCE tree to <out>:
 #   install_manifest_write <tree> <out> [<ci_state> [<rows> [<manager>]]]
 # <ci_state> is CI's verdict on the commit as "<state><TAB><detail>", the
-# form install_ci_state gives. <manager> is who owns the published tree,
-# `utilz` unless the formula's publish says `brew` (ST0019 D4).
+# release core's line, which install_ci_verdict gives. <manager> is who owns
+# the published tree, `utilz` unless the formula's publish says `brew` (ST0019
+# D4).
 install_manifest_write() {
   local tree="$1"
   local out="$2"
@@ -469,13 +470,14 @@ install_build_prez() {
   }
 }
 
-# THE CI QUERY (issue 0016): the command it runs, the workflow it asks about,
-# and how long a publish waits for the answer. Assigned here rather than read
-# from the environment, so only code that has sourced this file -- a test --
-# can point them anywhere else.
-INSTALL_GH="gh"
-INSTALL_CI_WORKFLOW="tests.yml"
-INSTALL_CI_DEADLINE=10
+# THE CI QUERY (issue 0016): how long a publish waits for the release core's
+# reader, `bin/devbin ci-state`, to answer (install_ci_verdict). It was 10 s
+# for one gh call; the core's reader starts its dispatcher, reads the config,
+# lists the runs and, for a failed run, reads its jobs, and the core itself
+# gives a single ask at least 15 s, so the publish waits 30. Assigned here
+# rather than read from the environment, so only a test, which sources this
+# file, can set it otherwise.
+INSTALL_CI_DEADLINE=30
 
 # Run <cmd...> with stdout to <out> and stderr to <err>, and kill it if it is
 # still running after <seconds>. Returns the command's own status, or 124 --
@@ -490,7 +492,7 @@ install_run_bounded() {
   "$@" > "$out" 2> "$err" &
   pid=$!
   # THE WATCHDOG'S OUTPUT GOES NOWHERE: it writes none, and it must hold none
-  # of its caller's. install_ci_state is read through $(...), which waits for
+  # of its caller's. install_ci_verdict is read through $(...), which waits for
   # every holder of its pipe, and a TERM landing between `sleep &` and
   # `sleeper=$!` would otherwise leave that sleep holding it until the
   # deadline (issue 0032).
@@ -530,103 +532,30 @@ install_run_bounded() {
   return "$rc"
 }
 
-# Echo CI's verdict on <commit> as "<state><TAB><detail>" (issue 0016), asked
-# of the workflow's own record with gh, run in <tree> so gh finds the repo
-# from the tree's remotes. It never fails and never guesses: an answer it
-# cannot get, or cannot read, is `unknown` with the reason, because a failed
-# read recorded as success is a pass nobody measured.
+# Echo CI's verdict on <commit> as "<verdict><TAB><detail>", read through the
+# release core's own reader, `bin/devbin ci-state`, run in <tree> (ST0031/01).
+# The verdict is the core's word, one of green, failed, pending, none and
+# unknown, and the detail is the core's, eg `run 105`, which for a failed run
+# names the jobs that failed (issue 0062's note, now the core's). Utilz kept
+# its own gh query until the core's reader replaced every project's, so the
+# publish and the cut now read CI one way.
 #
-#   <conclusion>  CI's verdict on a completed run, eg success     the run id
-#   pending       a run that has not concluded                    the run id
-#   none          no run for this commit, eg it was never pushed  no run
-#   unknown       gh absent, refusing, silent or unreadable       the reason
-#
-# EVERY RUN ON THE COMMIT IS READ, AND THE WORST OF THEM IS THE ANSWER (issue
-# 0052). A release commit carries two runs since the macOS legs moved to
-# release tags (0046) -- the branch push, and the tag push that runs them --
-# and GitHub documents no order between the two push events of one `git push`,
-# so asking for one run is asking for a coin toss. Worst first: a row that
-# cannot be read, a conclusion that is not success, a run still going, a
-# completed run with no conclusion, success. That is the same rule tools/ci-state
-# states downstream, applied to the population instead of to one row.
-# Name what failed INSIDE a run, as "<note>" or nothing (issue 0062).
-#
-# WHY A SECOND CALL EXISTS AT ALL. install_ci_state reads the RUN's conclusion,
-# and a run concludes `failure` for two reasons a release cares about very
-# differently: a job ran and went red, or no job ran at all -- a billing
-# refusal, an unavailable runner, an expired or cancelled queue. At the run
-# level those are the same word. Measured at devbin: four runs concluded
-# `failure` with every test job green and only the summary refused. The reader
-# was correct and unactionable, and it is read by a human mid-cut deciding
-# between "fix the code" and "re-run CI", which are opposite moves.
-#
-# ONLY ON THE NOT-SUCCESS PATH, so a green release costs exactly one gh call
-# as before. And this ENRICHES rather than decides: a note it cannot get is no
-# note, never a changed verdict, because install_ci_state's contract is that it
-# never guesses and the run id is already in the detail for a human to follow.
-install_ci_jobs() {
-  local tree="$1" run_id="$2"
-  local scratch rc=0 rows line conclusion name total=0 failed="" count=0
-
-  command -v "$INSTALL_GH" > /dev/null 2>&1 || return 0
-  [[ -n "$run_id" ]] || return 0
-  scratch=$(mktemp -d "${TMPDIR:-/tmp}/utilz-cijobs.XXXXXX") || return 0
-  : > "$scratch/out"
-  : > "$scratch/err"
-
-  (
-    cd "$tree" || exit 125
-    install_run_bounded "$INSTALL_CI_DEADLINE" "$scratch/out" "$scratch/err" \
-      "$INSTALL_GH" run view "$run_id" --json jobs \
-      --jq '.jobs[] | "\(.conclusion)|\(.name)"'
-  ) || rc=$?
-
-  rows=$(cat "$scratch/out")
-  rm -rf "$scratch"
-
-  # A read that did not work adds nothing. The verdict and the run id stand.
-  [[ "$rc" -eq 0 ]] || return 0
-
-  # A here-string, never a pipe, for the reason install_ci_state gives: a
-  # piped loop's counters die in its subshell.
-  while IFS= read -r line; do
-    [[ -n "$line" ]] || continue
-    total=$((total + 1))
-    IFS='|' read -r conclusion name <<< "$line"
-    [[ "$conclusion" != "null" ]] || conclusion=""
-    case "$conclusion" in
-      success | skipped | neutral) continue ;;
-    esac
-    count=$((count + 1))
-    # Three names is enough to act on; more is a wall of text in a manifest.
-    if [[ "$count" -le 3 ]]; then
-      [[ -z "$failed" ]] && failed="$name" || failed="$failed, $name"
-    fi
-  done <<< "$rows"
-
-  if [[ "$total" -eq 0 ]]; then
-    # THE SIGNATURE OF AN INFRASTRUCTURE REFUSAL: the run concluded, and
-    # nothing in it ran. Nothing was tested, so nothing about the code is known.
-    printf 'no job ran, so nothing was tested'
-    return 0
-  fi
-  if [[ "$count" -eq 0 ]]; then
-    printf 'no job failed, so the run was refused rather than tested'
-    return 0
-  fi
-  [[ "$count" -le 3 ]] || failed="$failed and $((count - 3)) more"
-  printf 'failed: %s' "$failed"
-}
-
-install_ci_state() {
+# IT NEVER FAILS AND NEVER GUESSES (issue 0016). A reader that cannot run,
+# exits non-zero, outlives INSTALL_CI_DEADLINE, prints nothing or prints a
+# word that is no verdict is `unknown`, with what it said, because a failed
+# read recorded as anything else is a pass nobody measured. The answer is read
+# as the core reads a query's (release.steps, release_ci_verdict), whose five
+# words the case below takes, held equal to it by install_lib.bats. The core
+# bounds no call of its own when it is asked directly, so the publish bounds
+# this one. No ref is passed, so the core reads the commit's own runs: a
+# DEVBIN_RELEASE_TAG or DEVBIN_RELEASE_PASSED_OVER left in the environment by
+# a cut would narrow it to one ref's runs, so neither reaches it. Nor does
+# stdin: install_run_bounded starts the reader in the background, and a
+# background command in a script reads /dev/null.
+install_ci_verdict() {
   local tree="$1" commit="$2"
-  local scratch rc=0 answers reason line status conclusion run_id
-  local rank=0 verdict=success detail="" total=0 newest=""
+  local scratch rc=0 line shown reason said verdict detail=""
 
-  if ! command -v "$INSTALL_GH" > /dev/null 2>&1; then
-    printf 'unknown\t%s is not installed\n' "$INSTALL_GH"
-    return 0
-  fi
   if ! scratch=$(mktemp -d "${TMPDIR:-/tmp}/utilz-ci.XXXXXX"); then
     printf 'unknown\tcould not make a scratch directory for the query\n'
     return 0
@@ -637,95 +566,53 @@ install_ci_state() {
   (
     cd "$tree" || exit 125
     install_run_bounded "$INSTALL_CI_DEADLINE" "$scratch/out" "$scratch/err" \
-      "$INSTALL_GH" run list --commit "$commit" --workflow "$INSTALL_CI_WORKFLOW" \
-      --json status,conclusion,databaseId --limit 20 \
-      --jq '.[] | "\(.status)|\(.conclusion)|\(.databaseId)"'
+      env -u DEVBIN_RELEASE_TAG -u DEVBIN_RELEASE_PASSED_OVER bin/devbin ci-state "$commit"
   ) || rc=$?
 
-  answers=$(cat "$scratch/out")
+  line=$(head -n 1 "$scratch/out")
   reason=$(head -n 1 "$scratch/err")
   rm -rf "$scratch"
+  # The line as it came, its tab a space, so a record of it stays one field;
+  # and what a reader that failed said: its error, else that line.
+  shown=$(printf '%s' "$line" | tr '\t' ' ')
+  said="${reason:-${shown:-it said nothing}}"
 
   case "$rc" in
     0) ;;
     124)
-      printf 'unknown\t%s did not answer within %ss\n' "$INSTALL_GH" "$INSTALL_CI_DEADLINE"
+      printf 'unknown\tbin/devbin ci-state did not answer within %ss\n' "$INSTALL_CI_DEADLINE"
       return 0
       ;;
     125)
       printf 'unknown\tcould not enter %s to ask\n' "$tree"
       return 0
       ;;
+    126 | 127)
+      printf 'unknown\tbin/devbin ci-state could not run in %s (exit %s): %s\n' "$tree" "$rc" "$said"
+      return 0
+      ;;
     *)
-      printf 'unknown\t%s\n' "${reason:-$INSTALL_GH exited $rc and said nothing}"
+      printf 'unknown\tbin/devbin ci-state exited %s: %s\n' "$rc" "$said"
       return 0
       ;;
   esac
 
-  if [[ -z "$answers" ]]; then
-    printf 'none\tno run\n'
+  if [[ -z "$line" ]]; then
+    printf 'unknown\tbin/devbin ci-state printed nothing\n'
     return 0
   fi
-
-  # A here-string, never a pipe: a piped loop runs in a subshell and its
-  # verdict dies with it, which would leave every commit reading success.
-  while IFS= read -r line; do
-    [[ -n "$line" ]] || continue
-    total=$((total + 1))
-    IFS='|' read -r status conclusion run_id <<< "$line"
-    # gh renders a JSON null through jq as the STRING "null", not as an empty
-    # field (measured: `"\(.conclusion)"` on a null gives `completed|null|9`),
-    # so a completed run with no conclusion arrives SPELLED. Without this the
-    # rank below reads "null" as a conclusion that is not success and answers
-    # with it as a verdict word, and the branch written for that case cannot be
-    # reached at all (cc's read of issue 0052). It fails safe either way; it
-    # just says something untrue on the way.
-    [[ "$conclusion" != "null" ]] || conclusion=""
-    # gh lists newest first, so the first id read is the newest, which is what
-    # an all-green answer names.
-    [[ -n "$newest" ]] || newest="$run_id"
-
-    local row_rank=0 row_verdict="success" row_detail="$run_id"
-    if [[ -z "$status" || -z "$run_id" ]]; then
-      row_rank=4
-      row_verdict="unknown"
-      row_detail="could not read the answer from $INSTALL_GH: $line"
-    elif [[ "$conclusion" != "success" && "$status" == "completed" && -n "$conclusion" ]]; then
-      row_rank=3
-      row_verdict="$conclusion"
-    elif [[ "$status" != "completed" ]]; then
-      row_rank=2
-      row_verdict="pending"
-    elif [[ -z "$conclusion" ]]; then
-      row_rank=1
-      row_verdict="unknown"
-      row_detail="a completed run with no conclusion: $run_id"
-    fi
-
-    if [[ "$row_rank" -gt "$rank" ]]; then
-      rank="$row_rank"
-      verdict="$row_verdict"
-      detail="$row_detail"
-    fi
-  done <<< "$answers"
-
-  if [[ "$total" -eq 0 ]]; then
-    printf 'none\tno run\n'
-    return 0
+  verdict="${line%%$'\t'*}"
+  case "$verdict" in
+    green | failed | pending | none | unknown) ;;
+    *)
+      printf 'unknown\tbin/devbin ci-state printed "%s", which is no verdict\n' "$shown"
+      return 0
+      ;;
+  esac
+  if [[ "$line" == *$'\t'* ]]; then
+    detail="${line#*$'\t'}"
   fi
-  [[ -n "$detail" ]] || detail="$newest"
-  # A CONCLUSION THAT IS NOT SUCCESS IS THE ONE ANSWER A HUMAN MUST ACT ON,
-  # so it is the one that gets a second question asked of it (issue 0062).
-  # rank 3 is that case, and at rank 3 the detail is the run id alone.
-  if [[ "$rank" -eq 3 ]]; then
-    local jobs_note
-    jobs_note=$(install_ci_jobs "$tree" "$detail")
-    [[ -z "$jobs_note" ]] || detail="$detail ($jobs_note)"
-  fi
-  # The count is part of the answer only when there was more than one run to
-  # read, so a single-run commit reads exactly as it always has.
-  [[ "$total" -eq 1 ]] || detail="$detail of $total runs on this commit"
-  printf '%s\t%s\n' "$verdict" "$detail"
+  printf '%s\t%s\n' "$verdict" "${detail:-no detail given}"
 }
 
 # Refuse, by name, when <dir> is a Homebrew keg (ST0019 D4). Returns 0 for any
@@ -910,10 +797,10 @@ install_verb_install() {
   rows=$(install_manifest_rows "$src") || return 1
   install_copy_owned "$src" "$prefix" || return 1
   # CI's verdict on the commit being published (issue 0016), asked here, at the
-  # coordination, and handed to the writer. Recorded, never enforced: no
-  # answer refuses the publish.
+  # coordination, of the release core's reader, and handed to the writer.
+  # Recorded, never enforced: no answer refuses the publish.
   local ci_state
-  ci_state=$(install_ci_state "$src" "$(git -C "$src" rev-parse HEAD)")
+  ci_state=$(install_ci_verdict "$src" "$(git -C "$src" rev-parse HEAD)")
   install_manifest_write "$src" "$prefix/$UTILZ_MANIFEST_NAME" "$ci_state" "$rows" "$manager" || return 1
 
   local count

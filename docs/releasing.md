@@ -13,29 +13,29 @@ Everything here was read from the copy vendored at `bin/.devbin/`, which is the 
 - **Run `bin/devbin check all` before handing a Rust change on, and do not read a green test suite as covering it.** `check all` runs `cargo fmt --check` and clippy; no Utilz suite runs either, and the pre-commit formatter gate stops at markdown. Six formatting diffs rode five commits into `main` on 2026-09-22 under a green 13/13 thread and a green estate, reddened CI, and would have refused the cut at step 5 (issues 0059 and 0060). `cargo fmt --check` also fails the CI step **ahead** of clippy, so drift hides the clippy verdict entirely rather than adding to it.
 - **The tree is clean, and stays clean.** Step 2 refuses anything dirty outside what the release owns, untracked files included, so a realised view of a closed thread or a stray scratch file stops the cut. Step 5 re-reads the tree and `HEAD` after the gates and fails the cut if a gate wrote to either.
 - **Every node holds its writes for the whole cut** (ST0019 D6). That includes `intent wb` heartbeats and pickups, which write a board view and a canon event.
-- **The gate is `bin/devbin check all`** (hv, 28 Oct 2026, ST0030). `bin/devbin test estate`, which is `tools/test-estate` and runs every suite under the bash 3.2.57 macOS ships (issue 0051), runs before the cut, in the dry run and the twins, and not again in it.
-- **CI cancels a run that a newer push supersedes, and the macOS legs run on the TAG, not on the push** (issue 0046). A superseded commit's run concludes `cancelled`, which `tools/ci-state`, the core's CI query, reads as `failed`; the core reads CI after it pushes, so nothing may land on `main` between the release push and that read, which the hold above already guarantees. A release commit therefore carries two runs, the branch's without macOS and the tag's with it, and the query reads every run on the commit and answers with the worst of them (issue 0052), so its verdict does not depend on which of the two push events GitHub registered first.
+- **The gate is `bin/devbin check all`** (hv, 28 Oct 2026, ST0030). `bin/devbin test estate`, which is `tools/test-estate` and runs every suite under the bash 3.2.57 macOS ships (issue 0051), runs before the cut and not in it. hv's ruling rested on the dry run and the twins running the suites; at Devbin 0.1.28 a dry run runs no gate, so before a cut the suites run in the twins, and in no step of the cut or its dry run.
+- **CI is read on the candidate, before anything is tagged** (issue 0046, ST0031/04). The core reads CI itself, with its built-in `bin/devbin ci-state`: its legs step pushes the release commit to `candidate/<tag>`, whose push runs `tests.yml` with every leg, the macOS legs included, and it reads that ref's runs alone, the worst of them deciding. A red candidate, or no verdict within `ci.wait`, stops the cut with nothing tagged and the candidate deleted, and a run GitHub cancelled before a resumed cut's own push is passed over (devbin issue 0330).
 - **The tag is bare and annotated**: `2.12.0`, never `v2.12.0`, with the CHANGELOG section's body as its message, passed with `--cleanup=whitespace` (ST0019 D7). The core writes it and reads it back.
 
 ## The cut
 
 1. **`bin/devbin release check`** -- read-only. It validates the declaration and prints it.
-2. **`bin/devbin release --minor --dry-run`** -- every read of the cut and none of its writes: no commit, no tag, no push, no release object. **The gates still run**, on `HEAD` in place; since a dry run makes no release commit, that predicts the gates rather than gating the release. `--patch` and `--major` choose the other bumps, and `X.Y.Z` or `vX.Y.Z` names a version outright.
-3. **`bin/devbin release --minor --yes`**, run by hv. `--yes` answers the confirm step, which prints what it is about to push and carries on, so from here to the tap nobody is asked anything (ST0030). Without it, the cut stops at step 6 to ask. Eleven steps, each with a postcondition it reads first, so a re-run continues where it stopped rather than starting again:
+2. **`bin/devbin release --minor --dry-run`** -- every read of the cut and none of its writes: no stamp, commit, tag, push or release object, **and no gate and no `after:`**. It runs `release.preflight`'s commands as the cut does, so it refuses wherever the cut would, and prints each step as what it would do. `--patch` and `--major` choose the other bumps, and `X.Y.Z` or `vX.Y.Z` names a version outright.
+3. **`bin/devbin release --minor --yes`**, run by hv. `--yes` answers the confirm step, which names what the cut will push and run and carries on, so from here to the tap nobody is asked anything (ST0030). Without it, the cut stops at step 3 to ask. Eleven steps, each with a postcondition it reads first, so a re-run continues where it stopped rather than starting again (Devbin 0.1.28):
 
-| Step | Name       | What it does                                                    |
-| ---- | ---------- | --------------------------------------------------------------- |
-| 1    | resolve    | the version, the tag, and whether this is a new cut or a resume |
-| 2    | pre-flight | the branch, the remotes, the tree, the notes                    |
-| 3    | stamp      | the version files and the CHANGELOG's date                      |
-| 4    | commit     | the release commit                                              |
-| 5    | gates      | `check all`, then the tree and `HEAD` are re-read               |
-| 6    | confirm    | what is about to be pushed, and where                           |
-| 7    | tag        | bare, annotated, written and read back                          |
-| 8    | push       | every remote (see below)                                        |
-| 9    | object     | the release object                                              |
-| 10   | after      | `tools/post-cut`: Menuz.app at the tag, then the tap            |
-| 11   | ci         | the CI verdict, through `tools/ci-state`                        |
+| Step | Name       | What it does                                                                         |
+| ---- | ---------- | ------------------------------------------------------------------------------------ |
+| 1    | resolve    | the version and the tag                                                              |
+| 2    | pre-flight | the branch, the tree, the note, every remote, and that the candidate's push runs CI  |
+| 3    | confirm    | asks once, naming the tag, the candidate, the pushes, the object and the after: line |
+| 4    | stamp      | the version files and the CHANGELOG's date                                           |
+| 5    | commit     | the release commit                                                                   |
+| 6    | legs       | `check all`, the macOS stage signing Menuz.app, and the candidate's CI               |
+| 7    | tag        | bare, annotated, once every leg is green                                             |
+| 8    | push       | every remote (see below), then the candidate is deleted                              |
+| 9    | object     | the release object, then `Menuz.app.zip` attached (issue 0329)                       |
+| 10   | formula    | off: `release.formula` stays undeclared until issue I59c806c                         |
+| 11   | after      | `tools/formula publish --pull`: the formula to the tap, then this machine's clone    |
 
 **Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's sixteen older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped: the newest match is `2.11.0`, and `--minor` resolves `2.12.0`.
 
@@ -56,7 +56,7 @@ release: stopped at step 1 (resolve). This run tagged nothing and pushed nothing
 
 ## After the cut: Menuz.app
 
-menuz's app ships as a release asset, `Menuz.app.zip`, beside the tag's source. The cut's macOS leg signs and notarises it at the release commit, on this machine, through devbin's built-in `bin/devbin macos` (ST0027 D12, as Intent signs `Intent.app`), which `bin/.devbin/config.yaml`'s `macos:` block declares for Menuz (issue 0118). The release core attaches no app: its object step makes the release object, and `tools/post-cut` attaches the copy the leg signed (below). CI builds the app unsigned and reads no secrets.
+menuz's app ships as a release asset, `Menuz.app.zip`, beside the tag's source. The cut's macOS leg signs and notarises it at the release commit, on this machine, through devbin's built-in `bin/devbin macos` (ST0027 D12, as Intent signs `Intent.app`), which `bin/.devbin/config.yaml`'s `macos:` block declares for Menuz (issue 0118). The release core's object step makes the release object and then attaches the copy the leg signed, with `macos publish` (issue 0329, below). CI builds the app unsigned and reads no secrets.
 
 **Once on each Mac that cuts**, hv stores the notary profile in the login keychain:
 
@@ -67,9 +67,9 @@ bin/devbin macos doctor        # the profile PRESENT, the Developer ID identitie
 
 `store-creds` runs `notarytool store-credentials` under the profile `macos.notary_profile` names, `devbin` by default, and every notarisation submits under it. It runs in a terminal only, refusing a stdin that is not one. notarytool asks for an App Store Connect API key path, left empty, then the Apple ID, the app-specific password and the team id, each typed at its own prompt, so none reaches a command line (issue 0126), checks them with Apple and saves the profile. Nothing is written to this repository, and nothing prints a value. `doctor` names each Developer ID identity's team, and `macos.team` is declared only where it counts more than one. The `utilz.apple` items an earlier devbin read stay in the keychain, unread.
 
-**After every cut, `tools/post-cut` attaches the app the cut's macOS leg signed, with `macos publish` (step 3 below), then publishes the formula and pulls this machine's tap, in order, stopping at the first failure** (ST0030, ST0031/04). It is the release core's one `after:` line, so the cut runs it; by hand it is `tools/post-cut [<tag>]`, the tag defaulting to the top-level `VERSION` at HEAD, and refusing any tag but the newest release. It builds and signs nothing. A re-run starts from the top and skips what is done: a release already carrying `Menuz.app.zip` and `SHA256SUMS`, both uploaded, skips the publish, and a tap already carrying the release is left as it is. It is one `after:` line, not several, because the core runs every `after:` line even when one before it failed. `release.formula` stays undeclared, so the core's own formula step, which runs before `after:`, cannot put the formula on the tap ahead of the app.
+**At every cut, the core's object step attaches the app the cut's macOS leg signed, with `macos publish` (step 3 below), and only then does the cut publish the formula** (issue 0329, ST0031/01). A failed attach ends the cut before its `after:` line runs, so the formula never reaches the tap ahead of the app. A re-run continues where it stopped: the object step is done once the release carries `Menuz.app.zip`, and a tap already carrying the release is left as it is. Nothing here builds or signs. By hand, outside a cut, it is `bin/devbin macos publish` from a tree whose version is the tag, then `tools/formula publish --pull`.
 
-The leg signs in the primary at the release commit, the commit the tag then names, and `publish` reads the tag's commit, never HEAD: it refuses a staged copy signed at any other commit, and one whose `MenuzCommit` is not the tag's (issue 0103). So a node's board commit that moves the primary past the tag cannot make it ship another build, and `post-cut` needs no worktree. A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
+The leg signs in the primary at the release commit, the commit the tag then names, and `publish` reads the tag's commit, never HEAD: it refuses a staged copy signed at any other commit, and one whose `MenuzCommit` is not the tag's (issue 0103). So a node's board commit that moves the primary past the tag cannot make it ship another build, and the attach needs no worktree. A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
 
 Menuz versions apart from Utilz, from `opt/menuz/VERSION`, so a copy's version cannot show it is the tag's build. Its `MenuzCommit` stamp does: it must be 8 to 40 lowercase hex characters and begin the commit the tag names, with the tag in the tree. Its `MenuzKind` must be `release`, which menuz stamps by the rule `help/menuz.md` states with the stamps.
 
@@ -90,17 +90,17 @@ The icon is Utilz's own, not the built-in's: `bin/devbin macos app-icons` raster
 Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The repository keeps the formula as a template, `packaging/homebrew/utilz.rb`, with one `@@TAG@@` and one `@@REVISION@@`, and is never installed from. `tools/formula` fills them from git, as the dev, opt, brew contract has every tool's formula rendered (T8, devbin's `docs/dev-opt-brew.md` at devbin commit aeed31e4; issue 0105).
 
 - `tools/formula render <tag> <out>` writes the formula for an annotated tag to `<out>`. It refuses a tag that does not exist, a lightweight one, and a template without exactly one of each placeholder, and writes nothing in this tree.
-- `tools/formula publish [--tap <url>]` renders the newest release, the highest annotated tag of Utilz's bare-semver form, into a fresh clone of the tap, commits it and pushes it. It refuses a template with changes no commit holds, and leaves a tap that already carries the formula as it is. It pushes, so it runs in hv's cut, through `tools/post-cut`, the release's `after:` line, once `Menuz.app.zip` is attached (ST0030, hv's ruling of 28 Oct 2026, replacing that of 2026-09-21 in ST0019 WP-05 that no release hook runs it).
+- `tools/formula publish [--tap <url>]` renders the newest release, the highest annotated tag of Utilz's bare-semver form, into a fresh clone of the tap, commits it and pushes it. It refuses a template with changes no commit holds, and leaves a tap that already carries the formula as it is. It pushes, so it runs in hv's cut, as the release's one `after:` line, `tools/formula publish --pull`, once the object step has attached `Menuz.app.zip` (ST0030, hv's ruling of 28 Oct 2026, replacing that of 2026-09-21 in ST0019 WP-05 that no release hook runs it). With `--pull` it then brings this machine's clone of the tap forward, where Homebrew keeps one, and names a clone it cannot fast-forward, to be pulled by hand. It stays Utilz's until issue I59c806c moves the template to the core's install, when the core's own formula step takes its place.
 
 **Never type the commit by hand.** The offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install. The commit comes from `git rev-parse <tag>^{commit}`, inside `tools/formula`.
 
 ### After every cut
 
-`tools/post-cut` attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives, and then publishes the formula to the tap with `tools/formula publish`. Nothing is committed in this repository: the template does not change from one release to the next.
+The core's object step attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives. Then the `after:` line publishes the formula to the tap and pulls this machine's clone, with `tools/formula publish --pull`. Nothing is committed in this repository: the template does not change from one release to the next.
 
 Then hv:
 
-1. **Audits this machine's tap**, which `tools/post-cut` has pulled (brew's own auto-update can leave a third-party tap behind, as it left 2.14.4 after 2.14.5's publish), with Homebrew's auto-update off, as every scripted brew call runs:
+1. **Audits this machine's tap**, which `tools/formula publish --pull` has pulled (brew's own auto-update can leave a third-party tap behind, as it left 2.14.4 after 2.14.5's publish), with Homebrew's auto-update off, as every scripted brew call runs:
 
    ```bash
    HOMEBREW_NO_AUTO_UPDATE=1 brew audit --strict matthewsinclair/utilz/utilz

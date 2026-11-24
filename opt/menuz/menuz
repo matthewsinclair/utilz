@@ -70,7 +70,7 @@ VERBS:
                              dropped, as build's is
   stamps                     what the next build stamps, NAME=value a line
   install                    build Release (a source clone) or fetch the
-                             release's Menuz.app.zip (an install), then quit,
+                             release's $MENUZ_ASSET (an install), then quit,
                              replace ~/Applications/Menuz.app, register, launch
   use [dev|installed]        which build start, restart, status, validate and
                              render act on; with no word, the choice and why
@@ -901,9 +901,9 @@ launch_bundle() {
   printf 'menuz: launched %s\n' "$bundle"
 }
 
-# The keg's install: the release's Menuz.app.zip for this tree's VERSION,
-# unzipped into ASSET_TMP and verified before anything is replaced. Sets
-# ASSET_BUNDLE; exit 1 naming the check that failed.
+# The keg's install: the release's asset, MENUZ_ASSET from the lib, for this
+# tree's VERSION, unzipped into ASSET_TMP and verified before anything is
+# replaced. Sets ASSET_BUNDLE; exit 1 naming the check that failed.
 ASSET_TMP=""
 ASSET_BUNDLE=""
 fetch_asset() {
@@ -912,9 +912,9 @@ fetch_asset() {
   want="$(tr -d '[:space:]' <"$UTILZ_HOME/opt/menuz/VERSION" 2>/dev/null)" || want=""
   [[ -n "$version" ]] || refuse "install: this install has no release version in $UTILZ_HOME/VERSION to fetch the app of"
   [[ -n "$want" ]] || refuse "install: this install has no menuz version in $UTILZ_HOME/opt/menuz/VERSION to check the app against"
-  url="$RELEASE_DOWNLOADS/$version/Menuz.app.zip"
+  url="$RELEASE_DOWNLOADS/$version/$MENUZ_ASSET"
   ASSET_TMP="$(mktemp -d)"
-  zip="$ASSET_TMP/Menuz.app.zip"
+  zip="$ASSET_TMP/$MENUZ_ASSET"
   printf 'menuz: fetching %s\n' "$url"
   out="$(curl -fsSL -o "$zip" "$url" 2>&1)" || rc=$?
   if [[ $rc -eq 22 ]]; then

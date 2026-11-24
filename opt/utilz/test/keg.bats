@@ -9,16 +9,16 @@
 #
 # Every keg here is published by the real install verb from make_fake_src, so
 # the row under test is the one a publish writes, not one a fixture typed.
-# INSTALL_GH names no gh, so each publish records unknown at once instead of
-# asking CI over the network.
+# A fake source holds no bin/devbin, so each publish records unknown at once
+# instead of asking CI over the network.
 
 load "test_helper.bash"
 
-# Publish <src> to <prefix> with any extra install args, gh absent.
+# Publish <src> to <prefix> with any extra install args.
 publish_to() {
   local src="$1" prefix="$2"
   shift 2
-  run run_install_function "UTILZ_HOME='$src'; INSTALL_GH='$BATS_TEST_TMPDIR/no-gh'; install_verb_install --prefix '$prefix' $*"
+  run run_install_function "UTILZ_HOME='$src'; install_verb_install --prefix '$prefix' $*"
 }
 
 # A fake source at <src> and a keg published from it at <keg>.

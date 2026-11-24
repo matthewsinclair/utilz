@@ -25,12 +25,15 @@ export UTILZ_TEST_DIR="$UTILZ_HOME/opt/utilz/test"
 export PATH="$UTILZ_BIN_DIR:$PATH"
 
 # NO TEST REACHES THE NETWORK (issue 0016). A publish asks CI about the commit
-# it publishes, with gh, so every suite that publishes -- install, upgrade,
-# relink, the guard install and the e2e -- would otherwise ask GitHub about a
-# fixture commit it has never seen, from a machine that may or may not be
-# logged in. This gh refuses every call the same way, so a publish records
-# `unknown`, identically, on every machine and on CI. A test that wants another
-# answer points INSTALL_GH at its own stub.
+# it publishes, through the release core's `bin/devbin ci-state`, which asks
+# gh, so a suite that publishes a copy of this checkout, as the e2e does,
+# would otherwise ask GitHub about a fixture commit it has never seen, from a
+# machine that may or may not be logged in. This gh refuses every call, so
+# such a publish records unknown on every machine and on CI; where PATH's
+# bash is 3.2, as on CI's macOS legs, bin/devbin refuses before gh is asked,
+# and the reason differs. A fake source holds no bin/devbin, so its publish
+# records unknown without asking; a test that wants another answer writes its
+# own bin/devbin (install_lib.bats).
 export PATH="$UTILZ_TEST_DIR/stub-bin:$PATH"
 
 # NO TEST WRITES OUTSIDE ITS OWN TEMP DIRS (issue 0082). Tools that keep state

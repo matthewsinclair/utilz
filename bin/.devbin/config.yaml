@@ -131,19 +131,25 @@ macos:
 #
 # tag: bare, hv's ruling at 2.7.0. repo: declared because the core refuses
 # without it -- no origin and two remotes (local, upstream). gates: check all
-# alone (hv, 28 Oct 2026, ST0030): the dry run and the twins run test estate
-# before a cut. after: tools/post-cut, one line, since the core runs every
-# after: command even past a failure: it attaches the Menuz.app the cut's
-# macos leg signed, then publishes the formula and pulls the tap, stopping at
-# the first failure (ST0030 D2, ST0031/04). No formula: key, so the core's
-# formula step, which runs before after:, cannot put the formula on the tap
-# ahead of the app. No ci block: from devbin 0.1.19 the core's built-in
-# ci-state reads CI itself, on the candidate's run of tests.yml, its default
-# workflow.
+# alone (hv, 28 Oct 2026, ST0030), test estate running before a cut and not in
+# it; the ruling rested on the dry run and the twins running the suites, and at
+# devbin 0.1.28 a dry run runs no gate, so that is the twins' run (ST0031/01).
+# after: one line, `tools/formula publish --pull` (ST0031/01),
+# which publishes the formula to the tap, then pulls this machine's clone of
+# it. The Menuz.app the cut's macos leg signed is attached before it, by the
+# core's own object step (issue 0329, from devbin 0.1.22), and a failed attach
+# ends the cut before any after: command runs, so the formula never reaches
+# the tap ahead of the app. No formula: key, so release.formula stays false
+# and the core's formula step stays off until issue I59c806c: the core's render
+# refuses Utilz's template, whose install is Utilz's own publish rather than the
+# core's @@INSTALL@@, and once the template takes the core's install, the
+# core's step replaces this line. No ci block: from devbin 0.1.19 the core's
+# built-in ci-state reads CI itself, on the candidate's run of tests.yml, its
+# default workflow.
 release:
   tag: "{version}"
   repo: matthewsinclair/utilz
   gates:
     - check all
   after:
-    - tools/post-cut
+    - tools/formula publish --pull
