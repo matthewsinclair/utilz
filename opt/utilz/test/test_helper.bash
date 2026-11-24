@@ -942,7 +942,20 @@ make_fake_src() {
     '    help:' '      path: help' '    version:' '      path: VERSION' \
     'commands:' '  build:' '    run: "true"' >"$home/bin/.devbin/config.yaml"
   git -C "$home" init -q >/dev/null 2>&1
-  fixture_commit "$home" init
+  fixture_commit "$home" init || return 1
+  # devbin 0.1.31 refuses to publish a checkout whose .devbin-tool is not its
+  # install: block's. The block above is the fixture's own, so the canon
+  # tree's copy would be stale here: devbin's build writes the fixture's.
+  local out
+  if ! out=$(run_devbin "$home" build 2>&1); then
+    printf 'make_fake_src: bin/devbin build in %s failed:\n%s\n' "$home" "$out" >&2
+    return 1
+  fi
+  [[ -f "$home/.devbin-tool" ]] || {
+    printf 'make_fake_src: bin/devbin build wrote no .devbin-tool in %s:\n%s\n' "$home" "$out" >&2
+    return 1
+  }
+  fixture_commit "$home" "tool facts"
 }
 
 # manifest_with_source_tree <manifest> <path> -- <manifest> with one
