@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-24 10:59Z
+heartbeat_at: 2026-11-24 13:43Z
 status: active
-focus: "Folded for hv's estate-wide compact (24 Nov 10:42Z, via devbin-vc). Utilz holds for hv's word after it. Open: hold 30, spike v3 for hv's ready; ic's AC-702cceb9.7 landing; hv decisions 17, 18 and 19 uncommitted on hv's board for hv's word."
+focus: "24 Nov 13:42Z: quiesced for hv's lid close (devbin-vc). ST0031/02 done; only AC-01.4, the cut, is left. Spike v3 slot 01M86TCTMC2NZ1GYDPPZ8HBGCN: cc releases it with its END. hv decisions 17, 18 and 19 uncommitted for hv's word. Unpushed to bc808502."
 claims: []
 ---
 
