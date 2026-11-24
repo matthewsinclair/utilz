@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 7386a9d5-ebce-4a62-bbeb-a887311d02fd
-heartbeat_at: 2026-11-24 16:54Z
+heartbeat_at: 2026-11-24 17:05Z
 status: active
 focus: "24 Nov 16:54Z: localfold for hv's estate compact (devbin-vc, 16:53Z). I59c806c landed at b58bb55e and pushed; CI run 45442089070 pending. Next: release dry run, first Desk slot after the compacts. Hold 31 stands."
 claims: []
