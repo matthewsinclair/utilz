@@ -1,0 +1,15 @@
+{
+  "id": "01M84K8AQ3Y21XG85EXFHTVA4S",
+  "ts": "2026-11-23T16:19:03.523Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 23 Nov 2026, first-hand in vc's session, read by vc's date -u of 16:18Z. hv's words: \"ready for the spike\" (16:05Z), and then \"yes\". The yes answers vc's question: \"may dc's ST0031 run and ic's showreel qr run go after the spike? devbin-vc needs your word for them.\" The rest is vc's wording. vc reads the yes as that and says so to hv. devbin-vc granted the spike's slot TM15WA at 16:05Z on hv's first words, relayed by vc, and holds every heavy grant until the spike's END. vc's relay of the yes to devbin-vc was refused by vc's session's safety check at 16:18Z. So hv gives that word in devbin-vc's own window, and until then utilz-dc's FF5TB4 (ST0031/01 with /02 at eec4b900) and utilz-ic's 1TDNX1 (showreel qr at 1ae82d9d) stay queued. Intent's 5DJWVA was granted by devbin-vc on hv's word in its own window at 16:17Z and runs alongside the spike. The spike runs under that load, so cc marks every timing with the load it read, and an M2 miss gets a quiet re-run before WP6's create design settles."
+  }
+}

@@ -229,6 +229,39 @@
       "text": "hv, 23 Nov 2026, first-hand, after decision 15. To each seat in its own session, as each relayed it to vc, and in vc's session: \"Please finish booting, then hold for instructions from VC and then devbin-vc.\" (cc by its date -u of 13:01Z, ic 13:02Z, dc 13:03Z), repeated after further compacts as \"Please finish booting, then hold for instructions from VC and devbin-vc.\" (dc 13:05Z, ic 13:05Z, cc 13:06Z). Then in vc's session, during vc's turn, before vc's date -u of 13:49Z: \"However, I need to move. Now.\" and \"We can do this later.\" The rest is vc's wording. hv has left for now, and the spike waits for hv's return, in place of decision 15's (4) \"Now\". cc's ask for it, 01M848922YQPMVNF4T2WTM15WA, stays queued at the Desk, which devbin-vc has kept closed since 12:52Z until hv gives it a word. Meanwhile the seats work on vc's word, and the Desk's grants stay devbin-vc's. dc queues its heavy ask for ST0031/01's run, to go after the spike's END. cc codes STca1b7f9's WP3 and WP4's failure half in a worktree, with no run (vc decision 112). ic designs `showreel qr`.",
       "state": "live",
       "recorded_at": "2026-11-23T13:50:35.798Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 17,
+      "text": "hv, 23 Nov 2026, first-hand in vc's session, read by vc's date -u of 16:18Z. hv's words: \"ready for the spike\" (16:05Z), and then \"yes\". The yes answers vc's question: \"may dc's ST0031 run and ic's showreel qr run go after the spike? devbin-vc needs your word for them.\" The rest is vc's wording. vc reads the yes as that and says so to hv. devbin-vc granted the spike's slot TM15WA at 16:05Z on hv's first words, relayed by vc, and holds every heavy grant until the spike's END. vc's relay of the yes to devbin-vc was refused by vc's session's safety check at 16:18Z. So hv gives that word in devbin-vc's own window, and until then utilz-dc's FF5TB4 (ST0031/01 with /02 at eec4b900) and utilz-ic's 1TDNX1 (showreel qr at 1ae82d9d) stay queued. Intent's 5DJWVA was granted by devbin-vc on hv's word in its own window at 16:17Z and runs alongside the spike. The spike runs under that load, so cc marks every timing with the load it read, and an M2 miss gets a quiet re-run before WP6's create design settles.",
+      "state": "live",
+      "recorded_at": "2026-11-23T16:19:03.523Z",
+      "edited_at": "2026-11-23T16:19:18.328Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 18,
+      "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 04:39Z. hv's words: \"Why why why WHY are there still open issues?!?\" and, to vc's answer and recommendation, \"Yes. I want all of these fixed.\" The rest is vc's wording. vc's batching is withdrawn: STca1b7f9's code already written (cc/stca1b7f9 at 3efc3397: WP3, WP4's failure half, Ib12d894's fix, WP6 but its create) and ic's toasts (I4eacd29) land now in their own booked run, without waiting for the spike, which closes Ib12d894, I4eacd29 and as much of I7fce35c as needs no spike; the spike's parts (WP1, WP2, WP4's Mission Control leg, WP6's create) follow in a second run. Ie8e55e8 closes with ST0031/01's landing, I59c806c follows in devbin-cc's order, and 0114, parked on arca_swift's tag by hv's P3 ruling, is put back to hv, since it needs arca_swift's issue 0003 fixed and tagged first.",
+      "state": "live",
+      "recorded_at": "2026-11-24T04:39:30.816Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 19,
+      "text": "rhadamanth stays on utilz dev while the Utilz seats work (hv, 24 Nov 2026, in vc's window: \"Stay on dev; Molt fix\", and in devbin-vc's window at 09:27Z: \"Keep dev; Molt warns\"). Molt's utilz liberator reports a dev or opt link set on a brew sleeve as a notice with its remedy, not a failure. The fix is Molt's (molt-vc's seats). rhadamanth's molt.toml keeps source = \"brew\".",
+      "state": "live",
+      "recorded_at": "2026-11-24T09:26:22.413Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 20,
+      "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 14:47Z. hv's words: \"I have pre-approved all checkins, commits, pushes, cuts, and brew updates, etc at devbin-vc. When it says go, go. Ok?\" The rest is vc's wording. It confirms devbin-vc's relay of hv's 14:45Z words (vc decision 114). From now on, a go from devbin-vc is hv's approval in vc's session for Utilz's commits, pushes, cuts and brew updates, and vc acts on it. hv decisions 17, 18 and 19 are committed as written under it. A red before a tag stops and waits. Spike v3 and STca1b7f9's live run still need hv at the keyboard, and a cut's notarisation still needs hv's keychain.",
+      "state": "live",
+      "recorded_at": "2026-11-24T14:47:44.961Z"
     }
   ],
   "sent": [],

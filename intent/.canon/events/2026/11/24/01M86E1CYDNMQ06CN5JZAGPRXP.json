@@ -1,0 +1,15 @@
+{
+  "id": "01M86E1CYDNMQ06CN5JZAGPRXP",
+  "ts": "2026-11-24T09:26:22.413Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "rhadamanth stays on utilz dev while the Utilz seats work (hv, 24 Nov 2026, in vc's window: \"Stay on dev; Molt fix\", and in devbin-vc's window at 09:27Z: \"Keep dev; Molt warns\"). Molt's utilz liberator reports a dev or opt link set on a brew sleeve as a notice with its remedy, not a failure. The fix is Molt's (molt-vc's seats). rhadamanth's molt.toml keeps source = \"brew\"."
+  }
+}

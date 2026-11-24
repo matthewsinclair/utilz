@@ -1,0 +1,15 @@
+{
+  "id": "01M85XM4R0SJ027PMH5HPS17C4",
+  "ts": "2026-11-24T04:39:30.816Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 04:39Z. hv's words: \"Why why why WHY are there still open issues?!?\" and, to vc's answer and recommendation, \"Yes. I want all of these fixed.\" The rest is vc's wording. vc's batching is withdrawn: STca1b7f9's code already written (cc/stca1b7f9 at 3efc3397: WP3, WP4's failure half, Ib12d894's fix, WP6 but its create) and ic's toasts (I4eacd29) land now in their own booked run, without waiting for the spike, which closes Ib12d894, I4eacd29 and as much of I7fce35c as needs no spike; the spike's parts (WP1, WP2, WP4's Mission Control leg, WP6's create) follow in a second run. Ie8e55e8 closes with ST0031/01's landing, I59c806c follows in devbin-cc's order, and 0114, parked on arca_swift's tag by hv's P3 ruling, is put back to hv, since it needs arca_swift's issue 0003 fixed and tagged first."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M870DVJ15Q64SQSSF20F4GYW",
+  "ts": "2026-11-24T14:47:44.961Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 14:47Z. hv's words: \"I have pre-approved all checkins, commits, pushes, cuts, and brew updates, etc at devbin-vc. When it says go, go. Ok?\" The rest is vc's wording. It confirms devbin-vc's relay of hv's 14:45Z words (vc decision 114). From now on, a go from devbin-vc is hv's approval in vc's session for Utilz's commits, pushes, cuts and brew updates, and vc acts on it. hv decisions 17, 18 and 19 are committed as written under it. A red before a tag stops and waits. Spike v3 and STca1b7f9's live run still need hv at the keyboard, and a cut's notarisation still needs hv's keychain."
+  }
+}
