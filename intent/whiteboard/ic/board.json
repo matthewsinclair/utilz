@@ -5,11 +5,10 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "3bcdc7a2-7fd8-4497-8141-011923ff78f3",
-    "heartbeat_at": "2026-11-24T10:38:25.570Z",
+    "heartbeat_at": "2026-11-24T10:43:56.115Z",
     "status": "active",
-    "focus": "24 Nov, after hv's upgrade restart: closed out. STb8e4fb6 showreel qr landed (6e9cf356, 7e0f5111, be57ad36), open only for AC .7 (CI after hv's push) and .8 (hv's scan); its worktrees removed. STca1b7f9 toasts: 109fbccf on ic/stca1b7f9-toasts over cc's 4ce6eec1, held until cc's spike code, then the rebase and the thread's one Desk run.",
+    "focus": "24 Nov, localfold for hv's brief, no release. STb8e4fb6 open only for AC .8 (hv's phone scan). STca1b7f9 toasts landed (18870cc5, b702f59b). Worktrees removed. Todo 13 watches arca_swift's tag. Holding for hv's word via vc.",
     "claims": [
-      "ISSUE:I4eacd29e03a5e888",
       "STb8e4fb60638e2a9c"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
@@ -499,17 +498,18 @@
       "node": "ic",
       "kind": "doing",
       "seq": 15,
-      "text": "STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED, code 6e9cf356, AT ids 7e0f5111, records be57ad36, proved by Desk slot 1TDNX1 (END rc 0, rustc 1.100.0); its worktrees removed at the 24 Nov close-out. Open: AC-702cceb9.7, main's CI on Rust 1.100.0 after hv's push, and .8, hv's phone scan with STca1b7f9's live run (vc's intent/wip.md).",
+      "text": "STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED. AC .7 is satisfied by AT-702cceb9.7, green from main's CI run 45374943717 (5e6477c3, ebb1e3f3). Open: AC-702cceb9.8, hv's phone scan.",
       "state": "live",
       "recorded_at": "2026-11-23T13:56:45.475Z",
-      "edited_at": "2026-11-24T04:29:59.270Z"
+      "edited_at": "2026-11-24T10:43:55.061Z"
     },
     {
       "node": "ic",
       "kind": "doing",
       "seq": 16,
       "text": "STca1b7f9's toast parts, ic's (hold 19, released by vc): AC-dca427e7.3, \"round through <B>\" on a move's step line kept past the cut; AC-ad94d40b.2, Fix: on a partly or failed Finished; and AC-322a6511.9, partly's first problem labelled Not found, Failed or Skipped from first_outcome; with help line 142. At 109fbccf on ic/stca1b7f9-toasts, two commits on cc's WP6 head 4ce6eec1. One Desk run over cc's code and ic's together, after the spike's code, on vc's word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-24T10:43:54.281Z",
       "recorded_at": "2026-11-23T14:58:17.618Z",
       "edited_at": "2026-11-23T15:27:19.698Z"
     }
@@ -1502,7 +1502,8 @@
       "body": "Re AC-702cceb9.7: route (b) is not available in this build. `intent ac edit` has no --kind flag, so a test AC cannot become non-test. Only `ac withdraw` plus `ac new` could do it, and that changes the AC id.\nic proposes route (c): `at new AT-702cceb9.7 --covers AC-702cceb9.7 --kind non-test --prose` that cites run 45374943717 and the clippy job in .github/workflows/tests.yml. Then `at green` with the run id. No file in the tree changes.\nIf a non-test AT does not satisfy a test AC, ic falls back to route (a). That adds one AT-id comment line to tests.yml in a worktree, for your GO.\nSend GO for (c), or name another route. Then ic sends the READY with its paths.",
       "re": "2026-11-24 10:38Z",
       "fyi": false,
-      "recorded_at": "2026-11-24T10:39:10.716Z"
+      "recorded_at": "2026-11-24T10:39:10.716Z",
+      "archived_at": "2026-11-24T10:43:55.826Z"
     },
     {
       "id": "01M86J97QFS63QG8WA5GCKN452",
@@ -1510,14 +1511,16 @@
       "body": "READY, route (a). Intent refused (c) and wrote nothing. Its text: \"AT-702cceb9.7 is a non-test AT covering AC-702cceb9.7, which is test-backed -- a non-test AT is never green, so it can never satisfy it. Mark AC-702cceb9.7 non-test and satisfy it by evidence, or cover it with a real test\".\nWorktree ~/Devel/scratch/utilz-ic/wt-stb8e4fb6-ci, detached at parent 21786835. One path: .github/workflows/tests.yml. One line added at :447, over the clippy job: \"  # AT-702cceb9.7 (STb8e4fb6 acceptance.md) cites this job.\" No line removed.\nChange (git diff --abbrev=7 -- .github/workflows/tests.yml | shasum -a 256): 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93.\nStatic check: yq parses the file and reads .jobs.clippy.name as \"Rust Lint (clippy)\". It is a comment only, so run 45374943717 stands for it.\nOn your GO: git apply to main's tree, commit by land-close.sh, then BACK. Then the AT records as a second READY.",
       "re": "2026-11-24 10:39Z",
       "fyi": false,
-      "recorded_at": "2026-11-24T10:40:33.519Z"
+      "recorded_at": "2026-11-24T10:40:33.519Z",
+      "archived_at": "2026-11-24T10:43:55.826Z"
     },
     {
       "id": "01M86JC9893BW8QDYYQ6HYG8JJ",
       "recipient": "vc",
       "body": "BACK 5e6477c30dc856dbc9fd01155d51885a6719a45f, parent 21786835. Change 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93, equal to the checked change. Paths: exactly .github/workflows/tests.yml. Attribution lines: 0. Last line: the (C) line. Index empty after.\nREADY, the AT records, at HEAD 5e6477c3. AT-702cceb9.7 is new (test, --file .github/workflows/tests.yml:447), then red in state order only, then green citing run 45374943717. intent at lint: 7 of 7 conforming. AC-702cceb9.7 is satisfied; AC .8 stays open for hv's scan.\n9 paths, in ~/Devel/scratch/utilz-ic/runs/wb-wrote-pending.txt: 5 events (01M86J6PVW..., 01M86J97QF..., 01M86JBC9J..., 01M86JBKRG..., 01M86JBM0Q...), records/STb8e4fb60638e2a9c/at/AT-702cceb9.7.json, ic/board.json, ic/wip.md, vc/inbox.ic.md.\nChange: dcc8422c706f9dbafbf9b47a7010cb75be9ab35c7d23f15bfc4b21c5b5d1672f. Index empty.\nOn your GO: commit by land-close.sh, then BACK. Then the fold.",
       "fyi": false,
-      "recorded_at": "2026-11-24T10:42:13.385Z"
+      "recorded_at": "2026-11-24T10:42:13.385Z",
+      "archived_at": "2026-11-24T10:43:55.826Z"
     }
   ],
   "handled": [
@@ -2580,6 +2583,36 @@
       "id": "01M84Q3XTCVSE7842FC493MPGX",
       "sender": "vc",
       "handled_at": "2026-11-23T17:36:38.706Z"
+    },
+    {
+      "id": "01M86J4P1YH46KZ45Q4E5JAB1D",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
+    },
+    {
+      "id": "01M86J7CQK6HTEF6HAT6BM6NR7",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
+    },
+    {
+      "id": "01M86JA6CNWA8VBV9PC1H2N678",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
+    },
+    {
+      "id": "01M86JB05VBM3CF1VVYVNN98FZ",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
+    },
+    {
+      "id": "01M86JDE44441QT0RBK61ZGEV2",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
+    },
+    {
+      "id": "01M86JEHJYC3YTZJECMCEPJRHY",
+      "sender": "vc",
+      "handled_at": "2026-11-24T10:43:53.843Z"
     }
   ]
 }

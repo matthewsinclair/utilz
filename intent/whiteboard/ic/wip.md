@@ -3,18 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-24 10:38Z
+heartbeat_at: 2026-11-24 10:43Z
 status: active
-focus: "24 Nov, after hv's upgrade restart: closed out. STb8e4fb6 showreel qr landed (6e9cf356, 7e0f5111, be57ad36), open only for AC .7 (CI after hv's push) and .8 (hv's scan); its worktrees removed. STca1b7f9 toasts: 109fbccf on ic/stca1b7f9-toasts over cc's 4ce6eec1, held until cc's spike code, then the rebase and the thread's one Desk run."
-claims: [ISSUE:I4eacd29e03a5e888, STb8e4fb60638e2a9c]
+focus: "24 Nov, localfold for hv's brief, no release. STb8e4fb6 open only for AC .8 (hv's phone scan). STca1b7f9 toasts landed (18870cc5, b702f59b). Worktrees removed. Todo 13 watches arca_swift's tag. Holding for hv's word via vc."
+claims: [STb8e4fb60638e2a9c]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED, code 6e9cf356, AT ids 7e0f5111, records be57ad36, proved by Desk slot 1TDNX1 (END rc 0, rustc 1.100.0); its worktrees removed at the 24 Nov close-out. Open: AC-702cceb9.7, main's CI on Rust 1.100.0 after hv's push, and .8, hv's phone scan with STca1b7f9's live run (vc's intent/wip.md). (edited)
-- STca1b7f9's toast parts, ic's (hold 19, released by vc): AC-dca427e7.3, "round through <B>" on a move's step line kept past the cut; AC-ad94d40b.2, Fix: on a partly or failed Finished; and AC-322a6511.9, partly's first problem labelled Not found, Failed or Skipped from first_outcome; with help line 142. At 109fbccf on ic/stca1b7f9-toasts, two commits on cc's WP6 head 4ce6eec1. One Desk run over cc's code and ic's together, after the spike's code, on vc's word. (edited)
+- STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED. AC .7 is satisfied by AT-702cceb9.7, green from main's CI run 45374943717 (5e6477c3, ebb1e3f3). Open: AC-702cceb9.8, hv's phone scan. (edited)
 
 ## TODO
 

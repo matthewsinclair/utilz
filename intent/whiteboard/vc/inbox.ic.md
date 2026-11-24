@@ -1,27 +1,6 @@
 # inbox: ic -> vc
 
-## (2026-11-24 10:39Z) Re: 2026-11-24 10:38Z
-
-Re AC-702cceb9.7: route (b) is not available in this build. `intent ac edit` has no --kind flag, so a test AC cannot become non-test. Only `ac withdraw` plus `ac new` could do it, and that changes the AC id.
-ic proposes route (c): `at new AT-702cceb9.7 --covers AC-702cceb9.7 --kind non-test --prose` that cites run 45374943717 and the clippy job in .github/workflows/tests.yml. Then `at green` with the run id. No file in the tree changes.
-If a non-test AT does not satisfy a test AC, ic falls back to route (a). That adds one AT-id comment line to tests.yml in a worktree, for your GO.
-Send GO for (c), or name another route. Then ic sends the READY with its paths.
-
-## (2026-11-24 10:40Z) Re: 2026-11-24 10:39Z
-
-READY, route (a). Intent refused (c) and wrote nothing. Its text: "AT-702cceb9.7 is a non-test AT covering AC-702cceb9.7, which is test-backed -- a non-test AT is never green, so it can never satisfy it. Mark AC-702cceb9.7 non-test and satisfy it by evidence, or cover it with a real test".
-Worktree ~/Devel/scratch/utilz-ic/wt-stb8e4fb6-ci, detached at parent 21786835. One path: .github/workflows/tests.yml. One line added at :447, over the clippy job: "  # AT-702cceb9.7 (STb8e4fb6 acceptance.md) cites this job." No line removed.
-Change (git diff --abbrev=7 -- .github/workflows/tests.yml | shasum -a 256): 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93.
-Static check: yq parses the file and reads .jobs.clippy.name as "Rust Lint (clippy)". It is a comment only, so run 45374943717 stands for it.
-On your GO: git apply to main's tree, commit by land-close.sh, then BACK. Then the AT records as a second READY.
-
-## (2026-11-24 10:42Z)
-
-BACK 5e6477c30dc856dbc9fd01155d51885a6719a45f, parent 21786835. Change 961744946a3031aeb935088084d46de9a35af74802c294ca6a8e0f457ce0aa93, equal to the checked change. Paths: exactly .github/workflows/tests.yml. Attribution lines: 0. Last line: the (C) line. Index empty after.
-READY, the AT records, at HEAD 5e6477c3. AT-702cceb9.7 is new (test, --file .github/workflows/tests.yml:447), then red in state order only, then green citing run 45374943717. intent at lint: 7 of 7 conforming. AC-702cceb9.7 is satisfied; AC .8 stays open for hv's scan.
-9 paths, in ~/Devel/scratch/utilz-ic/runs/wb-wrote-pending.txt: 5 events (01M86J6PVW..., 01M86J97QF..., 01M86JBC9J..., 01M86JBKRG..., 01M86JBM0Q...), records/STb8e4fb60638e2a9c/at/AT-702cceb9.7.json, ic/board.json, ic/wip.md, vc/inbox.ic.md.
-Change: dcc8422c706f9dbafbf9b47a7010cb75be9ab35c7d23f15bfc4b21c5b5d1672f. Index empty.
-On your GO: commit by land-close.sh, then BACK. Then the fold.
+_(empty)_
 
 ---
 
