@@ -1,0 +1,16 @@
+{
+  "id": "01M86JDA7Z5R0YE2G53X12H081",
+  "ts": "2026-11-24T10:42:47.168Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 3,
+    "text": "No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file without a fresh go from hv."
+  }
+}

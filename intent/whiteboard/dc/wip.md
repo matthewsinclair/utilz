@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-24 10:38Z
+heartbeat_at: 2026-11-24 10:42Z
 status: active
-focus: "24 Nov: ST0031/01 and /02 landed at 7c0b9538 and 00c87c15 on slot 01M84ATR's run; the landing records with vc; /01 open until the cut proves AC-01.4, /02 until CI proves its criteria."
+focus: "24 Nov: localfold, no release; Utilz holds for hv's word. ST0031 rests until the next push, a candidate run and the first cut."
 claims: [ST0031/01, ST0031/02]
 ---
 
@@ -13,7 +13,7 @@ claims: [ST0031/01, ST0031/02]
 
 ## DOING
 
-- ST0031/01 with /02, under (A) (hv decision 14): landed on main at 7c0b9538 (/02) and 00c87c15 (/01), proven by slot 01M84ATR's run at eec4b900, each checked by vc by change. After hv's push: AC-01.1 on the pushed sha and vc's read, with /02's criteria as CI proves them (AC-02.1 also at the next push that runs CI, AC-02.3 at the first candidate/ run or dispatch), then /02 done. /01 stays open until the cut proves AC-01.4. The worktree ~/Devel/scratch/utilz-dc/wt-st0031-01 and branch dc/st0031-01 go by the fold's checks. (edited)
+- ST0031 rests, landed and pushed (/02 7c0b9538, /01 00c87c15, records 9a297a6a and 21786835). Open: AC-02.1 at the next push's cache restore, AC-02.3 at the first candidate/ or dispatch run, then /02 done; AC-01.4 at the first cut, then /01 done. (edited)
 
 ## TODO
 
@@ -25,7 +25,7 @@ _(none)_
 
 ## Watch-outs
 
-- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file. The ST0031/03 exception (vc decision 80) is spent: it landed at b8e527d8 and closed at 001b8c0d. Touching build_kind again, eg for ST0031/01's re-read against the vendored 0.1.19 app-sign, needs a fresh go from hv. (edited)
+- No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file without a fresh go from hv. (edited)
 - The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew.
 
 ## Decisions
