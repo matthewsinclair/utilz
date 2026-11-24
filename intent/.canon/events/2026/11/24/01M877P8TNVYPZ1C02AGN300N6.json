@@ -1,0 +1,15 @@
+{
+  "id": "01M877P8TNVYPZ1C02AGN300N6",
+  "ts": "2026-11-24T16:54:40.725Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 24 Nov 2026: issue I59c806c (devbin-cc) landed on main at b58bb55e, a fast-forward from 2423573c, at vc's date -u of 16:48Z. Its four commits were CHECKED by change: 2c9f7d99 (2523e259, 27 paths), e50fb93e (659ca8f4, 88), 0aaae2d0 (f1ef7d6d, 1) and b58bb55e (6cc4a0ac, 18). Each has 0 attribution and the (C) line last. Its proof is Desk run 01M873MQZQ0A5QWQ0FQG9F9WPA (driver 5d212100): 272 of 272 under BSD, 0 skipped, the opt-tree guard clean, the red arm failing at the base, critic exit 0, and release check formula true, after none. hv pushed main to b58bb55e on both remotes. The issue closes when push run 45442089070 is green. The old AT notes keep their text. Next: the release dry run in the canon tree, in the Desk's first slot after hv's compacts (devbin-vc, 16:53Z)."
+  }
+}
