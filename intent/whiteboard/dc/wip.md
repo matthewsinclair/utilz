@@ -3,7 +3,7 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-23 16:19Z
+heartbeat_at: 2026-11-24 04:28Z
 status: active
 focus: "23 Nov: ST0031/01 with /02 at eec4b900, slot 01M84ATR asked on vc's GO at 13:51Z, queued after cc's spike TM15WA, the Desk closed until hv's word; on devbin-vc's GO run, release, END; land on vc's word, the records ready in ~/Devel/scratch/utilz-dc/st0031-01/. ic's `showreel qr` read second: r1 and r2 sent, no finding left."
 claims: [ST0031/01, ISSUE:Ie8e55e87057927e0]
@@ -13,7 +13,7 @@ claims: [ST0031/01, ISSUE:Ie8e55e87057927e0]
 
 ## DOING
 
-- ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 asked at 13:51Z on vc's GO (heavy; network, cargo and bats in its text), after cc's spike TM15WA, which needs hv's hands; the Desk is closed until hv's word to devbin-vc. On devbin-vc's GO: run, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/. (edited)
+- ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 is live and still asked (heavy; network, cargo and bats). It is P2 under devbin decision 286, after Molt's 1.4.8 cut, as dc asked devbin-vc on 23 Nov: the run is unmeasured, with a cold prez build and a 1800 s cap. Main at 9ccf44ad leaves the run's 17 paths and its three reader pins unmoved. On devbin-vc's GO: run, time it, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/. (edited)
 
 ## TODO
 

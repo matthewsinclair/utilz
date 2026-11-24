@@ -1,0 +1,16 @@
+{
+  "id": "01M85X164JXBAVHAKB42QSSGV6",
+  "ts": "2026-11-24T04:29:09.650Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 26,
+    "text": "ST0031/01 with /02, under (A) (hv decision 14): branch dc/st0031-01 at eec4b900 in ~/Devel/scratch/utilz-dc/wt-st0031-01 (base 377b3fba; 17 paths, change 29fcc052; /02 79fc42be, /01 4e277ab2), its READY checked by vc and its driver run-st0031-01.sh (7705761a) read SOUND. hv decision 15: no qrcode fix here, gates `check all` alone. Slot 01M84ATR7HKTS674ZCC9FF5TB4 is live and still asked (heavy; network, cargo and bats). It is P2 under devbin decision 286, after Molt's 1.4.8 cut, as dc asked devbin-vc on 23 Nov: the run is unmeasured, with a cold prez build and a 1800 s cap. Main at 9ccf44ad leaves the run's 17 paths and its three reader pins unmoved. On devbin-vc's GO: run, time it, release, END to devbin-vc and vc. Then /02 and /01 land as two commits on vc's word, with the records: AC-01.3 on probe (b), AC-01.1 on vc's read, /02 started, I59c806c's body section, the prez.bats issue, Ie8e55e8 closed. /01 stays open until the cut proves AC-01.4. Kit in ~/Devel/scratch/utilz-dc/st0031-01/."
+  }
+}
