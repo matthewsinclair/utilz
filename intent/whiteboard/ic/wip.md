@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-23 17:36Z
+heartbeat_at: 2026-11-24 04:29Z
 status: active
-focus: "23 Nov, localfold for hv's estate-wide compact (via devbin-vc, Desk held from 17:26Z), no release. STb8e4fb6 showreel qr: code at 1ae82d9d on ic/stb8e4fb6, CHECKED; Desk ask 1TDNX1 (run-qr.sh 8b3ce0d4) queued behind FF5TB4, re-judged after the compacts. STca1b7f9 toasts: 109fbccf on ic/stca1b7f9-toasts over cc's 4ce6eec1, rebase once more after the spike's code, then the thread's one Desk run. Resume state in ~/Devel/scratch/utilz-ic/RESUME.md."
+focus: "24 Nov, after hv's upgrade restart: closed out. STb8e4fb6 showreel qr landed (6e9cf356, 7e0f5111, be57ad36), open only for AC .7 (CI after hv's push) and .8 (hv's scan); its worktrees removed. STca1b7f9 toasts: 109fbccf on ic/stca1b7f9-toasts over cc's 4ce6eec1, held until cc's spike code, then the rebase and the thread's one Desk run."
 claims: [ISSUE:I4eacd29e03a5e888, STb8e4fb60638e2a9c]
 ---
 
@@ -13,7 +13,7 @@ claims: [ISSUE:I4eacd29e03a5e888, STb8e4fb60638e2a9c]
 
 ## DOING
 
-- STb8e4fb6, showreel qr (hv decision 15): code landed as 6e9cf356 and its AT ids as 7e0f5111, each CHECKED by vc, proved by Desk slot 1TDNX1 (END rc 0, rustc 1.100.0). WP 702cceb9's ACs satisfied but .7, main's CI on Rust 1.100.0 after hv's push, and .8, hv's phone scan with STca1b7f9's live run; vc keeps both beside hv's push on intent/wip.md. The worktrees wt-stb8e4fb6 and wt-stb8e4fb6-atids go at ic's next fold. (edited)
+- STb8e4fb6, showreel qr (hv decision 15): landed and CHECKED, code 6e9cf356, AT ids 7e0f5111, records be57ad36, proved by Desk slot 1TDNX1 (END rc 0, rustc 1.100.0); its worktrees removed at the 24 Nov close-out. Open: AC-702cceb9.7, main's CI on Rust 1.100.0 after hv's push, and .8, hv's phone scan with STca1b7f9's live run (vc's intent/wip.md). (edited)
 - STca1b7f9's toast parts, ic's (hold 19, released by vc): AC-dca427e7.3, "round through <B>" on a move's step line kept past the cut; AC-ad94d40b.2, Fix: on a partly or failed Finished; and AC-322a6511.9, partly's first problem labelled Not found, Failed or Skipped from first_outcome; with help line 142. At 109fbccf on ic/stca1b7f9-toasts, two commits on cc's WP6 head 4ce6eec1. One Desk run over cc's code and ic's together, after the spike's code, on vc's word. (edited)
 
 ## TODO
