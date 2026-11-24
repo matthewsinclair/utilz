@@ -1,0 +1,32 @@
+# The tool's facts, written by devbin from bin/.devbin/config.yaml's install:
+# block (docs/dev-opt-brew.md, T1 and T3). Do not edit it: in a checkout,
+# bin/devbin build and bin/devbin upgrade write it again.
+manifest: manifest.sha256
+set: :(literal)bin/utilz
+set: :(literal)bin/arngz
+set: :(literal)bin/cleanz
+set: :(literal)bin/clipz
+set: :(literal)bin/cryptz
+set: :(literal)bin/expz
+set: :(literal)bin/gitz
+set: :(literal)bin/lnrel
+set: :(literal)bin/macoz
+set: :(literal)bin/mdagg
+set: :(literal)bin/menuz
+set: :(literal)bin/pdf2md
+set: :(literal)bin/prez
+set: :(literal)bin/retry
+set: :(literal)bin/stampz
+set: :(literal)bin/syncz
+set: :(literal)bin/todo
+set: :(literal)bin/xtrct
+set: :(literal)bin
+set: :(exclude,glob)bin/devbin
+set: :(exclude,glob)bin/.devbin/**
+set: :(literal)opt
+set: :(exclude,glob)opt/*/test/**
+set: :(exclude,glob)opt/prez/crate/**
+set: :(literal)help
+set: :(literal)static
+set: :(literal)VERSION
+set: :(literal)opt/prez/crate/Cargo.toml
