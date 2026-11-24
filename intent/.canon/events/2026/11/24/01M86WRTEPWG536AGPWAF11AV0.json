@@ -1,0 +1,15 @@
+{
+  "id": "01M86WRTEPWG536AGPWAF11AV0",
+  "ts": "2026-11-24T13:43:49.975Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) did not run: slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was granted at 13:02Z and released \"not run\" by cc at 13:43Z, at hv's lid close. Released when hv says ready again: cc makes a fresh ask at the Desk, runs the load-only check, then vc gives hv the command."
+  }
+}

@@ -2705,6 +2705,14 @@
       "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 13:01Z. hv's words: \"ready, but be sure to sync with devbin-vc.\" The rest is vc's wording. It releases hold 30: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5, unchanged at 13:01Z). cc makes a fresh light ask at the Desk, devbin-vc grants it in its order, cc runs the load-only check under the slot, and then vc gives hv the command to run in hv's own terminal. vc tells devbin-vc first, as hv asked.",
       "state": "live",
       "recorded_at": "2026-11-24T13:01:56.873Z"
+    },
+    {
+      "node": "vc",
+      "kind": "hold",
+      "seq": 31,
+      "text": "STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) did not run: slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was granted at 13:02Z and released \"not run\" by cc at 13:43Z, at hv's lid close. Released when hv says ready again: cc makes a fresh ask at the Desk, runs the load-only check, then vc gives hv the command.",
+      "state": "live",
+      "recorded_at": "2026-11-24T13:43:49.974Z"
     }
   ],
   "sent": [
