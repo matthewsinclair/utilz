@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-24 10:42Z
+heartbeat_at: 2026-11-24 16:54Z
 status: active
-focus: "24 Nov, localfold on vc's FOLD NOW (10:40Z), no release. STca1b7f9's code before the spike is on main (18870cc5, 3fd0923c, b702f59b); wt-stca1b and its branches removed. Hold 53: spike v3 on hv's ready through vc. Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "24 Nov 16:54Z, localfold on hv's word via vc, no release. Spike v3 slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was released not run at 13:43Z (lid close). Hold 53 stands: fresh ask on hv's next ready via vc. Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]
 ---
 
