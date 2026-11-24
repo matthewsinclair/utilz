@@ -1,0 +1,14 @@
+{
+  "id": "01M86KQQ69J34J7MB9P2X6V079",
+  "ts": "2026-11-24T11:05:56.683Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST0031/AC-02.1"
+  },
+  "payload": {
+    "evidence": "Main's CI, Rust (ubuntu-latest), Swatinem/rust-cache at 6323deb1 (v2.9.2), workspaces opt/prez/crate -> target, key ${{ matrix.os }}. Run 45374943717 (attempt 1, head d429526c, push, success): \"No cache found.\", the release builds finished in 48.70s and 53.00s, and the post step saved the cache. Run 45379534519 (attempt 1, head 6c1c3529, push, success): \"Restored from cache key \"v0-rust-ubuntu-latest-rust-Linux-x64-8272a5e9-167796d6\" full match: true.\", the release builds finished in 27.50s and 33.69s, and the post step said \"Cache up-to-date.\". Read by vc and by dc from the logs (vc's ~/Devel/scratch/utilz-vc/ci-45379534519/run.log, sha256 1a15770d; dc's read of 45374943717 through gh run view --log)."
+  }
+}
