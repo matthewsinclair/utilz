@@ -87,6 +87,12 @@ setup() {
 
   isolate_tool_homes
 
+  # UTILZ_INSTALL_PREFIX HAS NO READER AT THIS TREE, AND IT IS STILL UNSET HERE.
+  # devbin publishes Utilz now (devbin#0326, issue I59c806c), from
+  # install.prefix. But an older tree's `utilz install` reads the variable, and
+  # a test can run older code, eg a red leg on the base. A maintainer's own value
+  # names the real opt tree, so it must never reach a test.
+  unset UTILZ_INSTALL_PREFIX
   # AND THE LINK DIRECTORY IS THE TEST'S (issue 0105): doctor and `use` read
   # ~/.local/bin, which on a maintainer's machine holds the live link set.
   # UTILZ_LINK_DIR names it for tests only, here a directory no test has made.
