@@ -13,7 +13,7 @@ claims: [ST0031/01, ST0031/02]
 
 ## DOING
 
-- ST0031 rests, landed and pushed (/02 7c0b9538, /01 00c87c15, records 9a297a6a and 21786835). Open: AC-02.1 at the next push's cache restore, AC-02.3 at the first candidate/ or dispatch run, then /02 done; AC-01.4 at the first cut, then /01 done. (edited)
+- ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M86WH8NF6JXYK4YSNE2Z5ZSW",
+  "ts": "2026-11-24T13:39:42.383Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 26,
+    "text": "ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done."
+  }
+}
