@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-24 10:43Z
+heartbeat_at: 2026-11-24 16:54Z
 status: active
-focus: "24 Nov, localfold for hv's brief, no release. STb8e4fb6 open only for AC .8 (hv's phone scan). STca1b7f9 toasts landed (18870cc5, b702f59b). Worktrees removed. Todo 13 watches arca_swift's tag. Holding for hv's word via vc."
+focus: "24 Nov 16:54Z: localfold on hv's word via vc, no release. STb8e4fb6 open only for AC .8 (hv's phone scan). Todo 13 watches arca_swift's tag. Holding for hv's word via vc."
 claims: [STb8e4fb60638e2a9c]
 ---
 
