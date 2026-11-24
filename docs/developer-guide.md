@@ -603,60 +603,12 @@ load "../../utilz/test/test_helper.bash"
 
 ## Multi-Language Utilities
 
-Utilities can be written in any language, invoked via a bash wrapper.
+The dispatcher runs `opt/<name>/<name>`, which is always a bash script. A utility in another language keeps that script as a shim and puts the tool beside it. Write new code in bash or zsh, or in Rust. Ship no Python.
 
-### Bash Wrapper Pattern
+- **Rust**: prez is the model. `opt/prez/prez` is a shim that builds the crate under `opt/prez/crate/` when it is missing or stale, then runs it. Its header says why the binary is built on each machine and not committed. Build it through `bin/devbin build`.
+- **Lua**: arngz is the model. `opt/arngz/arngz` is the shim, and its engine is in `opt/arngz/lib/`.
 
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Source common library
-if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
-    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-fi
-
-# Check for Python
-require_command "python3" "Python 3 is required"
-
-# Execute Python implementation
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-exec python3 "$SCRIPT_DIR/logtool.py" "$@"
-```
-
-### Project Structure
-
-```
-opt/logtool/
-├── logtool         # Bash wrapper (dispatcher invokes this)
-├── logtool.py      # Python implementation
-├── logtool.yaml    # Metadata
-└── test/
-    └── logtool.bats
-```
-
-### Supported Languages
-
-Any language that can be invoked as a script:
-
-- **Python**: `exec python3 "$SCRIPT_DIR/logtool.py" "$@"`
-- **Ruby**: `exec ruby "$SCRIPT_DIR/logtool.rb" "$@"`
-- **Node.js**: `exec node "$SCRIPT_DIR/logtool.js" "$@"`
-- **Compiled** (Rust, Go): Build binary, `exec "$SCRIPT_DIR/logtool" "$@"`
-
-### Dependency Declaration
-
-Declare language dependency in metadata:
-
-```yaml
-dependencies:
-  - name: python3
-    required: true
-    install: brew install python3
-    purpose: Runtime for logtool implementation
-```
+Declare each runtime the utility needs under `dependencies:` in its metadata, as [Dependencies](#dependencies) says.
 
 ## Version Management
 
@@ -673,13 +625,10 @@ version: 1.0.0
 Declare compatible framework version with caret notation:
 
 ```yaml
-utilz_version: "^1.0.0" # Compatible with 1.x.x
+utilz_version: "^2.0.0" # Compatible with 2.x.x
 ```
 
-**Version Compatibility Rules**:
-
-- `^1.0.0`: Compatible with 1.x.x (major version must match)
-- `^2.0.0`: Compatible with 2.x.x (incompatible with 1.x.x)
+The major version must match: `^2.0.0` accepts 2.x.x and refuses 1.x.x.
 
 ### Checking Compatibility
 
@@ -689,35 +638,16 @@ The `utilz doctor` command checks version compatibility:
 $ utilz doctor
 Checking installed utilities...
 ⚠ Version incompatibilities detected:
-    - logtool (requires Utilz ^2.0.0, have 1.0.0)
+    - logtool (requires Utilz ^3.0.0, have 2.15.0)
 ```
 
 ### Updating Versions
 
-When releasing a new version of your utility:
+A utility ships in a Utilz release. It has no tag of its own.
 
-1. Update version in YAML:
-
-   ```yaml
-   version: 1.1.0
-   ```
-
-2. Update CHANGELOG (if you have one)
-
-3. Commit and tag:
-
-   ```bash
-   git commit -am "logtool 1.1.0: Add JSON support"
-   git tag logtool-1.1.0
-   ```
-
-   **No `v` prefix, from 2.7.0 onward** (hv's ruling). It is noise, and it was
-   the last thing making the framework's version line a different shape from a
-   utility's. Tags cut before 2.7.0 keep the `v` they were published with --
-   those are records of the name a release actually had, not assertions about
-   the convention. Nothing in this repo consumes the prefix: no workflow, lib
-   or script globs `v*` or calls `git describe` with a v-pattern, so the series
-   being non-uniform costs a reader's eye and nothing else.
+1. Bump `version:` in its YAML, or the file its `version_file:` names (eg `opt/arngz/VERSION`, prez's `crate/Cargo.toml`).
+2. Add a line to the CHANGELOG's open section, `## [X.Y.Z] - unreleased`, that names the change and the version step, eg "arngz goes from 1.2.0 to 1.2.1".
+3. Commit it. hv's cut tags the release, bare, with no `v` ([releasing.md](releasing.md)).
 
 ## Best Practices
 

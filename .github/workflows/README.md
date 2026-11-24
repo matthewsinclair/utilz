@@ -1,164 +1,27 @@
 # GitHub Actions Workflows
 
-This directory contains automated workflows that run on GitHub to ensure code quality and test coverage for the Utilz framework.
+Each workflow's comments say why each step is as it is. This file names the jobs and when they run.
 
-## Workflows
+## Utilz Tests (`tests.yml`)
 
-### 1. Utilz Tests (`tests.yml`)
+It runs on a push to `main` or to `candidate/**`, on a pull request to `main`, and on a manual dispatch. A push that changes only `intent/whiteboard/` and `intent/.canon/` starts no run. A newer push cancels the run it supersedes. No tag starts a run: the release core pushes the release commit to `candidate/<tag>` and reads CI there before it tags ([docs/releasing.md](../../docs/releasing.md)).
 
-**Triggers**: On push to `main` branch and on all pull requests
+| Job            | Name                  | When                                                   | What it does                                                                                           |
+| -------------- | --------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `test-linux`   | Test on Ubuntu        | every run                                              | `tools/ci-suites` on Ubuntu, with bats-core 1.12.0                                                     |
+| `test-macos`   | Test on macOS         | candidate push, dispatch                               | `tools/ci-suites` on macOS, with Homebrew's bats-core                                                  |
+| `shellcheck`   | Shell Script Analysis | every run                                              | `shellcheck -x` on every shell file under `bin/` and `opt/`, sourced `*.sh` libraries included         |
+| `rust`         | Rust (os)             | Ubuntu every run, macOS on candidate push and dispatch | Each crate's build and tests, and prez's `crate/test/*.sh` suites, with a cargo cache, bound at 25 min |
+| `clippy`       | Rust Lint (clippy)    | every run                                              | `cargo fmt --check` and clippy with `-D warnings`, on every crate                                      |
+| `menuz-app`    | menuz app (macOS)     | candidate push, dispatch                               | Menuz.app built and tested by Xcode, unsigned                                                          |
+| `test-summary` | Test Summary          | every run that is not cancelled                        | Reads every job's result, and fails when one failed                                                    |
 
-**What it does**:
+Every job fails the run when it fails. `tools/ci-suites` is the one roster for both test jobs. It runs `utilz test` for the dispatcher, then each utility's suite but prez's, which is the `rust` job's. The file says why.
 
-- Runs all utility tests on Ubuntu and macOS
-- Performs ShellCheck analysis on all scripts
-- Validates framework with `utilz doctor`
-- Provides a summary of test results
+## PR Checks (`pr-checks.yml`)
 
-**Jobs**:
+It runs on a pull request. Its jobs are `check-documentation`, `test-coverage`, `commit-message-check`, `pr-size-check` and `utility-metadata-check`.
 
-- `test-linux`: Runs full test suite on Ubuntu with bats-core
-- `test-macos`: Runs full test suite on macOS with bats-core
-- `shellcheck`: Static analysis of shell scripts (non-blocking)
-- `test-summary`: Aggregates results from all test jobs
+## Run the tests locally
 
-**Key Features**:
-
-- Tests on both Ubuntu and macOS to ensure cross-platform compatibility
-- Installs yq for YAML parsing
-- Uses `utilz test` to run all utility tests
-- ShellCheck provides code quality feedback without blocking
-
-### 2. PR Checks (`pr-checks.yml`)
-
-**Triggers**: On all pull request events (opened, synchronized, reopened)
-
-**What it does**:
-
-- Checks for documentation updates when code changes
-- Verifies test coverage for new code
-- Validates commit message format
-- Checks PR size and suggests splitting if too large
-- Validates utility metadata for new utilities
-
-**Jobs**:
-
-- `check-documentation`: Ensures docs are updated when scripts change
-- `test-coverage`: Verifies tests are added/updated with code changes
-- `commit-message-check`: Validates commit message length and format
-- `pr-size-check`: Warns about large PRs (>1000 lines)
-- `utility-metadata-check`: Ensures new utilities have proper metadata, README, and tests
-
-## Status Badge
-
-Add the test status badge to the main README:
-
-```markdown
-[![Utilz Tests](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml/badge.svg)](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml)
-```
-
-## Local Testing
-
-Before pushing, you can run tests locally:
-
-```bash
-# Set up environment
-export UTILZ_HOME="$HOME/Devel/prj/Utilz"
-export PATH="$UTILZ_HOME/bin:$PATH"
-
-# Run all tests
-utilz test
-
-# Run specific utility tests
-utilz test mdagg
-
-# Run tests directly
-cd opt/mdagg/test
-bats mdagg.bats
-
-# Run diagnostics
-utilz doctor
-
-# Run ShellCheck locally
-shellcheck bin/utilz
-shellcheck opt/*/[!test]*
-```
-
-## Workflow Maintenance
-
-### Dependencies
-
-- **GitHub Actions**: Uses `actions/checkout@v4`
-- **yq**: YAML parsing for metadata files
-- **Bats**: Installed via system package manager (v1.12.0)
-- Both environments test the full suite to ensure cross-platform compatibility
-
-### Test Environments
-
-- **Ubuntu**: Latest version with apt package manager
-- **macOS**: Latest version with Homebrew
-- Both environments run identical test suites
-
-### Best Practices
-
-- ShellCheck runs are non-blocking to allow gradual improvements
-- Tests run with `utilz test` command
-- All scripts are made executable before running
-- Environment setup mimics local development
-
-## Adding New Utilities
-
-When adding a new utility:
-
-1. **Create the implementation** in `opt/myutil/myutil`
-2. **Add metadata file** `opt/myutil/myutil.yaml` with version and description
-3. **Write tests** in `opt/myutil/test/*.bats`
-4. **Add documentation** in `opt/myutil/README.md` and `help/myutil.md`
-5. **Create symlink** `ln -s utilz bin/myutil`
-6. **Run tests locally** with `utilz test myutil`
-7. **Update main README** if the utility is significant
-
-The PR checks will validate that all these files are present.
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Tests pass locally but fail in CI**
-   - Check for environment-specific paths
-   - Ensure UTILZ_HOME is set correctly
-   - Verify file permissions are set correctly
-   - Check that yq is available
-
-2. **yq not found**
-   - The workflow installs yq automatically
-   - On Linux, it downloads the binary directly
-   - On macOS, it uses Homebrew
-
-3. **ShellCheck warnings**
-   - These are non-blocking but should be addressed
-   - Run `shellcheck` locally to see specific issues
-   - Common issues: unquoted variables, unused variables
-
-4. **Doctor reports issues**
-   - This is non-blocking to allow flexible test environments
-   - PATH warnings are expected in CI (UTILZ_HOME/bin not in base PATH)
-   - Missing optional dependencies (bat, mdcat) are acceptable
-
-### Debugging Workflows
-
-- Check the Actions tab in GitHub for detailed logs
-- Each step shows its output when expanded
-- Failed steps are highlighted in red
-- Use `echo` statements for debugging in workflows
-
-## Version Compatibility
-
-The workflows expect:
-
-- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
-- yq for YAML parsing
-- bats-core for testing
-- Standard Unix utilities (grep, sed, awk, find)
-
-Both Ubuntu and macOS runners provide these by default or install them during setup.
+Build and test through `bin/devbin`, and only through it: `bin/devbin test <rust|shell|estate|all>`. Where `intent estate status` shows a controller, ask it for a slot first ([AGENTS.md](../../AGENTS.md)). [docs/developer-guide.md](../../docs/developer-guide.md) says how to add a utility and its tests.

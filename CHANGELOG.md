@@ -15,12 +15,15 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **`utilz upgrade` builds with devbin in dev, and names devbin's republish in opt.** In dev it runs `git pull --ff-only`, then `bin/devbin build`. In opt it names `bin/devbin install --force` in the dev checkout.
 - **A manifest with no `line` is an old one**, as devbin's contract reads it: Utilz's own header from before this release included. In opt doctor fails it, naming `bin/devbin install --force`. Homebrew's keg with one is noted, naming `brew upgrade utilz`, and fails nothing.
 - **doctor no longer shows CI's verdict on the published commit.** devbin's manifest does not record it; the cut reads CI through the core's `ci-state`.
+- **The cut's object step attaches Menuz.app.zip before the formula step runs** (ST0031/01, devbin#0329). The core does both. Issue Ie8e55e8: menuz names the release asset in one place, `MENUZ_ASSET`, which is held equal to the core's.
+- **CI's two test jobs run one roster, `tools/ci-suites`** (ST0031/02; harness only). It runs the dispatcher's suite and every utility's but prez's, through `each_utility`, so a new utility is tested on both legs. The rust job caches cargo, and stops after 25 minutes (issue 0131).
 
 ### Removed
 
 - **`utilz install` and `utilz use`.** Each refuses, naming `bin/devbin install` or `bin/devbin use`, run in a checkout. `utilz relink` names `bin/devbin use`.
 - **`UTILZ_INSTALL_PREFIX`.** The opt prefix is `install.prefix` in `bin/.devbin/config.yaml`.
 - **`tools/formula`.** devbin's formula built-in renders and publishes the template.
+- **`tools/ci-state` and `tools/post-cut`** (ST0031/01). The core's `bin/devbin ci-state` reads CI, and the core's object step attaches the app.
 
 ## [2.14.10] - 2026-11-10
 

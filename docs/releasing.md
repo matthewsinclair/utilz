@@ -1,19 +1,19 @@
 # Releasing Utilz
 
-A Utilz release is cut by **devbin's release core**, `bin/devbin release`, declared in the `release:` block of `bin/.devbin/config.yaml` and switched on since 2026-09-21 (hv's OK; ST0019 D1, Devbin ST0007 WP-08, commit cb45181). **2.12.0 is the first cut through it.** Every release up to 2.11.0 was cut by hand, the last of them on hv's ruling of 14 September that the core would be adopted after it rather than during it.
+A Utilz release is cut by **devbin's release core**, `bin/devbin release`, declared in the `release:` block of `bin/.devbin/config.yaml` (ST0019 D1).
 
 **hv runs the cut.** It tags and pushes, and tags and pushes are hv's. Every read-only step below is anyone's.
 
-Everything here was read from the copy vendored at `bin/.devbin/`, which is the copy that runs, and the version rule below was checked by running it rather than by reading it. **A runtime before 0.1.6 cannot cut this project at all**: it stops at step 1 on this repository's own tag set, for the reason under "Which version it resolves" below. So 2.12.0 is cut after the vendored runtime is swept to 0.1.6.
+Everything here was read from the copy vendored at `bin/.devbin/`, which is the copy that runs.
 
 ## Before the cut
 
 - **The CHANGELOG's open section names its version**: `## [X.Y.Z] - unreleased`, never `## [Unreleased]`. The core finds a section by its version and dates it at the cut (ST0019 D2).
 - **prez keeps its own version number.** A release that bumps prez carries the bump (`opt/prez/crate/Cargo.toml` and the `Cargo.lock` cargo rewrites) in its own commit before the cut (ST0019 D2, ruled 2026-09-21). A hand-written version needs a build before the suite reads it (issue 0056).
-- **Run `bin/devbin check all` before handing a Rust change on, and do not read a green test suite as covering it.** `check all` runs `cargo fmt --check` and clippy; no Utilz suite runs either, and the pre-commit formatter gate stops at markdown. Six formatting diffs rode five commits into `main` on 2026-09-22 under a green 13/13 thread and a green estate, reddened CI, and would have refused the cut at step 5 (issues 0059 and 0060). `cargo fmt --check` also fails the CI step **ahead** of clippy, so drift hides the clippy verdict entirely rather than adding to it.
+- **Run `bin/devbin check all` before handing a Rust change on, and do not read a green test suite as covering it.** `check all` runs `cargo fmt --check` and clippy; no Utilz suite runs either, and the pre-commit formatter gate stops at markdown (issues 0059 and 0060). `cargo fmt --check` also fails the CI step **ahead** of clippy, so drift hides the clippy verdict entirely rather than adding to it.
 - **The tree is clean, and stays clean.** Step 2 refuses anything dirty outside what the release owns, untracked files included, so a realised view of a closed thread or a stray scratch file stops the cut. Step 5 re-reads the tree and `HEAD` after the gates and fails the cut if a gate wrote to either.
 - **Every node holds its writes for the whole cut** (ST0019 D6). That includes `intent wb` heartbeats and pickups, which write a board view and a canon event.
-- **The gate is `bin/devbin check all`** (hv, 28 Oct 2026, ST0030). `bin/devbin test estate`, which is `tools/test-estate` and runs every suite under the bash 3.2.57 macOS ships (issue 0051), runs before the cut and not in it. hv's ruling rested on the dry run and the twins running the suites; at Devbin 0.1.28 a dry run runs no gate, so before a cut the suites run in the twins, and in no step of the cut or its dry run.
+- **The gate is `bin/devbin check all`** (hv, 28 Oct 2026, ST0030). `bin/devbin test estate`, which is `tools/test-estate` and runs every suite under the bash 3.2.57 macOS ships (issue 0051), runs before the cut and not in it. A dry run runs no gate, so the suites run in the twins before a cut, and in no step of the cut or its dry run.
 - **CI is read on the candidate, before anything is tagged** (issue 0046, ST0031/04). The core reads CI itself, with its built-in `bin/devbin ci-state`: its legs step pushes the release commit to `candidate/<tag>`, whose push runs `tests.yml` with every leg, the macOS legs included, and it reads that ref's runs alone, the worst of them deciding. A red candidate, or no verdict within `ci.wait`, stops the cut with nothing tagged and the candidate deleted, and a run GitHub cancelled before a resumed cut's own push is passed over (devbin issue 0330).
 - **The tag is bare and annotated**: `2.12.0`, never `v2.12.0`, with the CHANGELOG section's body as its message, passed with `--cleanup=whitespace` (ST0019 D7). The core writes it and reads it back.
 
@@ -37,18 +37,7 @@ Everything here was read from the copy vendored at `bin/.devbin/`, which is the 
 | 10   | formula    | `formula publish --pull`: the formula to the tap, then this machine's clone         |
 | 11   | after      | none: the formula step is the core's, under `release.formula` (issue I59c806c)      |
 
-**Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's sixteen older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped: the newest match is `2.11.0`, and `--minor` resolves `2.12.0`.
-
-**On a runtime before 0.1.6 those same tags stop the cut dead** (devbin issue 0106, found here and fixed in 0.1.6). `release_versions` ends its loop body with `is_semver "$v" && printf ...` (release.steps:107). `git tag --list` emits byte order, so `v2.6.1` is the last tag it reads; `is_semver` is false on it; the `&&` leaves 1 as the loop's status; and because the handler runs under `set -euo pipefail` (cmd/release:24), `pipefail` makes that the status of the whole pipeline even though `sort` succeeded. `release_resolve` returns it on a bare `||` with no `warn`, so the cut stops at step 1 with an empty reason, having written nothing:
-
-```
-release: --minor (DRY RUN: nothing is written)
-  1  resolve     FAILED
-
-release: stopped at step 1 (resolve). This run tagged nothing and pushed nothing.
-```
-
-**Ask this question with `bin/devbin release --minor --dry-run`, never by sourcing `release_versions` into a shell of your own.** The refusal is created by the handler's shell options rather than by the function, so the same call under a plain `bash -c` returns `2.12.0` and reports success: a true answer about a shell the cut never runs in. Two nodes measured it that way on 2026-09-22 and agreed with each other, which is one measurement taken twice rather than a confirmation. The dry run is read-only, needs no argument beyond the bump, and answers it directly.
+**Which version it resolves.** `--minor` bumps the newest tag matching the declared template, and the template here is `{version}`, so a tag counts only when it is a bare `X.Y.Z`. This repository's older `v`-prefixed tags (`v1.0.0` through `v2.6.1`) are therefore not candidates and cannot be bumped. Ask which version a bump resolves with `bin/devbin release --minor --dry-run`, never by sourcing the core's functions into a shell of your own: the cut's handler runs under `set -euo pipefail`, and a plain shell can answer differently (devbin issue 0106).
 
 **Where it pushes.** `release.remotes` is undeclared here, and undeclared means every remote `git remote` lists, in that order: **`local` and `upstream`, both**, which is this project's rule anyway. `release.repo` names `matthewsinclair/utilz` because with no `origin` and two remotes the core cannot read the repository off a remote and refuses rather than guessing.
 
@@ -67,7 +56,7 @@ bin/devbin macos doctor        # the profile PRESENT, the Developer ID identitie
 
 `store-creds` runs `notarytool store-credentials` under the profile `macos.notary_profile` names, `devbin` by default, and every notarisation submits under it. It runs in a terminal only, refusing a stdin that is not one. notarytool asks for an App Store Connect API key path, left empty, then the Apple ID, the app-specific password and the team id, each typed at its own prompt, so none reaches a command line (issue 0126), checks them with Apple and saves the profile. Nothing is written to this repository, and nothing prints a value. `doctor` names each Developer ID identity's team, and `macos.team` is declared only where it counts more than one. The `utilz.apple` items an earlier devbin read stay in the keychain, unread.
 
-**At every cut, the core's object step attaches the app the cut's macOS leg signed, with `macos publish` (step 3 below), and only then does the cut publish the formula** (issue 0329, ST0031/01). A failed attach ends the cut before its `after:` line runs, so the formula never reaches the tap ahead of the app. A re-run continues where it stopped: the object step is done once the release carries `Menuz.app.zip`, and a tap already carrying the release is left as it is. Nothing here builds or signs. By hand, outside a cut, it is `bin/devbin macos publish` from a tree whose version is the tag, then `bin/devbin formula publish --pull`.
+**At every cut, the core's object step attaches the app the cut's macOS leg signed, with `macos publish` (step 3 below), and only then does the cut publish the formula** (issue 0329, ST0031/01). A failed attach ends the cut before the formula step, so the formula never reaches the tap ahead of the app. A re-run continues where it stopped: the object step is done once the release carries `Menuz.app.zip`, and a tap already carrying the release is left as it is. Nothing here builds or signs. By hand, outside a cut, it is `bin/devbin macos publish` from a tree whose version is the tag, then `bin/devbin formula publish --pull`.
 
 The leg signs in the primary at the release commit, the commit the tag then names, and `publish` reads the tag's commit, never HEAD: it refuses a staged copy signed at any other commit, and one whose `MenuzCommit` is not the tag's (issue 0103). So a node's board commit that moves the primary past the tag cannot make it ship another build, and the attach needs no worktree. A Menuz.app built off the tag carries that commit and the kind `dev`, and every Homebrew install's menu would show them.
 
@@ -90,13 +79,13 @@ The icon is Utilz's own, not the built-in's: `bin/devbin macos app-icons` raster
 Utilz installs with Homebrew from the tap `matthewsinclair/homebrew-utilz`. Its formula builds from source at the bare tag, so it names the tag and the tag's commit. The repository keeps the formula as a template, `packaging/homebrew/utilz.rb`, with one `@@TAG@@`, one `@@REVISION@@` and one `@@INSTALL@@`, and is never installed from. devbin's formula built-in fills them, as the dev, opt, brew contract has every tool's formula rendered (T8, devbin's `docs/dev-opt-brew.md`; issues 0105 and I59c806c): the tag and its commit from git, and `@@INSTALL@@` with the core's one install form, `bin/devbin install --prefix libexec --managed-by brew` from the tag's checkout, then the link set. Render also writes the bash the build needs and the step that hashes the manifest again after brew changes the keg. The template's declaration is the `formula:` block in `bin/.devbin/config.yaml`: source mode, and the tap.
 
 - `bin/devbin formula render <tag> <out>` writes the formula for an annotated tag to `<out>`, and writes nothing in this tree. `bin/devbin formula check` makes every check render makes that needs no tag, and Utilz's formula.bats runs it.
-- `bin/devbin formula publish --pull` renders the release into a fresh clone of the tap, commits it and pushes it, then brings this machine's clone of the tap forward, where Homebrew keeps one. It pushes, so it runs in hv's cut, as the core's formula step under `release.formula`, once the object step has attached `Menuz.app.zip`. `tools/formula`, which did this until issue I59c806c, is retired.
+- `bin/devbin formula publish --pull` renders the release into a fresh clone of the tap, commits it and pushes it, then brings this machine's clone of the tap forward, where Homebrew keeps one. It pushes, so it runs in hv's cut, as the core's formula step under `release.formula`, once the object step has attached `Menuz.app.zip`.
 
 **Never type the commit by hand.** The offline `brew audit --strict` accepts any 40 hex digits, so a wrong commit passes the audit and fails at every user's install. The commit comes from `git rev-parse <tag>^{commit}`, inside devbin's render.
 
 ### After every cut
 
-The core's object step attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above), since a formula pushed before it gives every new install a `menuz install` that fails until the asset arrives. Then the core's formula step publishes the formula to the tap and pulls this machine's clone, with `bin/devbin formula publish --pull`. Nothing is committed in this repository: the template does not change from one release to the next.
+The core's object step attaches Menuz.app's asset first, the copy the cut's macOS leg signed (above). Then the core's formula step publishes the formula to the tap and pulls this machine's clone, with `bin/devbin formula publish --pull`. Nothing is committed in this repository: the template does not change from one release to the next.
 
 Then hv:
 
@@ -126,4 +115,4 @@ A formula that names a commit brew cannot fetch fails every install, so the tap 
 
 The tap's repository is `matthewsinclair/homebrew-utilz` on GitHub. On a machine that has tapped it, brew keeps its clone at `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`, as hv's Intent tap is kept.
 
-It was set up once, at the 2.11.0 cut on 2026-09-21, after this repository's tag was pushed: the formula then committed here, written by the tool `tools/formula` replaced (itself retired by issue I59c806c for devbin's formula built-in), was staged as `Formula/utilz.rb` in a new repository, created with `gh repo create matthewsinclair/homebrew-utilz --source . --push`, then tapped with `brew tap matthewsinclair/utilz`, audited clean, installed and checked with `utilz doctor` (ST0019 AC-05.2).
+It was set up once, at the 2.11.0 cut on 2026-09-21, with `gh repo create matthewsinclair/homebrew-utilz --source . --push` and `brew tap matthewsinclair/utilz` (ST0019 AC-05.2).
