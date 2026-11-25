@@ -1,0 +1,16 @@
+{
+  "id": "01M89Q1BV6GBMBVJPVDTQSZ22V",
+  "ts": "2026-11-25T16:01:21.766Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 20,
+    "text": "A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 23 (3)), on vc's go after hv decision 39, at risk and not run: ic's 2f914ba9 on ic/desks1125-a-toasts (worktree ~/Devel/scratch/utilz-ic/wt-desks-a-toasts), over cc's 90bc0d8e, is in cc's stack as 365d3cf3 on cc/desks1125, and ic checked it by change: 061437f9 for both. The remove step, the wait for \"desktop changes\", Finished's removed and extra counts, a third count line so no count is cut, help/arngz.md's Toasts lines, and toast_test's arms. cc's run-a.sh leg 3 pins the red leg ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh (972f71c0, base 90bc0d8e), and vc reads the driver. The run goes at vc's word after the removeSpace probe, and cc sends ic its END. If the probe sends A back to design, the parts go back with it. After a green END: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua), to-write, red, green; remove wt-desks-a-toasts once A lands."
+  }
+}
