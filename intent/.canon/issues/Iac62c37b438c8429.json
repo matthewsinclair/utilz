@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "Iac62c37b438c8429",
+  "origin": "01M88WX18SFNFXK216HZYR5852",
+  "realised": true,
+  "slug": "macoz-setpicfor-pattern-has-no-effect-and-dry-ru",
+  "title": "macoz setpicfor: --pattern has no effect, and --dry-run refuses without fileicon",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-25",
+  "reporter": "Matthew Sinclair",
+  "body": "Found by ic in the docs sync of 24 Nov 2026 (hv decision 21), and fixed on vc's word (hv decision 23).\n\n## What is wrong\n\n1. `macoz setpicfor --pattern <pat>` stores the pattern and prints it with `--verbose`, but `--all` never uses it (`opt/macoz/macoz:146`, `196-203`, `247`). The search always looks for `icon.*`, `folder.*` and `<dirname>.*` (`259-270`). The option has never had an effect, and nothing tells the user so. Since the docs sync, help/macoz.md:57 says it has no effect.\n2. The check for fileicon runs before the mode is known (`231-237`). So a `--dry-run`, which never calls fileicon, refuses on a Mac without it. Since the docs sync, help/macoz.md:42 says so.\n\n## The fix\n\n1. Make `--pattern` work, as hv chose over removing it (hv decision 25). With `--all`, its value names the images that setpicfor looks for in each subdirectory, in place of the built-in names (`icon`, `folder` and the directory's own name).\n   - The value is a list of shell globs separated by `|`, eg `'cover.*|art.*'`. Each glob is matched against the file name of each image.\n   - setpicfor tries the globs in the order given. Where one glob matches more than one image, it takes the first in name order.\n   - Only `png`, `jpg` and `jpeg` files count, in lower or upper case, as for the built-in names.\n   - Without `--all`, a `--pattern` is refused, exit 1, since one directory takes the image it is given.\n2. Check for fileicon only when the run will call it, so a `--dry-run` previews without it.\n\n## The proof\n\nFour new tests in `opt/macoz/test/macoz.bats`, each red at the base:\n\n- with `--pattern`, a directory takes the image the pattern names in place of a built-in name, and a directory with only a built-in name is skipped;\n- the globs are tried in order, and only images count;\n- `--pattern` without `--all` is refused;\n- a `--dry-run` with fileicon hidden from the PATH succeeds.\n\nThe existing test that a real run refuses without fileicon stays green.\n"
+}

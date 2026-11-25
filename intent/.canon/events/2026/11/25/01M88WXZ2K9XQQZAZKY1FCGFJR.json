@@ -1,0 +1,15 @@
+{
+  "id": "01M88WXZ2K9XQQZAZKY1FCGFJR",
+  "ts": "2026-11-25T08:25:07.411Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Four defects on hv decision 23: I9adb91e (mdagg strip), Iac62c37 (macoz --pattern, --dry-run), I5963f6c (prez USAGE, prez.yaml), I2b133d8 (5 READMEs' licence). Fix in a worktree, one Desk run, land on vc's word."
+  }
+}

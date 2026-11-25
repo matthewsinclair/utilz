@@ -1,0 +1,15 @@
+{
+  "id": "01M88WWTTT827N4ANEKC74ZWH3",
+  "ts": "2026-11-25T08:24:30.301Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I9adb91e6bb8b096d"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "mdagg --strip-front-matter cuts the text between any two --- lines, not only a front-matter block at line 1"
+  }
+}

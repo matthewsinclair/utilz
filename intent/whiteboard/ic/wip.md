@@ -2,11 +2,11 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 3bcdc7a2-7fd8-4497-8141-011923ff78f3
-heartbeat_at: 2026-11-24 19:33Z
+session_id: 04e9ab64-11cf-4205-bf2e-c2e0c0f64d94
+heartbeat_at: 2026-11-25 07:33Z
 status: active
 focus: "24 Nov 19:33Z: end of day, localfold on hv's word, no release. Docs landed at c4b1a6c1, records at 1183c682. Open: STb8e4fb6 AC .8 (hv's phone scan); todo 13 watches arca_swift's tag. Holding for hv's word via vc."
-claims: [STb8e4fb60638e2a9c]
+claims: [STb8e4fb60638e2a9c, ISSUE:I9adb91e6bb8b096d, ISSUE:Iac62c37b438c8429, ISSUE:I5963f6cbf3a07824, ISSUE:I2b133d807f5599ce]
 ---
 
 # Interface Claude (ic)
@@ -14,6 +14,7 @@ claims: [STb8e4fb60638e2a9c]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
+- Four defects on hv decision 23: I9adb91e (mdagg strip), Iac62c37 (macoz --pattern, --dry-run), I5963f6c (prez USAGE, prez.yaml), I2b133d8 (5 READMEs' licence). Fix in a worktree, one Desk run, land on vc's word.
 
 ## TODO
 

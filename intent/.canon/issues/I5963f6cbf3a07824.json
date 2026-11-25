@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "I5963f6cbf3a07824",
+  "origin": "01M88WX1D95QR00C4N7K1JJ71P",
+  "realised": true,
+  "slug": "prez-the-present-line-of-help-omits-o-and-prez-y",
+  "title": "prez: the present line of --help omits -o, and prez.yaml claims a stdin mode and one crate",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-25",
+  "reporter": "Matthew Sinclair",
+  "body": "Found by ic in the docs sync of 24 Nov 2026 (hv decision 21), and fixed on vc's word (hv decision 23).\n\n## What is wrong\n\n1. `prez --help` shows `prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--window=WxH] [--browser=PATH]` (`opt/prez/crate/src/args.rs:16`). `present` takes `-o`, which keeps the built HTML at that path (`opt/prez/crate/src/deck.rs:66-75`), and help/prez.md:50 shows it.\n2. `opt/prez/prez.yaml:43` lists `stdin` as an input mode. prez reads no deck from standard input: it takes one path, and a bare `-` is not stdin (`args.rs:185-187`).\n3. `prez.yaml:16-17`, `args.rs:1` and `opt/prez/crate/src/frontmatter.rs:8` say that comrak is the only crate or dependency. Since 9 Sep 2026, prez also depends on its first-party `artifact` crate, which hv signed off as AC02's one addition (`opt/prez/crate/Cargo.toml`).\n\nNo code reads prez.yaml's `modes`, so that line is wrong but nothing acts on it.\n\n## The fix\n\n1. Add `[-o out.html]` to USAGE's present line.\n2. Remove `stdin` from prez.yaml's `modes`.\n3. Say in each of the three places that comrak is the only third-party crate.\n\n## The proof\n\nA new unit test in `args.rs`, red at the base: USAGE's present line names `-o`. `cargo test` for the prez crate runs it.\n"
+}
