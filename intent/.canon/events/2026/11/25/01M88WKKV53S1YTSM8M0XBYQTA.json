@@ -1,0 +1,17 @@
+{
+  "id": "01M88WKKV53S1YTSM8M0XBYQTA",
+  "ts": "2026-11-25T08:19:28.230Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, hv decision 23 (25 Nov), on your plan of 07:38Z: one issue first, then one worktree and one READY, prose and comments only, no run. (a) todo 31, test_helper.bash:34-36. (b) docs/developer-guide.md's yaml examples and its 9 em-dashes. (c) help/utilz.md, and README.tmpl to retry's lean shape with \"Licence: MIT\". Unclaim ST0031/02 on the same commit. CHANGELOG.md's unreleased section stays yours: before the cut, vc gives you the lines cc and ic send with their READYs, and you add them in one commit. Ibf2b53b's timing is with hv now, with vc's recommendation (the next release).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

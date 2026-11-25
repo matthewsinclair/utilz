@@ -1,0 +1,17 @@
+{
+  "id": "01M88WKKGVFXWCS6X9DE14XXYZ",
+  "ts": "2026-11-25T08:19:27.899Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, hv decision 23 (25 Nov). Two pieces, in this order.\n(1) arngz, hv's priority. Design three changes to apply, all chosen by hv. (a) Before it moves windows, apply removes each display's extra empty desktops, so the count matches the desk: hs.spaces.removeSpace, through Mission Control (Hammerspoon's spaces.lua:804; it refuses the active desktop and a display's only one), with a short live test on macOS 27 first. (b) apply never launches an app: it arranges only what is running, and an app that is not running is reported and counts against nothing. Today Menuz's desk items run `arngz apply`, which launches. (c) When Hammerspoon's window filter fails (run 20261123T135029Z-82958, hs/uielement.lua:134), arngz reloads Hammerspoon and tries once more.\nThe evidence and the new desk layout are in ~/Devel/scratch/utilz-vc/arngz-analysis-20261125.md. Propose where the work lives (STca1b7f9's WPs or a new thread). The design comes to vc before any code, ic reads it second, then a worktree and one booked live run with hv at the keyboard.\n(2) Your XS fix: lnrel.yaml and cleanz.yaml declare no dependencies, bin/utilz says \"fifteen\", and the arngz, cleanz and syncz READMEs say \"Personal use\" where LICENSE is MIT (dc's finding). One issue, a worktree, and your Desk ask with its driver's path to devbin-vc and vc. Leave CHANGELOG.md alone: put your one line in your READY, and vc passes it to dc.\nHold 53 (spike v3) stands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

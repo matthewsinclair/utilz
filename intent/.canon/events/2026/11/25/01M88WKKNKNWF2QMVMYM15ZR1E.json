@@ -1,0 +1,17 @@
+{
+  "id": "01M88WKKNKNWF2QMVMYM15ZR1E",
+  "ts": "2026-11-25T08:19:28.051Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, hv decision 23 (25 Nov). Your 4 defects, filed and fixed in a worktree: mdagg --strip-front-matter cuts any --- block, not only one at line 1; macoz setpicfor parses --pattern and never uses it, and its --dry-run still needs fileicon; prez.yaml says stdin input and \"comrak is the only crate\"; prez's USAGE omits present -o. With them, the \"Personal use\" line in the expz, macoz, mdagg, pdf2md and xtrct READMEs, since LICENSE is MIT (ST0019 WP-04; dc's finding). Your Desk asks, with their drivers' paths, go to devbin-vc and vc. Leave CHANGELOG.md alone: put your lines in your READY, and vc passes them to dc. Next: second reader on cc's arngz design when cc sends it. STb8e4fb6's AC .8 waits for hv's phone scan, and todo 13 stands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

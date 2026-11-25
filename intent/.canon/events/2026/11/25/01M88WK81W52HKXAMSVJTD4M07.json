@@ -1,0 +1,15 @@
+{
+  "id": "01M88WK81W52HKXAMSVJTD4M07",
+  "ts": "2026-11-25T08:19:16.157Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session. Read by vc's date -u of 07:43Z, hv asked for an analysis of why arngz is not reliable across desks, with three ideas: the same number of desktops on each display in every desk, a re-save that drops an app no longer open, and a Hammerspoon reload at a monitor change. vc read the run log, the five desks and the code (~/Devel/scratch/utilz-vc/arngz-analysis-20261125.md) and put four questions to hv in the terminal, answered before vc's date -u of 08:17Z. hv's picks, from options worded by vc: (1) \"4th monitor desktop for browsers (Recommended)\". (2) On zeophq and hockenbury, hv's words: \"We can mnaully edit whatever we need to her, and arngz post-dates ever sitting at hockenbury as I wrote it here in Reunion and I haven't been back home since. So go for it. Nothing is sacred.\" (3) \"Remove extra desktops, Never launch apps, Recover from the filter crash\". (4) \"Yes, start them now (Recommended)\". hv gave the same start for Utilz and Gtools in devbin-vc's window (\"Both start (Recommended)\", relayed by devbin-vc at 08:13Z). The rest is vc's wording. (1) and (2): every desk shares one layout. The laptop's 6 desktops are the same in every desk. The first monitor's 3 desktops hold Mail/Notion/BusyCal/Emacs, ChatGPT/Claude and Xcode/Devices at every site. Chrome and Safari are on zeopit's second monitor, or on a 4th monitor desktop at a one-monitor site. rhad is the laptop's 6, then ChatGPT/Claude and Xcode/Devices, with Mail, Notion, BusyCal, Emacs, Chrome and Safari on laptop desktop 1. vc wrote rhad, homere, zeophq and hockenbury at 08:18Z, and zeopit already matched. The old files are in ~/Devel/scratch/utilz-vc/desks-before-20261125/. (3) cc designs all three, design to vc before code, with ic as second reader, then a worktree and one booked live run with hv at the keyboard, about M together. (4) cc, ic and dc start their work outside arngz through the Desk."
+  }
+}
