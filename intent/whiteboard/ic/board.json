@@ -9,11 +9,7 @@
     "status": "active",
     "focus": "24 Nov 19:33Z: end of day, localfold on hv's word, no release. Docs landed at c4b1a6c1, records at 1183c682. Open: STb8e4fb6 AC .8 (hv's phone scan); todo 13 watches arca_swift's tag. Holding for hv's word via vc.",
     "claims": [
-      "STb8e4fb60638e2a9c",
-      "ISSUE:I9adb91e6bb8b096d",
-      "ISSUE:Iac62c37b438c8429",
-      "ISSUE:I5963f6cbf3a07824",
-      "ISSUE:I2b133d807f5599ce"
+      "STb8e4fb60638e2a9c"
     ],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -522,7 +518,8 @@
       "kind": "doing",
       "seq": 17,
       "text": "Four defects on hv decision 23: I9adb91e (mdagg strip), Iac62c37 (macoz --pattern, --dry-run), I5963f6c (prez USAGE, prez.yaml), I2b133d8 (5 READMEs' licence). Fix in a worktree, one Desk run, land on vc's word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-25T08:53:24.917Z",
       "recorded_at": "2026-11-25T08:25:07.411Z"
     }
   ],
@@ -2630,6 +2627,26 @@
       "id": "01M86JGZMB4NJH9CBA134FFNYH",
       "sender": "vc",
       "handled_at": "2026-11-24T10:58:50.930Z"
+    },
+    {
+      "id": "01M88T4NCQPZN93EP7A0SV1G5R",
+      "sender": "vc",
+      "handled_at": "2026-11-25T08:44:42.341Z"
+    },
+    {
+      "id": "01M88WKKNKNWF2QMVMYM15ZR1F",
+      "sender": "vc",
+      "handled_at": "2026-11-25T08:44:42.341Z"
+    },
+    {
+      "id": "01M88X7DCJWGWFA9WBSQDW061C",
+      "sender": "vc",
+      "handled_at": "2026-11-25T08:44:42.341Z"
+    },
+    {
+      "id": "01M88XBHKCH9XDZS4EHPZWVMWP",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:44:42.497Z"
     }
   ]
 }

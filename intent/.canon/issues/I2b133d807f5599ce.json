@@ -2,12 +2,12 @@
   "schema": "intent/issue@4.0",
   "id": "I2b133d807f5599ce",
   "origin": "01M88WX1HW34YB9ASFTF7JBX99",
-  "realised": true,
   "slug": "five-utility-readmes-give-the-licence-as-persona",
   "title": "Five utility READMEs give the licence as personal use, but Utilz is MIT",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-11-25",
+  "closed": "2026-11-25",
   "reporter": "Matthew Sinclair",
-  "body": "Found by dc, and given to ic for these five READMEs by vc (hv decision 23).\n\n## What is wrong\n\nThe License sections of `opt/expz/README.md`, `opt/macoz/README.md`, `opt/mdagg/README.md`, `opt/pdf2md/README.md` and `opt/xtrct/README.md` say \"Part of Utilz framework. Personal use.\", each with a copyright line of its own. Utilz's LICENSE is MIT, and so is the Homebrew formula's `license` (`packaging/homebrew/utilz.rb:16`, ST0019). A reader of one of these READMEs is told the wrong licence. Their copyright years also differ from LICENSE's 2025-2026.\n\n## The fix\n\nEach of the five License sections says what the root README says, with the path from the utility: \"MIT. See [LICENSE](../../LICENSE).\" The README's own copyright line goes, since LICENSE holds the one copy.\n\nThe same line is in the READMEs of arngz, cleanz and syncz, which are cc's, and in `opt/utilz/tmpl/README.tmpl`, which is dc's.\n\n## The proof\n\nText only, so no run. After the fix, `git grep \"Personal use\"` finds nothing in the five files.\n"
+  "body": "Found by dc, and given to ic for these five READMEs by vc (hv decision 23).\n\n## What is wrong\n\nThe License sections of `opt/expz/README.md`, `opt/macoz/README.md`, `opt/mdagg/README.md`, `opt/pdf2md/README.md` and `opt/xtrct/README.md` say \"Part of Utilz framework. Personal use.\", each with a copyright line of its own. Utilz's LICENSE is MIT, and so is the Homebrew formula's `license` (`packaging/homebrew/utilz.rb:16`, ST0019). A reader of one of these READMEs is told the wrong licence. Their copyright years also differ from LICENSE's 2025-2026.\n\n## The fix\n\nEach of the five License sections says what the root README says, with the path from the utility: \"MIT. See [LICENSE](../../LICENSE).\" The README's own copyright line goes, since LICENSE holds the one copy.\n\nThe same line is in the READMEs of arngz, cleanz and syncz, which are cc's, and in `opt/utilz/tmpl/README.tmpl`, which is dc's.\n\n## The proof\n\nText only, so no run. After the fix, `git grep \"Personal use\"` finds nothing in the five files.\n\nResolution: Fixed at a9feb66d, which vc checked by its change: the License sections of the five READMEs say MIT and point to LICENSE. Text only, so no run."
 }

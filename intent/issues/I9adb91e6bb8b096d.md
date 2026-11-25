@@ -1,9 +1,10 @@
 ---
 issue: I9adb91e
 title: mdagg --strip-front-matter cuts the text between any two --- lines, not only a front-matter block at line 1
-status: OPEN
+status: CLOSED
 severity: medium
 created: 2026-11-25
+closed: 2026-11-25
 reporter: Matthew Sinclair
 ---
 
@@ -29,6 +30,8 @@ A file whose line 1 is `---` with no closing `---` line also loses everything af
 ## The proof
 
 Two new tests in `opt/mdagg/test/mdagg.bats`, each red at the base: under `-s`, a file with no front matter and two dividers keeps all its text, and a file with an unclosed `---` on line 1 keeps all its lines. The existing test of a real block stays green.
+
+Resolution: Fixed at a9feb66d, which vc checked by its change: mdagg strips a block only when line 1 is --- and a later --- line closes it. Proved by run 2FHBH1 (log runs/run-20261125T085049Z.log): the two new tests were red at the base, and mdagg.bats passed 44 of 44 under bash 3.2 and bash 5.
 
 ---
 
