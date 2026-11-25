@@ -1,0 +1,15 @@
+{
+  "id": "01M89S1PT4PJPM8XWNNF5DFA30",
+  "ts": "2026-11-25T16:36:30.148Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 16:36Z. devbin-vc's wording: \"hv's word: an estate-wide localfold and compact cycle.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing new until devbin-vc's word after the cycle. Each Utilz seat banks its prep in its worktree or scratch, localfolds by committing its own board files by path, sets a one-line resume focus and goes quiet, with no release. vc sends devbin-vc one report when Utilz is folded: what is unpushed, and the resume step, which is hv's arca_swift line first. Then hv runs /compact in each session."
+  }
+}

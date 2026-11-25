@@ -417,6 +417,14 @@
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 15:05Z. devbin-vc's wording: \"hv approved the plan as written.\" The rest is the wording of devbin-vc and vc. The estate plan is approved with Utilz's line and vc's amendment, so devbin-vc's ruling of arngz 2.0.0 (vc decision 119) stands. Utilz goes on now with the steps that need no run: (a) cc's WP A at-risk code from b04b86ea; (b) ic's R2 red-leg list and driver, for vc's read; (c) dc's 0114 CHANGELOG line, with menuz's step from 0.4.10 to 0.4.11; then the amendment's (1), dc's version steps, and (3), cc's fix of README.md:147. Each lands in the plan's order. devbin 0.1.33's sweep reaches Utilz now, and no seat commits on Utilz main until devbin-vc says Utilz's sweep commit is in. Runs ask the Desk as usual.",
       "state": "live",
       "recorded_at": "2026-11-25T15:05:43.814Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 40,
+      "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 16:36Z. devbin-vc's wording: \"hv's word: an estate-wide localfold and compact cycle.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing new until devbin-vc's word after the cycle. Each Utilz seat banks its prep in its worktree or scratch, localfolds by committing its own board files by path, sets a one-line resume focus and goes quiet, with no release. vc sends devbin-vc one report when Utilz is folded: what is unpushed, and the resume step, which is hv's arca_swift line first. Then hv runs /compact in each session.",
+      "state": "live",
+      "recorded_at": "2026-11-25T16:36:30.148Z"
     }
   ],
   "sent": [],
