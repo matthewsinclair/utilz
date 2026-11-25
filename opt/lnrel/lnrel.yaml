@@ -3,4 +3,16 @@ version_file: VERSION
 utilz_version: "^2.0.0"
 description: Create symlinks with relative paths
 author: Matthew Sinclair
-dependencies: []
+dependencies:
+  # lnrel needs GNU realpath, for its -m and --relative-to (find_gnu_realpath).
+  # macOS has it only as coreutils' grealpath; Linux has it as realpath.
+  - name: grealpath
+    platforms: [macos]
+    required: true
+    install: brew install coreutils
+    purpose: GNU realpath, which gives the relative path of each link
+  - name: realpath
+    platforms: [linux]
+    required: true
+    install: sudo apt install coreutils
+    purpose: GNU realpath, which gives the relative path of each link

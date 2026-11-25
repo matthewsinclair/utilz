@@ -59,10 +59,10 @@ determine_utilz_home() {
 # whole tree were the two tests of the announcement itself -- a behaviour whose
 # only consumer is its own test. Both tests are deleted with the branch.
 #
-# The variable survives as an internal channel from this line to the fifteen
-# utilities and to common.sh: derived once here and exported, because fifteen
-# utilities each re-deriving would be fifteen copies of one answer. The
-# dispatcher is its only producer.
+# The variable survives as an internal channel from this line to every utility
+# and to common.sh: derived once here and exported, because each utility
+# re-deriving it would be one more copy of one answer. The dispatcher is its
+# only producer.
 #
 # Assigned before export: `export VAR=$(cmd)` reports export's status (0), so a
 # failure to resolve UTILZ_HOME would be swallowed and every later path built

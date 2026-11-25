@@ -3,7 +3,13 @@ version_file: VERSION
 utilz_version: "^2.0.0"
 description: LLM text cleaner - removes hidden characters and formatting artifacts
 author: Matthew Sinclair
-dependencies: []
+dependencies:
+  # clipz, which --clipboard uses, is in this tree: cleanz finds it on PATH or
+  # at $UTILZ_HOME/bin/clipz, so it is not an external dependency.
+  - name: exiftool
+    required: false
+    install: brew install exiftool
+    purpose: Reads and strips image metadata; needed by cleanz --image
 
 integration:
   input: stdin

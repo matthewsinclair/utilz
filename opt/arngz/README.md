@@ -73,8 +73,7 @@ utilz test arngz
 
 ## License
 
-Part of Utilz framework. Personal use.
-Copyright (c) 2026 Matthew Sinclair
+MIT. See [LICENSE](../../LICENSE).
 
 ---
 

@@ -190,3 +190,23 @@ require_gnu_realpath() {
   run_lnrel "$BATS_TEST_TMPDIR/target.txt" "$BATS_TEST_TMPDIR/existing.txt"
   assert_failure
 }
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+# doctor reads what a utility needs from its yaml alone, so lnrel.yaml is what
+# makes doctor say that lnrel cannot run (issue I123a34f). The platform is
+# macOS, where GNU realpath is coreutils' grealpath, and the PATH has no
+# grealpath: /usr/bin and /bin never hold it.
+@test "doctor names grealpath as required by lnrel on macOS, with its install line, when it is not on PATH" {
+  stub_platform Darwin
+  local bin="$BATS_TEST_TMPDIR/bin" tool
+  mkdir -p "$bin"
+  for tool in yq git bash; do
+    ln -s "$(command -v "$tool")" "$bin/$tool"
+  done
+  run /bin/bash -c "export PATH='$UTILZ_TEST_PLATFORM_BIN:$bin:/usr/bin:/bin'; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_app() { return 0; }; run_doctor"
+  assert_output_contains "grealpath (required by lnrel)"
+  assert_output_contains "Install: brew install coreutils"
+}

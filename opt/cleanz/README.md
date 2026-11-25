@@ -47,7 +47,7 @@ cleanz
 
 ### Dependencies
 
-`help/cleanz.md` lists them. The script runs under bash 3.2, the bash that macOS ships.
+`cleanz.yaml` declares them, and `help/cleanz.md` says what each one is for. The script runs under bash 3.2, the bash that macOS ships.
 
 ---
 
@@ -72,8 +72,7 @@ utilz test cleanz
 
 ## License
 
-Part of Utilz framework. Personal use.
-Copyright (c) 2025 Matthew Sinclair
+MIT. See [LICENSE](../../LICENSE).
 
 ---
 

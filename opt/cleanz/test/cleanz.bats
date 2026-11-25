@@ -720,3 +720,23 @@ skip_if_no_exiftool() {
   assert_failure
   assert_output_contains "not supported in image mode"
 }
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+# doctor reads what a utility needs from its yaml alone, so cleanz.yaml is what
+# makes doctor name exiftool, which --image needs (issue I123a34f). It is
+# optional, since the rest of cleanz runs without it. The PATH has no exiftool:
+# /usr/bin and /bin never hold it.
+@test "doctor names exiftool as optional for cleanz when it is not on PATH" {
+  stub_platform Darwin
+  local bin="$BATS_TEST_TMPDIR/bin" tool
+  mkdir -p "$bin"
+  for tool in yq git bash; do
+    ln -s "$(command -v "$tool")" "$bin/$tool"
+  done
+  run /bin/bash -c "export PATH='$UTILZ_TEST_PLATFORM_BIN:$bin:/usr/bin:/bin'; source '$UTILZ_HOME/opt/utilz/lib/common.sh'; check_app() { return 0; }; run_doctor"
+  assert_output_contains "Optional: 'exiftool' is not installed"
+  assert_output_contains "(declared by cleanz)"
+}
