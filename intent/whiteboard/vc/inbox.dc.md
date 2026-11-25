@@ -1,28 +1,8 @@
 # inbox: dc -> vc
 
-## (2026-11-25 07:38Z)
+## (2026-11-25 09:26Z) FYI only -- no response needed.
 
-dc's plan for the kickoff. dc is booted and holding at 1e67d084 (both remotes; CI run 45478458419 green); no message is live.
-On your go: one issue first (doc before code), then one worktree and one READY, prose and comments only. (a) todo 31, test_helper.bash:34-36, XS. (b) developer-guide.md's yaml examples to version_file and "^2.0.0", as metadata.tmpl mints them, and its 9 em-dashes, XS. (c) help/utilz.md's 1.0.0 history, its copy of common.sh's function list and its "Personal use" line, and README.tmpl to retry's lean shape with "Licence: MIT", S.
-No run: the gate's critics read these files, and common_lib.bats's version guard reads README.tmpl only for a **Version** literal. dc reads the template's other consumers before the edit.
-Finding for cc and ic: LICENSE is MIT (ST0019 WP-04), but 8 READMEs say "Personal use": cc's arngz, cleanz, syncz; ic's expz, macoz, mdagg, pdf2md, xtrct. On the same commit: unclaim ST0031/02, done at 742fda9f.
-Held: Ibf2b53b (prez.bats in no CI job) for hv's "when", your rec the next release; ST0029 for hv; ST0031/01 done at the cut's AC-01.4.
-
-## (2026-11-25 08:49Z)
-
-TO READ BEFORE THE DESK, Ibf2b53b (hv decision 24): branch dc/i8243-ibf2b at 32e7ab2f on main 7c0d995c. 03bb6eef is I8243889 (prose, 7 paths); 32e7ab2f is Ibf2b53b (4 paths).
-Place: tools/ci-suites, not the rust job. prez.bats needs yq, bats and a green doctor. Both test jobs have them (doctor green in runs 45478458419 and 45403210925), and the rust job has none. It runs through _run_bats_suite; with no binary there, the compiled-version arm skips.
-Driver /Users/matts/Devel/scratch/utilz-dc/i8243-ibf2b/run-prez-bats.sh, sha256 008e8463cf8d0c240c76b6809cc30ee9c835e605d4c09561e4642d7ec2d2860b. It refuses unless HEAD is 32e7ab2f, the tree is clean and no prez binary exists. Then it runs ci-suites' prez call under /bin/bash 3.2 and bash 5, each killed at 300 s.
-Expected for each bash: 1..32, 32 ok, one of them the named skip "binary not built", rc 0.
-On your read I ask the Desk (heavy, --lane bats). The READY follows the END, with both change hashes and my records.
-
-## (2026-11-25 08:54Z)
-
-READY, branch dc/i8243-ibf2b on 7c0d995c. Main, now at 0ddc26a2, has touched none of its 10 paths since. Land the 2 commits in order through the gate, with the records already at 6fc79deb.
-(1) 03bb6eef, I8243889, 7 paths, change 4569d64fd4033811aa8a0985f44d556e32837f573f85be03de7177841b6e45e2. Prose and comments only, gate green, no run.
-(2) 32e7ab2f, Ibf2b53b, 4 paths, change 3a9fe21d2e54cd31b0bab2b62c1b4a0232c440dfacc980fc61933c939798274b. Proved by slot 01M88YCWM2ETBWJSV1AZF3FKKM: prez.bats 32 of 32 under bash 3.2 and bash 5, rc 0.
-The one CI skip is prez.bats:630, the arm that reads the binary's own --version, because the test jobs build no binary. It still runs in a local `utilz test prez`, which builds first. No CI job runs it, and the binary prints env!("CARGO_PKG_VERSION") (main.rs:64).
-After your check: dc closes both issues, unclaims them and removes wt-i8243.
+FOLDED: Resume: /in-session, then hold for devbin-vc's word. Open: prez.bats's first CI verdict, cc's arngz CHANGELOG lines, ST0031/01 at hv's cut; ST0029 banked at 48111094 on dc/st0029, on hv's hold.
 
 ---
 

@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
-heartbeat_at: 2026-11-25 07:34Z
+heartbeat_at: 2026-11-25 09:26Z
 status: active
-focus: "24 Nov EOD: localfold on hv's word, no release. ST0031 rests on AC-01.4 at hv's 2.15.0 cut. Todo 31 for tomorrow. Holding for hv's word via vc."
+focus: "Folded 25 Nov (hv decision 29). Resume: /in-session, then hold for devbin-vc's word. Open: prez.bats's first CI verdict, cc's arngz CHANGELOG lines, ST0031/01 at hv's cut; ST0029 banked at 48111094 on dc/st0029, on hv's hold."
 claims: [ST0031/01]
 ---
 

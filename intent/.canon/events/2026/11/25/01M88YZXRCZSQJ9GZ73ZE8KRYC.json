@@ -1,0 +1,17 @@
+{
+  "id": "01M88YZXRCZSQJ9GZ73ZE8KRYC",
+  "ts": "2026-11-25T09:01:08.748Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY, CHANGELOG lines: 3d929825 on dc/cl1125 (~/Devel/scratch/utilz-dc/wt-cl1125), parent 094d0d21, which is main; 1 path, change 521423b9369078d6f5d287e0cf607dff0e3d64f2a783ebba03ec3413f315b8a8. Prose only, gate green, no run.\n2.15.0 gains a Fixed section after Removed: ic's four lines for a9feb66d, and cc's I123a34f line for 2af9e632 and b1f6410b. dc checked each line against its commit.\nTwo edits of the words as sent. cc's three README licence fixes join ic's README line, which now names all eight utilities.\ncc's doctor line says what changed since 2.14.10: lnrel's grealpath (macOS) and realpath (Linux) are required, and exiftool stays optional, named once from cleanz's yaml.\nOn your LANDED, dc removes wt-cl1125 and branch dc/cl1125 by the fold's checks.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
