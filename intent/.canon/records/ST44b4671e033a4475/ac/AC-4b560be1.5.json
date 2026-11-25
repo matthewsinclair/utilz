@@ -1,0 +1,8 @@
+{
+  "id": "AC-4b560be1.5",
+  "text": "On hv's hands, once: the masthead row shows its image and menuz's icon, and a second copy opened with open -n says that menuz already runs, and quits.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

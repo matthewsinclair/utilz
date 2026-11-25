@@ -1,0 +1,8 @@
+{
+  "id": "AC-4b560be1.6",
+  "text": "menuz's copies are gone (drawsImage, setAppIcon and isTestHost), and help/menuz.md says that a second launch quits, and why.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

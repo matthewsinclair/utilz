@@ -1,4 +1,5 @@
 import AppKit
+import ArcaLaunch
 import MenuzKit
 import OSLog
 import ServiceManagement
@@ -47,12 +48,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     return image
   }
 
-  /// Whether this process is XCTest's host rather than the app a person
-  /// runs (Gtools' gtools#0050): xcodebuild sets XCTestConfigurationFilePath
-  /// in the host, and a launch at login or by `open` has none.
-  nonisolated static func isTestHost(_ environment: [String: String]) -> Bool {
-    environment["XCTestConfigurationFilePath"] != nil
-  }
+  /// Whether arca_swift's launch call let this copy run its launch path:
+  /// false in XCTest's host, and in a copy that handed over to the one that
+  /// runs. TestHostTests reads it here, since the tests import no arca_swift
+  /// library.
+  var launched: Bool { ArcaLaunch.launched }
 
   static func main() {
     if let arm = Arm.parse(Array(CommandLine.arguments.dropFirst()), environment: ProcessInfo.processInfo.environment) {
@@ -64,11 +64,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     app.run()
   }
 
+  /// arca_swift's launch call comes first (issue 0114): XCTest's host runs
+  /// none of the launch path, and a copy launched while another runs says so,
+  /// on stderr and in the system log, and quits, so one copy of menuz runs at
+  /// a time. Its lock is ~/Library/Application Support/Menuz/instance.lock.
+  /// menuz's own log has no file yet, so the call writes to the system log.
   func applicationDidFinishLaunching(_ notification: Notification) {
-    guard !Self.isTestHost(ProcessInfo.processInfo.environment) else {
-      AppLog.logger.info("XCTest host: the launch path is skipped")
-      return
-    }
+    guard ArcaLaunch.begin(app: "Menuz", log: { AppLog.logger.notice("\($0, privacy: .public)") }) else { return }
     setupMainMenu()
     // Read before the status item is made, in case making it records a
     // place; logged at once, posted once the centre has granted (D13: the
@@ -121,12 +123,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
     if masthead == nil {
       // Its environment finds its folder, so a Reload's capture keeps both;
       // the menu file it names is read at each open, so that one follows.
-      // Made after the log has its file, which the row's refusals reach, and
-      // its note: the icon it gave the app, once per launch.
+      // Made after the log has its file, which the row's refusals reach.
       let log = self.log
       masthead = MenuzMasthead.row(
-        environment: shell.environment, menu: { [weak self] in self?.paths.menuFile }, log: { log.write($0) },
-        note: { log.write($0) })
+        environment: shell.environment, menu: { [weak self] in self?.paths.menuFile }, log: { log.write($0) })
     }
     registerLoginItem()
     fileChanged()
@@ -291,7 +291,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, MenuAc
   /// Every way out (Quit menuz, Cmd-Q) logs the runs still going and kills
   /// none (D9).
   func applicationWillTerminate(_ notification: Notification) {
-    guard !Self.isTestHost(ProcessInfo.processInfo.environment) else { return }
+    guard ArcaLaunch.launched else { return }
     runner.quit()
   }
 

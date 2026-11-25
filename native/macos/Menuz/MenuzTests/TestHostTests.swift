@@ -7,25 +7,17 @@ import Testing
 /// Menuz.app hosts its own tests, so without the guard every `xcodebuild
 /// test` would run the launch path first: a second menu bar item, a login
 /// shell, a watcher, and a login item registered on a first run. The
-/// delegate returns before any of it when XCTest hosts it.
+/// delegate's launch begins with arca_swift's launch call (issue 0114),
+/// which holds the launch path back when XCTest hosts the process, and
+/// takes no instance lock there. How it tells a host is arca_swift's, and
+/// its own tests pin it (ArcaLaunchTests, from arca_swift 0.3.0).
 @MainActor
 @Suite("Test host")
 struct TestHostTests {
-  @Test("XCTest's variable marks a host, and a launch without it is not one")
-  func detector() {
-    #expect(AppDelegate.isTestHost(["XCTestConfigurationFilePath": "/tmp/Menuz.xctestconfiguration"]))
-    #expect(!AppDelegate.isTestHost([:]))
-    #expect(!AppDelegate.isTestHost(["HOME": "/Users/someone", "PATH": "/usr/bin:/bin"]))
-  }
-
-  @Test("this process, the host, is recognised as one")
-  func thisProcess() {
-    #expect(AppDelegate.isTestHost(ProcessInfo.processInfo.environment))
-  }
-
-  @Test("the host's delegate ran none of the launch path")
+  @Test("the host's delegate was held back by arca_swift's launch call, and ran none of the launch path")
   func skipped() throws {
     let delegate = try #require(AppDelegate.current)
+    #expect(!delegate.launched)
     #expect(!delegate.hasStatusItem)
   }
 }

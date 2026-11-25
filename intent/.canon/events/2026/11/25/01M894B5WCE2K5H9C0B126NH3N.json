@@ -1,0 +1,15 @@
+{
+  "id": "01M894B5WCE2K5H9C0B126NH3N",
+  "ts": "2026-11-25T10:34:40.399Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST44b4671e033a4475/4b560be1"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "The pin, the row, the launch, the tests and help"
+  }
+}

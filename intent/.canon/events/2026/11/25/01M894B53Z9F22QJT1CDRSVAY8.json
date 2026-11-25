@@ -1,0 +1,14 @@
+{
+  "id": "01M894B53Z9F22QJT1CDRSVAY8",
+  "ts": "2026-11-25T10:34:39.617Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST44b4671e033a4475"
+  },
+  "payload": {
+    "title": "menuz uses arca_swift 0.3.0: its own copies go, and one copy runs at a time (issue 0114)"
+  }
+}

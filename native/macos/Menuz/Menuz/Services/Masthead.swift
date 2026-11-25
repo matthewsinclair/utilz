@@ -22,73 +22,25 @@ enum MenuzMasthead {
 
   /// `log` is told each line the row logs, a refusal or a failure, after
   /// `masthead: ` (LogLine.mastheadLine, issue 0102), so the log window
-  /// shows it red. `note` is told, once, what setAppIcon did: the app writes
-  /// it to its log at each launch, and `--render`, which shows no icon, notes
-  /// nothing.
+  /// shows it red. Since arca_swift 0.3.0 (issue 0114, arca_swift issue
+  /// 0003), the row carries what menuz once did here: it asks macOS to draw
+  /// its image, which macOS 27 draws only on asking (issue 0073), and with
+  /// appIcon .bundleFile it draws the icon file that the bundle's
+  /// CFBundleIconFile names, read by URL, since AppKit's default app icon
+  /// drew nothing in menuz's row on macOS 27. The app's icon is left as it
+  /// is. A bundle with no such file is logged, once.
   @MainActor
   static func row(
     environment: [String: String], menu: @escaping @MainActor () -> String?, bundle: Bundle = .main,
-    log: @escaping @MainActor (String) -> Void, note: @MainActor (String) -> Void
+    log: @escaping @MainActor (String) -> Void
   ) -> NSMenuItem {
-    note(setAppIcon(bundle: bundle))
-    let row = MastheadRow(
+    MastheadRow(
       app: "menuz", environment: environment, bundle: bundle, owned: owned,
-      value: { value($0, bundle: bundle, menu: menu()) }, log: { log(LogLine.mastheadLine($0)) })
-    drawsImage(row)
-    return row
+      value: { value($0, bundle: bundle, menu: menu()) }, appIcon: .bundleFile, log: { log(LogLine.mastheadLine($0)) })
   }
 
-  /// macOS 27 draws a menu item's image only when the item asks for it: the
-  /// default visibility is automatic, and automatic drew no image in menuz's
-  /// top row (issue 0073), as it drew none in Gtools' menu (15 Sep 2026), so
-  /// the row asks for `.visible` (raw value 1 in NSMenuItem.h), as
-  /// GtoolsApp.drawsImage does. It is set by key, once the item says it has
-  /// the setter, because the property is new in the macOS 27 SDK: a named
-  /// reference does not compile against an older SDK, such as CI's runner
-  /// builds with, even inside `if #available`.
-  @MainActor
-  static func drawsImage(_ item: NSMenuItem) {
-    if item.responds(to: NSSelectorFromString("setPreferredImageVisibility:")) {
-      item.setValue(1, forKey: "preferredImageVisibility")
-    }
-  }
-
-  /// Sets the app's icon to the icon file the bundle names, decoded, and says
-  /// what it read, what the row now reads, and what the app had before, or
-  /// why it kept that.
-  /// This is app-wide state, set from the one function that makes a row: the
-  /// row draws NSApp.applicationIconImage, whose AppKit default drew nothing
-  /// in menuz's row on macOS 27 (issue 0073), where Gtools.app and
-  /// arca_swift's example, which set an explicit bitmap, draw theirs. arca's
-  /// row takes no icon of an adopter's own, and the launch path, where an app
-  /// would set it, is skipped under the XCTest host, so it is set here; a
-  /// second row sets the same image. The file is the bundle's CFBundleIconFile,
-  /// which actool writes from project.yml's app icon name, read by URL, never
-  /// by name, which can resolve through the asset catalog to the default
-  /// again. AppKit hands back a snapshot of whatever it is given (one
-  /// NSCGImageSnapshotRep), so the row's image is a snapshot either way; what
-  /// changes is its source.
-  @MainActor
-  static func setAppIcon(bundle: Bundle) -> String {
-    let before = describe(NSApplication.shared.applicationIconImage)
-    guard let named = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String, !named.isEmpty else {
-      return "the bundle names no icon file (CFBundleIconFile): the menu's top row keeps the app's icon (\(before))"
-    }
-    let file = named.hasSuffix(".icns") ? named : named + ".icns"
-    guard let url = bundle.url(forResource: file, withExtension: nil) else {
-      return "the bundle has no \(file): the menu's top row keeps the app's icon (\(before))"
-    }
-    guard let icon = NSImage(contentsOf: url) else {
-      return "\(url.path) is not an image: the menu's top row keeps the app's icon (\(before))"
-    }
-    NSApplication.shared.applicationIconImage = icon
-    let now = describe(NSApplication.shared.applicationIconImage)
-    return "the menu's top row shows \(file) (read as \(describe(icon)); the app's icon now \(now))"
-      + " in place of the app's icon (\(before))"
-  }
-
-  /// An image as the note names it: none, or its representations' count and
-  /// classes, and the pixels it colours at the row's size.
+  /// An image as a test's message names it: none, or its representations'
+  /// count and classes, and the pixels it colours at the row's size.
   static func describe(_ image: NSImage?) -> String {
     guard let image else { return "none" }
     let kinds = Set(image.representations.map { String(describing: type(of: $0)) }).sorted()
@@ -97,8 +49,8 @@ enum MenuzMasthead {
   }
 
   /// The pixels of a 32 by 32 bitmap that `image`, drawn into it, colours:
-  /// how the note, and the row's test, tell an icon that draws from a blank
-  /// one. Nil when the bitmap cannot be made.
+  /// how the row's test tells an icon that draws from a blank one. Nil when
+  /// the bitmap cannot be made.
   static func pixelsDrawn(_ image: NSImage) -> Int? {
     guard
       let bitmap = NSBitmapImageRep(
