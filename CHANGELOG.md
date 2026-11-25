@@ -9,6 +9,12 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 
 ## [2.15.0] - unreleased
 
+### Added
+
+- **`arngz log` prints the last run from arngz's run log** (ST589246c). Every run of `apply`, `diff`, `discover`, `which`, `auto`, `doctor`, `init` and `delete` appends what it saw, planned, did and read back to `~/.local/state/arngz/arngz.log`. The log stays under `ARNGZ_LOG_MAX` bytes, 4 MiB unless set, with one older file beside it. It puts nothing on screen.
+- **`arngz apply` shows its progress in toasts** (ST589246c). Starting names the desk, and Running... shows each wait and each step as it begins. Finished gives the counts, the desktops added and the time taken. After a refusal it gives the reason and the fix. After a run that left an entry not placed, it gives the first one, labelled `Not found:`, `Failed:` or `Skipped:`, and its fix where there is one. Save Desk... (`discover`) shows Finished alone. A toast takes no click and no focus, and shows no window title (issue I4eacd29).
+- **A move past a full-screen desktop goes round through another display** (STca1b7f9). A held window cannot be carried into a full-screen space. So arngz drags the window to another display that shows a desktop and is joined to the window's display by shared edges. Then it steps the window's display past the full-screen space, and drags the window back. With no such display, the move fails and names the full-screen apps in the way. Its fix fits the case: attach a display, show a desktop on the display the route would take, or arrange a display to share an edge.
+
 ### Changed
 
 - **devbin publishes and switches Utilz** (issue I59c806c, devbin#0326). `bin/devbin install`, run in a Utilz checkout, publishes the opt tree, and `bin/devbin use dev|opt|brew` points the link set in `~/.local/bin`, as devbin does for every tool it drives. The opt prefix is `install.prefix` in `bin/.devbin/config.yaml`. The formula's install is the core's `@@INSTALL@@`, and the release's formula step is the core's, under `release.formula`. A tree's manifest is devbin's T3 form, which records the tree's version line under `line`.
@@ -18,6 +24,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **doctor no longer shows CI's verdict on the published commit.** devbin's manifest does not record it; the cut reads CI through the core's `ci-state`.
 - **The cut's object step attaches Menuz.app.zip before the formula step runs** (ST0031/01, devbin#0329). The core does both. Issue Ie8e55e8: menuz names the release asset in one place, `MENUZ_ASSET`, which is held equal to the core's.
 - **CI's two test jobs run one roster, `tools/ci-suites`** (ST0031/02; harness only). It runs the dispatcher's suite and every utility's, through `each_utility`, so a new utility is tested on both legs. For prez it runs `prez.bats` alone, which no CI job ran before (issue Ibf2b53b), and the rust job builds and tests prez's crate. The rust job caches cargo, and stops after 25 minutes (issue 0131).
+- **`arngz apply` waits for the displays to settle** (ST589246c). Before it reads the screens, it waits until no display has changed for 5 s. If they still change at 20 s, it refuses, exit 2, with nothing changed. `auto` and `discover --save` wait by the same rule. `which`, `diff` and a plain `discover` do not wait.
 
 ### Removed
 
@@ -33,6 +40,14 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **`prez --help` shows `present -o`** (issue I5963f6c). prez.yaml no longer lists a stdin mode, which prez never had.
 - **`utilz doctor` checks lnrel's GNU realpath and cleanz's exiftool, which their yamls now declare** (issue I123a34f). lnrel needs `grealpath` from coreutils on macOS and `realpath` on Linux. exiftool stays optional, and doctor names it once, from cleanz's yaml.
 - **The READMEs of arngz, cleanz, expz, macoz, mdagg, pdf2md, syncz and xtrct give Utilz's licence as MIT** (issues I2b133d8 and I123a34f). They said "Personal use".
+- **`arngz apply` no longer refuses a display whose desktop order macOS has not recorded** (ST589246c). Where macOS's record in `com.apple.spaces` is out of date, as after a display change, arngz takes the order in which macOS lists the desktops live. macOS rewrites that record only at the next display change. Before, arngz refused such a display and said to wait, then run it again, and waiting did not help. A display with one desktop can now take a new one, and the run log says where each order came from.
+- **`arngz apply` stops asking for desktops when the Dock does not open Mission Control** (issue I7fce35c). It tries that create once, and asks for no other desktop in that run, on any display. Its fix says to add the desktop in Mission Control by hand. Before, it tried four times, and each try toggled Mission Control while it could still be opening.
+- **`arngz apply` keeps its plan when Hammerspoon's window filter fails mid-run** (issue I7fce35c). Before, a retry's plan from that moment replaced it, and windows on desktops not shown came back `unseen`. When the plan in hand had the filter fail, its unseen entries say so, and their fix says to run it again or reload Hammerspoon's config.
+- **`arngz apply` no longer reports an app gone while a window it had at the start is still listed** (issue I7fce35c). It takes that app as running, and the run log says so.
+- **arngz's plan reasons call a desk display with no name "display N"** (issue Ib12d894). They said "display nil" in `diff`'s plan and in `apply`'s report.
+- **Save Desk... (`arngz discover`) waits up to 180 s for Hammerspoon** (ST589246c). It reads every window on every desktop in one call, and once ran past the 60 s that every other call waits. `ARNGZ_HS_TIMEOUT` still sets the deadline of every call.
+- **arngz gives `hs` 3 s to exit on its own once its answer has come** (ST589246c), and stops it only if it still runs. Before, it stopped `hs` at once, and once that broke the next run with "ipc port is no longer valid".
+- **arngz reads a value from yq's output alone** (ST589246c). Five reads, among them the engine's exit code, also took any warning yq printed on stderr into the value.
 
 ## [2.14.10] - 2026-11-10
 
