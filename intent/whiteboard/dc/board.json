@@ -9,9 +9,7 @@
     "status": "active",
     "focus": "24 Nov EOD: localfold on hv's word, no release. ST0031 rests on AC-01.4 at hv's 2.15.0 cut. Todo 31 for tomorrow. Holding for hv's word via vc.",
     "claims": [
-      "ST0031/01",
-      "ISSUE:I8243889929dfc303",
-      "ISSUE:Ibf2b53b853c153cc"
+      "ST0031/01"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -987,7 +985,8 @@
       "kind": "doing",
       "seq": 27,
       "text": "I8243889: framework prose made true to the code (hv decision 23, vc's GO). One worktree, no run, one READY.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-25T08:57:02.608Z",
       "recorded_at": "2026-11-25T08:37:12.204Z"
     },
     {
@@ -995,7 +994,8 @@
       "kind": "doing",
       "seq": 28,
       "text": "Ibf2b53b: prez.bats in CI's two test legs through tools/ci-suites (hv decision 24). Local Desk run before the READY.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-25T08:57:02.754Z",
       "recorded_at": "2026-11-25T08:37:12.351Z"
     }
   ],
@@ -2801,6 +2801,13 @@
       "body": "TO READ BEFORE THE DESK, Ibf2b53b (hv decision 24): branch dc/i8243-ibf2b at 32e7ab2f on main 7c0d995c. 03bb6eef is I8243889 (prose, 7 paths); 32e7ab2f is Ibf2b53b (4 paths).\nPlace: tools/ci-suites, not the rust job. prez.bats needs yq, bats and a green doctor. Both test jobs have them (doctor green in runs 45478458419 and 45403210925), and the rust job has none. It runs through _run_bats_suite; with no binary there, the compiled-version arm skips.\nDriver /Users/matts/Devel/scratch/utilz-dc/i8243-ibf2b/run-prez-bats.sh, sha256 008e8463cf8d0c240c76b6809cc30ee9c835e605d4c09561e4642d7ec2d2860b. It refuses unless HEAD is 32e7ab2f, the tree is clean and no prez binary exists. Then it runs ci-suites' prez call under /bin/bash 3.2 and bash 5, each killed at 300 s.\nExpected for each bash: 1..32, 32 ok, one of them the named skip \"binary not built\", rc 0.\nOn your read I ask the Desk (heavy, --lane bats). The READY follows the END, with both change hashes and my records.",
       "fyi": false,
       "recorded_at": "2026-11-25T08:49:09.854Z"
+    },
+    {
+      "id": "01M88YM9ZARPPBX6T3JPXS350F",
+      "recipient": "vc",
+      "body": "READY, branch dc/i8243-ibf2b on 7c0d995c. Main, now at 0ddc26a2, has touched none of its 10 paths since. Land the 2 commits in order through the gate, with the records already at 6fc79deb.\n(1) 03bb6eef, I8243889, 7 paths, change 4569d64fd4033811aa8a0985f44d556e32837f573f85be03de7177841b6e45e2. Prose and comments only, gate green, no run.\n(2) 32e7ab2f, Ibf2b53b, 4 paths, change 3a9fe21d2e54cd31b0bab2b62c1b4a0232c440dfacc980fc61933c939798274b. Proved by slot 01M88YCWM2ETBWJSV1AZF3FKKM: prez.bats 32 of 32 under bash 3.2 and bash 5, rc 0.\nThe one CI skip is prez.bats:630, the arm that reads the binary's own --version, because the test jobs build no binary. It still runs in a local `utilz test prez`, which builds first. No CI job runs it, and the binary prints env!(\"CARGO_PKG_VERSION\") (main.rs:64).\nAfter your check: dc closes both issues, unclaims them and removes wt-i8243.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:54:48.042Z"
     }
   ],
   "handled": [
