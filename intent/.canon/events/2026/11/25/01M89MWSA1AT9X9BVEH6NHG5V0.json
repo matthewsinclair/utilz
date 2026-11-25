@@ -1,0 +1,16 @@
+{
+  "id": "01M89MWSA1AT9X9BVEH6NHG5V0",
+  "ts": "2026-11-25T15:23:54.561Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 39,
+    "text": "0114's CHANGELOG line, banked and read SOUND by vc: (c) 266cb1ef on dc/cl0114, stacked on V2's bank baf64d72, with menuz 0.4.10 to 0.4.11. Releases when vc lands 0114 after R2: (c) lands with it, dc checks it by change, removes wt-cl0114 and dc/cl0114 by the fold's checks, and commits its records. V1 (7601c725) and V2 (ac2ddc60) are landed and checked by change."
+  }
+}

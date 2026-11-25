@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8bd6bdc9-a0e8-43ed-9077-c54e4fa150db
-heartbeat_at: 2026-11-25 15:16Z
+heartbeat_at: 2026-11-25 16:37Z
 status: active
-focus: "25 Nov: holding (hold 39). V1 5ba57cc7, V2 baf64d72 and (c) 266cb1ef are banked and read SOUND; vc lands V1 and V2 after devbin-vc's 0.1.33 sweep word, and (c) with 0114 after R2. Next, on vc's word: WP A's CHANGELOG line after the probe; STca1b7f9's spike parts' lines. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "25 Nov fold for hv decision 40's compact. After it: /in-session, then hold for vc's word. (c) 266cb1ef on dc/cl0114 stays banked for 0114 (hold 39). After the probe: WP A's CHANGELOG line, which also corrects CHANGELOG.md:15 (hold 40), then STca1b7f9's spike parts' lines. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
@@ -22,7 +22,8 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
-- 2.15.0's version steps and 0114's line, banked and read SOUND by vc (hv decision 39, vc decision 119): V1 5ba57cc7 on dc/ver1125; V2 baf64d72 on dc/prez1125; (c) 266cb1ef on dc/cl0114, stacked on V2. Releases at vc's word that devbin-vc's 0.1.33 sweep commit is in: vc lands V1, then V2, and dc checks each by change; (c) lands with 0114 after R2. Then dc removes each worktree and branch by the fold's checks and commits its records.
+- 0114's CHANGELOG line, banked and read SOUND by vc: (c) 266cb1ef on dc/cl0114, stacked on V2's bank baf64d72, with menuz 0.4.10 to 0.4.11. Releases when vc lands 0114 after R2: (c) lands with it, dc checks it by change, removes wt-cl0114 and dc/cl0114 by the fold's checks, and commits its records. V1 (7601c725) and V2 (ac2ddc60) are landed and checked by change. (edited)
+- WP A's CHANGELOG step (ST6d8eed9 WP 8850, the desk's desktop count), with STca1b7f9's spike parts' lines after it. In the same step, correct CHANGELOG.md:15 (ST589246c's toast line): it says the counts "go on to a second" line, and ic's toast parts for A (2f914ba9 on ic/desks1125-a-toasts) let a busy run's Finished counts take a third, so that no count is cut (vc, 25 Nov). Releases at vc's word after the removeSpace probe and WP A's READY.
 
 ## Watch-outs
 

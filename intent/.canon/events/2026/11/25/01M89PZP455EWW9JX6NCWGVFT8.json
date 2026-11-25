@@ -1,0 +1,15 @@
+{
+  "id": "01M89PZP455EWW9JX6NCWGVFT8",
+  "ts": "2026-11-25T16:00:26.757Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "WP A's CHANGELOG step (ST6d8eed9 WP 8850, the desk's desktop count), with STca1b7f9's spike parts' lines after it. In the same step, correct CHANGELOG.md:15 (ST589246c's toast line): it says the counts \"go on to a second\" line, and ic's toast parts for A (2f914ba9 on ic/desks1125-a-toasts) let a busy run's Finished counts take a third, so that no count is cut (vc, 25 Nov). Releases at vc's word after the removeSpace probe and WP A's READY."
+  }
+}
