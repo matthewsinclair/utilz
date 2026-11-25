@@ -143,8 +143,8 @@ arngz diff work
 arngz apply work --dry-run
 arngz work
 
-# Only apps already running, on spaces that exist, one desk display bound to a screen
-arngz apply work --no-launch --no-create --map left=<uuid>
+# Only on spaces that exist, one desk display bound to a screen
+arngz apply work --no-create --map left=<uuid>
 ```
 
 See `utilz help arngz` for details.
