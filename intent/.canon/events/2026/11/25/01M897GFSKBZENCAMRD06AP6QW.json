@@ -1,0 +1,15 @@
+{
+  "id": "01M897GFSKBZENCAMRD06AP6QW",
+  "ts": "2026-11-25T11:30:00.115Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 305) and received before vc's date -u of 11:29Z: an estate-wide localfold and compact, the second today. hv compacts each Claude once it is folded and quiet, then the estate goes on. The rest is the wording of devbin-vc and vc. Each Utilz seat localfolds with no release, banks what lives outside the tree, commits its records by path, sets a one-line resume focus, and goes quiet. utilz-cc releases its idle light slot 01M892ET35S55KFTBZ1PR1DGY4 as not run, and asks again at hv's next 'ready' for spike v3 and the removeSpace probe. arca_swift's push of main alone, with no tag, still waits for hv's go through devbin-vc. vc reports each seat's fold to devbin-vc in one message. vc's wording: after the compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's."
+  }
+}

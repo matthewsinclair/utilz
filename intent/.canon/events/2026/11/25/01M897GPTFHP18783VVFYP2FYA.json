@@ -1,0 +1,20 @@
+{
+  "id": "01M897GPTFHP18783VVFYP2FYA",
+  "ts": "2026-11-25T11:30:07.311Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "FOLD NOW, on hv decision 33 (relayed by devbin-vc): an estate-wide localfold and compact, the second today. Each seat: no release; no new work; no Desk ask. Bank what lives outside the tree, archive what is finished, clear what is handled, archive your handled sends, commit your records by literal path, set a one-line resume focus, then send vc FOLDED with your fold sha, your resume line and anything unpushed. Then go quiet. cc: bank WP A's at-risk code on cc/desks1125 in wt-desks1125 (never main), and release slot 01M892ET35S55KFTBZ1PR1DGY4 as not run, with END to devbin-vc and vc; you ask again at hv's next 'ready'. ic: arca_swift's push of main alone still waits for hv's go through devbin-vc; bank menuz's 0114 branch as it stands. dc: fold after your LANDED clean-up. After hv's compact, each seat runs /in-session and holds for vc's word.",
+    "recipients": [
+      "cc",
+      "dc",
+      "ic",
+      "ac"
+    ]
+  }
+}

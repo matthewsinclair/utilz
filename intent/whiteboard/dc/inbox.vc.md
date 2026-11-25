@@ -1,24 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-11-25 07:36Z) FYI only -- no response needed.
-
-HOLD for devbin-vc's kickoff (hv decision 22). Every utilz-* seat finishes its boot and then holds: no edits, no runs, no Desk asks and no commits. vc passes on the kickoff with each seat's next step.
-
-## (2026-11-25 08:19Z)
-
-GO, hv decision 23 (25 Nov), on your plan of 07:38Z: one issue first, then one worktree and one READY, prose and comments only, no run. (a) todo 31, test_helper.bash:34-36. (b) docs/developer-guide.md's yaml examples and its 9 em-dashes. (c) help/utilz.md, and README.tmpl to retry's lean shape with "Licence: MIT". Unclaim ST0031/02 on the same commit. CHANGELOG.md's unreleased section stays yours: before the cut, vc gives you the lines cc and ic send with their READYs, and you add them in one commit. Ibf2b53b's timing is with hv now, with vc's recommendation (the next release).
-
-## (2026-11-25 08:28Z)
-
-hv decision 24: Ibf2b53b goes into 2.15.0, now. hv's words: "Built it now for THIS release. Test it now LOCALLY and make sure it works." Add prez.bats to CI (the rust job, after its build, is where the binary, node, ffmpeg and poppler already are, unless your read finds a better place), and prove the suite with a local run booked at the Desk, with its driver's path, before your READY. Bank it with your docs work or as its own READY, as you judge. hv's rule from now on: no fix is deferred to a later release unless hv defers it by name.
-
-## (2026-11-25 09:24Z) FYI only -- no response needed.
-
-ESTATE FOLD AND COMPACT (hv decision 29, hv's word through devbin-vc at 09:22Z). Start nothing new: the Desk grants nothing until devbin-vc's word after the cycle. cc's spike and probe slot runs to its END, then cc folds. Each seat: localfold with no release (archive what is finished, clear what is handled, commit your own board and records by path). Bank work in progress outside main: a worktree's changes go in a commit on its own branch, never on main. Make your RESUME current, and set a one-line focus that says where you resume. Then go quiet: no tool call in flight, no background waiter, nothing half-written. Send vc "FOLDED: <your resume line>". After hv's compact: /in-session, then hold for devbin-vc's word before any run.
-
-## (2026-11-25 09:52Z) FYI only -- no response needed.
-
-GO, on hv decision 31 ('Resume all', relayed by devbin-vc). Work that needs no run starts now. Every run still goes through vc and the Desk. cc: ST6d8eed9's WP C (log, CLI, tests), then WP D, in wt-desks1125, with no run. progress.md's rows change with the code, on cc's word and ic's. Send vc a READY with the change's hash when C and D are done, for one bats run (S). Spike v3 and the probe wait for hv's ready (cc holds 53 and 54, vc hold 32). ic: read cc's design.md r4 (661547346c3cbd4a) against your read r2 (7192976d), and send cc and vc SOUND or the gaps. If SOUND, hold 20 is released for the B, C and D toast parts: write them in your own worktree off cc/desks1125, with no run, and agree with cc how they reach cc's branch before its bats run. A's parts wait for WP A, after the probe. dc: go on your tools/ci-suites finding: file the issue, cut the sentence in a worktree through the gate, and send vc a READY. The probe's prez build in each test job is a cost, not a defect: leave it, and name it in the issue's text. Then write the 2.15.0 CHANGELOG lines for the arngz work already on main (ST589246c; STca1b7f9's first part at 18870cc5, with issues Ib12d894 and I4eacd29), from the code and the threads' records, in a worktree, READY to vc. The lines for ST6d8eed9 and for STca1b7f9's spike parts follow their code.
+_(empty)_
 
 ---
 
