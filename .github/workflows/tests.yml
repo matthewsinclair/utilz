@@ -507,10 +507,13 @@ jobs:
     # project is stale and xcodebuild with the products under XDG state; test
     # runs the scheme, MenuzKitTests and MenuzTests both. macos.bats runs in
     # test-macos's full run and in test-linux's loop, with its fakes. The
-    # app runs on macOS 26 (issue 0073) and builds with Xcode 27.1, the Xcode
-    # the release asset is built with (issue 0097), so the job runs on the
-    # xcode-27 image, a preview on macOS 27, with 27.1 named: the image's
-    # default moves, and on an image without 27.1 xcodebuild -version fails.
+    # app runs on macOS 26 (issue 0073) and builds with Xcode 27.1 or later,
+    # the floor in project.yml's xcodeVersion (issue 0097). The release asset
+    # is built on the maintainer's machine, with that machine's Xcode, which
+    # can be newer (issue Ibd734d3). So the job tests the floor: it runs on
+    # the xcode-27 image, a preview on macOS 27, with 27.1 named, since the
+    # image's default moves, and on an image without 27.1 xcodebuild -version
+    # fails.
     runs-on: xcode-27
     if: ${{ github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/heads/candidate/') }}
     env:
