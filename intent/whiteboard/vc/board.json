@@ -2760,6 +2760,14 @@
       "state": "archived",
       "archived_at": "2026-11-25T10:01:40.112Z",
       "recorded_at": "2026-11-25T09:32:05.524Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 118,
+      "text": "vc, 25 Nov 2026: ic's design for arca_swift's issue 0003 and Utilz's issue 0114 (~/Devel/scratch/utilz-ic/arca0003/design.md, 380c83f6), read against hv decision 32, is approved, and ic codes arca_swift's part now, in a worktree of arca_swift. vc's answers to its three choices: (a) the row's icon from the bundle's file is opt in; (b) two runs, R1 for arca_swift and R2 for menuz at the new pin; (c) vc lands arca_swift's commits by the change's hash, as for Utilz, and the tag and the push are hv's, through devbin-vc. One fix before R1 is booked: Runs 1 says each new test fails at its own assertion over the base sources, but a test of an API that the base lacks does not compile there. ic lists each test arm as red at the base by its own assertion, as GREEN_AT_BASE with a one-line reason, or as moved unchanged with the code it tests, naming its origin file and the commit where it was proven. An arm that is none of these is a finding to fix in the arm, never a reason for a mutant (hv's rule of 5 Nov). dc reads the proof plan's CI leg. When 0.3.0 is pushed, vc tells devbin-vc, so that the other adopters, Gtools.app, Intent.app and Conflab.app, can move to it in their own projects.",
+      "state": "live",
+      "recorded_at": "2026-11-25T10:11:32.996Z"
     }
   ],
   "sent": [
@@ -11221,6 +11229,16 @@
       "id": "01M892CRBSER7J5MC4650RYMY7",
       "sender": "dc",
       "handled_at": "2026-11-25T10:01:40.271Z"
+    },
+    {
+      "id": "01M892T3YWHNQNAZRG525X87N1",
+      "sender": "dc",
+      "handled_at": "2026-11-25T10:11:49.416Z"
+    },
+    {
+      "id": "01M892Y8WEVDVF1NYJ5CBV6G7X",
+      "sender": "ic",
+      "handled_at": "2026-11-25T10:11:49.584Z"
     }
   ]
 }
