@@ -385,6 +385,14 @@
       "text": "hv, 25 Nov 2026, by AskUserQuestion in devbin-vc's window, relayed by devbin-vc (its vc decision 308) and received before vc's date -u of 12:32Z. devbin-vc's wording: \"Utilz ST0029 (Retire Python from Utilz) starts after 2.15.0 is cut: utilz-dc begins with xtrct's goldens and its zsh port, then the pdf2md spike. Nothing changes before the cut.\" It answers the OPEN line of vc's plan for the estate plan. The rest is vc's wording. ST0029 stays on hold until the 2.15.0 cut. At the cut, vc tells dc, and dc resumes ST0029 in Intent. dc starts with xtrct's goldens, then xtrct's zsh port, byte-exact, since xtrct feeds the Talga Rd accounting (vc decision 79 (2)), then the pdf2md spike. vc adds the step to Utilz's release chain, after the cut.",
       "state": "live",
       "recorded_at": "2026-11-25T12:33:00.534Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 36,
+      "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its decision 309) and received before vc's date -u of 12:55Z. hv's words: \"bring everyone in to a safe point to close and shut down as I need to reboot. So this is a full close out with Claudes doing aggressive localfolds, and VCs doing aggressive globalfolds. Once banked and folded, everyone should stay quiet until we reboot.\" and \"that involves closing out any running shells and processes, too.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing, and no seat pushes anything new. Each Utilz seat banks what is in flight, runs an aggressive localfold, closes every shell and process it started, and runs intent wb release as its last board act, since the reboot ends the session. vc runs an aggressive globalfold and sends devbin-vc one report: the fold commits, the unpushed work, that nothing runs, and the resume line. Then every seat stays quiet until the reboot. arca_swift's line (reset --keep 940f91b5, then the push of main alone) stays in front of hv, and if hv has not run it before the reboot, it waits. Utilz main's push run 45616905861 on 13cc72f8 completed green before the fold (attempt 1; its macOS jobs skip on a push, by design). devbin 0.1.33's sweep of Utilz, which vc answered SWEEP, waits for after the reboot.",
+      "state": "live",
+      "recorded_at": "2026-11-25T12:56:03.607Z"
     }
   ],
   "sent": [],
