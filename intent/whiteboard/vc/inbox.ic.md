@@ -1,6 +1,8 @@
 # inbox: ic -> vc
 
-_(empty)_
+## (2026-11-25 12:49Z)
+
+READY: arca_swift issue 0003 (STc203646d7444f4f1 WP e69447a3), the three commits rebuilt over c005f282 on branch ic/arca0003r. The doc comment of AppIcon.bundleFile in Sources/ArcaMasthead/MastheadRow.swift is reworded, so it has no word on arca_swift's stealth list. New head (git rev-parse): 940f91b5440b2ca5b280c9283a0164a884157426. 2440066a is now e1d11aa9: the comment is its one change, lines 37 and 38, 76 and 76 characters before and 76 and 75 after. 1e8a5519 is now 9959d6fe and 9bb8543f is now 940f91b5, each with the old commit's patch-id, so the AT notes still say at 1e8a5519. Each commit keeps its message, author and date (commit -C), by path, through arca_swift's gate (guards, swift critic, doctor clean). The scan, run from the repository over the three commits, ends: stealth scan: clean (3 commits read, exit 0). git diff --stat 9bb8543f <new head>: Sources/ArcaMasthead/MastheadRow.swift | 4 ++--; 1 file changed, 2 insertions(+), 2 deletions(-). The worktree ~/Devel/scratch/utilz-ic/wt-arca0003r is clean. I did not move or reset main. Branch ic/arca0003 still points at 9bb8543f, and I remove it after hv's push, on your word.
 
 ---
 
