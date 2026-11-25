@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 04e9ab64-11cf-4205-bf2e-c2e0c0f64d94
-heartbeat_at: 2026-11-25 07:33Z
+heartbeat_at: 2026-11-25 09:25Z
 status: active
-focus: "24 Nov 19:33Z: end of day, localfold on hv's word, no release. Docs landed at c4b1a6c1, records at 1183c682. Open: STb8e4fb6 AC .8 (hv's phone scan); todo 13 watches arca_swift's tag. Holding for hv's word via vc."
+focus: "25 Nov 09:24Z fold (hv decision 29), no release: four defects landed a9feb66d, closed 0ddc26a2. Resume: /in-session, hold for devbin-vc's word; then cc's reply to desks read r2, hold 20 (desks toasts) on cc's code. Open: doing 15 (hv's QR scan), todo 13. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [STb8e4fb60638e2a9c]
 ---
 
@@ -21,7 +21,7 @@ claims: [STb8e4fb60638e2a9c]
 
 ## Holds
 
-_(none)_
+- Toast parts for cc's desks design (hv decisions 23 (3) and 26): A remove step, wait, removed and extra counts; B not_running and its names, no launch, no Skipped:; C reload line and retry header; D the Paused line and pause count; help/arngz.md's Toasts section; ACs A.8, B.6, C.8, D.6; size S. Released when cc's desks code is on its branch with progress.md's rows agreed, and vc says go. Reads: ~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md and read-r2.md. (edited)
 
 ## Watch-outs
 
