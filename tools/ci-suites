@@ -19,8 +19,7 @@
 # display. So the rust job builds the crate and runs its tests and suites.
 # opt/prez/test/prez.bats builds nothing, and needs yq, bats and a green
 # doctor, which these two jobs have. It runs here through _run_bats_suite, the
-# one function that runs a utility's BATS. No binary is built here, so its one
-# arm that reads the compiled version skips.
+# one function that runs a utility's BATS.
 #
 # The tree's own dispatcher and lib, never PATH's: on a desk a plain `utilz`
 # can be a Homebrew install.
