@@ -26,6 +26,14 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **`tools/formula`.** devbin's formula built-in renders and publishes the template.
 - **`tools/ci-state` and `tools/post-cut`** (ST0031/01). The core's `bin/devbin ci-state` reads CI, and the core's object step attaches the app.
 
+### Fixed
+
+- **`mdagg --strip-front-matter` strips only a front-matter block** (issue I9adb91e). A block opens with `---` on line 1 and closes with the next `---` line. A `---` divider in any other place stays, and a line-1 `---` that never closes keeps all its lines. Before, mdagg cut the text from the first `---` line to the next one, wherever they were.
+- **`macoz setpicfor --pattern` works** (issue Iac62c37, hv decision 25). With `--all`, its globs, split by `|`, name the images to look for in place of icon, folder and the directory's own name. Before, it had no effect. Without `--all`, a `--pattern` is refused. A `--dry-run` no longer needs fileicon.
+- **`prez --help` shows `present -o`** (issue I5963f6c). prez.yaml no longer lists a stdin mode, which prez never had.
+- **`utilz doctor` checks lnrel's GNU realpath and cleanz's exiftool, which their yamls now declare** (issue I123a34f). lnrel needs `grealpath` from coreutils on macOS and `realpath` on Linux. exiftool stays optional, and doctor names it once, from cleanz's yaml.
+- **The READMEs of arngz, cleanz, expz, macoz, mdagg, pdf2md, syncz and xtrct give Utilz's licence as MIT** (issues I2b133d8 and I123a34f). They said "Personal use".
+
 ## [2.14.10] - 2026-11-10
 
 ### Fixed
