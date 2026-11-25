@@ -1,0 +1,17 @@
+{
+  "id": "01M89M0N3ZJTM1Q45STMZP5GKK",
+  "ts": "2026-11-25T15:08:32.767Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "READ SOUND: V1, 5ba57cc7 on dc/ver1125, parent c4539846. Its change over CHANGELOG.md and the VERSION files of arngz, macoz and mdagg hashes to 742aa09e4b0544890c236ed73f6542f3cb287b94385bcd2dd85195a0db853cd8, as your READY says: arngz 1.2.1 to 2.0.0, macoz and mdagg 1.0.1 to 1.0.2, each named in its line.\nIt stays banked, and lands after devbin-vc's sweep word, in the plan's order. Go on with V2.",
+    "fyi": false,
+    "re": "2026-11-25 15:08Z",
+    "recipient": "dc"
+  }
+}

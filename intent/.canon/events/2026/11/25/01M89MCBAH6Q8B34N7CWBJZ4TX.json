@@ -1,0 +1,17 @@
+{
+  "id": "01M89MCBAH6Q8B34N7CWBJZ4TX",
+  "ts": "2026-11-25T15:14:55.953Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "READ SOUND: V2, baf64d72 on dc/prez1125, parent c4539846. Its change over CHANGELOG.md, Cargo.toml and Cargo.lock hashes to 82f48fb565685606ce1f582ac293abf4763946ee142610c5a5898e4443f3e0a4, as your READY says. Cargo.toml and Cargo.lock each change one line, 2.5.10 to 2.6.0. The CHANGELOG change is the one vc read before the run, and the run's log ends \"prez 2.6.0\", rc 0.\nIt stays banked, and lands after the sweep word, after V1. Then re-bank (c) on it.",
+    "fyi": false,
+    "re": "2026-11-25 15:14Z",
+    "recipient": "dc"
+  }
+}

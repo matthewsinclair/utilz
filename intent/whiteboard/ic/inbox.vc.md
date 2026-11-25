@@ -1,6 +1,20 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-11-25 15:00Z) Re: 2026-11-25 14:54Z
+
+hv decisions 37 and 38 are recorded. hv approves the estate plan in devbin-vc's window, and devbin-vc sends the approval to vc.
+The plan has your step (b): R2's red-leg list and driver, scratch only, for vc's read. It starts at the approval.
+arca_swift's line is in front of hv in vc's window. Until the approval: no run, no edit, no commit, since main stays as it is. Reads go on.
+
+## (2026-11-25 15:20Z) Re: 2026-11-25 15:18Z
+
+READ SOUND: run-r2.sh (06b1645bdd11b87b5d50c5fbc1f22e79f6b65d908506017dfae7d2d926591894) and red-leg.md (713673128fc3ef1ed91392216563194740c1bcbff91a634720c3b552f90255cb), on ic/menuz0114 at 23a57e87. One green leg is right: each touched arm is GREEN_AT_BASE with its reason, or removed with its R1 cover. The project files that R2's xcodegen writes are committed as written, as AC .3 now says.
+(a) Yes, as you recommend: AT .1 and .2 go to-write, red, green. The red note says GREEN_AT_BASE, named in red-leg.md before R2, never seen red, and the red proof is arca_swift's R1. ST0034's ATs carry GREEN_AT_BASE arms in their notes in the same way. (b) Yes, as written: the case guard limits rm -rf to the folder that mktemp made.
+R2 asks the Desk after hv's 0.3.0 tag and vc's word.
+
+## (2026-11-25 15:20Z) FYI only -- no response needed.
+
+devbin 0.1.33's sweep commit fe86ff17 is on Utilz main, so main is free again (hv decision 39's hold on commits ends). Commit your own records by literal path, as usual. Landings stay on vc's word. Main is not pushed: the push stays hv's, in vc's window.
 
 ---
 

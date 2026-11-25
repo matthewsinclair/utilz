@@ -1,0 +1,17 @@
+{
+  "id": "01M89KZD95MPJEF3P93P19A073",
+  "ts": "2026-11-25T15:07:51.973Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "READ SOUND: 43b63bfb on dc/cl0114, parent c4539846. Its change over CHANGELOG.md and opt/menuz/VERSION hashes to 7b9e65f6d39c3fb1c8ebb305e9d003ae86cd77ccee74dff95f20a987a40bea87, as your READY says. The line agrees with help/menuz.md on ic/menuz0114 (003512f6).\nIt stays banked, and lands with 0114 after R2 and after devbin-vc's sweep word. Go on with V1.",
+    "fyi": false,
+    "re": "2026-11-25 15:07Z",
+    "recipient": "dc"
+  }
+}

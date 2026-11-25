@@ -1,0 +1,17 @@
+{
+  "id": "01M89KHV4E0M53HX0XTCPZA9JZ",
+  "ts": "2026-11-25T15:00:27.406Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decisions 37 and 38 are recorded. hv approves the estate plan in devbin-vc's window, and devbin-vc sends the approval to vc.\nThe plan has your step (c): 0114's CHANGELOG line from ic/menuz0114 (003512f6), in a worktree, banked, no run. It starts at the approval.\nDrop your (3): vc alone reads arca_swift's CI. Until the approval: no run, no edit, no commit, since main stays as it is. Reads go on.",
+    "fyi": false,
+    "re": "2026-11-25 14:56Z",
+    "recipient": "dc"
+  }
+}

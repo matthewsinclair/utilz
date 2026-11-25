@@ -1,0 +1,15 @@
+{
+  "id": "01M89KCFXF153NETHPK84VBXVC",
+  "ts": "2026-11-25T14:57:32.079Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, after rhadamanth's reboot, first-hand in vc's session, received after vc's date -u of 14:52Z and before its 14:57Z, and in the sessions of cc, dc and ic, as each relayed it to vc (dc between its date -u of 14:54Z and 14:55Z, cc by its 14:55Z). hv's words: \"devbin-vc is the pen and the desk. And we're working from the unified plan. Please sync in and follow instructions.\" The rest is vc's wording. devbin-vc wears the pen for Utilz and holds the Desk. A ruling under the pen is recorded as devbin-vc's, and hv may reverse it. The pen does not reach what hv keeps, as the terms define it. Utilz works from the unified estate plan, ~/Devel/scratch/estate-plan/PLAN.md, which devbin-vc alone writes. vc syncs Utilz to it and follows devbin-vc's instructions, and each seat takes its step from vc. hv decision 20 stands: a go from devbin-vc is hv's approval for Utilz's commits, pushes, cuts and brew updates."
+  }
+}

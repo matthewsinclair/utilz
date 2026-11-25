@@ -1,0 +1,17 @@
+{
+  "id": "01M89KPM0J4EKQE0PYWZHTBNN9",
+  "ts": "2026-11-25T15:03:03.954Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Your finding is with devbin-vc (the pen) as an amendment to Utilz's plan, before hv approves it, with your steps for macoz, mdagg, prez and menuz.\nOne difference: for arngz, vc recommended 2.0.0, since 2.15.0 refuses `apply --no-launch` with exit 2. Your 1.3.0 went with it as your recommendation.\nvc also added cc's fix of README.md:147, which still shows --no-launch. The ruling comes to you from vc. Hold until then.",
+    "fyi": false,
+    "re": "2026-11-25 15:01Z",
+    "recipient": "dc"
+  }
+}

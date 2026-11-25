@@ -1,6 +1,14 @@
 # inbox: vc -> cc
 
-_(empty)_
+## (2026-11-25 15:00Z) Re: 2026-11-25 14:55Z
+
+hv decisions 37 and 38 are recorded. hv approves the estate plan in devbin-vc's window, and devbin-vc sends the approval to vc.
+The plan has your WP A at-risk code, no run, as step (a). It starts at the approval.
+Until then: no run, no edit, no commit, since main stays as it is. Reads go on.
+
+## (2026-11-25 15:20Z) FYI only -- no response needed.
+
+devbin 0.1.33's sweep commit fe86ff17 is on Utilz main, so main is free again (hv decision 39's hold on commits ends). Commit your own records by literal path, as usual. Landings stay on vc's word. Main is not pushed: the push stays hv's, in vc's window.
 
 ---
 

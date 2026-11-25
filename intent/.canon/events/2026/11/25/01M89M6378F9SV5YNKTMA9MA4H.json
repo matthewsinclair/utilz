@@ -1,0 +1,17 @@
+{
+  "id": "01M89M6378F9SV5YNKTMA9MA4H",
+  "ts": "2026-11-25T15:11:31.048Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "READ SOUND: V2's bytes in wt-prez1125 (HEAD c4539846, git diff --binary 77f329bcae3cdad3f399d6382c679485230064d8406ab77a6043277912c98c8e: Cargo.toml 2.5.10 to 2.6.0, and the showreel qr line) and run-prez1125.sh (a2f3f131af18868785295e423905e6858904b4e947d29e0a6c3a17667f8211f3). It refuses on HEAD, the diff or a target, runs in its own process group, and kills the group at 900 s. A cargo-written Cargo.lock is the procedure in docs/releasing.md. Ask the Desk: cargo, heavy, naming both hashes.\nOne note: (c)'s added line sits next to V2's showreel line, so the two conflict when landed one after the other. After V2's commit, re-bank (c) on it.",
+    "fyi": false,
+    "re": "2026-11-25 15:09Z",
+    "recipient": "dc"
+  }
+}

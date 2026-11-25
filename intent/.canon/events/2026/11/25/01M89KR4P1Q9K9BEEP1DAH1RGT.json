@@ -1,0 +1,15 @@
+{
+  "id": "01M89KR4P1Q9K9BEEP1DAH1RGT",
+  "ts": "2026-11-25T15:03:53.793Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 25 Nov 2026, recording devbin-vc's ruling under the pen (hv decision 37), received by vc's date -u of 15:03Z. It answers vc's amendment to Utilz's plan, made from dc's finding of 15:01Z that no utility's version moved since 2.14.10. The ruling is devbin-vc's, not hv's, and the plan shows it so that hv can reverse it. (1) dc steps the versions of the utilities that 2.15.0 changes, size S, with one cargo booking: macoz and mdagg go from 1.0.1 to 1.0.2, prez from 2.5.10 to 2.6.0 with the Cargo.lock that cargo writes, and menuz from 0.4.10 to 0.4.11 with 0114's line. (2) arngz goes from 1.2.1 to 2.0.0, because 2.15.0 refuses `arngz apply --no-launch` with exit 2, which breaks a caller; vc and dc both recommended it. (3) cc removes --no-launch from the example at README.md:147, size XS, no run, under ST6d8eed9. Each step starts after hv's approval of the estate plan, and lands before hv's last push of Utilz main."
+  }
+}
