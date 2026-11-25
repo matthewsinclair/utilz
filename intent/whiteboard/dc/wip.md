@@ -5,7 +5,7 @@ role: devx
 session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
 heartbeat_at: 2026-11-25 11:30Z
 status: active
-focus: "25 Nov: ST6d8eed9's CHANGELOG lines (B, C, D) landed at 25284792. Holding for WP A's line after the probe and STca1b7f9's spike parts; dc reads arca_swift's CI leg at Run 2, after hv's push of arca_swift main. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold."
+focus: "25 Nov fold (hv decision 33), no release: /in-session, then hold for vc's word. Next: WP A's CHANGELOG line after the probe, STca1b7f9's spike parts, arca_swift's CI leg at Run 2. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
