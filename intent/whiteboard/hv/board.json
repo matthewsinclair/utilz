@@ -345,6 +345,14 @@
       "state": "live",
       "recorded_at": "2026-11-25T09:32:05.360Z",
       "edited_at": "2026-11-25T09:32:12.487Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 31,
+      "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 304) and received before vc's date -u of 09:48Z: hv chose 'Resume all'. The rest is the wording of devbin-vc and vc. The hold of hv decision 29 ends, and the Utilz seats go on with work that needs no run. cc codes ST6d8eed9's WP C, then WP D, in its worktree. ic writes the desks toasts. dc writes the CHANGELOG lines. Spike v3 and the removeSpace probe (light, S) still wait for hv's 'ready' at vc's window (vc hold 32), and cc then asks the Desk. vc puts issue 0114 to hv at vc's window.",
+      "state": "live",
+      "recorded_at": "2026-11-25T09:52:01.117Z"
     }
   ],
   "sent": [],

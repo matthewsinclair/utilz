@@ -1,0 +1,15 @@
+{
+  "id": "01M891X2JWPETNH27YTRYM4MQH",
+  "ts": "2026-11-25T09:52:01.117Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 304) and received before vc's date -u of 09:48Z: hv chose 'Resume all'. The rest is the wording of devbin-vc and vc. The hold of hv decision 29 ends, and the Utilz seats go on with work that needs no run. cc codes ST6d8eed9's WP C, then WP D, in its worktree. ic writes the desks toasts. dc writes the CHANGELOG lines. Spike v3 and the removeSpace probe (light, S) still wait for hv's 'ready' at vc's window (vc hold 32), and cc then asks the Desk. vc puts issue 0114 to hv at vc's window."
+  }
+}
