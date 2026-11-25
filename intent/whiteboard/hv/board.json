@@ -369,6 +369,22 @@
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 305) and received before vc's date -u of 11:29Z: an estate-wide localfold and compact, the second today. hv compacts each Claude once it is folded and quiet, then the estate goes on. The rest is the wording of devbin-vc and vc. Each Utilz seat localfolds with no release, banks what lives outside the tree, commits its records by path, sets a one-line resume focus, and goes quiet. utilz-cc releases its idle light slot 01M892ET35S55KFTBZ1PR1DGY4 as not run, and asks again at hv's next 'ready' for spike v3 and the removeSpace probe. arca_swift's push of main alone, with no tag, still waits for hv's go through devbin-vc. vc reports each seat's fold to devbin-vc in one message. vc's wording: after the compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's.",
       "state": "live",
       "recorded_at": "2026-11-25T11:30:00.115Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 34,
+      "text": "hv, 25 Nov 2026, by two channels. (1) In devbin-vc's window, relayed by devbin-vc (its vc decision 307, 11:57Z by its date -u): hv's go for both pushes. hv types each as a ! line in vc's window, fast-forward only, to both remotes: arca_swift main 9bb8543f alone, with no tag, and Utilz main 1cdad894 (33 commits). (2) First-hand in vc's session, received after vc's date -u of 11:51Z and before its 11:57Z. hv's words: 'devbin-vc is about to ask for your \"plan-as-a-set-of-1-line-steps\" plan. Please respond accordingly. We will sync and synthesise at devbin-vc and then coordinate work accordingly therefafter. Ok?' The rest is vc's wording. vc said yes, and sent devbin-vc Utilz's plan as three chain lines (menuz, arngz and release) for its merge into ~/Devel/scratch/estate-plan/PLAN.md. The seats take their next steps from vc after that merge. Also, as utilz-cc relayed it, hv ran /in-finish in cc's session before cc's date -u of 11:50Z. cc read it as a localfold with no release. Its records-only commit 13cc72f8, which vc checked by change, puts Utilz main 34 commits ahead. vc's push line for hv names 13cc72f8, so a later commit by another seat does not go out with the push.",
+      "state": "live",
+      "recorded_at": "2026-11-25T12:32:58.978Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 35,
+      "text": "hv, 25 Nov 2026, by AskUserQuestion in devbin-vc's window, relayed by devbin-vc (its vc decision 308) and received before vc's date -u of 12:32Z. devbin-vc's wording: \"Utilz ST0029 (Retire Python from Utilz) starts after 2.15.0 is cut: utilz-dc begins with xtrct's goldens and its zsh port, then the pdf2md spike. Nothing changes before the cut.\" It answers the OPEN line of vc's plan for the estate plan. The rest is vc's wording. ST0029 stays on hold until the 2.15.0 cut. At the cut, vc tells dc, and dc resumes ST0029 in Intent. dc starts with xtrct's goldens, then xtrct's zsh port, byte-exact, since xtrct feeds the Talga Rd accounting (vc decision 79 (2)), then the pdf2md spike. vc adds the step to Utilz's release chain, after the cut.",
+      "state": "live",
+      "recorded_at": "2026-11-25T12:33:00.534Z"
     }
   ],
   "sent": [],

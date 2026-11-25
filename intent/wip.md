@@ -1,12 +1,12 @@
 ---
-verblock: "25 Nov 2026:v1.72: matts - the second estate fold of the day"
+verblock: "25 Nov 2026:v1.73: matts - the pushes and the estate plan"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- Utilz folds for hv's second estate compact (hv decision 33); after /in-session, every seat holds for vc's word.
+- hv: the pushes of arca_swift main alone and of Utilz main at 13cc72f8 (hv decision 34). The seats take their next steps from vc after devbin-vc merges the estate plan.
 - ic: arca_swift's issue 0003 on arca_swift's local main, for hv's push of main alone through devbin-vc, then vc's read of its CI, then hv's tag 0.3.0 (hv decision 32, vc decision 118).
 
 ## TODO
@@ -19,4 +19,4 @@ verblock: "25 Nov 2026:v1.72: matts - the second estate fold of the day"
 - dc: CHANGELOG lines for WP A, STca1b7f9's spike parts and 0114, from their READYs.
 - hv: a phone scan of one QR that `showreel qr` wrote (AC-702cceb9.8), which closes STb8e4fb6.
 - hv: the 2.15.0 cut, once both arngz threads and 0114 have landed and main's CI is green; it proves ST0031 AC-01.4, and its candidate branch runs prez.bats in CI's macOS job for the first time.
-- dc: ST0029, Retire Python, once hv lifts its hold.
+- dc: ST0029, Retire Python, after the 2.15.0 cut (hv decision 35): xtrct's goldens and its zsh port, then the pdf2md spike.

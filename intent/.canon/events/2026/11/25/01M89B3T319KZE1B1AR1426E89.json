@@ -1,0 +1,15 @@
+{
+  "id": "01M89B3T319KZE1B1AR1426E89",
+  "ts": "2026-11-25T12:32:58.978Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, by two channels. (1) In devbin-vc's window, relayed by devbin-vc (its vc decision 307, 11:57Z by its date -u): hv's go for both pushes. hv types each as a ! line in vc's window, fast-forward only, to both remotes: arca_swift main 9bb8543f alone, with no tag, and Utilz main 1cdad894 (33 commits). (2) First-hand in vc's session, received after vc's date -u of 11:51Z and before its 11:57Z. hv's words: 'devbin-vc is about to ask for your \"plan-as-a-set-of-1-line-steps\" plan. Please respond accordingly. We will sync and synthesise at devbin-vc and then coordinate work accordingly therefafter. Ok?' The rest is vc's wording. vc said yes, and sent devbin-vc Utilz's plan as three chain lines (menuz, arngz and release) for its merge into ~/Devel/scratch/estate-plan/PLAN.md. The seats take their next steps from vc after that merge. Also, as utilz-cc relayed it, hv ran /in-finish in cc's session before cc's date -u of 11:50Z. cc read it as a localfold with no release. Its records-only commit 13cc72f8, which vc checked by change, puts Utilz main 34 commits ahead. vc's push line for hv names 13cc72f8, so a later commit by another seat does not go out with the push."
+  }
+}

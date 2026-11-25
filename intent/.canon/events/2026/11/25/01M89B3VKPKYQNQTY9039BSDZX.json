@@ -1,0 +1,15 @@
+{
+  "id": "01M89B3VKPKYQNQTY9039BSDZX",
+  "ts": "2026-11-25T12:33:00.534Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, by AskUserQuestion in devbin-vc's window, relayed by devbin-vc (its vc decision 308) and received before vc's date -u of 12:32Z. devbin-vc's wording: \"Utilz ST0029 (Retire Python from Utilz) starts after 2.15.0 is cut: utilz-dc begins with xtrct's goldens and its zsh port, then the pdf2md spike. Nothing changes before the cut.\" It answers the OPEN line of vc's plan for the estate plan. The rest is vc's wording. ST0029 stays on hold until the 2.15.0 cut. At the cut, vc tells dc, and dc resumes ST0029 in Intent. dc starts with xtrct's goldens, then xtrct's zsh port, byte-exact, since xtrct feeds the Talga Rd accounting (vc decision 79 (2)), then the pdf2md spike. vc adds the step to Utilz's release chain, after the cut."
+  }
+}
