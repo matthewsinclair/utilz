@@ -1,0 +1,14 @@
+{
+  "id": "01M89M9FCEP374CC06FJ6S07EK",
+  "ts": "2026-11-25T15:13:21.808Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST44b4671e033a4475/AC-4b560be1.3"
+  },
+  "payload": {
+    "text": "project.yml pins arca_swift at minorVersion 0.3.0 with ArcaLaunch. Each tracked file under Menuz.xcodeproj is as R2 wrote it: the shim's xcodegen makes the project files from project.yml, so project.pbxproj takes ArcaLaunch and the 0.3.0 pin, and the resolve writes Package.resolved, which names 0.3.0's commit. R2's build and test change no other file under native/macos/Menuz."
+  }
+}
