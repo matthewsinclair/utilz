@@ -1,0 +1,20 @@
+{
+  "id": "01M88T4NCQPZN93EP7A0SV1G5N",
+  "ts": "2026-11-25T07:36:21.143Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.announce",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "HOLD for devbin-vc's kickoff (hv decision 22). Every utilz-* seat finishes its boot and then holds: no edits, no runs, no Desk asks and no commits. vc passes on the kickoff with each seat's next step.",
+    "recipients": [
+      "cc",
+      "dc",
+      "ic",
+      "ac"
+    ]
+  }
+}

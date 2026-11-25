@@ -1,6 +1,8 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-11-25 07:36Z) FYI only -- no response needed.
+
+HOLD for devbin-vc's kickoff (hv decision 22). Every utilz-* seat finishes its boot and then holds: no edits, no runs, no Desk asks and no commits. vc passes on the kickoff with each seat's next step.
 
 ---
 

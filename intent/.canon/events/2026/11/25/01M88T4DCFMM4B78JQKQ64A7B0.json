@@ -1,0 +1,15 @@
+{
+  "id": "01M88T4DCFMM4B78JQKQ64A7B0",
+  "ts": "2026-11-25T07:36:12.943Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:34Z. hv's words: \"Please corall all of the utilz-* Claudes and then wait for kickoff from devbin-vc (who is still The Desk).\" The rest is vc's wording. vc tells utilz-cc, utilz-ic and utilz-dc to finish booting and hold, by socket and by vc's announce. utilz-ac has never started. No seat edits, runs, asks the Desk or commits until devbin-vc's kickoff. vc then passes the kickoff on, with each seat's next step. The estate's control line names devbin-vc as the Desk's holder."
+  }
+}
