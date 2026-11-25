@@ -1535,8 +1535,12 @@ local function exec_remove_space(op, ctx)
   -- create's tries and its stop on a reason that lasts. A call that reported
   -- the removal is never made again, as a create's is not.
   -- `moved` is what the live list was instead of the proof's, in words: a
-  -- list that could not be read is never taken as the proof's.
-  local removed, why, moved, verdict, went, came, after
+  -- list that could not be read is never taken as the proof's. `asked` is
+  -- set once removeSpace has been asked: a call that did not report the
+  -- removal may have made it all the same, so a try after one reads the
+  -- verdict before it holds the list to the proof's again (ic's S1). Only a
+  -- list that changed before any call is "not removed".
+  local removed, why, moved, verdict, went, came, after, asked
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
     if not removed then
       local live, lerr2 = hs.spaces.spacesForScreen(op.screen)
@@ -1545,10 +1549,18 @@ local function exec_remove_space(op, ctx)
         error(moved, 0)
       end
       live = list(live)
+      if asked then
+        verdict, went, came = P.removal_verdict(proof, live, op.space)
+        if verdict ~= "none" then
+          after = live
+          return verdict
+        end
+      end
       if not P.same_ids(live, proof) then
         moved = L.ids(live)
         error("the live list changed since the proof", 0)
       end
+      asked = true
       local called, r, w = pcall(hs.spaces.removeSpace, op.space, true)
       if called then removed, why = r, w else removed, why = nil, r end
     end

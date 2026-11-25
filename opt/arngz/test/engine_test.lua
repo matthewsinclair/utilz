@@ -321,7 +321,9 @@ end
 --   fails     {[asked] = why}: gotoSpace(asked) returns nil and why, and
 --             shows nothing new
 --   takes     {[asked] = taken}: removeSpace(asked) takes another id
---   why       removeSpace fails with this reason and takes nothing
+--   why       removeSpace fails with this reason and takes nothing, unless
+--   anyway    is set too: then it fails with the reason and takes the id
+--             all the same
 --   lag       how many readbacks after the call still list the id
 --   reorder_after, reorder: once gotoSpace(reorder_after) is asked, the live
 --             list is reorder
@@ -380,8 +382,9 @@ local function fake_desktops_hs(by_screen)
       removeSpace = function(space, _)
         local s = holding(space)
         log.remove[#log.remove + 1] = space
-        if s.why then return nil, s.why end
+        if s.why and not s.anyway then return nil, s.why end
         s.pending = { id = (s.takes or {})[space] or space, lag = s.lag or 0 }
+        if s.why then return nil, s.why end
         return true
       end,
       addSpaceToScreen = function(uuid, _)
@@ -497,6 +500,17 @@ do
   check("remove: a reason that may pass is tried the whole budget, then said as a note, binding nothing",
     r[1].status == "note" and says(r[1], why) and #log.remove == TRIES and ctx.dock_failed == nil
       and ctx.remove_failed == nil, tostring(r[1].reason) .. " / " .. joined(log.remove))
+end
+
+-- A call that reported failure and removed the target all the same, seen a
+-- readback late (ic's S1): the try after it reads the verdict first, so the
+-- removal is done and counted, never "not removed", and not asked again.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, why = "the Dock is not answering",
+    anyway = true, lag = 1 } }, { remove_on(SCREEN, 3) })
+  check("remove: a call that failed and removed the target anyway is done, read by the verdict, not asked again",
+    r[1].status == "done" and joined(r[1].removed) == "3" and joined(log.remove) == "3",
+    tostring(r[1].status) .. " / " .. tostring(r[1].reason) .. " / " .. joined(log.remove))
 end
 
 -- The live list changed between the proof and the removal: removeSpace would
