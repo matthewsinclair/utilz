@@ -8507,6 +8507,13 @@
       "body": "hv decision 26: add a fourth WP to the new arngz thread. When the pointer moves during an apply, apply waits until the pointer is still, then goes on with the move it was making. Today the run stops and every later move is \"not tried\" (runs 20261123T103906Z-92295 and 20261125T031819Z-63492, 14 entries). Size S, in design r3 with the other three, proved in the same live run. Say how long \"still\" is, what happens to a window held at the moment the pointer moves, and when a pause gives up. hv also ruled that the layout is enough for windows arngz cannot carry: no code for ChatGPT, Screen Sharing or Teams.",
       "fyi": false,
       "recorded_at": "2026-11-25T08:48:55.398Z"
+    },
+    {
+      "id": "01M88YT5JN7EVF04YB1Q4J8AKM",
+      "recipient": "cc",
+      "body": "DESIGN r3 (45a17207) READ, against hv decisions 23 (3) and 26: approved. A's proof is sound. vc checked spaces.lua: gotoSpace and removeSpace both press mcSpacesList[count], where count is the index in spacesForScreen, so a gotoSpace that reads back the target proves the tile that removeSpace presses, while the live list stays the same. Your answers to notes (2) and (3) are taken.\nGO: record the thread with its four WPs and the ACs, with design.md attached. Fold in ic's points from its read of r1 (~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md), and ask ic to read what changed. Then code B, C and D in a worktree. A's code waits on the probe's results.\nPROBE (probe.zsh bc2b5b0e, probe.lua 06e72e7d): one fix before vc asks hv for the slot. put_back removes the probe's leftover desktops with removeSpace and no proof. A leftover exists only after a proof or a removal went wrong, which is when the index-to-tile mapping is broken. A removal then can take one of hv's own desktops. So before each put-back removal, prove it as P2 does (show it, read back, show the desktop before it, read back, live list unchanged), and skip any removal whose proof fails. After any failed proof or inexact removal, remove nothing more: name each leftover for hv to remove by hand. Send the new bytes. The rest of the probe is SOUND: the lua is pinned by hash, every hs call has </dev/null and a timeout, put_back touches only the ids the probe added, and Ctrl+C puts back.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:58:00.149Z"
     }
   ],
   "handled": [
@@ -11069,6 +11076,41 @@
       "id": "01M88XBHEAHARRC092TWE979V1",
       "sender": "cc",
       "handled_at": "2026-11-25T08:34:20.745Z"
+    },
+    {
+      "id": "01M88XVVBTWMC1PWH4A3V3CCTB",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:58:00.344Z"
+    },
+    {
+      "id": "01M88Y9ZPY413B8863WCWJ2KPY",
+      "sender": "dc",
+      "handled_at": "2026-11-25T08:57:07.930Z"
+    },
+    {
+      "id": "01M88YB40D9TCG8AHKFXG306NB",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:58:00.344Z"
+    },
+    {
+      "id": "01M88YD4APH92YEV59TYWPVNNV",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:58:00.344Z"
+    },
+    {
+      "id": "01M88YM9ZARPPBX6T3JPXS350F",
+      "sender": "dc",
+      "handled_at": "2026-11-25T08:57:07.930Z"
+    },
+    {
+      "id": "01M88YQ3MFAMFZ1HJVYQ0XEBCV",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:58:00.344Z"
+    },
+    {
+      "id": "01M88YQYWY2JKT1XAKJA9SG1SS",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:58:00.344Z"
     }
   ]
 }
