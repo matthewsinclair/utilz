@@ -2,11 +2,11 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 02346c8e-1026-49af-b928-04d0f4037c1b
-heartbeat_at: 2026-11-24 19:23Z
+session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
+heartbeat_at: 2026-11-25 07:34Z
 status: active
 focus: "24 Nov EOD: localfold on hv's word, no release. ST0031 rests on AC-01.4 at hv's 2.15.0 cut. Todo 31 for tomorrow. Holding for hv's word via vc."
-claims: [ST0031/01, ST0031/02]
+claims: [ST0031/01, ISSUE:I8243889929dfc303, ISSUE:Ibf2b53b853c153cc]
 ---
 
 # DevX Claude (dc)
@@ -14,10 +14,12 @@ claims: [ST0031/01, ST0031/02]
 ## DOING
 
 - ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done. (edited)
+- I8243889: framework prose made true to the code (hv decision 23, vc's GO). One worktree, no run, one READY.
+- Ibf2b53b: prez.bats in CI's two test legs through tools/ci-suites (hv decision 24). Local Desk run before the READY.
 
 ## TODO
 
-- opt/utilz/test/test_helper.bash:34-36 says a fake source holds no bin/devbin; make_fake_src copies it since I59c806c. XS comment fix, on vc's word.
+_(none)_
 
 ## Holds
 

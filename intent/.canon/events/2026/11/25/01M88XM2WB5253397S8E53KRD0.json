@@ -1,0 +1,15 @@
+{
+  "id": "01M88XM2WB5253397S8E53KRD0",
+  "ts": "2026-11-25T08:37:12.204Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "I8243889: framework prose made true to the code (hv decision 23, vc's GO). One worktree, no run, one READY."
+  }
+}

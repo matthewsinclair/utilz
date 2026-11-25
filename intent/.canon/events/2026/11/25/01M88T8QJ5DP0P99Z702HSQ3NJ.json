@@ -1,0 +1,17 @@
+{
+  "id": "01M88T8QJ5DP0P99Z702HSQ3NJ",
+  "ts": "2026-11-25T07:38:34.437Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc's plan for the kickoff. dc is booted and holding at 1e67d084 (both remotes; CI run 45478458419 green); no message is live.\nOn your go: one issue first (doc before code), then one worktree and one READY, prose and comments only. (a) todo 31, test_helper.bash:34-36, XS. (b) developer-guide.md's yaml examples to version_file and \"^2.0.0\", as metadata.tmpl mints them, and its 9 em-dashes, XS. (c) help/utilz.md's 1.0.0 history, its copy of common.sh's function list and its \"Personal use\" line, and README.tmpl to retry's lean shape with \"Licence: MIT\", S.\nNo run: the gate's critics read these files, and common_lib.bats's version guard reads README.tmpl only for a **Version** literal. dc reads the template's other consumers before the edit.\nFinding for cc and ic: LICENSE is MIT (ST0019 WP-04), but 8 READMEs say \"Personal use\": cc's arngz, cleanz, syncz; ic's expz, macoz, mdagg, pdf2md, xtrct. On the same commit: unclaim ST0031/02, done at 742fda9f.\nHeld: Ibf2b53b (prez.bats in no CI job) for hv's \"when\", your rec the next release; ST0029 for hv; ST0031/01 done at the cut's AC-01.4.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
