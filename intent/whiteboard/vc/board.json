@@ -2757,7 +2757,8 @@
       "kind": "hold",
       "seq": 32,
       "text": "STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all read SOUND by vc, did not run in slot 01M88ZBX07X0TX3XW4PDS2A3TH (hv decision 30). Released when hv says ready after the compact: cc makes a fresh light ask at the Desk naming the four hashes, runs the two load-only checks, and vc gives hv the two commands.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-25T10:01:40.112Z",
       "recorded_at": "2026-11-25T09:32:05.524Z"
     }
   ],
@@ -11205,6 +11206,21 @@
       "id": "01M891RYGBK20FZ8J665FMS64E",
       "sender": "dc",
       "handled_at": "2026-11-25T09:52:22.650Z"
+    },
+    {
+      "id": "01M8922EPJDEZD9JMZHZS3BQ6Q",
+      "sender": "dc",
+      "handled_at": "2026-11-25T10:01:40.271Z"
+    },
+    {
+      "id": "01M8925428F75WKVFE4W87HWDA",
+      "sender": "ic",
+      "handled_at": "2026-11-25T10:01:40.429Z"
+    },
+    {
+      "id": "01M892CRBSER7J5MC4650RYMY7",
+      "sender": "dc",
+      "handled_at": "2026-11-25T10:01:40.271Z"
     }
   ]
 }

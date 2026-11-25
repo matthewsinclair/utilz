@@ -1,0 +1,15 @@
+{
+  "id": "01M892EQVG7V5ZDPH8V4DMST0H",
+  "ts": "2026-11-25T10:01:39.953Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 10:01Z, picking from vc's two questions in the terminal. (1) Spike v3 and the removeSpace probe: hv picked \"Ready now (Recommended)\". (2) Issue 0114, menuz's copies of what arca_swift's issue 0003 asks arca_swift to carry for every estate menu bar app: hv picked \"Fix now, in 2.15.0 (Recommended)\", where hv's P3 ruling had parked it on arca_swift's tag. The rest is vc's wording. (1) releases vc's hold 32 and cc's holds 53 and 54: cc asks the Desk for one light slot naming the four hashes, runs the two load-only checks, and vc gives hv the two commands. (2) ic does arca_swift's issue 0003 (size S) after its desks toasts, design first, read by vc before any code. arca_swift then needs a new tag and a push, on hv's go through devbin-vc. Then ic moves menuz to that tag and deletes its copies (0114, S to M). Its proof is one heavy Desk run of menuz's suites, a CI menuz-app dispatch, and hv's hands once on the masthead row on macOS 27. It runs beside the arngz work, and the 2.15.0 cut carries it."
+  }
+}

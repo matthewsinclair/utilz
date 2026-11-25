@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all read SOUND by vc, did not run in slot 01M88ZBX07X0TX3XW4PDS2A3TH (hv decision 30). Released when hv says ready after the compact: cc makes a fresh light ask at the Desk naming the four hashes, runs the two load-only checks, and vc gives hv the two commands.
+_(none)_
 
 ## Watch-outs
 
