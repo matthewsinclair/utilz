@@ -3,8 +3,8 @@
 -- AT-eae7633d.2 to AT-eae7633d.8 (ST589246c acceptance.md) cite this file,
 -- each over the section of the same name below. AC-eae7633d.1 is hv's
 -- diagnosis run on the dev tree, and no file proves it. AT-35219619.6,
--- AT-a45b3aeb.8 and AT-4cb617e2.6 (ST6d8eed9 acceptance.md) cite it too, each
--- over the section of the same name.
+-- AT-a45b3aeb.8, AT-4cb617e2.6 and AT-88504807.8 (ST6d8eed9 acceptance.md)
+-- cite it too, each over the section of the same name.
 --
 -- Run by toast.bats under whichever of lua5.4, lua or luajit is present:
 --   <lua> opt/arngz/test/toast_test.lua <path to opt/arngz/lib/toast.lua>
@@ -106,9 +106,9 @@ do
   check("observed and planned leave the toast as it is",
     T.on_point(st, "observed", { run = "r1", displays = 3, desktops = 14, windows = 22 }, name_of) == nil
     and T.on_point(st, "planned", { run = "r1", moves = 7 }, name_of) == nil)
-  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "new desktops", seconds = 3 }, name_of)
-  check("waiting: names what it waits for and its longest, before any step without Hands off",
-    p and shown(p.lines) == "arngz: zeopit | Running... waiting for macOS to record the new desktops (up to 3 s)",
+  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "desktop changes", seconds = 3 }, name_of)
+  check("waiting for the desktop changes: names what it waits for and its longest, before any step without Hands off",
+    p and shown(p.lines) == "arngz: zeopit | Running... waiting for macOS to record the desktop changes (up to 3 s)",
     p and shown(p.lines))
   p = T.on_point(st, "waiting", { run = "r1", ["for"] = "unseen windows", seconds = 1.5 }, name_of)
   check("waiting: unseen windows", p and p.lines[2] == "Running... waiting for windows to show (up to 1.5 s)",
@@ -484,6 +484,67 @@ do
 end
 
 -- ============================================================================
+print("AT-88504807.8: extra empty desktops removed: the step, the wait and the counts")
+-- ============================================================================
+
+-- AT-88504807.8 (ST6d8eed9 acceptance.md) cites this section.
+-- ST6d8eed9 AC-88504807.8: apply removes a display's extra empty desktops
+-- before any move. A removal's step names the desktop by its ordinal when the
+-- step begins, and its display. The wait after the desktop edits is for the
+-- desktop changes. Finished counts the desktops removed, before those added,
+-- and the extra desktops the run leaves, after them, each only when it is not
+-- 0, and a busy run's counts stay whole on a third line.
+do
+  local st = fresh()
+  apply_start(st, "r1")
+  local p = T.on_point(st, "step", { run = "r1", i = 1, n = 12, kind = "remove", app = "", display = "left", desktop = 1 },
+    name_of)
+  check("step, remove: names the empty desktop by its ordinal and its display, then Hands off",
+    p and shown(p.lines) == "arngz: zeopit | Running... 1 of 12: removing empty desktop 1 on left | " .. T.HANDS_OFF,
+    p and shown(p.lines))
+  p = T.on_point(st, "step", { run = "r1", i = 2, n = 12, kind = "remove", app = "", display = "left" }, name_of)
+  check("step, remove: with no ordinal it says an empty desktop",
+    p and p.lines[2] == "Running... 2 of 12: removing an empty desktop on left", p and shown(p.lines))
+  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "desktop changes", seconds = 3 }, name_of)
+  check("waiting for the desktop changes after the removals, with Hands off under it",
+    p and shown(p.lines) == "arngz: zeopit | Running... waiting for macOS to record the desktop changes (up to 3 s) | "
+      .. T.HANDS_OFF, p and shown(p.lines))
+
+  local done = finish({ outcome = "done", exit = 0, placed = 9, removed = 1, seconds = 12.5 })
+  check("finished: the desktops removed, in the singular for one",
+    done and done.lines[2] == "Finished in 12.5 s: 9 placed, 1 desktop removed", done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, in_place = 3, removed = 2, created = 1, seconds = 7 })
+  check("finished: the desktops removed come before those added, in the plural for two",
+    done and done.lines[2] == "Finished in 7.0 s: 3 already in place, 2 desktops removed, 1 desktop added",
+    done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, in_place = 12, extra = 1, seconds = 3.2 })
+  check("finished: an extra desktop the run leaves is said after the rest, in a clean run",
+    done and done.lines[2] == "Finished in 3.2 s: 12 already in place, 1 extra desktop not removed"
+      and #done.lines == 2, done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, placed = 5, extra = 2, seconds = 4 })
+  check("finished: extra desktops in the plural",
+    done and done.lines[2] == "Finished in 4.0 s: 5 placed, 2 extra desktops not removed", done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, placed = 4, removed = 0, extra = 0, seconds = 2 })
+  check("finished: no removed or extra count when each is 0",
+    done and done.lines[2] == "Finished in 2.0 s: 4 placed", done and shown(done.lines))
+
+  local wanted = { "9 placed", "2 already in place", "1 not found", "1 not running", "1 failed", "1 desktop removed",
+    "1 desktop added", "1 extra desktop not removed", "2 pauses for the pointer" }
+  local busy = finish({ outcome = "partly", exit = 1, placed = 9, in_place = 2, unseen = 1, not_running = 1, failed = 1,
+    removed = 1, created = 1, extra = 1, paused = 2, not_running_apps = "Teams", seconds = 13.2,
+    first = "Mail: no window of it could be named", first_outcome = "unseen" })
+  local said_counts = busy and table.concat({ busy.lines[2], busy.lines[3], busy.lines[4] }, " ") or ""
+  local whole = true
+  for _, c in ipairs(wanted) do
+    if not said_counts:find(c, 1, true) then whole = false end
+  end
+  check("finished: a busy run that also removes, adds and leaves desktops takes a third line, each count whole",
+    busy and whole and busy.lines[2]:sub(-1) == "," and busy.lines[3]:sub(-1) == ","
+      and busy.lines[4]:find("^%d") ~= nil and longest(busy.lines) <= T.MAX_LINE
+      and busy.lines[5] == "Not running: Teams", busy and shown(busy.lines))
+end
+
+-- ============================================================================
 -- The fake hs: what a real canvas and timer would be asked to do, recorded.
 -- opts.no_canvas leaves hs.canvas out; opts.delete_raises makes a canvas's
 -- delete raise.
@@ -610,7 +671,7 @@ do
   local level
   local log, prints, ok, err = drive(function(M, _, hs)
     M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
-    M.point("waiting", { run = "r1", ["for"] = "new desktops", seconds = 3 })
+    M.point("waiting", { run = "r1", ["for"] = "desktop changes", seconds = 3 })
     M.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "com.apple.Safari", display = "laptop" })
     level = hs.canvas.windowLevels.status
   end)

@@ -12,7 +12,8 @@
 -- nothing until that call has returned. Every other verb gets nothing.
 -- ST6d8eed9 adds what a toast says of an app that is not running (WP
 -- 35219619), of a reload of Hammerspoon's config and the run again (WP
--- a45b3aeb), and of a pause while the person has the pointer (WP 4cb617e2).
+-- a45b3aeb), of a pause while the person has the pointer (WP 4cb617e2), and
+-- of the extra empty desktops a run removes (WP 88504807).
 --
 -- PURE, THEN IMPURE. What a toast says, where it sits, how long it stays and
 -- when it hides are pure functions of the points heard: T.cut, T.wrap,
@@ -157,9 +158,11 @@ local function add_wrapped(lines, text)
   return lines
 end
 
--- A wait, by what it waits for (progress.md's `for`).
+-- A wait, by what it waits for (progress.md's `for`). "desktop changes" is the
+-- wait after the desktops are removed, created, or both (ST6d8eed9 WP
+-- 88504807).
 local WAITING = {
-  ["new desktops"] = "waiting for macOS to record the new desktops",
+  ["desktop changes"] = "waiting for macOS to record the desktop changes",
   ["unseen windows"] = "waiting for windows to show",
 }
 
@@ -189,10 +192,16 @@ local function desktop(f)
   return nil
 end
 
--- A step, by its kind (progress.md: create, move, place or recheck).
+-- A step, by its kind (progress.md: create, remove, move, place or recheck).
+-- A removal's desktop is its ordinal when its step begins (ST6d8eed9 WP
+-- 88504807).
 local STEP = {
   create = function(f)
     return "adding " .. (desktop(f) or "a desktop") .. on_display(f)
+  end,
+  remove = function(f)
+    local which = desktop(f)
+    return "removing " .. (which and ("empty " .. which) or "an empty desktop") .. on_display(f)
   end,
   move = function(f, app)
     local to = desktop(f)
@@ -237,7 +246,9 @@ local COUNTS = {
   { "failed", "failed" },
 }
 
--- The counts, then the desktops added, then the times the run paused for the
+-- The counts, then the desktops removed and added, in the order the run makes
+-- them, then the extra desktops it leaves (progress.md's finished removed and
+-- extra; ST6d8eed9 WP 88504807), then the times the run paused for the
 -- pointer (progress.md's finished paused; ST6d8eed9 AC-4cb617e2.6).
 local function counts(f)
   local parts = {}
@@ -245,21 +256,28 @@ local function counts(f)
     local n = f[c[1]]
     if type(n) == "number" and n > 0 then parts[#parts + 1] = int(n) .. " " .. c[2] end
   end
+  if type(f.removed) == "number" and f.removed > 0 then parts[#parts + 1] = plural(f.removed, "desktop") .. " removed" end
   if type(f.created) == "number" and f.created > 0 then parts[#parts + 1] = plural(f.created, "desktop") .. " added" end
+  if type(f.extra) == "number" and f.extra > 0 then
+    parts[#parts + 1] = plural(f.extra, "extra desktop") .. " not removed"
+  end
   if type(f.paused) == "number" and f.paused > 0 then parts[#parts + 1] = plural(f.paused, "pause") .. " for the pointer" end
   return parts
 end
 
--- A Finished line: its head, then the counts, on at most T.LONG_LINES lines.
+-- A Finished line: its head, then the counts, on as many lines as they take.
 -- It breaks only between two counts, so no count is cut in two: a count's
 -- own spaces are held as HELD while T.wrap breaks between words, then given
--- back. HELD is one byte, as a space is, so each line keeps its length.
+-- back. HELD is one byte, as a space is, so each line keeps its length. A
+-- count fits on a line, so the lines never outnumber the counts and the head,
+-- and no count is cut at the end either: a busy run that also removes, adds
+-- and leaves desktops takes a third line (ST6d8eed9 WP 88504807).
 local HELD = "\1"
 
 local function counts_lines(head, parts)
   local held = {}
   for i, part in ipairs(parts) do held[i] = (part:gsub(" ", HELD)) end
-  local lines = T.wrap(head .. table.concat(held, ", "))
+  local lines = T.wrap(head .. table.concat(held, ", "), T.MAX_LINE, #parts + 1)
   for i, line in ipairs(lines) do lines[i] = (line:gsub(HELD, " ")) end
   return lines
 end
