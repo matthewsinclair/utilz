@@ -890,8 +890,13 @@ apply_response() {
 }
 
 @test "ST6d8eed9: arngz holds no code that launches an app (AC-35219619.3)" {
-  run grep -n -E 'open -b|launchOrFocus|exec_launch|LAUNCH_TIMEOUT' "$UTILZ_HOME/opt/arngz/arngz" "$UTILZ_HOME"/opt/arngz/lib/*.lua
+  # The engine is where apply launched apps: no launch call is left in it.
+  run grep -n -E 'open -b|launchOrFocus|launchApplication|exec_launch|LAUNCH_TIMEOUT' "$UTILZ_HOME"/opt/arngz/lib/*.lua
   # grep's 1 is "no line matched"; its 2 would be a file it could not read.
+  [ "$status" -eq 1 ] || fail "grep exited $status: $output"
+  # The CLI runs no open command. Its fix lines that tell a person to run
+  # `open -b` for Hammerspoon itself are words it prints, never a command.
+  run grep -n -E '^[[:space:]]*(command[[:space:]]+)?open[[:space:]]' "$UTILZ_HOME/opt/arngz/arngz"
   [ "$status" -eq 1 ] || fail "grep exited $status: $output"
 }
 
@@ -1268,8 +1273,9 @@ ask_option() {
   apply_machine scheduled "$response"
   run_arngz apply --no-create --map left=AAAA-1 --map=right=BBBB-2 zeop1
   assert_success
+  # apply's first try lets the engine ask for a reload (ST6d8eed9 WP a45b3aeb).
   run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
-  assert_output '{"no_create":true,"map":{"left":"AAAA-1","right":"BBBB-2"}}'
+  assert_output '{"no_create":true,"map":{"left":"AAAA-1","right":"BBBB-2"},"may_reload":true}'
 }
 
 @test "AT-05.3: apply with no options sends no_create off and an empty map" {
@@ -1277,8 +1283,9 @@ ask_option() {
   response="$(apply_response placed_results)"
   apply_machine scheduled "$response"
   run_arngz apply zeop1
+  # apply's first try lets the engine ask for a reload (ST6d8eed9 WP a45b3aeb).
   run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
-  assert_output '{"no_create":false,"map":{}}'
+  assert_output '{"no_create":false,"map":{},"may_reload":true}'
 }
 
 @test "ST6d8eed9: --no-launch is refused as an unknown option, before anything is asked (AC-35219619.3)" {
