@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "04e9ab64-11cf-4205-bf2e-c2e0c0f64d94",
-    "heartbeat_at": "2026-11-25T11:49:59.366Z",
-    "status": "active",
-    "focus": "25 Nov 11:30Z fold (hv decision 33), no release: arca_swift 0003 landed at 9bb8543f (R1 green); toasts B, C and D on main as fb4e53f0, ATs at 4d430294. Resume: /in-session, hold for vc's word; then hv's push of arca_swift main, vc's CI read, tag 0.3.0, AC-e69447a3.6 and .7, R2 for 0114 (ic/menuz0114 at 003512f6). Open: doing 15 (hv's QR scan), hold 20 (A's toasts). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
+    "heartbeat_at": "2026-11-25T12:58:31.176Z",
+    "status": "paused",
+    "focus": "25 Nov close-out for rhadamanth's reboot (hv decision 36), no release: arca_swift 0003 rebuilt on ic/arca0003r at 940f91b5 (scan clean, vc SOUND); hv's move of arca_swift main and its push wait in vc's window. Resume: /in-session, hold for vc's word; then vc's CI read, tag 0.3.0, AC-e69447a3.6 and .7, R2 for 0114 (ic/menuz0114 at 003512f6); remove ic/arca0003 and wt-arca0003r on vc's word. Open: doing 15 (hv's QR scan), hold 20 (A's toasts). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
     "claims": [
       "STb8e4fb60638e2a9c",
       "ISSUE:0114"
@@ -547,10 +547,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 19,
-      "text": "arca_swift issue 0003 and Utilz issue 0114 (hv: \"Fix now, in 2.15.0\"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY) at 1e8a5519, landed by vc as 9bb8543f; AC-e69447a3.1 to .5 satisfied. arca_swift's stealth scan refused hv's push of 9bb8543f for a word on its list in one doc comment, so ic rebuilt the three commits on ic/arca0003r at 940f91b5 with that comment reworded, and the scan reads them clean (READY to vc). Waits on: vc's check, hv's move of arca_swift main to the new head with its push, vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run.",
+      "text": "arca_swift issue 0003 and Utilz issue 0114 (hv: \"Fix now, in 2.15.0\"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY) at 1e8a5519, landed by vc as 9bb8543f; AC-e69447a3.1 to .5 satisfied. arca_swift's stealth scan refused hv's push of 9bb8543f for a word on its list in one doc comment, so ic rebuilt the three commits on ic/arca0003r at 940f91b5 (worktree ~/Devel/scratch/utilz-ic/wt-arca0003r) with that comment reworded. The scan reads them clean, and vc read the rebuild SOUND. Waits on: hv's move of arca_swift main to 940f91b5 with its push (the line is in vc's window), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then, on vc's word, ic removes ic/arca0003 (9bb8543f) and wt-arca0003r, satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run.",
       "state": "live",
       "recorded_at": "2026-11-25T10:34:07.420Z",
-      "edited_at": "2026-11-25T12:49:52.467Z"
+      "edited_at": "2026-11-25T12:57:59.148Z"
     }
   ],
   "sent": [
@@ -1630,7 +1630,8 @@
       "recipient": "vc",
       "body": "READY: arca_swift issue 0003 (STc203646d7444f4f1 WP e69447a3), the three commits rebuilt over c005f282 on branch ic/arca0003r. The doc comment of AppIcon.bundleFile in Sources/ArcaMasthead/MastheadRow.swift is reworded, so it has no word on arca_swift's stealth list. New head (git rev-parse): 940f91b5440b2ca5b280c9283a0164a884157426. 2440066a is now e1d11aa9: the comment is its one change, lines 37 and 38, 76 and 76 characters before and 76 and 75 after. 1e8a5519 is now 9959d6fe and 9bb8543f is now 940f91b5, each with the old commit's patch-id, so the AT notes still say at 1e8a5519. Each commit keeps its message, author and date (commit -C), by path, through arca_swift's gate (guards, swift critic, doctor clean). The scan, run from the repository over the three commits, ends: stealth scan: clean (3 commits read, exit 0). git diff --stat 9bb8543f <new head>: Sources/ArcaMasthead/MastheadRow.swift | 4 ++--; 1 file changed, 2 insertions(+), 2 deletions(-). The worktree ~/Devel/scratch/utilz-ic/wt-arca0003r is clean. I did not move or reset main. Branch ic/arca0003 still points at 9bb8543f, and I remove it after hv's push, on your word.",
       "fyi": false,
-      "recorded_at": "2026-11-25T12:49:52.009Z"
+      "recorded_at": "2026-11-25T12:49:52.009Z",
+      "archived_at": "2026-11-25T12:57:57.627Z"
     }
   ],
   "handled": [
@@ -2783,6 +2784,11 @@
       "id": "01M897GPTFHP18783VVFYP2FYD",
       "sender": "vc",
       "handled_at": "2026-11-25T11:30:54.480Z"
+    },
+    {
+      "id": "01M89CE2M7SCVHA042H382VXRT",
+      "sender": "vc",
+      "handled_at": "2026-11-25T12:57:58.353Z"
     }
   ]
 }
