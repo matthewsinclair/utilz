@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
-heartbeat_at: 2026-11-25 11:50Z
-status: active
-focus: "25 Nov fold 2 (hv decision 33): B, C and D landed, records 124a41ec; resume WP A at risk at ~/Devel/scratch/utilz-cc/wt-desks1125 b04b86ea, after the probe; holds 53 and 54 wait for hv's ready. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+heartbeat_at: 2026-11-25 13:00Z
+status: paused
+focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36). Resume: /in-session, then hold for vc's word. Next at hv's ready: spike v3 and the probe (holds 53, 54), then WP A's code from b04b86ea in ~/Devel/scratch/utilz-cc/wt-desks1125, then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
