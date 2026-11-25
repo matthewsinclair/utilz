@@ -1,5 +1,5 @@
 ---
-verblock: "25 Nov 2026:v1.67: matts - fold before the estate compact"
+verblock: "25 Nov 2026:v1.68: matts - the arngz runs wait for the compact"
 ---
 
 # Work In Progress
@@ -7,12 +7,12 @@ verblock: "25 Nov 2026:v1.67: matts - fold before the estate compact"
 ## DOING
 
 - Utilz folds for hv's estate compact and account change (hv decision 29); after /in-session, every seat holds for devbin-vc's word.
-- hv: STca1b7f9's spike v3, then ST6d8eed9's removeSpace probe, in hv's own terminal, in cc's Desk slot.
 - cc: ST6d8eed9's WPs B (no launches), C (a reload after the window filter fails) and D (a pause on a pointer move), in a worktree.
 - hv: the push of main to upstream and local, then CI's first run of prez.bats in both test jobs.
 
 ## TODO
 
+- hv: "ready" for STca1b7f9's spike v3, then ST6d8eed9's removeSpace probe, in hv's own terminal (vc hold 32); cc asks the Desk, and vc gives hv the commands at the grant.
 - vc: read the spike's and the probe's results; WP A's code (extra empty desktops removed, each proved first) waits on the probe.
 - cc: STca1b7f9's WP1, WP2, WP4's Mission Control leg and WP6's create, from the spike's results. Issue I7fce35c closes with AC-322a6511.6, .7 and AC-026eadfc.1 to .4.
 - cc: one Desk run for each arngz thread, then one live run of each with hv at the keyboard.
