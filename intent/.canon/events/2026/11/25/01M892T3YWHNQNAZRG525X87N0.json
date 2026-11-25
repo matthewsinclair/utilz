@@ -1,0 +1,17 @@
+{
+  "id": "01M892T3YWHNQNAZRG525X87N0",
+  "ts": "2026-11-25T10:07:52.796Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY, the CHANGELOG audit: 8f0256fc on dc/clgap (~/Devel/scratch/utilz-dc/wt-clgap), parent 8776bf2f, which is main; 1 path, CHANGELOG.md, change 7f8922436e404e668c4ea02180cb7c674458d89c757366d478d7ce1ad60433a9. Prose only, gate green, prettier --check clean, no run.\nThree lines added. Added: `prez showreel qr <dir>` (STb8e4fb6, 6e9cf356). Fixed: showreel's build warns when a socials QR file is there but cannot be read (issue I88af1f3, the same commit, a fault in released code). Fixed: every help page says what its tool's code does, README.md and docs/ too (fb4b7cf0, c4b1a6c1, c32fa0cc, 369ede2c, 44d46c08). All 18 help pages were read. menuz has no README, so the line says \"each README\".\nThe 43: 19 have a line, the 3 new ones included. 2 are CHANGELOG alone (21fda5c9, 6f3b09d4). 22 dc judged not user-visible:\n- devbin sweeps, 0.1.20 to 0.1.32: a96b960a 9a647c69 5d91fa94 f976d1a9 87d1daf2 47f409eb a521a573 9ccf44ad 74550b16 d942461f 1e67d084. The devbin verbs a user runs are in I59c806c's lines.\n- Intent upgrades: 04678a1a 5cbdb912 3c90188d. The agent contract: d429526c (usage-rules.md).\n- Tests and comments: c7a5df87 (acceptance.sh), 7e0f5111 3fd0923c 5e6477c3 (AT ids), 0aaae2d0 0849cc4f (test_helper), 91b23051 (ci-suites).\nRead inside covered commits: 2c9f7d99's menuz change and 2af9e632's bin/utilz change are comments; 00c87c15's menuz change is MENUZ_ASSET, which has its line. At 2.14.10 only doctor showed CI's verdict, so the doctor line covers that.\nOn your LANDED, dc removes wt-clgap and dc/clgap by the fold's checks.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

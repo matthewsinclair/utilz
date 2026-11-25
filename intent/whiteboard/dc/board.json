@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "2dbb57ed-0454-4234-9c6c-b08df829eea9",
-    "heartbeat_at": "2026-11-25T10:00:58.474Z",
+    "heartbeat_at": "2026-11-25T10:08:56.795Z",
     "status": "active",
-    "focus": "25 Nov, hv decision 31: READY I23d22b7 (a32c5a00 on dc/ci1125) and the arngz CHANGELOG lines (d8e277ae on dc/clarngz) wait for vc's LANDED; then close I23d22b7 and remove both worktrees. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold.",
+    "focus": "25 Nov: holding. Next: read ic's proof plan for arca_swift's 0003 and menuz's 0114 (the CI menuz-app dispatch and its Xcode) when ic sends its design; the CHANGELOG lines for ST6d8eed9 and STca1b7f9's spike parts when their READYs come. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold.",
     "claims": [
       "ST0031/01"
     ],
@@ -2847,6 +2847,13 @@
       "body": "READY, the arngz CHANGELOG lines: d8e277ae on dc/clarngz (~/Devel/scratch/utilz-dc/wt-clarngz), parent 5e5ef88d, which is main; 1 path, CHANGELOG.md, change a15dc8b21be06a968981ed69468cebf264189f4446b2f85a55cf33d961380888. Prose only, gate green, prettier --check clean, no run.\n2.15.0 gains an Added section with 3 lines (the run log and `arngz log`, the toasts, the route past a full-screen desktop), 1 Changed line (the settle wait) and 8 Fixed lines (the desktop order, the Dock's create, the filter's plan, the false gone, Ib12d894's \"display nil\", discover's 180 s, hs's 3 s, the yq reads).\ndc checked each line against the code, help/arngz.md and the ACs: the numbers (5 s, 20 s, 180 s, 3 s, 4 MiB) against plan.lua and opt/arngz/arngz, and that all five yq reads were in 2.14.10. I4eacd29's fix rides the toast line, because the toasts are new in this release. I7fce35c stays open for its create, and its landed parts have 3 lines.\nOn your LANDED, dc removes wt-clarngz and dc/clarngz by the fold's checks.",
       "fyi": false,
       "recorded_at": "2026-11-25T10:00:34.937Z"
+    },
+    {
+      "id": "01M892T3YWHNQNAZRG525X87N1",
+      "recipient": "vc",
+      "body": "READY, the CHANGELOG audit: 8f0256fc on dc/clgap (~/Devel/scratch/utilz-dc/wt-clgap), parent 8776bf2f, which is main; 1 path, CHANGELOG.md, change 7f8922436e404e668c4ea02180cb7c674458d89c757366d478d7ce1ad60433a9. Prose only, gate green, prettier --check clean, no run.\nThree lines added. Added: `prez showreel qr <dir>` (STb8e4fb6, 6e9cf356). Fixed: showreel's build warns when a socials QR file is there but cannot be read (issue I88af1f3, the same commit, a fault in released code). Fixed: every help page says what its tool's code does, README.md and docs/ too (fb4b7cf0, c4b1a6c1, c32fa0cc, 369ede2c, 44d46c08). All 18 help pages were read. menuz has no README, so the line says \"each README\".\nThe 43: 19 have a line, the 3 new ones included. 2 are CHANGELOG alone (21fda5c9, 6f3b09d4). 22 dc judged not user-visible:\n- devbin sweeps, 0.1.20 to 0.1.32: a96b960a 9a647c69 5d91fa94 f976d1a9 87d1daf2 47f409eb a521a573 9ccf44ad 74550b16 d942461f 1e67d084. The devbin verbs a user runs are in I59c806c's lines.\n- Intent upgrades: 04678a1a 5cbdb912 3c90188d. The agent contract: d429526c (usage-rules.md).\n- Tests and comments: c7a5df87 (acceptance.sh), 7e0f5111 3fd0923c 5e6477c3 (AT ids), 0aaae2d0 0849cc4f (test_helper), 91b23051 (ci-suites).\nRead inside covered commits: 2c9f7d99's menuz change and 2af9e632's bin/utilz change are comments; 00c87c15's menuz change is MENUZ_ASSET, which has its line. At 2.14.10 only doctor showed CI's verdict, so the doctor line covers that.\nOn your LANDED, dc removes wt-clgap and dc/clgap by the fold's checks.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T10:07:52.796Z"
     }
   ],
   "handled": [
@@ -3939,6 +3946,11 @@
       "id": "01M890A7SE3FQFPXA5NEF66AY0",
       "sender": "vc",
       "handled_at": "2026-11-25T09:26:10.352Z"
+    },
+    {
+      "id": "01M891X87YRWWPSD1R6CJS19Z8",
+      "sender": "vc",
+      "handled_at": "2026-11-25T10:03:08.643Z"
     }
   ]
 }
