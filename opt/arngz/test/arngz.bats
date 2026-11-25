@@ -879,6 +879,7 @@ apply_response() {
   assert_output "apply zeop1"
 }
 
+# AT-35219619.2 (ST6d8eed9 acceptance.md) cites this arm.
 @test "ST6d8eed9: an app that is not running is reported not running, and apply exits 0 (AC-35219619.2)" {
   local response
   response="$(apply_response not_running_results)"
@@ -889,6 +890,7 @@ apply_response() {
   assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
 }
 
+# AT-35219619.3 (ST6d8eed9 acceptance.md) cites this arm.
 @test "ST6d8eed9: arngz holds no code that launches an app (AC-35219619.3)" {
   # The engine is where apply launched apps: no launch call is left in it.
   run grep -n -E 'open -b|launchOrFocus|launchApplication|exec_launch|LAUNCH_TIMEOUT' "$UTILZ_HOME"/opt/arngz/lib/*.lua
@@ -964,6 +966,7 @@ ask_option() {
   K="$2" yq -r '.options[strenv(K)]' "$FAKE_HS_LOG/request.$1.json"
 }
 
+# AT-a45b3aeb.3 (ST6d8eed9 acceptance.md) cites this arm and the next.
 @test "ST6d8eed9: a filter that failed at apply's read reloads Hammerspoon once, waits for its fresh config, and asks apply again (AC-a45b3aeb.3)" {
   local response last n
   response="$(apply_response placed_results)"
@@ -1025,6 +1028,8 @@ ask_option() {
   assert_output "zeop1"
 }
 
+# AT-a45b3aeb.4 (ST6d8eed9 acceptance.md) cites this arm, with log_test.lua's
+# arm "the reload and state verbs".
 @test "ST6d8eed9: a reload the engine refuses while a run is live leaves the first answer, with the refusal's fix, and asks nothing more (AC-a45b3aeb.4)" {
   apply_machine sequence
   reload_sequence
@@ -1039,6 +1044,7 @@ ask_option() {
   [ "$(asks_made)" -eq "$(answers_numbered)" ] || fail "the fake was asked $(asks_made) times, for $(answers_numbered) answers"
 }
 
+# AT-a45b3aeb.5 (ST6d8eed9 acceptance.md) cites this arm.
 @test "ST6d8eed9: a Hammerspoon not back within ARNGZ_RELOAD_TIMEOUT is exit 1 with the words, and apply is not asked again (AC-a45b3aeb.5)" {
   local last n numbered
   apply_machine sequence
@@ -1068,6 +1074,8 @@ ask_option() {
   [ ! -e "$FAKE_HS_LOG/request.json" ]
 }
 
+# AT-a45b3aeb.6 (ST6d8eed9 acceptance.md) cites this arm, with log_test.lua's
+# discover checks in arm "the reload and state verbs".
 @test "ST6d8eed9: discover --save reloads once, and saves nothing when the filter failed again (AC-a45b3aeb.6)" {
   local last
   fake_hs sequence
@@ -1089,6 +1097,7 @@ ask_option() {
   [ "$(ask_option "$last" may_reload)" = false ] || fail "the retry let the engine ask for a second reload"
 }
 
+# AT-a45b3aeb.7 (ST6d8eed9 acceptance.md) cites this arm.
 @test "ST6d8eed9: diff and apply --dry-run never let the engine ask for a reload, and never reload (AC-a45b3aeb.7)" {
   local response="$BATS_TEST_TMPDIR/plan-reload.json"
   # A plan that carries reload, which the engine never sends: a CLI that acted
@@ -1288,6 +1297,7 @@ ask_option() {
   assert_output '{"no_create":false,"map":{},"may_reload":true}'
 }
 
+# AT-35219619.3 (ST6d8eed9 acceptance.md) cites this arm too.
 @test "ST6d8eed9: --no-launch is refused as an unknown option, before anything is asked (AC-35219619.3)" {
   apply_machine ok "$FIXTURES/responses/observe.json"
   run_arngz apply --no-launch zeop1

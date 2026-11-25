@@ -216,7 +216,8 @@ do
 end
 
 -- An app not running is not_running, said and uncounted, in either plan:
--- apply never launches an app (ST6d8eed9 AC-35219619.1).
+-- apply never launches an app (ST6d8eed9 AC-35219619.1). AT-35219619.1
+-- (ST6d8eed9 acceptance.md) cites this arm and the next.
 do
   local w = base_world()
   w.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
@@ -355,7 +356,8 @@ do
   u.window_filter = "failed: hs/uielement.lua:134"
   local ops = P.plan(base_desk(), u, {})
   local words = P.filter_words(u)
-  -- AC-a45b3aeb.2 cites this arm.
+  -- AC-a45b3aeb.2 cites this arm, and AT-a45b3aeb.2 (ST6d8eed9 acceptance.md)
+  -- with log_test.lua's arm "a reload asked for by the read after the creates".
   check("ST6d8eed9: an unseen op planned while the filter failed carries its words, which ask for a reload"
     .. " when the request lets it",
     kinds(ops) == "unseen" and ops[1].filter == words and words == "Hammerspoon's window filter failed (hs/uielement.lua:134)"
@@ -816,6 +818,7 @@ end
 
 -- ---------------------------- the pointer is still (ST6d8eed9 WP 4cb617e2)
 
+-- AT-4cb617e2.1 (ST6d8eed9 acceptance.md) cites this arm.
 -- AC-4cb617e2.1 cites this arm: still after STILL_SECONDS within STILL_PX
 -- with hands free, a wait before that, and a give-up at PAUSE_LIMIT.
 print("the pointer is still")

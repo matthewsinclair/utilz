@@ -485,6 +485,7 @@ arm("the tally", function()
     ran.reload == true and done.reload == false and refused.reload == false and errored.reload == false,
     table.concat({ tostring(ran.reload), tostring(done.reload), tostring(refused.reload), tostring(errored.reload) }, " / "))
   -- ST6d8eed9 WP 4cb617e2 (AC-4cb617e2.4): how many times the run paused.
+  -- AT-4cb617e2.4 (ST6d8eed9 acceptance.md) cites this check.
   local paused = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = {}, paused = 2 }, 1,
     "/tmp/arngz.log")
   check("finished: paused says how many times the run paused for the pointer, and 0 when it did not",
@@ -1006,7 +1007,7 @@ local function point_of(recs, run, name)
   return ""
 end
 
--- AC-a45b3aeb.1
+-- AC-a45b3aeb.1. AT-a45b3aeb.1 (ST6d8eed9 acceptance.md) cites this arm.
 arm("a reload asked for before anything changes", function()
   local log = tmpdir() .. "/arngz.log"
   local real_execute = M.execute
@@ -1058,6 +1059,7 @@ arm("a reload asked for before anything changes", function()
   if not ok then error(err, 0) end
 end)
 
+-- AT-a45b3aeb.2 (ST6d8eed9 acceptance.md) cites this arm.
 -- AC-a45b3aeb.2: the read after the creates, as arm "the read after the
 -- creates" makes one, but with the filter failed there and Safari's window
 -- unnamed. The desk's extra desktop holds no app, so only the create needs
@@ -1108,7 +1110,8 @@ arm("a reload asked for by the read after the creates", function()
     point_of(recs, "R-LATER", "finished"))
 end)
 
--- AC-a45b3aeb.4, and discover's side of AC-a45b3aeb.6.
+-- AC-a45b3aeb.4, and discover's side of AC-a45b3aeb.6. AT-a45b3aeb.4 and
+-- AT-a45b3aeb.6 (ST6d8eed9 acceptance.md) cite this arm with arngz.bats's.
 arm("the reload and state verbs", function()
   fresh_globals()
   local log = tmpdir() .. "/arngz.log"
@@ -1306,7 +1309,8 @@ local function result_of(response, kind, match)
   return nil
 end
 
--- AC-4cb617e2.2 and AC-4cb617e2.4
+-- AC-4cb617e2.2 and AC-4cb617e2.4. AT-4cb617e2.2 and AT-4cb617e2.4
+-- (ST6d8eed9 acceptance.md) cite this arm.
 arm("a pause for the pointer, then the move goes on", function()
   local log = tmpdir() .. "/arngz.log"
   local turns = { "taken", "done" }
@@ -1346,7 +1350,7 @@ arm("a pause for the pointer, then the move goes on", function()
     find(recs, "wait", "still: done after") ~= nil and finished:match(" paused=(%d+)") == tostring(takes), finished)
 end)
 
--- AC-4cb617e2.3
+-- AC-4cb617e2.3. AT-4cb617e2.3 (ST6d8eed9 acceptance.md) cites this arm.
 arm("a pause that gives up, and a take after the last pause", function()
   local log = tmpdir() .. "/arngz.log"
   local turns = { "taken" }
