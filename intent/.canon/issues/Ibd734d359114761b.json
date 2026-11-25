@@ -2,12 +2,12 @@
   "schema": "intent/issue@4.0",
   "id": "Ibd734d359114761b",
   "origin": "01M893BAH7ZC000PTPHT84359Y",
-  "realised": true,
   "slug": "tests-yml-s-menuz-app-comment-says-the-release-a",
   "title": "tests.yml's menuz-app comment says the release asset is built with Xcode 27.1, but it is now built with 27.2",
-  "status": "open",
+  "status": "closed",
   "severity": "low",
   "created": "2026-11-25",
+  "closed": "2026-11-25",
   "reporter": "Matthew Sinclair",
-  "body": "The menuz-app job's comment (.github/workflows/tests.yml:510-511) says that the app builds with Xcode 27.1, \"the Xcode the release asset is built with (issue 0097)\". That is no longer true. The release asset is built on the maintainer's machine by `bin/devbin macos`, which takes the machine's default developer dir, as the menuz shim does. rhadamanth's one Xcode is now 27.2 (/Applications/Xcode.app), so the 2.15.0 asset is built with 27.2.\n\nThe job is still right to name 27.1. It is menuz's floor, project.yml's xcodeVersion (issue 0097), which help/menuz.md gives as \"Xcode 27.1 or later\". Only the comment's reason is wrong.\n\nFix: the comment says that 27.1 is the floor the job tests, and that the release asset is built on the maintainer's machine with its own Xcode. Comment only, 1 path, no run.\n\nFound by dc in its read of ic's design for arca_swift's issue 0003 and Utilz's issue 0114 (~/Devel/scratch/utilz-dc/arca0003-read/r1.md, b8d373bd), 25 Nov 2026.\n"
+  "body": "The menuz-app job's comment (.github/workflows/tests.yml:510-511) says that the app builds with Xcode 27.1, \"the Xcode the release asset is built with (issue 0097)\". That is no longer true. The release asset is built on the maintainer's machine by `bin/devbin macos`, which takes the machine's default developer dir, as the menuz shim does. rhadamanth's one Xcode is now 27.2 (/Applications/Xcode.app), so the 2.15.0 asset is built with 27.2.\n\nThe job is still right to name 27.1. It is menuz's floor, project.yml's xcodeVersion (issue 0097), which help/menuz.md gives as \"Xcode 27.1 or later\". Only the comment's reason is wrong.\n\nFix: the comment says that 27.1 is the floor the job tests, and that the release asset is built on the maintainer's machine with its own Xcode. Comment only, 1 path, no run.\n\nFound by dc in its read of ic's design for arca_swift's issue 0003 and Utilz's issue 0114 (~/Devel/scratch/utilz-dc/arca0003-read/r1.md, b8d373bd), 25 Nov 2026.\n\nResolution: Landed at 92241c6a on main (dc's b970738b), checked by vc by change (327a9051) on 25 Nov 2026, for 2.15.0. The menuz-app job's comment in tests.yml says that 27.1 is menuz's Xcode floor, which the job tests, and that the release asset is built on the maintainer's machine with that machine's Xcode."
 }

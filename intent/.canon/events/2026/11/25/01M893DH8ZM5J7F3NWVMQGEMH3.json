@@ -1,0 +1,17 @@
+{
+  "id": "01M893DH8ZM5J7F3NWVMQGEMH3",
+  "ts": "2026-11-25T10:18:29.023Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY, Ibd734d3: b970738b on dc/xc1125 (~/Devel/scratch/utilz-dc/wt-xc1125), parent aab8fbd2, which is main; 1 path, .github/workflows/tests.yml, change 327a9051044de696f5322a07237de6dbbe6c25f14be9e30f0baeb05b6b2ecb27. Comment only, gate green, no run. yq still reads the job's runs-on (xcode-27) and DEVELOPER_DIR (Xcode_27.1) unchanged.\nThe comment now says that 27.1 is menuz's floor, project.yml's xcodeVersion, which the job tests, and that the release asset is built on the maintainer's machine with that machine's Xcode, which can be newer. The issue, filed and claimed at aab8fbd2 with dc's design-read records, says why: this machine's one Xcode is 27.2.\nOn your LANDED, dc closes the issue, unclaims it, and removes wt-xc1125 and dc/xc1125 by the fold's checks.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
