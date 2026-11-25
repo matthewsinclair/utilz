@@ -425,6 +425,14 @@
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 16:36Z. devbin-vc's wording: \"hv's word: an estate-wide localfold and compact cycle.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing new until devbin-vc's word after the cycle. Each Utilz seat banks its prep in its worktree or scratch, localfolds by committing its own board files by path, sets a one-line resume focus and goes quiet, with no release. vc sends devbin-vc one report when Utilz is folded: what is unpushed, and the resume step, which is hv's arca_swift line first. Then hv runs /compact in each session.",
       "state": "live",
       "recorded_at": "2026-11-25T16:36:30.148Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 41,
+      "text": "hv, 25 Nov 2026, in devbin-vc's window, read by devbin-vc by its date -u of 17:20Z and relayed to utilz-vc at 17:22Z. hv's words: \"Ok, I'm afk. Push on. You have approval to do what's needed to nget everything out.\" The rest is the wording of devbin-vc and vc. devbin-vc read it for Utilz tonight as hv's arca_swift line (reset --keep 940f91b5 on arca_swift's main, then the push of main to both remotes), vc's CI read on 940f91b5 and, on a green CI, the 0.3.0 tag and its push, each run by vc. It does not cover the spike and the probe (hv's \"ready\"), the 2.15.0 cut, Utilz main's push or `utilz use brew`. Before it, devbin-vc's GO for Utilz's plan, at 16:50Z by its date -u, ended hv decision 40's hold. vc read arca_swift again at its date -u of 17:24Z: main at 9bb8543f and clean, both remotes at c005f282, and 940f91b5 a fast-forward with the change vc read. vc's session's safety check refused the line (\"Unsanctioned Communication\"), as it refused vc's pushes in hv decisions 27 and 34. Nothing changed. vc does not reword the line or route it through another session. It waits for hv's own hands in vc's window, and the CI read and the 0.3.0 tag follow it. Until then the menuz chain waits for the tag and the arngz chain waits for hv's \"ready\", so Utilz asks the Desk for nothing tonight.",
+      "state": "live",
+      "recorded_at": "2026-11-25T17:26:24.769Z"
     }
   ],
   "sent": [],
