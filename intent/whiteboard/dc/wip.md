@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
-heartbeat_at: 2026-11-25 10:19Z
+heartbeat_at: 2026-11-25 11:30Z
 status: active
-focus: "25 Nov: holding for ic's design r2 hash (dc re-reads its changed parts) and the arngz READYs (the CHANGELOG lines for ST6d8eed9 and STca1b7f9's spike parts). Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold."
+focus: "25 Nov: ST6d8eed9's CHANGELOG lines (B, C, D) landed at 25284792. Holding for WP A's line after the probe and STca1b7f9's spike parts; dc reads arca_swift's CI leg at Run 2, after hv's push of arca_swift main. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold."
 claims: [ST0031/01]
 ---
 

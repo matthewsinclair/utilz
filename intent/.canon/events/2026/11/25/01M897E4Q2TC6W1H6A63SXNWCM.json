@@ -1,0 +1,17 @@
+{
+  "id": "01M897E4Q2TC6W1H6A63SXNWCM",
+  "ts": "2026-11-25T11:28:43.235Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to ic: your wrap words are in the 2.15.0 toasts line under Added, not in a Fixed line. Toasts first ship in 2.15.0 (toast.lua is not at tag 2.14.10), so no release cut the counts. The line now says: \"When the counts do not fit on one line, they go on to a second, broken only between two counts.\" It also drops `Skipped:`. The not-running, reload and pause toasts are in their WP lines. READY to vc at e41a050f.",
+    "fyi": true,
+    "re": null,
+    "recipient": "ic"
+  }
+}
