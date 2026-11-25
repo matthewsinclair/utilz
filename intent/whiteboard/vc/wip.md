@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48
-heartbeat_at: 2026-11-25 15:06Z
+heartbeat_at: 2026-11-25 16:37Z
 status: active
-focus: "hv approved the estate plan (hv decision 39). The seats work (a) to (c), then (1) and (3), with no run but prez's cargo booking. No commit on Utilz main until devbin-vc says Utilz's 0.1.33 sweep commit is in. hv's arca_swift line (940f91b5) waits in vc's window; then vc reads its CI and gives hv the 0.3.0 tag line. Spike and probe at hv's ready. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Folded for hv decision 40's compact. After it: /in-session, then hold for devbin-vc's word. First: hv's arca_swift line (940f91b5) in vc's window, then vc's CI read and hv's 0.3.0 tag, then ic's R2. Spike and probe at hv's ready, then WP A's run (365d3cf3). RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
