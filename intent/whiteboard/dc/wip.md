@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
-heartbeat_at: 2026-11-25 12:36Z
-status: active
-focus: "25 Nov, after hv decision 33's compact: hold for vc's word, which follows devbin-vc's estate plan. Next: WP A's CHANGELOG line after the probe, STca1b7f9's spike parts, arca_swift's CI leg at Run 2. Open: ST0031/01 at hv's cut; ST0029 holds until the 2.15.0 cut (hv decision 35), banked at 48111094. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+heartbeat_at: 2026-11-25 12:58Z
+status: paused
+focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36): after the reboot, /in-session, then hold for vc's word. Next: WP A's CHANGELOG line after the probe, STca1b7f9's spike parts, arca_swift's CI leg at Run 2. Open: ST0031/01 at hv's cut; ST0029 holds until the 2.15.0 cut (hv decision 35), banked at 48111094 in wt-st0029. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 

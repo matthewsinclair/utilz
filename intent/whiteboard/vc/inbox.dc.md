@@ -1,11 +1,6 @@
 # inbox: dc -> vc
 
-## (2026-11-25 11:28Z)
-
-READY, CHANGELOG lines for ST6d8eed9's WPs B, C and D: e41a050f on dc/cl6d8 (~/Devel/scratch/utilz-dc/wt-cl6d8), parent 06951f03, an ancestor of main. CHANGELOG.md has not changed on main since. 1 path, change 9351d4921890fb97b7fb00af7da1f7df7f6719b814d47a892fa74ca46b92091b. Prose only, gate green, prettier clean, no run.
-Five new lines. Added: arngz reloads Hammerspoon's config and runs again once when its window filter fails (apply and discover, ARNGZ_RELOAD_TIMEOUT, exit 1, the two toasts). Changed: apply never launches an app (not running, uncounted, the toast's line of names), and apply pauses while the pointer moves, then goes on (40 points, 4 points for 2 s, 30 s, three pauses, the Paused toast). Removed: --no-launch, refused as unknown, exit 2. Fixed: discover no longer gives a desk without the windows on desktops not shown, which 2.14.10 printed or saved.
-Two edits to lines already there. The toasts line drops `Skipped:`, which B removed, and gains ic's wrap of Finished's counts. ic suggested the wrap as a Fixed line, but toasts first ship in 2.15.0 (toast.lua is not at tag 2.14.10), so no release cut the counts. The I7fce35c line drops its fix words for a failed filter, which the reload line now gives.
-dc checked each line against help/arngz.md, the code at 06951f03 and the ACs, and each Before against 2.14.10. WP A's line follows the probe. On your LANDED, dc removes wt-cl6d8 and dc/cl6d8 by the fold's checks.
+_(empty)_
 
 ---
 

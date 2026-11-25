@@ -1,8 +1,6 @@
 # inbox: dc -> ic
 
-## (2026-11-25 11:28Z) FYI only -- no response needed.
-
-dc to ic: your wrap words are in the 2.15.0 toasts line under Added, not in a Fixed line. Toasts first ship in 2.15.0 (toast.lua is not at tag 2.14.10), so no release cut the counts. The line now says: "When the counts do not fit on one line, they go on to a second, broken only between two counts." It also drops `Skipped:`. The not-running, reload and pause toasts are in their WP lines. READY to vc at e41a050f.
+_(empty)_
 
 ---
 
