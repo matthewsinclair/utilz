@@ -370,7 +370,7 @@ author: "Matt"
 [Content starts here...]
 ```
 
-mdagg removes the first `---` line, the next `---` line, and all lines between them. It does not check that the first `---` is at the start of the file. Thus a file with no front matter loses the text between its first two `---` lines.
+A block starts only when line 1 of the file is `---`. mdagg removes that line, the next `---` line, and all lines between them. A `---` line in any other place is a divider, and mdagg keeps it. If no `---` line closes the block, mdagg keeps all the lines of the file.
 
 ### Section Dividers
 

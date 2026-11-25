@@ -140,10 +140,40 @@ cmd_background() {
   fi
 }
 
+# The image files setpicfor takes, by extension. The built-in names and
+# --pattern both look only for these.
+SETPICFOR_EXTS=(png jpg jpeg PNG JPG JPEG)
+
+# Print the first image in <dir> whose file name matches one of <pattern>'s
+# globs, which are separated by |. The globs are tried in the order given, and
+# the images that one glob matches in name order. Print nothing when no image
+# matches (issue Iac62c37).
+image_by_pattern() {
+  local dir="$1" rest="$2|" glob file name ext
+  while [[ -n "$rest" ]]; do
+    glob="${rest%%|*}"
+    rest="${rest#*|}"
+    [[ -n "$glob" ]] || continue
+    for file in "$dir"/*; do
+      [[ -f "$file" ]] || continue
+      name="${file##*/}"
+      # shellcheck disable=SC2053 # the glob match is the point
+      [[ "$name" == $glob ]] || continue
+      for ext in "${SETPICFOR_EXTS[@]}"; do
+        if [[ "$name" == *".$ext" ]]; then
+          printf '%s\n' "$file"
+          return 0
+        fi
+      done
+    done
+  done
+  return 0
+}
+
 cmd_setpicfor() {
   local batch_mode=false
   local data_dir="."
-  local pattern="icon.*|folder.*"
+  local pattern=""
   local dry_run=false
   local verbose=false
   local image_path=""
@@ -166,7 +196,8 @@ ARGUMENTS:
 OPTIONS:
   --all              Batch mode: set icons for subdirectories
   --data-dir <dir>   Directory to process (default: current)
-  --pattern <pat>    Image pattern for --all mode
+  --pattern <pat>    With --all: the images to look for, as globs split by |,
+                     in place of icon, folder and the directory's name
   --dry-run          Preview changes without applying
   -v, --verbose      Show detailed output
   -h, --help         Show this help
@@ -175,6 +206,7 @@ EXAMPLES:
   macoz setpicfor icon.png
   macoz setpicfor photo.jpg ~/Projects
   macoz setpicfor --all
+  macoz setpicfor --all --pattern 'cover.*|art.*'
   macoz setpicfor --all --dry-run --verbose
 
 For more help: utilz help macoz
@@ -228,8 +260,16 @@ EOFHELP
     esac
   done
 
-  # Check for fileicon dependency
-  if ! command -v fileicon >/dev/null 2>&1; then
+  # One directory takes the image it is given, so --pattern belongs to --all
+  # alone, and is refused rather than ignored without it.
+  if [[ -n "$pattern" ]] && ! $batch_mode; then
+    error "--pattern needs --all: it names the images that --all looks for"
+    exit 1
+  fi
+
+  # Only a real run calls fileicon, so a --dry-run previews without it
+  # (issue Iac62c37).
+  if ! $dry_run && ! command -v fileicon >/dev/null 2>&1; then
     error "fileicon command not found"
     echo ""
     echo "Install with: brew install fileicon"
@@ -237,14 +277,16 @@ EOFHELP
   fi
 
   if $batch_mode; then
-    # Batch mode: scan directories for images matching pattern
+    # Batch mode: give each subdirectory the icon image it holds, if any
     if [[ ! -d "$data_dir" ]]; then
       error "Directory not found: $data_dir"
       exit 1
     fi
 
     $verbose && info "Scanning directories in: $data_dir"
-    $verbose && info "Image pattern: $pattern"
+    if $verbose && [[ -n "$pattern" ]]; then
+      info "Image pattern: $pattern"
+    fi
 
     local count=0
     # Find all subdirectories
@@ -252,22 +294,25 @@ EOFHELP
       local dir_name
       dir_name=$(basename "$dir")
 
-      # Look for image files matching pattern or directory name
       local found_image=""
-
-      # First try exact pattern match
-      for ext in png jpg jpeg PNG JPG JPEG; do
-        if [[ -f "$dir/icon.$ext" ]]; then
-          found_image="$dir/icon.$ext"
-          break
-        elif [[ -f "$dir/folder.$ext" ]]; then
-          found_image="$dir/folder.$ext"
-          break
-        elif [[ -f "$dir/$dir_name.$ext" ]]; then
-          found_image="$dir/$dir_name.$ext"
-          break
-        fi
-      done
+      if [[ -n "$pattern" ]]; then
+        found_image=$(image_by_pattern "$dir" "$pattern")
+      else
+        # The built-in names: icon, folder, then the directory's own name,
+        # each tried for one extension before the next extension.
+        for ext in "${SETPICFOR_EXTS[@]}"; do
+          if [[ -f "$dir/icon.$ext" ]]; then
+            found_image="$dir/icon.$ext"
+            break
+          elif [[ -f "$dir/folder.$ext" ]]; then
+            found_image="$dir/folder.$ext"
+            break
+          elif [[ -f "$dir/$dir_name.$ext" ]]; then
+            found_image="$dir/$dir_name.$ext"
+            break
+          fi
+        done
+      fi
 
       if [[ -n "$found_image" ]]; then
         count=$((count + 1))
@@ -380,7 +425,7 @@ COMMANDS:
                             Options:
                               --all           Batch mode: set icons for subdirectories
                               --data-dir DIR  Directory to process (default: current)
-                              --pattern PAT   Image pattern for --all mode
+                              --pattern PAT   With --all: image names to look for, eg 'cover.*|art.*'
                               --dry-run       Preview changes without applying
                               -v, --verbose   Show detailed output
 

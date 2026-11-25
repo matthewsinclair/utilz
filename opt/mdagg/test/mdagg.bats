@@ -244,6 +244,40 @@ EOF
   assert_output_contains "Test Document"
 }
 
+@test "option: -s keeps the --- dividers of a file with no front matter (issue I9adb91e)" {
+  cat > test.md <<'EOF'
+# Test Document
+
+Before the first divider.
+
+---
+
+Between the dividers.
+
+---
+
+After the dividers.
+EOF
+
+  run_mdagg "test.md" -s
+  assert_success
+  assert_output "$(cat test.md)"
+}
+
+@test "option: -s keeps every line of a file whose line-1 --- never closes (issue I9adb91e)" {
+  cat > test.md <<'EOF'
+---
+
+# Test Document
+
+No --- line follows the first one.
+EOF
+
+  run_mdagg "test.md" -s
+  assert_success
+  assert_output "$(cat test.md)"
+}
+
 @test "option: -b/--strip-back-links removes navigation links" {
   create_markdown_with_backlinks "test.md"
 

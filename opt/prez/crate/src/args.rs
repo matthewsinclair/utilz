@@ -1,4 +1,4 @@
-// Hand-rolled argument parsing (AC02 -- comrak is the only dependency).
+// Hand-rolled argument parsing (AC02 -- comrak is the only third-party crate).
 //
 // The surface is small and fixed, so a parser generator would be more code to
 // read than the parser. What this file owes the user is the part a generator
@@ -13,7 +13,7 @@ prez -- markdown in, one self-contained HTML presentation out.
 Usage:
   prez build   <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--watch]
   prez pdf     <deck.md> [-o out.pdf]  [--theme=NAME|--theme-file=PATH] [--paper=WxH] [--browser=PATH]
-  prez present <deck.md> [--theme=NAME|--theme-file=PATH] [--window=WxH] [--browser=PATH]
+  prez present <deck.md> [-o out.html] [--theme=NAME|--theme-file=PATH] [--window=WxH] [--browser=PATH]
   prez browser
   prez --help | --version
 
@@ -21,6 +21,7 @@ Every flag below takes its value either way: --theme=simple or --theme simple.
 
 Options:
   -o, --out PATH    Output path. Default: beside the input, extension swapped.
+                    present without -o stages the file in temp.
       --theme NAME  Theme NAME: looked up in PREZ_THEME_PATH, then among the
                     built-ins. NEVER resolved against the working directory.
                     Beats the deck's front matter and PREZ_DEFAULT_THEME.
@@ -407,6 +408,20 @@ mod tests {
     assert!(
       USAGE.contains("prez browser"),
       "the verb exists and --help does not say so"
+    );
+  }
+
+  #[test]
+  fn usage_documents_present_out() {
+    // `present -o` keeps the built deck at that path (deck.rs), so its usage
+    // line names -o, as help/prez.md does (issue I5963f6c).
+    let line = USAGE
+      .lines()
+      .find(|l| l.trim_start().starts_with("prez present"))
+      .expect("USAGE has a present line");
+    assert!(
+      line.contains("[-o out.html]"),
+      "present takes -o and its usage line does not say so: {line}"
     );
   }
 }

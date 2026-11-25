@@ -39,7 +39,7 @@ macOS system utilities - various macOS-specific operations.
 - `setpicfor <image> [directory]` - Set folder icon from image file
   - image: path to image file (jpg, png)
   - directory: target directory (default: current directory)
-  - setpicfor needs `fileicon`, also with `--dry-run`
+  - setpicfor needs `fileicon`, but a `--dry-run` does not
 
 ---
 
@@ -54,7 +54,7 @@ macOS system utilities - various macOS-specific operations.
 
 - `--all` - Batch mode: set icons for subdirectories
 - `--data-dir <dir>` - Directory whose subdirectories `--all` scans (default: current directory)
-- `--pattern <pattern>` - Accepted, but has no effect: `--all` always looks for the names in Folder Icon Pattern Matching
+- `--pattern <pattern>` - With `--all`: the images to look for, in place of the built-in names. See Folder Icon Pattern Matching
 - `--dry-run` - Preview changes without applying them
 - `-v, --verbose` - Show detailed operation steps
 
@@ -99,6 +99,9 @@ macoz setpicfor --all --dry-run
 # Process specific directory tree
 macoz setpicfor --all --data-dir ~/Projects
 
+# Look for cover.* first, then art.*, in place of the built-in names
+macoz setpicfor --all --pattern 'cover.*|art.*'
+
 # Verbose output
 macoz setpicfor --all --verbose
 ```
@@ -123,6 +126,8 @@ When using `--all` mode, the command looks for image files in each subdirectory:
 - `<dirname>.*` - Image file matching the directory name
 
 The extensions are `png`, `jpg` and `jpeg`, in lower case or upper case. macoz scans only the subdirectories one level below the data directory. It skips a subdirectory with no matching image.
+
+`--pattern` replaces the three names. Its value is a list of globs separated by `|`, eg `'cover.*|art.*'`, and macoz matches each glob against the file name of each image. It tries the globs in the order given. Where one glob matches more than one image, macoz takes the first in name order. Only files with the extensions above count. Without `--all`, macoz refuses a `--pattern`, exit 1.
 
 ---
 

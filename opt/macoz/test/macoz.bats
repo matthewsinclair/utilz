@@ -246,6 +246,24 @@ EOF
   assert_output_contains "brew install fileicon"
 }
 
+@test "macoz setpicfor --dry-run previews without fileicon (issue Iac62c37)" {
+  if ! is_macos; then
+    skip "Not on macOS"
+  fi
+
+  # A dry run never calls fileicon, so it must not need it. fileicon is
+  # hidden as in the test above.
+  local farm
+  farm=$(path_without fileicon)
+  touch "$BATS_TEST_TMPDIR/test.png"
+  mkdir -p "$BATS_TEST_TMPDIR/testdir"
+
+  run env PATH="$farm" "$UTILZ_BIN_DIR/macoz" setpicfor --dry-run "$BATS_TEST_TMPDIR/test.png" "$BATS_TEST_TMPDIR/testdir"
+  assert_success
+  assert_output_contains "[DRY RUN] Would set icon for"
+  refute_output_contains "fileicon command not found"
+}
+
 @test "macoz setpicfor --all dry-run mode" {
   if ! is_macos; then
     skip "Not on macOS"
@@ -263,4 +281,50 @@ EOF
   assert_output_contains "Would process"
 
   rm -rf "$BATS_TEST_TMPDIR/testparent"
+}
+
+@test "macoz setpicfor --pattern names the images to look for, in place of the built-in names (issue Iac62c37)" {
+  if ! is_macos; then
+    skip "Not on macOS"
+  fi
+
+  local top="$BATS_TEST_TMPDIR/testparent"
+  mkdir -p "$top/both" "$top/builtin"
+  touch "$top/both/icon.png" "$top/both/cover.png" "$top/builtin/icon.png"
+
+  run_macoz setpicfor --all --dry-run --pattern 'cover.*' --data-dir "$top"
+  assert_success
+  assert_output_contains "Would set icon for: $top/both"
+  assert_output_contains "Using image: cover.png"
+  refute_output_contains "Using image: icon.png"
+  refute_output_contains "Would set icon for: $top/builtin"
+}
+
+@test "macoz setpicfor --pattern tries its globs in order, and takes images only (issue Iac62c37)" {
+  if ! is_macos; then
+    skip "Not on macOS"
+  fi
+
+  # art.* is tried before cover.*, so cover.png loses. art.bmp comes first in
+  # name order, but a bmp is not an image setpicfor takes.
+  local top="$BATS_TEST_TMPDIR/testparent"
+  mkdir -p "$top/sub"
+  touch "$top/sub/art.bmp" "$top/sub/art.jpg" "$top/sub/cover.png"
+
+  run_macoz setpicfor --all --dry-run --pattern 'art.*|cover.*' --data-dir "$top"
+  assert_success
+  assert_output_contains "Using image: art.jpg"
+}
+
+@test "macoz setpicfor refuses --pattern without --all (issue Iac62c37)" {
+  if ! is_macos; then
+    skip "Not on macOS"
+  fi
+
+  touch "$BATS_TEST_TMPDIR/test.png"
+  mkdir -p "$BATS_TEST_TMPDIR/testdir"
+
+  run_macoz setpicfor --dry-run --pattern 'cover.*' "$BATS_TEST_TMPDIR/test.png" "$BATS_TEST_TMPDIR/testdir"
+  assert_exit_code 1
+  assert_output_contains "--pattern needs --all"
 }

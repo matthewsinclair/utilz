@@ -14,8 +14,9 @@ website: https://matthewsinclair.com
 help_file: ../../help/prez.md
 
 # NO RUNTIME DEPENDENCIES. The built binary is self-contained: comrak is the
-# only crate, and the seven themes plus mermaid.min.js are embedded at compile
-# time with include_str!. Nothing is resolved from the filesystem at run time.
+# only third-party crate, beside prez's own artifact crate, and the seven
+# themes plus mermaid.min.js are embedded at compile time with include_str!.
+# Nothing is resolved from the filesystem at run time.
 #
 # cargo is a BUILD-time need rather than a runtime one, so it is deliberately
 # NOT declared here -- doctor's declared-dependency walk would report it as
@@ -40,7 +41,6 @@ optional_dependencies:
 # Supported input modes
 modes:
   - file # a markdown deck on disk
-  - stdin # a deck on standard input
 
 # Main features
 features:

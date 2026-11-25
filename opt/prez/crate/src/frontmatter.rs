@@ -5,7 +5,7 @@
 // headers use: one line per key, the value is everything after the first `: `
 // to end of line, no nesting, no block scalars, no continuation lines, and
 // quotes are a display delimiter rather than syntax. Reaching for a YAML parser
-// here would also breach AC02 (comrak is the only dependency).
+// here would also breach AC02 (comrak is the only third-party crate).
 //
 // The delimiter collision with slide breaks is settled by POSITION AND THEN BY
 // CONTENT, and it took both. Position alone -- "front matter is the block whose

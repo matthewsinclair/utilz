@@ -75,8 +75,7 @@ bats macoz.bats
 
 ## License
 
-Part of Utilz framework. Personal use.
-Copyright (c) 2025 Matthew Sinclair
+MIT. See [LICENSE](../../LICENSE).
 
 ---
 

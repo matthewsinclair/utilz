@@ -165,8 +165,7 @@ fi
 
 ## License
 
-Part of Utilz framework. Personal use.
-Copyright © 2025 Matthew Sinclair.
+MIT. See [LICENSE](../../LICENSE).
 
 ---
 

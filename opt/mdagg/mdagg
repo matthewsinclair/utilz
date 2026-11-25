@@ -126,12 +126,16 @@ process_file() {
 
   # Strip YAML front matter if requested
   if [[ "$STRIP_FRONT_MATTER" == true ]]; then
-    # Remove everything from first --- to second --- at start of file
+    # A front-matter block opens with --- on line 1 and closes with the next
+    # --- line. A --- anywhere else is a divider and stays (issue I9adb91e).
+    # A line-1 --- that never closes opens no block, so the lines held for it
+    # are given back at the end.
     content=$(echo "$content" | awk '
-      BEGIN { in_frontmatter=0; started=0 }
-      /^---$/ && !started { in_frontmatter=1; started=1; next }
-      /^---$/ && in_frontmatter { in_frontmatter=0; next }
-      !in_frontmatter { print }
+      NR == 1 && /^---$/ { in_block = 1; held = $0; next }
+      in_block && /^---$/ { in_block = 0; held = ""; next }
+      in_block { held = held "\n" $0; next }
+      { print }
+      END { if (in_block) print held }
     ')
   fi
 
