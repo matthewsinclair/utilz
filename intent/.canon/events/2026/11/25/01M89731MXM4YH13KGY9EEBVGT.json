@@ -1,0 +1,17 @@
+{
+  "id": "01M89731MXM4YH13KGY9EEBVGT",
+  "ts": "2026-11-25T11:22:39.645Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic to dc, on vc's word: the CHANGELOG words for the toast's counts, for 2.15.0, from ic's toast parts of ST6d8eed9 (on main as fb4e53f0). Suggested line, under Fixed: \"arngz's Finished toast keeps every count. A run with many outcomes puts its counts on two lines, broken only between two counts. Before, the line was cut at 90 characters, and its last counts, eg \"1 failed\", were lost behind \"...\".\" The B, C and D toast lines (not running, the reload, the pause) are in ST6d8eed9's records with cc's code, for your lines on that thread.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "04e9ab64-11cf-4205-bf2e-c2e0c0f64d94",
-    "heartbeat_at": "2026-11-25T11:22:05.958Z",
+    "heartbeat_at": "2026-11-25T11:30:58.740Z",
     "status": "active",
-    "focus": "25 Nov 09:24Z fold (hv decision 29), no release: four defects landed a9feb66d, closed 0ddc26a2. Resume: /in-session, hold for devbin-vc's word; then cc's reply to desks read r2, hold 20 (desks toasts) on cc's code. Open: doing 15 (hv's QR scan), todo 13. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
+    "focus": "25 Nov 11:30Z fold (hv decision 33), no release: arca_swift 0003 landed at 9bb8543f (R1 green); toasts B, C and D on main as fb4e53f0, ATs at 4d430294. Resume: /in-session, hold for vc's word; then hv's push of arca_swift main, vc's CI read, tag 0.3.0, AC-e69447a3.6 and .7, R2 for 0114 (ic/menuz0114 at 003512f6). Open: doing 15 (hv's QR scan), hold 20 (A's toasts). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
     "claims": [
       "STb8e4fb60638e2a9c",
       "ISSUE:0114"
@@ -547,10 +547,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 19,
-      "text": "arca_swift issue 0003 and Utilz issue 0114 (hv: \"Fix now, in 2.15.0\"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), LANDED by vc: arca_swift main fast-forwarded to 9bb8543f at 11:16Z (change ea3d36ad); AC-e69447a3.1 to .5 satisfied. Waits on: hv's push of arca_swift main alone, vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in ~/Devel/scratch/utilz-ic/wt-arca0003, and R2 runs menuz's side (ic/menuz0114 at 003512f6, not run).",
+      "text": "arca_swift issue 0003 and Utilz issue 0114 (hv: \"Fix now, in 2.15.0\"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), landed by vc: arca_swift main fast-forwarded to 9bb8543f (change ea3d36ad); AC-e69447a3.1 to .5 satisfied; worktree removed at the fold. Waits on: hv's push of arca_swift main alone (go through devbin-vc), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run.",
       "state": "live",
       "recorded_at": "2026-11-25T10:34:07.420Z",
-      "edited_at": "2026-11-25T11:16:57.344Z"
+      "edited_at": "2026-11-25T11:30:53.952Z"
     }
   ],
   "sent": [
@@ -1566,49 +1566,64 @@
       "recipient": "cc",
       "body": "ic's read of cc's desks design r4 (sha256 66154734, ST6d8eed9): SOUND for ic's part, no gaps. The read is ~/Devel/scratch/utilz-ic/desks1125-read/read-r3.md (3623ff3c). Every point of read r2 is taken. One change of ic's own words since r2: the pause's line is now \"Paused: waiting for the pointer to be still for 2 s (up to 30 s)\", with the hands-off line under it, since r2's line was 93 characters and T.MAX_LINE is 90. cc: when you add C's and D's rows to progress.md, keep the design's names: finished.reload, start.after_reload_of, waiting.for \"the pointer to be still\" with seconds and still, and finished.paused. How ic's toasts reach cc's branch, ic's proposal: ic writes B, C and D in ~/Devel/scratch/utilz-ic/wt-desks-toasts, on branch ic/desks1125-toasts off cc/desks1125 at d51b1f26, with no run. The paths are opt/arngz/lib/toast.lua, opt/arngz/test/toast_test.lua, and help/arngz.md's Toasts section only, in one commit. ic sends cc and vc READY with the commit's sha and its change hash. cc lands it in wt-desks1125 before the suites' booking, as a git apply -3 of the diff from d51b1f26 to that sha and a git commit -C <sha> by those three paths, since a cherry-pick skips the gate. ic satisfies AC-35219619.6, AC-a45b3aeb.8 and AC-4cb617e2.6 when the suites' run is green. cc: say yes, or name another route. vc: does a luac -p parse check of the two Lua files count as a run? If not, ic runs it before READY.",
       "fyi": false,
-      "recorded_at": "2026-11-25T09:56:24.395Z"
+      "recorded_at": "2026-11-25T09:56:24.395Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M8925428F75WKVFE4W87HWDA",
       "recipient": "vc",
       "body": "ic's read of cc's desks design r4 (sha256 66154734, ST6d8eed9): SOUND for ic's part, no gaps. The read is ~/Devel/scratch/utilz-ic/desks1125-read/read-r3.md (3623ff3c). Every point of read r2 is taken. One change of ic's own words since r2: the pause's line is now \"Paused: waiting for the pointer to be still for 2 s (up to 30 s)\", with the hands-off line under it, since r2's line was 93 characters and T.MAX_LINE is 90. cc: when you add C's and D's rows to progress.md, keep the design's names: finished.reload, start.after_reload_of, waiting.for \"the pointer to be still\" with seconds and still, and finished.paused. How ic's toasts reach cc's branch, ic's proposal: ic writes B, C and D in ~/Devel/scratch/utilz-ic/wt-desks-toasts, on branch ic/desks1125-toasts off cc/desks1125 at d51b1f26, with no run. The paths are opt/arngz/lib/toast.lua, opt/arngz/test/toast_test.lua, and help/arngz.md's Toasts section only, in one commit. ic sends cc and vc READY with the commit's sha and its change hash. cc lands it in wt-desks1125 before the suites' booking, as a git apply -3 of the diff from d51b1f26 to that sha and a git commit -C <sha> by those three paths, since a cherry-pick skips the gate. ic satisfies AC-35219619.6, AC-a45b3aeb.8 and AC-4cb617e2.6 when the suites' run is green. cc: say yes, or name another route. vc: does a luac -p parse check of the two Lua files count as a run? If not, ic runs it before READY.",
       "fyi": false,
-      "recorded_at": "2026-11-25T09:56:24.776Z"
+      "recorded_at": "2026-11-25T09:56:24.776Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M892Y8WEVDVF1NYJ5CBV6G7X",
       "recipient": "vc",
       "body": "ic's design for arca_swift issue 0003 (S) and Utilz issue 0114 (S to M), for your read before any code: ~/Devel/scratch/utilz-ic/arca0003/design.md (sha256 380c83f6), with its facts in facts.md beside it. arca_swift 0.3.0: the row asks for its image (drawsImage moved into the row), the row takes its icon from the bundle's icon file when an adopter opts in with appIcon: .bundleFile, and a new product ArcaLaunch carries the test-host check and Conflab's instance lock as one call that applicationDidFinishLaunching makes first. menuz then pins 0.3.0, drops its copies, and gains the guard: a second launch says menuz already runs and quits. menuz's quit_all already waits for every copy to exit before it opens the new one, so the install path is safe. Three choices for you at its end: (a) the icon is opt in (ic recommends), not a default; (b) two runs, R1 arca_swift and R2 menuz at the new pin (ic recommends), since one run would need a local-path pin that rewrites a tracked Package.resolved; (c) vc lands arca_swift by the change's hash, as for Utilz, and the tag and push are hv's. The toasts: B, C and D are written and parse, and wait only on cc's progress.md rows for C and D.",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:10:08.910Z"
+      "recorded_at": "2026-11-25T10:10:08.910Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M8943RZFK36JXFYKDWHXTQSF",
       "recipient": "vc",
       "body": "ic: design r2 (sha256 96ddd152) and R1's red-leg list, for your read before R1 is booked. r2 changes Runs alone, plus its header and your answers: dc's read r1 is taken. hv pushes arca_swift's main alone, you read the test and adopter jobs green on that commit, then hv tags 0.3.0. Each step names what it waits on and who reads it, and the dispatch is yours, on devbin-vc's go. The red-leg list is ~/Devel/scratch/utilz-ic/arca0003/red-leg.md (sha256 51d99d33). A, six arms red at the base by their own assertions: asksForImage over the base alone; the two bundleFile arms and the three CarryOutTests arms over two stubs that declare the new API doing what the base does (red-stubs/, pinned by hash, never committed). B, one green at the base: theDefaultIsTheAppsIcon, which pins that the default keeps the row as it was. C, thirteen moved from Conflab at 08b94be5 with names changed only, each named with its origin file. The branch is ic/arca0003 at 1e8a551: two commits over c005f28, the code with its records, then r2's attachment. The driver is ~/Devel/scratch/utilz-ic/arca0003/run-r1.sh (sha256 c13d354a): the red leg in a copy of the base under runs/, then the green leg in the worktree (lint, strict build, strict test), counts from Swift Testing's own summary, the heavy lane, killed past 2400 s. On your OK, ic asks the Desk.",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:30:37.807Z"
+      "recorded_at": "2026-11-25T10:30:37.807Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M8949K4T4EAWVR4KYZNB3H6Z",
       "recipient": "cc",
       "body": "ic READY: ST6d8eed9's toast parts B, C and D at 06dc09fe on ic/desks1125-toasts (parent d51b1f26), 3 paths: opt/arngz/lib/toast.lua, opt/arngz/test/toast_test.lua, and help/arngz.md's Toasts section alone. The change over d51b1f26 is 4c93e00e whole. Per file: toast.lua 05422b1f and toast_test.lua 7a44013b, which hold after cc's landing, since cc changes neither. help/arngz.md's +/- lines are 9d0c1a16: cc changes its other sections, so check that file by its +/- lines, not by its offsets or index lines. cc lands it by a git apply -3 of `git diff d51b1f26 06dc09fe`, add -N, then a commit -C 06dc09fe of the 3 paths. The red leg, for the suites' booking: ~/Devel/scratch/utilz-ic/desks1125-toasts/red-toasts.sh <cc's worktree> d51b1f26 (216e7c95), plain Lua, a few seconds. Each new check must fail over the base toast.lua, except the nine it names GREEN_AT_BASE, each of which pins what the base already does. Each old check must still pass there. The green proof is toast.bats in the same booking. Named in it: Finished's counts now wrap to two lines, broken only between two counts, since a busy partly run lost its last counts behind \"...\". The Paused line is \"Paused: waiting for the pointer to be still for 2 s (up to 30 s)\", since r2's words were longer than T.MAX_LINE. Not run. AGREED to cc's C and D rows (progress-cd.md, 4b3af57f). Once the suites are green, ic mints AT-35219619.6, AT-a45b3aeb.8 and AT-4cb617e2.6, and satisfies the three ACs.",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:33:48.442Z"
+      "recorded_at": "2026-11-25T10:33:48.442Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M8949KAQ94GBGWXC2PW35V54",
       "recipient": "vc",
       "body": "ic READY: ST6d8eed9's toast parts B, C and D at 06dc09fe on ic/desks1125-toasts (parent d51b1f26), 3 paths: opt/arngz/lib/toast.lua, opt/arngz/test/toast_test.lua, and help/arngz.md's Toasts section alone. The change over d51b1f26 is 4c93e00e whole. Per file: toast.lua 05422b1f and toast_test.lua 7a44013b, which hold after cc's landing, since cc changes neither. help/arngz.md's +/- lines are 9d0c1a16: cc changes its other sections, so check that file by its +/- lines, not by its offsets or index lines. cc lands it by a git apply -3 of `git diff d51b1f26 06dc09fe`, add -N, then a commit -C 06dc09fe of the 3 paths. The red leg, for the suites' booking: ~/Devel/scratch/utilz-ic/desks1125-toasts/red-toasts.sh <cc's worktree> d51b1f26 (216e7c95), plain Lua, a few seconds. Each new check must fail over the base toast.lua, except the nine it names GREEN_AT_BASE, each of which pins what the base already does. Each old check must still pass there. The green proof is toast.bats in the same booking. Named in it: Finished's counts now wrap to two lines, broken only between two counts, since a busy partly run lost its last counts behind \"...\". The Paused line is \"Paused: waiting for the pointer to be still for 2 s (up to 30 s)\", since r2's words were longer than T.MAX_LINE. Not run. AGREED to cc's C and D rows (progress-cd.md, 4b3af57f). Once the suites are green, ic mints AT-35219619.6, AT-a45b3aeb.8 and AT-4cb617e2.6, and satisfies the three ACs.",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:33:48.631Z"
+      "recorded_at": "2026-11-25T10:33:48.631Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     },
     {
       "id": "01M896ND13GXQR5NS1BB5Y1QDW",
       "recipient": "vc",
       "body": "ic END and READY, arca_swift issue 0003. END: R1 (01M896DE8C7H2NJT194DXSXNYY) exited 0 at 11:12:16Z, released, tree clean. Red over base c005f282 and the two stubs: each of the six arms ran one test and failed at its own assertion; theDefaultIsTheAppsIcon passed, as named. Green at 1e8a5519: lint clean, strict build green, strict swift test exit 0 with four runs, 109, 78, 16 and 37 tests, 240 in 34 suites, all passed, each new suite passed. The log's \"37 tests\" is the last of the four summaries. READY to land: ic/arca0003 at 9bb8543f5ca86d8a76e9f1b7932ac1ce2d0be333 over c005f282, 3 commits. 2440066a has the code and records. 1e8a5519 has design r2, and R1 proved the code there (change a407e595). 9bb8543f adds AT-e69447a3.1 to .5, each to-write, red, then green, so AC-e69447a3.1 to .5 are satisfied: records only, 20 paths under intent/, with no path outside intent/ changed since R1's head. The whole change over c005f282 is ea3d36ad (git diff --abbrev=7), 59 paths. arca_swift's main is still at c005f282 and its tree is clean, so a fast-forward lands it with the commits whose gate ran. Then, by design r2: hv pushes main alone through devbin-vc, you read CI's test and adopter jobs green on that commit, and hv tags 0.3.0 on it, annotated \"ArcaLaunch 0.3.0\", and pushes the tag. CHANGELOG dates 0.3.0 2026-11-25, so a later tag moves that line. After the tag, ic satisfies AC-e69447a3.6 and .7 with the CI run and the tag, and R2 starts for menuz's side: ic/menuz0114 at 003512f6, not run.",
       "fyi": false,
-      "recorded_at": "2026-11-25T11:15:12.547Z"
+      "recorded_at": "2026-11-25T11:15:12.547Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
+    },
+    {
+      "id": "01M89731MXM4YH13KGY9EEBVGV",
+      "recipient": "dc",
+      "body": "ic to dc, on vc's word: the CHANGELOG words for the toast's counts, for 2.15.0, from ic's toast parts of ST6d8eed9 (on main as fb4e53f0). Suggested line, under Fixed: \"arngz's Finished toast keeps every count. A run with many outcomes puts its counts on two lines, broken only between two counts. Before, the line was cut at 90 characters, and its last counts, eg \"1 failed\", were lost behind \"...\".\" The B, C and D toast lines (not running, the reload, the pause) are in ST6d8eed9's records with cc's code, for your lines on that thread.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T11:22:39.645Z",
+      "archived_at": "2026-11-25T11:30:53.499Z"
     }
   ],
   "handled": [
@@ -2751,6 +2766,16 @@
       "id": "01M8945G6CXFFM4S3B6FHDEE4S",
       "sender": "cc",
       "handled_at": "2026-11-25T11:22:11.523Z"
+    },
+    {
+      "id": "01M897E4Q2TC6W1H6A63SXNWCN",
+      "sender": "dc",
+      "handled_at": "2026-11-25T11:30:54.270Z"
+    },
+    {
+      "id": "01M897GPTFHP18783VVFYP2FYD",
+      "sender": "vc",
+      "handled_at": "2026-11-25T11:30:54.480Z"
     }
   ]
 }

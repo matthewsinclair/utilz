@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 04e9ab64-11cf-4205-bf2e-c2e0c0f64d94
-heartbeat_at: 2026-11-25 11:22Z
+heartbeat_at: 2026-11-25 11:30Z
 status: active
-focus: "25 Nov 09:24Z fold (hv decision 29), no release: four defects landed a9feb66d, closed 0ddc26a2. Resume: /in-session, hold for devbin-vc's word; then cc's reply to desks read r2, hold 20 (desks toasts) on cc's code. Open: doing 15 (hv's QR scan), todo 13. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "25 Nov 11:30Z fold (hv decision 33), no release: arca_swift 0003 landed at 9bb8543f (R1 green); toasts B, C and D on main as fb4e53f0, ATs at 4d430294. Resume: /in-session, hold for vc's word; then hv's push of arca_swift main, vc's CI read, tag 0.3.0, AC-e69447a3.6 and .7, R2 for 0114 (ic/menuz0114 at 003512f6). Open: doing 15 (hv's QR scan), hold 20 (A's toasts). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
-- arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), LANDED by vc: arca_swift main fast-forwarded to 9bb8543f at 11:16Z (change ea3d36ad); AC-e69447a3.1 to .5 satisfied. Waits on: hv's push of arca_swift main alone, vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in ~/Devel/scratch/utilz-ic/wt-arca0003, and R2 runs menuz's side (ic/menuz0114 at 003512f6, not run). (edited)
+- arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), landed by vc: arca_swift main fast-forwarded to 9bb8543f (change ea3d36ad); AC-e69447a3.1 to .5 satisfied; worktree removed at the fold. Waits on: hv's push of arca_swift main alone (go through devbin-vc), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run. (edited)
 
 ## TODO
 

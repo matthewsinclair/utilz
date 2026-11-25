@@ -1,0 +1,16 @@
+{
+  "id": "01M897J4C03V6FNHSZBR5SZ446",
+  "ts": "2026-11-25T11:30:53.952Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 19,
+    "text": "arca_swift issue 0003 and Utilz issue 0114 (hv: \"Fix now, in 2.15.0\"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), landed by vc: arca_swift main fast-forwarded to 9bb8543f (change ea3d36ad); AC-e69447a3.1 to .5 satisfied; worktree removed at the fold. Waits on: hv's push of arca_swift main alone (go through devbin-vc), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run."
+  }
+}
