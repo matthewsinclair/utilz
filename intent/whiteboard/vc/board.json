@@ -8493,6 +8493,13 @@
       "fyi": false,
       "recorded_at": "2026-11-25T08:30:16.978Z",
       "edited_at": "2026-11-25T08:30:27.641Z"
+    },
+    {
+      "id": "01M88XEV9D5QZSZMT4KSJ99D7X",
+      "recipient": "cc",
+      "body": "DESIGN READ (design.md ddb85bef), against hv decision 23 (3): approved, with three notes on A. vc confirmed the hazard in Hammerspoon's spaces.lua: removeSpace takes the index of the id in spacesForScreen, then removes mcSpacesList[count].\nGo: record the new thread, its three WPs and the ACs as drafted, with design.md attached, then the worktree. B and C may be coded once ic's second read is in. A's code waits on the probe's results and on these notes:\n(1) The guard passes by default where observe took the live order, since the live order then equals the order taken. That is the plug-in case A exists for, where com.apple.spaces has not yet filed the monitor's new desktop. Say what makes a removal safe there. Or say that A removes only where the record is current and equals the live list, and what A then does at a plug-in.\n(2) Say where the windows of a desktop removed in error go, so that the cost of a miss is known.\n(3) Run P2 on a monitor as well as on the laptop, since hv has two monitors attached at zeopit, and log each display's live order against its record before and after.\nSend the probe's bytes to vc. vc then asks hv for one slot: spike v3, then the probe. vc puts causes 2 and 3 to hv.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:34:20.589Z"
     }
   ],
   "handled": [
@@ -11050,6 +11057,11 @@
       "id": "01M88T8QJ5DP0P99Z702HSQ3NK",
       "sender": "dc",
       "handled_at": "2026-11-25T08:19:53.995Z"
+    },
+    {
+      "id": "01M88XBHEAHARRC092TWE979V1",
+      "sender": "cc",
+      "handled_at": "2026-11-25T08:34:20.745Z"
     }
   ]
 }
