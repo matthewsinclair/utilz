@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# ci-suites -- every utility's suite but prez's, as CI's two test jobs run
-# them (ST0031/02): `utilz test` for the dispatcher, then for each utility the
-# tree installs, stopping at the first that fails.
+# ci-suites: every utility's suite, as CI's two test jobs run them
+# (ST0031/02): `utilz test` for the dispatcher, then for each utility the tree
+# installs, with prez's BATS suite alone, stopping at the first that fails.
 #
 # ONE ROSTER, AND IT IS each_utility'S. test-linux carried its own list of
 # utilities, which every new utility had to be added to by hand or go untested
@@ -12,15 +12,15 @@
 # of bin/ that `utilz test` itself iterates, so a utility is covered on both
 # legs the day it lands, and the roster has one home.
 #
-# prez IS LEFT TO THE rust JOB, DELIBERATELY, and not because it is failing.
-# `utilz test prez` drives three sources: cargo, BATS, and the crate's
-# black-box suites, which always pass --strict. Those suites need what only
-# the rust job installs: node 26, ffmpeg, poppler and, on Linux, a display.
-# Here they would skip, and --strict counts a skip as a failure, correctly.
-# The rust job builds and tests the crate across its os matrix and runs every
-# crate/test/*.sh suite, and the clippy job lints every crate. prez's BATS
-# suite, opt/prez/test/prez.bats, runs in neither, nor in any CI job: that gap
-# is older than this file, which does not close it.
+# prez'S BATS SUITE RUNS HERE, AND ITS CRATE'S SUITES IN THE rust JOB (issue
+# Ibf2b53b). `utilz test prez` drives the release build, cargo test, BATS and
+# the crate's black-box suites, which always pass --strict. Those suites need
+# what only the rust job installs: node 26, ffmpeg, poppler and, on Linux, a
+# display. So the rust job builds the crate and runs its tests and suites.
+# opt/prez/test/prez.bats builds nothing, and needs yq, bats and a green
+# doctor, which these two jobs have. It runs here through _run_bats_suite, the
+# one function that runs a utility's BATS. No binary is built here, so its one
+# arm that reads the compiled version skips.
 #
 # The tree's own dispatcher and lib, never PATH's: on a desk a plain `utilz`
 # can be a Homebrew install.
@@ -46,7 +46,8 @@ done <<<"$names"
 
 for utility in "${utilities[@]}"; do
   if [ "$utility" = prez ]; then
-    echo "Skipping prez here: the rust job runs its suites, as the header of tools/ci-suites says."
+    echo "== prez: its BATS suite alone; the rust job runs its crate, as the header says =="
+    _run_bats_suite prez "$root/opt/prez/test"
     continue
   fi
   echo "== $utility =="

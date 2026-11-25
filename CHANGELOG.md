@@ -17,7 +17,7 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **A manifest with no `line` is an old one**, as devbin's contract reads it: Utilz's own header from before this release included. In opt doctor fails it, naming `bin/devbin install --force`. Homebrew's keg with one is noted, naming `brew upgrade utilz`, and fails nothing.
 - **doctor no longer shows CI's verdict on the published commit.** devbin's manifest does not record it; the cut reads CI through the core's `ci-state`.
 - **The cut's object step attaches Menuz.app.zip before the formula step runs** (ST0031/01, devbin#0329). The core does both. Issue Ie8e55e8: menuz names the release asset in one place, `MENUZ_ASSET`, which is held equal to the core's.
-- **CI's two test jobs run one roster, `tools/ci-suites`** (ST0031/02; harness only). It runs the dispatcher's suite and every utility's but prez's, through `each_utility`, so a new utility is tested on both legs. The rust job caches cargo, and stops after 25 minutes (issue 0131).
+- **CI's two test jobs run one roster, `tools/ci-suites`** (ST0031/02; harness only). It runs the dispatcher's suite and every utility's, through `each_utility`, so a new utility is tested on both legs. For prez it runs `prez.bats` alone, which no CI job ran before (issue Ibf2b53b), and the rust job builds and tests prez's crate. The rust job caches cargo, and stops after 25 minutes (issue 0131).
 
 ### Removed
 

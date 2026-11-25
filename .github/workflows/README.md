@@ -16,7 +16,7 @@ It runs on a push to `main` or to `candidate/**`, on a pull request to `main`, a
 | `menuz-app`    | menuz app (macOS)     | candidate push, dispatch                               | Menuz.app built and tested by Xcode, unsigned                                                          |
 | `test-summary` | Test Summary          | every run that is not cancelled                        | Reads every job's result, and fails when one failed                                                    |
 
-Every job fails the run when it fails. `tools/ci-suites` is the one roster for both test jobs. It runs `utilz test` for the dispatcher, then each utility's suite but prez's, which is the `rust` job's. The file says why.
+Every job fails the run when it fails. `tools/ci-suites` is the one roster for both test jobs. It runs `utilz test` for the dispatcher, then each utility's suite. For prez it runs `prez.bats` alone, because the `rust` job builds and tests prez's crate. The file says why.
 
 ## PR Checks (`pr-checks.yml`)
 
