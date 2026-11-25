@@ -14,6 +14,7 @@ import Testing
 /// answer, and the host is the built app, so the bundle's is the one that
 /// ships.
 /// AT-07.2 (ST0027 acceptance.md) cites this file.
+/// AT-4b560be1.1 (ST44b4671e033a4475 acceptance.md) cites this file.
 @MainActor
 @Suite("Identity row")
 struct IdentityRowTests {

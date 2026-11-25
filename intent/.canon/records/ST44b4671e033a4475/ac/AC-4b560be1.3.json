@@ -1,6 +1,6 @@
 {
   "id": "AC-4b560be1.3",
-  "text": "project.yml pins arca_swift at minorVersion 0.3.0 with ArcaLaunch, and the tracked Package.resolved names 0.3.0's commit, as R2's resolve wrote it. R2's build and test change no other file under native/macos/Menuz.",
+  "text": "project.yml pins arca_swift at minorVersion 0.3.0 with ArcaLaunch. The tracked project.pbxproj is the one that the shim's xcodegen made from project.yml in R2, and the tracked Package.resolved names 0.3.0's commit, as R2's resolve wrote it. R2's build and test change no other file under native/macos/Menuz.",
   "kind": "non-test",
   "state": {
     "is": "unsatisfied"

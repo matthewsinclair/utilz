@@ -11,6 +11,7 @@ import Testing
 /// which holds the launch path back when XCTest hosts the process, and
 /// takes no instance lock there. How it tells a host is arca_swift's, and
 /// its own tests pin it (ArcaLaunchTests, from arca_swift 0.3.0).
+/// AT-4b560be1.2 (ST44b4671e033a4475 acceptance.md) cites this file.
 @MainActor
 @Suite("Test host")
 struct TestHostTests {
