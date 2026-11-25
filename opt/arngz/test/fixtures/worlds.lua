@@ -214,11 +214,22 @@ function F.placed_results()
   return {}
 end
 
--- Safari's launch found it not installed: one entry skipped, exit 1.
-function F.launch_skipped_results()
+-- Safari not running, which apply never launches (ST6d8eed9 WP 35219619):
+-- what execute returns for the plan's not_running op, with the mark plan set
+-- and the name LaunchServices gave. One entry not running, uncounted, so
+-- exit 0.
+function F.not_running_results()
   return {
-    { op = "launch", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "skipped",
-      reason = "not installed: Unable to find application" },
+    { op = "not_running", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "not_running",
+      uncounted = true, app_name = "Safari", reason = "com.apple.Safari is not running, and apply does not launch apps" },
+  }
+end
+
+-- Safari quit while apply moved its windows: one entry gone, so exit 1.
+function F.gone_results()
+  return {
+    { op = "gone", bundle = "com.apple.Safari", path = "displays[0].spaces[0].apps[1]", status = "failed",
+      reason = "com.apple.Safari was running when apply began and is not now" },
   }
 end
 

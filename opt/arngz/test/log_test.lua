@@ -35,9 +35,9 @@
 -- com.apple.spaces after the creates and at its end.
 --
 -- WHAT IT DOES NOT HOLD, said so it is not read into a green. The waiting
--- points of the launches and the unseen windows, their step points and those
--- of the moves, and rule 2's "a step goes out before its work" for them, come
--- only from an apply that launches or moves, and the hand that moves a window
+-- point of the unseen windows, the step points of the moves, and rule 2's "a
+-- step goes out before its work" for them, come only from an apply that
+-- moves, and the hand that moves a window
 -- is not faked here. Those are read in the code (steps_before, waiting,
 -- wait_ended) and proven live on hv's dev tree, where the toasts show the
 -- steps. The read after the creates is held only as the stubbed observe
@@ -338,10 +338,11 @@ arm("the formatters", function()
   check("op record: an unmovable op's window and title go to the log, as its reason does not carry them",
     string.find(unmovable, 'window 103 "arngz.lua - Utilz"; failed: com.microsoft.VSCode is on 2 spaces', 1, true) ~= nil,
     unmovable)
-  local pairs_out = L.report_pairs({ "a (p): placed" }, 1, { placed = 2, in_place = 1, failed = 1, unseen = 0, skipped = 0, created = 1 })
-  check("report pairs: each line, then the exit and the tally",
+  local pairs_out = L.report_pairs({ "a (p): placed" }, 1,
+    { placed = 2, in_place = 1, failed = 1, unseen = 0, not_running = 3, created = 1 })
+  check("report pairs: each line, then the exit and the tally, with the apps not running",
     #pairs_out == 2 and pairs_out[1][2] == "a (p): placed"
-      and pairs_out[2][2] == "exit 1: 2 placed, 1 in place, 1 failed, 0 unseen, 0 skipped, 1 desktop(s) created",
+      and pairs_out[2][2] == "exit 1: 2 placed, 1 in place, 1 failed, 0 unseen, 3 not running, 1 desktop(s) created",
     pairs_out[2] and pairs_out[2][2])
 end)
 
@@ -406,10 +407,6 @@ arm("the tally", function()
     tally5.first == "not moved: full screen"
       and tally5.fix == "take it out of full screen, or attach a display, then run it again",
     tostring(tally5.first) .. " / " .. tostring(tally5.fix))
-  local _, _, tally6 = P.apply_report(desk, { { op = "launch", path = "displays[0].spaces[0].apps[1]", bundle = "com.b",
-    status = "failed", reason = "open -b exited 1", fix = "install it" } })
-  check("tally: a failed launch's fix goes with its words", tally6.first == "open -b exited 1" and tally6.fix == "install it",
-    tostring(tally6.first) .. " / " .. tostring(tally6.fix))
   local _, _, tally7 = P.apply_report(desk, { { op = "create_space", path = "displays[0].spaces[2]", status = "failed",
     reason = "the Dock did not open Mission Control", fix = "add the desktop in Mission Control by hand" } })
   check("tally: a failure on no entry's path carries its fix too",
@@ -420,13 +417,20 @@ arm("the tally", function()
   -- the tally's own keys, so the toast can label it.
   local _, _, unseen_first = P.apply_report(desk, { { op = "unseen", path = "displays[0].spaces[0].apps[1]",
     status = "unseen", reason = "no window to name", uncounted = false } })
-  local _, _, skipped_first = P.apply_report(desk, { { op = "not_launched", path = "displays[0].spaces[0].apps[1]",
-    status = "skipped", reason = "--no-launch leaves it so" } })
-  check("tally: first_outcome is what the entry first names was: failed, unseen or skipped",
+  -- ST6d8eed9 WP 35219619: an app not running is uncounted, so never first.
+  local _, _, not_running_first = P.apply_report(desk, { { op = "not_running", path = "displays[0].spaces[0].apps[1]",
+    status = "not_running", bundle = "com.b", uncounted = true, reason = "com.b is not running" } })
+  check("tally: first_outcome is what the entry first names was: failed or unseen, never not_running",
     tally3.first_outcome == "failed" and unseen_first.first_outcome == "unseen"
-      and skipped_first.first_outcome == "skipped" and tally7.first_outcome == "failed",
+      and not_running_first.first_outcome == nil and not_running_first.first == nil and tally7.first_outcome == "failed",
     table.concat({ tostring(tally3.first_outcome), tostring(unseen_first.first_outcome),
-      tostring(skipped_first.first_outcome), tostring(tally7.first_outcome) }, " / "))
+      tostring(not_running_first.first_outcome), tostring(tally7.first_outcome) }, " / "))
+  local not_running_finished = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = not_running_first }, 1,
+    "/tmp/arngz.log")
+  check("finished: not_running counts the entries and not_running_apps names their apps (AC-35219619)",
+    not_running_finished.not_running == 1 and not_running_finished.not_running_apps == "com.b"
+      and not_running_finished.skipped == nil,
+    tostring(not_running_finished.not_running) .. " / " .. tostring(not_running_finished.not_running_apps))
   local partly = L.finished_fields({ status = "ok", verb = "apply", exit = 1, tally = unseen_first }, 2, "/tmp/arngz.log")
   check("finished: first_outcome goes with a first the tally names", partly.first_outcome == "unseen"
     and partly.first == "no window to name", tostring(partly.first_outcome))

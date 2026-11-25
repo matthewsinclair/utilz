@@ -31,12 +31,8 @@ local MODULE = (debug.getinfo(1, "S").source:gsub("^@", ""))
 
 local M = {}
 
--- A wait reads this often: a launch's, between phases, or inside the plan
--- verb's call.
+-- A wait reads this often: between phases, or inside the plan verb's call.
 local POLL_SECONDS = 0.25
-
--- How long launch waits for an app's first window (design.md, apply step 8).
-M.LAUNCH_TIMEOUT = 20
 
 -- How many times a space creation is tried before it is given up on (issue
 -- 0135): a call that made nothing, for a reason that may pass, and the count
@@ -56,10 +52,6 @@ local function refuse(why, fix) error({ refused = why, fix = fix }, 0) end
 local function rect(r)
   if not r then return nil end
   return { x = r.x, y = r.y, w = r.w, h = r.h }
-end
-
-local function shell_quote(s)
-  return "'" .. (tostring(s):gsub("'", "'\\''")) .. "'"
 end
 
 -- A defaults domain through `defaults export`, so cfprefsd answers rather than
@@ -198,8 +190,9 @@ end
 -- hs.application.get uses, matches only the app's own case (measured 16 Oct
 -- 2026: com.apple.Finder finds nothing, com.apple.finder finds Finder).
 -- LaunchServices answers in any case. An app it does not know keeps the
--- desk's spelling, and launching it says it is not installed. A lookup that
--- raises is nil and why: could not see, never taken for not there.
+-- desk's spelling, and nothing then finds it running, so it reads as not
+-- running (ST6d8eed9 WP 35219619). A lookup that raises is nil and why: could
+-- not see, never taken for not there.
 local function own_id(bundle)
   local ok, info = pcall(hs.application.infoForBundleID, bundle)
   if not ok then return nil, "infoForBundleID(" .. tostring(bundle) .. "): " .. tostring(info) end
@@ -713,33 +706,6 @@ local function exec_create_space(op, ctx)
   if after == nil or (after == before and not made) then ctx.space_failed[op.screen] = { reason = reason, fix = fix } end
   if dock then ctx.dock_failed = { reason = reason, fix = fix, all = true } end
   return { status = "failed", reason = reason, fix = fix }
-end
-
--- A window plan could claim (named, standard, not minimized): what a launch
--- waits for, because a splash or a palette is not what the desk places.
-local function claimable_window(bundle)
-  local id, why = own_id(bundle)
-  if not id then error(why, 0) end
-  local app = hs.application.get(id)
-  if not app then return nil end
-  for _, w in ipairs(app:allWindows() or {}) do
-    if P.claimable({ named = true, standard = w:isStandard(), minimized = w:isMinimized() }) then return w end
-  end
-  return nil
-end
-
-local function exec_launch(op)
-  local out, ok, _, rc = hs.execute("/usr/bin/open -b " .. shell_quote(op.bundle) .. " 2>&1")
-  local status, reason = P.launch_verdict(ok, out, rc)
-  if status then return { status = status, reason = reason } end
-  local waited = 0
-  while waited < M.LAUNCH_TIMEOUT do
-    local w = claimable_window(op.bundle)
-    if w then return { status = "done", readback = { window = w:id(), waited = waited } } end
-    hs.timer.usleep(math.floor(POLL_SECONDS * 1e6))
-    waited = waited + POLL_SECONDS
-  end
-  return { status = "failed", reason = string.format("launched, but no standard window within %d s", M.LAUNCH_TIMEOUT) }
 end
 
 local show_desktop -- below, with the hand
@@ -1429,12 +1395,12 @@ local function exec_move(op, ctx)
 end
 
 -- Ops that ask for nothing to be done, and the status the report gives them.
-local REPORT_ONLY = { unseen = "unseen", not_launched = "skipped", gone = "failed", unmovable = "failed", no_space = "failed" }
+local REPORT_ONLY = { unseen = "unseen", not_running = "not_running", gone = "failed", unmovable = "failed",
+  no_space = "failed" }
 
 -- A recheck is a place (ST0034): the same gesture and readback, so an app that
 -- stops holding its own size is re-sized, and its result clears the record.
-local EXEC = { create_space = exec_create_space, launch = exec_launch, move = exec_move, place = exec_place,
-  recheck = exec_place }
+local EXEC = { create_space = exec_create_space, move = exec_move, place = exec_place, recheck = exec_place }
 
 -- The kinds of op execute performs, which are the ones a step point stands
 -- for; log_test holds log.lua's PLANNED_FIELD to them (ST589246c).
@@ -1459,6 +1425,13 @@ function M.execute(ops, ctx)
     if REPORT_ONLY[op.op] then
       -- A report-only op's fix goes with its reason (STca1b7f9 WP6).
       r = { status = REPORT_ONLY[op.op], reason = op.reason, fix = op.fix }
+      -- An app that is not running is named as LaunchServices names it, for
+      -- the Finished point's list (ST6d8eed9 WP 35219619). A lookup that
+      -- fails leaves the bundle id, which P.app_label then says.
+      if op.op == "not_running" then
+        local named, name = pcall(hs.application.nameForBundleID, op.bundle)
+        if named and type(name) == "string" then r.app_name = name end
+      end
     elseif EXEC[op.op] then
       local ok, res = pcall(EXEC[op.op], op, ctx)
       if ok then r = res else r = { status = "failed", reason = "lua error: " .. tostring(res) } end
@@ -1618,8 +1591,7 @@ local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither
 -- which no observe succeeded raises the last error; otherwise what is in
 -- hand stands.
 -- What each wait is for, in the waiting point's words (progress.md).
-local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops",
-  launched = "launched apps" }
+local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops" }
 
 -- A wait's start and end in the run log, and its point when it starts. After
 -- the creates, the displays are logged as the read found them: whether macOS
@@ -1722,7 +1694,7 @@ end
 
 -- Step 6's refusals, then the creates (step 7).
 function PHASE.prepare(job)
-  local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, launched = {}, lg = job.lg }
+  local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, lg = job.lg }
   ctx.keys, ctx.keys_error = move_keys()
   if P.needs_hand(job.ops, job.world) then
     if not ctx.keys then refuse(ctx.keys_error) end
@@ -1733,12 +1705,10 @@ function PHASE.prepare(job)
   job.first_ops = job.ops
   job.changed = true
   job.creates = only(job.ops, { create_space = true })
-  job.launches = only(job.ops, { launch = true })
   if #job.creates > 0 then
     append(job.results, M.execute(job.creates, ctx))
     return "created", POLL_SECONDS
   end
-  if #job.launches > 0 then return "launch" end
   return "organise_start"
 end
 
@@ -1752,41 +1722,23 @@ function PHASE.created(job)
   return waiting(job, "created", 3, function(w)
     job.world = w
     return true
-  end, #job.launches > 0 and "launch" or "replan", true)
-end
-
--- Step 8: each launch waits for a claimable window through the fresh query.
-function PHASE.launch(job)
-  local done = M.execute(job.launches, job.ctx)
-  append(job.results, done)
-  for _, r in ipairs(done) do job.ctx.launched[P.app_key(r.bundle)] = r.status == "done" end
-  return "launched", POLL_SECONDS
-end
-
--- Until every app whose launch was done runs and has a window plan could
--- claim named on a desktop, for up to the launch timeout. A launched window
--- becomes nameable a beat after the launch sees it (vc's hand runs, 16 Oct
--- 2026). Plan reports what is still not named as unseen.
-function PHASE.launched(job)
-  return waiting(job, "launched", M.LAUNCH_TIMEOUT, function(w)
-    job.world = w
-    return #P.unsettled_launches(w, job.ctx.launched) == 0
   end, "replan", true)
 end
 
--- Step 9: plan again against the fresh world, for move and place.
+-- Step 9: plan again against the fresh world, for move and place. apply
+-- launches nothing (ST6d8eed9 WP 35219619), so the replan follows only the
+-- creates.
 function PHASE.replan(job)
   job.options = {
     no_create = true, after_create = #job.creates > 0, user_no_create = job.request_options.no_create,
-    no_launch = job.request_options.no_launch, map = job.request_options.map,
-    own_sizes = job.request_options.own_sizes,
-    launched = job.ctx.launched, running_before = P.running_set(job.ctx.world_before),
+    map = job.request_options.map, own_sizes = job.request_options.own_sizes,
+    running_before = P.running_set(job.ctx.world_before),
     -- The windows named at the start, by app, against which a read that says
     -- an app is not running is set (STca1b7f9 WP6).
     windows_before = P.app_windows(job.ctx.world_before),
   }
   local nxt, err = plan_then(job, "organise_start")
-  if not nxt then error("the plan after creating and launching refused: " .. tostring(err), 0) end
+  if not nxt then error("the plan after creating refused: " .. tostring(err), 0) end
   return nxt
 end
 
@@ -1798,7 +1750,7 @@ function PHASE.organise_start(job)
   -- Each display by the desk's name for it, else its own, for a step's `via`
   -- and a failed move's words (STca1b7f9).
   ctx.names = P.display_names(job.desk, ctx.world, job.options)
-  job.rest = except(job.ops, { create_space = true, launch = true })
+  job.rest = except(job.ops, { create_space = true })
   job.next_op = 1
   if P.needs_hand(job.rest, ctx.world) then
     local took, why = take_hand(ctx)
@@ -1899,7 +1851,6 @@ local function steps_total(job)
   end
   if job.rest then
     count(job.creates)
-    count(job.launches)
     count(job.rest)
   else
     count(job.ops)
@@ -1909,8 +1860,8 @@ end
 
 -- THE STEP POINTS GO OUT BEFORE THEIR WORK (progress.md, rule 2): Hammerspoon
 -- draws only between callbacks, so each is emitted here, before the callback
--- that does it is scheduled. prepare's creates and launch's launches run as
--- one batch each, so their steps all go out before it. A move's step carries
+-- that does it is scheduled. prepare's creates run as one batch, so their
+-- steps all go out before it. A move's step carries
 -- the window's frame now, for the toast to keep clear of the grab, and the
 -- display it goes round through, if it does (STca1b7f9 WP3). A point that
 -- cannot be made is an error record, never a failed run.
@@ -1918,8 +1869,6 @@ local function steps_before(job, nxt)
   local batch
   if nxt == "prepare" then
     batch = only(job.ops, { create_space = true })
-  elseif nxt == "launch" then
-    batch = job.launches
   elseif nxt == "organise" then
     local op = job.rest and job.rest[job.next_op]
     batch = (op and EXEC[op.op]) and { op } or {}
@@ -1969,8 +1918,7 @@ function M.start_apply(desk, options, respond, lg)
   options = options or {}
   local job = {
     desk = desk, request_options = options, results = {},
-    options = { no_create = options.no_create, no_launch = options.no_launch, map = options.map,
-      own_sizes = options.own_sizes },
+    options = { no_create = options.no_create, map = options.map, own_sizes = options.own_sizes },
     deadlines = {}, observed = {}, observe_errors = {}, changed = false,
     -- The run's log (ST589246c); with none, no record is written.
     lg = lg or new_log({}),

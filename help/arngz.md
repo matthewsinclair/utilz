@@ -15,7 +15,7 @@
 
 ```bash
 arngz <desk>
-arngz apply <desk> [--dry-run] [--no-launch] [--no-create] [--map <name>=<uuid>]
+arngz apply <desk> [--dry-run] [--no-create] [--map <name>=<uuid>]
 arngz discover [--grid WxH] [--save <desk>] [--force]
 arngz diff <desk>
 arngz list
@@ -101,11 +101,11 @@ displays:
 1. The desk is read and validated. A desk that does not validate is refused, exit 2.
 2. The three settings `doctor` checks are read: separate spaces on, auto-rearrange off and Stage Manager off. The first that does not hold is refused, exit 2, with its fix. `--dry-run` skips this step.
 3. Hammerspoon observes the screens, spaces and windows, and plans. Before anything changes it refuses, exit 2, when it has no Accessibility grant, when the desk cannot be planned on this machine, eg a display that matches no screen, or, when a window has to move, when the Move left/right a space shortcuts are not set or a mouse button or modifier key is held down.
-4. Missing spaces are created, unless `--no-create` is given. Apps that are not running are launched, unless `--no-launch` is given, and apply waits up to 20 s for each one's first window, then up to 20 s more for every launched app's window to be named. Then it plans again against what is on screen.
+4. Missing spaces are created, unless `--no-create` is given, and then apply plans again against what is on screen. apply never launches an app: one that is not running is left so, and the report says so.
 5. Windows are moved to their spaces and placed on their cells, and every step is read back. Before apply takes a window by its title bar, it raises the window and checks, for up to 1 s, that a press there lands on that window's own bar. A window still covered by another app's window fails, naming that app. So does a window whose raise switched its display to another desktop, and a window whose frame does not follow the held pointer, which fails before any key is pressed.
 6. The mouse button, the pointer and the focus are given back. Focus goes back only to a window on a desktop that is still shown.
 
-The report names every app entry in the desk with its outcome: `placed`, `launched and placed`, `moved and placed`, `skipped` (not installed, or not running under `--no-launch`), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed or unseen, 1 when any is skipped or failed, and 2 when it refused before changing anything. An unseen entry has nothing to arrange, so it is reported and counts against nothing, except when `apply` launched its app, or when a window could not be read at that moment, since it may have been the entry's: then the entry counts as not placed. Hammerspoon's window filter is the one way to name a window on a desktop not shown, and it can fail for a moment. When it fails, each entry left unseen says so, and its fix is to run it again, then, if it fails again, to reload Hammerspoon's config (Reload Config in its menu). A read in which the filter failed never replaces a plan made from one in which it ran.
+The report names every app entry in the desk with its outcome: `placed`, `moved and placed`, `not running` (the app is not running, or not installed), `unseen` (running, with no window of it that matches and can be named), or `failed`, with why. `apply` exits 0 when every entry is placed, not running or unseen, 1 when any failed, and 2 when it refused before changing anything. An entry that is not running, and an unseen one, have nothing to arrange, so each is reported and counts against nothing, except an unseen entry while a window could not be read at that moment, since that window may have been the entry's: then the entry counts as not placed. An app that was running when apply began and quit during the run is `failed`. Hammerspoon's window filter is the one way to name a window on a desktop not shown, and it can fail for a moment. When it fails, each entry left unseen says so, and its fix is to run it again, then, if it fails again, to reload Hammerspoon's config (Reload Config in its menu). A read in which the filter failed never replaces a plan made from one in which it ran.
 
 - **An app that fixes its own window size** cannot fill the cells the desk gives it. A window that reached the origin the desk put it at, at a size the app enforces, is `placed`, and the report says so in brackets after the outcome: `placed (placed at the app's own size, 375x667)`. It is as well placed as it can be, so it counts against nothing. A window that reached the wrong origin is `failed` whatever its size.
 - **Creating a space** asks the Dock through Mission Control. When the Dock does not open Mission Control for Hammerspoon ("unable to get Mission Control data from the Dock"), the create is not tried again, since each try asks the Dock to open it again while it may still be opening, and no other desktop is asked for in that run, on any display, since Mission Control is one for all of them. The failure says the Dock did not open Mission Control, and its fix is to add the desktop in Mission Control by hand, then run it again. Any other call that reports no space made none, and is tried up to four times, a fifth of a second apart. A call that reports a space is made **once**, and the attempts after it only re-read the desktop count, because the desktop list can lag behind a creation and a count read in the same breath as one cannot be the trigger for another. A cause that lasts is said once for the display, not once for every space the desk asks for, and the later ones say they were not tried again. A display the plan named and which is no longer there is not retried, since waiting cannot bring it back. If the desktops go up by more than the one asked for, apply says so by name rather than counting it a success.
@@ -230,7 +230,6 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 | Option                | Verb       | Effect                                                       |
 | --------------------- | ---------- | ------------------------------------------------------------ |
 | `--dry-run`           | `apply`    | print the plan and change nothing                            |
-| `--no-launch`         | `apply`    | report apps that are not running instead of launching them   |
 | `--no-create`         | `apply`    | do not create missing spaces                                 |
 | `--map <name>=<uuid>` | `apply`    | bind one desk display to one screen for this run             |
 | `--grid WxH`          | `discover` | the grid windows are snapped to; 8x4 when absent             |
@@ -258,7 +257,7 @@ arngz show zeop1              # one desk, validated
 arngz diff zeop1              # what apply would change, changing nothing
 arngz apply zeop1 --dry-run   # the same plan, from apply
 arngz zeop1                   # arrange the windows; hands off the mouse
-arngz apply zeop1 --no-launch --no-create   # only what is running, on spaces that exist
+arngz apply zeop1 --no-create # only on spaces that exist
 arngz apply zeop1 --map left=37D8832A-2D66-02CA-B9F7-8F30A301B230   # bind a display
 arngz delete old              # remove a desk
 arngz current                 # the desk applied or saved last
@@ -291,7 +290,7 @@ arngz current                 # the desk applied or saved last
 ## Exit Status
 
 - `0`: done.
-- `1`: `apply` skipped an app (not installed, or not running under `--no-launch`), saw no window for an entry whose app it launched or while a window could not be read, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `log` found no run logged, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
+- `1`: `apply` saw no window for an entry while a window could not be read, found an app gone that was running when it began, or a move or place did not take, each named in its report; `apply` was sent and did not answer within `ARNGZ_APPLY_TIMEOUT`, so it may still be running; `apply`'s engine failed rather than refused, which can come after windows moved, so its response is kept and named; `list` found a desk that does not validate, `current` found no desk recorded or the recorded one gone from the catalogue, `log` found no run logged, `diff` found that apply would change something, `doctor` found a precondition that does not hold, or `init --yes` stopped at a step that failed after it had changed something; each is named, and for `init` so is every step it had made. `which` found no desk fitting the screens present, and `auto` found none with no `--default` to fall back on, so nothing moved.
 - `2`: refused before anything changed: a desk that does not exist or does not validate, a bad name or option, a precondition `apply` checks first (a preference, Accessibility, the Move-space shortcuts, a mouse button or modifier held), another apply still running, or Hammerspoon not answering. For `which` and `auto` it is also the question having no one answer: more than one desk fits the screens present and none of them is the current desk, so `auto` moves nothing.
 
 ---

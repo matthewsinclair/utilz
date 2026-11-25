@@ -390,8 +390,8 @@ local function all_windows(world)
 end
 
 -- An app's identity: its bundle id without regard to case, as macOS treats
--- it. Plan's claims, launches and running lookups, apply's launched set, and discover's
--- counts and NOT_RECORDED all key on this, so one app is never two.
+-- it. Plan's claims and running lookups, and discover's counts and
+-- NOT_RECORDED all key on this, so one app is never two.
 local function app_key(bundle)
   return string.lower(bundle or "")
 end
@@ -542,22 +542,18 @@ end
 -- plan(desk, world, options) -> ops, or nil, a refusal and, where the
 -- refusal names one, its fix.
 --
--- options: no_create and no_launch (booleans), after_create (a second plan,
--- so a space that does not exist is one whose creation failed),
--- user_no_create (a second plan: false when the person did not pass
--- --no-create, so a missing space is one that went away meanwhile), map
--- ({name = uuid}), and
--- launched ({app key = true when its launch was done, false when not}): the
--- apps apply has already launched, which a second plan never launches again
--- (design.md, apply 9). One whose launch was not done is the launch result's
--- to report; one whose launch was done and is not running now is reported
--- here, as gone. running_before ({app key = true}), given to a second plan,
--- launches nothing, and reports an app that was running then and is not now
--- as gone.
+-- options: no_create (a boolean), after_create (a second plan, so a space
+-- that does not exist is one whose creation failed), user_no_create (a second
+-- plan: false when the person did not pass --no-create, so a missing space
+-- is one that went away meanwhile), map ({name = uuid}), and running_before
+-- ({app key = true}), given to a second plan, which reports an app that was
+-- running then and is not now as gone.
+-- apply never launches an app (hv decision 23, ST6d8eed9 WP 35219619): one
+-- that is not running is a not_running op, said and uncounted.
 -- Each op carries `op`, its arguments, `reason`, and `path`, the desk path
--- that asked for it. Order is the order apply executes in: create_space, then
--- launch, then for each window move before place (D14). There is no --bind
--- in v1 (D10, AC-05.6).
+-- that asked for it. Order is the order apply executes in: create_space,
+-- then for each window move before place (D14). There is no --bind in v1
+-- (D10, AC-05.6).
 -- A desk display is named by its name, else by its place in the desk from 1,
 -- as the step point's `display` names it (log.lua's L.path_place). It is the
 -- one rule P.plan's reasons and P.display_names name a desk display by: a desk
@@ -654,8 +650,7 @@ function P.plan(desk, world, options)
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
 
-  local creates, launches, windows = {}, {}, {}
-  local already = options.launched or {}
+  local creates, windows = {}, {}
 
   for di, d in ipairs(desk.displays or {}) do
     local s = screens[di]
@@ -672,7 +667,7 @@ function P.plan(desk, world, options)
   end
 
   local running = running_set(world)
-  local launched, claimed = {}, {}
+  local claimed = {}
   local pool = all_windows(world)
   -- Windows that went away, or were not backed yet, between being listed and
   -- being read: said in every unseen reason, because one may be the entry's.
@@ -709,38 +704,21 @@ function P.plan(desk, world, options)
     local a, s = e.app, screens[e.display]
     local bundle = a.app
     if not (running[app_key(bundle)] or taken[app_key(bundle)]) then
-      if already[app_key(bundle)] ~= nil then
-        -- Launched by this apply, and not running now: when its launch failed
-        -- or was skipped, that result is the report's line; when it showed a
-        -- window and has quit since, this says so, never "placed".
-        if already[app_key(bundle)] == true then
-          windows[#windows + 1] = {
-            op = "gone", bundle = bundle, path = e.path,
-            reason = bundle .. " was launched by this apply and is not running now",
-          }
-        end
-        launched[app_key(bundle)] = true
-      elseif options.running_before then
-        -- A second plan launches nothing. An app running when apply began
-        -- and not now quit in between: said, never launched mid-run. One
-        -- that was not running then had its launch tried, or the run
-        -- stopped before it, and that result is the report's.
-        if options.running_before[app_key(bundle)] then
-          windows[#windows + 1] = {
-            op = "gone", bundle = bundle, path = e.path,
-            reason = bundle .. " was running when apply began and is not now; apply does not launch it mid-run",
-          }
-        end
-      elseif options.no_launch then
+      if (options.running_before or {})[app_key(bundle)] then
+        -- A second plan: running when apply began and not now, so it quit
+        -- while the run moved its windows. Said, and it fails.
         windows[#windows + 1] = {
-          op = "not_launched", bundle = bundle, path = e.path,
-          reason = bundle .. " is not running, and --no-launch leaves it so",
+          op = "gone", bundle = bundle, path = e.path,
+          reason = bundle .. " was running when apply began and is not now",
         }
-      elseif not launched[app_key(bundle)] then
-        launched[app_key(bundle)] = true
-        launches[#launches + 1] = {
-          op = "launch", bundle = bundle, path = e.path,
-          reason = bundle .. " is not running",
+      else
+        -- apply never launches an app (hv decision 23): one that is not
+        -- running is said and counts against nothing, in either plan. One
+        -- that LaunchServices does not know reads the same, since nothing
+        -- finds it running.
+        windows[#windows + 1] = {
+          op = "not_running", bundle = bundle, path = e.path, uncounted = true,
+          reason = bundle .. " is not running, and apply does not launch apps",
         }
       end
     elseif a.layout ~= "fullscreen" then
@@ -856,31 +834,10 @@ function P.plan(desk, world, options)
   end
 
   local ops = {}
-  for _, list in ipairs({ creates, launches, windows }) do
+  for _, list in ipairs({ creates, windows }) do
     for _, op in ipairs(list) do ops[#ops + 1] = op end
   end
   return ops
-end
-
--- The apps of `launched` ({app key = true when its launch was done}) that
--- are not running yet, or have no window plan could claim named on any space
--- yet: what apply waits on after launching, before it plans again. A
--- launched app can be listed in neither for a moment after its launch saw
--- its window (vc's hand runs, 16 Oct 2026).
-function P.unsettled_launches(world, launched)
-  local running = running_set(world)
-  -- Plan's own pool, so "named" here means exactly what an entry can claim:
-  -- a window on a full-screen space does not end the wait (D11).
-  local named = {}
-  for _, cand in ipairs(all_windows(world)) do
-    if cand.win.bundle then named[app_key(cand.win.bundle)] = true end
-  end
-  local out = {}
-  for key, done in pairs(launched or {}) do
-    if done and not (named[key] and running[key]) then out[#out + 1] = key end
-  end
-  table.sort(out)
-  return out
 end
 
 -- The desk's apps, each bundle id once, in desk order: what observe asks
@@ -1528,18 +1485,6 @@ function P.needs_hand(ops, world)
   return false
 end
 
--- What `open -b` said, as a launch's status: nil when it ran, "skipped"
--- when the bundle id names nothing on this Mac (its words, measured on macOS
--- 27.0.1), and "failed" for anything else, never quietly a skip.
-function P.launch_verdict(ran, said, rc)
-  if ran then return nil end
-  said = string.gsub(said or "", "%s+$", "")
-  if string.find(said, "determine the application with bundle identifier", 1, true) then
-    return "skipped", "not installed: " .. said
-  end
-  return "failed", string.format("open -b exited %s: %s", tostring(rc), said)
-end
-
 -- ------------------------------------------------------------- the report
 
 -- Results that stop every entry after them: a phase of apply failed once
@@ -1552,29 +1497,31 @@ local BLANKET = { phase = true }
 -- planned and the results execute returned, each result carrying its op's
 -- `op`, `path`, `bundle`, `status` and `reason`, an unseen op's `uncounted`,
 -- and a done result's `note`, said in brackets after the outcome and counting
--- against nothing. A launch speaks for every entry of its app. Returns the report
--- lines and the exit code: 0 when every entry is placed or uncounted, 1 when
--- any is anything else, or when any op failed whatever entry it served. An
--- entry is uncounted when every result on it that is not done is an unseen
--- that plan marked uncounted, and this apply launched nothing for it: a launch
--- changed the machine, so an entry it served that was not placed counts
--- (issue 0132). Each result is counted, not only the one the outcome shows.
+-- against nothing. Returns the report lines and the exit code: 0 when every
+-- entry is placed or uncounted, 1 when any is anything else, or when any op
+-- failed whatever entry it served. An entry is uncounted when every result on
+-- it that is not done is one that plan marked uncounted: an unseen with
+-- nothing to arrange (issue 0132), or an app that is not running, which
+-- apply never launches (ST6d8eed9 WP 35219619). Each result is counted, not
+-- only the one the outcome shows.
 --
 -- The third value is the tally the run log and the Finished point read
 -- (ST589246c, progress.md), from this one classifier rather than a second:
 -- each entry once, placed when something was done for it and in_place when
--- nothing was, else failed, unseen or skipped; the desktops created; and the
--- first failure's words.
-local TALLIED = { failed = true, unseen = true, skipped = true }
+-- nothing was, else failed, unseen or not_running; the names of the apps not
+-- running, once each, in desk order; the desktops created; and the first
+-- failure's words.
+local TALLIED = { failed = true, unseen = true, not_running = true }
+-- An outcome as the report line says it, where the tally's key is not words.
+local OUTCOME_WORDS = { not_running = "not running" }
 function P.apply_report(desk, results)
-  local by_path, by_app, loose, blanket = {}, {}, {}, {}
-  local tally = { placed = 0, in_place = 0, failed = 0, unseen = 0, skipped = 0, created = 0 }
+  local by_path, loose, blanket = {}, {}, {}
+  local tally = { placed = 0, in_place = 0, failed = 0, unseen = 0, not_running = 0, created = 0 }
+  local not_running, named = {}, {}
   for _, r in ipairs(results or {}) do
     if r.op == "create_space" and r.status == "done" then tally.created = tally.created + 1 end
     if BLANKET[r.op] and r.status ~= "done" then blanket[#blanket + 1] = tostring(r.reason) end
-    if r.op == "launch" then
-      by_app[app_key(r.bundle)] = r
-    elseif r.path and string.find(r.path, "%.apps%[") then
+    if r.path and string.find(r.path, "%.apps%[") then
       local list = by_path[r.path] or {}
       list[#list + 1] = r
       by_path[r.path] = list
@@ -1591,7 +1538,6 @@ function P.apply_report(desk, results)
     end
   end
   for _, e in ipairs(ordered) do
-    local launch = by_app[app_key(e.app.app)]
     -- first_fix is the fix of why[1], the words the tally may name first:
     -- a failure's way out travels with its reason (STca1b7f9 WP4).
     local outcome, why, moved, counts, first_fix = "placed", {}, false, false, nil
@@ -1601,17 +1547,20 @@ function P.apply_report(desk, results)
     -- `why`, which is the account of something that went wrong: merging them
     -- would make a placed entry read as a failure to anything parsing a line.
     local notes = {}
-    if launch and launch.status ~= "done" then
-      outcome = launch.status
-      why[#why + 1] = tostring(launch.reason)
-      first_fix = launch.fix
-    end
     for _, r in ipairs(by_path[e.path] or {}) do
       if r.status == "done" then
         if r.op == "move" then moved = true end
         if r.note then notes[#notes + 1] = tostring(r.note) end
       else
         if not r.uncounted then counts = true end
+        if r.status == "not_running" then
+          -- Named once, as the engine read the app's name (P.app_label).
+          local key = app_key(r.bundle)
+          if not named[key] then
+            named[key] = true
+            not_running[#not_running + 1] = P.app_label(r.app_name, r.bundle)
+          end
+        end
         if outcome == "placed" or r.status == "failed" then
           outcome = r.status
           if #why == 0 then first_fix = r.fix end
@@ -1625,14 +1574,15 @@ function P.apply_report(desk, results)
       counts = true
     end
     if outcome == "placed" then
-      if by_path[e.path] or launch then tally.placed = tally.placed + 1 else tally.in_place = tally.in_place + 1 end
-      if launch then outcome = "launched and placed" elseif moved then outcome = "moved and placed" end
+      if by_path[e.path] then tally.placed = tally.placed + 1 else tally.in_place = tally.in_place + 1 end
+      if moved then outcome = "moved and placed" end
     else
       local kind = TALLIED[outcome] and outcome or "failed"
       tally[kind] = tally[kind] + 1
       -- The first failure is one that counts, as the exit's is: an uncounted
-      -- unseen entry is tallied, and never named as what went wrong.
-      if counts or launch then
+      -- entry, unseen or not running, is tallied and never named as what
+      -- went wrong, so first_outcome is failed or unseen alone.
+      if counts then
         code = 1
         -- first_outcome says what the entry `first` names was, in the
         -- tally's own keys, so the toast can label it (STca1b7f9 WP6).
@@ -1640,7 +1590,7 @@ function P.apply_report(desk, results)
       end
     end
     local name = e.app.window and string.format("%s %q", e.app.app, e.app.window) or e.app.app
-    lines[#lines + 1] = string.format("%s (%s): %s%s%s", name, e.path, outcome,
+    lines[#lines + 1] = string.format("%s (%s): %s%s%s", name, e.path, OUTCOME_WORDS[outcome] or outcome,
       (#why > 0) and (": " .. table.concat(why, "; ")) or "",
       (#notes > 0) and (" (" .. table.concat(notes, "; ") .. ")") or "")
   end
@@ -1656,6 +1606,9 @@ function P.apply_report(desk, results)
     lines[#lines + 1] = string.format("%s%s: %s: %s", tostring(r.op), r.path and (" (" .. r.path .. ")") or "",
       tostring(r.status), tostring(r.reason))
   end
+  -- The apps not running, by name, for the Finished point and its toast; absent
+  -- when every app ran (ST6d8eed9, ic's read r1, point 11).
+  if #not_running > 0 then tally.not_running_apps = table.concat(not_running, ", ") end
   return lines, code, tally
 end
 
@@ -2002,7 +1955,6 @@ end
 -- One line per op, as diff prints it: what apply would do, and why.
 local DESCRIBE = {
   create_space = function(op) return "create a space on " .. tostring(op.screen) end,
-  launch = function(op) return "launch " .. tostring(op.bundle) end,
   move = function(op)
     return string.format("move window %s to space %s of %s", tostring(op.window), tostring(op.ordinal), tostring(op.screen))
   end,
@@ -2010,7 +1962,7 @@ local DESCRIBE = {
     return string.format("place window %s at %d,%d %dx%d", tostring(op.window), op.frame.x, op.frame.y, op.frame.w, op.frame.h)
   end,
   unseen = function(op) return "unseen " .. tostring(op.bundle) end,
-  not_launched = function(op) return "not launching " .. tostring(op.bundle) end,
+  not_running = function(op) return "not running " .. tostring(op.bundle) end,
   gone = function(op) return "gone " .. tostring(op.bundle) end,
   unmovable = function(op) return "not moving window " .. tostring(op.window) end,
   no_space = function(op) return "no space for window " .. tostring(op.window) end,

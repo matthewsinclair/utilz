@@ -112,11 +112,14 @@ arngz_list() {
   read -r -a verbs <<<"$(arngz_list ARNGZ_VERBS)"
   [ "${#verbs[@]}" -gt 0 ] || fail "ARNGZ_VERBS could not be read from the script"
   for word in "${verbs[@]}" \
-    --dry-run --no-launch --no-create --map --save --force --yes --default; do
+    --dry-run --no-create --map --save --force --yes --default; do
     assert_output_contains "$word"
   done
-  # No --bind in v1 (D10, AC-05.6): help does not offer what apply refuses.
+  # No --bind in v1 (D10, AC-05.6), and no --no-launch, since apply never
+  # launches an app (ST6d8eed9 AC-35219619.3): help does not offer what apply
+  # refuses.
   refute_output_contains "--bind"
+  refute_output_contains "--no-launch"
 }
 
 @test "AT-02.1: utilz list shows arngz" {
@@ -876,13 +879,20 @@ apply_response() {
   assert_output "apply zeop1"
 }
 
-@test "AT-05.3: an app not installed is reported skipped, exit 1" {
+@test "ST6d8eed9: an app that is not running is reported not running, and apply exits 0 (AC-35219619.2)" {
   local response
-  response="$(apply_response launch_skipped_results)"
+  response="$(apply_response not_running_results)"
   apply_machine scheduled "$response"
   run_arngz apply zeop1
-  assert_exit_code 1
-  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): skipped: not installed"
+  assert_success
+  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): not running: com.apple.Safari is not running, and apply does not launch apps"
+  assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
+}
+
+@test "ST6d8eed9: arngz holds no code that launches an app (AC-35219619.3)" {
+  run grep -n -E 'open -b|launchOrFocus|exec_launch|LAUNCH_TIMEOUT' "$UTILZ_HOME/opt/arngz/arngz" "$UTILZ_HOME"/opt/arngz/lib/*.lua
+  # grep's 1 is "no line matched"; its 2 would be a file it could not read.
+  [ "$status" -eq 1 ] || fail "grep exited $status: $output"
 }
 
 @test "0132: an app running with no window to name is reported unseen, and apply exits 0" {
@@ -1044,23 +1054,31 @@ apply_response() {
   [ ! -e "$FAKE_HS_LOG/request.json" ]
 }
 
-@test "AT-05.3: --no-launch, --no-create and --map reach the engine as options" {
+@test "AT-05.3: --no-create and --map reach the engine as options" {
   local response
   response="$(apply_response placed_results)"
   apply_machine scheduled "$response"
-  run_arngz apply --no-launch --no-create --map left=AAAA-1 --map=right=BBBB-2 zeop1
+  run_arngz apply --no-create --map left=AAAA-1 --map=right=BBBB-2 zeop1
   assert_success
   run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
-  assert_output '{"no_launch":true,"no_create":true,"map":{"left":"AAAA-1","right":"BBBB-2"}}'
+  assert_output '{"no_create":true,"map":{"left":"AAAA-1","right":"BBBB-2"}}'
 }
 
-@test "AT-05.3: apply with no options sends both off and an empty map" {
+@test "AT-05.3: apply with no options sends no_create off and an empty map" {
   local response
   response="$(apply_response placed_results)"
   apply_machine scheduled "$response"
   run_arngz apply zeop1
   run yq -o json -I0 '.options' "$FAKE_HS_LOG/request.json"
-  assert_output '{"no_launch":false,"no_create":false,"map":{}}'
+  assert_output '{"no_create":false,"map":{}}'
+}
+
+@test "ST6d8eed9: --no-launch is refused as an unknown option, before anything is asked (AC-35219619.3)" {
+  apply_machine ok "$FIXTURES/responses/observe.json"
+  run_arngz apply --no-launch zeop1
+  assert_exit_code 2
+  assert_output_contains "unknown option for apply: '--no-launch'"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
 }
 
 @test "AT-05.3: a --map not of the form name=uuid, or given twice for one name, is refused before asking" {
@@ -2008,7 +2026,7 @@ current_record() {
 
 @test "0070: an apply that ran with an entry not placed, exit 1, records its desk all the same" {
   local response
-  response="$(apply_response launch_skipped_results)"
+  response="$(apply_response gone_results)"
   apply_machine scheduled "$response"
   run_arngz apply zeop1
   assert_exit_code 1

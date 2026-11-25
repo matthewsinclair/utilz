@@ -114,7 +114,7 @@ Named window arrangements (desks) across displays and spaces.
 
 VERBS:
   <desk>                     the same as apply <desk>
-  apply <desk> [--dry-run] [--no-launch] [--no-create] [--map <name>=<uuid>]
+  apply <desk> [--dry-run] [--no-create] [--map <name>=<uuid>]
                              arrange this machine's windows as the desk says
   discover [--grid WxH] [--save <desk>] [--force]
                              print the arrangement on screen now as a desk
@@ -1882,18 +1882,19 @@ apply_prefs() {
 }
 
 # apply's options as the engine reads them, in a fresh temp dir whose path
-# it prints: no_launch and no_create from 1 or 0, map from MAPS, one
-# name=uuid per line, and own_sizes, the sizes apps hold their windows at
-# (ST0034). Refuses by name when the dir or the file cannot be made. diff
-# sends the same options with nothing set, as apply --dry-run does.
+# it prints: no_create from 1 or 0, map from MAPS, one name=uuid per line,
+# and own_sizes, the sizes apps hold their windows at (ST0034). Refuses by
+# name when the dir or the file cannot be made. diff sends the same options
+# with nothing set, as apply --dry-run does. apply never launches an app, so
+# there is no option for it (ST6d8eed9 WP 35219619).
 apply_options() {
-  local no_launch="$1" no_create="$2" maps="$3" dir options why map
+  local no_create="$1" maps="$2" dir options why map
   if ! dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-apply.XXXXXX" 2>&1)"; then
     refuse "apply: could not make a temp dir under ${TMPDIR:-/tmp} for its options: $dir"
   fi
   options="$dir/options.json"
-  if ! why="$(NL="$no_launch" NC="$no_create" yq -n -o json \
-    '.no_launch = (env(NL) == 1) | .no_create = (env(NC) == 1) | .map = {}' 2>&1 >"$options")"; then
+  if ! why="$(NC="$no_create" yq -n -o json \
+    '.no_create = (env(NC) == 1) | .map = {}' 2>&1 >"$options")"; then
     rm -rf -- "$dir"
     refuse "apply: could not write its options to $options: $why"
   fi
@@ -1913,14 +1914,15 @@ apply_options() {
 # plan printed (--dry-run, no apply request sent) or the preferences judged
 # and one apply request, whose report is printed and whose exit code is the
 # engine's: 0 every entry placed or uncounted (an unseen plan marked so, issue
-# 0132), 1 any other. A refusal before anything changed is 2. There is no
-# --bind (D10, AC-05.6): it is refused as the unknown option it is.
+# 0132, or an app that is not running, which apply never launches), 1 any
+# other. A refusal before anything changed is 2. There is no --bind (D10,
+# AC-05.6), and no --no-launch (ST6d8eed9 WP 35219619): each is refused as the
+# unknown option it is.
 cmd_apply() {
-  local desk="" dry=0 no_launch=0 no_create=0 map name maps="" dir options rc code
+  local desk="" dry=0 no_create=0 map name maps="" dir options rc code
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --dry-run) dry=1; shift ;;
-      --no-launch) no_launch=1; shift ;;
       --no-create) no_create=1; shift ;;
       --map | --map=*)
         if [[ "$1" == --map ]]; then
@@ -1952,7 +1954,7 @@ cmd_apply() {
     apply_prefs
   fi
 
-  dir="$(apply_options "$no_launch" "$no_create" "$maps")" || exit 2
+  dir="$(apply_options "$no_create" "$maps")" || exit 2
   options="$dir/options.json"
 
   rc=0
@@ -2023,7 +2025,7 @@ cmd_diff() {
   # The options apply --dry-run sends, so the two plan alike: above all the
   # sizes apps hold their windows at, without which diff and apply disagree
   # about such a window (issue 0138).
-  dir="$(apply_options 0 0 "")" || exit 2
+  dir="$(apply_options 0 "")" || exit 2
   engine_ask plan "$(desk_file "$desk")" "$dir/options.json" || rc=$?
   # Its options are gone whatever the engine said, before a refusal ends diff.
   rm -rf -- "$dir"

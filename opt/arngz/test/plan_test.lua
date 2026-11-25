@@ -215,29 +215,24 @@ do
   check("a full-screen space between desktops takes no ordinal", ops and #ops == 0, ops_text(ops))
 end
 
--- An app not running yields launch, and --no-launch removes it.
+-- An app not running is not_running, said and uncounted, in either plan:
+-- apply never launches an app (ST6d8eed9 AC-35219619.1).
 do
   local w = base_world()
   w.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
   table.remove(space(w, 1).windows, 2)
   local ops = P.plan(base_desk(), w, {})
-  check("an app not running yields launch", kinds(ops) == "launch" and ops[1].bundle == "com.apple.Safari",
-    ops_text(ops))
-  local without = P.plan(base_desk(), w, { no_launch = true })
-  check("--no-launch launches nothing and says so, as not_launched with a reason and the entry's path",
-    kinds(without) == "not_launched" and without[1].bundle == "com.apple.Safari" and without[1].reason ~= nil
-      and without[1].path == "displays[0].spaces[0].apps[1]", ops_text(without))
-  local again = P.plan(base_desk(), w, { launched = { ["com.apple.safari"] = false } })
-  check("an app whose launch this apply tried and did not finish is not launched again, and left to that result",
-    again and #again == 0, ops_text(again))
-  local quit = P.plan(base_desk(), w, { launched = { ["com.apple.safari"] = true } })
-  check("an app this apply launched that is not running now is gone, never placed, and not launched again",
-    kinds(quit) == "gone" and quit[1].path == "displays[0].spaces[0].apps[1]" and quit[1].reason ~= nil, ops_text(quit))
-  local before = P.plan(base_desk(), w, { running_before = { ["com.apple.safari"] = true } })
-  check("a second plan reports an app that quit since apply began as gone, and launches nothing",
-    kinds(before) == "gone" and string.find(before[1].reason, "was running when apply began", 1, true) ~= nil, ops_text(before))
+  check("an app not running is not_running, uncounted, with a reason and the entry's path",
+    kinds(ops) == "not_running" and ops[1].bundle == "com.apple.Safari" and ops[1].uncounted == true
+      and ops[1].reason ~= nil and ops[1].path == "displays[0].spaces[0].apps[1]", ops_text(ops))
   local never = P.plan(base_desk(), w, { running_before = {} })
-  check("and one that was not running then is left to its launch's result", never and #never == 0, ops_text(never))
+  check("a second plan says the same of one that was not running when apply began",
+    kinds(never) == "not_running" and never[1].uncounted == true, ops_text(never))
+  local before = P.plan(base_desk(), w, { running_before = { ["com.apple.safari"] = true } })
+  check("a second plan reports an app that quit since apply began as gone, counted",
+    kinds(before) == "gone" and string.find(before[1].reason, "was running when apply began", 1, true) ~= nil
+      and not before[1].uncounted, ops_text(before))
+  check("and no plan holds a launch", not string.find(kinds(ops) .. kinds(never) .. kinds(before), "launch", 1, true))
 end
 
 -- A window pattern chooses among an app's windows.
@@ -402,33 +397,13 @@ do
     table.concat(P.desk_bundles(d), ","))
 end
 
--- After launching, apply waits until each launched app has a claimable
--- window named on a space.
+-- A world whose running apps could not be listed is refused, never read as
+-- every app not running.
 do
-  local w = base_world()
-  local none = P.unsettled_launches(w, { ["com.apple.safari"] = true, ["com.example.never"] = false })
-  check("an app whose launch was done and whose window is named is not waited on; one not done is not either",
-    #none == 0, table.concat(none, ","))
-  local unnamed = base_world()
-  space(unnamed, 1).windows[2].named = false
-  local wait = P.unsettled_launches(unnamed, { ["com.apple.safari"] = true })
-  check("an app whose launch was done with no named window is waited on", wait[1] == "com.apple.safari",
-    table.concat(wait, ","))
-  local unlisted = base_world()
-  unlisted.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
-  local wait2 = P.unsettled_launches(unlisted, { ["com.apple.safari"] = true })
-  check("and so is one with a named window that is not yet listed as running", wait2[1] == "com.apple.safari",
-    table.concat(wait2, ","))
-  local fs = base_world()
-  local safari = table.remove(space(fs, 1).windows, 2)
-  table.insert(fs.screens[1].spaces, { id = 98, ordinal = 3, type = "fullscreen", windows = { safari } })
-  local wait3 = P.unsettled_launches(fs, { ["com.apple.safari"] = true })
-  check("a launched app whose only window is on a full-screen space is still waited on, as plan cannot claim it",
-    wait3[1] == "com.apple.safari", table.concat(wait3, ","))
   local noapps = base_world()
   noapps.apps_running_error = "hs.application.runningApplications: axuielement"
   local nops, nerr = P.plan(base_desk(), noapps, {})
-  check("plan refuses a world whose running apps could not be listed, never launching what runs",
+  check("plan refuses a world whose running apps could not be listed, never calling what runs not running",
     nops == nil and string.find(tostring(nerr), "running apps could not be listed", 1, true) ~= nil, nerr or ops_text(nops))
 end
 
@@ -469,7 +444,8 @@ do
   check("and under --no-create it plans as before, creating nothing", kinds(without) == "no_space", ops_text(without))
 end
 
--- One app named in two cases in a desk is launched once.
+-- One app a desk names in two cases is one app: each of its entries is
+-- not_running, and the tally names it once (ST6d8eed9 AC-35219619.1).
 do
   local w = base_world()
   w.apps_running = {}
@@ -477,12 +453,25 @@ do
   d.displays[1].spaces[2].apps[1].app = "com.Apple.Mail"
   d.displays[1].spaces[2].apps[1].window = "^nothing$"
   table.insert(d.displays[1].spaces[1].apps, { app = "com.apple.mail", window = "^nothing either$", layout = "0,0 1x1" })
-  local ops = P.plan(d, w, {})
-  local mail = 0
-  for _, op in ipairs(ops or {}) do
-    if op.op == "launch" and string.lower(op.bundle) == "com.apple.mail" then mail = mail + 1 end
+  local entries = 0
+  for _, dd in ipairs(d.displays) do
+    for _, sp in ipairs(dd.spaces) do
+      for _, a in ipairs(sp.apps) do
+        if string.lower(a.app) == "com.apple.mail" then entries = entries + 1 end
+      end
+    end
   end
-  check("an app a desk names in two cases is launched once", mail == 1, ops_text(ops))
+  local ops = P.plan(d, w, {})
+  local mail, results = 0, {}
+  for _, op in ipairs(ops or {}) do
+    if op.op == "not_running" and string.lower(op.bundle) == "com.apple.mail" then mail = mail + 1 end
+    results[#results + 1] = { op = op.op, path = op.path, status = op.op, reason = op.reason, bundle = op.bundle,
+      uncounted = op.uncounted }
+  end
+  check("each entry of an app a desk names in two cases is not_running", entries > 1 and mail == entries, ops_text(ops))
+  local _, code, tally = P.apply_report(d, results)
+  local _, named = string.gsub(string.lower(tally.not_running_apps or ""), "com%.apple%.mail", "")
+  check("and the tally names it once, with exit 0", code == 0 and named == 1, tostring(tally.not_running_apps))
 end
 
 -- A layout the validator should have refused is refused here too.
@@ -566,15 +555,16 @@ do
     seen[op.op] = true
     if not op.reason then missing[#missing + 1] = op.op end
   end
-  local all = seen.create_space and seen.launch and seen.move and seen.place and seen.unseen
+  local all = seen.create_space and seen.not_running and seen.move and seen.place and seen.unseen
   check("one world yields every op kind it can", all, ops_text(ops))
   -- The kinds one world cannot yield beside those: each from its own world.
   local more = {}
   local nl = base_world()
   nl.apps_running = { "com.apple.mail", "com.microsoft.VSCode" }
   table.remove(space(nl, 1).windows, 2)
-  for _, op in ipairs(P.plan(base_desk(), nl, { no_launch = true }) or {}) do more[#more + 1] = op end
-  for _, op in ipairs(P.plan(base_desk(), nl, { launched = { ["com.apple.safari"] = true } }) or {}) do more[#more + 1] = op end
+  for _, op in ipairs(P.plan(base_desk(), nl, { running_before = { ["com.apple.safari"] = true } }) or {}) do
+    more[#more + 1] = op
+  end
   local short = base_world()
   table.insert(space(short, 1).windows, table.remove(short.screens[1].spaces, 2).windows[1])
   for _, op in ipairs(P.plan(base_desk(), short, { no_create = true }) or {}) do more[#more + 1] = op end
@@ -592,13 +582,12 @@ do
     seen[op.op] = true
     if not op.reason then missing[#missing + 1] = op.op end
   end
-  local every = { "create_space", "launch", "move", "place", "unseen", "not_launched", "gone", "unmovable", "no_space",
-    "pending" }
+  local every = { "create_space", "not_running", "move", "place", "unseen", "gone", "unmovable", "no_space", "pending" }
   local absent = {}
   for _, k in ipairs(every) do
     if not seen[k] then absent[#absent + 1] = k end
   end
-  check("between them, the worlds yield all ten op kinds", #absent == 0, table.concat(absent, ","))
+  check("between them, the worlds yield every op kind", #absent == 0, table.concat(absent, ","))
   check("and every op of every kind carries a reason", #missing == 0, table.concat(missing, ","))
   local all_ops = {}
   for _, op in ipairs(ops or {}) do all_ops[#all_ops + 1] = op end
@@ -1224,15 +1213,6 @@ do
     ops_text(gone_space))
 end
 
-print("launch")
-do
-  check("open -b that ran is no verdict", P.launch_verdict(true, "", 0) == nil)
-  local st, why = P.launch_verdict(false, "Unable to find application named\nLSCopy: determine the application with bundle identifier com.x\n", 1)
-  check("a bundle id nothing carries is skipped, as not installed", st == "skipped" and string.find(why, "^not installed") ~= nil, why)
-  local fst, fwhy = P.launch_verdict(false, "The application cannot be opened\n", 1)
-  check("any other failure is failed, with open's words and exit", fst == "failed" and string.find(fwhy, "exited 1", 1, true) ~= nil, fwhy)
-end
-
 -- ------------------------------------------------------------- the report
 
 print("report")
@@ -1248,10 +1228,24 @@ do
     r("move", "displays[0].spaces[1].apps[0]", "done"), r("place", "displays[0].spaces[1].apps[0]", "done"),
   })
   check("a done move reads as moved and placed", code == 0 and string.find(lines[3], "moved and placed", 1, true) ~= nil, lines[3])
-  lines, code = P.apply_report(d, { r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari") })
-  check("a done launch reads as launched and placed", code == 0 and string.find(lines[2], "launched and placed", 1, true) ~= nil, lines[2])
-  lines, code = P.apply_report(d, { r("launch", "displays[0].spaces[0].apps[1]", "skipped", "not installed", "com.apple.Safari") })
-  check("an app not installed is skipped, exit 1", code == 1 and string.find(lines[2], "skipped: not installed", 1, true) ~= nil, lines[2])
+  -- A not_running result as execute returns it: uncounted, as plan marked
+  -- it, with the name LaunchServices gave (ST6d8eed9 AC-35219619.2).
+  local function nr(path, bundle, name)
+    return { op = "not_running", path = path, status = "not_running", bundle = bundle, uncounted = true, app_name = name,
+      reason = bundle .. " is not running, and apply does not launch apps" }
+  end
+  local tally
+  lines, code, tally = P.apply_report(d, { nr("displays[0].spaces[0].apps[1]", "com.apple.Safari", "Safari") })
+  check("an app that is not running reads as not running, exits 0, and is tallied and named, never first",
+    code == 0 and string.find(lines[2], ": not running: ", 1, true) ~= nil and tally.not_running == 1
+      and tally.not_running_apps == "Safari" and tally.first == nil and tally.first_outcome == nil, lines[2])
+  lines, code, tally = P.apply_report(d, { nr("displays[0].spaces[0].apps[1]", "com.apple.Safari"),
+    r("place", "displays[0].spaces[1].apps[0]", "failed", "the window refused its size") })
+  check("beside a counted failure, the failure is first and the app with no name says its bundle",
+    code == 1 and tally.first_outcome == "failed" and tally.not_running_apps == "com.apple.Safari", tostring(tally.first))
+  lines, code, tally = P.apply_report(d, {})
+  check("a run with every app running carries no not_running_apps", tally.not_running == 0 and tally.not_running_apps == nil,
+    tostring(tally.not_running_apps))
   -- An unseen result as execute returns it, with the mark plan set: uncounted
   -- unless a window read failed when it was planned (issue 0132).
   local function unseen(path, counted)
@@ -1272,21 +1266,9 @@ do
   check("a failed entry exits 1 before or after an uncounted unseen one (issue 0132)",
     ahead == 1 and behind == 1, "before: exit " .. tostring(ahead) .. ", after: exit " .. tostring(behind))
   lines, code = P.apply_report(d, { unseen("displays[0].spaces[0].apps[0]"),
-    r("not_launched", "displays[0].spaces[0].apps[0]", "skipped", "--no-launch") })
-  check("a skipped result after an uncounted unseen one on the same entry still exits 1 (issue 0132)",
+    r("gone", "displays[0].spaces[0].apps[0]", "failed", "quit") })
+  check("a counted result after an uncounted unseen one on the same entry still exits 1 (issue 0132)",
     code == 1, said(code, lines))
-  lines, code = P.apply_report(d, {
-    r("launch", "displays[0].spaces[0].apps[1]", "failed", "open -b exited 1: x", "com.apple.Safari"),
-    unseen("displays[0].spaces[0].apps[1]"),
-  })
-  check("an entry whose launch failed, then planned unseen, reads failed, exit 1 (issue 0132)",
-    code == 1 and string.find(lines[2], "failed: open -b exited 1: x", 1, true) ~= nil, said(code, lines))
-  lines, code = P.apply_report(d, {
-    r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari"),
-    unseen("displays[0].spaces[0].apps[1]"),
-  })
-  check("an entry whose app this apply launched, then found unseen, exits 1 (issue 0132)",
-    code == 1 and string.find(lines[2], "unseen: no window", 1, true) ~= nil, said(code, lines))
   -- Every entry unseen and uncounted, as the planner gives them for the base
   -- world with every window closed, beside a phase that failed.
   local closed = base_world()
@@ -1310,9 +1292,7 @@ do
   })
   check("a move whose readback disagreed is failed, with why, exit 1",
     code == 1 and string.find(lines[3], "failed: the readback shows it on space 11", 1, true) ~= nil, lines[3])
-  lines, code = P.apply_report(d, { r("not_launched", "displays[0].spaces[0].apps[1]", "skipped", "--no-launch") })
-  check("an app left unlaunched by --no-launch is skipped, exit 1", code == 1 and string.find(lines[2], "skipped", 1, true) ~= nil, lines[2])
-  lines, code = P.apply_report(d, { r("phase", nil, "failed", "replan: the plan after creating and launching refused: x") })
+  lines, code = P.apply_report(d, { r("phase", nil, "failed", "replan: the plan after creating refused: x") })
   local any_placed = false
   for _, l in ipairs(lines) do
     if string.find(l, ": placed", 1, true) or string.find(l, "and placed", 1, true) then any_placed = true end
@@ -1320,15 +1300,14 @@ do
   check("when the engine could not go on, no entry reads as placed, and the exit is 1",
     code == 1 and not any_placed and string.find(lines[1], "not finished: replan: the plan after", 1, true) ~= nil, lines[1])
   -- What run_phase emits for a phase that failed after things changed, from
-  -- a phase whose name is also an op kind: still blanket, never by_app.
-  for _, phase in ipairs({ "launch", "unseen", "launched", "organise" }) do
+  -- a phase whose name is also an op kind: still blanket.
+  for _, phase in ipairs({ "prepare", "unseen", "replan", "organise" }) do
     lines, code = P.apply_report(d, { { op = "phase", phase = phase, status = "failed", reason = phase .. ": boom" } })
     check("a failed " .. phase .. " phase after things changed leaves no entry placed, exit 1",
       code == 1 and string.find(lines[1], "failed: not finished: " .. phase .. ": boom", 1, true) ~= nil, lines[1])
   end
-  lines, code = P.apply_report(d, { r("gone", "displays[0].spaces[0].apps[1]", "failed", "quit"),
-    r("launch", "displays[0].spaces[0].apps[1]", "done", nil, "com.apple.Safari") })
-  check("a launched app that quit reads as failed, not launched and placed",
+  lines, code = P.apply_report(d, { r("gone", "displays[0].spaces[0].apps[1]", "failed", "quit") })
+  check("an app that quit while the run moved its windows reads as failed, exit 1",
     code == 1 and string.find(lines[2], "failed: quit", 1, true) ~= nil, lines[2])
   lines, code = P.apply_report(d, { r("restore", nil, "note", "focus left where it is") })
   check("a note is said and leaves the exit at 0, with no path printed for it",

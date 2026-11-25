@@ -290,16 +290,16 @@ end
 -- Which planned field counts each kind of op the engine executes: the
 -- progress point's own words (progress.md). log_test ties it to the kinds the
 -- engine runs, so a kind added there and not here goes red.
-L.PLANNED_FIELD = { create_space = "creates", launch = "launches", move = "moves", place = "places", recheck = "places" }
+L.PLANNED_FIELD = { create_space = "creates", move = "moves", place = "places", recheck = "places" }
 
 -- The planned point's fields (progress.md), from the ops or a refusal.
 function L.planned_fields(ops, refused)
-  local f = { creates = 0, launches = 0, moves = 0, places = 0 }
+  local f = { creates = 0, moves = 0, places = 0 }
   local key = L.PLANNED_FIELD
   for _, op in ipairs(ops or {}) do
     if key[op.op] then f[key[op.op]] = f[key[op.op]] + 1 end
   end
-  f.nothing = refused == nil and f.creates + f.launches + f.moves + f.places == 0
+  f.nothing = refused == nil and f.creates + f.moves + f.places == 0
   if refused then f.refused = tostring(refused) end
   return f
 end
@@ -387,9 +387,9 @@ end
 function L.report_pairs(lines, code, tally)
   local out = {}
   for _, line in ipairs(lines or {}) do out[#out + 1] = { "report", line } end
-  out[#out + 1] = { "report", string.format("exit %s: %d placed, %d in place, %d failed, %d unseen, %d skipped,"
-    .. " %d desktop(s) created", tostring(code), tally.placed, tally.in_place, tally.failed, tally.unseen, tally.skipped,
-    tally.created) }
+  out[#out + 1] = { "report", string.format("exit %s: %d placed, %d in place, %d failed, %d unseen, %d not running,"
+    .. " %d desktop(s) created", tostring(code), tally.placed, tally.in_place, tally.failed, tally.unseen,
+    tally.not_running, tally.created) }
   return out
 end
 
@@ -416,13 +416,18 @@ function L.finished_fields(response, seconds, log_path)
     in_place = t.in_place or 0,
     failed = t.failed or 0,
     unseen = t.unseen or 0,
-    skipped = t.skipped or 0,
+    -- Entries whose app is not running, which apply never launches, and
+    -- those apps' names as one string, absent when every app ran (ST6d8eed9
+    -- WP 35219619).
+    not_running = t.not_running or 0,
+    not_running_apps = t.not_running_apps,
     created = t.created or 0,
     seconds = seconds or 0,
     first = tostring(response.error or t.first or ""),
-    -- What the entry `first` names was, in the tally's own keys ("failed",
-    -- "unseen" or "skipped"), so the toast can label it; absent when first
-    -- is a refusal's or a failed run's words (STca1b7f9 WP6, ic's words).
+    -- What the entry `first` names was, in the tally's own keys ("failed" or
+    -- "unseen": a not-running entry is uncounted, so never first), so the
+    -- toast can label it; absent when first is a refusal's or a failed run's
+    -- words (STca1b7f9 WP6, ic's words).
     first_outcome = response.error == nil and t.first_outcome or nil,
     -- A refusal's fix, or the first failure's, which the tally carries with
     -- `first` (STca1b7f9 WP4).
@@ -435,7 +440,7 @@ end
 function L.options_text(options)
   if type(options) ~= "table" then return "none" end
   local parts = {}
-  for _, k in ipairs({ "no_create", "no_launch", "grid", "name", "current" }) do
+  for _, k in ipairs({ "no_create", "grid", "name", "current" }) do
     if options[k] ~= nil and options[k] ~= false then parts[#parts + 1] = k .. "=" .. tostring(options[k]) end
   end
   for _, k in ipairs({ "map", "own_sizes", "desks" }) do

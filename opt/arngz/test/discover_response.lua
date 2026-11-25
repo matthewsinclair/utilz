@@ -10,7 +10,7 @@
 -- (ST0034): plan reads them, and apply answers with them merged.
 --
 -- <world>, <desk> and <results> name functions in worlds.lua (eg
--- discover_world, base_world, base_desk, launch_skipped_results). An apply
+-- discover_world, base_world, base_desk, not_running_results). An apply
 -- response's report and exit code come from the real apply_report. A test-only JSON encoder, because plain Lua has none;
 -- keys are written in sorted order, and the CLI reorders them anyway.
 

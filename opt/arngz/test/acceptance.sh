@@ -9,7 +9,7 @@
 # Usage:
 #   opt/arngz/test/acceptance.sh observe [<spike.lua>]
 #   opt/arngz/test/acceptance.sh apply <desk>
-#   opt/arngz/test/acceptance.sh launch <desk> <bundle id>
+#   opt/arngz/test/acceptance.sh notrunning <desk> <bundle id>
 #
 #   observe   AT-03.3: the engine's observe, through the real hs, reports every
 #             screen with UUID, name, frame and position, every space with its
@@ -21,13 +21,13 @@
 #   apply     AT-05.4 (AC-05.4), after the desk's windows were scrambled by hand: diff
 #             first finds something to do (the scramble is real), apply exits
 #             0 with every entry placed, diff then finds nothing to do (a fresh
-#             observe and plan), and a second apply moves and launches nothing
-#             and reports every entry plainly placed. It TAKES THE POINTER:
-#             hands off the mouse and the keyboard while it runs.
-#   launch    AT-05.5 (AC-05.5), with <bundle id> named in <desk> and NOT running: apply
-#             --no-launch reports it skipped and exits 1, leaving it unlaunched;
-#             then apply launches and places it within the timeout, exit 0.
-#             It takes the pointer too.
+#             observe and plan), and a second apply moves nothing and reports
+#             every entry plainly placed. It TAKES THE POINTER: hands off the
+#             mouse and the keyboard while it runs.
+#   notrunning  ST6d8eed9 AC-35219619.5, with <bundle id> named in <desk> and
+#             NOT running: apply reports it not running and leaves it so,
+#             since apply never launches an app (it replaces AT-05.5's launch
+#             check). It takes the pointer too.
 #
 # Exit 0 if every check passed, 1 if any failed, 2 if it could not run.
 
@@ -212,7 +212,7 @@ apply_check() {
   # fixed-size app in the desk and this check reported bad while `arngz apply`
   # itself exited 0 -- a failure whose cause was the fix working, on the very
   # line 0133's design names as its acceptance test.
-  placed="$(count_lines '\(displays\[[0-9]+\]\.spaces\[[0-9]+\]\.apps\[[0-9]+\]\): (moved and |launched and )?placed( \([^)]*\))?$')"
+  placed="$(count_lines '\(displays\[[0-9]+\]\.spaces\[[0-9]+\]\.apps\[[0-9]+\]\): (moved and )?placed( \([^)]*\))?$')"
   if [[ "$placed" -eq "$entries" ]]; then
     ok "every entry placed ($placed of $entries)"
   else
@@ -223,16 +223,16 @@ apply_check() {
   # difference, since issue 0138: apply and diff agree about it.
   if [[ $RC -eq 0 ]]; then ok "diff after apply finds nothing to do (a fresh observe)"; else bad "diff after apply finds nothing to do (exit $RC)"; fi
   arngz apply "$desk"
-  # The note is allowed here too, and still excludes a move or a launch, which
-  # is what "plainly placed" is guarding: a note is neither. The noted ones are
+  # The note is allowed here too, and still excludes a move, which is what
+  # "plainly placed" is guarding: a note is not one. The noted ones are
   # counted separately and said, so a desk whose apps are all held at their own
   # size cannot pass this with no plainly-placed entry at all.
   placed="$(count_lines '\(displays\[[0-9]+\]\.spaces\[[0-9]+\]\.apps\[[0-9]+\]\): placed( \([^)]*\))?$')"
   noted="$(count_lines '\(displays\[[0-9]+\]\.spaces\[[0-9]+\]\.apps\[[0-9]+\]\): placed \([^)]*\)$')"
   if [[ $RC -eq 0 && "$placed" -eq "$entries" ]]; then
-    ok "a second apply reports every entry plainly placed, nothing moved or launched, exit 0 ($placed of $entries, $noted at an app's own size)"
+    ok "a second apply reports every entry plainly placed, nothing moved, exit 0 ($placed of $entries, $noted at an app's own size)"
   else
-    bad "a second apply reports every entry plainly placed, nothing moved or launched, exit 0 (exit $RC, $placed of $entries, $noted at an app's own size)"
+    bad "a second apply reports every entry plainly placed, nothing moved, exit 0 (exit $RC, $placed of $entries, $noted at an app's own size)"
   fi
 }
 
@@ -250,28 +250,26 @@ app_running() {
   printf '%s\n' "$said"
 }
 
-launch_check() {
+# ST6d8eed9 AC-35219619.5: apply never launches an app. One the desk names
+# that is not running is reported not running, counts against nothing, and is
+# still not running after the run.
+notrunning_check() {
   local desk="${1:-}" bundle="${2:-}" running
-  [[ -n "$desk" && -n "$bundle" ]] || die "usage: $0 launch <desk> <bundle id>"
+  [[ -n "$desk" && -n "$bundle" ]] || die "usage: $0 notrunning <desk> <bundle id>"
   running="$(app_running "$bundle")"
   if [[ "$running" == true ]]; then
     die "$bundle is running; quit it first, then run this again"
   fi
-  echo "AT-05.5 (AC-05.5) -- $bundle in $desk, not running (hands off: this takes the pointer)"
-  arngz apply --no-launch "$desk"
-  if [[ $RC -eq 1 ]] && grep -iF "$bundle" <<<"$OUT" | grep -q ': skipped'; then
-    ok "--no-launch reports $bundle skipped, exit 1"
-  else
-    bad "--no-launch reports $bundle skipped, exit 1 (exit $RC)"
-  fi
-  running="$(app_running "$bundle")"
-  if [[ "$running" == false ]]; then ok "--no-launch left $bundle unlaunched"; else bad "--no-launch left $bundle unlaunched"; fi
+  echo "AC-35219619.5 -- $bundle in $desk, not running (hands off: this takes the pointer)"
   arngz apply "$desk"
-  if [[ $RC -eq 0 ]] && grep -iF "$bundle" <<<"$OUT" | grep -q 'launched and placed'; then
-    ok "apply launches and places $bundle, exit 0"
+  if grep -iF "$bundle" <<<"$OUT" | grep -q ': not running'; then
+    ok "apply reports $bundle not running"
   else
-    bad "apply launches and places $bundle, exit 0 (exit $RC)"
+    bad "apply reports $bundle not running (exit $RC)"
   fi
+  if [[ $RC -ne 2 ]]; then ok "apply ran, exit $RC"; else bad "apply refused, exit 2"; fi
+  running="$(app_running "$bundle")"
+  if [[ "$running" == false ]]; then ok "apply left $bundle not running"; else bad "apply left $bundle not running"; fi
 }
 
 case "${1:-}" in
@@ -283,11 +281,11 @@ case "${1:-}" in
     shift
     apply_check "$@"
     ;;
-  launch)
+  notrunning)
     shift
-    launch_check "$@"
+    notrunning_check "$@"
     ;;
-  *) die "usage: $0 observe [<spike.lua>] | apply <desk> | launch <desk> <bundle id>" ;;
+  *) die "usage: $0 observe [<spike.lua>] | apply <desk> | notrunning <desk> <bundle id>" ;;
 esac
 
 if [[ $FAILED -gt 0 ]]; then
