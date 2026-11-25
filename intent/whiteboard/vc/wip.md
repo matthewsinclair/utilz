@@ -3,8 +3,8 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 16e2c2bd-e1ce-4d05-891c-1784ba97a994
-heartbeat_at: 2026-11-25 12:58Z
-status: active
+heartbeat_at: 2026-11-25 13:01Z
+status: paused
 focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36). After the reboot: /in-session, then hold for devbin-vc's word. Resume from ~/Devel/scratch/utilz-vc/RESUME.md: hv's arca_swift line (940f91b5), its CI and the 0.3.0 tag, the spike and probe at hv's ready, then 0114's R2."
 claims: []
 ---
