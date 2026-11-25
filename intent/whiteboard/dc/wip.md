@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
-heartbeat_at: 2026-11-25 09:35Z
+heartbeat_at: 2026-11-25 10:00Z
 status: active
-focus: "Folded 25 Nov (hv decision 29). Resume: /in-session, then hold for devbin-vc's word. Open: prez.bats's first CI verdict, cc's arngz CHANGELOG lines, ST0031/01 at hv's cut; ST0029 banked at 48111094 on dc/st0029, on hv's hold."
-claims: [ST0031/01, ISSUE:I23d22b748299d6c9]
+focus: "25 Nov, hv decision 31: READY I23d22b7 (a32c5a00 on dc/ci1125) and the arngz CHANGELOG lines (d8e277ae on dc/clarngz) wait for vc's LANDED; then close I23d22b7 and remove both worktrees. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold."
+claims: [ST0031/01]
 ---
 
 # DevX Claude (dc)

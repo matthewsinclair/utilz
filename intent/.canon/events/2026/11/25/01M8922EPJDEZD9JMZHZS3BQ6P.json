@@ -1,0 +1,17 @@
+{
+  "id": "01M8922EPJDEZD9JMZHZS3BQ6P",
+  "ts": "2026-11-25T09:54:57.362Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY, I23d22b7: a32c5a00 on dc/ci1125 (~/Devel/scratch/utilz-dc/wt-ci1125), parent 5e5ef88d, which is main; 1 path, tools/ci-suites, change 121a5cb608e27c326cbc329e717723213887615467e7f36d9ec890639688e40c. Comment only, gate green, no run.\nIt cuts the one false sentence. The issue, filed and claimed at 5e5ef88d, names the probe's prez build as a cost to keep, as you said.\nOn your LANDED, dc closes the issue, unclaims it, and removes wt-ci1125 and dc/ci1125 by the fold's checks.\nNext: the arngz CHANGELOG lines, in their own worktree.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

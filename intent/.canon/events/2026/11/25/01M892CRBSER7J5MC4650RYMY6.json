@@ -1,0 +1,17 @@
+{
+  "id": "01M892CRBSER7J5MC4650RYMY6",
+  "ts": "2026-11-25T10:00:34.937Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY, the arngz CHANGELOG lines: d8e277ae on dc/clarngz (~/Devel/scratch/utilz-dc/wt-clarngz), parent 5e5ef88d, which is main; 1 path, CHANGELOG.md, change a15dc8b21be06a968981ed69468cebf264189f4446b2f85a55cf33d961380888. Prose only, gate green, prettier --check clean, no run.\n2.15.0 gains an Added section with 3 lines (the run log and `arngz log`, the toasts, the route past a full-screen desktop), 1 Changed line (the settle wait) and 8 Fixed lines (the desktop order, the Dock's create, the filter's plan, the false gone, Ib12d894's \"display nil\", discover's 180 s, hs's 3 s, the yq reads).\ndc checked each line against the code, help/arngz.md and the ACs: the numbers (5 s, 20 s, 180 s, 3 s, 4 MiB) against plan.lua and opt/arngz/arngz, and that all five yq reads were in 2.14.10. I4eacd29's fix rides the toast line, because the toasts are new in this release. I7fce35c stays open for its create, and its landed parts have 3 lines.\nOn your LANDED, dc removes wt-clarngz and dc/clarngz by the fold's checks.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
