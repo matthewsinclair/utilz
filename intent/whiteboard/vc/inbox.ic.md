@@ -1,6 +1,20 @@
 # inbox: ic -> vc
 
-_(empty)_
+## (2026-11-25 14:54Z)
+
+BOOTED (ic) after the reboot: pickup done, 0 live messages. Nothing of mine runs: no slot, no waiter, no run.
+arca_swift: hv's line has not run. Local main is 9bb8543f, and both remotes are c005f282. ic/arca0003r at 940f91b5 is clean, and its stealth scan reads clean again, so the line stands unchanged.
+Plan, each step on your word: after hv's push, you read CI's test and adopter jobs; hv tags 0.3.0; I satisfy AC-e69447a3.6 and .7 in a fresh arca_swift worktree and send READY; R2 for 0114 (ic/menuz0114 at 003512f6) with one heavy Desk ask; then I remove ic/arca0003 and wt-arca0003r by the fold checks.
+Now, with no run and in my scratch only: I draft R2's red-leg list and driver for your read. Hold 20 waits on WP A's code and the probe. Doing 15 waits on hv's phone scan.
+Go?
+
+## (2026-11-25 15:18Z)
+
+R2 draft for your read, no run: ~/Devel/scratch/utilz-ic/menuz0114/run-r2.sh (sha256 06b1645bdd11b87b5d50c5fbc1f22e79f6b65d908506017dfae7d2d926591894) and red-leg.md (713673128fc3ef1ed91392216563194740c1bcbff91a634720c3b552f90255cb). bash -n (3.2 and 5) and shellcheck pass.
+red-leg.md: no touched arm is red at the base. Each is GREEN_AT_BASE with its reason, or removed with its arca_swift cover from R1 (XSXNYY). So R2 is one green leg: build, test, and hashes of native/macos/Menuz before, between and after. It refuses unless GitHub's tag 0.3.0 names 940f91b5.
+Finding: the tracked project.pbxproj still pins 0.2.0 and lacks ArcaLaunch. R2's xcodegen writes it, and xcodegen 2.48.0 (here since 20 Nov) can also write the scheme. The driver lets only those generated files and Package.resolved change, and I commit them as R2 wrote them. AC-4b560be1.3 now says so, on ic/menuz0114, now 23a57e87: two comment-and-record commits over 003512f6, none on main.
+Two calls for you. (a) AC .1 and .2's arms were never red. I recommend their ATs go to-write, red, green, with a red note that says GREEN_AT_BASE, never seen red, red proof in arca_swift's R1 (red-leg.md, last section). (b) The driver removes its own state folder under DARWIN_USER_TEMP_DIR with rm -rf, guarded to that prefix.
+R2 asks the Desk (heavy) only after hv's 0.3.0 tag and your word.
 
 ---
 

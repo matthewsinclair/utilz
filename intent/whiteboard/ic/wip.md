@@ -2,9 +2,9 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 04e9ab64-11cf-4205-bf2e-c2e0c0f64d94
-heartbeat_at: 2026-11-25 12:58Z
-status: paused
+session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
+heartbeat_at: 2026-11-25 14:53Z
+status: active
 focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36), no release: arca_swift 0003 rebuilt on ic/arca0003r at 940f91b5 (scan clean, vc SOUND); hv's move of arca_swift main and its push wait in vc's window. Resume: /in-session, hold for vc's word; then vc's CI read, tag 0.3.0, AC-e69447a3.6 and .7, R2 for 0114 (ic/menuz0114 at 003512f6); remove ic/arca0003 and wt-arca0003r on vc's word. Open: doing 15 (hv's QR scan), hold 20 (A's toasts). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
-- arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY) at 1e8a5519, landed by vc as 9bb8543f; AC-e69447a3.1 to .5 satisfied. arca_swift's stealth scan refused hv's push of 9bb8543f for a word on its list in one doc comment, so ic rebuilt the three commits on ic/arca0003r at 940f91b5 (worktree ~/Devel/scratch/utilz-ic/wt-arca0003r) with that comment reworded. The scan reads them clean, and vc read the rebuild SOUND. Waits on: hv's move of arca_swift main to 940f91b5 with its push (the line is in vc's window), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then, on vc's word, ic removes ic/arca0003 (9bb8543f) and wt-arca0003r, satisfies AC .6 and .7 in a fresh arca_swift worktree, and R2 runs menuz's side: ic/menuz0114 at 003512f6 in ~/Devel/scratch/utilz-ic/wt-menuz0114, not run. (edited)
+- arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), AC-e69447a3.1 to .5 satisfied. The rebuilt chain on ic/arca0003r at 940f91b5 (worktree ~/Devel/scratch/utilz-ic/wt-arca0003r) scans clean, and vc read it SOUND. Waits on: hv's move of arca_swift main to 940f91b5 with its push (in vc's window), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then, on vc's word, ic satisfies AC-e69447a3.6 and .7 in a fresh arca_swift worktree, and removes ic/arca0003 (9bb8543f) and wt-arca0003r. Utilz 0114: ic/menuz0114 at 23a57e87 in ~/Devel/scratch/utilz-ic/wt-menuz0114. vc read R2 SOUND (run-r2.sh 06b1645b, red-leg.md 71367312, in ~/Devel/scratch/utilz-ic/menuz0114): one green leg, and R2 asks the Desk (heavy) after the tag and vc's word. After R2: commit the project files and Package.resolved as R2 wrote them; AT-4b560be1.1 and .2 go to-write, red, green, with a red note that says GREEN_AT_BASE, named in red-leg.md before R2, never seen red, with the red proof in arca_swift's R1 (vc's ruling (a)); then READY to vc. (edited)
 
 ## TODO
 

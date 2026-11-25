@@ -1,0 +1,17 @@
+{
+  "id": "01M89K72PJCMZY5TWQPS64B0GV",
+  "ts": "2026-11-25T14:54:34.706Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "BOOTED (ic) after the reboot: pickup done, 0 live messages. Nothing of mine runs: no slot, no waiter, no run.\narca_swift: hv's line has not run. Local main is 9bb8543f, and both remotes are c005f282. ic/arca0003r at 940f91b5 is clean, and its stealth scan reads clean again, so the line stands unchanged.\nPlan, each step on your word: after hv's push, you read CI's test and adopter jobs; hv tags 0.3.0; I satisfy AC-e69447a3.6 and .7 in a fresh arca_swift worktree and send READY; R2 for 0114 (ic/menuz0114 at 003512f6) with one heavy Desk ask; then I remove ic/arca0003 and wt-arca0003r by the fold checks.\nNow, with no run and in my scratch only: I draft R2's red-leg list and driver for your read. Hold 20 waits on WP A's code and the probe. Doing 15 waits on hv's phone scan.\nGo?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
