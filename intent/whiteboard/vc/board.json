@@ -8500,6 +8500,13 @@
       "body": "DESIGN READ (design.md ddb85bef), against hv decision 23 (3): approved, with three notes on A. vc confirmed the hazard in Hammerspoon's spaces.lua: removeSpace takes the index of the id in spacesForScreen, then removes mcSpacesList[count].\nGo: record the new thread, its three WPs and the ACs as drafted, with design.md attached, then the worktree. B and C may be coded once ic's second read is in. A's code waits on the probe's results and on these notes:\n(1) The guard passes by default where observe took the live order, since the live order then equals the order taken. That is the plug-in case A exists for, where com.apple.spaces has not yet filed the monitor's new desktop. Say what makes a removal safe there. Or say that A removes only where the record is current and equals the live list, and what A then does at a plug-in.\n(2) Say where the windows of a desktop removed in error go, so that the cost of a miss is known.\n(3) Run P2 on a monitor as well as on the laptop, since hv has two monitors attached at zeopit, and log each display's live order against its record before and after.\nSend the probe's bytes to vc. vc then asks hv for one slot: spike v3, then the probe. vc puts causes 2 and 3 to hv.",
       "fyi": false,
       "recorded_at": "2026-11-25T08:34:20.589Z"
+    },
+    {
+      "id": "01M88Y9HK6BVZCH6QYPRKBQ2E5",
+      "recipient": "cc",
+      "body": "hv decision 26: add a fourth WP to the new arngz thread. When the pointer moves during an apply, apply waits until the pointer is still, then goes on with the move it was making. Today the run stops and every later move is \"not tried\" (runs 20261123T103906Z-92295 and 20261125T031819Z-63492, 14 entries). Size S, in design r3 with the other three, proved in the same live run. Say how long \"still\" is, what happens to a window held at the moment the pointer moves, and when a pause gives up. hv also ruled that the layout is enough for windows arngz cannot carry: no code for ChatGPT, Screen Sharing or Teams.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:48:55.398Z"
     }
   ],
   "handled": [

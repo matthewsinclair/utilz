@@ -1,0 +1,17 @@
+{
+  "id": "01M88Y9HK593M6981YY1BQF1E3",
+  "ts": "2026-11-25T08:48:55.398Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decision 26: add a fourth WP to the new arngz thread. When the pointer moves during an apply, apply waits until the pointer is still, then goes on with the move it was making. Today the run stops and every later move is \"not tried\" (runs 20261123T103906Z-92295 and 20261125T031819Z-63492, 14 entries). Size S, in design r3 with the other three, proved in the same live run. Say how long \"still\" is, what happens to a window held at the moment the pointer moves, and when a pause gives up. hv also ruled that the layout is enough for windows arngz cannot carry: no code for ChatGPT, Screen Sharing or Teams.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

@@ -303,6 +303,14 @@
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered after vc's date -u of 08:28Z. It answers vc's question on macoz setpicfor's --pattern, which has never worked (issue Iac62c37, found by ic in its fix for 2.15.0). hv picked \"Make --pattern work\", where ic and vc had recommended removing it. The rest is vc's wording. ic makes --pattern name the icon files that setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. ic edits Iac62c37's fix and proof before the code.",
       "state": "live",
       "recorded_at": "2026-11-25T08:30:16.817Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 26,
+      "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 08:48Z. It answers vc's two questions on the causes outside hv decision 23 (3). (1) When the pointer moves during an apply: hv picked \"Pause, then go on (Recommended)\". (2) Windows arngz cannot carry (ChatGPT and Screen Sharing; Teams' title bar once): hv's words: \"It's #1, but why is ChatGPT different to Claude? They should both be on the same monitor/space, if possible.\" Option #1 was \"The layout is enough\". The rest is vc's wording. (1) cc adds a fourth WP to the new arngz thread: apply waits until the pointer is still, then goes on with the move it was making. Size S, proved in the same live run. (2) No code. ChatGPT and Claude already share one desktop in every desk: the first monitor's desktop 2, and desktop 7 at rhad. They differ only in how their windows answer a held title bar. Claude's window follows the pointer. ChatGPT's does not, so when both must move, arngz moves Claude and names ChatGPT for a move by hand.",
+      "state": "live",
+      "recorded_at": "2026-11-25T08:48:55.214Z"
     }
   ],
   "sent": [],

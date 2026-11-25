@@ -1,0 +1,15 @@
+{
+  "id": "01M88Y9HDENVG6VJKX3V5X6ZKZ",
+  "ts": "2026-11-25T08:48:55.214Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 08:48Z. It answers vc's two questions on the causes outside hv decision 23 (3). (1) When the pointer moves during an apply: hv picked \"Pause, then go on (Recommended)\". (2) Windows arngz cannot carry (ChatGPT and Screen Sharing; Teams' title bar once): hv's words: \"It's #1, but why is ChatGPT different to Claude? They should both be on the same monitor/space, if possible.\" Option #1 was \"The layout is enough\". The rest is vc's wording. (1) cc adds a fourth WP to the new arngz thread: apply waits until the pointer is still, then goes on with the move it was making. Size S, proved in the same live run. (2) No code. ChatGPT and Claude already share one desktop in every desk: the first monitor's desktop 2, and desktop 7 at rhad. They differ only in how their windows answer a held title bar. Claude's window follows the pointer. ChatGPT's does not, so when both must move, arngz moves Claude and names ChatGPT for a move by hand."
+  }
+}
