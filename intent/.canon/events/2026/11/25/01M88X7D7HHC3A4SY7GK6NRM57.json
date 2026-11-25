@@ -1,0 +1,15 @@
+{
+  "id": "01M88X7D7HHC3A4SY7GK6NRM57",
+  "ts": "2026-11-25T08:30:16.817Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session, answered after vc's date -u of 08:28Z. It answers vc's question on macoz setpicfor's --pattern, which has never worked (issue Iac62c37, found by ic in its fix for 2.15.0). hv picked \"Make --pattern work\", where ic and vc had recommended removing it. The rest is vc's wording. ic makes --pattern name the icon files that setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. ic edits Iac62c37's fix and proof before the code."
+  }
+}

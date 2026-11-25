@@ -8478,6 +8478,21 @@
       "body": "GO, hv decision 23 (25 Nov), on your plan of 07:38Z: one issue first, then one worktree and one READY, prose and comments only, no run. (a) todo 31, test_helper.bash:34-36. (b) docs/developer-guide.md's yaml examples and its 9 em-dashes. (c) help/utilz.md, and README.tmpl to retry's lean shape with \"Licence: MIT\". Unclaim ST0031/02 on the same commit. CHANGELOG.md's unreleased section stays yours: before the cut, vc gives you the lines cc and ic send with their READYs, and you add them in one commit. Ibf2b53b's timing is with hv now, with vc's recommendation (the next release).",
       "fyi": false,
       "recorded_at": "2026-11-25T08:19:28.229Z"
+    },
+    {
+      "id": "01M88X4NM2N493SJ2TMQ2ZX689",
+      "recipient": "dc",
+      "body": "hv decision 24: Ibf2b53b goes into 2.15.0, now. hv's words: \"Built it now for THIS release. Test it now LOCALLY and make sure it works.\" Add prez.bats to CI (the rust job, after its build, is where the binary, node, ffmpeg and poppler already are, unless your read finds a better place), and prove the suite with a local run booked at the Desk, with its driver's path, before your READY. Bank it with your docs work or as its own READY, as you judge. hv's rule from now on: no fix is deferred to a later release unless hv defers it by name.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:28:47.106Z"
+    },
+    {
+      "id": "01M88X7DCJWGWFA9WBSQDW061C",
+      "recipient": "ic",
+      "body": "hv decision 25: make macoz setpicfor's --pattern work. hv picked \"Make --pattern work\" over the recommendation to remove it. --pattern names the icon files setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. First edit Iac62c37's fix and proof to say so (doc before code). Then send your records READY again with its new hash, and vc lands it then. Your records READY (change f5a6ef45) is not landed. vc read it and found it sound apart from Iac62c37's fix.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T08:30:16.978Z",
+      "edited_at": "2026-11-25T08:30:27.641Z"
     }
   ],
   "handled": [

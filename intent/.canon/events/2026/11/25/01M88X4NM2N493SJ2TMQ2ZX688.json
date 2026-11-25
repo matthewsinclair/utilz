@@ -1,0 +1,17 @@
+{
+  "id": "01M88X4NM2N493SJ2TMQ2ZX688",
+  "ts": "2026-11-25T08:28:47.106Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decision 24: Ibf2b53b goes into 2.15.0, now. hv's words: \"Built it now for THIS release. Test it now LOCALLY and make sure it works.\" Add prez.bats to CI (the rust job, after its build, is where the binary, node, ffmpeg and poppler already are, unless your read finds a better place), and prove the suite with a local run booked at the Desk, with its driver's path, before your READY. Bank it with your docs work or as its own READY, as you judge. hv's rule from now on: no fix is deferred to a later release unless hv defers it by name.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

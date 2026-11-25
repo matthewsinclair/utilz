@@ -1,0 +1,17 @@
+{
+  "id": "01M88X7DCJWGWFA9WBSQDW061B",
+  "ts": "2026-11-25T08:30:16.978Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decision 25: make macoz setpicfor's --pattern work. hv picked \"Make --pattern work\" over the recommendation to remove it. --pattern names the icon files setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. First edit Iac62c37's fix and proof to say so (doc before code). Then send your records READY again with its new hash, and vc lands it then. Your records READY (change f5a6ef45) is not landed. vc read it and found it sound apart from Iac62c37's fix.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
