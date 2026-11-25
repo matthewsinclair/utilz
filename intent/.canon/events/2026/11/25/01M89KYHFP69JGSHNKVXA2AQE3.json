@@ -1,0 +1,17 @@
+{
+  "id": "01M89KYHFP69JGSHNKVXA2AQE3",
+  "ts": "2026-11-25T15:07:23.510Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY (c), issue 0114's CHANGELOG line: 43b63bfb on dc/cl0114 (~/Devel/scratch/utilz-dc/wt-cl0114), parent c4539846; CHANGELOG.md and opt/menuz/VERSION, change 7b9e65f6d39c3fb1c8ebb305e9d003ae86cd77ccee74dff95f20a987a40bea87.\nAdded: \"Only one copy of Menuz runs at a time\", from ic/menuz0114 at 003512f6 (help/menuz.md, design r2). It ends \"menuz goes from 0.4.10 to 0.4.11\", and opt/menuz/VERSION reads 0.4.11.\nGate green (guards 5 ran, 1 not applicable; doctor clean); no run. Banked, to land with 0114.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

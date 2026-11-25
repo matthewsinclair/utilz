@@ -2,10 +2,10 @@
 node: dc
 name: DevX Claude
 role: devx
-session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
-heartbeat_at: 2026-11-25 12:58Z
-status: paused
-focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36): after the reboot, /in-session, then hold for vc's word. Next: WP A's CHANGELOG line after the probe, STca1b7f9's spike parts, arca_swift's CI leg at Run 2. Open: ST0031/01 at hv's cut; ST0029 holds until the 2.15.0 cut (hv decision 35), banked at 48111094 in wt-st0029. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+session_id: 8bd6bdc9-a0e8-43ed-9077-c54e4fa150db
+heartbeat_at: 2026-11-25 15:16Z
+status: active
+focus: "25 Nov: holding (hold 39). V1 5ba57cc7, V2 baf64d72 and (c) 266cb1ef are banked and read SOUND; vc lands V1 and V2 after devbin-vc's 0.1.33 sweep word, and (c) with 0114 after R2. Next, on vc's word: WP A's CHANGELOG line after the probe; STca1b7f9's spike parts' lines. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
@@ -22,6 +22,7 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
+- 2.15.0's version steps and 0114's line, banked and read SOUND by vc (hv decision 39, vc decision 119): V1 5ba57cc7 on dc/ver1125; V2 baf64d72 on dc/prez1125; (c) 266cb1ef on dc/cl0114, stacked on V2. Releases at vc's word that devbin-vc's 0.1.33 sweep commit is in: vc lands V1, then V2, and dc checks each by change; (c) lands with 0114 after R2. Then dc removes each worktree and branch by the fold's checks and commits its records.
 
 ## Watch-outs
 

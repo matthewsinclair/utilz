@@ -1,0 +1,17 @@
+{
+  "id": "01M89KZZKKQZBHG2W5MW18FA99",
+  "ts": "2026-11-25T15:08:10.739Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY (1) V1, the version steps for arngz, macoz and mdagg: 5ba57cc7 on dc/ver1125 (~/Devel/scratch/utilz-dc/wt-ver1125), parent c4539846; CHANGELOG.md, opt/arngz/VERSION, opt/macoz/VERSION, opt/mdagg/VERSION, change 742aa09e4b0544890c236ed73f6542f3cb287b94385bcd2dd85195a0db853cd8.\narngz 1.2.1 to 2.0.0, named on the Removed --no-launch line (\"A call that gives it now fails, so arngz goes from 1.2.1 to 2.0.0.\"). mdagg and macoz 1.0.1 to 1.0.2, each named at the end of its Fixed line.\nNo other file names these versions: arngz reads its VERSION only for the run log's start line (arngz:326), and no test pins one. Gate green; no run. V2 (prez) follows with its booking.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

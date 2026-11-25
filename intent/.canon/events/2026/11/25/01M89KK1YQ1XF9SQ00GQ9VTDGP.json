@@ -1,0 +1,17 @@
+{
+  "id": "01M89KK1YQ1XF9SQ00GQ9VTDGP",
+  "ts": "2026-11-25T15:01:07.159Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "FINDING for 2.15.0 (dc): no utility's version file moved since 2.14.10, and no 2.15.0 line names a step. Yet arngz gains features and drops --no-launch, prez gains showreel qr, macoz and mdagg fix bugs, and 0114 changes menuz's app.\n2.14.10 stepped arngz for one fix, and 2.14.9 stepped four, eg menuz 0.4.9 to 0.4.10 (hv's ruling, vc decision 82). docs/developer-guide.md:635-639 gives the procedure. No test pins a version.\nCost: each tool reports its 2.14.10 version with 2.15.0 behaviour, so its version cannot tell the two apart.\nRec (dc, S): arngz 1.2.1 to 1.3.0, macoz and mdagg 1.0.1 to 1.0.2, in one commit with each line's \"goes from\" words, no run. prez 2.5.10 to 2.6.0 in its own commit with the Cargo.lock that cargo writes (releasing.md:12), one cargo booking. menuz 0.4.10 to 0.4.11 with 0114's line.\nThe steps are hv's or the pen's to choose. dc holds until your word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

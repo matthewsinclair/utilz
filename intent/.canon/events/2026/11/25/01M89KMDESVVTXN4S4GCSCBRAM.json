@@ -1,0 +1,15 @@
+{
+  "id": "01M89KMDESVVTXN4S4GCSCBRAM",
+  "ts": "2026-11-25T15:01:51.705Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "0114's CHANGELOG line (vc's step c), drafted from ic/menuz0114 at 003512f6, in a worktree, banked, no run. Releases when vc relays devbin-vc's approval of the estate plan (hv decisions 37 and 38). Until then: no run, no edit, no commit; reads go on."
+  }
+}

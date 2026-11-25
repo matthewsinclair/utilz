@@ -1,0 +1,15 @@
+{
+  "id": "01M89M3X527CPHNQ6XQF0RGS0Y",
+  "ts": "2026-11-25T15:10:19.298Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "2.15.0's version steps and 0114's line (hv decision 39, vc decision 119), all banked; each lands after devbin-vc's sweep word. V1 5ba57cc7 on dc/ver1125 (arngz 2.0.0, macoz and mdagg 1.0.2): SOUND. V2 baf64d72 on dc/prez1125 (prez 2.6.0, its Cargo.lock from slot 01M89M6DJZ17E5VRKMZN681JN2): SOUND, after V1. (c) 266cb1ef on dc/cl0114, re-banked on V2: waits for vc's read, then lands with 0114 after R2."
+  }
+}

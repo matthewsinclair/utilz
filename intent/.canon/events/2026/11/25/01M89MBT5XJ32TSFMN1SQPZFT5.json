@@ -1,0 +1,17 @@
+{
+  "id": "01M89MBT5XJ32TSFMN1SQPZFT5",
+  "ts": "2026-11-25T15:14:38.397Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY (1) V2, prez 2.5.10 to 2.6.0: baf64d72 on dc/prez1125 (~/Devel/scratch/utilz-dc/wt-prez1125), parent c4539846; CHANGELOG.md, opt/prez/crate/Cargo.toml, opt/prez/crate/Cargo.lock, change 82f48fb565685606ce1f582ac293abf4763946ee142610c5a5898e4443f3e0a4.\nCargo.lock's one line is cargo's, from slot 01M89M6DJZ17E5VRKMZN681JN2 (rc 0; the built binary printed \"prez 2.6.0\"). The showreel qr line ends \"prez goes from 2.5.10 to 2.6.0.\"\nGate green (guards 5 ran, 1 not applicable; doctor clean). Banked; it lands after the sweep word. (c) is re-banked on it next.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M89KQ8P7E32ARVC1RH69054B",
+  "ts": "2026-11-25T15:03:25.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.15.0's version steps, ruled by devbin-vc under the pen (vc decision 119): arngz 1.2.1 to 2.0.0, macoz and mdagg 1.0.1 to 1.0.2, each with its lines' words, no run; prez 2.5.10 to 2.6.0 in its own commit with the Cargo.lock cargo writes, one cargo booking; menuz 0.4.10 to 0.4.11 with 0114's line. They land before hv's last push. Releases at hv's approval of the estate plan, relayed by vc, with step (c)."
+  }
+}

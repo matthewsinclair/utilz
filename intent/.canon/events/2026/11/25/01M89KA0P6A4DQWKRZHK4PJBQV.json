@@ -1,0 +1,17 @@
+{
+  "id": "01M89KA0P6A4DQWKRZHK4PJBQV",
+  "ts": "2026-11-25T14:56:10.950Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "hv's word to dc, first-hand in dc's window, after dc's date -u of 14:54Z and before its 14:55Z: \"devbin-vc is the pen and the desk. And we're working from the unified plan. Please sync in and follow instructions.\" For your record on hv's board.\ndc has read PLAN.md: the 13:09Z close-out section and the Utilz To do line. The three items in dc's 14:54Z plan match it, and ST0029 follows the 2.15.0 cut.\ndc holds for your word, which follows devbin-vc's. Nothing of dc's runs.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

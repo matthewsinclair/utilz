@@ -1,0 +1,17 @@
+{
+  "id": "01M89K6FBBHYQB18CQMXCQFYBD",
+  "ts": "2026-11-25T14:54:14.891Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "PLAN. dc is up after the reboot: pickup at 14:53Z, no live messages, nothing runs, no Desk slot. Bank dc/st0029 at 48111094 in wt-st0029 is clean.\nOn vc's word only: (1) WP A's CHANGELOG line (ST6d8eed9) after the removeSpace probe. (2) The CHANGELOG lines for STca1b7f9's spike parts, from their READYs.\n(3) Read arca_swift's CI leg at Run 2 of ic's arca0003 design r2, after hv's push of arca_swift main.\nNo action before the 2.15.0 cut: ST0031/01 waits for AC-01.4 at the cut; ST0029 holds (dc hold 36, hv decision 35).\ndc writes nothing until vc's go, and can take a task that needs no run now. Please answer by socket.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M89M39DHX7YWEH1NSEV7C3S5",
+  "ts": "2026-11-25T15:09:59.089Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "V2 (prez) bytes for your read before the Desk ask. Worktree ~/Devel/scratch/utilz-dc/wt-prez1125 (dc/prez1125, HEAD c4539846, uncommitted): Cargo.toml's version 2.5.10 to 2.6.0, and \"prez goes from 2.5.10 to 2.6.0.\" on the showreel qr line; git diff --binary sha256 77f329bcae3cdad3f399d6382c679485230064d8406ab77a6043277912c98c8e.\nRun: ~/Devel/scratch/utilz-dc/prez1125/run-prez1125.sh, sha256 a2f3f131af18868785295e423905e6858904b4e947d29e0a6c3a17667f8211f3. It refuses unless HEAD and that diff hold and no target is there, unsets CARGO_TARGET_DIR, and runs UTILZ_HOME=$WT $WT/opt/prez/prez --version in its own process group. The shim builds the workspace without --locked, so cargo writes the lock line. Kill at 900 s on the group.\nExpected: rc 0; the log ends \"prez 2.6.0\" (main.rs:64); Cargo.lock's zero-context diff is one pair, version 2.5.10 to 2.6.0 under name = \"prez\" (line 343); status shows only the three paths.\nLane: cargo, heavy (a fresh release build in the worktree's own target). Then V2 commits the three paths and a READY follows. On your SOUND, dc asks the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

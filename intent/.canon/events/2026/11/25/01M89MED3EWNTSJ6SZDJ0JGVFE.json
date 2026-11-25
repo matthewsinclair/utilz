@@ -1,0 +1,15 @@
+{
+  "id": "01M89MED3EWNTSJ6SZDJ0JGVFE",
+  "ts": "2026-11-25T15:16:03.310Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.15.0's version steps and 0114's line, banked and read SOUND by vc (hv decision 39, vc decision 119): V1 5ba57cc7 on dc/ver1125; V2 baf64d72 on dc/prez1125; (c) 266cb1ef on dc/cl0114, stacked on V2. Releases at vc's word that devbin-vc's 0.1.33 sweep commit is in: vc lands V1, then V2, and dc checks each by change; (c) lands with 0114 after R2. Then dc removes each worktree and branch by the fold's checks and commits its records."
+  }
+}

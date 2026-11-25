@@ -1,0 +1,17 @@
+{
+  "id": "01M89MDD71DKC1HYFXQ9YQMNNQ",
+  "ts": "2026-11-25T15:15:30.657Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "READY (c) re-banked on V2: 266cb1ef on dc/cl0114 (~/Devel/scratch/utilz-dc/wt-cl0114), parent baf64d72; CHANGELOG.md and opt/menuz/VERSION, change 53f173f9dfa645e74e9916e83ef28879ad474541b7984516bdccfa2de660158f. It replaces 43b63bfb.\nThe added line is byte-identical to 43b63bfb's (cmp), now after the showreel qr line as V2 leaves it; opt/menuz/VERSION reads 0.4.11. Gate green; no run.\ngit merge-tree of V1 (5ba57cc7) with this stack is clean: 7 paths and the five steps. Banked; it lands with 0114 after V2.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
