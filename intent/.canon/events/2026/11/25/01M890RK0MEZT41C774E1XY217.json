@@ -1,0 +1,15 @@
+{
+  "id": "01M890RK0MEZT41C774E1XY217",
+  "ts": "2026-11-25T09:32:05.524Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all read SOUND by vc, did not run in slot 01M88ZBX07X0TX3XW4PDS2A3TH (hv decision 30). Released when hv says ready after the compact: cc makes a fresh light ask at the Desk naming the four hashes, runs the two load-only checks, and vc gives hv the two commands."
+  }
+}
