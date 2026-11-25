@@ -1,0 +1,16 @@
+{
+  "id": "01M890SJZ508A5WP05A8PFB9PF",
+  "ts": "2026-11-25T09:32:38.245Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 53,
+    "text": "STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready after the compact and the account change (hv decision 29; slot 01M88ZBX07X0TX3XW4PDS2A3TH was released not run on 25 Nov). Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; at the start the two load-only checks, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step."
+  }
+}

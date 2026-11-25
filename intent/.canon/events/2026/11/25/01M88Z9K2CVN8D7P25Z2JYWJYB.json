@@ -1,0 +1,17 @@
+{
+  "id": "01M88Z9K2CVN8D7P25Z2JYWJYB",
+  "ts": "2026-11-25T09:06:25.484Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "PROBE r2, your put-back fix taken: probe.zsh sha256 185cbd7a639af91e25d92d3de5093cdfb17f1a79f2bbf2f619ba626f65560614, probe.lua sha256 653aa999bea077d1f1bf0bc019d1e950555ac5bf5b484b03d8bcc799c1d10daa, in ~/Devel/scratch/utilz-cc/desks1125/probe/ (copies in probe-sent-r2/ for the next diff).\nput_back proves each removal as P2 does (show it, read back; show the display's start-time last desktop, which the probe never removes, read back) and removes it only with the live list unchanged. A BROKEN flag, set by any proof that showed another desktop, any inexact removal and any call with no answer, makes put_back remove nothing more and name each leftover for hv.\nOne gap of my own, fixed with it: the wrapper compared the live list after removeSpace had already run. Now the remove step takes the proof's list and refuses before removeSpace when the list differs, in P2, P3, P4 and put_back.\nAlso: a fail or Ctrl+C after hv opened P4's TextEdit window tells hv to close it by hand. Nothing else changed.\nNext: B, C and D in wt-desks1125 (cc/desks1125 off 5cb2c180).",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

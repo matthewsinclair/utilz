@@ -1,0 +1,16 @@
+{
+  "id": "01M890DS6P7KBBFTGKB63M7ND0",
+  "ts": "2026-11-25T09:26:11.414Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 76,
+    "text": "ST6d8eed9e4875782f (hv decisions 23 and 26): recorded at 5cb2c180 (4 WPs, 28 ACs, design.md r4). Worktree ~/Devel/scratch/utilz-cc/wt-desks1125, branch cc/desks1125: WP B done at 654f1863, not run; WP C's engine half WIP at d51b1f26; WP D not started. Next: C's log, CLI and tests, then D, then one booked bats run, ic's toasts on the branch, WP A after the probe, and one live run with hv."
+  }
+}

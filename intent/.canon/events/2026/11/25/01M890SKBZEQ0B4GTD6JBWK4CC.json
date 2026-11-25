@@ -1,0 +1,16 @@
+{
+  "id": "01M890SKBZEQ0B4GTD6JBWK4CC",
+  "ts": "2026-11-25T09:32:38.655Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 54,
+    "text": "ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready after the compact. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6), and then WP A's code starts."
+  }
+}
