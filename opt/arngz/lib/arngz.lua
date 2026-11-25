@@ -48,6 +48,14 @@ M.CREATE_SPACE_TRIES = 4
 
 local function utc_now() return os.date("!%Y-%m-%dT%H:%M:%SZ") end
 
+-- The run arngz_running holds, said with its article: "an apply", or "a
+-- reload" while Hammerspoon's config is about to be reloaded (ST6d8eed9 WP
+-- a45b3aeb).
+local function a_run(running)
+  local verb = tostring(running.verb)
+  return (verb:match("^[aeiou]") and "an " or "a ") .. verb
+end
+
 -- A refusal: raised as a tagged table, so answer() can tell "refused before
 -- anything changed" from a Lua error inside the engine (D25). A fix, where
 -- the refusal names one, goes into the response for the CLI to print.
@@ -2031,8 +2039,8 @@ local VERBS = {
   reload = function()
     local running = rawget(_G, "arngz_running")
     if running then
-      refuse(string.format("an %s is running (asked for at %s), so Hammerspoon's config is not reloaded",
-        tostring(running.verb), tostring(running.at)), "another arngz run is live; run it again when it has finished")
+      refuse(string.format("%s is running (asked for at %s)", a_run(running), tostring(running.at)),
+        "another arngz run is live; run it again when it has finished")
     end
     rawset(_G, "arngz_running", { verb = "reload", at = utc_now() })
     rawset(_G, "arngz_reloading", true)
@@ -2122,8 +2130,10 @@ local function finish_run(response_path, response, lg)
   local clocked, t = pcall(function() return hs.timer.secondsSinceEpoch() end)
   local seconds = (clocked and lg.started) and math.floor((t - lg.started) * 10 + 0.5) / 10 or 0
   if response.status ~= "ok" then
-    note(lg, response.kind == "refused" and "refused" or "error",
-      tostring(response.error) .. (response.fix and ("; fix: " .. tostring(response.fix)) or ""))
+    -- A refusal, or a reload asked for (ST6d8eed9 WP a45b3aeb), under its own
+    -- kind; anything else is an error.
+    local event = (response.kind == "refused" or response.kind == "reload") and response.kind or "error"
+    note(lg, event, tostring(response.error) .. (response.fix and ("; fix: " .. tostring(response.fix)) or ""))
   end
   point(lg, "finished", function() return L.finished_fields(response, seconds, lg.path) end)
   return respond_with(response_path, response, lg)
@@ -2203,7 +2213,7 @@ function M.run(request_path)
     -- Its own start and finished, under its own run, so its toast leaves the
     -- running one alone (progress.md, rule 3).
     return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb,
-      error = string.format("an %s is already running (asked for at %s)", running.verb, running.at),
+      error = string.format("%s is already running (asked for at %s)", a_run(running), tostring(running.at)),
       fix = "wait for it to finish; if none is running, reload Hammerspoon's config (hs.reload() in its console),"
         .. " which clears what a crashed apply left set" }, lg)
   end

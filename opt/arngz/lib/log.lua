@@ -396,22 +396,28 @@ end
 -- The finished point's fields (progress.md) from a run's RESPONSE, whatever
 -- it says. An apply's counts come from its report's tally; done when it
 -- exited 0, partly when it exited 1 having placed something, failed when it
--- placed nothing. Every other verb is done when it answered ok.
+-- placed nothing. Every other verb is done when it answered ok. A refusal of
+-- kind reload is a refusal: nothing changed (ST6d8eed9 WP a45b3aeb).
 function L.finished_fields(response, seconds, log_path)
   local t = type(response.tally) == "table" and response.tally or {}
+  local refusal = response.kind == "refused" or response.kind == "reload"
   local outcome
   if response.status ~= "ok" then
-    outcome = response.kind == "refused" and "refused" or "failed"
+    outcome = refusal and "refused" or "failed"
   elseif response.verb == "apply" and response.exit == 1 then
     outcome = ((t.placed or 0) + (t.in_place or 0)) > 0 and "partly" or "failed"
   else
     outcome = "done"
   end
   local exit = response.exit
-  if exit == nil then exit = response.status == "ok" and 0 or (response.kind == "refused" and 2 or 1) end
+  if exit == nil then exit = response.status == "ok" and 0 or (refusal and 2 or 1) end
   return {
     outcome = outcome,
     exit = exit,
+    -- Whether this answer asks the CLI to reload Hammerspoon's config and run
+    -- the verb again: a refusal of kind reload, or an apply that ran and
+    -- carries reload. The CLI acts after this point (ST6d8eed9 WP a45b3aeb).
+    reload = response.kind == "reload" or (response.reload ~= nil and response.reload ~= false),
     placed = t.placed or 0,
     in_place = t.in_place or 0,
     failed = t.failed or 0,
@@ -440,7 +446,10 @@ end
 function L.options_text(options)
   if type(options) ~= "table" then return "none" end
   local parts = {}
-  for _, k in ipairs({ "no_create", "grid", "name", "current" }) do
+  -- may_reload and after_reload_of say whether the CLI lets the engine ask
+  -- for a reload, and which run a retry after a reload follows (ST6d8eed9
+  -- WP a45b3aeb).
+  for _, k in ipairs({ "no_create", "grid", "name", "current", "may_reload", "after_reload_of" }) do
     if options[k] ~= nil and options[k] ~= false then parts[#parts + 1] = k .. "=" .. tostring(options[k]) end
   end
   for _, k in ipairs({ "map", "own_sizes", "desks" }) do

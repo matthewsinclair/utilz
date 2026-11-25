@@ -895,6 +895,214 @@ apply_response() {
   [ "$status" -eq 1 ] || fail "grep exited $status: $output"
 }
 
+# ============================================================================
+# ST6d8eed9 WP a45b3aeb -- a reload and one retry after the window filter fails
+# ============================================================================
+
+# The words the engine gives a failed window filter (P.filter_words), with a
+# fixture's reason in the brackets.
+FILTER_WORDS="Hammerspoon's window filter failed (hs/uielement.lua:134: FIXTURE)"
+
+# The reload verb's answer, and the state verb's from the old Lua state and
+# from a fresh one.
+RELOADING='{"status":"ok","verb":"reload","reloading":true}'
+OLD_STATE='{"status":"ok","verb":"state","reloading":true}'
+FRESH_STATE='{"status":"ok","verb":"state","reloading":false}'
+
+# The engine's answers for a command that reloads, one per ask in the order
+# the CLI asks them, for fake-hs's sequence mode. After apply_machine or
+# fake_hs, given the mode sequence.
+reload_sequence() {
+  export FAKE_HS_SEQUENCE="$BATS_TEST_TMPDIR/sequence"
+  mkdir -p "$FAKE_HS_SEQUENCE"
+}
+
+# answer N JSON: ask N's response. answer_mode N MODE: ask N answered as
+# fake-hs's MODE. N is rest for every ask with no answer of its own.
+answer() {
+  printf '%s\n' "$2" >"$FAKE_HS_SEQUENCE/$1.json"
+}
+
+answer_mode() {
+  printf '%s\n' "$2" >"$FAKE_HS_SEQUENCE/$1.mode"
+}
+
+# The engine's refusal of VERB when the window filter failed at its read and
+# the request let it ask for a reload.
+reload_refusal() {
+  V="$1" W="$FILTER_WORDS" F="arngz reloads Hammerspoon's config and runs it again" yq -n -o json -I0 \
+    '{"status": "error", "kind": "reload", "verb": strenv(V), "error": strenv(W), "fix": strenv(F)}'
+}
+
+# A refusal of VERB with WORDS and FIX, as the engine gives one.
+engine_refusal() {
+  V="$1" W="$2" F="$3" yq -n -o json -I0 \
+    '{"status": "error", "kind": "refused", "verb": strenv(V), "error": strenv(W), "fix": strenv(F)}'
+}
+
+# The answers the test numbered, which is how many asks a command that took
+# each of them made; and the asks the fake took.
+answers_numbered() {
+  find "$FAKE_HS_SEQUENCE" -type f -name '[0-9]*' | wc -l | tr -d ' '
+}
+
+asks_made() {
+  cat "$FAKE_HS_LOG/asks"
+}
+
+# The verb of ask N, and an option it carried.
+ask_verb() {
+  yq -r '.verb' "$FAKE_HS_LOG/request.$1.json"
+}
+
+ask_option() {
+  K="$2" yq -r '.options[strenv(K)]' "$FAKE_HS_LOG/request.$1.json"
+}
+
+@test "ST6d8eed9: a filter that failed at apply's read reloads Hammerspoon once, waits for its fresh config, and asks apply again (AC-a45b3aeb.3)" {
+  local response last n
+  response="$(apply_response placed_results)"
+  apply_machine sequence
+  reload_sequence
+  answer 1 "$(reload_refusal apply)"
+  answer 2 "$RELOADING"
+  answer 3 "$OLD_STATE"
+  answer_mode 4 exit-69
+  answer 5 "$FRESH_STATE"
+  cp "$response" "$FAKE_HS_SEQUENCE/6.json"
+  run_arngz apply zeop1
+  assert_success
+  # The second answer is the command's, and one line before it says why.
+  assert_output_contains "$FILTER_WORDS, so arngz reloaded Hammerspoon's config and ran apply again"
+  assert_output_contains "com.apple.mail (displays[0].spaces[0].apps[0]): placed"
+  # Every answer was asked for, and no more: one reload, then state until a
+  # fresh config answered, then one retry.
+  last="$(asks_made)"
+  [ "$last" -eq "$(answers_numbered)" ] || fail "the fake was asked $last times, for $(answers_numbered) answers"
+  [ "$(ask_verb 1)" = apply ] || fail "ask 1 is $(ask_verb 1)"
+  [ "$(ask_verb 2)" = reload ] || fail "ask 2 is $(ask_verb 2)"
+  for ((n = 3; n < last; n++)); do
+    [ "$(ask_verb "$n")" = state ] || fail "ask $n is $(ask_verb "$n"), not state"
+  done
+  [ "$(ask_verb "$last")" = apply ] || fail "the last ask is $(ask_verb "$last")"
+  [ "$(ask_option 1 may_reload)" = true ] || fail "the first apply did not let the engine ask for a reload"
+  [ "$(ask_option "$last" may_reload)" = false ] || fail "the retry let the engine ask for a second reload"
+  [ "$(ask_option "$last" after_reload_of)" = "$(yq -r '.run' "$FAKE_HS_LOG/request.1.json")" ] ||
+    fail "the retry does not name the run it follows: $(ask_option "$last" after_reload_of)"
+  # The run log has each step of the reload.
+  grep -qF " cli reload apply: $FILTER_WORDS; asking Hammerspoon to reload its config" "$(run_log)" ||
+    fail "no record of the reload asked for: $(cat "$(run_log)")"
+  grep -q ' cli reload Hammerspoon answered from a fresh config after [0-9]* s; asking apply again$' "$(run_log)" ||
+    fail "no record of Hammerspoon back: $(cat "$(run_log)")"
+}
+
+@test "ST6d8eed9: an apply that ran while the filter failed asks for the reload in its answer, and the retry's answer is the command's (AC-a45b3aeb.3)" {
+  local first="$BATS_TEST_TMPDIR/ran.json" second last
+  W="$FILTER_WORDS" yq -o json '.reload = strenv(W)' "$(apply_response unseen_results)" >"$first"
+  second="$(apply_response placed_results)"
+  apply_machine sequence
+  reload_sequence
+  cp "$first" "$FAKE_HS_SEQUENCE/1.json"
+  answer 2 "$RELOADING"
+  answer 3 "$FRESH_STATE"
+  cp "$second" "$FAKE_HS_SEQUENCE/4.json"
+  run_arngz apply zeop1
+  assert_success
+  assert_output_contains "$FILTER_WORDS, so arngz reloaded Hammerspoon's config and ran apply again"
+  assert_output_contains "com.apple.Safari (displays[0].spaces[0].apps[1]): placed"
+  refute_output_contains "): unseen"
+  last="$(asks_made)"
+  [ "$last" -eq "$(answers_numbered)" ] || fail "the fake was asked $last times, for $(answers_numbered) answers"
+  [ "$(ask_verb "$last")" = apply ] || fail "the last ask is $(ask_verb "$last")"
+  # The first apply ran, so its desk is the current one.
+  run --separate-stderr "$UTILZ_BIN_DIR/arngz" current
+  assert_success
+  assert_output "zeop1"
+}
+
+@test "ST6d8eed9: a reload the engine refuses while a run is live leaves the first answer, with the refusal's fix, and asks nothing more (AC-a45b3aeb.4)" {
+  apply_machine sequence
+  reload_sequence
+  answer 1 "$(reload_refusal apply)"
+  answer 2 "$(engine_refusal reload "an apply is running (asked for at 2026-11-25T10:00:00Z)" \
+    "another arngz run is live; run it again when it has finished")"
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "the engine refused apply: $FILTER_WORDS"
+  assert_output_contains "Hammerspoon's config was not reloaded: the engine refused reload: an apply is running"
+  assert_output_contains "fix: another arngz run is live; run it again when it has finished"
+  [ "$(asks_made)" -eq "$(answers_numbered)" ] || fail "the fake was asked $(asks_made) times, for $(answers_numbered) answers"
+}
+
+@test "ST6d8eed9: a Hammerspoon not back within ARNGZ_RELOAD_TIMEOUT is exit 1 with the words, and apply is not asked again (AC-a45b3aeb.5)" {
+  local last n numbered
+  apply_machine sequence
+  reload_sequence
+  export ARNGZ_RELOAD_TIMEOUT=2
+  answer 1 "$(reload_refusal apply)"
+  answer 2 "$RELOADING"
+  answer_mode rest exit-69
+  run_arngz apply zeop1
+  assert_exit_code 1
+  assert_output_contains "after the reload of its config, Hammerspoon did not answer within $ARNGZ_RELOAD_TIMEOUT s"
+  assert_output_contains "fix: open Hammerspoon and read its console"
+  last="$(asks_made)"
+  numbered="$(answers_numbered)"
+  [ "$last" -gt "$numbered" ] || fail "the CLI never asked whether Hammerspoon was back"
+  for ((n = numbered + 1; n <= last; n++)); do
+    [ "$(ask_verb "$n")" = state ] || fail "ask $n is $(ask_verb "$n"), not state"
+  done
+}
+
+@test "ST6d8eed9: a bad ARNGZ_RELOAD_TIMEOUT is refused before anything is sent, exit 2" {
+  apply_machine scheduled "$(apply_response placed_results)"
+  export ARNGZ_RELOAD_TIMEOUT=soon
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "ARNGZ_RELOAD_TIMEOUT = 'soon'"
+  [ ! -e "$FAKE_HS_LOG/request.json" ]
+}
+
+@test "ST6d8eed9: discover --save reloads once, and saves nothing when the filter failed again (AC-a45b3aeb.6)" {
+  local last
+  fake_hs sequence
+  catalogue
+  reload_sequence
+  answer 1 "$(reload_refusal discover)"
+  answer 2 "$RELOADING"
+  answer 3 "$FRESH_STATE"
+  answer 4 "$(engine_refusal discover \
+    "$FILTER_WORDS, so windows on desktops not shown could not be named, and a desk read now would leave them out" \
+    "arngz reloaded Hammerspoon's config and its window filter failed again: quit Hammerspoon, open it again, then run arngz again")"
+  run_arngz discover --save fresh
+  assert_exit_code 2
+  assert_output_contains "$FILTER_WORDS, so arngz reloaded Hammerspoon's config and ran discover again"
+  assert_output_contains "quit Hammerspoon, open it again, then run arngz again"
+  [ ! -e "$CAT/fresh.yaml" ] || fail "discover saved a desk from a read whose filter failed"
+  last="$(asks_made)"
+  [ "$last" -eq "$(answers_numbered)" ] || fail "the fake was asked $last times, for $(answers_numbered) answers"
+  [ "$(ask_option "$last" may_reload)" = false ] || fail "the retry let the engine ask for a second reload"
+}
+
+@test "ST6d8eed9: diff and apply --dry-run never let the engine ask for a reload, and never reload (AC-a45b3aeb.7)" {
+  local response="$BATS_TEST_TMPDIR/plan-reload.json"
+  # A plan that carries reload, which the engine never sends: a CLI that acted
+  # on it would ask a second time.
+  W="$FILTER_WORDS" yq -o json '.reload = strenv(W)' "$(engine_response plan base_world base_desk)" >"$response"
+  apply_machine ok "$response"
+  # A red then waits for a fresh config that never comes: a second, not 30.
+  export ARNGZ_RELOAD_TIMEOUT=1
+  run_arngz diff zeop1
+  assert_success
+  [ "$(ask_option 1 may_reload)" = null ] || fail "diff let the engine ask for a reload"
+  [ ! -e "$FAKE_HS_LOG/request.2.json" ] || fail "diff asked the engine again: $(ask_verb 2)"
+  rm -f "$FAKE_HS_LOG"/request.* "$FAKE_HS_LOG/asks"
+  run_arngz apply --dry-run zeop1
+  assert_success
+  [ "$(ask_option 1 may_reload)" = null ] || fail "apply --dry-run let the engine ask for a reload"
+  [ ! -e "$FAKE_HS_LOG/request.2.json" ] || fail "apply --dry-run asked the engine again: $(ask_verb 2)"
+}
+
 @test "0132: an app running with no window to name is reported unseen, and apply exits 0" {
   local response
   response="$(apply_response unseen_results)"

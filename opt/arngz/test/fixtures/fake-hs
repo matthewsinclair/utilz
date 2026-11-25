@@ -28,6 +28,13 @@
 #   unsettled-moved    as unsettled-once, but the second ask is unsettled
 #                      too, its wait begun again at FAKE_HS_BEGAN_AGAIN, as a
 #                      faulty engine's would be; every later ask as ok does
+#   sequence           answer the n-th ask as FAKE_HS_SEQUENCE says, for a
+#                      command that asks several verbs, as a reload and its
+#                      retry do (ST6d8eed9 WP a45b3aeb): FAKE_HS_SEQUENCE/<n>.json
+#                      is that ask's response, written as ok writes it, and
+#                      FAKE_HS_SEQUENCE/<n>.mode names another mode for it (eg
+#                      exit-69, as while Hammerspoon reloads). An ask with
+#                      neither is answered by rest.json or rest.mode.
 #
 # Every ask is also kept as FAKE_HS_LOG/request.<n>.json, counting from 1, for
 # a verb that asks more than once.
@@ -67,6 +74,24 @@ answer_unsettled() {
     '{"status": "ok", "verb": strenv(V), "unsettled": {"wait": strenv(W), "began": strenv(B)}}' >"$response.partial"
   mv "$response.partial" "$response"
 }
+
+# A sequence names each ask's own answer: the mode it is given, and for ok
+# its response.
+if [[ "${FAKE_HS_MODE:-ok}" == sequence ]]; then
+  FAKE_HS_MODE=""
+  for answer in "${FAKE_HS_SEQUENCE:?}/$asks" "$FAKE_HS_SEQUENCE/rest"; do
+    if [[ -f "$answer.mode" ]]; then
+      FAKE_HS_MODE="$(cat "$answer.mode")"
+      break
+    fi
+    if [[ -f "$answer.json" ]]; then
+      FAKE_HS_MODE=ok
+      FAKE_HS_RESPONSE="$answer.json"
+      break
+    fi
+  done
+  [[ -n "$FAKE_HS_MODE" ]] || { echo "fake-hs: no answer for ask $asks in $FAKE_HS_SEQUENCE" >&2; exit 64; }
+fi
 
 case "${FAKE_HS_MODE:-ok}" in
   ok) cp "$FAKE_HS_RESPONSE" "$response"; echo "arngz: ok observe" ;;

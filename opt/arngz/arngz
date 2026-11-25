@@ -708,12 +708,18 @@ seconds_setting() {
 
 # How long one engine call for VERB may take, in seconds: 60, and for discover
 # 180, since it reads every window on every desktop inside one call, and one
-# took 87 s in hv's log (F4, ST589246c/93ea7f8a). ARNGZ_HS_TIMEOUT overrides it
+# took 87 s in hv's log (F4, ST589246c/93ea7f8a). reload and state answer at
+# once, and state is asked again and again while Hammerspoon reloads, so a
+# call to a Hammerspoon in the middle of its reload gives up in 5 s, inside
+# the reload's own wait (ST6d8eed9 WP a45b3aeb). ARNGZ_HS_TIMEOUT overrides it
 # for every verb, which is how the suite makes a call that never answers fail
 # in one second rather than sixty.
 engine_timeout() {
   local default=60
-  if [[ "${1:-}" == discover ]]; then default=180; fi
+  case "${1:-}" in
+    discover) default=180 ;;
+    reload | state) default=5 ;;
+  esac
   seconds_setting ARNGZ_HS_TIMEOUT "$default"
 }
 
@@ -761,9 +767,11 @@ hs_gave_up_waiting() {
 #      could not write one (lib/arngz.lua)
 # with why in ENGINE_ERROR and what fixes it in ENGINE_FIX for each but 0.
 # Whenever the engine wrote a response, ENGINE_KIND says what it was: ok,
-# refused (nothing changed), lua_error, or failed when it named no kind (both
-# its own error, which for apply may come after windows moved), or
-# unreadable; it is empty when there was none.
+# refused (nothing changed), reload (nothing changed, and the engine asks for
+# Hammerspoon's config to be reloaded and the request sent again, ST6d8eed9
+# WP a45b3aeb), lua_error, or failed when it named no kind (both its own
+# error, which for apply may come after windows moved), or unreadable; it is
+# empty when there was none.
 # ENGINE_DIR is the request's temp dir whenever a request was written, for the
 # caller to keep or remove; when nothing was asked, the dir is already gone.
 # A bad ARNGZ_HS_TIMEOUT, or for a scheduled verb a bad ARNGZ_APPLY_TIMEOUT,
@@ -992,9 +1000,10 @@ engine_ask_run() {
   fi
   if [[ "$status" != "ok" ]]; then
     # The engine says which: a refusal before anything changed, with its
-    # reason, or its own Lua error (D25).
+    # reason, or its own Lua error (D25). A reload is a refusal too, whose fix
+    # the CLI carries out itself (engine_ask_reloading).
     ENGINE_KIND="$(yq -r '.kind // "failed"' "$response")"
-    if [[ "$ENGINE_KIND" == refused ]]; then
+    if engine_refused; then
       ENGINE_ERROR="the engine refused $verb: $(yq -r '.error' "$response" | tr '\n' ' ')"
       # The engine may name the fix itself, as it does for an apply that is
       # already running.
@@ -1074,6 +1083,175 @@ engine_ask_quiet() {
       return 2
     fi
   done
+}
+
+# Whether the engine's answer is a refusal before anything changed: refused,
+# or reload, which also asks for Hammerspoon's config to be reloaded
+# (ST6d8eed9 WP a45b3aeb).
+engine_refused() {
+  [[ "$ENGINE_KIND" == refused || "$ENGINE_KIND" == reload ]]
+}
+
+# How long the CLI waits, after it asked for a reload, for Hammerspoon to
+# answer from a fresh config, in seconds (ST6d8eed9 WP a45b3aeb).
+# ARNGZ_RELOAD_TIMEOUT overrides it.
+engine_reload_timeout() {
+  seconds_setting ARNGZ_RELOAD_TIMEOUT 30
+}
+
+# How often the CLI asks whether Hammerspoon answers from a fresh config, in
+# seconds, while it waits after a reload.
+RELOAD_POLL_SECONDS=1
+
+# Set by engine_ask_reloading once Hammerspoon's config has been reloaded:
+# ENGINE_FIRST_KIND is the first answer's ENGINE_KIND, and ENGINE_RELOAD_LOST
+# is 1 when no second answer came. Both say that the command is never
+# "nothing changed" when the first try was an apply that ran, or when the
+# reload left the request without an answer.
+ENGINE_FIRST_KIND=""
+ENGINE_RELOAD_LOST=0
+
+# The words of a reload the engine asks for, into ENGINE_RELOAD_WORDS, from
+# the answer of an ask that returned RC: a refusal of kind reload says it in
+# its error, and an apply that ran says it in its `reload`. Empty when it asks
+# for none. Returns 1 when the response could not be read, with why in
+# ENGINE_ERROR.
+ENGINE_RELOAD_WORDS=""
+engine_reload_words() {
+  local rc="$1" query
+  ENGINE_RELOAD_WORDS=""
+  if [[ $rc -eq 3 && "$ENGINE_KIND" == reload ]]; then
+    query='.error // ""'
+  elif [[ $rc -eq 0 ]]; then
+    query='.reload // ""'
+  else
+    return 0
+  fi
+  if ! ENGINE_RELOAD_WORDS="$(yq_value -r "$query" "$ENGINE_RESPONSE")"; then
+    ENGINE_RELOAD_WORDS=""
+    ENGINE_ERROR="could not read whether the engine asks for a reload, at $ENGINE_RESPONSE: $(yq_words -r "$query" "$ENGINE_RESPONSE")"
+    ENGINE_FIX="$(engine_failing)"
+    return 1
+  fi
+}
+
+# Whether Hammerspoon answers from a fresh config: the engine's state verb
+# says that no reload is still to come. True, or false while it does not
+# answer or answers from the old state.
+engine_fresh() {
+  local rc=0 reloading=""
+  engine_ask state || rc=$?
+  if [[ $rc -eq 0 ]]; then
+    reloading="$(yq_value -r '.reloading' "$ENGINE_RESPONSE")" || reloading=""
+  fi
+  if [[ -n "$ENGINE_DIR" ]]; then
+    if ! rm -rf -- "$ENGINE_DIR"; then warn "arngz: could not remove $ENGINE_DIR"; fi
+    ENGINE_DIR=""
+  fi
+  [[ "$reloading" == false ]]
+}
+
+# engine_ask_reloading <ask> <verb> <desk file> <options file>: ASK
+# (engine_ask, or engine_ask_quiet for a verb that waits for the displays to
+# settle) sends the request, and lets the engine ask for a reload
+# (may_reload). When Hammerspoon's window filter failed, the answer is a
+# refusal of kind reload, or an apply that ran carries `reload`. Then the CLI
+# asks the engine's reload verb, waits up to ARNGZ_RELOAD_TIMEOUT for
+# Hammerspoon to answer from a fresh config, and sends the same request once
+# more, with may_reload false and after_reload_of, this run's id (ST6d8eed9 WP
+# a45b3aeb). The second answer is the command's, and one line before its
+# report says what happened. One reload per command.
+#
+# A reload the engine refused, or one that could not be asked, leaves the
+# first answer standing, with why said, and the refusal's fix in ENGINE_FIX.
+# Hammerspoon not back in time returns 1 with ENGINE_RELOAD_LOST set, and the
+# first answer's response kept. Its exits are otherwise ASK's, and the run log
+# has each step.
+engine_ask_reloading() {
+  local ask="$1" verb="$2" desk="$3" options="$4" timeout rc=0 words why deadline t0
+  local first_response first_error first_dir first_kind reload_error
+  ENGINE_FIRST_KIND=""
+  ENGINE_RELOAD_LOST=0
+  # Judged before anything is sent, as every other setting is: a bad value
+  # found after an apply ran would refuse as though nothing had changed.
+  timeout="$(engine_reload_timeout)" || exit 2
+  if ! why="$(yq -i -o json '.may_reload = true' "$options" 2>&1)"; then
+    engine_unasked "$verb: could not let the engine ask for a reload in $options: $why" "$(tmp_fix)"
+    return 2
+  fi
+  "$ask" "$verb" "$desk" "$options" || rc=$?
+  engine_reload_words "$rc" || return 3
+  words="$ENGINE_RELOAD_WORDS"
+  if [[ -z "$words" ]]; then return "$rc"; fi
+
+  first_response="$ENGINE_RESPONSE"
+  first_error="$ENGINE_ERROR"
+  first_dir="$ENGINE_DIR"
+  first_kind="$ENGINE_KIND"
+  log_record reload "$verb: $words; asking Hammerspoon to reload its config"
+  local asked=0
+  engine_ask reload || asked=$?
+  if [[ $asked -ne 0 ]]; then
+    # ENGINE_FIX stays the reload's: for a refusal, that another run is live.
+    reload_error="$ENGINE_ERROR"
+    if [[ -n "$ENGINE_DIR" ]] && ! rm -rf -- "$ENGINE_DIR"; then warn "arngz: could not remove $ENGINE_DIR"; fi
+    ENGINE_RESPONSE="$first_response"
+    ENGINE_ERROR="$first_error"
+    ENGINE_DIR="$first_dir"
+    ENGINE_KIND="$first_kind"
+    log_record reload "not reloaded: $reload_error"
+    warn "arngz: $words, and Hammerspoon's config was not reloaded: $reload_error"
+    return "$rc"
+  fi
+  if [[ -n "$ENGINE_DIR" ]] && ! rm -rf -- "$ENGINE_DIR"; then warn "arngz: could not remove $ENGINE_DIR"; fi
+  ENGINE_FIRST_KIND="$first_kind"
+
+  t0=$SECONDS
+  deadline=$((SECONDS + timeout))
+  local back=0
+  while [[ $SECONDS -lt $deadline ]]; do
+    sleep "$RELOAD_POLL_SECONDS"
+    if engine_fresh; then
+      back=1
+      break
+    fi
+  done
+  if [[ $back -ne 1 ]]; then
+    log_record reload "not back within $timeout s"
+    ENGINE_RELOAD_LOST=1
+    ENGINE_RESPONSE="$first_response"
+    ENGINE_DIR="$first_dir"
+    ENGINE_KIND="$first_kind"
+    ENGINE_ERROR="after the reload of its config, Hammerspoon did not answer within $timeout s"
+    ENGINE_FIX="open Hammerspoon and read its console"
+    return 1
+  fi
+  log_record reload "Hammerspoon answered from a fresh config after $((SECONDS - t0)) s; asking $verb again"
+  if [[ -n "$first_dir" ]] && ! rm -rf -- "$first_dir"; then warn "arngz: could not remove $first_dir"; fi
+  if ! why="$(R="$ARNGZ_RUN" yq -i -o json '.may_reload = false | .after_reload_of = strenv(R)' "$options" 2>&1)"; then
+    ENGINE_RELOAD_LOST=1
+    ENGINE_RESPONSE=""
+    ENGINE_DIR=""
+    ENGINE_ERROR="after the reload of Hammerspoon's config, arngz could not ask $verb again: $why"
+    ENGINE_FIX="$(tmp_fix)"
+    return 1
+  fi
+  rc=0
+  "$ask" "$verb" "$desk" "$options" || rc=$?
+  warn "arngz: $words, so arngz reloaded Hammerspoon's config and ran $verb again"
+  return "$rc"
+}
+
+# A request after a reload that is never "nothing changed" (ST6d8eed9 WP
+# a45b3aeb): the reload left it without an answer, or its first try was an
+# apply that ran. Exit 1, with what is kept.
+engine_reloaded_exit() {
+  local kept=""
+  if [[ -n "$ENGINE_RESPONSE" && -f "$ENGINE_RESPONSE" ]]; then
+    kept="; its response is kept at $ENGINE_RESPONSE"
+  fi
+  error "arngz: $ENGINE_ERROR$kept; fix: $ENGINE_FIX"
+  exit 1
 }
 
 # The response's log_error and toast_error, said once each per run. The engine
@@ -1961,12 +2139,16 @@ cmd_apply() {
   if [[ $dry -eq 1 ]]; then
     engine_ask plan "$(desk_file "$desk")" "$options" || rc=$?
   else
-    engine_ask apply "$(desk_file "$desk")" "$options" || rc=$?
+    # Hammerspoon's window filter failing is met with one reload and one more
+    # try (ST6d8eed9 WP a45b3aeb). A dry run changes nothing, so it never
+    # reloads.
+    engine_ask_reloading engine_ask apply "$(desk_file "$desk")" "$options" || rc=$?
   fi
   rm -rf -- "$dir"
   # Wherever the engine has taken an apply, the desk is the current one from
   # then on, whatever the report says; a refusal leaves the record alone
-  # (issue 0070).
+  # (issue 0070). An apply that ran before a reload was taken too.
+  if [[ "$ENGINE_FIRST_KIND" == ok ]]; then record_current "$desk"; fi
   if [[ $rc -ne 0 && $ENGINE_PENDING -eq 1 ]]; then
     # Taken and not answered: windows may be moving, so this is not "nothing
     # changed" (design.md "apply, in order", step 4).
@@ -1974,13 +2156,18 @@ cmd_apply() {
     error "arngz: $ENGINE_ERROR (request kept at $ENGINE_DIR/request.json); fix: $ENGINE_FIX"
     exit 1
   fi
-  if [[ $rc -eq 3 && $dry -eq 0 && "$ENGINE_KIND" != refused && -n "$ENGINE_RESPONSE" ]]; then
+  if [[ $rc -eq 3 && $dry -eq 0 && -n "$ENGINE_RESPONSE" ]] && ! engine_refused; then
     # The engine answered, and not with a refusal: its own failure may come
     # after windows moved, so this is never "nothing changed".
     record_current "$desk"
     record_own_sizes "$ENGINE_RESPONSE"
     error "arngz: $ENGINE_ERROR; its response is kept at $ENGINE_RESPONSE; fix: $ENGINE_FIX"
     exit 1
+  fi
+  # After a reload: a request the reload left without an answer, or one whose
+  # first try was an apply that ran, is never "nothing changed".
+  if [[ $rc -ne 0 ]] && { [[ $ENGINE_RELOAD_LOST -eq 1 ]] || [[ "$ENGINE_FIRST_KIND" == ok ]]; }; then
+    engine_reloaded_exit
   fi
   if [[ $rc -ne 0 ]]; then
     engine_refuse
@@ -2090,14 +2277,18 @@ cmd_discover() {
   # request the engine kept carries the options in it.
   rc=0
   # A desk saved is written from one reading, so --save waits for the displays
-  # to settle first; a plain discover only prints what it sees.
+  # to settle first; a plain discover only prints what it sees. A read whose
+  # window filter failed is never a desk: it is met with one reload and one
+  # more try (ST6d8eed9 WP a45b3aeb).
   if [[ -n "$save" ]]; then
-    engine_ask_quiet discover "" "$options" || rc=$?
+    engine_ask_reloading engine_ask_quiet discover "" "$options" || rc=$?
   else
-    engine_ask discover "" "$options" || rc=$?
+    engine_ask_reloading engine_ask discover "" "$options" || rc=$?
   fi
   if [[ $rc -ne 0 ]]; then
     rm -rf -- "$dir"
+    # Hammerspoon's config reloaded and not back is never "nothing changed".
+    if [[ $ENGINE_RELOAD_LOST -eq 1 ]]; then engine_reloaded_exit; fi
     engine_refuse
   fi
   yaml="$dir/desk.yaml"

@@ -346,6 +346,38 @@ do
       and not P.filter_failed({}))
 end
 
+-- ST6d8eed9 WP a45b3aeb: an unseen op planned while the filter failed carries
+-- the filter's words, which ask for a reload when the request lets it; and a
+-- plan after the reload gives the next way out.
+do
+  local u = base_world()
+  table.remove(space(u, 1).windows, 2)
+  u.window_filter = "failed: hs/uielement.lua:134"
+  local ops = P.plan(base_desk(), u, {})
+  local words = P.filter_words(u)
+  -- AC-a45b3aeb.2 cites this arm.
+  check("ST6d8eed9: an unseen op planned while the filter failed carries its words, which ask for a reload"
+    .. " when the request lets it",
+    kinds(ops) == "unseen" and ops[1].filter == words and words == "Hammerspoon's window filter failed (hs/uielement.lua:134)"
+      and P.reload_reason(ops, true) == words,
+    ops_text(ops) .. " / " .. tostring(P.reload_reason(ops, true)))
+  check("ST6d8eed9: a request that does not let the engine ask gets no reload",
+    P.reload_reason(ops, false) == nil and P.reload_reason(ops, nil) == nil)
+  local v = base_world()
+  table.remove(space(v, 1).windows, 2)
+  v.window_filter = "ran"
+  local vops = P.plan(base_desk(), v, {})
+  check("ST6d8eed9: an unseen op with the filter run asks for no reload, since a reload gives it nothing",
+    kinds(vops) == "unseen" and vops[1].filter == nil and P.reload_reason(vops, true) == nil, ops_text(vops))
+  local none = P.plan(base_desk(), base_world(), {})
+  check("ST6d8eed9: a plan with no unseen op asks for no reload", P.reload_reason(none, true) == nil, ops_text(none))
+  local after = P.plan(base_desk(), u, { after_reload = true })
+  check("ST6d8eed9: after the reload, an unseen op from a filter that failed again carries the next way out",
+    after and after[1] and after[1].fix == P.FILTER_FIX_AFTER_RELOAD
+      and string.find(P.FILTER_FIX_AFTER_RELOAD, "quit Hammerspoon, open it again", 1, true) ~= nil,
+    after and after[1] and tostring(after[1].fix))
+end
+
 -- Which unseen op counts (issue 0132): plan marks one uncounted only when no
 -- window read failed, since the window not read may be the entry's, and
 -- diff's exit, P.plan_exit, counts every op without the mark.

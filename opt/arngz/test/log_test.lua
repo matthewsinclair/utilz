@@ -254,6 +254,17 @@ end
 
 local function fresh_globals()
   _G.arngz_screens, _G.arngz_running, _G.arngz_timer = nil, nil, nil
+  -- What the reload verb sets (ST6d8eed9 WP a45b3aeb), which a reload clears.
+  _G.arngz_reloading, _G.arngz_reload_timer = nil, nil
+end
+
+-- The monotonic clock at 100 ms a read, so a wait counted on it, as the
+-- unseen wait's 1.5 s is, ends in a few reads rather than 1500.
+local function quick_clock(f)
+  f.hs.timer.absoluteTime = function()
+    f.abs = f.abs + 1e8
+    return f.abs
+  end
 end
 
 -- A display watcher this module and LOG keep, as M.watch finds it on a
@@ -459,6 +470,24 @@ arm("the tally", function()
   local errored = L.finished_fields({ status = "error", kind = "lua_error", verb = "apply", error = "boom", tally = tally3 },
     1, "/tmp/arngz.log")
   check("finished: a run that failed on its own error shows no fix of a tally's", errored.fix == "", errored.fix)
+  -- ST6d8eed9 WP a45b3aeb: a reload asked for before anything changed is a
+  -- refusal, exit 2, and finished says that the CLI reloads; an apply that
+  -- ran and carries reload says so too; an answer that asks none does not.
+  local words = "Hammerspoon's window filter failed (hs/uielement.lua:134)"
+  local reloading = L.finished_fields({ status = "error", kind = "reload", verb = "apply", error = words,
+    fix = "arngz reloads Hammerspoon's config and runs it again" }, 1, "/tmp/arngz.log")
+  local ran = L.finished_fields({ status = "ok", verb = "apply", exit = 1, tally = unseen_first, reload = words }, 1,
+    "/tmp/arngz.log")
+  check("finished: a reload asked for before anything changed is refused, exit 2, with reload and the filter's words",
+    reloading.outcome == "refused" and reloading.exit == 2 and reloading.reload == true and reloading.first == words,
+    tostring(reloading.outcome) .. " / " .. tostring(reloading.exit) .. " / " .. tostring(reloading.reload))
+  check("finished: an apply that ran and asks for a reload says reload, and an answer that asks none says it does not",
+    ran.reload == true and done.reload == false and refused.reload == false and errored.reload == false,
+    table.concat({ tostring(ran.reload), tostring(done.reload), tostring(refused.reload), tostring(errored.reload) }, " / "))
+  check("options: the start record says when the engine may ask for a reload, and which run a retry follows",
+    L.options_text({ may_reload = true }) == "may_reload=true"
+      and L.options_text({ may_reload = false, after_reload_of = "R-FIRST" }) == "after_reload_of=R-FIRST",
+    L.options_text({ may_reload = true }) .. " / " .. L.options_text({ may_reload = false, after_reload_of = "R-FIRST" }))
 end)
 
 -- -------------------------------- arm 4: every acting kind has its field
@@ -957,6 +986,180 @@ arm("the read after the creates", function()
         and in_block(label, "record", uuid .. ": " .. table.concat(before, " ") .. " (current ")
         and in_block(label, "filed", made .. " under none"))
   end
+end)
+
+-- ---------------- ST6d8eed9 WP a45b3aeb: a reload after the filter fails
+-- The engine's side of AC-a45b3aeb.1, .2, .4 and .6 runs here, where apply
+-- runs through M.run with every timer drained; engine_test.lua drives
+-- M.execute alone.
+
+-- The point named NAME of RUN, as its record's text, or "".
+local function point_of(recs, run, name)
+  for _, r in ipairs(recs) do
+    if r.run == run and r.event == "point" and r.text:match("^" .. name .. " ") then return r.text end
+  end
+  return ""
+end
+
+-- AC-a45b3aeb.1
+arm("a reload asked for before anything changes", function()
+  local log = tmpdir() .. "/arngz.log"
+  local real_execute = M.execute
+  local executed = 0
+  M.execute = function(...)
+    executed = executed + 1
+    return real_execute(...)
+  end
+  -- One apply of the base desk on the world where the filter failed and
+  -- Safari's window went unnamed, under RUN with OPTIONS; its answer, and how
+  -- many times it executed ops.
+  local function apply(run, options)
+    fresh_globals()
+    local f = new_fake()
+    quick_clock(f)
+    _G.arngz_screens = watcher_of(f, log)
+    M.observe = function()
+      local w = F.unseen_unread_world()
+      w.accessibility = true
+      return w
+    end
+    executed = 0
+    local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = options, run = run, log = log })
+    return response, executed
+  end
+  local ok, err = pcall(function()
+    local words = P.filter_words(F.unseen_unread_world())
+    local asked, asked_executed = apply("R-ASKED", { may_reload = true })
+    local plain, plain_executed = apply("R-PLAIN", {})
+    apply("R-AGAIN", { after_reload_of = "R-ASKED" })
+    local recs = records(log)
+    local finished = point_of(recs, "R-ASKED", "finished")
+    check("reload: a filter that failed at apply's read refuses with kind reload and the filter's words, executing nothing",
+      asked and asked.status == "error" and asked.kind == "reload" and asked.error == words and asked_executed == 0,
+      asked and (tostring(asked.kind) .. " / " .. tostring(asked.error) .. " / executed " .. asked_executed))
+    check("reload: its finished is refused, exit 2, with reload, and apply is no longer marked running",
+      finished:find("outcome=refused", 1, true) ~= nil and finished:find("exit=2", 1, true) ~= nil
+        and finished:find("reload=true", 1, true) ~= nil and rawget(_G, "arngz_running") == nil, finished)
+    check("reload: a request that does not let the engine ask runs on, with no reload in its answer",
+      plain and plain.status == "ok" and plain.reload == nil and plain_executed > 0
+        and point_of(recs, "R-PLAIN", "finished"):find("reload=false", 1, true) ~= nil,
+      plain and (tostring(plain.status) .. " / " .. tostring(plain.reload)))
+    check("reload: the run after a reload names the run it follows, and its fix is the next way out",
+      point_of(recs, "R-AGAIN", "start"):find("after_reload_of=R-ASKED", 1, true) ~= nil
+        and point_of(recs, "R-AGAIN", "finished"):find("fix=" .. P.FILTER_FIX_AFTER_RELOAD, 1, true) ~= nil,
+      point_of(recs, "R-AGAIN", "start") .. " / " .. point_of(recs, "R-AGAIN", "finished"))
+  end)
+  M.execute = real_execute
+  if not ok then error(err, 0) end
+end)
+
+-- AC-a45b3aeb.2: the read after the creates, as arm "the read after the
+-- creates" makes one, but with the filter failed there and Safari's window
+-- unnamed. The desk's extra desktop holds no app, so only the create needs
+-- Hammerspoon.
+arm("a reload asked for by the read after the creates", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  quick_clock(f)
+  _G.arngz_screens = watcher_of(f, log)
+  local before, after = {}, {}
+  for i, sp in ipairs(F.base_world().screens[1].spaces) do
+    before[i] = sp.id
+    after[i] = sp.id
+  end
+  local made = before[#before] + 1
+  after[#after + 1] = made
+  f.live = before
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.addSpaceToScreen = function()
+    f.live = after
+    return true
+  end
+  local failed_filter = "failed: hs/uielement.lua:134"
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    w.window_filter = "ran"
+    if #f.live > #before then
+      local s = w.screens[1]
+      s.spaces[#s.spaces + 1] = { id = made, ordinal = #f.live, type = "user", uuid = "SPACE-" .. made, active = false,
+        windows = {} }
+      w.window_filter = failed_filter
+      table.remove(s.spaces[1].windows, 2)
+    end
+    return w
+  end
+  local desk = F.base_desk()
+  local spaces = desk.displays[1].spaces
+  spaces[#spaces + 1] = { name = "spare", apps = {} }
+  local response = run_engine(f, { verb = "apply", desk = desk, options = { may_reload = true }, run = "R-LATER", log = log })
+  local recs = records(log)
+  check("reload: an apply whose read after its creates failed the filter finishes, and its answer asks for a reload",
+    response and response.status == "ok" and response.reload == P.filter_words({ window_filter = failed_filter })
+      and find(recs, "report", (#after - #before) .. " desktop(s) created") ~= nil,
+    response and (tostring(response.status) .. " / " .. tostring(response.reload) .. " / " .. last_line(recs)))
+  check("reload: its finished says reload", point_of(recs, "R-LATER", "finished"):find("reload=true", 1, true) ~= nil,
+    point_of(recs, "R-LATER", "finished"))
+end)
+
+-- AC-a45b3aeb.4, and discover's side of AC-a45b3aeb.6.
+arm("the reload and state verbs", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  local reloads, reloads_at_answer = 0, nil
+  f.hs.reload = function() reloads = reloads + 1 end
+  local write = f.hs.json.write
+  f.hs.json.write = function(response, path)
+    reloads_at_answer = reloads
+    return write(response, path)
+  end
+  M.observe = function() return world_fixture() end
+  _G.arngz_running = { verb = "apply", at = "2026-11-25T10:00:00Z" }
+  local refused = run_engine(f, { verb = "reload", options = {}, run = "R-RELOAD-LIVE", log = log })
+  check("reload: refused while an apply runs, with the fix to run it again when that run has finished, and nothing reloaded",
+    refused and refused.status == "error" and refused.kind == "refused"
+      and refused.fix == "another arngz run is live; run it again when it has finished"
+      and tostring(refused.error):find("an apply is running", 1, true) ~= nil
+      and reloads == 0 and rawget(_G, "arngz_reloading") == nil and rawget(_G, "arngz_running").verb == "apply",
+    refused and (tostring(refused.kind) .. " / " .. tostring(refused.error)))
+  _G.arngz_running = nil
+  local reload = run_engine(f, { verb = "reload", options = {}, run = "R-RELOAD", log = log })
+  check("reload: answers at once, and reloads Hammerspoon's config on a timer after the answer",
+    reload and reload.status == "ok" and reload.reloading == true and reloads_at_answer == 0 and reloads == 1,
+    reload and (tostring(reload.reloading) .. " / reloads at the answer " .. tostring(reloads_at_answer)
+      .. ", after it " .. reloads))
+  check("reload: until the reload, a new run is held off and the old state says one is to come",
+    rawget(_G, "arngz_running") ~= nil and rawget(_G, "arngz_running").verb == "reload"
+      and rawget(_G, "arngz_reloading") == true)
+  local held = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-HELD", log = log })
+  check("reload: an apply asked for before the reload is refused, saying a reload is running",
+    held and held.kind == "refused" and tostring(held.error):find("a reload is already running", 1, true) ~= nil,
+    held and tostring(held.error))
+  local old = run_engine(f, { verb = "state", options = {}, run = "R-OLD", log = log })
+  fresh_globals()
+  local fresh = run_engine(f, { verb = "state", options = {}, run = "R-FRESH", log = log })
+  check("state: the old Lua state says a reload is to come, and a fresh one says none is",
+    old and old.status == "ok" and old.reloading == true and fresh and fresh.status == "ok" and fresh.reloading == false,
+    tostring(old and old.reloading) .. " / " .. tostring(fresh and fresh.reloading))
+  -- A read whose filter failed is never a desk (AC-a45b3aeb.6).
+  local failed_filter = "failed: hs/uielement.lua:134"
+  M.observe = function()
+    local w = world_fixture()
+    w.window_filter = failed_filter
+    return w
+  end
+  local first = run_engine(f, { verb = "discover", options = { may_reload = true }, run = "R-D1", log = log })
+  local again = run_engine(f, { verb = "discover", options = { after_reload_of = "R-D1" }, run = "R-D2", log = log })
+  local plain = run_engine(f, { verb = "discover", options = {}, run = "R-D3", log = log })
+  check("discover: a read whose filter failed asks for a reload when the request lets it, with no desk",
+    first and first.kind == "reload" and first.error == P.filter_words({ window_filter = failed_filter })
+      and first.desk == nil, first and tostring(first.kind))
+  check("discover: after the reload it refuses with the next way out, and with no reload let, with the first",
+    again and again.kind == "refused" and again.fix == P.FILTER_FIX_AFTER_RELOAD and again.desk == nil
+      and plain and plain.kind == "refused" and plain.fix == P.FILTER_FIX and plain.desk == nil,
+    tostring(again and again.fix) .. " / " .. tostring(plain and plain.fix))
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))
