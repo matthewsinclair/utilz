@@ -1,0 +1,15 @@
+{
+  "id": "01M89909RDXQ3YZGGDHT335TRV",
+  "ts": "2026-11-25T11:56:06.798Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "thread.set",
+  "subject": {
+    "type": "thread",
+    "id": "ST6d8eed9e4875782f"
+  },
+  "payload": {
+    "field": "realised",
+    "via": "dehydrate"
+  }
+}

@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
-heartbeat_at: 2026-11-25 11:32Z
+heartbeat_at: 2026-11-25 11:50Z
 status: active
 focus: "25 Nov fold 2 (hv decision 33): B, C and D landed, records 124a41ec; resume WP A at risk at ~/Devel/scratch/utilz-cc/wt-desks1125 b04b86ea, after the probe; holds 53 and 54 wait for hv's ready. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
