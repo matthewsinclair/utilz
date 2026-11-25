@@ -1,0 +1,16 @@
+{
+  "id": "01M897MJGGEMTE3QZYAZ6R19FN",
+  "ts": "2026-11-25T11:32:13.969Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 54,
+    "text": "ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Then WP A's at-risk code (b04b86ea on cc/desks1125) goes on, or goes back to design if the probe shows another id gone."
+  }
+}

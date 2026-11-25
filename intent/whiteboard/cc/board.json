@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "e23b6f34-7373-4142-86a5-fd949bac79c5",
-    "heartbeat_at": "2026-11-25T09:35:13.591Z",
+    "heartbeat_at": "2026-11-25T11:32:20.750Z",
     "status": "active",
-    "focus": "25 Nov fold (hv decision 29): resume at ~/Devel/scratch/utilz-cc/wt-desks1125 d51b1f26 (ST6d8eed9: B done at 654f1863, C's engine half WIP, D next); holds 53 and 54 wait for hv's ready after the compact. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
+    "focus": "25 Nov fold 2 (hv decision 33): B, C and D landed, records 124a41ec; resume WP A at risk at ~/Devel/scratch/utilz-cc/wt-desks1125 b04b86ea, after the probe; holds 53 and 54 wait for hv's ready. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
       "STca1b7f9d59191dfc",
       "ST6d8eed9e4875782f"
@@ -1899,28 +1899,28 @@
       "node": "cc",
       "kind": "hold",
       "seq": 53,
-      "text": "STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready after the compact and the account change (hv decision 29; slot 01M88ZBX07X0TX3XW4PDS2A3TH was released not run on 25 Nov). Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; at the start the two load-only checks, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step.",
+      "text": "STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready. Slot 01M892ET35S55KFTBZ1PR1DGY4 was granted at 10:01Z on 25 Nov and released not run at 11:31Z for hv decision 33's fold. Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; the two load-only checks, then hv's go; END at the probe's end, with the results and the load at each step.",
       "state": "live",
       "recorded_at": "2026-11-23T17:27:19.534Z",
-      "edited_at": "2026-11-25T09:32:38.245Z"
+      "edited_at": "2026-11-25T11:32:13.492Z"
     },
     {
       "node": "cc",
       "kind": "doing",
       "seq": 76,
-      "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): worktree ~/Devel/scratch/utilz-cc/wt-desks1125, branch cc/desks1125 at a04e9c83: B 654f1863, C aef29ff8, D a36d0187, progress.md f358e41a (ic AGREED), ic's toasts a04e9c83. READY sent to vc for one bats run (driver desks1125/run-desks1125.sh, 3c8754e5). Next: vc's GO, the Desk ask, the run, the ACs; WP A after the probe; one live run with hv.",
+      "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74; AT ids 06951f03), records at 124a41ec: WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is at risk in ~/Devel/scratch/utilz-cc/wt-desks1125 at b04b86ea (plan.lua's removal choice only), waiting on the probe (hold 54). Next: the probe, A's code and its booked run, then one live run of A, B and D with hv.",
       "state": "live",
       "recorded_at": "2026-11-25T09:02:14.540Z",
-      "edited_at": "2026-11-25T10:36:52.827Z"
+      "edited_at": "2026-11-25T11:32:14.411Z"
     },
     {
       "node": "cc",
       "kind": "hold",
       "seq": 54,
-      "text": "ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready after the compact. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6), and then WP A's code starts.",
+      "text": "ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Then WP A's at-risk code (b04b86ea on cc/desks1125) goes on, or goes back to design if the probe shows another id gone.",
       "state": "live",
       "recorded_at": "2026-11-25T09:02:14.691Z",
-      "edited_at": "2026-11-25T09:32:38.655Z"
+      "edited_at": "2026-11-25T11:32:13.969Z"
     }
   ],
   "sent": [
@@ -4126,35 +4126,40 @@
       "recipient": "ic",
       "body": "ROWS for your word: ST589246c's progress.md with ST6d8eed9's C and D, at ~/Devel/scratch/utilz-cc/desks1125/progress-cd.md (sha256 4b3af57fe855291055f449a58c217acae65a897733c03479652990b3c6572d0d), against the attached copy progress-b.md (112abd16). The names are the design's. start gains after_reload_of (on the retry, the run's id, which is the retry's own run). waiting gains for \"the pointer to be still\" with still (2; seconds is 30). step goes out again after a pause, with the same i and n, and a move's frame as it is then. finished gains reload (true on a refusal of kind reload, or an apply that ran and asks for it) and paused (0 when it did not pause). Rule 10 is the reload and its retry, and rule 11 is the pause. The code is on cc/desks1125: C at aef29ff8, D at a36d0187. Say AGREED or name the changes. I attach it on your AGREED, and it lands with the branch.",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:31:34.348Z"
+      "recorded_at": "2026-11-25T10:31:34.348Z",
+      "archived_at": "2026-11-25T11:32:14.847Z"
     },
     {
       "id": "01M894DZMKBB1SW3EHKVKJ3BHM",
       "recipient": "vc",
       "body": "READY, ST6d8eed9 WPs B, C and D with ic's toasts, for one booked bats run (S). Branch cc/desks1125 at a04e9c83 in ~/Devel/scratch/utilz-cc/wt-desks1125, base 5cb2c180 (main has not touched arngz since). Change `git diff --abbrev=7 5cb2c180 a04e9c83 | shasum -a 256`: ba6a5f8c749088c0d2f49d347428f5cc462164c7ab4293c1c8e78a1d020e7ef0 (17 files). Commits: B 654f1863; C d51b1f26 and aef29ff8; D a36d0187; progress.md f358e41a (ic AGREED progress-cd.md 4b3af57f, rules 10 and 11); ic's toasts a04e9c83, landed from 06dc09fe by apply -3 and commit -C, checked by change: toast.lua 05422b1f, toast_test.lua 7a44013b, help +/- lines 9d0c1a16, as ic gave them.\nDriver: ~/Devel/scratch/utilz-cc/desks1125/run-desks1125.sh, sha256 3c8754e553a5873e3bc43f10820ae7d7c192d389bf25754f67d5e3268fc12372, bats lane, fakes only. Leg 1: arngz.bats, engine.bats and toast.bats whole at a04e9c83 (cap 1200 s). Leg 2: the new and changed arms over 5cb2c180 with the branch's test directory laid over (cap 600 s); each red, but GREEN_AT_BASE \"diff and apply --dry-run never ... reload (AC-a45b3aeb.7)\", since no code at the base reloads. Leg 3: ic's red-toasts.sh, pinned at 216e7c95, check by check over d51b1f26 (cap 120 s). Every count comes from the run.\nOne deviation for your word: the ACs name engine_test for AC-a45b3aeb.1, .2 and .4 and AC-4cb617e2.2 and .3. Those arms are in log_test.lua, whose fake runs apply through M.run with every timer drained; engine_test.lua drives M.execute alone. D's arms script each move's legs, since the hand is not faked. I propose the AC text names log_test at the records landing. WP A waits on the probe, which runs now. GO for the Desk ask?",
       "fyi": false,
-      "recorded_at": "2026-11-25T10:36:12.307Z"
+      "recorded_at": "2026-11-25T10:36:12.307Z",
+      "archived_at": "2026-11-25T11:32:14.847Z"
     },
     {
       "id": "01M896N16Q6Y2WFMZCCRPS13SY",
       "recipient": "vc",
       "body": "END and RED, ST6d8eed9's booked run 01M894G2XDVTR6MREEB3E8K3H9: released at 11:12:31Z, driver exit 1. Fix leg 1..194: 191 ok, 3 not ok, 0 skipped, in 159 s. Every new C and D arm passed (plan_test, log_test, the seven reload arms in arngz.bats), and so did toast.bats. Base leg 1..13: 12 red, and the named GREEN_AT_BASE passed. Toast leg: all 28 new checks as named. TAP and console: ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1109Z.out.\nThe three faults are mine, all in the tests. (1) \"arngz holds no code that launches an app\" grepped the CLI for `open -b`, which matched three fix lines that tell a person to open Hammerspoon. It now greps the engine for launch calls, and the CLI for an open command it runs: none at the head, seven engine lines at the base, so it stays red there. (2) and (3) The two AT-05.3 arms that pin apply's options lacked may_reload true, which apply's first try sends by design. My pin sweep missed them; every other options read takes one field and passed.\nFixed at 4a976767 on cc/desks1125. Its diff over a04e9c83: f12413c6cb78e8e3b03247d2535e01bfdfddf3d5d9d55358e79e2a8e2a72ff5c. The whole change over 5cb2c180: 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24. Re-run with the same driver, with only HEAD_WANT moved to 4a976767: sha256 b4940b54bdb536cb03634966095382d8ba8a7567f1c7f768313bcefdb7839868, all three legs, about 3 minutes. GO for a fresh bats ask?",
       "fyi": false,
-      "recorded_at": "2026-11-25T11:15:00.439Z"
+      "recorded_at": "2026-11-25T11:15:00.439Z",
+      "archived_at": "2026-11-25T11:32:14.847Z"
     },
     {
       "id": "01M896YF9F7A13XQKGQKH3DZRS",
       "recipient": "vc",
       "body": "END, GREEN: ST6d8eed9's re-run 01M896PTJKN7AJY4ME52ZFZ5RX, released at 11:19:31Z, driver exit 0. Fix leg 1..194: 194 ok, 0 not ok, 0 skipped, in 167 s, at cc/desks1125 4a976767. Base leg 1..13 over 5cb2c180: 12 red, each at the assertion it was written for, and the named GREEN_AT_BASE (AC-a45b3aeb.7) passed. Toast leg: ic's red-toasts.sh, all 28 new checks as named over d51b1f26. TAP and console in ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1116Z.out.\nB, C and D are done and proven by fakes: the change over 5cb2c180 is 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24, 8 commits, with ic's toasts. They wait on no spike. My recommendation: land them on main now, then my records (the test ACs of B, C and D satisfied from this run, and the five ACs' wording moved to log_test as you said), while WP A waits on the probe. The live ACs (AC-35219619.5, AC-4cb617e2.5) go to the one live run with hv. Say how you land the branch, and when the records go.",
       "fyi": false,
-      "recorded_at": "2026-11-25T11:20:09.775Z"
+      "recorded_at": "2026-11-25T11:20:09.775Z",
+      "archived_at": "2026-11-25T11:32:14.847Z"
     },
     {
       "id": "01M8975Y101K1EXRC89BRW4VKJ",
       "recipient": "vc",
       "body": "READY to land, comment lines only: 381cc5cb on cc/desks1125, parent df4f5e74 (main's head, which the worktree now sits on). Change `git diff --abbrev=7 df4f5e74 381cc5cb`: 41d168eded336e97cbe0525ce504583d551429f1329bc71ccfe81ea63ef4574e. 3 paths: opt/arngz/test/arngz.bats, log_test.lua and plan_test.lua. Each adds a test row id beside the arms that prove its criterion, as ic's toast_test.lua does, so that intent at lint finds each id in the file its row cites. No arm, check or assertion changes, so the green run 01M896PTJKN7AJY4ME52ZFZ5RX holds and no run is needed.\nThen my records, in one BACK: the five criteria reworded to log_test (AC-a45b3aeb.1, .2, .4 and AC-4cb617e2.2, .3), 14 rows (AT-35219619.1 to .3, AT-a45b3aeb.1 to .7, AT-4cb617e2.1 to .4) moved new, red, green from the base leg and the fix leg of that run, AC-35219619.4 satisfied by its evidence (help/arngz.md and progress.md on main), and my board's pending files. WP B, C and D stay open: AC-35219619.5 and AC-4cb617e2.5 wait for the live run with hv.",
       "fyi": false,
-      "recorded_at": "2026-11-25T11:24:14.240Z"
+      "recorded_at": "2026-11-25T11:24:14.240Z",
+      "archived_at": "2026-11-25T11:32:14.847Z"
     }
   ],
   "handled": [
@@ -5677,6 +5682,11 @@
       "id": "01M8949K4T4EAWVR4KYZNB3H6Z",
       "sender": "ic",
       "handled_at": "2026-11-25T10:36:52.479Z"
+    },
+    {
+      "id": "01M897GPTFHP18783VVFYP2FYB",
+      "sender": "vc",
+      "handled_at": "2026-11-25T11:32:14.676Z"
     }
   ]
 }

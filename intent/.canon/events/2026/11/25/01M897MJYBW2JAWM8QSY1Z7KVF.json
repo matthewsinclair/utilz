@@ -1,0 +1,16 @@
+{
+  "id": "01M897MJYBW2JAWM8QSY1Z7KVF",
+  "ts": "2026-11-25T11:32:14.411Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 76,
+    "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74; AT ids 06951f03), records at 124a41ec: WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is at risk in ~/Devel/scratch/utilz-cc/wt-desks1125 at b04b86ea (plan.lua's removal choice only), waiting on the probe (hold 54). Next: the probe, A's code and its booked run, then one live run of A, B and D with hv."
+  }
+}

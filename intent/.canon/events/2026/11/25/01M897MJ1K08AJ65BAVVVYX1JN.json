@@ -1,0 +1,16 @@
+{
+  "id": "01M897MJ1K08AJ65BAVVVYX1JN",
+  "ts": "2026-11-25T11:32:13.492Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 53,
+    "text": "STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready. Slot 01M892ET35S55KFTBZ1PR1DGY4 was granted at 10:01Z on 25 Nov and released not run at 11:31Z for hv decision 33's fold. Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; the two load-only checks, then hv's go; END at the probe's end, with the results and the load at each step."
+  }
+}

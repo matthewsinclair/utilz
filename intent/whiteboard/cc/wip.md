@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
-heartbeat_at: 2026-11-25 09:35Z
+heartbeat_at: 2026-11-25 11:32Z
 status: active
-focus: "25 Nov fold (hv decision 29): resume at ~/Devel/scratch/utilz-cc/wt-desks1125 d51b1f26 (ST6d8eed9: B done at 654f1863, C's engine half WIP, D next); holds 53 and 54 wait for hv's ready after the compact. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "25 Nov fold 2 (hv decision 33): B, C and D landed, records 124a41ec; resume WP A at risk at ~/Devel/scratch/utilz-cc/wt-desks1125 b04b86ea, after the probe; holds 53 and 54 wait for hv's ready. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
@@ -14,7 +14,7 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ## DOING
 
 - STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
-- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): worktree ~/Devel/scratch/utilz-cc/wt-desks1125, branch cc/desks1125 at a04e9c83: B 654f1863, C aef29ff8, D a36d0187, progress.md f358e41a (ic AGREED), ic's toasts a04e9c83. READY sent to vc for one bats run (driver desks1125/run-desks1125.sh, 3c8754e5). Next: vc's GO, the Desk ask, the run, the ACs; WP A after the probe; one live run with hv. (edited)
+- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74; AT ids 06951f03), records at 124a41ec: WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is at risk in ~/Devel/scratch/utilz-cc/wt-desks1125 at b04b86ea (plan.lua's removal choice only), waiting on the probe (hold 54). Next: the probe, A's code and its booked run, then one live run of A, B and D with hv. (edited)
 
 ## TODO
 
@@ -22,8 +22,8 @@ _(none)_
 
 ## Holds
 
-- STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready after the compact and the account change (hv decision 29; slot 01M88ZBX07X0TX3XW4PDS2A3TH was released not run on 25 Nov). Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; at the start the two load-only checks, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step. (edited)
-- ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready after the compact. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6), and then WP A's code starts. (edited)
+- STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready. Slot 01M892ET35S55KFTBZ1PR1DGY4 was granted at 10:01Z on 25 Nov and released not run at 11:31Z for hv decision 33's fold. Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; the two load-only checks, then hv's go; END at the probe's end, with the results and the load at each step. (edited)
+- ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Then WP A's at-risk code (b04b86ea on cc/desks1125) goes on, or goes back to design if the probe shows another id gone. (edited)
 
 ## Watch-outs
 
