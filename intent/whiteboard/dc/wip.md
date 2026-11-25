@@ -6,7 +6,7 @@ session_id: 2dbb57ed-0454-4234-9c6c-b08df829eea9
 heartbeat_at: 2026-11-25 10:08Z
 status: active
 focus: "25 Nov: holding. Next: read ic's proof plan for arca_swift's 0003 and menuz's 0114 (the CI menuz-app dispatch and its Xcode) when ic sends its design; the CHANGELOG lines for ST6d8eed9 and STca1b7f9's spike parts when their READYs come. Open: ST0031/01 at hv's cut; ST0029 banked at 48111094, on hv's hold."
-claims: [ST0031/01]
+claims: [ST0031/01, ISSUE:Ibd734d359114761b]
 ---
 
 # DevX Claude (dc)
