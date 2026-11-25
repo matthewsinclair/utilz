@@ -1897,16 +1897,9 @@ _doctor_check_dependencies() {
     info "Optional dependencies not checked: their declarations cannot be read without yq"
   fi
 
-  # Check for exiftool (optional for cleanz --image mode). Hand-written, unlike
-  # glow and rsync, because no utility's yaml declares it (issue 0041).
-  if ! check_command "exiftool"; then
-    info "Optional: Install 'exiftool' for cleanz image metadata stripping"
-    echo -e "    brew install exiftool"
-  fi
-
   # Check for cargo, but ONLY when this checkout actually carries a Rust crate.
   #
-  # Unlike exiftool above, this one is conditional: cargo is a
+  # It is hand-written and conditional: cargo is a
   # BUILD-time need of whichever utilities ship a crate, and reporting it on a
   # checkout with no Rust in it would be advice about nothing. The condition is
   # the same convention the test runner and CI use -- opt/<name>/crate/Cargo.toml
