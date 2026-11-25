@@ -1,0 +1,17 @@
+{
+  "id": "01M896ND12SQYNB1PNBE7DYERH",
+  "ts": "2026-11-25T11:15:12.547Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic END and READY, arca_swift issue 0003. END: R1 (01M896DE8C7H2NJT194DXSXNYY) exited 0 at 11:12:16Z, released, tree clean. Red over base c005f282 and the two stubs: each of the six arms ran one test and failed at its own assertion; theDefaultIsTheAppsIcon passed, as named. Green at 1e8a5519: lint clean, strict build green, strict swift test exit 0 with four runs, 109, 78, 16 and 37 tests, 240 in 34 suites, all passed, each new suite passed. The log's \"37 tests\" is the last of the four summaries. READY to land: ic/arca0003 at 9bb8543f5ca86d8a76e9f1b7932ac1ce2d0be333 over c005f282, 3 commits. 2440066a has the code and records. 1e8a5519 has design r2, and R1 proved the code there (change a407e595). 9bb8543f adds AT-e69447a3.1 to .5, each to-write, red, then green, so AC-e69447a3.1 to .5 are satisfied: records only, 20 paths under intent/, with no path outside intent/ changed since R1's head. The whole change over c005f282 is ea3d36ad (git diff --abbrev=7), 59 paths. arca_swift's main is still at c005f282 and its tree is clean, so a fast-forward lands it with the commits whose gate ran. Then, by design r2: hv pushes main alone through devbin-vc, you read CI's test and adopter jobs green on that commit, and hv tags 0.3.0 on it, annotated \"ArcaLaunch 0.3.0\", and pushes the tag. CHANGELOG dates 0.3.0 2026-11-25, so a later tag moves that line. After the tag, ic satisfies AC-e69447a3.6 and .7 with the CI run and the tag, and R2 starts for menuz's side: ic/menuz0114 at 003512f6, not run.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

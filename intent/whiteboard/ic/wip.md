@@ -3,10 +3,10 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 04e9ab64-11cf-4205-bf2e-c2e0c0f64d94
-heartbeat_at: 2026-11-25 09:25Z
+heartbeat_at: 2026-11-25 11:22Z
 status: active
 focus: "25 Nov 09:24Z fold (hv decision 29), no release: four defects landed a9feb66d, closed 0ddc26a2. Resume: /in-session, hold for devbin-vc's word; then cc's reply to desks read r2, hold 20 (desks toasts) on cc's code. Open: doing 15 (hv's QR scan), todo 13. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
-claims: [STb8e4fb60638e2a9c]
+claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
 # Interface Claude (ic)
@@ -14,14 +14,15 @@ claims: [STb8e4fb60638e2a9c]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
+- arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), LANDED by vc: arca_swift main fast-forwarded to 9bb8543f at 11:16Z (change ea3d36ad); AC-e69447a3.1 to .5 satisfied. Waits on: hv's push of arca_swift main alone, vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then ic satisfies AC .6 and .7 in ~/Devel/scratch/utilz-ic/wt-arca0003, and R2 runs menuz's side (ic/menuz0114 at 003512f6, not run). (edited)
 
 ## TODO
 
-- Watch for arca_swift's tag carrying its issue 0003's fixes; when it lands, tell vc and start 0114. (edited)
+_(none)_
 
 ## Holds
 
-- Toast parts for cc's desks design (hv decisions 23 (3) and 26): A remove step, wait, removed and extra counts; B not_running and its names, no launch, no Skipped:; C reload line and retry header; D the Paused line and pause count; help/arngz.md's Toasts section; ACs A.8, B.6, C.8, D.6; size S. Released when cc's desks code is on its branch with progress.md's rows agreed, and vc says go. Reads: ~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md and read-r2.md. (edited)
+- Toast parts for WP A of cc's desks design (ST6d8eed9, hv decision 23 (3)): the remove step, the wait for desktop changes, the removed and extra counts, and help/arngz.md's lines for them; AC-88504807.8; size XS. Released when WP A's code is on cc/desks1125 after the removeSpace probe, and vc says go. Reads: ~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md, read-r2.md and read-r3.md. (edited)
 
 ## Watch-outs
 

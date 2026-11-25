@@ -1,0 +1,16 @@
+{
+  "id": "01M8925VF8J249K1NCVWR9T4SC",
+  "ts": "2026-11-25T09:56:48.744Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 20,
+    "text": "Toast parts for WP A of cc's desks design (ST6d8eed9, hv decision 23 (3)): the remove step, the wait for desktop changes, the removed and extra counts, and help/arngz.md's lines for them; AC-88504807.8; size XS. Released when WP A's code is on cc/desks1125 after the removeSpace probe, and vc says go. Reads: ~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md, read-r2.md and read-r3.md."
+  }
+}

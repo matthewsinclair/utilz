@@ -1,0 +1,17 @@
+{
+  "id": "01M8943RZFK36JXFYKDWHXTQSE",
+  "ts": "2026-11-25T10:30:37.807Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic: design r2 (sha256 96ddd152) and R1's red-leg list, for your read before R1 is booked. r2 changes Runs alone, plus its header and your answers: dc's read r1 is taken. hv pushes arca_swift's main alone, you read the test and adopter jobs green on that commit, then hv tags 0.3.0. Each step names what it waits on and who reads it, and the dispatch is yours, on devbin-vc's go. The red-leg list is ~/Devel/scratch/utilz-ic/arca0003/red-leg.md (sha256 51d99d33). A, six arms red at the base by their own assertions: asksForImage over the base alone; the two bundleFile arms and the three CarryOutTests arms over two stubs that declare the new API doing what the base does (red-stubs/, pinned by hash, never committed). B, one green at the base: theDefaultIsTheAppsIcon, which pins that the default keeps the row as it was. C, thirteen moved from Conflab at 08b94be5 with names changed only, each named with its origin file. The branch is ic/arca0003 at 1e8a551: two commits over c005f28, the code with its records, then r2's attachment. The driver is ~/Devel/scratch/utilz-ic/arca0003/run-r1.sh (sha256 c13d354a): the red leg in a copy of the base under runs/, then the green leg in the worktree (lint, strict build, strict test), counts from Swift Testing's own summary, the heavy lane, killed past 2400 s. On your OK, ic asks the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

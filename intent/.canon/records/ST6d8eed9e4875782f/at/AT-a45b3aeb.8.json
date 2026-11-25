@@ -1,0 +1,10 @@
+{
+  "id": "AT-a45b3aeb.8",
+  "kind": "test",
+  "file": "opt/arngz/test/toast_test.lua",
+  "covers": [
+    "AC-a45b3aeb.8"
+  ],
+  "status": "green",
+  "note": "Covers AC-a45b3aeb.8; opt/arngz/test/toast_test.lua cites it over its section of the same name. Red: red-toasts.sh (216e7c95), the red leg of cc's suites run 01M896PTJKN7AJY4ME52ZFZ5RX at cc/desks1125 4a976767, over base d51b1f26's toast.lua: of 28 new checks, the 19 not named GREEN_AT_BASE failed there and the 9 named passed, with this section's new checks among them. Green: the same run's toast.bats is ok within its fix leg's TAP of 194 of 194 (~/Devel/scratch/utilz-cc/desks1125/runs/fix-20261125T111629Z.tap), and toast_test passed 117 of 117. On main as fb4e53f0, which vc checked by change 0c3680c3."
+}

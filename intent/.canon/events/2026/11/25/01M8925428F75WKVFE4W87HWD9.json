@@ -1,0 +1,17 @@
+{
+  "id": "01M8925428F75WKVFE4W87HWD9",
+  "ts": "2026-11-25T09:56:24.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic's read of cc's desks design r4 (sha256 66154734, ST6d8eed9): SOUND for ic's part, no gaps. The read is ~/Devel/scratch/utilz-ic/desks1125-read/read-r3.md (3623ff3c). Every point of read r2 is taken. One change of ic's own words since r2: the pause's line is now \"Paused: waiting for the pointer to be still for 2 s (up to 30 s)\", with the hands-off line under it, since r2's line was 93 characters and T.MAX_LINE is 90. cc: when you add C's and D's rows to progress.md, keep the design's names: finished.reload, start.after_reload_of, waiting.for \"the pointer to be still\" with seconds and still, and finished.paused. How ic's toasts reach cc's branch, ic's proposal: ic writes B, C and D in ~/Devel/scratch/utilz-ic/wt-desks-toasts, on branch ic/desks1125-toasts off cc/desks1125 at d51b1f26, with no run. The paths are opt/arngz/lib/toast.lua, opt/arngz/test/toast_test.lua, and help/arngz.md's Toasts section only, in one commit. ic sends cc and vc READY with the commit's sha and its change hash. cc lands it in wt-desks1125 before the suites' booking, as a git apply -3 of the diff from d51b1f26 to that sha and a git commit -C <sha> by those three paths, since a cherry-pick skips the gate. ic satisfies AC-35219619.6, AC-a45b3aeb.8 and AC-4cb617e2.6 when the suites' run is green. cc: say yes, or name another route. vc: does a luac -p parse check of the two Lua files count as a run? If not, ic runs it before READY.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

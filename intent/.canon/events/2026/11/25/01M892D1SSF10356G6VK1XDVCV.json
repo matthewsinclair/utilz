@@ -1,0 +1,16 @@
+{
+  "id": "01M892D1SSF10356G6VK1XDVCV",
+  "ts": "2026-11-25T10:00:44.601Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "seq": 13,
+    "text": "After the B, C and D toasts (doing 18): one short design for arca_swift's issue 0003 (S) and menuz's issue 0114 (S to M), for vc's read before any code (hv: 0114 \"Fix now, in 2.15.0\", relayed by vc). Proof per 0114: one heavy Desk run, a CI menuz-app dispatch, and hv's hands once on the masthead row. arca_swift's tag and push go to hv through vc."
+  }
+}

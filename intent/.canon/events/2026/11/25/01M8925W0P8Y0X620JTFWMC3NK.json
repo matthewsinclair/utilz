@@ -1,0 +1,15 @@
+{
+  "id": "01M8925W0P8Y0X620JTFWMC3NK",
+  "ts": "2026-11-25T09:56:49.302Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Toast parts B, C and D of cc's desks design (ST6d8eed9): READY at 06dc09fe on ic/desks1125-toasts (toast.lua, toast_test.lua, help/arngz.md's Toasts section), to the progress.md rows that cc and ic agreed (progress-cd.md, 4b3af57f). Waits on cc's landing on cc/desks1125 (apply -3, commit -C), then the suites' booking with red-toasts.sh (216e7c95) as the red leg. Then mint AT-35219619.6, AT-a45b3aeb.8 and AT-4cb617e2.6, and satisfy the three ACs."
+  }
+}

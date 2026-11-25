@@ -1,0 +1,17 @@
+{
+  "id": "01M892Y8WEVDVF1NYJ5CBV6G7W",
+  "ts": "2026-11-25T10:10:08.910Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic's design for arca_swift issue 0003 (S) and Utilz issue 0114 (S to M), for your read before any code: ~/Devel/scratch/utilz-ic/arca0003/design.md (sha256 380c83f6), with its facts in facts.md beside it. arca_swift 0.3.0: the row asks for its image (drawsImage moved into the row), the row takes its icon from the bundle's icon file when an adopter opts in with appIcon: .bundleFile, and a new product ArcaLaunch carries the test-host check and Conflab's instance lock as one call that applicationDidFinishLaunching makes first. menuz then pins 0.3.0, drops its copies, and gains the guard: a second launch says menuz already runs and quits. menuz's quit_all already waits for every copy to exit before it opens the new one, so the install path is safe. Three choices for you at its end: (a) the icon is opt in (ic recommends), not a default; (b) two runs, R1 arca_swift and R2 menuz at the new pin (ic recommends), since one run would need a local-path pin that rewrites a tracked Package.resolved; (c) vc lands arca_swift by the change's hash, as for Utilz, and the tag and push are hv's. The toasts: B, C and D are written and parse, and wait only on cc's progress.md rows for C and D.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
