@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 16e2c2bd-e1ce-4d05-891c-1784ba97a994
-heartbeat_at: 2026-11-25 07:34Z
+heartbeat_at: 2026-11-25 09:25Z
 status: active
-focus: "24 Nov: end of day (hv decision 21). Docs synced and landed: dc 369ede2c, cc fb4b7cf0, ic c4b1a6c1. hv pushes main. Holds for hv's word tomorrow; hold 31 stands."
+focus: "25 Nov: folded for hv's estate compact (hv decision 29). Resume from ~/Devel/scratch/utilz-vc/RESUME.md: hv's push and CI's prez.bats verdict, the spike's and the probe's results, then cc's ST6d8eed9 READY. Hold for devbin-vc's word before any run."
 claims: []
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) did not run: slot 01M86TCTMC2NZ1GYDPPZ8HBGCN was granted at 13:02Z and released "not run" by cc at 13:43Z, at hv's lid close. Released when hv says ready again: cc makes a fresh ask at the Desk, runs the load-only check, then vc gives hv the command.
+_(none)_
 
 ## Watch-outs
 
@@ -39,7 +39,6 @@ _(none)_
 - hv, 31 Oct, first-hand in vc's session, received by vc's date -u of 14:12Z: 'Go with your recommendations on hold 24'. (2) ST0029, Retire Python, resumes after Devbin 0.1.19's sweep, owned by dc, widened to dc's census of the Python outside its scope (hold 24's text, archived with this decision, and ~/Devel/scratch/utilz-dc/python-census-20261030.txt), with xtrct's port byte-exact, since it feeds the Talga Rd accounting. (3) ST0017/04 is cancelled, with that reason on it. (4) git rm of the whiteboard's .history/ trees, 48 files, was refused by the pre-commit gate's append-only guard, since Intent's whiteboard protocol keeps .history/ append-only; vc restored all 48 from HEAD with nothing committed, withdraws the recommendation, and puts it back to hv: keep them (vc's rec), or remove them by hand past the gate, which is hv's alone. (5) vc's 15 spent messages in hv's inbox are cleared by hv's own '! intent wb clear vc --node hv', which vc then commits. 0114, hold 24's (1), stays parked on arca_swift's tag (ic's todo 13; intent/wip.md). Peers read this decision at pickup; dc records no copy.
 - vc, 23 Nov 2026: cc's design for STca1b7f9 (35510494: objective, context, design.md and four WPs), read against hv decision 13, is approved for its spike, M1 to M3, once vc has read the probes' bytes. Code waits on three things: the spike's results, each WP's body and acceptance criteria recorded, and hv's word on WP5, Appgate's grab point, which cc recommends and vc backs. vc's five notes to cc, sent with this read: (1) The two ways past a full-screen desktop on the laptop alone, leaving full screen or Mission Control, were vc's words in the question decision 13 answered, not hv's, so design.md says so. Turning down leaving full screen is cc's design choice, and vc tells hv it as that. (2) A void bindings record, after a reboot or a logout, falls back to today's rules until the next Save Desk. The design and help/arngz.md say so, and AC 13's steps save each desk in the same session first. (3) The design says what keeps two runs from losing each other's write of the record. The engine refuses a second apply (arngz:999-1000), and the design says whether a discover --save can run beside one. (4) WP5 is one rule: a press only where the deepest element is the web area itself, and only in the title strip. Appgate is a VPN client, so M3's point is chosen by that rule. (5) A window that newest's rule misses is left unarranged, never mis-taken, and the design says so. The spike moves hv's windows, so hv runs it in hv's own terminal, booked at the Desk. ic is second reader, on the design now and on the code before it lands, in place of dc, whom ST0031/01 holds (vc, the same day, at ic's return from hv's compact). (edited)
 - vc, 23 Nov 2026: decision 111's code gate is amended. hv's word on WP5 is in: hv decision 15 left it out, and M3 with it. cc codes WP3, the round through B, and WP4's failure half, its words and their fix, now, in a worktree off main, with no run, for ic to read second. cc read that neither depends on M1, M2 or WP5, and vc takes that read. WP1, WP2 and WP4's Mission Control leg wait on the spike's results, and the spike waits on hv's return (hv decision 16). Nothing lands before ic's read and vc's check by change.
-- vc, 24 Nov 2026: the release dry run passed in hv's own terminal, on main at b3f9a633, as devbin-vc relayed to vc before vc's date -u of 17:21Z. vc did not read the output first-hand. By devbin-vc's read: it resolved 2.15.0, and no step failed. The pre-flight passed with hv's keychain. The object step attaches Menuz.app.zip and SHA256SUMS, and then the formula step runs formula publish --pull, so the step order is proven. The legs are candidate, local and macos. This closes decision 116's open point. Next: hv pushes main (2540b6fd..b3f9a633 and this record) to upstream and local.
 
 ---
 

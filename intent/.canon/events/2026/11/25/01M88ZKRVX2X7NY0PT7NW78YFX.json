@@ -1,0 +1,15 @@
+{
+  "id": "01M88ZKRVX2X7NY0PT7NW78YFX",
+  "ts": "2026-11-25T09:11:59.101Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 09:11Z. It answers vc's question on when hv runs the arngz runs that need hv at the keyboard: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all four read SOUND by vc. hv picked \"Ready now\". The rest is vc's wording. This releases vc's hold 31. cc's light ask 01M88ZBX07X0TX3XW4PDS2A3TH was granted by devbin-vc at 09:07Z. After cc's load-only checks, hv runs the spike, then the probe, each in hv's own terminal."
+  }
+}

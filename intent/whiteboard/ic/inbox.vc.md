@@ -1,16 +1,8 @@
 # inbox: vc -> ic
 
-## (2026-11-25 07:36Z) FYI only -- no response needed.
+## (2026-11-25 09:24Z) FYI only -- no response needed.
 
-HOLD for devbin-vc's kickoff (hv decision 22). Every utilz-* seat finishes its boot and then holds: no edits, no runs, no Desk asks and no commits. vc passes on the kickoff with each seat's next step.
-
-## (2026-11-25 08:19Z)
-
-GO, hv decision 23 (25 Nov). Your 4 defects, filed and fixed in a worktree: mdagg --strip-front-matter cuts any --- block, not only one at line 1; macoz setpicfor parses --pattern and never uses it, and its --dry-run still needs fileicon; prez.yaml says stdin input and "comrak is the only crate"; prez's USAGE omits present -o. With them, the "Personal use" line in the expz, macoz, mdagg, pdf2md and xtrct READMEs, since LICENSE is MIT (ST0019 WP-04; dc's finding). Your Desk asks, with their drivers' paths, go to devbin-vc and vc. Leave CHANGELOG.md alone: put your lines in your READY, and vc passes them to dc. Next: second reader on cc's arngz design when cc sends it. STb8e4fb6's AC .8 waits for hv's phone scan, and todo 13 stands.
-
-## (2026-11-25 08:30Z) (edited)
-
-hv decision 25: make macoz setpicfor's --pattern work. hv picked "Make --pattern work" over the recommendation to remove it. --pattern names the icon files setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. First edit Iac62c37's fix and proof to say so (doc before code). Then send your records READY again with its new hash, and vc lands it then. Your records READY (change f5a6ef45) is not landed. vc read it and found it sound apart from Iac62c37's fix.
+ESTATE FOLD AND COMPACT (hv decision 29, hv's word through devbin-vc at 09:22Z). Start nothing new: the Desk grants nothing until devbin-vc's word after the cycle. cc's spike and probe slot runs to its END, then cc folds. Each seat: localfold with no release (archive what is finished, clear what is handled, commit your own board and records by path). Bank work in progress outside main: a worktree's changes go in a commit on its own branch, never on main. Make your RESUME current, and set a one-line focus that says where you resume. Then go quiet: no tool call in flight, no background waiter, nothing half-written. Send vc "FOLDED: <your resume line>". After hv's compact: /in-session, then hold for devbin-vc's word before any run.
 
 ---
 

@@ -319,6 +319,23 @@
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc and read by its date -u of 08:57Z: hv picked \"Push now (Recommended)\" for Utilz main, so that CI reads the new code and the prez.bats leg before the 2.15.0 cut. The rest is vc's wording. The push is a fast-forward of both remotes from 1e67d084. vc's own push was refused by its session's safety check, as in hv decision 17, so hv runs the push in vc's session. vc sends devbin-vc the pushed sha, CI's run id and then its verdict.",
       "state": "live",
       "recorded_at": "2026-11-25T08:58:45.050Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 28,
+      "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 09:11Z. It answers vc's question on when hv runs the arngz runs that need hv at the keyboard: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all four read SOUND by vc. hv picked \"Ready now\". The rest is vc's wording. This releases vc's hold 31. cc's light ask 01M88ZBX07X0TX3XW4PDS2A3TH was granted by devbin-vc at 09:07Z. After cc's load-only checks, hv runs the spike, then the probe, each in hv's own terminal.",
+      "state": "live",
+      "recorded_at": "2026-11-25T09:11:59.101Z",
+      "edited_at": "2026-11-25T09:12:07.531Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 29,
+      "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 09:22Z. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I need to roll over to a different account, too.\" The rest is the wording of devbin-vc and vc. Nothing new starts, and the Desk grants nothing until devbin-vc's word after the cycle. cc's slot 01M88ZBX07X0TX3XW4PDS2A3TH, with hv at the keyboard for spike v3 and the probe, runs to its END, then cc folds. Each Utilz seat localfolds without a release: it archives what is finished, clears what is handled, commits its own board and records by path, banks what lives outside the tree, keeps its RESUME current, and sets a one-line focus that says where it resumes. Then it goes quiet. vc sends devbin-vc one message with each seat's resume line and whether hv's push of main is done. After hv's compact, each seat runs /in-session, then holds for devbin-vc's word before any run.",
+      "state": "live",
+      "recorded_at": "2026-11-25T09:24:15.065Z"
     }
   ],
   "sent": [],
