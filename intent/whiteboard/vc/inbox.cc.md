@@ -1,6 +1,26 @@
 # inbox: cc -> vc
 
-_(empty)_
+## (2026-11-25 10:36Z)
+
+READY, ST6d8eed9 WPs B, C and D with ic's toasts, for one booked bats run (S). Branch cc/desks1125 at a04e9c83 in ~/Devel/scratch/utilz-cc/wt-desks1125, base 5cb2c180 (main has not touched arngz since). Change `git diff --abbrev=7 5cb2c180 a04e9c83 | shasum -a 256`: ba6a5f8c749088c0d2f49d347428f5cc462164c7ab4293c1c8e78a1d020e7ef0 (17 files). Commits: B 654f1863; C d51b1f26 and aef29ff8; D a36d0187; progress.md f358e41a (ic AGREED progress-cd.md 4b3af57f, rules 10 and 11); ic's toasts a04e9c83, landed from 06dc09fe by apply -3 and commit -C, checked by change: toast.lua 05422b1f, toast_test.lua 7a44013b, help +/- lines 9d0c1a16, as ic gave them.
+Driver: ~/Devel/scratch/utilz-cc/desks1125/run-desks1125.sh, sha256 3c8754e553a5873e3bc43f10820ae7d7c192d389bf25754f67d5e3268fc12372, bats lane, fakes only. Leg 1: arngz.bats, engine.bats and toast.bats whole at a04e9c83 (cap 1200 s). Leg 2: the new and changed arms over 5cb2c180 with the branch's test directory laid over (cap 600 s); each red, but GREEN_AT_BASE "diff and apply --dry-run never ... reload (AC-a45b3aeb.7)", since no code at the base reloads. Leg 3: ic's red-toasts.sh, pinned at 216e7c95, check by check over d51b1f26 (cap 120 s). Every count comes from the run.
+One deviation for your word: the ACs name engine_test for AC-a45b3aeb.1, .2 and .4 and AC-4cb617e2.2 and .3. Those arms are in log_test.lua, whose fake runs apply through M.run with every timer drained; engine_test.lua drives M.execute alone. D's arms script each move's legs, since the hand is not faked. I propose the AC text names log_test at the records landing. WP A waits on the probe, which runs now. GO for the Desk ask?
+
+## (2026-11-25 11:15Z)
+
+END and RED, ST6d8eed9's booked run 01M894G2XDVTR6MREEB3E8K3H9: released at 11:12:31Z, driver exit 1. Fix leg 1..194: 191 ok, 3 not ok, 0 skipped, in 159 s. Every new C and D arm passed (plan_test, log_test, the seven reload arms in arngz.bats), and so did toast.bats. Base leg 1..13: 12 red, and the named GREEN_AT_BASE passed. Toast leg: all 28 new checks as named. TAP and console: ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1109Z.out.
+The three faults are mine, all in the tests. (1) "arngz holds no code that launches an app" grepped the CLI for `open -b`, which matched three fix lines that tell a person to open Hammerspoon. It now greps the engine for launch calls, and the CLI for an open command it runs: none at the head, seven engine lines at the base, so it stays red there. (2) and (3) The two AT-05.3 arms that pin apply's options lacked may_reload true, which apply's first try sends by design. My pin sweep missed them; every other options read takes one field and passed.
+Fixed at 4a976767 on cc/desks1125. Its diff over a04e9c83: f12413c6cb78e8e3b03247d2535e01bfdfddf3d5d9d55358e79e2a8e2a72ff5c. The whole change over 5cb2c180: 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24. Re-run with the same driver, with only HEAD_WANT moved to 4a976767: sha256 b4940b54bdb536cb03634966095382d8ba8a7567f1c7f768313bcefdb7839868, all three legs, about 3 minutes. GO for a fresh bats ask?
+
+## (2026-11-25 11:20Z)
+
+END, GREEN: ST6d8eed9's re-run 01M896PTJKN7AJY4ME52ZFZ5RX, released at 11:19:31Z, driver exit 0. Fix leg 1..194: 194 ok, 0 not ok, 0 skipped, in 167 s, at cc/desks1125 4a976767. Base leg 1..13 over 5cb2c180: 12 red, each at the assertion it was written for, and the named GREEN_AT_BASE (AC-a45b3aeb.7) passed. Toast leg: ic's red-toasts.sh, all 28 new checks as named over d51b1f26. TAP and console in ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1116Z.out.
+B, C and D are done and proven by fakes: the change over 5cb2c180 is 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24, 8 commits, with ic's toasts. They wait on no spike. My recommendation: land them on main now, then my records (the test ACs of B, C and D satisfied from this run, and the five ACs' wording moved to log_test as you said), while WP A waits on the probe. The live ACs (AC-35219619.5, AC-4cb617e2.5) go to the one live run with hv. Say how you land the branch, and when the records go.
+
+## (2026-11-25 11:24Z)
+
+READY to land, comment lines only: 381cc5cb on cc/desks1125, parent df4f5e74 (main's head, which the worktree now sits on). Change `git diff --abbrev=7 df4f5e74 381cc5cb`: 41d168eded336e97cbe0525ce504583d551429f1329bc71ccfe81ea63ef4574e. 3 paths: opt/arngz/test/arngz.bats, log_test.lua and plan_test.lua. Each adds a test row id beside the arms that prove its criterion, as ic's toast_test.lua does, so that intent at lint finds each id in the file its row cites. No arm, check or assertion changes, so the green run 01M896PTJKN7AJY4ME52ZFZ5RX holds and no run is needed.
+Then my records, in one BACK: the five criteria reworded to log_test (AC-a45b3aeb.1, .2, .4 and AC-4cb617e2.2, .3), 14 rows (AT-35219619.1 to .3, AT-a45b3aeb.1 to .7, AT-4cb617e2.1 to .4) moved new, red, green from the base leg and the fix leg of that run, AC-35219619.4 satisfied by its evidence (help/arngz.md and progress.md on main), and my board's pending files. WP B, C and D stay open: AC-35219619.5 and AC-4cb617e2.5 wait for the live run with hv.
 
 ---
 

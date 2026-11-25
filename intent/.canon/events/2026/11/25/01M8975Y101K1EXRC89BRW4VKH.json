@@ -1,0 +1,17 @@
+{
+  "id": "01M8975Y101K1EXRC89BRW4VKH",
+  "ts": "2026-11-25T11:24:14.240Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "READY to land, comment lines only: 381cc5cb on cc/desks1125, parent df4f5e74 (main's head, which the worktree now sits on). Change `git diff --abbrev=7 df4f5e74 381cc5cb`: 41d168eded336e97cbe0525ce504583d551429f1329bc71ccfe81ea63ef4574e. 3 paths: opt/arngz/test/arngz.bats, log_test.lua and plan_test.lua. Each adds a test row id beside the arms that prove its criterion, as ic's toast_test.lua does, so that intent at lint finds each id in the file its row cites. No arm, check or assertion changes, so the green run 01M896PTJKN7AJY4ME52ZFZ5RX holds and no run is needed.\nThen my records, in one BACK: the five criteria reworded to log_test (AC-a45b3aeb.1, .2, .4 and AC-4cb617e2.2, .3), 14 rows (AT-35219619.1 to .3, AT-a45b3aeb.1 to .7, AT-4cb617e2.1 to .4) moved new, red, green from the base leg and the fix leg of that run, AC-35219619.4 satisfied by its evidence (help/arngz.md and progress.md on main), and my board's pending files. WP B, C and D stay open: AC-35219619.5 and AC-4cb617e2.5 wait for the live run with hv.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

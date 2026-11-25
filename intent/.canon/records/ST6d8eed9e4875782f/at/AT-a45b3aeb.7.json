@@ -1,0 +1,10 @@
+{
+  "id": "AT-a45b3aeb.7",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-a45b3aeb.7"
+  ],
+  "status": "green",
+  "note": "Covers AC-a45b3aeb.7; opt/arngz/test/arngz.bats cites it beside arngz.bats's arm 'diff and apply --dry-run never let the engine ask for a reload, and never reload'. Red: not red at the base by design: the driver named this arm GREEN_AT_BASE in advance, since no code at 5cb2c180 reloads at all, and it passed there as named. It is a guard: a CLI that sent may_reload for a plan, or asked again after one, fails it by the request's options or by a second ask, in the base leg of run 01M896PTJKN7AJY4ME52ZFZ5RX, cc's booked bats run of 25 Nov 2026 (driver run-desks1125.sh b4940b54, read SOUND by vc and devbin-vc) (~/Devel/scratch/utilz-cc/desks1125/runs/base-20261125T111629Z.tap). Green: the fix leg of the same run, at cc/desks1125 4a976767, 194 of 194 ok (~/Devel/scratch/utilz-cc/desks1125/runs/fix-20261125T111629Z.tap). On main since vc's landing at df4f5e74, checked by change 0caee12b, with this row's id beside its arms since 06951f03."
+}

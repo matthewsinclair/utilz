@@ -3,8 +3,8 @@
   "origin": "01M88YXTHQFMGVCXRSXPMK9Z54",
   "title": "A reload and one retry after Hammerspoon's window filter fails",
   "scope": "S",
-  "status": "not-started",
-  "objective": "",
+  "status": "done",
+  "objective": "When Hammerspoon's window filter fails, arngz reloads Hammerspoon's config and runs apply or discover once more (hv decision 23).",
   "body": "# A reload and one retry after Hammerspoon's window filter fails\n\ncc's work package under the thread's design.md, section C (hv decision 23 (3)). ic is the second reader.\n\n## The change\n\n- **opt/arngz/lib/plan.lua.** `P.reload_reason`, and the second try's fix words.\n- **opt/arngz/lib/arngz.lua.** `may_reload` in the request. On the first try, apply's start read refuses with kind `reload` when the filter failed, and a later failed read that leaves an entry unseen gives the response `reload`. discover refuses with kind `reload` on the first try, and never saves from a failed filter on the second. A `reload` verb, refused while a run is live, sets `arngz_running` and `arngz_reloading` and schedules `hs.reload()` on a timer.\n- **opt/arngz/arngz.** One function for apply, auto's apply and discover: ask the `reload` verb, poll for the new state up to `ARNGZ_RELOAD_TIMEOUT` (a seconds_setting), then send the request once more with `may_reload` false and `after_reload_of`. The line before the second report, the refused and not-back ends, and a `log_record` for each step. diff and apply --dry-run never reload.\n- **opt/arngz/lib/log.lua and ST589246c's progress.md.** `finished.reload` and `start.after_reload_of`.\n- **help/arngz.md.** The filter's paragraph, the exit codes and `ARNGZ_RELOAD_TIMEOUT`.\n\n## Acceptance\n\nAC-a45b3aeb.1 to .8, as design.md's Acceptance gives them. AC-a45b3aeb.8 is ic's.\n\n## Tests\n\n- plan_test.lua: `P.reload_reason`.\n- engine_test.lua: the first try's refusal, and the `reload` verb refused while a run is live.\n- arngz.bats, with the fake hs: the reload and the retry, a refused reload, Hammerspoon not back in time, discover, diff and apply --dry-run.\n\n## Size\n\nS.\n",
   "preamble": ""
 }

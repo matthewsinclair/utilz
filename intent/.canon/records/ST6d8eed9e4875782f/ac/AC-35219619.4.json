@@ -3,6 +3,7 @@
   "text": "help/arngz.md and progress.md say that apply never launches.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "help/arngz.md at 06951f03: apply's step 4 ('apply never launches an app: one that is not running is left so, and the report says so') and Finished's counts ('not running'); ST589246c's progress.md as attached on main (17598642): finished's not_running field, 'entries whose app is not running, which apply never launches'"
   }
 }

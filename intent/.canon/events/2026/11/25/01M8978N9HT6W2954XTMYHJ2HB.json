@@ -1,0 +1,14 @@
+{
+  "id": "01M8978N9HT6W2954XTMYHJ2HB",
+  "ts": "2026-11-25T11:25:43.602Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST6d8eed9e4875782f/AC-a45b3aeb.4"
+  },
+  "payload": {
+    "text": "The `reload` verb is refused while a run is live, and the CLI then keeps the first answer with its fix. log_test and arngz.bats."
+  }
+}

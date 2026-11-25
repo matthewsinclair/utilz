@@ -1,0 +1,17 @@
+{
+  "id": "01M896N16Q6Y2WFMZCCRPS13SX",
+  "ts": "2026-11-25T11:15:00.439Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END and RED, ST6d8eed9's booked run 01M894G2XDVTR6MREEB3E8K3H9: released at 11:12:31Z, driver exit 1. Fix leg 1..194: 191 ok, 3 not ok, 0 skipped, in 159 s. Every new C and D arm passed (plan_test, log_test, the seven reload arms in arngz.bats), and so did toast.bats. Base leg 1..13: 12 red, and the named GREEN_AT_BASE passed. Toast leg: all 28 new checks as named. TAP and console: ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1109Z.out.\nThe three faults are mine, all in the tests. (1) \"arngz holds no code that launches an app\" grepped the CLI for `open -b`, which matched three fix lines that tell a person to open Hammerspoon. It now greps the engine for launch calls, and the CLI for an open command it runs: none at the head, seven engine lines at the base, so it stays red there. (2) and (3) The two AT-05.3 arms that pin apply's options lacked may_reload true, which apply's first try sends by design. My pin sweep missed them; every other options read takes one field and passed.\nFixed at 4a976767 on cc/desks1125. Its diff over a04e9c83: f12413c6cb78e8e3b03247d2535e01bfdfddf3d5d9d55358e79e2a8e2a72ff5c. The whole change over 5cb2c180: 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24. Re-run with the same driver, with only HEAD_WANT moved to 4a976767: sha256 b4940b54bdb536cb03634966095382d8ba8a7567f1c7f768313bcefdb7839868, all three legs, about 3 minutes. GO for a fresh bats ask?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

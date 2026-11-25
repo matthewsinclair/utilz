@@ -1,0 +1,17 @@
+{
+  "id": "01M896YF9F7A13XQKGQKH3DZRR",
+  "ts": "2026-11-25T11:20:09.775Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END, GREEN: ST6d8eed9's re-run 01M896PTJKN7AJY4ME52ZFZ5RX, released at 11:19:31Z, driver exit 0. Fix leg 1..194: 194 ok, 0 not ok, 0 skipped, in 167 s, at cc/desks1125 4a976767. Base leg 1..13 over 5cb2c180: 12 red, each at the assertion it was written for, and the named GREEN_AT_BASE (AC-a45b3aeb.7) passed. Toast leg: ic's red-toasts.sh, all 28 new checks as named over d51b1f26. TAP and console in ~/Devel/scratch/utilz-cc/desks1125/runs/ and run-console-20261125T1116Z.out.\nB, C and D are done and proven by fakes: the change over 5cb2c180 is 0caee12b126747cc6158075a0fd35d2ed1f893426758e750ac7c6578355b2f24, 8 commits, with ic's toasts. They wait on no spike. My recommendation: land them on main now, then my records (the test ACs of B, C and D satisfied from this run, and the five ACs' wording moved to log_test as you said), while WP A waits on the probe. The live ACs (AC-35219619.5, AC-4cb617e2.5) go to the one live run with hv. Say how you land the branch, and when the records go.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

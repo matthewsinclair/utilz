@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
-heartbeat_at: 2026-11-25 09:32Z
+heartbeat_at: 2026-11-25 09:35Z
 status: active
 focus: "25 Nov fold (hv decision 29): resume at ~/Devel/scratch/utilz-cc/wt-desks1125 d51b1f26 (ST6d8eed9: B done at 654f1863, C's engine half WIP, D next); holds 53 and 54 wait for hv's ready after the compact. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
@@ -14,7 +14,7 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ## DOING
 
 - STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
-- ST6d8eed9e4875782f (hv decisions 23 and 26): recorded at 5cb2c180 (4 WPs, 28 ACs, design.md r4). Worktree ~/Devel/scratch/utilz-cc/wt-desks1125, branch cc/desks1125: WP B done at 654f1863, not run; WP C's engine half WIP at d51b1f26; WP D not started. Next: C's log, CLI and tests, then D, then one booked bats run, ic's toasts on the branch, WP A after the probe, and one live run with hv. (edited)
+- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): worktree ~/Devel/scratch/utilz-cc/wt-desks1125, branch cc/desks1125 at a04e9c83: B 654f1863, C aef29ff8, D a36d0187, progress.md f358e41a (ic AGREED), ic's toasts a04e9c83. READY sent to vc for one bats run (driver desks1125/run-desks1125.sh, 3c8754e5). Next: vc's GO, the Desk ask, the run, the ACs; WP A after the probe; one live run with hv. (edited)
 
 ## TODO
 

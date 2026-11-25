@@ -1,0 +1,14 @@
+{
+  "id": "01M8978NEXGE9S1AHNCRG5TSE7",
+  "ts": "2026-11-25T11:25:43.774Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.edit",
+  "subject": {
+    "type": "ac",
+    "id": "ST6d8eed9e4875782f/AC-4cb617e2.2"
+  },
+  "payload": {
+    "text": "A pointer taken during a move lets go, pauses, and, once the pointer is still, runs that move again from where its window is now. log_test, with the fake hs."
+  }
+}

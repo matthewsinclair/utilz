@@ -1,0 +1,17 @@
+{
+  "id": "01M894DZMKBB1SW3EHKVKJ3BHK",
+  "ts": "2026-11-25T10:36:12.307Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "READY, ST6d8eed9 WPs B, C and D with ic's toasts, for one booked bats run (S). Branch cc/desks1125 at a04e9c83 in ~/Devel/scratch/utilz-cc/wt-desks1125, base 5cb2c180 (main has not touched arngz since). Change `git diff --abbrev=7 5cb2c180 a04e9c83 | shasum -a 256`: ba6a5f8c749088c0d2f49d347428f5cc462164c7ab4293c1c8e78a1d020e7ef0 (17 files). Commits: B 654f1863; C d51b1f26 and aef29ff8; D a36d0187; progress.md f358e41a (ic AGREED progress-cd.md 4b3af57f, rules 10 and 11); ic's toasts a04e9c83, landed from 06dc09fe by apply -3 and commit -C, checked by change: toast.lua 05422b1f, toast_test.lua 7a44013b, help +/- lines 9d0c1a16, as ic gave them.\nDriver: ~/Devel/scratch/utilz-cc/desks1125/run-desks1125.sh, sha256 3c8754e553a5873e3bc43f10820ae7d7c192d389bf25754f67d5e3268fc12372, bats lane, fakes only. Leg 1: arngz.bats, engine.bats and toast.bats whole at a04e9c83 (cap 1200 s). Leg 2: the new and changed arms over 5cb2c180 with the branch's test directory laid over (cap 600 s); each red, but GREEN_AT_BASE \"diff and apply --dry-run never ... reload (AC-a45b3aeb.7)\", since no code at the base reloads. Leg 3: ic's red-toasts.sh, pinned at 216e7c95, check by check over d51b1f26 (cap 120 s). Every count comes from the run.\nOne deviation for your word: the ACs name engine_test for AC-a45b3aeb.1, .2 and .4 and AC-4cb617e2.2 and .3. Those arms are in log_test.lua, whose fake runs apply through M.run with every timer drained; engine_test.lua drives M.execute alone. D's arms script each move's legs, since the hand is not faked. I propose the AC text names log_test at the records landing. WP A waits on the probe, which runs now. GO for the Desk ask?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

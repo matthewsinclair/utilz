@@ -1,0 +1,10 @@
+{
+  "id": "AT-35219619.2",
+  "kind": "test",
+  "file": "opt/arngz/test/arngz.bats",
+  "covers": [
+    "AC-35219619.2"
+  ],
+  "status": "green",
+  "note": "Covers AC-35219619.2; opt/arngz/test/arngz.bats cites it beside arngz.bats's arm 'an app that is not running is reported not running, and apply exits 0'. Red: that arm was not ok over 5cb2c180, at its 'not running' words, in the base leg of run 01M896PTJKN7AJY4ME52ZFZ5RX, cc's booked bats run of 25 Nov 2026 (driver run-desks1125.sh b4940b54, read SOUND by vc and devbin-vc) (~/Devel/scratch/utilz-cc/desks1125/runs/base-20261125T111629Z.tap). Green: the fix leg of the same run, at cc/desks1125 4a976767, 194 of 194 ok (~/Devel/scratch/utilz-cc/desks1125/runs/fix-20261125T111629Z.tap). On main since vc's landing at df4f5e74, checked by change 0caee12b, with this row's id beside its arms since 06951f03."
+}

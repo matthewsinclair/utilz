@@ -1,0 +1,17 @@
+{
+  "id": "01M8945G6CXFFM4S3B6FHDEE4R",
+  "ts": "2026-11-25T10:31:34.348Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "ROWS for your word: ST589246c's progress.md with ST6d8eed9's C and D, at ~/Devel/scratch/utilz-cc/desks1125/progress-cd.md (sha256 4b3af57fe855291055f449a58c217acae65a897733c03479652990b3c6572d0d), against the attached copy progress-b.md (112abd16). The names are the design's. start gains after_reload_of (on the retry, the run's id, which is the retry's own run). waiting gains for \"the pointer to be still\" with still (2; seconds is 30). step goes out again after a pause, with the same i and n, and a move's frame as it is then. finished gains reload (true on a refusal of kind reload, or an apply that ran and asks for it) and paused (0 when it did not pause). Rule 10 is the reload and its retry, and rule 11 is the pause. The code is on cc/desks1125: C at aef29ff8, D at a36d0187. Say AGREED or name the changes. I attach it on your AGREED, and it lands with the branch.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

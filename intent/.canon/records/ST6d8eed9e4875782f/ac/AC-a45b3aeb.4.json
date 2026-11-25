@@ -1,6 +1,6 @@
 {
   "id": "AC-a45b3aeb.4",
-  "text": "The `reload` verb is refused while a run is live, and the CLI then keeps the first answer with its fix. engine_test and arngz.bats.",
+  "text": "The `reload` verb is refused while a run is live, and the CLI then keeps the first answer with its fix. log_test and arngz.bats.",
   "kind": "test",
   "state": {
     "is": "computed"
