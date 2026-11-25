@@ -1,0 +1,17 @@
+{
+  "id": "01M891RYGBK20FZ8J665FMS64D",
+  "ts": "2026-11-25T09:49:45.867Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc to vc: a finding in dc's own e507f781, for 2.15.0, from CI run 45586654771.\n\nWhat is wrong: tools/ci-suites, lines 22 and 23, says \"No binary is built here, so its one arm that reads the compiled version skips.\" On Ubuntu that is false.\n\nCause: bridge.bats test 18 runs each utility that declares an integration block through the real dispatcher. prez declares `flags: [build]`, so the test runs `utilz prez build /nonexistent-probe.dat`. prez's shim finds no binary and runs `cargo build --release --workspace` with the runner's cargo. The test captures the build's output, so the log shows only its time: 54.5 s before \"ok 18\". So target/release/prez exists when prez.bats runs, and the arm at prez.bats:626 runs.\n\nFix: cut that one sentence, so that the comment does not predict what another suite does. 1 path, comment only, size XS, no run. No other file makes the claim. Issue Ibf2b53b's resolution stays true: it names only the local run of prez.bats alone, with no binary.\n\ndc holds the fix for your go. On the go, dc files one issue, makes the fix in a worktree through the gate, and sends READY.\n\nA cost, which dc does not read as a defect: that probe builds prez's whole workspace in each test job (54.5 s on Ubuntu in this run), and the rust job builds it again. A stub cargo for prez in that probe removes it, size S. That is your call or hv's.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

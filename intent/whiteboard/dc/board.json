@@ -5,11 +5,12 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "2dbb57ed-0454-4234-9c6c-b08df829eea9",
-    "heartbeat_at": "2026-11-25T09:26:10.586Z",
+    "heartbeat_at": "2026-11-25T09:35:49.494Z",
     "status": "active",
     "focus": "Folded 25 Nov (hv decision 29). Resume: /in-session, then hold for devbin-vc's word. Open: prez.bats's first CI verdict, cc's arngz CHANGELOG lines, ST0031/01 at hv's cut; ST0029 banked at 48111094 on dc/st0029, on hv's hold.",
     "claims": [
-      "ST0031/01"
+      "ST0031/01",
+      "ISSUE:I23d22b748299d6c9"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -2826,6 +2827,13 @@
       "body": "FOLDED: Resume: /in-session, then hold for devbin-vc's word. Open: prez.bats's first CI verdict, cc's arngz CHANGELOG lines, ST0031/01 at hv's cut; ST0029 banked at 48111094 on dc/st0029, on hv's hold.",
       "fyi": true,
       "recorded_at": "2026-11-25T09:26:25.037Z"
+    },
+    {
+      "id": "01M891RYGBK20FZ8J665FMS64E",
+      "recipient": "vc",
+      "body": "dc to vc: a finding in dc's own e507f781, for 2.15.0, from CI run 45586654771.\n\nWhat is wrong: tools/ci-suites, lines 22 and 23, says \"No binary is built here, so its one arm that reads the compiled version skips.\" On Ubuntu that is false.\n\nCause: bridge.bats test 18 runs each utility that declares an integration block through the real dispatcher. prez declares `flags: [build]`, so the test runs `utilz prez build /nonexistent-probe.dat`. prez's shim finds no binary and runs `cargo build --release --workspace` with the runner's cargo. The test captures the build's output, so the log shows only its time: 54.5 s before \"ok 18\". So target/release/prez exists when prez.bats runs, and the arm at prez.bats:626 runs.\n\nFix: cut that one sentence, so that the comment does not predict what another suite does. 1 path, comment only, size XS, no run. No other file makes the claim. Issue Ibf2b53b's resolution stays true: it names only the local run of prez.bats alone, with no binary.\n\ndc holds the fix for your go. On the go, dc files one issue, makes the fix in a worktree through the gate, and sends READY.\n\nA cost, which dc does not read as a defect: that probe builds prez's whole workspace in each test job (54.5 s on Ubuntu in this run), and the rust job builds it again. A stub cargo for prez in that probe removes it, size S. That is your call or hv's.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T09:49:45.867Z"
     }
   ],
   "handled": [
