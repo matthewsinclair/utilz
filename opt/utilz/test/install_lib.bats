@@ -341,8 +341,8 @@ make_fake_install() {
 # AT01 held the reader Utilz kept as the release core's ci.query: five arms
 # for its verdicts, its refusal, its one query, its usage and its place in no
 # install. ST0031/01 retired that reader with its arms, since CI's verdict is
-# now the core's own `bin/devbin ci-state`, for the cut and the publish alike;
-# the publish's side of it is AT08's arms above.
+# now the core's own `bin/devbin ci-state`, which the cut reads. No publish
+# asks CI since I59c806c.
 
 # ============================================================================
 # issue 0044: the announced commit is the tree's own, or none

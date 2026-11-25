@@ -4,14 +4,14 @@
 <!-- NO VERSION LITERAL IN THIS FILE OR ANY HELP FILE, AND THIS ONE LEARNED IT
      FIRST: hardcoding the framework version here drifted it to 2.2.0 while
      2.4.0 shipped. The fix was applied to this file alone and left in fifteen
-     others, where it drifted again -- cleanz's README said 1.1.0 against a
+     others, where it drifted again: cleanz's README said 1.1.0 against a
      yaml of 1.2.0, and todo's help AND README said 1.0.0 against 1.1.0. The
      version has ONE home: the utility's yaml, or the file its version_file
      points at. A test in common_lib.bats holds every help file and every
      utility README to it. -->
 
 **Author**: Matthew Sinclair
-**Location**: worked out from the dispatcher's own path -- the Homebrew install (`$(brew --prefix)/opt/utilz/libexec`), or, for the maintainer, a dev checkout or an opt install published from one. `utilz version` names which one answered.
+**Location**: worked out from the dispatcher's own path: the Homebrew install (`$(brew --prefix)/opt/utilz/libexec`), or, for the maintainer, a dev checkout or an opt install published from one. `utilz version` names which one answered.
 
 ---
 
@@ -21,9 +21,9 @@
 
 - **Single dispatcher**: All utilities are symlinks to a master `utilz` script
 - **Consistent UX**: Unified help, error handling, and output formatting
-- **Easy management**: Add utilities by dropping implementation in `opt/{name}/` and creating a symlink
+- **Easy management**: `utilz generate <name>` adds a utility, with its metadata, help page, tests and link
 - **Installed with Homebrew**: one formula puts every utility on `$PATH`
-- **Multi-language support**: Utilities can be written in bash/zsh, Rust, Elixir, or any language
+- **Multi-language support**: each utility is a bash script, which can run a tool beside it in another language, as prez does in Rust and arngz in Lua
 
 ---
 
@@ -42,11 +42,6 @@ brew upgrade utilz
 ```
 
 A clone of the repository is the maintainer's dev checkout; devbin's `bin/devbin use`, run there, switches the shell between it, an opt install and this one, and the commands that only work there are under "Commands for a dev checkout" below.
-
-**Do NOT export `UTILZ_HOME`.** The dispatcher derives it from its own location
-and ignores an inherited value. This page told you to export it until v2.5.1;
-with two trees in play, an ambient `UTILZ_HOME` silently sent the _installed_
-utilz back to the checkout. Delete those lines if you have them.
 
 ### First Utility
 
@@ -97,7 +92,7 @@ It prints the version line first, as `utilz version` does, then its checks, each
 - **installed utilities**: each is properly configured
 - **external dependencies**: they are installed (eg `yq`)
 - **install integrity**: every file of the runtime set matches the manifest it was published
-  with, each dispatcher link still targets `utilz`,. In a source checkout there is no manifest, and doctor says so rather
+  with, and each dispatcher link still targets `utilz`. In a source checkout there is no manifest, and doctor says so rather
   than passing silently. An opt install with a manifest in an old form fails, naming `bin/devbin install --force`; a Homebrew install with one is noted, naming `brew upgrade utilz`, and fails nothing.
 
 What is not available on this platform is said, never counted as missing. A utility whose `platforms` leave this one out reads, in the installed utilities check, as `macoz: macOS only, not available on Linux`, and the external dependencies check skips its dependencies; a dependency whose `platforms` leave this one out, or a macOS app anywhere but macOS, is one line saying so, with no install line.
@@ -120,7 +115,7 @@ utilz list
 
 Show version information for Utilz or a specific utility.
 
-Every answer carries **both** versions in play -- the framework's and the utility's -- because being handed one of them is how a bug report arrives missing the half that explains it. **There is no `v` prefix anywhere**: it is noise, and it was the only thing making the framework's line a different shape from a utility's.
+Every answer carries **both** versions in play, the framework's and the utility's, because being handed one of them is how a bug report arrives missing the half that explains it. **There is no `v` prefix anywhere**: it is noise, and it was the only thing making the framework's line a different shape from a utility's.
 
 ```bash
 $ utilz version          # --version is accepted as an alias
@@ -137,9 +132,9 @@ Markdown aggregator
 utilz 2.7.0 (brew, 0123456789ab)
 ```
 
-**Both invocation forms give the same bytes**, and that is a guarantee rather than a coincidence: `bin/utilz` answers `--version` from one place for both. Until ST0015 it intercepted the symlink form only, thirteen utilities hand-copied an arm to cover the other, and the two that never copied it -- `todo` and `prez` -- were the two that disagreed with themselves.
+**Both invocation forms give the same bytes**: `bin/utilz` answers `--version` from one place for both.
 
-Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>)`. It names **which tree replied** -- dev, opt or brew -- and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads the line up to its closing parenthesis and ignores anything after it. A utility's answer is the pair and its description, with that line last. CI's verdict on the commit is `utilz doctor`'s to show: a record, not a gate.
+Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>)`. It names **which tree replied**, dev, opt or brew, and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads the line up to its closing parenthesis and ignores anything after it. A utility's answer is the pair and its description, with that line last.
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 
@@ -172,7 +167,7 @@ Editor-neutral integration manifest surface. Consumed by the Utilz Emacs bridge 
 
 Verbs:
 
-- `commands` — emit a TSV manifest of every utility that declares an `integration:` block in its YAML. One row per utility; columns are `name`, `description`, `input`, `output`, `flags` (tab-separated).
+- `commands`: emit a TSV manifest of every utility that declares an `integration:` block in its YAML. One row per utility; columns are `name`, `description`, `input`, `output`, `flags` (tab-separated).
 
 ```bash
 # Render as an aligned table
@@ -186,12 +181,12 @@ The walker lives in `opt/utilz/lib/common.sh` as `emit_integration_tsv`. The blo
 
 ### `utilz emacs <verb>`
 
-Emacs-specific installer and health check for the Utilz elisp bridge. See `intent/st/ST0007/` for the design.
+Emacs-specific installer and health check for the Utilz elisp bridge. Steel thread ST0007 holds the design.
 
 Verbs:
 
-- `install --dest PATH [--symlink] [--force]` — copy (or symlink with `--symlink`) the canonical `static/emacs/utilz.el` to `PATH`. From the Homebrew install the symlink goes through `$(brew --prefix)/opt/utilz/libexec`, the path brew keeps across upgrades, never the versioned keg, so it follows each `brew upgrade utilz`. Idempotent: re-running with the same destination is a no-op; use `--force` to overwrite a differing destination. Prints the `(load ...)` line to add to your Emacs config.
-- `doctor` — verify `utilz` is on `PATH` (reachable by Emacs child processes), every installed utility has a valid `integration:` block, and the canonical elisp file is present (info-level check; absence is expected pre-WP03).
+- `install --dest PATH [--symlink] [--force]`: copy (or symlink with `--symlink`) the canonical `static/emacs/utilz.el` to `PATH`. From the Homebrew install the symlink goes through `$(brew --prefix)/opt/utilz/libexec`, the path brew keeps across upgrades, never the versioned keg, so it follows each `brew upgrade utilz`. Idempotent: re-running with the same destination is a no-op; use `--force` to overwrite a differing destination. Prints the `(load ...)` line to add to your Emacs config.
+- `doctor`: verify `utilz` is on `PATH` (reachable by Emacs child processes), every installed utility has a valid `integration:` block, and the canonical elisp file is present (an info-level check).
 
 ```bash
 # Install into Doom config as a symlink (follows each brew upgrade utilz)
@@ -282,140 +277,19 @@ $UTILZ_HOME/
 
 ### Common Functions
 
-All utilities have access to shared functions in `opt/utilz/lib/common.sh`:
-
-**Logging**:
-
-- `info "message"` - Informational message (blue ℹ)
-- `success "message"` - Success message (green ✓)
-- `warn "message"` - Warning message (yellow ⚠)
-- `error "message"` - Error message (red ✗)
-- `debug "message"` - Debug message (only if `UTILZ_DEBUG=1`)
-
-**Utilities**:
-
-- `show_help "utility"` - Display help from `help/{utility}.md`
-- `check_command "cmd"` - Check if command exists
-- `require_command "cmd" "install hint"` - Require command or exit with hint
-- `parse_yaml "file.yaml" "query"` - Parse YAML using `yq`
-- `require_yq` - Gate on the `yq` hard dependency; call ONCE before a loop, never per-iteration
-- `each_utility [tree]` - Emit every installed utility name of a tree, the running one unless given, one per line; consume with `< <(each_utility)`, not a pipe
-
-**Colors** (automatically disabled when not a TTY):
-
-- `$BOLD`, `$RED`, `$GREEN`, `$YELLOW`, `$BLUE`, `$RESET`
+Every utility can use the shared functions in `opt/utilz/lib/common.sh`. The [Developer Guide](../docs/developer-guide.md#using-the-common-library) lists them.
 
 ---
 
 ## Adding a New Utility
 
-### 1. Create the Implementation
-
-```bash
-# Create directory
-mkdir -p $UTILZ_HOME/opt/myutil
-
-# Create executable script
-cat > $UTILZ_HOME/opt/myutil/myutil <<'EOF'
-#!/usr/bin/env bash
-# Implementation of myutil
-set -euo pipefail
-
-# $UTILZ_HOME and common functions are already available
-info "Running myutil..."
-
-# Your utility logic here
-echo "Hello from myutil!"
-success "Done!"
-EOF
-
-chmod +x $UTILZ_HOME/opt/myutil/myutil
-```
-
-### 2. Create a Symlink
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz myutil
-```
-
-### 3. Create Help File
-
-````bash
-cat > $UTILZ_HOME/help/myutil.md <<'EOF'
-# myutil - My Custom Utility
-
-**Version**: run `myutil --version`
-
-## Purpose
-Brief description of what myutil does.
-
-## Usage
-```bash
-myutil [options] <args>
-````
-
-## Examples
-
-...
-EOF
-
-````
-
-### 4. Test
-
-```bash
-# Run diagnostics
-utilz doctor
-
-# Test utility
-myutil --help
-myutil
-````
+Run `utilz generate <name>`, as above. The [Developer Guide](../docs/developer-guide.md) covers the layout, the metadata and the tests.
 
 ---
 
 ## Multi-Language Support
 
-Utilities can be written in any language:
-
-### Bash/Zsh (Default)
-
-```bash
-#!/usr/bin/env bash
-# opt/myutil/myutil
-```
-
-### Rust
-
-```bash
-#!/usr/bin/env bash
-# opt/myutil/myutil (wrapper script)
-exec "$UTILZ_HOME/opt/myutil/target/release/myutil" "$@"
-```
-
-Then build Rust binary in `opt/myutil/`:
-
-```bash
-cd $UTILZ_HOME/opt/myutil
-cargo build --release
-```
-
-### Elixir
-
-```bash
-#!/usr/bin/env elixir
-# opt/myutil/myutil
-```
-
-### Python (if you must)
-
-```bash
-#!/usr/bin/env python3
-# opt/myutil/myutil
-```
-
-The dispatcher doesn't care about the implementation language - it just needs an executable file.
+The dispatcher runs `opt/<name>/<name>`, which is always a bash script. A tool in another language sits beside it, as prez's Rust crate and arngz's Lua engine do. The [Developer Guide](../docs/developer-guide.md#multi-language-utilities) says which languages new code may use.
 
 ---
 
@@ -428,7 +302,8 @@ None is required. `$UTILZ_HOME` is not one to set: the dispatcher works it out f
 ### Optional
 
 - `$UTILZ_DEBUG` - Set to `1` to enable debug output
-- `$NO_COLOR` - Set to disable colored output
+
+Colour is on when stdout is a terminal, and off when it is not.
 
 ---
 
@@ -436,9 +311,9 @@ None is required. `$UTILZ_HOME` is not one to set: the dispatcher works it out f
 
 ### Required
 
-- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
+- Bash 3.2 or later (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - Standard Unix tools (`grep`, `sed`, `awk`, `cat`)
-- `yq` -- the single YAML parser for all utility metadata. Required by the framework itself, not by any one utility: `utilz list`, `utilz doctor`, and `utilz generate` all read `opt/<name>/<name>.yaml` through it.
+- `yq`: the single YAML parser for all utility metadata. Required by the framework itself, not by any one utility: `utilz list`, `utilz doctor`, and `utilz generate` all read `opt/<name>/<name>.yaml` through it.
   ```bash
   brew install yq
   ```
@@ -450,9 +325,9 @@ None is required. `$UTILZ_HOME` is not one to set: the dispatcher works it out f
 
 ### Optional (Recommended)
 
-- `bat` or `mdcat` - Better markdown rendering for help
+- `glow`, or else `bat` - Better markdown rendering for help
   ```bash
-  brew install bat
+  brew install glow
   ```
 
 ---
@@ -503,53 +378,9 @@ This will identify and suggest fixes for common configuration issues.
 
 ---
 
-## Installed Utilities
-
-Run `utilz list` to see all installed utilities, or check the list below:
-
-### lnrel - Relative Symlink Creator
-
-Creates symlinks with relative paths. Portable symlinks that survive directory tree moves.
-
-See `utilz help lnrel` for details.
-
-### mdagg - Markdown Aggregator
-
-Concatenates multiple markdown files into a single document for PDF generation.
-
-See `utilz help mdagg` for details.
-
----
-
-## Version History
-
-### 1.0.0 (2025-01-12)
-
-- Initial release
-- Core dispatcher framework
-- `utilz help`, `utilz doctor`, `utilz list` commands
-- Multi-language utility support
-- First utility: `mdagg` (Markdown Aggregator)
-
----
-
-## Contributing
-
-This is a personal utilities framework, but the architecture can be adapted for team use.
-
-### Design Principles
-
-1. **Simple**: Each utility does one thing well
-2. **Consistent**: Unified UX across all utilities
-3. **Portable**: Works on any \*nix system
-4. **Extensible**: Easy to add new utilities
-5. **Self-contained**: Minimal external dependencies
-
----
-
 ## License
 
-Personal use. Copyright © 2025 Matthew Sinclair.
+MIT. See [LICENSE](../LICENSE).
 
 ---
 

@@ -263,40 +263,28 @@ Each utility has a YAML metadata file describing its configuration.
 
 ```yaml
 name: logtool
-version: 1.0.0
-utilz_version: "^1.0.0"
+version_file: VERSION
+utilz_version: "^2.0.0"
 description: Process and analyze log files
 author: Your Name
-website: https://yoursite.com
-help_file: ../../help/logtool.md
+dependencies: []
 ```
+
+`utilz generate` writes these fields. The help page is always `help/<name>.md`, found by name.
 
 ### Required Fields
 
 - `name`: Utility name (must match directory and file name)
-- `version`: Semantic version (MAJOR.MINOR.PATCH)
+- `version_file`: The file that holds the version, relative to the yaml. `utilz generate` writes `VERSION` beside it. A yaml's inline `version`, where it has one, is read first.
 - `utilz_version`: Compatible framework version (caret notation)
 - `description`: One-line description
 - `author`: Author name
-- `help_file`: Relative path to help file
 
 ### Optional Fields
 
-**Website**:
-
-```yaml
-website: https://github.com/you/logtool
-```
-
-**Version File Reference** (instead of inline version):
-
-```yaml
-version_file: ../../VERSION
-```
-
 **Editor Integration Block**:
 
-Utilities that should be auto-exposed to editor bridges (Emacs today; VSCode / Zed / Vim in future) declare an `integration:` block. The block is optional — absence means the utility is not surfaced in the integration manifest.
+Utilities that should be auto-exposed to editor bridges (Emacs today; VSCode / Zed / Vim in future) declare an `integration:` block. The block is optional: without it, the utility is not in the integration manifest.
 
 ```yaml
 integration:
@@ -308,17 +296,17 @@ integration:
 
 Pick `input` by what the utility reads:
 
-- `stdin` — reads from stdin (Emacs pipes the active region or whole buffer via `shell-command-on-region`).
-- `file` — needs a real file path (Emacs uses the current buffer's `buffer-file-name`, or prompts).
-- `path` — needs a directory (Emacs prompts for a directory, defaulting to `default-directory`).
-- `none` — takes no input (e.g. clipboard operators, system actions).
+- `stdin`: reads from stdin (Emacs pipes the active region or whole buffer via `shell-command-on-region`).
+- `file`: needs a real file path (Emacs uses the current buffer's `buffer-file-name`, or prompts).
+- `path`: needs a directory (Emacs prompts for a directory, defaulting to `default-directory`).
+- `none`: takes no input (eg clipboard operators, system actions).
 
 Pick `output` by what the user wants to see:
 
-- `replace` — replaces the region/buffer with stdout (one `undo-boundary`, single `C-/` reverts).
-- `buffer` — dumps stdout into a `*utilz-<name>*` side buffer.
-- `message` — echoes stdout as a single-line minibuffer message.
-- `discard` — runs and reports exit status only.
+- `replace`: replaces the region/buffer with stdout (one `undo-boundary`, single `C-/` reverts).
+- `buffer`: dumps stdout into a `*utilz-<name>*` side buffer.
+- `message`: echoes stdout as a single-line minibuffer message.
+- `discard`: runs and reports exit status only.
 
 Once an `integration:` block is declared, `utilz integration commands` surfaces the utility in the TSV manifest, and `M-x utilz` in Emacs picks it up without any code changes. See [docs/architecture.md - Integration Manifest](architecture.md#integration-manifest) for the cross-boundary contract.
 
@@ -368,12 +356,10 @@ In the utility, ask common.sh rather than `uname`: `utilz_platform` answers `mac
 
 ```yaml
 name: logtool
-version: 1.0.0
+version_file: VERSION
 utilz_version: "^2.0.0"
 description: Process and analyze log files
 author: Jane Developer
-website: https://github.com/janedev/logtool
-help_file: ../../help/logtool.md
 
 dependencies:
   - name: jq
@@ -393,12 +379,6 @@ integration:
   input: file
   output: buffer
   flags: []
-
-features:
-  - Parse JSON logs
-  - Filter by severity level
-  - Aggregate statistics
-  - Export to CSV
 ```
 
 ## Using the Common Library
@@ -416,6 +396,8 @@ warn "Cache not found"         # Yellow
 error "File not found"         # Red
 debug "Variable value: $foo"   # Gray (only if UTILZ_DEBUG=1)
 ```
+
+The colour variables `$BOLD`, `$RED`, `$GREEN`, `$YELLOW`, `$BLUE` and `$RESET` are set when stdout is a terminal, and are empty when it is not.
 
 ### Help and Version
 
@@ -458,6 +440,8 @@ description=$(get_util_metadata "logtool" ".description") || status=$?
 utilz_version=$(get_util_metadata "logtool" ".utilz_version") || status=$?
 ```
 
+`require_yq` is the gate for yq, the one YAML parser. A caller that loops over utilities calls it once, before the loop. `parse_yaml "<file>" "<query>"` runs one yq query on any yaml file, after the same gate.
+
 ### Framework Functions
 
 ```bash
@@ -470,7 +454,12 @@ run_doctor
 # Run tests
 run_tests "logtool"  # Specific utility
 run_tests            # All utilities
+
+# Every utility of a tree, the running one unless named, one name per line
+while IFS= read -r name; do echo "$name"; done < <(each_utility)
 ```
+
+Read `each_utility` through process substitution, as above, and not through a pipe, so the loop's variables live after it.
 
 ## Writing Tests
 
@@ -614,10 +603,10 @@ Declare each runtime the utility needs under `dependencies:` in its metadata, as
 
 ### Utility Versioning
 
-Each utility declares its own version:
+Each utility keeps its version in one file, which its yaml names. `utilz generate` writes `VERSION` beside the yaml:
 
 ```yaml
-version: 1.0.0
+version_file: VERSION
 ```
 
 ### Framework Compatibility
@@ -723,7 +712,6 @@ if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
 fi
 
 # Constants
-readonly VERSION="1.0.0"
 readonly PROG_NAME="$(basename "$0")"
 
 # Defaults
@@ -772,10 +760,8 @@ while [[ $# -gt 0 ]]; do
             usage
             exit 0
             ;;
-        --version)
-            echo "$PROG_NAME v$VERSION"
-            exit 0
-            ;;
+        # No --version arm: bin/utilz answers --version for every utility
+        # before the utility runs, from the version's one home.
         -v|--verbose)
             VERBOSE=true
             shift
