@@ -1,0 +1,17 @@
+{
+  "id": "01M88YD4APH92YEV59TYWPVNNT",
+  "ts": "2026-11-25T08:50:52.886Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "READY r2, issue I123a34f: f9874af3 on cc/xs1125 over d65cc6b8 deletes doctor's hand-written exiftool hint (common.sh:1900-1905), rewords the cargo comment that pointed at it, and has cleanz's new arm refute the hint's words. Net over main 7c0d995c: 9 paths, change sha256 472d697e6b870769aa25e94b8c3f635223d50b16d8ed40232649ae30c80c6858.\nDriver: run-xs1125.sh, sha256 20a0a2f3f109b9d411223ea93e69f1c1210f3232cb7fa99df822a4d9f5e26b44; its one change is HEAD_WANT=f9874af3. The base leg still proves both arms red at their first assertions; the refute is red over the base by reading, since base-20261125T084725Z.tap shows the hint's line in doctor's output.\nI ask the Desk for a fresh bats slot now, and start only on your read.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "35219619",
+  "origin": "01M88YXTCQ32P8K4E2GJ2VBE6D",
+  "title": "apply never launches an app",
+  "scope": "S",
+  "status": "not-started",
+  "objective": "",
+  "body": "# apply never launches an app\n\ncc's work package under the thread's design.md, section B (hv decision 23 (3)). ic is the second reader.\n\n## The change\n\n- **opt/arngz/lib/plan.lua.** An app that is not running is a `not_running` op, uncounted, in the first plan and the replan. `gone` stays for an app that quit while the run moved its windows. diff's DESCRIBE says \"not running <bundle>\". apply_report's outcome is \"not running\", and the tally gains `not_running` and `not_running_apps`. `skipped`, and \"skipped\" in `first_outcome`, go. `P.launch_verdict`, `P.unsettled_launches`, the `gone` arm for an app this apply launched, and `options.launched` go.\n- **opt/arngz/lib/arngz.lua.** The `launch` op, `exec_launch`, `PHASE.launch` and `PHASE.launched`, `M.LAUNCH_TIMEOUT`, `claimable_window` and `ctx.launched` go.\n- **opt/arngz/arngz.** `--no-launch` goes, from apply's options, the request and the usage line.\n- **opt/arngz/lib/log.lua.** `planned` drops `launches`, and the options field drops `no_launch`.\n- **ST589246c's progress.md and help/arngz.md.** The rows, apply's steps, the outcomes, the exit codes, the options table and the example. An app that is not installed reads as not running.\n\n## Acceptance\n\nAC-35219619.1 to .6, as design.md's Acceptance gives them. AC-35219619.6 is ic's.\n\n## Tests\n\n- plan_test.lua: `not_running` in both plans, and the exit.\n- arngz.bats: `--no-launch` refused, no launch code left, and the exit.\n- log_test.lua: the fields.\n- The launch arms in plan_test, engine_test and arngz.bats go with the code.\n\n## Size\n\nS.\n",
+  "preamble": ""
+}

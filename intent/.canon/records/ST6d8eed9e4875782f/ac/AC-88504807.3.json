@@ -1,0 +1,8 @@
+{
+  "id": "AC-88504807.3",
+  "text": "`exec_remove_space` proves the target's tile first (it is shown after gotoSpace, then the desktop that takes its place is), removes by id only while the live list is the proof's, and reads back exactly that id gone. A proof that shows another desktop removes nothing on that display. Another id gone fails the op, names both ids with the fix, and stops later removals. engine_test, with the fake hs.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

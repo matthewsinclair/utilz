@@ -1,0 +1,8 @@
+{
+  "id": "AC-35219619.2",
+  "text": "apply exits 0 when every entry is placed, in place, unseen and uncounted, or not running. plan_test and arngz.bats.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

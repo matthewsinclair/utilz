@@ -1,0 +1,8 @@
+{
+  "id": "AC-4cb617e2.2",
+  "text": "A pointer taken during a move lets go, pauses, and, once the pointer is still, runs that move again from where its window is now. engine_test, with the fake hs.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

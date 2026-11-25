@@ -1,0 +1,8 @@
+{
+  "id": "AC-35219619.6",
+  "text": "(ic's) \"not running\" in the toast's counts, with the apps' names, and no \"Skipped:\" label. toast_test.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

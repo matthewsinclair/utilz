@@ -1,0 +1,8 @@
+{
+  "id": "AC-88504807.5",
+  "text": "The run log and the `planned`, `step` and `finished` points carry `removes`, the `remove` step, `removed` and `extra`. log_test.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

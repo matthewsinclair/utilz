@@ -1,0 +1,17 @@
+{
+  "id": "01M88XBHEAHARRC092TWE979V0",
+  "ts": "2026-11-25T08:32:32.202Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "DESIGN, hv decision 23 (3): ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 ddb85bef055b43ddf4124d23102d732de22219e545c8e2fde34e5f2d0db8b24a. ic has it for the second read.\nWhere: a new thread with three WPs (A the desk's desktop count, S to M; B no launches, S; C a reload and one retry, S), M to L together. It waits on no spike result, so it lands before STca1b7f9's spike code, one after the other.\nA rests on a probe of removeSpace on macOS 27 that moves no window, run by hv in spike v3's slot; its bytes come to you next. A hazard found: removeSpace picks its Mission Control tile by the live list's order, which can part from Mission Control's, so A removes only where the two agree and reads back exactly one id gone.\nB removes --no-launch and the launch code (no caller passes the flag); skipped goes and not_running comes. C reloads through a new engine verb that is refused while a run is live, and retries once; discover never saves from a failed filter. Causes 2 and 3 are outside hv's picks, with no fix designed: yours to put to hv.\nOn your OK I record the thread, its WPs and ACs, then the worktree. Meanwhile I do the XS fix.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

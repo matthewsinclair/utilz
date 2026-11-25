@@ -1,0 +1,8 @@
+{
+  "id": "AC-88504807.7",
+  "text": "Live: at hv's plug-in, apply removes macOS's new empty desktop, and each display's count matches the desk.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

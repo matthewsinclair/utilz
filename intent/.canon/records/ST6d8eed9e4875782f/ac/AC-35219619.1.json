@@ -1,0 +1,8 @@
+{
+  "id": "AC-35219619.1",
+  "text": "An app that is not running is `not_running` in both plans: reported, uncounted and never launched. plan_test.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

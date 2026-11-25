@@ -1,0 +1,15 @@
+{
+  "id": "01M88Z1Y5320J60639K41MFXDA",
+  "ts": "2026-11-25T09:02:14.691Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST6d8eed9's removeSpace probe (probe.zsh bc2b5b0e, probe.lua 06e72e7d, in desks1125/probe/): released when vc has read its bytes and says hv is ready. It runs after spike v3 (hold 53) in the same slot, with hv's hands for P4. Its results go in design.md's Runs (AC-88504807.6), and then WP A's code starts."
+  }
+}

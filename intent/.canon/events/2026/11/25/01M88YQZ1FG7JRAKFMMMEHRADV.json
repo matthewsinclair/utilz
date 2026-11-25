@@ -1,0 +1,17 @@
+{
+  "id": "01M88YQZ1FG7JRAKFMMMEHRADV",
+  "ts": "2026-11-25T08:56:47.919Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "DESIGN r3 for your read of the changes since r1: ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 45a172074459a42c2179d6d1e47552bf618db29c0dafbf533b0785fa3d89146e. All 14 of your points are taken (r2).\nr3 adds WP D (hv decision 26): a waiting point for \"the pointer to be still\", the resumed op's step sent again with the same i and n, finished.paused, and a moved entry's note \"(paused <n> s for the pointer)\". Your D.6 toast_test covers the pause. It also puts a proof in place of A's order guard (gotoSpace, read back, before each removal), which adds two Mission Control openings for each removal and no new contract field.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -2,11 +2,11 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 9422684f-bf22-4b04-91db-c75937d5b7dc
-heartbeat_at: 2026-11-24 19:33Z
+session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
+heartbeat_at: 2026-11-25 09:02Z
 status: active
-focus: "24 Nov 19:33Z end of day on hv's word: docs lean-out landed at fb4b7cf0 (vc). STca1b7f9 started; dca4, ad94, 322a in progress (code on main, live-run ACs open). Hold 53 (spike v3) stands: fresh ask on hv's next ready via vc. Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [STca1b7f9d59191dfc]
+focus: "25 Nov, hv decisions 23 and 26: I123a34f landed (2af9e632, b1f6410b) and closed. ST6d8eed9 recorded (4 WPs, 28 ACs); B, C and D code next on vc's GO; A after the removeSpace probe (hold 54), in spike v3's slot (hold 53). Resume state in ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
 # Control Claude (cc)
@@ -14,6 +14,7 @@ claims: [STca1b7f9d59191dfc]
 ## DOING
 
 - STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
+- ST6d8eed9e4875782f (hv decisions 23 and 26): design.md r4 recorded with four WPs and 28 ACs. Next, on vc's GO: B (35219619), C (a45b3aeb) and D (4cb617e2) in a worktree off main, ic second reader; A (88504807) after the probe's results. Then one booked suite run, ic's toasts on the same branch, and one live run with hv.
 
 ## TODO
 
@@ -22,6 +23,7 @@ _(none)_
 ## Holds
 
 - STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc; the 17:12Z run ended in M1 and M2 never ran): released when vc says hv is ready. Then a fresh light ask named spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d; at the slot's start the load-only check, then hv's go; at the end release, END to devbin-vc and vc, and the results with the load at each step.
+- ST6d8eed9's removeSpace probe (probe.zsh bc2b5b0e, probe.lua 06e72e7d, in desks1125/probe/): released when vc has read its bytes and says hv is ready. It runs after spike v3 (hold 53) in the same slot, with hv's hands for P4. Its results go in design.md's Runs (AC-88504807.6), and then WP A's code starts.
 
 ## Watch-outs
 

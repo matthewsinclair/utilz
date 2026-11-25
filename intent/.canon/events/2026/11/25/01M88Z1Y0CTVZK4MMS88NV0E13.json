@@ -1,0 +1,15 @@
+{
+  "id": "01M88Z1Y0CTVZK4MMS88NV0E13",
+  "ts": "2026-11-25T09:02:14.540Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST6d8eed9e4875782f (hv decisions 23 and 26): design.md r4 recorded with four WPs and 28 ACs. Next, on vc's GO: B (35219619), C (a45b3aeb) and D (4cb617e2) in a worktree off main, ic second reader; A (88504807) after the probe's results. Then one booked suite run, ic's toasts on the same branch, and one live run with hv."
+  }
+}

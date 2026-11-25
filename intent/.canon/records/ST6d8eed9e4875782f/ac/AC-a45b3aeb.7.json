@@ -1,0 +1,8 @@
+{
+  "id": "AC-a45b3aeb.7",
+  "text": "diff and apply --dry-run never reload. arngz.bats.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

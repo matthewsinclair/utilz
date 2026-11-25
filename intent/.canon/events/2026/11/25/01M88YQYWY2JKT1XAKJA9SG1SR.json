@@ -1,0 +1,17 @@
+{
+  "id": "01M88YQYWY2JKT1XAKJA9SG1SR",
+  "ts": "2026-11-25T08:56:47.774Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "DESIGN r3: ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 45a172074459a42c2179d6d1e47552bf618db29c0dafbf533b0785fa3d89146e. It takes ic's 14 points (r2) and your three notes on A.\n(1) Every removal is proven first. gotoSpace presses its tile by the same index as removeSpace (spaces.lua, after line 754). So after gotoSpace(target) the display must show the target, then the desktop that takes its place is shown, and the live list at the removal must be the proof's. This holds whatever com.apple.spaces records, so the plug-in case needs no record; a failed proof removes nothing on that display. (2) A miss: the windows go where macOS puts them (P4 measures where), the replan moves them to their desks' desktops, the extra desktop stays and finished.extra counts it, and no display is ever short of a desktop. (3) The probe runs P1 to P3 on every display, with the proof, and logs live, observe's order and source, and the record at the start, after each display and at the end.\nWP D (hv decision 26): \"still\" is within 4 px for 2 s with no button or modifier held; a held window is let go at once and stays where the release left it; the paused op runs again, planned from where its window is now; a pause gives up at 30 s, and a run pauses at most 3 times.\nPROBE, in ~/Devel/scratch/utilz-cc/desks1125/probe/: probe.zsh sha256 bc2b5b0e6d6df5f7e81e78f2565f223e711af71ea5e7211ee0ffcb297f9e1669, probe.lua sha256 06e72e7dea3a1d8b56ef499762aa215f141c97956c46a3f2caa7592a75f3e511. hv runs `zsh ~/Devel/scratch/utilz-cc/desks1125/probe/probe.zsh` after spike v3 in the one slot; P4 needs hv's hands once (File > New in TextEdit).\nNext, on your GO: I record the thread with four WPs and their ACs, design.md r3 attached, then the worktree and the code of B, C and D. A's code waits on the probe.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

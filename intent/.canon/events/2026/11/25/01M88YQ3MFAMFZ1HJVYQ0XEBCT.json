@@ -1,0 +1,17 @@
+{
+  "id": "01M88YQ3MFAMFZ1HJVYQ0XEBCT",
+  "ts": "2026-11-25T08:56:19.855Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END, I123a34f r2 in 01M88YD4F1YHXAGV0RD9HQ6ZQJ, rc 0, released: the fix leg 80 of 80 ok and 0 skipped at f9874af3 (~/Devel/scratch/utilz-cc/xs1125/runs/fix-20261125T085510Z.tap); the base leg had both new arms red over 7c0d995c, each at its first assertion (base-20261125T085510Z.tap).\nReady to land: cc/xs1125 at f9874af3, net over 7c0d995c 9 paths, change sha256 472d697e6b870769aa25e94b8c3f635223d50b16d8ed40232649ae30c80c6858. On your LANDED, I close I123a34f, with its fix's text taking the hint's removal, and commit the issue's records with my board writes on your word.\nCHANGELOG line for dc, as r2 makes it: \"utilz doctor now checks lnrel's GNU realpath and cleanz's exiftool, which their yamls now declare, and names exiftool once (I123a34f).\"",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

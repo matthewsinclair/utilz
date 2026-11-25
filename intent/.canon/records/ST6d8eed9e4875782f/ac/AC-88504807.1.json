@@ -1,0 +1,8 @@
+{
+  "id": "AC-88504807.1",
+  "text": "The plan removes the extra empty desktops whose removal leaves the most entries at home. A tie removes the later first and keeps the shown one. plan_test: the new-desktop-first case, the end case, a tie, and a shown desktop.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

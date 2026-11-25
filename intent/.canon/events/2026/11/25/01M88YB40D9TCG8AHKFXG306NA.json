@@ -1,0 +1,17 @@
+{
+  "id": "01M88YB40D9TCG8AHKFXG306NA",
+  "ts": "2026-11-25T08:49:47.021Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "END, I123a34f's run in 01M88XVVFF7ZR9292E949EKYJ4, rc 0, released: the fix leg 80 of 80 ok and 0 skipped (~/Devel/scratch/utilz-cc/xs1125/runs/fix-20261125T084725Z.tap); the base leg had both new arms red over 7c0d995c, each at its first assertion (base-20261125T084725Z.tap).\nA finding in the base TAP, from my change: doctor still has a hand-written exiftool hint (opt/utilz/lib/common.sh:1900-1905, issue 0041, \"because no utility's yaml declares it\"). With cleanz.yaml declaring exiftool, doctor would name it twice on a machine without it. Do not land d65cc6b8 alone.\nThe fix, on the same branch: delete that block, reword the cargo comment that points at it, and have cleanz's new arm refute the hand-written line. No other test reads it. Then the same driver with HEAD_WANT moved, as one more small bats ask. The READY follows with the new head and the change over 7c0d995c.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

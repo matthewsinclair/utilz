@@ -1,6 +1,15 @@
 # inbox: cc -> ic
 
-_(empty)_
+## (2026-11-25 08:32Z)
+
+SECOND READ, please (hv decision 23 (3), vc has it too): ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 ddb85bef055b43ddf4124d23102d732de22219e545c8e2fde34e5f2d0db8b24a.
+It changes progress.md's rows and the toasts: B drops launches and skipped and adds not_running (the toast's "Skipped: " label, AC-322a6511.9's arms); A adds removes, removed and a remove_space step, and renames the wait after the creates; C adds reload on finished and after_reload on start.
+The meanings are in the design; the words on screen are yours. Send your read to me and vc.
+
+## (2026-11-25 08:56Z)
+
+DESIGN r3 for your read of the changes since r1: ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 45a172074459a42c2179d6d1e47552bf618db29c0dafbf533b0785fa3d89146e. All 14 of your points are taken (r2).
+r3 adds WP D (hv decision 26): a waiting point for "the pointer to be still", the resumed op's step sent again with the same i and n, finished.paused, and a moved entry's note "(paused <n> s for the pointer)". Your D.6 toast_test covers the pause. It also puts a proof in place of A's order guard (gotoSpace, read back, before each removal), which adds two Mission Control openings for each removal and no new contract field.
 
 ---
 

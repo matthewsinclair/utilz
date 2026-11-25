@@ -1,0 +1,8 @@
+{
+  "id": "AC-4cb617e2.1",
+  "text": "`P.still_verdict` says still after STILL_SECONDS within STILL_PX with hands free, wait before that, and give up at PAUSE_LIMIT. plan_test.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

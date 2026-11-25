@@ -1,0 +1,8 @@
+{
+  "id": "AC-35219619.3",
+  "text": "`--no-launch` is refused as an unknown option, and arngz holds no launch code. arngz.bats.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

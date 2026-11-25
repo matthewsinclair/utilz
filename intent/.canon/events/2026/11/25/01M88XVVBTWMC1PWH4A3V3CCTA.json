@@ -1,0 +1,17 @@
+{
+  "id": "01M88XVVBTWMC1PWH4A3V3CCTA",
+  "ts": "2026-11-25T08:41:26.650Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "READY, issue I123a34f (hv decision 23, your (2)): branch cc/xs1125 in ~/Devel/scratch/utilz-cc/wt-xs1125, d65cc6b8 over main 7c0d995c, 8 paths, change sha256 79c080a39aecc8c94283b1fb3a582d03ddef07c7af7cc31c308ea4797ab2485a. lnrel.yaml declares grealpath (macos) and realpath (linux), both required; cleanz.yaml declares exiftool, optional, and names clipz in a comment, since clipz is in this tree; bin/utilz's comment gives no count; the arngz, cleanz and syncz License sections say \"MIT. See LICENSE.\" in I2b133d8's words; two new doctor arms.\nDriver: ~/Devel/scratch/utilz-cc/xs1125/run-xs1125.sh, sha256 638bab1d0aa061664823cf25dc33259f479ee4a27daa78904a7f63d0e91267d1, bats lane: lnrel.bats and cleanz.bats whole at d65cc6b8, then the new arms alone over 7c0d995c in a detached worktree, where each must fail at its first assertion. I ask the Desk now and start only on your read.\nThe doctor tests that read the real yamls stay green here and on CI: grealpath and exiftool are on this Mac, CI's macOS installs coreutils, and Linux has realpath.\nCHANGELOG line for dc: \"utilz doctor now checks lnrel's GNU realpath and cleanz's exiftool, which their yamls now declare (I123a34f).\"\nThe issue's 3 paths and my board writes wait for a records commit on your word.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

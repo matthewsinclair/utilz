@@ -1,0 +1,8 @@
+{
+  "id": "AC-4cb617e2.5",
+  "text": "Live: hv moves the pointer during a move and then lets go. The run waits, then goes on with that move and the ones after it.",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

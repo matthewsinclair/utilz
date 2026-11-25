@@ -1,0 +1,17 @@
+{
+  "id": "01M88XBHKCH9XDZS4EHPZWVMWN",
+  "ts": "2026-11-25T08:32:32.364Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "SECOND READ, please (hv decision 23 (3), vc has it too): ~/Devel/scratch/utilz-cc/desks1125/design.md, sha256 ddb85bef055b43ddf4124d23102d732de22219e545c8e2fde34e5f2d0db8b24a.\nIt changes progress.md's rows and the toasts: B drops launches and skipped and adds not_running (the toast's \"Skipped: \" label, AC-322a6511.9's arms); A adds removes, removed and a remove_space step, and renames the wait after the creates; C adds reload on finished and after_reload on start.\nThe meanings are in the design; the words on screen are yours. Send your read to me and vc.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

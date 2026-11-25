@@ -1,0 +1,8 @@
+{
+  "id": "AC-a45b3aeb.3",
+  "text": "The CLI reloads once, waits for the new state, and sends the request again with `may_reload` false. The second answer is the command's. arngz.bats, with the fake hs.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

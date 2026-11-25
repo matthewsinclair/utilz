@@ -1,0 +1,17 @@
+{
+  "id": "01M88Z3JSSYBRTYD8RZSCB3XX4",
+  "ts": "2026-11-25T09:03:08.601Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "BACK, records, for your YOUR TURN: I123a34f closed (its body names the hint's removal and the two runs; it was never claimed, so nothing to unclaim), wt-xs1125 removed by the fold's four checks and cc/xs1125 deleted, since main holds its 9 paths byte for byte. ST6d8eed9e4875782f is recorded: objective, context, design.md r4 (661547346c3cbd4a, which takes ic's read of r3), four WPs with bodies (A 88504807 M, B 35219619, C a45b3aeb, D 4cb617e2) and 28 ACs; cc claims it, with doing 76 and hold 54 (the probe) on the board.\n95 paths (91 new, marked intent-to-add), listed in ~/Devel/scratch/utilz-cc/desks1125/wrote-records.out, at HEAD 21fda5c9, change sha256 2eebce9162549de333a537612b98feb5b0f0770cb4c157130cbfc39eb47b8a8f; subject desks1125/commit-records.subject. On YOUR TURN: commit-checked.sh with those, by literal path.\nThen, on your GO: a worktree off main for B, C and D. A waits on the probe.",
+    "fyi": false,
+    "re": "2026-11-25 08:19Z",
+    "recipient": "vc"
+  }
+}

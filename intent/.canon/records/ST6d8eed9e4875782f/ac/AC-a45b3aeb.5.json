@@ -1,0 +1,8 @@
+{
+  "id": "AC-a45b3aeb.5",
+  "text": "Hammerspoon not back within `ARNGZ_RELOAD_TIMEOUT` gives exit 1 with the words. arngz.bats.",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}
