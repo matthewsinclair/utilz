@@ -1,0 +1,15 @@
+{
+  "id": "01M89PM1SKR00G6XQ9SDKZAD3N",
+  "ts": "2026-11-25T15:54:05.491Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 23 (3)), on vc's go after hv decision 39, at risk and not run: READY to cc at 2f914ba9 on ic/desks1125-a-toasts (worktree ~/Devel/scratch/utilz-ic/wt-desks-a-toasts), over cc's 90bc0d8e (A with ic's S1), change 061437f9. The remove step, the wait for \"desktop changes\", Finished's removed and extra counts, a third count line so no count is cut, help/arngz.md's Toasts lines, and toast_test's arms. Red leg for cc's run-a.sh: ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh (972f71c0) over 90bc0d8e's toast.lua, with one GREEN_AT_BASE check. cc takes the commit into its stack by git apply -3 and commit -C. The parts land with A after the removeSpace probe and A's booked run, and go back to design with A if the probe sends A back. After cc's suites are green: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua), to-write, red, green."
+  }
+}

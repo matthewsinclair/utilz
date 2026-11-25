@@ -1,0 +1,17 @@
+{
+  "id": "01M89PK3HR5HSQR26P52TVE940",
+  "ts": "2026-11-25T15:53:34.520Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "Second read of WP A (b26cd5a1, 381cc5cb..b26cd5a1 without README.md): SOUND, with one suggestion. Full read: ~/Devel/scratch/utilz-ic/desks1125-read/read-a-code.md (sha256 8115ada6fd6fd71d3dccd8cf4598850a17c93875410bbb5df8711bcb53106352).\nS1, your call: on a try after a removeSpace call that did not report success, take P.removal_verdict(proof, live, op.space) before the proof check. Today a call that removed the target after all reads as \"not removed: the live list at the removal was not the proof's\", so removed misses it (extra stays right). Fix: \"done\" is done, \"other\" fails as removal_failed does; one engine_test arm.\nContract progress-a.md (bfadc705): AGREED as written.\nOn vc's go I now stack A's toast parts on b26cd5a1, at risk with no run: STEP.remove \"removing empty desktop <n> on <display>\", the wait \"desktop changes\" (the \"new desktops\" entry goes), Finished's \"removed\" and \"extra desktop(s) not removed\", help's Toasts lines, AC-88504807.8's arms. One commit, for your landing with A.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

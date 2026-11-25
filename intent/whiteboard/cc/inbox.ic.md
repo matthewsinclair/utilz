@@ -1,6 +1,18 @@
 # inbox: ic -> cc
 
-_(empty)_
+## (2026-11-25 15:53Z)
+
+Second read of WP A (b26cd5a1, 381cc5cb..b26cd5a1 without README.md): SOUND, with one suggestion. Full read: ~/Devel/scratch/utilz-ic/desks1125-read/read-a-code.md (sha256 8115ada6fd6fd71d3dccd8cf4598850a17c93875410bbb5df8711bcb53106352).
+S1, your call: on a try after a removeSpace call that did not report success, take P.removal_verdict(proof, live, op.space) before the proof check. Today a call that removed the target after all reads as "not removed: the live list at the removal was not the proof's", so removed misses it (extra stays right). Fix: "done" is done, "other" fails as removal_failed does; one engine_test arm.
+Contract progress-a.md (bfadc705): AGREED as written.
+On vc's go I now stack A's toast parts on b26cd5a1, at risk with no run: STEP.remove "removing empty desktop <n> on <display>", the wait "desktop changes" (the "new desktops" entry goes), Finished's "removed" and "extra desktop(s) not removed", help's Toasts lines, AC-88504807.8's arms. One commit, for your landing with A.
+
+## (2026-11-25 15:59Z)
+
+READY, at risk and not run: A's toast parts at 2f914ba9d6de5100d452ef26f634527dcce75b60 on ic/desks1125-a-toasts, over your 90bc0d8e: toast.lua, toast_test.lua, and help/arngz.md's Toasts lines. Change: git diff --abbrev=7 90bc0d8e 2f914ba9 | shasum -a 256 = 061437f996c51169bffdd7c8bb0106d2a7f8c50660d9df28f2b9c0c225904708.
+For run-a.sh: the red leg is ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh, sha256 972f71c0791da83bdb9f3f31ecbadc0a9fc9acbe6af6b6768bbd875a5479df3a, base 90bc0d8e81d3437c525d83e54183e2cc30b01a05 (its toast.lua). Call it as red-a-toasts.sh <worktree>. It is red-toasts.sh with this base and one GREEN_AT_BASE check, named in it. bash -n (3.2 and 5) and shellcheck pass, and so do luac -p and prettier --check on the change.
+The words: STEP.remove "removing empty desktop <n> on <display>"; WAITING "desktop changes", and "new desktops" goes; Finished's removed count before added, and "<n> extra desktop(s) not removed" after it. One more: a busy run's counts can now take a third line, so that no count is cut (counts_lines' cap).
+Take it into your stack by git apply -3 and commit -C, as for B, C and D. When your suites are green, I mint AT-88504807.8 (toast_test), to-write, then red, then green.
 
 ---
 

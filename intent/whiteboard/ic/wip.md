@@ -15,6 +15,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
 - arca_swift issue 0003 and Utilz issue 0114 (hv: "Fix now, in 2.15.0"; vc decision 118; design r2 96ddd152). arca_swift: STc203646d7444f4f1 WP e69447a3, R1 green (XSXNYY), AC-e69447a3.1 to .5 satisfied. The rebuilt chain on ic/arca0003r at 940f91b5 (worktree ~/Devel/scratch/utilz-ic/wt-arca0003r) scans clean, and vc read it SOUND. Waits on: hv's move of arca_swift main to 940f91b5 with its push (in vc's window), vc's read of CI's test and adopter jobs, then hv's tag 0.3.0. Then, on vc's word, ic satisfies AC-e69447a3.6 and .7 in a fresh arca_swift worktree, and removes ic/arca0003 (9bb8543f) and wt-arca0003r. Utilz 0114: ic/menuz0114 at 23a57e87 in ~/Devel/scratch/utilz-ic/wt-menuz0114. vc read R2 SOUND (run-r2.sh 06b1645b, red-leg.md 71367312, in ~/Devel/scratch/utilz-ic/menuz0114): one green leg, and R2 asks the Desk (heavy) after the tag and vc's word. After R2: commit the project files and Package.resolved as R2 wrote them; AT-4b560be1.1 and .2 go to-write, red, green, with a red note that says GREEN_AT_BASE, named in red-leg.md before R2, never seen red, with the red proof in arca_swift's R1 (vc's ruling (a)); then READY to vc. (edited)
+- A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 23 (3)), on vc's go after hv decision 39, at risk and not run: READY to cc at 2f914ba9 on ic/desks1125-a-toasts (worktree ~/Devel/scratch/utilz-ic/wt-desks-a-toasts), over cc's 90bc0d8e (A with ic's S1), change 061437f9. The remove step, the wait for "desktop changes", Finished's removed and extra counts, a third count line so no count is cut, help/arngz.md's Toasts lines, and toast_test's arms. Red leg for cc's run-a.sh: ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh (972f71c0) over 90bc0d8e's toast.lua, with one GREEN_AT_BASE check. cc takes the commit into its stack by git apply -3 and commit -C. The parts land with A after the removeSpace probe and A's booked run, and go back to design with A if the probe sends A back. After cc's suites are green: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua), to-write, red, green. (edited)
 
 ## TODO
 
@@ -22,7 +23,7 @@ _(none)_
 
 ## Holds
 
-- Toast parts for WP A of cc's desks design (ST6d8eed9, hv decision 23 (3)): the remove step, the wait for desktop changes, the removed and extra counts, and help/arngz.md's lines for them; AC-88504807.8; size XS. Released when WP A's code is on cc/desks1125 after the removeSpace probe, and vc says go. Reads: ~/Devel/scratch/utilz-ic/desks1125-read/read-r1.md, read-r2.md and read-r3.md. (edited)
+_(none)_
 
 ## Watch-outs
 
