@@ -31,8 +31,12 @@
 -- another tree that is replaced while its own start raises leaves no watcher
 -- behind. And an apply that creates a desktop takes its first read after the
 -- creates as it comes, sends its step point before the create and its
--- waiting point for new desktops, names the desktop with its id, and logs
--- com.apple.spaces after the creates and at its end.
+-- waiting point for the desktop changes, names the desktop with its id, and
+-- logs com.apple.spaces after the creates and at its end. An apply that
+-- removes an extra empty desktop (ST6d8eed9 WP 88504807) counts it in its
+-- planned point, sends a remove step before it, names the desktop that went,
+-- and says in its finished point how many it removed and how many extra
+-- desktops it leaves.
 --
 -- WHAT IT DOES NOT HOLD, said so it is not read into a green. The waiting
 -- point of the unseen windows, the step points of the moves, and rule 2's "a
@@ -354,10 +358,13 @@ arm("the formatters", function()
     string.find(unmovable, 'window 103 "arngz.lua - Utilz"; failed: com.microsoft.VSCode is on 2 spaces', 1, true) ~= nil,
     unmovable)
   local pairs_out = L.report_pairs({ "a (p): placed" }, 1,
-    { placed = 2, in_place = 1, failed = 1, unseen = 0, not_running = 3, created = 1 })
-  check("report pairs: each line, then the exit and the tally, with the apps not running",
+    { placed = 2, in_place = 1, failed = 1, unseen = 0, not_running = 3, created = 1, removed = 2 })
+  -- AT-88504807.5 (ST6d8eed9 acceptance.md) cites this check: the desktops
+  -- removed beside those created.
+  check("report pairs: each line, then the exit and the tally, with the apps not running and the desktops removed",
     #pairs_out == 2 and pairs_out[1][2] == "a (p): placed"
-      and pairs_out[2][2] == "exit 1: 2 placed, 1 in place, 1 failed, 0 unseen, 3 not running, 1 desktop(s) created",
+      and pairs_out[2][2] == "exit 1: 2 placed, 1 in place, 1 failed, 0 unseen, 3 not running, 1 desktop(s) created,"
+        .. " 2 removed",
     pairs_out[2] and pairs_out[2][2])
 end)
 
@@ -960,11 +967,11 @@ arm("the read after the creates", function()
       and find(recs, "report", (#after - #before) .. " desktop(s) created") ~= nil,
     response and (tostring(response.status) .. " / " .. tostring(response.exit) .. " / " .. last_line(recs)))
   local done = find(recs, "wait", "created: done after")
-  local logged = find(recs, "displays", "after creating:", "engine")
+  local logged = find(recs, "displays", "after the desktop changes:", "engine")
   check("created: the read after the creates is its first, taken as it comes, never waited past",
     done ~= nil and find(recs, "wait", "created: timed out") == nil
       and logged ~= nil and logged.text:find("Hammerspoon read 1 after the create", 1, true) ~= nil,
-    (done and done.text or "no wait ended done") .. " / " .. (logged and logged.text or "no after creating block"))
+    (done and done.text or "no wait ended done") .. " / " .. (logged and logged.text or "no after the desktop changes block"))
   check("created: the desktop is recorded with its id, from the live list once the creation returns",
     find(recs, "op", "created desktop " .. made) ~= nil, last_line(recs))
   local step_at, made_at
@@ -990,7 +997,7 @@ arm("the read after the creates", function()
     return false
   end
   local uuid = tostring(base.uuid)
-  for _, label in ipairs({ "after creating", "end" }) do
+  for _, label in ipairs({ "after the desktop changes", "end" }) do
     check("created: com.apple.spaces is logged " .. label .. ", the new desktop live and filed under no record",
       in_block(label, "live", uuid .. ": " .. table.concat(after, " "))
         and in_block(label, "record", uuid .. ": " .. table.concat(before, " ") .. " (current ")
@@ -1386,6 +1393,97 @@ arm("a pause that gives up, and a take after the last pause", function()
   check("fourth take: finished says the run paused MAX_PAUSES times",
     point_of(recs, "R-SPENT", "finished"):match(" paused=(%d+)") == tostring(P.MAX_PAUSES),
     point_of(recs, "R-SPENT", "finished"))
+end)
+
+-- ---------------------------- ST6d8eed9 WP 88504807: extra empty desktops
+-- AT-88504807.5 (ST6d8eed9 acceptance.md) cites this arm, the next, and the
+-- report pairs' check in arm 1.
+
+arm("a removal's fields and records", function()
+  local desk = F.base_desk()
+  local remove = { op = "remove_space", screen = "SCREEN-A", space = 20, ordinal = 1, path = "displays[0]" }
+  local create = { op = "create_space", screen = "SCREEN-A", path = "displays[0].spaces[2]" }
+  local planned = L.planned_fields({ remove })
+  check("planned: removes counts the removals, and a plan of removals alone is not nothing",
+    planned.removes == 1 and planned.creates == 0 and planned.nothing == false,
+    L.point_text("planned", planned))
+  local removed = L.step_fields(desk, remove, 1, 2)
+  local created = L.step_fields(desk, create, 2, 2)
+  check("step: a removal's kind is remove, with its display and its desktop's ordinal",
+    removed.kind == "remove" and removed.display == "left" and removed.desktop == 1, L.point_text("step", removed))
+  check("step: a create's kind is create, the word the toast keys on",
+    created.kind == "create" and created.desktop == 3, L.point_text("step", created))
+  local text = L.result_text(remove, { status = "done", removed = { 20 }, readback = { live = { 11, 12 } } }, 9)
+  check("op record: a removal names the desktop that went, and the live list it read back",
+    string.find(text, "removed desktop 20", 1, true) ~= nil and string.find(text, "desktops live 11 12", 1, true) ~= nil,
+    text)
+  local finished = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = { removed = 1 }, extra = 2 }, 1,
+    "/tmp/arngz.log")
+  local unread = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = {} }, 1, "/tmp/arngz.log")
+  check("finished: removed counts the removals, and extra the desktops left beyond the desk's, absent when unread",
+    finished.removed == 1 and finished.extra == 2 and unread.removed == 0 and unread.extra == nil,
+    L.point_text("finished", finished))
+end)
+
+-- The plug-in case, through M.run: macOS put a new empty desktop first on
+-- the display, before the desk's two. apply removes it, proving its tile
+-- first, and then every window is already home.
+arm("an apply that removes a desktop", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local new = 20
+  f.live = { new }
+  for _, sp in ipairs(base.spaces) do f.live[#f.live + 1] = sp.id end
+  local shown = base.spaces[1].id
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    shown = id
+    return true
+  end
+  f.hs.spaces.windowsForSpace = function() return {} end
+  f.hs.spaces.removeSpace = function(id)
+    local kept = {}
+    for _, s in ipairs(f.live) do
+      if s ~= id then kept[#kept + 1] = s end
+    end
+    f.live = kept
+    return true
+  end
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    local s = w.screens[1]
+    s.live = f.live
+    if f.live[1] == new then
+      table.insert(s.spaces, 1, { id = new, type = "user", uuid = "SPACE-" .. new, active = false, windows = {} })
+      for i, sp in ipairs(s.spaces) do sp.ordinal = i end
+    end
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-REMOVE", log = log })
+  local recs = records(log)
+  check("remove run: apply answers ok, exit 0, every entry in place once the new desktop is gone",
+    response and response.status == "ok" and response.exit == 0 and L.ids(f.live) == L.ids({ 11, 12 }),
+    response and (tostring(response.status) .. " / " .. tostring(response.exit) .. " / " .. L.ids(f.live)))
+  check("remove run: the points go out start, observed, planned, step, waiting, finished",
+    point_names(recs, "R-REMOVE") == "start observed planned step waiting finished", point_names(recs, "R-REMOVE"))
+  check("remove run: planned counts the removal",
+    point_of(recs, "R-REMOVE", "planned"):find(" removes=1", 1, true) ~= nil, point_of(recs, "R-REMOVE", "planned"))
+  check("remove run: the step says remove, desktop 1 on left",
+    point_of(recs, "R-REMOVE", "step"):find(" desktop=1 display=left i=1 kind=remove n=1", 1, true) ~= nil,
+    point_of(recs, "R-REMOVE", "step"))
+  check("remove run: the wait after it is for the desktop changes",
+    point_of(recs, "R-REMOVE", "waiting"):find("for=desktop changes", 1, true) ~= nil, point_of(recs, "R-REMOVE", "waiting"))
+  check("remove run: its op record names the desktop that went", find(recs, "op", "removed desktop " .. new) ~= nil,
+    last_line(recs))
+  check("remove run: the report counts it", find(recs, "report", "0 desktop(s) created, 1 removed") ~= nil, last_line(recs))
+  local finished = point_of(recs, "R-REMOVE", "finished")
+  check("remove run: finished says one removed, and no extra desktop left",
+    finished:find(" removed=1", 1, true) ~= nil and finished:find(" extra=0", 1, true) ~= nil, finished)
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))

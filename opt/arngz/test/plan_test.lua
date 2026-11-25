@@ -612,11 +612,21 @@ do
   local sticky2 = base_world()
   table.insert(space(sticky2, 1).windows, space(sticky2, 2).windows[1])
   for _, op in ipairs(P.plan(d3, sticky2, {}) or {}) do more[#more + 1] = op end
+  -- ST6d8eed9 WP 88504807: an empty third desktop is removed, and one that
+  -- holds a window only it lists is kept as an extra.
+  local spare = base_world()
+  table.insert(spare.screens[1].spaces, { id = 13, ordinal = 3, type = "user", uuid = "SPACE-13", windows = {} })
+  for _, op in ipairs(P.plan(base_desk(), spare, {}) or {}) do more[#more + 1] = op end
+  local kept = base_world()
+  table.insert(kept.screens[1].spaces, { id = 13, ordinal = 3, type = "user", uuid = "SPACE-13",
+    windows = { win(104, "com.apple.Notes", "Notes", 0, 25, 300, 300) } })
+  for _, op in ipairs(P.plan(base_desk(), kept, {}) or {}) do more[#more + 1] = op end
   for _, op in ipairs(more) do
     seen[op.op] = true
     if not op.reason then missing[#missing + 1] = op.op end
   end
-  local every = { "create_space", "not_running", "move", "place", "unseen", "gone", "unmovable", "no_space", "pending" }
+  local every = { "create_space", "not_running", "move", "place", "unseen", "gone", "unmovable", "no_space", "pending",
+    "remove_space", "extra" }
   local absent = {}
   for _, k in ipairs(every) do
     if not seen[k] then absent[#absent + 1] = k end
@@ -2005,6 +2015,213 @@ do
   local twice, again = own("own_sizes_after", once, { result("place", "done", AT_OWN) })
   check("own sizes: merging the same results twice gives the same records, unchanged",
     twice and #twice == 1 and again == false, render(twice))
+end
+
+-- ---------------------------------- extra desktops (ST6d8eed9 WP 88504807)
+
+print("extra desktops")
+
+-- The base world with its screen's desktops in ORDER: 11 and 12 are the
+-- base's, with their windows, and any other id is a new empty desktop. Each
+-- is numbered as observe numbers it, and SHOWN (11 unless given) is the one
+-- its display shows.
+local function world_of(order, shown)
+  local w = base_world()
+  local by = {}
+  for _, sp in ipairs(w.screens[1].spaces) do by[sp.id] = sp end
+  local spaces = {}
+  for i, id in ipairs(order) do
+    local sp = by[id] or { id = id, type = "user", uuid = "SPACE-" .. id, windows = {} }
+    sp.ordinal = i
+    sp.active = id == (shown or 11)
+    spaces[i] = sp
+  end
+  w.screens[1].spaces = spaces
+  return w
+end
+
+-- The base desk with a third desktop that names no app, so a display needs
+-- three, and two empty desktops can compete for one removal.
+local function three_desk()
+  local d = base_desk()
+  table.insert(d.displays[1].spaces, { name = "spare", apps = {} })
+  return d
+end
+
+local function removed_ids(ops)
+  local out = {}
+  for _, op in ipairs(ops or {}) do
+    if op.op == "remove_space" then out[#out + 1] = tostring(op.space) end
+  end
+  return table.concat(out, ",")
+end
+
+-- AT-88504807.1 (ST6d8eed9 acceptance.md) cites the arms from here to the
+-- two removals'. The new-desktop-first case: at a plug-in, macOS puts a new
+-- empty desktop first on the monitor, before the desktops it carries back.
+-- Removing it lines them up with the desk. Removing the one at the end would
+-- leave every window a desktop off its own.
+do
+  local ops, err = P.plan(three_desk(), world_of({ 20, 11, 12, 21 }), {})
+  check("extra: the new empty desktop first is removed, not the empty one at the end", removed_ids(ops) == "20",
+    err or ops_text(ops))
+  check("extra: and with it gone every window is on its own desktop, so nothing else is planned",
+    kinds(ops) == "remove_space", ops_text(ops))
+  local op = ops and ops[1] or {}
+  check("extra: a removal names its screen, its desktop's id, its place among the display's desktops, and the desk path",
+    op.screen == "SCREEN-A" and op.space == 20 and op.ordinal == 1 and op.path == "displays[0]"
+      and string.find(tostring(op.reason), "display left needs 3 spaces and has 4; space 1 is empty", 1, true) ~= nil,
+    string.format("%s %s %s %s %s", tostring(op.screen), tostring(op.space), tostring(op.ordinal), tostring(op.path),
+      tostring(op.reason)))
+end
+
+-- The end case: a new empty desktop after the desk's.
+do
+  local ops, err = P.plan(base_desk(), world_of({ 11, 12, 20 }), {})
+  check("extra: an empty desktop at the end is removed, and nothing else is planned",
+    removed_ids(ops) == "20" and kinds(ops) == "remove_space" and ops[1].ordinal == 3, err or ops_text(ops))
+end
+
+-- A tie: either removal leaves every entry at home.
+do
+  local ops, err = P.plan(three_desk(), world_of({ 11, 12, 20, 21 }), {})
+  check("extra: a tie removes the later desktop", removed_ids(ops) == "21", err or ops_text(ops))
+  local shown, serr = P.plan(three_desk(), world_of({ 11, 12, 20, 21 }, 21), {})
+  check("extra: a tie keeps the shown desktop, though it is the later one", removed_ids(shown) == "20",
+    serr or ops_text(shown))
+end
+
+-- Two removals from three empty desktops: each candidate set is whole, and
+-- the removals go later first, so none moves the place of one still to come.
+do
+  local ops, err = P.plan(three_desk(), world_of({ 20, 11, 12, 21, 22 }), {})
+  check("extra: two of three empty desktops removed, the first and the later of the tie, later first",
+    removed_ids(ops) == "22,20" and ops[1].ordinal == 5 and ops[2].ordinal == 1, err or ops_text(ops))
+end
+
+-- AT-88504807.2 (ST6d8eed9 acceptance.md) cites the arms from here to the
+-- unmatched screen's.
+do
+  local ops = P.plan(base_desk(), base_world(), {})
+  check("extra: a display with no excess removes nothing", ops and #ops == 0, ops_text(ops))
+  local held = world_of({ 11, 12, 20 })
+  held.screens[1].spaces[3].windows = { win(104, "com.apple.Notes", "Notes", 0, 25, 300, 300) }
+  local hops, herr = P.plan(base_desk(), held, {})
+  check("extra: a desktop with a window only it lists is kept, as a note that counts against nothing",
+    kinds(hops) == "extra" and hops[1].uncounted == true and hops[1].count == 1
+      and string.find(hops[1].reason, "display left keeps 1 desktop(s) more than the 2 the desk names;"
+        .. " desktops 1, 2, 3 hold windows", 1, true) ~= nil,
+    herr or (hops and hops[1] and hops[1].reason) or ops_text(hops))
+  local report = P.plan_report(hops)
+  check("extra: diff says no change, then the kept desktop, and exits 0",
+    P.plan_exit(hops) == 0 and string.find(report[1] or "", "no change", 1, true) == 1
+      and string.find(report[2] or "", "keep 1 extra space(s) on SCREEN-A (displays[0]): ", 1, true) == 1,
+    table.concat(report or {}, " | "))
+  -- Part of the excess removed, the rest kept: both said.
+  local part = world_of({ 11, 12, 20, 21 })
+  part.screens[1].spaces[4].windows = { win(104, "com.apple.Notes", "Notes", 0, 25, 300, 300) }
+  local pops, perr = P.plan(base_desk(), part, {})
+  check("extra: an excess with one empty desktop removes it and keeps the rest, said",
+    kinds(pops) == "remove_space,extra" and pops[1].space == 20 and pops[2].count == 1, perr or ops_text(pops))
+end
+
+-- A window on every space holds no desktop.
+do
+  local sticky = world_of({ 11, 12, 20 })
+  local nc = win(900, "com.apple.notificationcenterui", "Notification Center", 0, 0, 10, 10)
+  for _, sp in ipairs(sticky.screens[1].spaces) do sp.windows[#sp.windows + 1] = nc end
+  local ops, err = P.plan(base_desk(), sticky, {})
+  check("extra: a desktop whose one window is on every space is empty, and removed", removed_ids(ops) == "20",
+    err or ops_text(ops))
+end
+
+-- A full-screen space is not a desktop.
+do
+  local fs = base_world()
+  table.insert(fs.screens[1].spaces, { id = 99, ordinal = 3, type = "fullscreen", uuid = "SPACE-99", windows = {} })
+  local ops, err = P.plan(base_desk(), fs, {})
+  check("extra: a full-screen space is never removed, nor counted as an extra desktop", ops and #ops == 0,
+    err or ops_text(ops))
+end
+
+-- A screen the desk does not match.
+do
+  local w = base_world()
+  table.insert(w.screens, { uuid = "SCREEN-B", name = "Other", primary = false, position = "above",
+    frame = { x = 0, y = -800, w = 1200, h = 800 }, full_frame = { x = 0, y = -825, w = 1200, h = 825 },
+    spaces = {
+      { id = 31, ordinal = 1, type = "user", uuid = "SPACE-31", active = true, windows = {} },
+      { id = 32, ordinal = 2, type = "user", uuid = "SPACE-32", windows = {} },
+    } })
+  local ops, err = P.plan(base_desk(), w, {})
+  check("extra: a screen the desk does not match keeps its empty desktops", ops and #ops == 0, err or ops_text(ops))
+end
+
+-- AT-88504807.4 (ST6d8eed9 acceptance.md) cites the arms from here to the
+-- report's.
+do
+  local again = P.plan(three_desk(), world_of({ 20, 11, 12, 21 }), { no_remove = true })
+  local kept = again and again[#again] or {}
+  check("extra: a second plan never removes; it keeps the excess as a note, last",
+    removed_ids(again) == "" and kept.op == "extra" and kept.count == 1, ops_text(again))
+  -- Desktop 20 first and empty, desktop 12 empty, VS Code with Mail and
+  -- Safari on 11: removing 20 leaves two entries home where removing 12
+  -- leaves one, and the move to the desk's second desktop is then to 12.
+  local w = world_of({ 20, 11, 12 })
+  table.insert(w.screens[1].spaces[2].windows, table.remove(w.screens[1].spaces[3].windows, 1))
+  local ops, err = P.plan(base_desk(), w, {})
+  check("extra: the moves are planned against the world without the removed desktop",
+    kinds(ops) == "remove_space,move,place" and ops[1].space == 20 and ops[2].space == 12 and ops[2].ordinal == 2,
+    err or ops_text(ops))
+  local lines = P.plan_report(ops)
+  check("extra: diff says the removal first, in its own words, and counts it as a change",
+    string.find(lines[1] or "", "remove empty space 1 of SCREEN-A (displays[0]): display left needs 2 spaces and has 3;"
+      .. " space 1 is empty", 1, true) == 1 and P.plan_exit(ops) == 1,
+    table.concat(lines or {}, " | "))
+end
+
+-- The report counts a removal done.
+do
+  local _, code, tally = P.apply_report(base_desk(), {
+    { op = "remove_space", path = "displays[0]", status = "done" },
+    { op = "remove_space", path = "displays[0]", status = "note", reason = "not removed: the proof failed" },
+  })
+  check("extra: the report counts each removal done, and a removal not done is a note that counts against nothing",
+    tally.removed == 1 and code == 0, tostring(tally.removed) .. " / " .. tostring(code))
+end
+
+-- What the finished point's extra reads, and what the engine's removal asks.
+do
+  local unread_world = world_of({ 20, 11, 12, 21 })
+  unread_world.screens[1].spaces_error = "spacesForScreen failed"
+  check("extra_desktops: the desktops beyond the desk's count on the displays it matches, nil where none match"
+    .. " or the read failed",
+    P.extra_desktops(base_desk(), world_of({ 20, 11, 12, 21 }), {}) == 2
+      and P.extra_desktops(base_desk(), base_world(), {}) == 0
+      and P.extra_desktops(base_desk(), nil, {}) == nil
+      and P.extra_desktops(base_desk(), unread_world, {}) == nil,
+    tostring(P.extra_desktops(base_desk(), world_of({ 20, 11, 12, 21 }), {})))
+  check("same_ids: the same ids in the same order, and nothing else",
+    P.same_ids({ 1, 2, 3 }, { 1, 2, 3 }) and not P.same_ids({ 1, 2, 3 }, { 1, 3, 2 })
+      and not P.same_ids({ 1, 2 }, { 1, 2, 3 }))
+  check("removal_place: the next desktop, else the one before, else none",
+    P.removal_place({ 1, 2, 3 }, 2) == 3 and P.removal_place({ 1, 2, 3 }, 3) == 2 and P.removal_place({ 1 }, 1) == nil
+      and P.removal_place({ 1, 2 }, 9) == nil)
+  local done = P.removal_verdict({ 1, 2, 3 }, { 1, 2 }, 3)
+  local other, went = P.removal_verdict({ 1, 2, 3 }, { 1, 3 }, 3)
+  local none = P.removal_verdict({ 1, 2, 3 }, { 1, 2, 3 }, 3)
+  local came_too, _, came = P.removal_verdict({ 1, 2, 3 }, { 1, 2, 7 }, 3)
+  check("removal_verdict: exactly the target gone is done, another gone is other, no change is none, one come is other",
+    done == "done" and other == "other" and went[1] == 2 and none == "none" and came_too == "other" and came[1] == 7,
+    table.concat({ tostring(done), tostring(other), tostring(none), tostring(came_too) }, " / "))
+  local empty = P.empty_by({}, function() return 0 end)
+  local alone, alone_why = P.empty_by({ 5 }, function() return 1 end)
+  local elsewhere = P.empty_by({ 5 }, function() return 3 end)
+  local unread, unread_why = P.empty_by({ 5 }, function() return nil, "boom" end)
+  check("empty_by: no window, or windows on other spaces too, is empty; a window on it alone, or one unread, is not",
+    empty and not alone and alone_why == "window 5 is on it alone" and elsewhere and not unread
+      and string.find(tostring(unread_why), "could not be read: boom", 1, true) ~= nil,
+    tostring(alone_why) .. " / " .. tostring(unread_why))
 end
 
 print(string.format("plan_test: %d passed, %d failed", passed, failed))

@@ -587,30 +587,45 @@ end
 
 -- ---------------------------------------------------------------- execute
 
+-- A screen's desktops live: its whole list and its user desktops, each in the
+-- live list's order, or nil, nil and why they could not be read. The one
+-- reader the creates and the removals share (ST6d8eed9 WP 88504807).
+local function live_desktops(uuid)
+  local spaces, err = hs.spaces.spacesForScreen(uuid)
+  if not spaces then return nil, nil, "spacesForScreen: " .. tostring(err) end
+  local all, users = {}, {}
+  for _, id in ipairs(spaces) do
+    local stype, terr = hs.spaces.spaceType(id)
+    if stype == nil then return nil, nil, "spaceType(" .. tostring(id) .. "): " .. tostring(terr) end
+    all[#all + 1] = id
+    if P.is_user_space(stype) then users[#users + 1] = id end
+  end
+  return all, users
+end
+
 -- How many desktops a screen has, or nil and why it could not be read, so a
 -- failed readback is never blamed on the op it was reading back. The third
 -- value is the live list the count was read from, so the run log can name the
 -- desktop a creation added without a read of its own.
 local function user_space_count(uuid)
-  local spaces, err = hs.spaces.spacesForScreen(uuid)
-  if not spaces then return nil, "spacesForScreen: " .. tostring(err) end
-  local n = 0
-  for _, id in ipairs(spaces) do
-    local stype, terr = hs.spaces.spaceType(id)
-    if stype == nil then return nil, "spaceType(" .. tostring(id) .. "): " .. tostring(terr) end
-    if P.is_user_space(stype) then n = n + 1 end
-  end
-  return n, nil, spaces
+  local all, users, err = live_desktops(uuid)
+  if not all then return nil, err end
+  return #users, nil, all
 end
 
--- The ids in AFTER that BEFORE did not hold: the desktops a creation added.
-local function added(before, after)
-  local had, out = {}, {}
-  for _, id in ipairs(before or {}) do had[id] = true end
-  for _, id in ipairs(after or {}) do
-    if not had[id] then out[#out + 1] = id end
-  end
-  return out
+-- The Dock's Mission Control error binds the rest of the run's desktop edits,
+-- creates and removes alike, since Mission Control is one for every display
+-- and prepare runs every edit in one callback (STca1b7f9 WP6; ST6d8eed9 WP
+-- 88504807). WHAT is the edit that failed there, as the refusal of a later
+-- edit says it. The one builder of ctx.dock_failed, and the one wording of
+-- what it refuses.
+local function bind_dock(ctx, what, reason)
+  ctx.dock_failed = { what = what, reason = reason, fix = P.DOCK_FIX, all = true }
+end
+
+local function dock_bound_words(bound)
+  return string.format("%s failed at the Dock earlier in this run, so no other desktop edit was tried (%s)",
+    tostring(bound.what), tostring(bound.reason))
 end
 
 local function exec_create_space(op, ctx)
@@ -623,9 +638,8 @@ local function exec_create_space(op, ctx)
   ctx.space_failed = ctx.space_failed or {}
   local bound = ctx.space_failed[op.screen] or ctx.dock_failed
   if bound then
-    return { status = "failed", fix = bound.fix, reason = string.format(bound.all
-      and "creating a space failed at the Dock earlier in this run and was not tried again (%s)"
-      or "creating a space on this display already failed and was not tried again (%s)", bound.reason) }
+    return { status = "failed", fix = bound.fix, reason = bound.all and dock_bound_words(bound)
+      or string.format("creating a space on this display already failed and was not tried again (%s)", bound.reason) }
   end
   local before, berr, before_ids = user_space_count(op.screen)
   if not before then
@@ -696,7 +710,7 @@ local function exec_create_space(op, ctx)
   if ok then
     -- `created` names the desktop it added, from the lists the counts were
     -- read from, for the run log (ST589246c).
-    return { status = "done", readback = { user_spaces = res }, created = added(before_ids, last_ids) }
+    return { status = "done", readback = { user_spaces = res }, created = P.added(before_ids, last_ids) }
   end
   local after = user_space_count(op.screen)
   -- No fixed outer phrase. apply_report prefixes every loose line with the op
@@ -723,7 +737,7 @@ local function exec_create_space(op, ctx)
   -- A count that moved by some other amount is likewise this op's failure
   -- alone, said rather than held against the rest of the run.
   if after == nil or (after == before and not made) then ctx.space_failed[op.screen] = { reason = reason, fix = fix } end
-  if dock then ctx.dock_failed = { reason = reason, fix = fix, all = true } end
+  if dock then bind_dock(ctx, "creating a space", reason) end
   return { status = "failed", reason = reason, fix = fix }
 end
 
@@ -1414,13 +1428,179 @@ local function exec_move(op, ctx)
   return { status = status, reason = reason, readback = rb }
 end
 
+-- ------------------------------------- removals (ST6d8eed9 WP 88504807)
+--
+-- hs.spaces.removeSpace finds its Mission Control tile by the desktop's index
+-- in the live list (spacesForScreen), and the live list can part from Mission
+-- Control's order (P.order_spaces). Then the call removes another desktop. So
+-- each removal is PROVEN first: gotoSpace presses the tile at the same index,
+-- and a display that then shows the target has the target's tile where
+-- removeSpace will press. The live list read at that show is the proof's.
+-- The desktop that takes the target's place is shown next, since removeSpace
+-- refuses a shown desktop, and the live list must still be the proof's, id
+-- for id, when removeSpace is asked. The readback must show exactly that id
+-- gone. Each proof opens Mission Control twice more; a desk already right
+-- removes nothing.
+
+-- How long a desktop shown through Mission Control may take to read back as
+-- shown: gotoSpace opens Mission Control, presses the tile, and the display
+-- switches as it closes.
+M.SHOW_SPACE_SECONDS = 5
+
+-- The desktop edits run before any move, with no pointer held: gotoSpace and
+-- removeSpace press Mission Control's tiles through the Dock's accessibility.
+-- So their readbacks check no hand.
+local NO_HAND = { check = function() end }
+
+-- Show SPACE on screen UUID through Mission Control, and read it back: true
+-- only when gotoSpace returned true and the screen then shows SPACE. Else nil,
+-- what the screen shows, and the call's own error, for the Dock's binding of
+-- the run. A call that failed proves nothing, whatever the screen shows.
+local function show_by_tile(uuid, space)
+  local called, ok, why = pcall(hs.spaces.gotoSpace, space)
+  if not called then ok, why = nil, ok end
+  if ok and wait_for(NO_HAND, M.SHOW_SPACE_SECONDS, "", function()
+    return hs.spaces.activeSpaceOnScreen(uuid) == space
+  end) then
+    return true
+  end
+  local at, aerr = hs.spaces.activeSpaceOnScreen(uuid)
+  return nil, string.format("gotoSpace(%s) %s, and screen %s shows %s", tostring(space),
+    ok and string.format("returned, and after %s s", tostring(M.SHOW_SPACE_SECONDS)) or ("failed: " .. tostring(why)),
+    tostring(uuid), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr))),
+    (not ok) and why or nil
+end
+
+local function exec_remove_space(op, ctx)
+  local function not_removed(why) return { status = "note", reason = "not removed: " .. tostring(why) } end
+  -- A proof that failed stops the removals on its display: that display's
+  -- extra desktops are left, and finished.extra counts them. The Dock's error
+  -- in it binds the run.
+  local function proof_failed(why, call_error)
+    ctx.proof_failed[op.screen] = why
+    if call_error and P.space_error_kind(call_error) == "dock" then
+      bind_dock(ctx, "removing a desktop", (P.create_failure(call_error)))
+    end
+    return not_removed("the proof failed, so no removal on this display is tried: " .. why)
+  end
+  -- A removal that failed stops every later one: its words, and the fix.
+  local function removal_failed(said, rb, went)
+    ctx.remove_failed = said
+    return { status = "failed", reason = said, readback = rb, removed = went,
+      fix = P.removal_fix(P.display_label(ctx.names, op.screen)) }
+  end
+  -- What binds this removal: a removal that failed earlier in the run stops
+  -- every removal, a proof that failed stops its display's, and the Dock's
+  -- Mission Control error binds creates and removes alike.
+  ctx.proof_failed = ctx.proof_failed or {}
+  if ctx.remove_failed then
+    return not_removed("an earlier removal in this run failed (" .. ctx.remove_failed .. ")")
+  end
+  if ctx.proof_failed[op.screen] then
+    return not_removed("a proof on this display failed earlier in this run (" .. ctx.proof_failed[op.screen] .. ")")
+  end
+  if ctx.dock_failed then return not_removed(dock_bound_words(ctx.dock_failed)) end
+  -- 1. Read again: a user desktop on its display, not its only one, and
+  -- empty by the one rule plan chose it by (P.empty_by).
+  local _, users, lerr = live_desktops(op.screen)
+  if not users then return not_removed("its display's desktops could not be read: " .. lerr) end
+  if not contains(users, op.space) then return not_removed("it is no longer a user desktop on its display") end
+  local place = P.removal_place(users, op.space)
+  if not place then return not_removed("it is its display's only desktop") end
+  local ids, werr = hs.spaces.windowsForSpace(op.space)
+  if not ids then return not_removed("its windows could not be read: windowsForSpace: " .. tostring(werr)) end
+  local empty, held = P.empty_by(list(ids), function(id)
+    local on, oerr = hs.spaces.windowSpaces(id)
+    if not on then return nil, "windowSpaces: " .. tostring(oerr) end
+    return #list(on)
+  end)
+  if not empty then return not_removed(held) end
+  -- 2. The proof. A press is seen only when the screen showed another
+  -- desktop before it, so a screen that shows the target already shows the
+  -- desktop in its place first. Then the target is shown and read back, with
+  -- the live list at its show, and the desktop in its place is shown again
+  -- and read back.
+  if hs.spaces.activeSpaceOnScreen(op.screen) == op.space then
+    local off, owhy, oerr = show_by_tile(op.screen, place)
+    if not off then return proof_failed(owhy, oerr) end
+  end
+  local shown, swhy, serr = show_by_tile(op.screen, op.space)
+  if not shown then return proof_failed(swhy, serr) end
+  local proof, perr = hs.spaces.spacesForScreen(op.screen)
+  if not proof then return proof_failed("the live list at the proof could not be read: " .. tostring(perr)) end
+  proof = list(proof)
+  shown, swhy, serr = show_by_tile(op.screen, place)
+  if not shown then return proof_failed(swhy, serr) end
+  -- 3. removeSpace, while the live list is the proof's, read back with the
+  -- create's tries and its stop on a reason that lasts. A call that reported
+  -- the removal is never made again, as a create's is not.
+  -- `moved` is what the live list was instead of the proof's, in words: a
+  -- list that could not be read is never taken as the proof's.
+  local removed, why, moved, verdict, went, came, after
+  local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
+    if not removed then
+      local live, lerr2 = hs.spaces.spacesForScreen(op.screen)
+      if not live then
+        moved = "a list that could not be read: spacesForScreen: " .. tostring(lerr2)
+        error(moved, 0)
+      end
+      live = list(live)
+      if not P.same_ids(live, proof) then
+        moved = L.ids(live)
+        error("the live list changed since the proof", 0)
+      end
+      local called, r, w = pcall(hs.spaces.removeSpace, op.space, true)
+      if called then removed, why = r, w else removed, why = nil, r end
+    end
+    local now_ids, nerr = hs.spaces.spacesForScreen(op.screen)
+    if not now_ids then error("could not read the desktops back: spacesForScreen: " .. tostring(nerr), 0) end
+    after = list(now_ids)
+    verdict, went, came = P.removal_verdict(proof, after, op.space)
+    if verdict ~= "none" then return verdict end
+    if removed then error("it reported removing the desktop and the desktop list never caught up", 0) end
+    error(tostring(why or "it changed nothing"), 0)
+  end, function()
+    return moved ~= nil or (not removed and why ~= nil and P.space_error_final(why))
+  end)
+  -- What it read back: the live list after the removal, for the run log.
+  local rb = after and { live = after } or nil
+  if ok and res == "done" then
+    return { status = "done", readback = rb, removed = went }
+  end
+  if ok then
+    -- 4. Another desktop went, or one came: the op fails, names both, and no
+    -- later removal on any display is tried. The run goes on: the replan
+    -- reads the world again before any move.
+    return removal_failed(string.format("asked to remove space %s, and %s went%s", tostring(op.space),
+      #went > 0 and ("space(s) " .. L.ids(went)) or "none",
+      #came > 0 and (", and space(s) " .. L.ids(came) .. " came") or ""), rb, went)
+  end
+  -- Not done. A list that was not the proof's: the call was never made.
+  if moved then
+    return not_removed(string.format("the live list at the removal was not the proof's (%s, then %s)",
+      L.ids(proof), moved))
+  end
+  -- A call that reported the removal, whose readback never showed it, or
+  -- could not be read: what happened is not known, so it fails, as a create
+  -- in the same case does, and no later removal is tried.
+  if removed then return removal_failed(tostring(res), rb, {}) end
+  -- A call that removed nothing: the display keeps its extra desktop.
+  local dock = why ~= nil and P.space_error_kind(why) == "dock"
+  local words = P.create_failure(dock and why or res)
+  if dock then bind_dock(ctx, "removing a desktop", words) end
+  return not_removed(words)
+end
+
 -- Ops that ask for nothing to be done, and the status the report gives them.
+-- An extra is a note, said and counted against nothing (ST6d8eed9 WP
+-- 88504807).
 local REPORT_ONLY = { unseen = "unseen", not_running = "not_running", gone = "failed", unmovable = "failed",
-  no_space = "failed" }
+  no_space = "failed", extra = "note" }
 
 -- A recheck is a place (ST0034): the same gesture and readback, so an app that
 -- stops holding its own size is re-sized, and its result clears the record.
-local EXEC = { create_space = exec_create_space, move = exec_move, place = exec_place, recheck = exec_place }
+local EXEC = { remove_space = exec_remove_space, create_space = exec_create_space, move = exec_move,
+  place = exec_place, recheck = exec_place }
 
 -- The kinds of op execute performs, which are the ones a step point stands
 -- for; log_test holds log.lua's PLANNED_FIELD to them (ST589246c).
@@ -1611,14 +1791,16 @@ local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither
 -- which no observe succeeded raises the last error; otherwise what is in
 -- hand stands.
 -- What each wait is for, in the waiting point's words (progress.md). still is
--- a pause for the pointer (ST6d8eed9 WP 4cb617e2).
-local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops",
+-- a pause for the pointer (ST6d8eed9 WP 4cb617e2). The wait after the desktop
+-- edits is for "desktop changes": desktops removed, created, or both
+-- (ST6d8eed9 WP 88504807).
+local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "desktop changes",
   still = "the pointer to be still" }
 
 -- A wait's start and end in the run log, and its point when it starts, with
--- any EXTRA fields the wait's point carries. After the creates, the displays
--- are logged as the read found them: whether macOS had recorded the new
--- desktops, and where (ST589246c, AC-53ef07aa.3).
+-- any EXTRA fields the wait's point carries. After the desktop edits, the
+-- displays are logged as the read found them: whether macOS had recorded the
+-- changed desktops, and where (ST589246c, AC-53ef07aa.3).
 local function wait_began(job, name, seconds, extra)
   job.waited = job.waited or {}
   job.waited[name] = now()
@@ -1633,7 +1815,7 @@ local function wait_ended(job, name, how, world)
   local since = job.waited and job.waited[name]
   note(job.lg, "wait", string.format("%s: %s after %s ms", name, how,
     since and tostring(math.floor((now() - since) / 1e6)) or "?"))
-  if name == "created" then log_world(job.lg, "after creating", world) end
+  if name == "created" then log_world(job.lg, "after the desktop changes", world) end
 end
 
 local function waiting(job, name, seconds, done, next_phase, must_observe)
@@ -1717,11 +1899,15 @@ function PHASE.unseen(job)
   return waiting(job, "unseen", UNSEEN_SECONDS, function(w) return retry_unseen(job, w) end, job.after_unseen)
 end
 
--- Step 6's refusals, then the creates (step 7). First, before anything
--- changes: a plan that leaves an entry unseen while Hammerspoon's window
--- filter failed asks the CLI to reload Hammerspoon and run apply again, when
--- the request lets it (ST6d8eed9 WP a45b3aeb). The unseen wait has given the
--- filter its chance to come back by then.
+-- The desktop edits, in the order apply makes them: the removals, then the
+-- creates (ST6d8eed9 WP 88504807). No display needs both.
+local DESKTOP_EDITS = { remove_space = true, create_space = true }
+
+-- Step 6's refusals, then the desktop edits (step 7): the removals, then the
+-- creates. First, before anything changes: a plan that leaves an entry unseen
+-- while Hammerspoon's window filter failed asks the CLI to reload Hammerspoon
+-- and run apply again, when the request lets it (ST6d8eed9 WP a45b3aeb). The
+-- unseen wait has given the filter its chance to come back by then.
 function PHASE.prepare(job)
   local reload = P.reload_reason(job.ops, job.request_options.may_reload)
   if reload then error({ reload = reload }, 0) end
@@ -1732,23 +1918,26 @@ function PHASE.prepare(job)
     local free, why = hands_free()
     if not free then refuse(why) end
   end
+  -- Each display as a person reads it, for a removal's fix.
+  ctx.names = P.display_names(job.desk, job.world, job.options)
   job.ctx = ctx
   job.first_ops = job.ops
   job.changed = true
+  job.edits = only(job.ops, DESKTOP_EDITS)
   job.creates = only(job.ops, { create_space = true })
-  if #job.creates > 0 then
-    append(job.results, M.execute(job.creates, ctx))
+  if #job.edits > 0 then
+    append(job.results, M.execute(job.edits, ctx))
     return "created", POLL_SECONDS
   end
   return "organise_start"
 end
 
--- After the creates, one fresh read of the world for the replan, tried again
--- through a read that fails for up to 3 s (WP 93ea7f8a). Nothing is waited for
--- beyond that read: each create is done only once its own count readback
--- lists the new desktop (exec_create_space), and com.apple.spaces, which macOS
--- may not write before the next display change, is never waited on. The read
--- is logged, so the run log shows the record after the creates.
+-- After the desktop edits, one fresh read of the world for the replan, tried
+-- again through a read that fails for up to 3 s (WP 93ea7f8a). Nothing is
+-- waited for beyond that read: each edit is done only once its own readback
+-- shows it (exec_create_space, exec_remove_space), and com.apple.spaces, which
+-- macOS may not write before the next display change, is never waited on. The
+-- read is logged, so the run log shows the record after the edits.
 function PHASE.created(job)
   return waiting(job, "created", 3, function(w)
     job.world = w
@@ -1758,10 +1947,12 @@ end
 
 -- Step 9: plan again against the fresh world, for move and place. apply
 -- launches nothing (ST6d8eed9 WP 35219619), so the replan follows only the
--- creates.
+-- desktop edits. It never removes or creates: an excess it finds is an extra
+-- note (WP 88504807).
 function PHASE.replan(job)
   job.options = {
-    no_create = true, after_create = #job.creates > 0, user_no_create = job.request_options.no_create,
+    no_create = true, no_remove = true, after_create = #job.creates > 0,
+    user_no_create = job.request_options.no_create,
     map = job.request_options.map, own_sizes = job.request_options.own_sizes,
     running_before = P.running_set(job.ctx.world_before),
     -- The windows named at the start, by app, against which a read that says
@@ -1770,7 +1961,7 @@ function PHASE.replan(job)
     after_reload = job.request_options.after_reload_of ~= nil,
   }
   local nxt, err = plan_then(job, "organise_start")
-  if not nxt then error("the plan after creating refused: " .. tostring(err), 0) end
+  if not nxt then error("the plan after the desktop changes refused: " .. tostring(err), 0) end
   return nxt
 end
 
@@ -1782,7 +1973,7 @@ function PHASE.organise_start(job)
   -- Each display by the desk's name for it, else its own, for a step's `via`
   -- and a failed move's words (STca1b7f9).
   ctx.names = P.display_names(job.desk, ctx.world, job.options)
-  job.rest = except(job.ops, { create_space = true })
+  job.rest = except(job.ops, DESKTOP_EDITS)
   job.next_op = 1
   if P.needs_hand(job.rest, ctx.world) then
     local took, why = take_hand(ctx)
@@ -1901,12 +2092,15 @@ function PHASE.finish(job)
   write_log(job.lg, "engine", function() return L.report_pairs(lines, code, tally) end)
   local own_sizes, changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
   -- A read after the changes that failed the filter and left an entry unseen
-  -- asks the CLI to reload and run apply again (ST6d8eed9 WP a45b3aeb), and
-  -- the answer says how many times the run paused for the pointer (WP
-  -- 4cb617e2).
+  -- asks the CLI to reload and run apply again (ST6d8eed9 WP a45b3aeb), the
+  -- answer says how many times the run paused for the pointer (WP 4cb617e2),
+  -- and how many desktops the run leaves beyond the desk's count, read from
+  -- the last observe (WP 88504807): absent when that read failed or the desk
+  -- no longer matches the screens.
   job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
     own_sizes = own_sizes, own_sizes_changed = changed, tally = tally,
-    reload = P.reload_reason(job.ops, job.request_options.may_reload), paused = job.pauses or 0 })
+    reload = P.reload_reason(job.ops, job.request_options.may_reload), paused = job.pauses or 0,
+    extra = final and P.extra_desktops(job.desk, final, { map = job.request_options.map }) or nil })
 end
 
 -- The error response for a verb that raised: refused (nothing changed), a
@@ -1981,7 +2175,7 @@ local function steps_total(job)
     end
   end
   if job.rest then
-    count(job.creates)
+    count(job.edits)
     count(job.rest)
   else
     count(job.ops)
@@ -1991,15 +2185,17 @@ end
 
 -- THE STEP POINTS GO OUT BEFORE THEIR WORK (progress.md, rule 2): Hammerspoon
 -- draws only between callbacks, so each is emitted here, before the callback
--- that does it is scheduled. prepare's creates run as one batch, so their
--- steps all go out before it. A move's step carries
+-- that does it is scheduled. prepare's desktop edits run as one batch, so
+-- their steps all go out before it, the removals' each with the ordinal its
+-- desktop has when its step begins: the plan removes the later ones first, so
+-- no removal moves the ordinal of one still to come. A move's step carries
 -- the window's frame now, for the toast to keep clear of the grab, and the
 -- display it goes round through, if it does (STca1b7f9 WP3). A point that
 -- cannot be made is an error record, never a failed run.
 local function steps_before(job, nxt)
   local batch
   if nxt == "prepare" then
-    batch = only(job.ops, { create_space = true })
+    batch = only(job.ops, DESKTOP_EDITS)
   elseif nxt == "organise" then
     local op = job.rest and job.rest[job.next_op]
     batch = (op and EXEC[op.op]) and { op } or {}

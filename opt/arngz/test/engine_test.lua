@@ -306,6 +306,245 @@ do
 end
 
 
+-- ------------------------------------- removals (ST6d8eed9 WP 88504807)
+--
+-- AT-88504807.3 (ST6d8eed9 acceptance.md) cites the arms from here to the
+-- lag's. exec_remove_space's own fake answers the hs.spaces calls a removal
+-- makes, an add for the create its Dock arm binds, and the clock that
+-- wait_for and attempts read, which only usleep moves: a wait that never
+-- holds ends at its deadline without sleeping. A screen is scripted as:
+--   live      its desktops, in the live list's order
+--   shown     the desktop it shows
+--   windows   {[space] = {window ids}}, none where not given, and
+--   on        {[window id] = {space ids}}, what windowSpaces answers
+--   shows     {[asked] = shown}: gotoSpace(asked) shows another desktop
+--   fails     {[asked] = why}: gotoSpace(asked) returns nil and why, and
+--             shows nothing new
+--   takes     {[asked] = taken}: removeSpace(asked) takes another id
+--   why       removeSpace fails with this reason and takes nothing
+--   lag       how many readbacks after the call still list the id
+--   reorder_after, reorder: once gotoSpace(reorder_after) is asked, the live
+--             list is reorder
+local function fake_desktops_hs(by_screen)
+  local log = { go = {}, remove = {}, add = 0, usleep = 0 }
+  local clock = 0
+  local function scripted(uuid)
+    local s = by_screen[uuid]
+    if not s then error("the fake was asked about a screen this arm does not script: " .. tostring(uuid), 0) end
+    return s
+  end
+  local function holding(space)
+    for _, s in pairs(by_screen) do
+      for _, id in ipairs(s.live) do
+        if id == space then return s end
+      end
+    end
+    error("the fake holds no desktop " .. tostring(space), 0)
+  end
+  local hs = {
+    spaces = {
+      spacesForScreen = function(uuid)
+        local s = scripted(uuid)
+        if s.pending then
+          if s.pending.lag > 0 then
+            s.pending.lag = s.pending.lag - 1
+          else
+            local kept = {}
+            for _, id in ipairs(s.live) do
+              if id ~= s.pending.id then kept[#kept + 1] = id end
+            end
+            s.live, s.pending = kept, nil
+          end
+        end
+        local out = {}
+        for i, id in ipairs(s.live) do out[i] = id end
+        return out
+      end,
+      spaceType = function(_) return "user" end,
+      windowsForSpace = function(space) return (holding(space).windows or {})[space] or {} end,
+      windowSpaces = function(wid)
+        for _, s in pairs(by_screen) do
+          if s.on and s.on[wid] then return s.on[wid] end
+        end
+        return nil, "no such window"
+      end,
+      gotoSpace = function(space)
+        local s = holding(space)
+        log.go[#log.go + 1] = space
+        if (s.fails or {})[space] then return nil, s.fails[space] end
+        s.shown = (s.shows or {})[space] or space
+        if s.reorder_after == space then s.live = s.reorder end
+        return true
+      end,
+      activeSpaceOnScreen = function(uuid) return scripted(uuid).shown end,
+      removeSpace = function(space, _)
+        local s = holding(space)
+        log.remove[#log.remove + 1] = space
+        if s.why then return nil, s.why end
+        s.pending = { id = (s.takes or {})[space] or space, lag = s.lag or 0 }
+        return true
+      end,
+      addSpaceToScreen = function(uuid, _)
+        scripted(uuid)
+        log.add = log.add + 1
+        return 99
+      end,
+    },
+    timer = {
+      usleep = function(us)
+        log.usleep = log.usleep + 1
+        clock = clock + us * 1000
+      end,
+      absoluteTime = function() return clock end,
+    },
+  }
+  return hs, log
+end
+
+local function drive_desktops(by_screen, ops)
+  local ctx = {}
+  local hs, log = fake_desktops_hs(by_screen)
+  _G.hs = hs
+  local ok, results = pcall(M.execute, ops, ctx)
+  _G.hs = nil
+  if not ok then error("M.execute itself raised: " .. tostring(results), 0) end
+  return results, log, ctx
+end
+
+local function remove_on(uuid, space, path)
+  return { op = "remove_space", screen = uuid, space = space, ordinal = 3, path = path or "displays[0]" }
+end
+
+local function joined(list) return table.concat(list or {}, ",") end
+
+-- A clean removal: the proof, then the removal by id, read back.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1 } }, { remove_on(SCREEN, 3) })
+  check("remove: a clean removal is done, naming the desktop that went", r[1].status == "done"
+    and joined(r[1].removed) == "3", tostring(r[1].status) .. " / " .. tostring(r[1].reason))
+  check("remove: it proves the tile first, the target shown and then the desktop in its place, then removes by id",
+    joined(log.go) == "3,2" and joined(log.remove) == "3", joined(log.go) .. " / " .. joined(log.remove))
+  check("remove: its readback is the live list after it", r[1].readback and joined(r[1].readback.live) == "1,2",
+    r[1].readback and joined(r[1].readback.live) or "no readback")
+end
+
+-- A proof that shows another desktop: the tile at the target's index is not
+-- the target's, so removeSpace would press another desktop's.
+do
+  local r, log, ctx = drive_desktops({ [SCREEN] = { live = { 1, 2, 3, 4 }, shown = 1, shows = { [4] = 3 } } },
+    { remove_on(SCREEN, 4), remove_on(SCREEN, 3) })
+  check("remove: a proof that shows another desktop removes nothing, said as a note",
+    r[1].status == "note" and says(r[1], "the proof failed") and says(r[1], "shows space 3") and #log.remove == 0,
+    tostring(r[1].status) .. " / " .. tostring(r[1].reason))
+  check("remove: and no other removal on that display is tried, nor its desktop shown",
+    r[2].status == "note" and says(r[2], "a proof on this display failed earlier in this run") and joined(log.go) == "4"
+      and (ctx.proof_failed or {})[SCREEN] ~= nil, tostring(r[2].reason) .. " / " .. joined(log.go))
+end
+
+-- Another desktop gone: the op fails, names both ids with the fix, and stops
+-- every later removal, on any display.
+do
+  local r, log = drive_desktops({
+    [SCREEN] = { live = { 1, 2, 3 }, shown = 1, takes = { [3] = 2 } },
+    [OTHER] = { live = { 5, 6 }, shown = 5 },
+  }, { remove_on(SCREEN, 3), remove_on(OTHER, 6, "displays[1]") })
+  check("remove: another desktop gone fails the op, naming both ids, with the fix",
+    r[1].status == "failed" and says(r[1], "asked to remove space 3, and space(s) 2 went")
+      and r[1].fix == P.removal_fix("screen " .. SCREEN), tostring(r[1].reason) .. " / " .. tostring(r[1].fix))
+  check("remove: and no later removal is tried on any display",
+    r[2].status == "note" and says(r[2], "an earlier removal in this run failed")
+      and joined(log.remove) == "3" and joined(log.go) == "3,2", tostring(r[2].reason) .. " / " .. joined(log.go))
+end
+
+-- A screen that shows the target already: a press of the target's tile
+-- would change nothing there, so it could not be seen. The desktop in its
+-- place is shown first.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 3 } }, { remove_on(SCREEN, 3) })
+  check("remove: a target already shown has the desktop in its place shown first, so the proof's press is seen",
+    r[1].status == "done" and joined(log.go) == "2,3,2" and joined(log.remove) == "3",
+    tostring(r[1].status) .. " / " .. joined(log.go))
+  local f, flog = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 3, fails = { [3] = "no tile" } } },
+    { remove_on(SCREEN, 3) })
+  check("remove: a target already shown whose tile press fails is not removed: a failed press proves nothing",
+    f[1].status == "note" and says(f[1], "gotoSpace(3) failed: no tile") and joined(flog.go) == "2,3"
+      and #flog.remove == 0, tostring(f[1].reason) .. " / " .. joined(flog.remove))
+end
+
+-- A call that reported the removal and a list that never drops it within the
+-- tries: what happened is not known, so the op fails, as a create in the same
+-- case does, and no later removal is tried.
+do
+  local r, log = drive_desktops({
+    [SCREEN] = { live = { 1, 2, 3 }, shown = 1, lag = TRIES * 2 },
+    [OTHER] = { live = { 5, 6 }, shown = 5 },
+  }, { remove_on(SCREEN, 3), remove_on(OTHER, 6, "displays[1]") })
+  check("remove: a reported removal the list never shows fails, with the fix, the call made once",
+    r[1].status == "failed" and says(r[1], "it reported removing the desktop and the desktop list never caught up")
+      and r[1].fix == P.removal_fix("screen " .. SCREEN) and joined(log.remove) == "3",
+    tostring(r[1].status) .. " / " .. tostring(r[1].reason))
+  check("remove: and it stops the later removals", r[2].status == "note"
+    and says(r[2], "an earlier removal in this run failed") and joined(log.go) == "3,2", tostring(r[2].reason))
+end
+
+-- A call that removed nothing, for a reason that may pass: tried the whole
+-- budget, the list checked against the proof before each try, then said, and
+-- the display keeps its desktop. It binds nothing.
+do
+  local why = "the Dock is not answering"
+  local r, log, ctx = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, why = why } },
+    { remove_on(SCREEN, 3) })
+  check("remove: a reason that may pass is tried the whole budget, then said as a note, binding nothing",
+    r[1].status == "note" and says(r[1], why) and #log.remove == TRIES and ctx.dock_failed == nil
+      and ctx.remove_failed == nil, tostring(r[1].reason) .. " / " .. joined(log.remove))
+end
+
+-- The live list changed between the proof and the removal: removeSpace would
+-- press another index.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, reorder_after = 2, reorder = { 1, 3, 2 } } },
+    { remove_on(SCREEN, 3) })
+  check("remove: a live list that is not the proof's when removeSpace would be asked removes nothing",
+    r[1].status == "note" and says(r[1], "the live list at the removal was not the proof's (1 2 3, then 1 3 2)")
+      and #log.remove == 0, tostring(r[1].reason))
+end
+
+-- The read before the removal: a window on it alone keeps it; a window on
+-- every space does not.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, windows = { [3] = { 500 } },
+    on = { [500] = { 3 } } } }, { remove_on(SCREEN, 3) })
+  check("remove: a desktop with a window on it alone at the read before is not removed, nor shown",
+    r[1].status == "note" and says(r[1], "window 500 is on it alone") and #log.go == 0 and #log.remove == 0,
+    tostring(r[1].reason))
+  local s = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, windows = { [3] = { 900 } },
+    on = { [900] = { 1, 2, 3 } } } }, { remove_on(SCREEN, 3) })
+  check("remove: a desktop whose one window is on every space is empty, and removed", s[1].status == "done",
+    tostring(s[1].status) .. " / " .. tostring(s[1].reason))
+end
+
+-- The Dock's error: tried once, said in the Dock's words, and it binds the
+-- run's creates as well as its removals.
+do
+  local r, log = drive_desktops({
+    [SCREEN] = { live = { 1, 2, 3 }, shown = 1, why = DOCK_WHY },
+    [OTHER] = { live = { 5 }, shown = 5 },
+  }, { remove_on(SCREEN, 3), create_on(OTHER, "displays[1].spaces[1]") })
+  check("remove: the Dock's error is tried once and said in the Dock's words, the desktop kept",
+    r[1].status == "note" and says(r[1], "the Dock did not open Mission Control for Hammerspoon (" .. DOCK_WHY .. ")")
+      and #log.remove == 1, tostring(r[1].reason) .. " / " .. joined(log.remove))
+  check("remove: and it binds the run's creates, Mission Control being one for every display",
+    r[2].status == "failed" and says(r[2], "failed at the Dock earlier in this run") and r[2].fix == P.DOCK_FIX
+      and log.add == 0, tostring(r[2].reason) .. " / " .. tostring(log.add))
+end
+
+-- A list that lags the removal: read back again, never asked again.
+do
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, lag = 2 } }, { remove_on(SCREEN, 3) })
+  check("remove: a list that lags the removal is read back again, and the removing call is made once",
+    r[1].status == "done" and #log.remove == 1, tostring(r[1].status) .. " / " .. joined(log.remove))
+end
+
 -- ------------------------------------------------------------- recheck (ST0034)
 
 -- A recheck is executed as a place: shown, setFrame, a readback. Its fake

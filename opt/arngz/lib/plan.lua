@@ -539,6 +539,243 @@ local function entries(desk)
   return patterned
 end
 
+-- --------------------- extra empty desktops (ST6d8eed9 WP 88504807)
+
+-- THE RULE FOR AN EMPTY DESKTOP, in one place: the plan's choice and the
+-- engine's read before each removal both ask it. A desktop is empty when
+-- every window it lists is listed on another space too, so no window lives on
+-- it alone. A window on every space holds no desktop. IDS are the windows the
+-- desktop lists; COUNT(id) is how many spaces list window id, or nil and why
+-- it could not be read, which is never taken as empty. Returns true, or false
+-- and why not.
+function P.empty_by(ids, count)
+  for _, id in ipairs(ids or {}) do
+    local n, why = count(id)
+    if n == nil then
+      return false, string.format("the desktops of window %s could not be read: %s", tostring(id), tostring(why))
+    end
+    if n < 2 then return false, string.format("window %s is on it alone", tostring(id)) end
+  end
+  return true
+end
+
+-- Whether user desktop SP, as observe read it, is empty for a removal: its
+-- windows were read (no windows_error), and P.empty_by holds over LISTED
+-- (P.listings).
+local function empty_desktop(sp, listed)
+  if sp.windows_error then return false end
+  local ids = {}
+  for _, w in ipairs(sp.windows or {}) do ids[#ids + 1] = w.id end
+  return (P.empty_by(ids, function(id) return (listed[id] or {}).count or 0 end))
+end
+
+-- The apps with a claimable window on each space, by space id, for the score.
+local function apps_by_space(world)
+  local out = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      local apps = {}
+      for _, w in ipairs(sp.windows or {}) do
+        if claimable(w) then apps[app_key(w.bundle)] = true end
+      end
+      out[sp.id] = apps
+    end
+  end
+  return out
+end
+
+-- How many of desk display D's entries find a window of their app already on
+-- their own desktop, when LEFT is the screen's user desktops that stay, in
+-- order: the desk's ordinals counted over them.
+local function entries_home(d, left, apps_on)
+  local n = 0
+  for j, sp in ipairs(d.spaces or {}) do
+    local home = left[j]
+    for _, a in ipairs(sp.apps or {}) do
+      if home and (apps_on[home.id] or {})[app_key(a.app)] then n = n + 1 end
+    end
+  end
+  return n
+end
+
+-- Every way to take K of the items in LIST, in order, each as a list. Each
+-- is copied item by item: an and/or around table.unpack keeps only its first
+-- value.
+local function choices(list, k)
+  local out = {}
+  local function walk(from, picked)
+    if #picked == k then
+      local set = {}
+      for i, item in ipairs(picked) do set[i] = item end
+      out[#out + 1] = set
+      return
+    end
+    for i = from, #list do
+      picked[#picked + 1] = list[i]
+      walk(i + 1, picked)
+      picked[#picked] = nil
+    end
+  end
+  walk(1, {})
+  return out
+end
+
+-- Whether removal set A beats set B, both of one size, when their scores tie:
+-- a set that keeps the shown desktop first, then the set that removes the
+-- later desktops, compared from the last. Keeping the shown desktop comes
+-- first because "later first" alone settles every tie: two sets of one size
+-- always differ at some place. observe's ordinal counts full-screen spaces
+-- too, but it runs in the same order as a desktop's place, so it compares
+-- the same.
+local function better_tie(a, b)
+  local function shown_in(set)
+    for _, sp in ipairs(set) do
+      if sp.active then return true end
+    end
+    return false
+  end
+  local sa, sb = shown_in(a), shown_in(b)
+  if sa ~= sb then return not sa end
+  for i = #a, 1, -1 do
+    if a[i].ordinal ~= b[i].ordinal then return a[i].ordinal > b[i].ordinal end
+  end
+  return false
+end
+
+-- WORLD with the desktops in GONE ({[space id] = true}) taken off their
+-- screens, each screen's spaces numbered again from 1 as observe numbers
+-- them, full-screen spaces too: the world the moves are planned against, so
+-- diff and apply --dry-run show what apply does.
+local function without_desktops(world, gone)
+  local w = {}
+  for k, v in pairs(world) do w[k] = v end
+  w.screens = {}
+  for i, s in ipairs(world.screens or {}) do
+    local copy = {}
+    for k, v in pairs(s) do copy[k] = v end
+    copy.spaces = {}
+    for _, sp in ipairs(s.spaces or {}) do
+      if not gone[sp.id] then
+        local c = {}
+        for k, v in pairs(sp) do c[k] = v end
+        c.ordinal = #copy.spaces + 1
+        copy.spaces[#copy.spaces + 1] = c
+      end
+    end
+    w.screens[i] = copy
+  end
+  return w
+end
+
+-- How many user desktops matched screen S has beyond what desk display D
+-- names, never counting the screen's last one, or 0: the one rule the plan's
+-- removals and the finished point's extra count by.
+local function excess_of(d, s)
+  return math.max(#P.user_spaces(s) - math.max(#(d.spaces or {}), 1), 0)
+end
+
+-- The removals (hv decision 23, ST6d8eed9 WP 88504807): for each desk display
+-- whose screen has more user desktops than the desk names, up to the excess
+-- of its empty ones, never its only desktop, chosen to leave the most desk
+-- entries with a window of their app already on their desktop. At a plug-in,
+-- macOS puts a new empty desktop first on the monitor, before the desktops it
+-- carries back, and removing that one lines them up with the desk. A tie
+-- keeps the shown desktop, then removes the later ones. options.no_remove (a
+-- second plan) removes none. An excess the plan leaves is a note, said and
+-- counted against nothing, naming the desktops that hold windows. Returns the
+-- remove_space ops, the notes, and the world and matched screens with the
+-- removed desktops gone.
+local function plan_removals(desk, world, screens, options)
+  local removes, notes, gone = {}, {}, {}
+  local listed = P.listings(world)
+  local apps_on = apps_by_space(world)
+  for di, d in ipairs(desk.displays or {}) do
+    local s = screens[di]
+    local users = P.user_spaces(s)
+    -- Each desktop's place among its display's user desktops, which a removal
+    -- and its words carry, as a move's ordinal is: observe's own ordinal
+    -- counts full-screen spaces too.
+    local place = {}
+    for ui, sp in ipairs(users) do place[sp.id] = ui end
+    local need = #(d.spaces or {})
+    local excess = excess_of(d, s)
+    if excess > 0 then
+      local chosen = {}
+      if not options.no_remove then
+        local empties = {}
+        for _, sp in ipairs(users) do
+          if empty_desktop(sp, listed) then empties[#empties + 1] = sp end
+        end
+        local k = math.min(excess, #empties)
+        local best, best_score
+        for _, set in ipairs(choices(empties, k)) do
+          local out = {}
+          for _, sp in ipairs(set) do out[sp.id] = true end
+          local left = {}
+          for _, sp in ipairs(users) do
+            if not out[sp.id] then left[#left + 1] = sp end
+          end
+          local score = entries_home(d, left, apps_on)
+          if not best or score > best_score or (score == best_score and better_tie(set, best)) then
+            best, best_score = set, score
+          end
+        end
+        chosen = best or {}
+      end
+      -- Later first, so no removal moves the ordinal of one still to come.
+      table.sort(chosen, function(a, b) return a.ordinal > b.ordinal end)
+      for _, sp in ipairs(chosen) do
+        gone[sp.id] = true
+        removes[#removes + 1] = {
+          op = "remove_space", screen = s.uuid, space = sp.id, ordinal = place[sp.id],
+          path = string.format("displays[%d]", di - 1),
+          reason = string.format("%s needs %d spaces and has %d; space %d is empty", P.desk_display_phrase(desk, di),
+            need, #users, place[sp.id]),
+        }
+      end
+      local kept = excess - #chosen
+      if kept > 0 then
+        local holding = {}
+        for _, sp in ipairs(users) do
+          if not gone[sp.id] and not empty_desktop(sp, listed) then holding[#holding + 1] = tostring(place[sp.id]) end
+        end
+        local said = ""
+        if #holding == 1 then
+          said = "; desktop " .. holding[1] .. " holds windows"
+        elseif #holding > 1 then
+          said = "; desktops " .. table.concat(holding, ", ") .. " hold windows"
+        end
+        notes[#notes + 1] = {
+          op = "extra", screen = s.uuid, path = string.format("displays[%d]", di - 1), uncounted = true, count = kept,
+          reason = string.format("%s keeps %d desktop(s) more than the %d the desk names%s",
+            P.desk_display_phrase(desk, di), kept, need, said),
+        }
+      end
+    end
+  end
+  if #removes == 0 then return removes, notes, world, screens end
+  local w = without_desktops(world, gone)
+  local index = {}
+  for i, s in ipairs(world.screens or {}) do index[s] = i end
+  local remapped = {}
+  for di, s in pairs(screens) do remapped[di] = w.screens[index[s]] end
+  return removes, notes, w, remapped
+end
+
+-- The user desktops a run leaves beyond the desk's count, on the displays it
+-- matched, for any reason: no empty one, a proof that failed, or a removal not
+-- done. Read from the end's observe for the finished point's `extra`; nil when
+-- that read is missing or holds a part observe could not read (the plan's own
+-- unread), or the desk no longer matches the screens there.
+function P.extra_desktops(desk, world, options)
+  if not world or unread(world) then return nil end
+  local screens = P.match_displays(desk, world, options or {})
+  if not screens then return nil end
+  local n = 0
+  for di, d in ipairs(desk.displays or {}) do n = n + excess_of(d, screens[di]) end
+  return n
+end
+
 -- plan(desk, world, options) -> ops, or nil, a refusal and, where the
 -- refusal names one, its fix.
 --
@@ -549,13 +786,20 @@ end
 -- ({app key = true}), given to a second plan, which reports an app that was
 -- running then and is not now as gone, and after_reload (true when the CLI
 -- reloaded Hammerspoon and ran apply again), which gives a failed filter's
--- unseen entries the fix past that reload (ST6d8eed9 WP a45b3aeb).
+-- unseen entries the fix past that reload (ST6d8eed9 WP a45b3aeb), and
+-- no_remove (a second plan, which never removes a desktop: ST6d8eed9 WP
+-- 88504807).
 -- apply never launches an app (hv decision 23, ST6d8eed9 WP 35219619): one
 -- that is not running is a not_running op, said and uncounted.
+-- A display with more user desktops than the desk names has its extra empty
+-- ones removed first (WP 88504807), and every op after the removals is
+-- planned against the world without them, so diff and apply --dry-run show
+-- what apply does. An excess the plan keeps is an `extra` note, last.
 -- Each op carries `op`, its arguments, `reason`, and `path`, the desk path
--- that asked for it. Order is the order apply executes in: create_space,
--- then for each window move before place (D14). There is no --bind in v1
--- (D10, AC-05.6).
+-- that asked for it. Order is the order apply executes in: remove_space,
+-- create_space, then for each window move before place (D14). No display
+-- needs both a removal and a create. There is no --bind in v1 (D10,
+-- AC-05.6).
 -- A desk display is named by its name, else by its place in the desk from 1,
 -- as the step point's `display` names it (log.lua's L.path_place). It is the
 -- one rule P.plan's reasons and P.display_names name a desk display by: a desk
@@ -676,6 +920,11 @@ function P.plan(desk, world, options)
   if unread_refusal then return nil, unread_refusal end
   local screens, refusal = P.match_displays(desk, world, options)
   if not screens then return nil, refusal end
+
+  -- The removals first: every op after them reads the world without the
+  -- desktops they remove (ST6d8eed9 WP 88504807).
+  local removes, extras
+  removes, extras, world, screens = plan_removals(desk, world, screens, options)
 
   local creates, windows = {}, {}
 
@@ -866,7 +1115,7 @@ function P.plan(desk, world, options)
   end
 
   local ops = {}
-  for _, list in ipairs({ creates, windows }) do
+  for _, list in ipairs({ removes, creates, windows, extras }) do
     for _, op in ipairs(list) do ops[#ops + 1] = op end
   end
   return ops
@@ -1584,17 +1833,20 @@ local BLANKET = { phase = true }
 -- (ST589246c, progress.md), from this one classifier rather than a second:
 -- each entry once, placed when something was done for it and in_place when
 -- nothing was, else failed, unseen or not_running; the names of the apps not
--- running, once each, in desk order; the desktops created; and the first
--- failure's words.
+-- running, once each, in desk order; the desktops created and removed
+-- (ST6d8eed9 WP 88504807); and the first failure's words.
 local TALLIED = { failed = true, unseen = true, not_running = true }
 -- An outcome as the report line says it, where the tally's key is not words.
 local OUTCOME_WORDS = { not_running = "not running" }
+-- The desktop edits a done result counts, by op, in the tally's own keys.
+local DONE_TALLY = { create_space = "created", remove_space = "removed" }
 function P.apply_report(desk, results)
   local by_path, loose, blanket = {}, {}, {}
-  local tally = { placed = 0, in_place = 0, failed = 0, unseen = 0, not_running = 0, created = 0 }
+  local tally = { placed = 0, in_place = 0, failed = 0, unseen = 0, not_running = 0, created = 0, removed = 0 }
   local not_running, named = {}, {}
   for _, r in ipairs(results or {}) do
-    if r.op == "create_space" and r.status == "done" then tally.created = tally.created + 1 end
+    local edit = r.status == "done" and DONE_TALLY[r.op]
+    if edit then tally[edit] = tally[edit] + 1 end
     if BLANKET[r.op] and r.status ~= "done" then blanket[#blanket + 1] = tostring(r.reason) end
     if r.path and string.find(r.path, "%.apps%[") then
       local list = by_path[r.path] or {}
@@ -1778,12 +2030,67 @@ P.DOCK_FIX = "add the desktop in Mission Control by hand, then run it again"
 
 -- A create's failure as a person reads it, and its fix where it has one: the
 -- Dock's error says that the Dock did not open Mission Control for
--- Hammerspoon (WP6). Any other reason is as Hammerspoon gave it.
+-- Hammerspoon (WP6). Any other reason is as Hammerspoon gave it. A removal
+-- says the same words for the Dock's error (ST6d8eed9 WP 88504807).
 function P.create_failure(why)
   if P.space_error_kind(why) == "dock" then
     return "the Dock did not open Mission Control for Hammerspoon (" .. tostring(why) .. ")", P.DOCK_FIX
   end
   return tostring(why), nil
+end
+
+-- ------------------------------------ removals (ST6d8eed9 WP 88504807)
+
+-- Whether two live lists hold the same ids in the same order. removeSpace
+-- presses the tile at its desktop's index in the live list, so the list at
+-- the removal must be the proof's, id for id.
+function P.same_ids(a, b)
+  a, b = a or {}, b or {}
+  if #a ~= #b then return false end
+  for i = 1, #a do
+    if a[i] ~= b[i] then return false end
+  end
+  return true
+end
+
+-- The desktop shown in place of TARGET before its removal, since removeSpace
+-- refuses a shown desktop: the next of USERS (a display's user desktops in
+-- the live list's order), else the one before. nil when TARGET is not among
+-- them or is the only one.
+function P.removal_place(users, target)
+  for i, id in ipairs(users or {}) do
+    if id == target then return users[i + 1] or users[i - 1] end
+  end
+  return nil
+end
+
+-- The ids in AFTER that BEFORE does not hold, in AFTER's order: the desktops a
+-- creation added, and, the other way round, the ones a removal took. The one
+-- set difference the engine and P.removal_verdict share.
+function P.added(before, after)
+  local had, out = {}, {}
+  for _, id in ipairs(before or {}) do had[id] = true end
+  for _, id in ipairs(after or {}) do
+    if not had[id] then out[#out + 1] = id end
+  end
+  return out
+end
+
+-- A removal's readback, from the live list at the proof (BEFORE) and now
+-- (AFTER): "done" when exactly TARGET went and nothing came, "none" while
+-- nothing has changed, else "other", which fails the op and stops every later
+-- removal. The ids that went and came are returned with it.
+function P.removal_verdict(before, after, target)
+  local went, came = P.added(after, before), P.added(before, after)
+  if #went == 0 and #came == 0 then return "none", went, came end
+  if #went == 1 and went[1] == target and #came == 0 then return "done", went, came end
+  return "other", went, came
+end
+
+-- The way out when a removal took another desktop, which no later removal
+-- tries again: DISPLAY is the display as a person reads it.
+function P.removal_fix(display)
+  return string.format("check the desktops on %s in Mission Control, then run arngz apply again", tostring(display))
 end
 
 -- Whether a window lies mostly off the display it was found on (issue 0134).
@@ -2029,6 +2336,11 @@ end
 
 -- One line per op, as diff prints it: what apply would do, and why.
 local DESCRIBE = {
+  -- ST6d8eed9 WP 88504807: a removal, and an excess the plan keeps.
+  remove_space = function(op)
+    return string.format("remove empty space %s of %s", tostring(op.ordinal), tostring(op.screen))
+  end,
+  extra = function(op) return string.format("keep %s extra space(s) on %s", tostring(op.count), tostring(op.screen)) end,
   create_space = function(op) return "create a space on " .. tostring(op.screen) end,
   move = function(op)
     return string.format("move window %s to space %s of %s", tostring(op.window), tostring(op.ordinal), tostring(op.screen))
@@ -2046,10 +2358,11 @@ local DESCRIBE = {
 }
 
 -- Ops that leave the machine as it is: a recheck finds a window already in
--- place at its app's own size (ST0034). diff says each one after the rest,
+-- place at its app's own size (ST0034), and an extra keeps a desktop the plan
+-- cannot remove (ST6d8eed9 WP 88504807). diff says each one after the rest,
 -- and neither reads it as a change, so a desk whose only differences are
--- recorded own sizes reads "no change" and exits 0.
-local IN_PLACE = { recheck = true }
+-- these reads "no change" and exits 0.
+local IN_PLACE = { recheck = true, extra = true }
 
 local function plan_line(op)
   local describe = DESCRIBE[op.op]

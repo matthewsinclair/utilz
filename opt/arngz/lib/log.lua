@@ -290,16 +290,23 @@ end
 -- Which planned field counts each kind of op the engine executes: the
 -- progress point's own words (progress.md). log_test ties it to the kinds the
 -- engine runs, so a kind added there and not here goes red.
-L.PLANNED_FIELD = { create_space = "creates", move = "moves", place = "places", recheck = "places" }
+L.PLANNED_FIELD = { remove_space = "removes", create_space = "creates", move = "moves", place = "places",
+  recheck = "places" }
 
--- The planned point's fields (progress.md), from the ops or a refusal.
+-- The planned point's fields (progress.md), from the ops or a refusal. Every
+-- field in L.PLANNED_FIELD is there, 0 when the plan has none of its kind.
 function L.planned_fields(ops, refused)
-  local f = { creates = 0, moves = 0, places = 0 }
+  local f = {}
   local key = L.PLANNED_FIELD
+  for _, field in pairs(key) do f[field] = 0 end
+  local any = 0
   for _, op in ipairs(ops or {}) do
-    if key[op.op] then f[key[op.op]] = f[key[op.op]] + 1 end
+    if key[op.op] then
+      f[key[op.op]] = f[key[op.op]] + 1
+      any = any + 1
+    end
   end
-  f.nothing = refused == nil and f.creates + f.moves + f.places == 0
+  f.nothing = refused == nil and any == 0
   if refused then f.refused = tostring(refused) end
   return f
 end
@@ -314,6 +321,8 @@ function L.readback_text(rb)
   if rb.listed_at_destination ~= nil then out[#out + 1] = "listed at the destination " .. tostring(rb.listed_at_destination) end
   if rb.listed_at_origin ~= nil then out[#out + 1] = "listed at the origin " .. tostring(rb.listed_at_origin) end
   if rb.user_spaces then out[#out + 1] = tostring(rb.user_spaces) .. " user desktops" end
+  -- A removal's: the live list after it (ST6d8eed9 WP 88504807).
+  if rb.live then out[#out + 1] = "desktops live " .. ids(rb.live) end
   for _, e in ipairs(rb.errors or {}) do out[#out + 1] = "unread: " .. tostring(e) end
   return #out > 0 and table.concat(out, ", ") or "nothing"
 end
@@ -335,8 +344,8 @@ end
 -- One op's outcome: kind and path, the window's title where the op keeps it
 -- for the log alone (issue I4eacd29), the status and reason the report has,
 -- its fix as a refused plan's is written, the full-screen windows a move
--- could not pass, a note, what it read back, the desktops it created, and how
--- long it took.
+-- could not pass, a note, what it read back, the desktops it created or
+-- removed, and how long it took.
 function L.result_text(op, r, ms)
   local parts = { string.format("%s %s", tostring(op.op), tostring(op.path or op.bundle or "")) }
   if op.title then parts[#parts + 1] = string.format("window %s %s", tostring(op.window), quoted(op.title, 60)) end
@@ -346,6 +355,7 @@ function L.result_text(op, r, ms)
   if r.note then parts[#parts + 1] = "note: " .. tostring(r.note) end
   if r.readback then parts[#parts + 1] = "read back: " .. L.readback_text(r.readback) end
   if r.created then parts[#parts + 1] = "created desktop " .. (#r.created > 0 and ids(r.created) or "none seen") end
+  if r.removed then parts[#parts + 1] = "removed desktop " .. (#r.removed > 0 and ids(r.removed) or "none seen") end
   if ms then parts[#parts + 1] = string.format("%d ms", round(ms)) end
   return table.concat(parts, "; ")
 end
@@ -370,14 +380,21 @@ function L.path_place(desk, path)
   return display and display.name or (d and ("display " .. (d + 1))) or "", s and (s + 1) or 0
 end
 
+-- A step's kind in progress.md's words, where the op's own name is not them:
+-- "create, remove, move, place or recheck" (ST6d8eed9 WP 88504807). The
+-- toast keys its lines on these words.
+L.STEP_KIND = { create_space = "create", remove_space = "remove" }
+
 -- The step point's fields (progress.md) for OP, the I-th step of N on DESK.
 -- FRAME is a move's window frame as read just now, or nil. VIA is the display
 -- a move goes round through, by the desk's name for it or the screen's own
--- (STca1b7f9 WP3), or nil for a move that goes straight.
+-- (STca1b7f9 WP3), or nil for a move that goes straight. A removal's desktop
+-- is its ordinal when its step begins, which is the plan's: the plan removes
+-- the later desktops first.
 function L.step_fields(desk, op, i, n, frame, via)
   local display, desktop = L.path_place(desk, op.path)
-  local f = { i = i, n = n, kind = tostring(op.op), app = tostring(op.bundle or ""), display = display,
-    desktop = op.ordinal or desktop }
+  local f = { i = i, n = n, kind = L.STEP_KIND[op.op] or tostring(op.op), app = tostring(op.bundle or ""),
+    display = display, desktop = op.ordinal or desktop }
   if type(frame) == "table" then f.x, f.y, f.w, f.h = frame.x, frame.y, frame.w, frame.h end
   if type(via) == "string" and via ~= "" then f.via = via end
   return f
@@ -388,8 +405,8 @@ function L.report_pairs(lines, code, tally)
   local out = {}
   for _, line in ipairs(lines or {}) do out[#out + 1] = { "report", line } end
   out[#out + 1] = { "report", string.format("exit %s: %d placed, %d in place, %d failed, %d unseen, %d not running,"
-    .. " %d desktop(s) created", tostring(code), tally.placed, tally.in_place, tally.failed, tally.unseen,
-    tally.not_running, tally.created) }
+    .. " %d desktop(s) created, %d removed", tostring(code), tally.placed, tally.in_place, tally.failed, tally.unseen,
+    tally.not_running, tally.created, tally.removed or 0) }
   return out
 end
 
@@ -430,6 +447,12 @@ function L.finished_fields(response, seconds, log_path)
     not_running = t.not_running or 0,
     not_running_apps = t.not_running_apps,
     created = t.created or 0,
+    -- The desktops removed, and the user desktops the run leaves beyond the
+    -- desk's count on the displays it matched, read from its last observe:
+    -- absent when that read failed or the desk no longer matches the screens
+    -- (ST6d8eed9 WP 88504807).
+    removed = t.removed or 0,
+    extra = tonumber(response.extra),
     seconds = seconds or 0,
     first = tostring(response.error or t.first or ""),
     -- What the entry `first` names was, in the tally's own keys ("failed" or
