@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 16e2c2bd-e1ce-4d05-891c-1784ba97a994
-heartbeat_at: 2026-11-25 09:25Z
+heartbeat_at: 2026-11-25 09:36Z
 status: active
 focus: "25 Nov: folded for hv's estate compact (hv decision 29). Resume from ~/Devel/scratch/utilz-vc/RESUME.md: hv's push and CI's prez.bats verdict, the spike's and the probe's results, then cc's ST6d8eed9 READY. Hold for devbin-vc's word before any run."
 claims: []

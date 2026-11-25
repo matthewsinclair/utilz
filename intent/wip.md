@@ -1,14 +1,13 @@
 ---
-verblock: "25 Nov 2026:v1.68: matts - the arngz runs wait for the compact"
+verblock: "25 Nov 2026:v1.69: matts - every seat holds for devbin-vc's word"
 ---
 
 # Work In Progress
 
 ## DOING
 
-- Utilz folds for hv's estate compact and account change (hv decision 29); after /in-session, every seat holds for devbin-vc's word.
+- Every Utilz seat holds for devbin-vc's word after hv's estate compact (hv decision 29).
 - cc: ST6d8eed9's WPs B (no launches), C (a reload after the window filter fails) and D (a pause on a pointer move), in a worktree.
-- hv: the push of main to upstream and local, then CI's first run of prez.bats in both test jobs.
 
 ## TODO
 
@@ -19,6 +18,6 @@ verblock: "25 Nov 2026:v1.68: matts - the arngz runs wait for the compact"
 - ic: ST6d8eed9's toasts, after cc's code.
 - dc: CHANGELOG lines for STca1b7f9 and ST6d8eed9, before the cut.
 - hv: a phone scan of one QR that `showreel qr` wrote (AC-702cceb9.8), which closes STb8e4fb6.
-- hv: the 2.15.0 cut, once both arngz threads have landed and main's CI is green; it proves ST0031 AC-01.4.
+- hv: the 2.15.0 cut, once both arngz threads have landed and main's CI is green; it proves ST0031 AC-01.4, and its candidate branch runs prez.bats in CI's macOS job for the first time.
 - hv: 0114, whether ic fixes arca_swift issue 0003 first.
 - dc: ST0029, Retire Python, once hv lifts its hold.
