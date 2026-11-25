@@ -36,12 +36,12 @@ The section still open names its version: `## [X.Y.Z] - unreleased`, never `## [
 - **`UTILZ_INSTALL_PREFIX`.** The opt prefix is `install.prefix` in `bin/.devbin/config.yaml`.
 - **`tools/formula`.** devbin's formula built-in renders and publishes the template.
 - **`tools/ci-state` and `tools/post-cut`** (ST0031/01). The core's `bin/devbin ci-state` reads CI, and the core's object step attaches the app.
-- **`arngz apply --no-launch`** (ST6d8eed9). `apply` never launches an app, so the option has no use. It is refused as an unknown option, exit 2.
+- **`arngz apply --no-launch`** (ST6d8eed9). `apply` never launches an app, so the option has no use. It is refused as an unknown option, exit 2. A call that gives it now fails, so arngz goes from 1.2.1 to 2.0.0.
 
 ### Fixed
 
-- **`mdagg --strip-front-matter` strips only a front-matter block** (issue I9adb91e). A block opens with `---` on line 1 and closes with the next `---` line. A `---` divider in any other place stays, and a line-1 `---` that never closes keeps all its lines. Before, mdagg cut the text from the first `---` line to the next one, wherever they were.
-- **`macoz setpicfor --pattern` works** (issue Iac62c37, hv decision 25). With `--all`, its globs, split by `|`, name the images to look for in place of icon, folder and the directory's own name. Before, it had no effect. Without `--all`, a `--pattern` is refused. A `--dry-run` no longer needs fileicon.
+- **`mdagg --strip-front-matter` strips only a front-matter block** (issue I9adb91e). A block opens with `---` on line 1 and closes with the next `---` line. A `---` divider in any other place stays, and a line-1 `---` that never closes keeps all its lines. Before, mdagg cut the text from the first `---` line to the next one, wherever they were. mdagg goes from 1.0.1 to 1.0.2.
+- **`macoz setpicfor --pattern` works** (issue Iac62c37, hv decision 25). With `--all`, its globs, split by `|`, name the images to look for in place of icon, folder and the directory's own name. Before, it had no effect. Without `--all`, a `--pattern` is refused. A `--dry-run` no longer needs fileicon. macoz goes from 1.0.1 to 1.0.2.
 - **`prez --help` shows `present -o`** (issue I5963f6c). prez.yaml no longer lists a stdin mode, which prez never had.
 - **showreel's build warns when a socials QR file is there but cannot be read** (issue I88af1f3). Before, it dropped that QR in silence, and the reel played without it.
 - **`utilz doctor` checks lnrel's GNU realpath and cleanz's exiftool, which their yamls now declare** (issue I123a34f). lnrel needs `grealpath` from coreutils on macOS and `realpath` on Linux. exiftool stays optional, and doctor names it once, from cleanz's yaml.
