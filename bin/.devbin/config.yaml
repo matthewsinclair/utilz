@@ -32,11 +32,9 @@ commands:
       rust:
         run: cargo test --workspace --no-fail-fast --manifest-path opt/prez/crate/Cargo.toml
         grammar: cargo
-        log: RUST
       shell:
         run: bats opt/*/test
         grammar: shell
-        log: SHELL
       # The estate: every suite a hand release runs, through the one driver
       # that discovers them -- the bats suites, the workspace's cargo tests and
       # each crate/test/*.sh black-box suite (ST0019 D1). It is the release
@@ -65,13 +63,11 @@ commands:
       clippy:
         run: cargo clippy --workspace --all-targets --manifest-path opt/prez/crate/Cargo.toml -- -D warnings
         grammar: cargo
-        log: CLIPPY
       # The check side of `fmt rust` below: the same command line with --check.
       # Utilz formats one language, so this declaration is the whole gate.
       format:
         run: cargo fmt --all --check --manifest-path opt/prez/crate/Cargo.toml
         grammar: generic
-        log: FORMAT
   # rustfmt, adopted for the prez crate on hv's ruling (issue 0036), with
   # opt/prez/crate/rustfmt.toml holding tab_spaces = 2. The catalogue's bare
   # `cargo fmt` cannot find a crate that is not at the root, so this arm runs
@@ -83,7 +79,6 @@ commands:
       rust:
         run: cargo fmt --all --manifest-path opt/prez/crate/Cargo.toml
         grammar: generic
-        log: FMTRS
   # Devbin's release core, switched on by hv's OK of 2026-09-21 (ST0019 D1,
   # Devbin ST0007 WP-08). Its first act, before any cut, is the read-only
   # `bin/devbin release check`. Its declaration is the release: block below.
