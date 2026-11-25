@@ -34,6 +34,10 @@ local M = {}
 -- A wait reads this often: between phases, or inside the plan verb's call.
 local POLL_SECONDS = 0.25
 
+-- How long after the reload verb's answer the reload itself runs, so that
+-- the answer is written first (ST6d8eed9 WP a45b3aeb).
+local RELOAD_DELAY = 0.5
+
 -- How many times a space creation is tried before it is given up on (issue
 -- 0135): a call that made nothing, for a reason that may pass, and the count
 -- readback, which can lag behind a creation. The Dock's Mission Control
@@ -1692,8 +1696,14 @@ function PHASE.unseen(job)
   return waiting(job, "unseen", UNSEEN_SECONDS, function(w) return retry_unseen(job, w) end, job.after_unseen)
 end
 
--- Step 6's refusals, then the creates (step 7).
+-- Step 6's refusals, then the creates (step 7). First, before anything
+-- changes: a plan that leaves an entry unseen while Hammerspoon's window
+-- filter failed asks the CLI to reload Hammerspoon and run apply again, when
+-- the request lets it (ST6d8eed9 WP a45b3aeb). The unseen wait has given the
+-- filter its chance to come back by then.
 function PHASE.prepare(job)
+  local reload = P.reload_reason(job.ops, job.request_options.may_reload)
+  if reload then error({ reload = reload }, 0) end
   local ctx = { hand = new_hand(), unmoved = {}, world = job.world, world_before = job.world, lg = job.lg }
   ctx.keys, ctx.keys_error = move_keys()
   if P.needs_hand(job.ops, job.world) then
@@ -1736,6 +1746,7 @@ function PHASE.replan(job)
     -- The windows named at the start, by app, against which a read that says
     -- an app is not running is set (STca1b7f9 WP6).
     windows_before = P.app_windows(job.ctx.world_before),
+    after_reload = job.request_options.after_reload_of ~= nil,
   }
   local nxt, err = plan_then(job, "organise_start")
   if not nxt then error("the plan after creating refused: " .. tostring(err), 0) end
@@ -1780,15 +1791,23 @@ function PHASE.finish(job)
   log_world(job.lg, "end", final)
   write_log(job.lg, "engine", function() return L.report_pairs(lines, code, tally) end)
   local own_sizes, changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
+  -- A read after the changes that failed the filter and left an entry unseen
+  -- asks the CLI to reload and run apply again (ST6d8eed9 WP a45b3aeb).
   job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
-    own_sizes = own_sizes, own_sizes_changed = changed, tally = tally })
+    own_sizes = own_sizes, own_sizes_changed = changed, tally = tally,
+    reload = P.reload_reason(job.ops, job.request_options.may_reload) })
 end
 
--- The error response for a verb that raised: refused (nothing changed) or a
--- Lua error, for the CLI (D25).
+-- The error response for a verb that raised: refused (nothing changed), a
+-- reload asked for before anything changed (ST6d8eed9 WP a45b3aeb), or a Lua
+-- error, for the CLI (D25).
 local function error_response(verb, err)
   if type(err) == "table" and err.refused then
     return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused), fix = err.fix }
+  end
+  if type(err) == "table" and err.reload then
+    return { status = "error", kind = "reload", verb = verb, error = tostring(err.reload),
+      fix = "arngz reloads Hammerspoon's config and runs it again" }
   end
   return { status = "error", kind = "lua_error", verb = verb, error = tostring(err) }
 end
@@ -1918,7 +1937,8 @@ function M.start_apply(desk, options, respond, lg)
   options = options or {}
   local job = {
     desk = desk, request_options = options, results = {},
-    options = { no_create = options.no_create, map = options.map, own_sizes = options.own_sizes },
+    options = { no_create = options.no_create, map = options.map, own_sizes = options.own_sizes,
+      after_reload = options.after_reload_of ~= nil },
     deadlines = {}, observed = {}, observe_errors = {}, changed = false,
     -- The run's log (ST589246c); with none, no record is written.
     lg = lg or new_log({}),
@@ -1973,8 +1993,18 @@ local VERBS = {
     return { desk = name, kind = kind, candidates = candidates, report = report }
   end,
   -- discover: the world as a desk (WP-04). options.grid, options.name.
+  -- A read whose window filter failed is never a desk: it would leave out the
+  -- windows on desktops not shown, and --save --force writes the whole desk.
+  -- When the request lets it, the answer asks the CLI to reload Hammerspoon
+  -- and ask again (ST6d8eed9 WP a45b3aeb); otherwise it is refused.
   discover = function(_, options, lg)
     local world = observed(lg, M.observe())
+    if P.filter_failed(world) then
+      local why = P.filter_words(world)
+      if options.may_reload then error({ reload = why }, 0) end
+      refuse(why .. ", so windows on desktops not shown could not be named, and a desk read now would leave them out",
+        options.after_reload_of and P.FILTER_FIX_AFTER_RELOAD or P.FILTER_FIX)
+    end
     local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
     if not desk then refuse(notes, fix) end
     return { desk = desk, report = notes }
@@ -1992,6 +2022,27 @@ local VERBS = {
     write_log(lg, "engine", function() return L.plan_pairs(ops, report) end)
     point(lg, "planned", function() return L.planned_fields(ops) end)
     return { ops = ops, report = report, exit = P.plan_exit(ops) }
+  end,
+  -- reload (ST6d8eed9 WP a45b3aeb): Hammerspoon's config reloaded, on a timer
+  -- after this answer is written, since a reload ends the Lua state the answer
+  -- comes from. Refused while an apply runs, which a reload would end mid-run.
+  -- Until the reload, arngz_running holds a new apply off and arngz_reloading
+  -- says that the old state answers; a fresh state has neither (`state`).
+  reload = function()
+    local running = rawget(_G, "arngz_running")
+    if running then
+      refuse(string.format("an %s is running (asked for at %s), so Hammerspoon's config is not reloaded",
+        tostring(running.verb), tostring(running.at)), "another arngz run is live; run it again when it has finished")
+    end
+    rawset(_G, "arngz_running", { verb = "reload", at = utc_now() })
+    rawset(_G, "arngz_reloading", true)
+    rawset(_G, "arngz_reload_timer", hs.timer.doAfter(RELOAD_DELAY, hs.reload))
+    return { reloading = true }
+  end,
+  -- state: whether a reload asked for is still to come. The CLI asks it until
+  -- a fresh Lua state answers (ST6d8eed9 WP a45b3aeb).
+  state = function()
+    return { reloading = rawget(_G, "arngz_reloading") == true }
   end,
 }
 
@@ -2045,7 +2096,10 @@ local function begin_run(lg, request)
       M.toast and "on" or (M.toast_error and ("off: " .. M.toast_error) or "off: there is no toast.lua"))
   end)
   if M.toast_error then lg.toast_error = lg.toast_error or M.toast_error end
-  point(lg, "start", { verb = tostring(request.verb), desk = tostring(desk) })
+  -- A retry after a reload says which run it retries (ST6d8eed9 WP a45b3aeb).
+  local again = type(request.options) == "table" and request.options.after_reload_of or nil
+  point(lg, "start", { verb = tostring(request.verb), desk = tostring(desk),
+    after_reload_of = again ~= nil and tostring(again) or nil })
 end
 
 -- What the log and the toast hook could not do, put in RESPONSE for the CLI

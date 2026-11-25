@@ -547,7 +547,9 @@ end
 -- plan: false when the person did not pass --no-create, so a missing space
 -- is one that went away meanwhile), map ({name = uuid}), and running_before
 -- ({app key = true}), given to a second plan, which reports an app that was
--- running then and is not now as gone.
+-- running then and is not now as gone, and after_reload (true when the CLI
+-- reloaded Hammerspoon and ran apply again), which gives a failed filter's
+-- unseen entries the fix past that reload (ST6d8eed9 WP a45b3aeb).
 -- apply never launches an app (hv decision 23, ST6d8eed9 WP 35219619): one
 -- that is not running is a not_running op, said and uncounted.
 -- Each op carries `op`, its arguments, `reason`, and `path`, the desk path
@@ -573,8 +575,33 @@ end
 
 -- The way out when Hammerspoon's window filter failed (STca1b7f9 WP6). It
 -- names the menu's Reload Config, so plan.lua names no Hammerspoon call
--- (AT-03.2's purity grep).
+-- (AT-03.2's purity grep). It is the fix of a read no reload followed: diff,
+-- apply --dry-run, or a request that did not let the CLI reload.
 P.FILTER_FIX = "run it again; if it fails again, reload Hammerspoon's config (Reload Config in its menu)"
+
+-- The way out when the filter failed again after the CLI reloaded
+-- Hammerspoon's config and ran the verb again (ST6d8eed9 WP a45b3aeb).
+P.FILTER_FIX_AFTER_RELOAD = "arngz reloaded Hammerspoon's config and its window filter failed again:"
+  .. " quit Hammerspoon, open it again, then run arngz again"
+
+-- What a failed filter is said as, from WORLD's note: the one wording plan's
+-- unseen reasons, discover's refusal and the reload's ask share.
+function P.filter_words(world)
+  return string.format("Hammerspoon's window filter failed (%s)",
+    (tostring((world or {}).window_filter):gsub("^failed: ", "")))
+end
+
+-- Whether apply's answer asks the CLI to reload Hammerspoon and run it again
+-- (ST6d8eed9 WP a45b3aeb): only when the request let it (MAY_RELOAD), and only
+-- for a plan that left an entry unseen while the filter failed, since a run
+-- the filter did not touch has nothing a reload can give it. The words, or nil.
+function P.reload_reason(ops, may_reload)
+  if not may_reload then return nil end
+  for _, op in ipairs(ops or {}) do
+    if op.op == "unseen" and op.filter then return op.filter end
+  end
+  return nil
+end
 
 -- The windows named in WORLD, by id, each with its app's key: what apply keeps
 -- from its start, so that a later read saying an app is not running can be
@@ -692,10 +719,13 @@ function P.plan(desk, world, options)
   -- shown, so when it failed, each entry it leaves unseen says so plainly,
   -- with the way out (STca1b7f9 WP6, issue I7fce35c).
   local filter_failed = P.filter_failed(world)
+  local filter_words = filter_failed and P.filter_words(world) or nil
   if filter_failed then
-    unread_note = unread_note .. string.format("; Hammerspoon's window filter failed (%s), so windows on desktops"
-      .. " not shown could not be named", (tostring(world.window_filter):gsub("^failed: ", "")))
+    unread_note = unread_note .. "; " .. filter_words .. ", so windows on desktops not shown could not be named"
   end
+  -- The fix after the CLI has reloaded Hammerspoon and run apply again is the
+  -- next step past that reload (ST6d8eed9 WP a45b3aeb).
+  local filter_fix = options.after_reload and P.FILTER_FIX_AFTER_RELOAD or P.FILTER_FIX
   local listed = P.listings(world)
   -- An app read as not running while a window it had when apply began is
   -- still listed is taken as running (WP6): the window outweighs the read.
@@ -827,7 +857,9 @@ function P.plan(desk, world, options)
           reason = string.format("%s is running and no standard window of it on a desktop space%s could be named"
             .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)%s", bundle,
             a.window and (" matching " .. string.format("%q", a.window)) or "", unread_note),
-          fix = filter_failed and P.FILTER_FIX or nil,
+          fix = filter_failed and filter_fix or nil,
+          -- The filter's words, which P.reload_reason reads (ST6d8eed9).
+          filter = filter_words,
         }
       end
     end
