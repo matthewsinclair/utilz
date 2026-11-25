@@ -2,7 +2,9 @@
 --
 -- AT-eae7633d.2 to AT-eae7633d.8 (ST589246c acceptance.md) cite this file,
 -- each over the section of the same name below. AC-eae7633d.1 is hv's
--- diagnosis run on the dev tree, and no file proves it.
+-- diagnosis run on the dev tree, and no file proves it. AT-35219619.6,
+-- AT-a45b3aeb.8 and AT-4cb617e2.6 (ST6d8eed9 acceptance.md) cite it too, each
+-- over the section of the same name.
 --
 -- Run by toast.bats under whichever of lua5.4, lua or luajit is present:
 --   <lua> opt/arngz/test/toast_test.lua <path to opt/arngz/lib/toast.lua>
@@ -58,6 +60,16 @@ end
 local MOVE = { run = "r1", i = 5, n = 12, kind = "move", app = "com.tinyspeck.slackmacgap", display = "left",
   desktop = 2, x = 100, y = 120, w = 800, h = 600 }
 
+-- One apply heard from its start, through one step, to its finished: the
+-- plan finished gave, and the state after it.
+local function finish(fields)
+  local s = fresh()
+  apply_start(s, "r9")
+  T.on_point(s, "step", { run = "r9", i = 5, n = 12, kind = "place", app = "Safari" }, name_of)
+  fields.run = "r9"
+  return T.on_point(s, "finished", fields, name_of), s
+end
+
 -- ============================================================================
 print("AT-eae7633d.2: what each point says")
 -- ============================================================================
@@ -105,13 +117,13 @@ do
   check("step: a move reads i of n, the app by name, its desktop and display, then Hands off",
     p and shown(p.lines) == "arngz: zeopit | Running... 5 of 12: moving Slack to desktop 2 on left | " .. T.HANDS_OFF,
     p and shown(p.lines))
-  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "launched apps", seconds = 20 }, name_of)
+  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "unseen windows", seconds = 1.5 }, name_of)
   check("waiting: after the first step it says Hands off too",
-    p and p.lines[2] == "Running... waiting for launched apps (up to 20 s)" and p.lines[3] == T.HANDS_OFF, p and shown(p.lines))
+    p and p.lines[2] == "Running... waiting for windows to show (up to 1.5 s)" and p.lines[3] == T.HANDS_OFF,
+    p and shown(p.lines))
 
   local kinds = {
     { { kind = "create", i = 1, n = 12, display = "left", desktop = 3 }, "Running... 1 of 12: adding desktop 3 on left" },
-    { { kind = "launch", i = 2, n = 12, app = "com.apple.mail" }, "Running... 2 of 12: launching Mail" },
     { { kind = "place", i = 6, n = 12, app = "com.apple.Safari", display = "laptop" },
       "Running... 6 of 12: placing Safari on laptop" },
     { { kind = "recheck", i = 7, n = 12, app = "com.apple.Safari" }, "Running... 7 of 12: checking Safari's size" },
@@ -146,13 +158,6 @@ do
   check("step: only a move goes round", p and p.lines[2] == "Running... 6 of 12: placing Safari on laptop",
     p and shown(p.lines))
 
-  local function finish(fields)
-    local s = fresh()
-    apply_start(s, "r9")
-    T.on_point(s, "step", { run = "r9", i = 5, n = 12, kind = "place", app = "Safari" }, name_of)
-    fields.run = "r9"
-    return T.on_point(s, "finished", fields, name_of), s
-  end
   local done, s = finish({ outcome = "done", exit = 0, placed = 9, in_place = 2, created = 1, seconds = 13.2 })
   check("finished, done: the counts that are not zero, the desktops added and the time taken",
     done and done.lines[2] == "Finished in 13.2 s: 9 placed, 2 already in place, 1 desktop added", done and shown(done.lines))
@@ -198,16 +203,18 @@ do
   -- AT-322a6511.9 (STca1b7f9 acceptance.md) cites this arm.
   -- STca1b7f9 AC-322a6511.9: a partly run's first problem is labelled by what
   -- it was, in the counts' own words, and is bare when the point does not say
-  -- or says what toast.lua does not know as a problem.
+  -- or says what toast.lua does not know as a problem. An entry whose app is
+  -- not running counts against nothing, so it is never a problem
+  -- (ST6d8eed9 WP 35219619).
   local labelled = {
     { "unseen", "Not found: " },
     { "failed", "Failed: " },
-    { "skipped", "Skipped: " },
+    { "not_running", "" },
     { nil, "" },
     { "placed", "" },
   }
   for _, want in ipairs(labelled) do
-    local fields = { outcome = "partly", exit = 1, placed = 9, unseen = 1, skipped = 1, failed = 1, seconds = 13.2,
+    local fields = { outcome = "partly", exit = 1, placed = 9, unseen = 1, not_running = 1, failed = 1, seconds = 13.2,
       first = "Mail: no window of it could be named", first_outcome = want[1] }
     local got = finish(fields)
     check("finished, partly: a first " .. tostring(want[1]) .. " reads " .. (want[2] ~= "" and want[2] or "bare"),
@@ -314,6 +321,166 @@ do
     p and shown(p.lines))
   check("every other verb draws nothing", T.on_point(st, "start", { run = "w1", verb = "which", desk = "" }, name_of) == nil
     and T.on_point(st, "finished", { run = "w1", outcome = "done" }, name_of) == nil)
+end
+
+-- ============================================================================
+print("AT-35219619.6: an app that is not running is counted, named, and no problem")
+-- ============================================================================
+
+-- AT-35219619.6 (ST6d8eed9 acceptance.md) cites this section.
+-- ST6d8eed9 AC-35219619.6: apply never launches an app. Finished counts the
+-- entries whose app is not running as "not running", names those apps on a
+-- line under the counts, and has no "Skipped:" label and no skipped count.
+do
+  local done = finish({ outcome = "done", exit = 0, placed = 9, in_place = 2, not_running = 2,
+    not_running_apps = "Teams, Slack", seconds = 13.2 })
+  check("finished, done: not running among the counts, and the apps named on the line under them",
+    done and done.lines[2] == "Finished in 13.2 s: 9 placed, 2 already in place, 2 not running"
+      and done.lines[3] == "Not running: Teams, Slack", done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, in_place = 12, not_running = 1, not_running_apps = "Teams", seconds = 2.1 })
+  check("finished, done: with an app not running, the entries in place are not called all of them",
+    done and done.lines[2] == "Finished in 2.1 s: 12 already in place, 1 not running", done and shown(done.lines))
+  local partly = finish({ outcome = "partly", exit = 1, placed = 9, unseen = 1, not_running = 1, failed = 1,
+    not_running_apps = "Teams", seconds = 13.2, first = "Mail: no window of it could be named", first_outcome = "unseen" })
+  check("finished, partly: not running between not found and failed, the apps named, then the first problem",
+    partly and partly.lines[2] == "Finished in 13.2 s with problems: 9 placed, 1 not found, 1 not running, 1 failed"
+      and partly.lines[3] == "Not running: Teams" and partly.lines[4] == "Not found: Mail: no window of it could be named"
+      and partly.lines[#partly.lines] == T.LOG_LINE, partly and shown(partly.lines))
+  done = finish({ outcome = "done", exit = 0, placed = 3, seconds = 1 })
+  check("finished: no Not running line when every app ran",
+    done and not shown(done.lines):find("Not running", 1, true), done and shown(done.lines))
+  -- More names than the long lines hold, however long the limits are.
+  local many = {}
+  while #table.concat(many, ", ") <= T.MAX_LINE * (T.LONG_LINES + 1) do many[#many + 1] = "App number " .. (#many + 1) end
+  local named = finish({ outcome = "done", exit = 0, not_running = #many, not_running_apps = table.concat(many, ", "),
+    seconds = 1 })
+  local unnamed = finish({ outcome = "done", exit = 0, not_running = #many, seconds = 1 })
+  check("finished: a long list of apps takes the long lines at most, each within the limit", named and unnamed
+    and #named.lines == #unnamed.lines + T.LONG_LINES and longest(named.lines) <= T.MAX_LINE
+    and named.lines[#named.lines]:sub(-3) == "...", named and shown(named.lines))
+  local skipped = finish({ outcome = "partly", exit = 1, placed = 9, skipped = 1, failed = 1, seconds = 13.2,
+    first = "Mail: no window of it could be named", first_outcome = "skipped" })
+  check("finished: no Skipped: label and no skipped count, which apply no longer has",
+    skipped and not shown(skipped.lines):find("kipped", 1, true), skipped and shown(skipped.lines))
+end
+
+-- ============================================================================
+print("AT-a45b3aeb.8: a run that reloads Hammerspoon says so, and so does the run again")
+-- ============================================================================
+
+-- AT-a45b3aeb.8 (ST6d8eed9 acceptance.md) cites this section.
+-- ST6d8eed9 AC-a45b3aeb.8: a Finished whose run asks the CLI to reload
+-- Hammerspoon's config says what comes next, whatever its outcome, with no
+-- counts, fix or log line. The run again, under the same run id, says
+-- "(after a reload)" on the header of each of its toasts.
+do
+  local reloading = "Reloading Hammerspoon, then running again: its window filter failed"
+  for _, outcome in ipairs({ "refused", "partly", "done" }) do
+    local p, s = finish({ outcome = outcome, exit = outcome == "done" and 0 or 1, reload = true, placed = 3, unseen = 1,
+      seconds = 4.2, first = "Mail: no window of it could be named", first_outcome = "unseen", fix = "run arngz again" })
+    check("finished, " .. outcome .. ", with reload: the reload line alone under the header",
+      p and shown(p.lines) == "arngz: zeopit | " .. reloading, p and shown(p.lines))
+    check("finished, " .. outcome .. ", with reload: the reload verb's points under the same run draw nothing",
+      T.on_point(s, "start", { run = "r9", verb = "reload", desk = "" }, name_of) == nil
+        and T.on_point(s, "finished", { run = "r9", outcome = "done", exit = 0 }, name_of) == nil)
+  end
+  local plain = finish({ outcome = "partly", exit = 1, reload = false, placed = 3, unseen = 1, seconds = 4.2 })
+  check("finished: reload false says nothing of a reload",
+    plain and not shown(plain.lines):find("Reloading", 1, true), plain and shown(plain.lines))
+  local saving = fresh()
+  T.on_point(saving, "start", { run = "d1", verb = "discover", desk = "" }, name_of)
+  local p = T.on_point(saving, "finished", { run = "d1", outcome = "refused", exit = 1, reload = true,
+    first = "Hammerspoon's window filter failed" }, name_of)
+  check("discover's Finished with reload says it too",
+    p and shown(p.lines) == "arngz: Save Desk | " .. reloading, p and shown(p.lines))
+
+  local st = fresh()
+  p = T.on_point(st, "start", { run = "r1", verb = "apply", desk = "zeopit", after_reload_of = "r1" }, name_of)
+  check("start, after a reload: Starting again, under a header that says so",
+    p and shown(p.lines) == "arngz: zeopit (after a reload) | Starting again: reading the screens and windows",
+    p and shown(p.lines))
+  p = T.on_point(st, "step", { run = "r1", i = 1, n = 3, kind = "place", app = "com.apple.Safari", display = "laptop" },
+    name_of)
+  check("step, after a reload: the header still says so",
+    p and p.lines[1] == "arngz: zeopit (after a reload)" and p.lines[2] == "Running... 1 of 3: placing Safari on laptop",
+    p and shown(p.lines))
+  p = T.on_point(st, "finished", { run = "r1", outcome = "done", exit = 0, placed = 3, seconds = 2 }, name_of)
+  check("finished, after a reload: the header still says so, over the run's own counts",
+    p and shown(p.lines) == "arngz: zeopit (after a reload) | Finished in 2.0 s: 3 placed", p and shown(p.lines))
+  local long = fresh()
+  p = T.on_point(long, "start", { run = "r2", verb = "apply", desk = string.rep("d", 120), after_reload_of = "r2" }, name_of)
+  check("a long desk name is cut before (after a reload), which stays in view",
+    p and #p.lines[1] <= T.MAX_LINE and p.lines[1]:find("%.%.%. %(after a reload%)$") ~= nil, p and p.lines[1])
+  local again = fresh()
+  T.on_point(again, "start", { run = "d2", verb = "discover", desk = "", after_reload_of = "d2" }, name_of)
+  T.on_point(again, "observed", { run = "d2", displays = 1, desktops = 2, windows = 3 }, name_of)
+  p = T.on_point(again, "finished", { run = "d2", outcome = "done", exit = 0, seconds = 1 }, name_of)
+  check("discover after a reload: Save Desk's header says so",
+    p and p.lines[1] == "arngz: Save Desk (after a reload)", p and shown(p.lines))
+  local verbs = fresh()
+  check("the reload and state verbs draw nothing",
+    T.on_point(verbs, "start", { run = "r3", verb = "reload", desk = "" }, name_of) == nil
+      and T.on_point(verbs, "finished", { run = "r3", outcome = "done", exit = 0 }, name_of) == nil
+      and T.on_point(verbs, "start", { run = "r3", verb = "state", desk = "" }, name_of) == nil
+      and T.on_point(verbs, "finished", { run = "r3", outcome = "done", exit = 0 }, name_of) == nil)
+end
+
+-- ============================================================================
+print("AT-4cb617e2.6: a pause for the pointer, the move again, and the count")
+-- ============================================================================
+
+-- AT-4cb617e2.6 (ST6d8eed9 acceptance.md) cites this section.
+-- ST6d8eed9 AC-4cb617e2.6: when the person takes the pointer during a move,
+-- the toast says Paused, how long the pointer must be still and the longest
+-- wait, with Hands off under it. The move that goes on is drawn again, and
+-- Finished counts the pauses, after the desktops added, with every count
+-- whole however many there are.
+do
+  local st = fresh()
+  apply_start(st, "r1")
+  T.on_point(st, "step", MOVE, name_of)
+  local p = T.on_point(st, "waiting", { run = "r1", ["for"] = "the pointer to be still", seconds = 30, still = 2 },
+    name_of)
+  check("waiting for the pointer: Paused, how long still and the longest, then Hands off",
+    p and shown(p.lines) == "arngz: zeopit | Paused: waiting for the pointer to be still for 2 s (up to 30 s) | "
+      .. T.HANDS_OFF, p and shown(p.lines))
+  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "the pointer to be still", seconds = 30 }, name_of)
+  check("waiting for the pointer with no still: the line leaves that time out",
+    p and p.lines[2] == "Paused: waiting for the pointer to be still (up to 30 s)", p and shown(p.lines))
+  -- The release left the window part-way, so the step comes again with its
+  -- frame as it is now.
+  local again = {}
+  for k, v in pairs(MOVE) do again[k] = v end
+  again.x, again.y = MOVE.x + MOVE.w, MOVE.y + MOVE.h
+  p = T.on_point(st, "step", again, name_of)
+  check("the move that goes on is drawn again, with its own i and n, and its frame as it is now",
+    p and shown(p.lines) == "arngz: zeopit | Running... 5 of 12: moving Slack to desktop 2 on left | " .. T.HANDS_OFF
+      and p.step == again, p and shown(p.lines))
+
+  local done = finish({ outcome = "done", exit = 0, placed = 9, created = 1, paused = 1, seconds = 21.4 })
+  check("finished: the pause count comes after the desktops added, in the singular for one",
+    done and done.lines[2] == "Finished in 21.4 s: 9 placed, 1 desktop added, 1 pause for the pointer",
+    done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, placed = 3, paused = 2, seconds = 9 })
+  check("finished: pauses in the plural", done and done.lines[2] == "Finished in 9.0 s: 3 placed, 2 pauses for the pointer",
+    done and shown(done.lines))
+  done = finish({ outcome = "done", exit = 0, placed = 3, paused = 0, seconds = 1 })
+  check("finished: no pause count when the run never paused",
+    done and not shown(done.lines):find("pause", 1, true), done and shown(done.lines))
+
+  local wanted = { "9 placed", "2 already in place", "1 not found", "1 not running", "1 failed", "1 desktop added",
+    "2 pauses for the pointer" }
+  local busy = finish({ outcome = "partly", exit = 1, placed = 9, in_place = 2, unseen = 1, not_running = 1, failed = 1,
+    created = 1, paused = 2, not_running_apps = "Teams", seconds = 13.2, first = "Mail: no window of it could be named",
+    first_outcome = "unseen" })
+  local said_counts = busy and (busy.lines[2] .. " " .. busy.lines[3]) or ""
+  local whole = true
+  for _, c in ipairs(wanted) do
+    if not said_counts:find(c, 1, true) then whole = false end
+  end
+  check("finished: a busy run's counts take two lines, broken between two counts, each count whole",
+    busy and whole and busy.lines[2]:sub(-1) == "," and busy.lines[3]:find("^%d") ~= nil
+      and longest(busy.lines) <= T.MAX_LINE and busy.lines[4] == "Not running: Teams", busy and shown(busy.lines))
 end
 
 -- ============================================================================

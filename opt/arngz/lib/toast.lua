@@ -10,6 +10,9 @@
 -- Finished, which says what happened and stays up longer. discover gets its
 -- Finished alone: it answers inside one IPC call, and Hammerspoon draws
 -- nothing until that call has returned. Every other verb gets nothing.
+-- ST6d8eed9 adds what a toast says of an app that is not running (WP
+-- 35219619), of a reload of Hammerspoon's config and the run again (WP
+-- a45b3aeb), and of a pause while the person has the pointer (WP 4cb617e2).
 --
 -- PURE, THEN IMPURE. What a toast says, where it sits, how long it stays and
 -- when it hides are pure functions of the points heard: T.cut, T.wrap,
@@ -127,10 +130,20 @@ function T.linger(outcome)
   return T.LINGER_OTHER
 end
 
+-- A run that is the retry after a reload of Hammerspoon's config says so on
+-- each of its toasts (progress.md's start after_reload_of; ST6d8eed9
+-- AC-a45b3aeb.8). A long desk name is cut before it, never in it.
+local AFTER_RELOAD = " (after a reload)"
+
 local function header(run)
-  if type(run.desk) == "string" and run.desk ~= "" then return T.cut("arngz: " .. run.desk) end
-  if run.verb == "discover" then return "arngz: Save Desk" end
-  return "arngz"
+  local again = run.reloaded and AFTER_RELOAD or ""
+  local head = "arngz"
+  if type(run.desk) == "string" and run.desk ~= "" then
+    head = "arngz: " .. run.desk
+  elseif run.verb == "discover" then
+    head = "arngz: Save Desk"
+  end
+  return T.cut(head, T.MAX_LINE - #again) .. again
 end
 
 local function headed(run, body)
@@ -147,13 +160,22 @@ end
 -- A wait, by what it waits for (progress.md's `for`).
 local WAITING = {
   ["new desktops"] = "waiting for macOS to record the new desktops",
-  ["launched apps"] = "waiting for launched apps",
   ["unseen windows"] = "waiting for windows to show",
 }
 
+-- The wait that is a pause: the person took the pointer during a move, and
+-- the move goes on once the pointer is still (progress.md's waiting `for` and
+-- `still`; ST6d8eed9 AC-4cb617e2.6). Its line says Paused, not Running...,
+-- in the words of what it waits for.
+local PAUSE_FOR = "the pointer to be still"
+
 local function waiting_line(f)
-  local what = WAITING[f["for"]] or ("waiting for " .. tostring(f["for"]))
   local longest = type(f.seconds) == "number" and string.format(" (up to %g s)", f.seconds) or ""
+  if f["for"] == PAUSE_FOR then
+    local still = type(f.still) == "number" and string.format(" for %g s", f.still) or ""
+    return "Paused: waiting for " .. PAUSE_FOR .. still .. longest
+  end
+  local what = WAITING[f["for"]] or ("waiting for " .. tostring(f["for"]))
   return "Running... " .. what .. longest
 end
 
@@ -167,13 +189,10 @@ local function desktop(f)
   return nil
 end
 
--- A step, by its kind (progress.md: create, launch, move or place).
+-- A step, by its kind (progress.md: create, move, place or recheck).
 local STEP = {
   create = function(f)
     return "adding " .. (desktop(f) or "a desktop") .. on_display(f)
-  end,
-  launch = function(_, app)
-    return "launching " .. (app or "an app")
   end,
   move = function(f, app)
     local to = desktop(f)
@@ -207,15 +226,19 @@ local function step_line(f, name_of)
 end
 
 -- The counts a Finished line names, each only when it is not zero, in the
--- order a person reads a run: what it did, then what it could not.
+-- order a person reads a run: what it did, then what it could not. apply
+-- never launches an app, so an entry whose app is not running is counted
+-- here and counts against nothing (ST6d8eed9 WP 35219619).
 local COUNTS = {
   { "placed", "placed" },
   { "in_place", "already in place" },
   { "unseen", "not found" },
-  { "skipped", "skipped" },
+  { "not_running", "not running" },
   { "failed", "failed" },
 }
 
+-- The counts, then the desktops added, then the times the run paused for the
+-- pointer (progress.md's finished paused; ST6d8eed9 AC-4cb617e2.6).
 local function counts(f)
   local parts = {}
   for _, c in ipairs(COUNTS) do
@@ -223,11 +246,28 @@ local function counts(f)
     if type(n) == "number" and n > 0 then parts[#parts + 1] = int(n) .. " " .. c[2] end
   end
   if type(f.created) == "number" and f.created > 0 then parts[#parts + 1] = plural(f.created, "desktop") .. " added" end
+  if type(f.paused) == "number" and f.paused > 0 then parts[#parts + 1] = plural(f.paused, "pause") .. " for the pointer" end
   return parts
 end
 
+-- A Finished line: its head, then the counts, on at most T.LONG_LINES lines.
+-- It breaks only between two counts, so no count is cut in two: a count's
+-- own spaces are held as HELD while T.wrap breaks between words, then given
+-- back. HELD is one byte, as a space is, so each line keeps its length.
+local HELD = "\1"
+
+local function counts_lines(head, parts)
+  local held = {}
+  for i, part in ipairs(parts) do held[i] = (part:gsub(" ", HELD)) end
+  local lines = T.wrap(head .. table.concat(held, ", "))
+  for i, line in ipairs(lines) do lines[i] = (line:gsub(HELD, " ")) end
+  return lines
+end
+
 -- What a first problem can have been (progress.md's finished first_outcome).
-local FIRST_OUTCOMES = { failed = true, unseen = true, skipped = true }
+-- An entry whose app is not running counts against nothing, so it is never
+-- the first problem.
+local FIRST_OUTCOMES = { failed = true, unseen = true }
 
 -- The label on a partly run's first problem: what it was, in COUNTS' own words,
 -- so the label and the count can never disagree, and an unseen entry reads
@@ -259,6 +299,17 @@ local function add_fix(lines, f)
   return lines
 end
 
+-- The apps that are not running, by name, on a line under the counts, since
+-- "N not running" names none (progress.md's finished not_running_apps;
+-- ST6d8eed9 AC-35219619.6). The engine gives them as one string, each app as
+-- it read the name, else as the desk spells it.
+local function add_not_running(lines, f)
+  if type(f.not_running_apps) == "string" and f.not_running_apps ~= "" then
+    add_wrapped(lines, "Not running: " .. f.not_running_apps)
+  end
+  return lines
+end
+
 local function refused(f, nothing)
   return add_fix(add_wrapped({}, "Refused, nothing " .. nothing .. ": " .. said(f)), f)
 end
@@ -278,17 +329,17 @@ end
 local APPLY_FINISHED = {
   done = function(_, f)
     local parts = counts(f)
-    local summary = table.concat(parts, ", ")
     if #parts == 0 then
-      summary = "nothing to do"
+      parts = { "nothing to do" }
     elseif #parts == 1 and type(f.in_place) == "number" and f.in_place > 0 then
-      summary = "all " .. int(f.in_place) .. " already in place"
+      parts = { "all " .. int(f.in_place) .. " already in place" }
     end
-    return { T.cut("Finished" .. took(f) .. ": " .. summary) }
+    return add_not_running(counts_lines("Finished" .. took(f) .. ": ", parts), f)
   end,
   partly = function(_, f)
     local parts = counts(f)
-    local lines = { T.cut("Finished" .. took(f) .. " with problems" .. (#parts > 0 and (": " .. table.concat(parts, ", ")) or "")) }
+    local lines = counts_lines("Finished" .. took(f) .. " with problems" .. (#parts > 0 and ": " or ""), parts)
+    add_not_running(lines, f)
     if f.first ~= nil and f.first ~= "" then add_wrapped(lines, first_label(f) .. tostring(f.first)) end
     add_fix(lines, f)
     lines[#lines + 1] = T.LOG_LINE
@@ -321,7 +372,14 @@ local DISCOVER_FINISHED = {
 
 local FINISHED = { apply = APPLY_FINISHED, discover = DISCOVER_FINISHED }
 
+-- A Finished whose run asks the CLI to reload Hammerspoon's config and run
+-- again (progress.md's finished reload; ST6d8eed9 AC-a45b3aeb.8) says what
+-- comes next, whatever its outcome, and not its counts: the reload takes this
+-- toast down, and the run again draws a toast of its own.
+local RELOADING = "Reloading Hammerspoon, then running again: its window filter failed"
+
 local function finished_lines(run, f)
+  if f.reload == true then return { RELOADING } end
   if run.slot == "notice" and run.verb == "apply" and f.outcome == "refused"
     and type(run.behind) == "string" and run.behind ~= "" then
     return { T.cut("Refused: " .. run.behind .. " is still being arranged") }
@@ -374,15 +432,18 @@ local ON = {}
 
 -- A run that starts while an apply is shown is a notice, in a small toast of
 -- its own above the running one: a second apply, which the engine refuses
--- (progress.md, rule 3), or a discover.
+-- (progress.md, rule 3), or a discover. A run that carries after_reload_of is
+-- the run again after a reload, under the same run id, in a fresh Lua state.
 function ON.start(st, f)
   if not SHOWN[f.verb] then return nil end
   local live = st.live and st.runs[st.live]
-  local run = { verb = f.verb, desk = f.desk, slot = live and "notice" or "main", behind = live and live.desk or nil }
+  local run = { verb = f.verb, desk = f.desk, slot = live and "notice" or "main", behind = live and live.desk or nil,
+    reloaded = f.after_reload_of ~= nil and f.after_reload_of ~= "" }
   st.runs[f.run] = run
   if f.verb ~= "apply" or run.slot ~= "main" then return nil end
   st.live = f.run
-  return { slot = "main", lines = headed(run, { "Starting: reading the screens and windows" }) }
+  local starting = run.reloaded and "Starting again" or "Starting"
+  return { slot = "main", lines = headed(run, { starting .. ": reading the screens and windows" }) }
 end
 
 function ON.observed(st, f)
