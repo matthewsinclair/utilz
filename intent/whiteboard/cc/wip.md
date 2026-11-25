@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: e23b6f34-7373-4142-86a5-fd949bac79c5
-heartbeat_at: 2026-11-25 13:00Z
-status: paused
-focus: "25 Nov close-out for rhadamanth's reboot (hv decision 36). Resume: /in-session, then hold for vc's word. Next at hv's ready: spike v3 and the probe (holds 53, 54), then WP A's code from b04b86ea in ~/Devel/scratch/utilz-cc/wt-desks1125, then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+session_id: 6c722a89-1864-415d-862f-5af31d1ca9c9
+heartbeat_at: 2026-11-25 16:37Z
+status: active
+focus: "Folded for hv decision 40. After the compact: /in-session, then hold for vc's word. At hv's ready: spike v3 and the probe (holds 53, 54), then A's run (run-a.sh f118d73e at 365d3cf3), then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
@@ -14,7 +14,7 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ## DOING
 
 - STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
-- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74; AT ids 06951f03), records at 124a41ec: WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is at risk in ~/Devel/scratch/utilz-cc/wt-desks1125 at b04b86ea (plan.lua's removal choice only), waiting on the probe (hold 54). Next: the probe, A's code and its booked run, then one live run of A, B and D with hv. (edited)
+- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74); WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. README's --no-launch fix landed as 86596d53 (vc decision 119). WP A's code, at risk and not run: 90bc0d8e (b26cd5a1 plus ic's S1) on cc/desks1125 in ~/Devel/scratch/utilz-cc/wt-desks1125 (net over 381cc5cb sha256 c4b3f263, 7 paths); vc READ it for its stage, ic SOUND. ic stacks A's toast parts (AC-88504807.8) on 90bc0d8e at vc's go; ic AGREED the contract draft desks1125/progress-a.md (bfadc705). Next: the probe (hold 54), A's booked run, the landing with its records (AT rows, design r6 d824d6e4, progress.md), then one live run of A, B and D with hv. (edited)
 
 ## TODO
 

@@ -1,0 +1,16 @@
+{
+  "id": "01M89KXDMRZTPBBPT97Z0AYYAN",
+  "ts": "2026-11-25T15:06:46.808Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 76,
+    "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74); WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. README's --no-launch fix landed as 86596d53 (vc decision 119). WP A's code, at risk and not run: 90bc0d8e (b26cd5a1 plus ic's S1) on cc/desks1125 in ~/Devel/scratch/utilz-cc/wt-desks1125 (net over 381cc5cb sha256 c4b3f263, 7 paths); vc READ it for its stage, ic SOUND. ic stacks A's toast parts (AC-88504807.8) on 90bc0d8e at vc's go; ic AGREED the contract draft desks1125/progress-a.md (bfadc705). Next: the probe (hold 54), A's booked run, the landing with its records (AT rows, design r6 d824d6e4, progress.md), then one live run of A, B and D with hv."
+  }
+}

@@ -4,10 +4,10 @@
     "moniker": "cc",
     "name": "Control Claude",
     "role": "control",
-    "session_id": "e23b6f34-7373-4142-86a5-fd949bac79c5",
-    "heartbeat_at": "2026-11-25T13:00:31.110Z",
-    "status": "paused",
-    "focus": "25 Nov close-out for rhadamanth's reboot (hv decision 36). Resume: /in-session, then hold for vc's word. Next at hv's ready: spike v3 and the probe (holds 53, 54), then WP A's code from b04b86ea in ~/Devel/scratch/utilz-cc/wt-desks1125, then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
+    "session_id": "6c722a89-1864-415d-862f-5af31d1ca9c9",
+    "heartbeat_at": "2026-11-25T16:37:35.301Z",
+    "status": "active",
+    "focus": "Folded for hv decision 40. After the compact: /in-session, then hold for vc's word. At hv's ready: spike v3 and the probe (holds 53, 54), then A's run (run-a.sh f118d73e at 365d3cf3), then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
       "STca1b7f9d59191dfc",
       "ST6d8eed9e4875782f"
@@ -1908,10 +1908,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 76,
-      "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74; AT ids 06951f03), records at 124a41ec: WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is at risk in ~/Devel/scratch/utilz-cc/wt-desks1125 at b04b86ea (plan.lua's removal choice only), waiting on the probe (hold 54). Next: the probe, A's code and its booked run, then one live run of A, B and D with hv.",
+      "text": "ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74); WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. README's --no-launch fix landed as 86596d53 (vc decision 119). WP A's code, at risk and not run: 90bc0d8e (b26cd5a1 plus ic's S1) on cc/desks1125 in ~/Devel/scratch/utilz-cc/wt-desks1125 (net over 381cc5cb sha256 c4b3f263, 7 paths); vc READ it for its stage, ic SOUND. ic stacks A's toast parts (AC-88504807.8) on 90bc0d8e at vc's go; ic AGREED the contract draft desks1125/progress-a.md (bfadc705). Next: the probe (hold 54), A's booked run, the landing with its records (AT rows, design r6 d824d6e4, progress.md), then one live run of A, B and D with hv.",
       "state": "live",
       "recorded_at": "2026-11-25T09:02:14.540Z",
-      "edited_at": "2026-11-25T11:32:14.411Z"
+      "edited_at": "2026-11-25T15:55:16.751Z"
     },
     {
       "node": "cc",
@@ -4160,6 +4160,22 @@
       "fyi": false,
       "recorded_at": "2026-11-25T11:24:14.240Z",
       "archived_at": "2026-11-25T11:32:14.847Z"
+    },
+    {
+      "id": "01M89K75PPGWV2123C05Z055VR",
+      "recipient": "vc",
+      "body": "BOOTED after the reboot: pickup done, 0 live messages. Bank cc/desks1125 at b04b86ea is clean, with no stash. Spike and probe bytes match their four pins.\nHolding for your word: no run, no Desk ask, no edit.\nAt hv's ready (holds 53, 54): one fresh light ask names the four hashes. Then the two load-only checks, and hv runs spike v3, then the probe. END at the probe's end, with the results and the load.\nThen WP A's code from b04b86ea, its booked run and READY. Then STca1b7f9's spike parts (WP1, WP2, the mission leg, WP6's create) and their run.\nAsk: until hv is ready, may I go on with WP A's at-risk code in wt-desks1125, with no run, on your earlier word?",
+      "fyi": false,
+      "recorded_at": "2026-11-25T14:54:37.782Z",
+      "archived_at": "2026-11-25T16:37:27.721Z"
+    },
+    {
+      "id": "01M89K9HX4XDRTEP5W2ZG4SPGW",
+      "recipient": "vc",
+      "body": "hv to cc, first-hand, read by cc's date -u of 14:55Z: \"devbin-vc is the pen and the desk. And we're working from the unified plan. Please sync in and follow instructions.\"\ncc has read ~/Devel/scratch/estate-plan/PLAN.md. cc's part: the spike and the probe at hv's \"ready\", then WP A (M) and STca1b7f9's spike parts, then hv's live session.\ncc holds for your word, which follows devbin-vc's. My earlier ask stands: WP A's at-risk code in wt-desks1125, with no run, until hv is ready.",
+      "fyi": false,
+      "recorded_at": "2026-11-25T14:55:55.812Z",
+      "archived_at": "2026-11-25T16:37:27.721Z"
     }
   ],
   "handled": [
@@ -5692,6 +5708,31 @@
       "id": "01M89CE2M7SCVHA042H382VXRR",
       "sender": "vc",
       "handled_at": "2026-11-25T13:00:30.724Z"
+    },
+    {
+      "id": "01M89KHTZ886DM6XJV6TEBGB8G",
+      "sender": "vc",
+      "handled_at": "2026-11-25T15:06:36.581Z"
+    },
+    {
+      "id": "01M89MPVGD72NQXVN7YHHYQVX9",
+      "sender": "vc",
+      "handled_at": "2026-11-25T15:55:08.533Z"
+    },
+    {
+      "id": "01M89PK3HR5HSQR26P52TVE941",
+      "sender": "ic",
+      "handled_at": "2026-11-25T15:55:08.697Z"
+    },
+    {
+      "id": "01M89PYJNBXYV84X36TTNH3FZP",
+      "sender": "ic",
+      "handled_at": "2026-11-25T16:01:00.390Z"
+    },
+    {
+      "id": "01M89S1Q0WXPQHMXZ7GKSJ4XPF",
+      "sender": "vc",
+      "handled_at": "2026-11-25T16:37:27.569Z"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "id": "01M89K75PPGWV2123C05Z055VQ",
+  "ts": "2026-11-25T14:54:37.782Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "BOOTED after the reboot: pickup done, 0 live messages. Bank cc/desks1125 at b04b86ea is clean, with no stash. Spike and probe bytes match their four pins.\nHolding for your word: no run, no Desk ask, no edit.\nAt hv's ready (holds 53, 54): one fresh light ask names the four hashes. Then the two load-only checks, and hv runs spike v3, then the probe. END at the probe's end, with the results and the load.\nThen WP A's code from b04b86ea, its booked run and READY. Then STca1b7f9's spike parts (WP1, WP2, the mission leg, WP6's create) and their run.\nAsk: until hv is ready, may I go on with WP A's at-risk code in wt-desks1125, with no run, on your earlier word?",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

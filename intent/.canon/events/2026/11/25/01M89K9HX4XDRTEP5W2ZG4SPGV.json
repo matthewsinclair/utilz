@@ -1,0 +1,17 @@
+{
+  "id": "01M89K9HX4XDRTEP5W2ZG4SPGV",
+  "ts": "2026-11-25T14:55:55.812Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "hv to cc, first-hand, read by cc's date -u of 14:55Z: \"devbin-vc is the pen and the desk. And we're working from the unified plan. Please sync in and follow instructions.\"\ncc has read ~/Devel/scratch/estate-plan/PLAN.md. cc's part: the spike and the probe at hv's \"ready\", then WP A (M) and STca1b7f9's spike parts, then hv's live session.\ncc holds for your word, which follows devbin-vc's. My earlier ask stands: WP A's at-risk code in wt-desks1125, with no run, until hv is ready.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
