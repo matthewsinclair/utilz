@@ -980,6 +980,49 @@ function P.quiet_verdict(now, watcher, began)
   return "wait", math.ceil(math.min(P.QUIET_SECONDS - quiet, P.QUIET_LIMIT - waited) * 10) / 10
 end
 
+-- ----------------------------- the pointer is still (ST6d8eed9 WP 4cb617e2)
+
+-- A pause when the person takes the pointer during a move (hv decision 26):
+-- how far the pointer may drift and still be still, for how long it must be
+-- still, how long a pause waits for that, and how many pauses one run takes.
+P.STILL_PX = 4
+P.STILL_SECONDS = 2
+P.PAUSE_LIMIT = 30
+P.MAX_PAUSES = 3
+
+-- What a pause that gave up says after the stop's own words, what the take
+-- after the last pause says, and the way out each gives.
+P.PAUSE_GAVE_UP = string.format("the pointer did not stay still for %d s within %d s", P.STILL_SECONDS, P.PAUSE_LIMIT)
+P.PAUSES_SPENT = string.format("arngz had paused for the pointer %d times, the most one run pauses", P.MAX_PAUSES)
+P.PAUSE_FIX = "keep your hands off the mouse and keyboard until arngz finishes, then run arngz apply again"
+
+-- Whether the pointer is still at NOW, as the engine reads it every
+-- POLL_SECONDS while a run pauses. LOOK is the look so far: { at = the point
+-- the pointer has stayed near, since = when it came there }, or nil before
+-- the first look and after a look with hands not free. POINTER is where the
+-- pointer is now, FREE whether no mouse button and no modifier key is held,
+-- and BEGAN when the pause began. Returns the verdict and the look to keep:
+-- "still" once the pointer has stayed within STILL_PX of one point, with
+-- hands free, for STILL_SECONDS; "give_up" once PAUSE_LIMIT has passed since
+-- BEGAN without that; otherwise "wait". Times are seconds since the epoch.
+function P.still_verdict(now, look, pointer, free, began)
+  if not free then
+    look = nil
+  elseif not look or math.sqrt((pointer.x - look.at.x) ^ 2 + (pointer.y - look.at.y) ^ 2) > P.STILL_PX then
+    look = { at = { x = pointer.x, y = pointer.y }, since = now }
+  end
+  if look and now - look.since >= P.STILL_SECONDS then return "still", look end
+  if now - began >= P.PAUSE_LIMIT then return "give_up", look end
+  return "wait", look
+end
+
+-- The note on an op that paused for the pointer and then took: how long it
+-- paused, in whole seconds rounded up, so a pause is never "0 s". Said, and
+-- counting against nothing.
+function P.paused_note(seconds)
+  return string.format("paused %d s for the pointer", math.ceil(seconds))
+end
+
 -- ------------------------------------------------------------- moving (D21)
 
 -- Ported from dc's spike 2 (arngz-spike2.lua, ST0026 WP-01), which measured

@@ -418,6 +418,8 @@ function L.finished_fields(response, seconds, log_path)
     -- the verb again: a refusal of kind reload, or an apply that ran and
     -- carries reload. The CLI acts after this point (ST6d8eed9 WP a45b3aeb).
     reload = response.kind == "reload" or (response.reload ~= nil and response.reload ~= false),
+    -- How many times the run paused for the pointer (ST6d8eed9 WP 4cb617e2).
+    paused = tonumber(response.paused) or 0,
     placed = t.placed or 0,
     in_place = t.in_place or 0,
     failed = t.failed or 0,

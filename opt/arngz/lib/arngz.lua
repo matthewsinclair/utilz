@@ -1236,8 +1236,9 @@ local function move_readback(op, origin)
 end
 
 -- Run legs in order, keeping ctx.state's shown spaces current. Returns nil
--- when they all took, or why not and the index of the leg that did not; a
--- stop marks ctx.stopped for every move after this one.
+-- when they all took, or why not and the index of the leg that did not. A
+-- stop, the person taking the pointer, marks ctx.taken with its words:
+-- organise then pauses the run, or ends its moves (ST6d8eed9 WP 4cb617e2).
 local function run_legs(ctx, legs, id)
   for i, leg in ipairs(legs) do
     step_note(ctx, string.format("leg %s: screen %s%s, steps %s, Move-space %s", tostring(leg.kind), tostring(leg.screen),
@@ -1247,7 +1248,7 @@ local function run_legs(ctx, legs, id)
       local released, rerr = pcall(function() ctx.hand:release() end)
       local let_go = released and "" or ("; and letting go of the button failed: " .. tostring(rerr))
       if type(err) == "table" and err.stop then
-        ctx.stopped = "the pointer was taken back during an earlier move (" .. err.stop .. ")"
+        ctx.taken = err.stop
         return "stopped: " .. err.stop .. let_go, i
       end
       return "lua error in the " .. leg.kind .. " leg: " .. tostring(err) .. let_go, i
@@ -1602,17 +1603,22 @@ local ACCESSIBILITY = "Hammerspoon has no Accessibility grant, so it can neither
 -- first read have passed; then `next_phase`. When `must_observe`, a wait in
 -- which no observe succeeded raises the last error; otherwise what is in
 -- hand stands.
--- What each wait is for, in the waiting point's words (progress.md).
-local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops" }
+-- What each wait is for, in the waiting point's words (progress.md). still is
+-- a pause for the pointer (ST6d8eed9 WP 4cb617e2).
+local WAIT_FOR = { quiet = "the displays to settle", unseen = "unseen windows", created = "new desktops",
+  still = "the pointer to be still" }
 
--- A wait's start and end in the run log, and its point when it starts. After
--- the creates, the displays are logged as the read found them: whether macOS
--- had recorded the new desktops, and where (ST589246c, AC-53ef07aa.3).
-local function wait_began(job, name, seconds)
+-- A wait's start and end in the run log, and its point when it starts, with
+-- any EXTRA fields the wait's point carries. After the creates, the displays
+-- are logged as the read found them: whether macOS had recorded the new
+-- desktops, and where (ST589246c, AC-53ef07aa.3).
+local function wait_began(job, name, seconds, extra)
   job.waited = job.waited or {}
   job.waited[name] = now()
   note(job.lg, "wait", string.format("%s: for %s, up to %s s", name, WAIT_FOR[name] or name, tostring(seconds)))
-  point(job.lg, "waiting", { ["for"] = WAIT_FOR[name] or name, seconds = seconds })
+  local fields = { ["for"] = WAIT_FOR[name] or name, seconds = seconds }
+  for k, v in pairs(extra or {}) do fields[k] = v end
+  point(job.lg, "waiting", fields)
 end
 
 local function wait_ended(job, name, how, world)
@@ -1779,10 +1785,98 @@ function PHASE.organise_start(job)
   return "organise"
 end
 
+-- THE PAUSE (hv decision 26, ST6d8eed9 WP 4cb617e2). When the person takes
+-- the pointer during an op's legs, the hand lets go at once (run_legs), and
+-- the run pauses: `still` reads the pointer on a timer until it is still,
+-- then the op runs again from the start, planned from where its window is
+-- now. A pause that gives up, and a take after MAX_PAUSES pauses, end the
+-- moves as a take did before pauses: the op fails, and every move after it
+-- is not tried.
+
+-- The moves end: CTX says so to every move after this one, and each result
+-- of the op the pointer was taken from fails with the take's words, WHY, and
+-- the way out.
+local function moves_end(ctx, results, taken, why)
+  ctx.stopped = "the pointer was taken back during an earlier move (" .. taken .. ")"
+  for _, r in ipairs(results) do
+    if r.status ~= "done" then
+      r.reason = tostring(r.reason) .. "; " .. why
+      r.fix = P.PAUSE_FIX
+    end
+  end
+end
+
+-- A pause begins after op INDEX of job.rest gave RESULTS: kept, for a pause
+-- that gives up, with the op's step number, so its step goes out again under
+-- the same one.
+local function pause_began(job, index, results)
+  job.pauses = (job.pauses or 0) + 1
+  job.pause = { index = index, i = job.step_i, taken = job.ctx.taken, results = results,
+    began = hs.timer.secondsSinceEpoch() }
+  note(job.lg, "pause", string.format("pause %d of %d: %s", job.pauses, P.MAX_PAUSES, job.ctx.taken))
+  wait_began(job, "still", P.PAUSE_LIMIT, { still = P.STILL_SECONDS })
+  return "still", POLL_SECONDS
+end
+
+-- An op that ran again after pauses and took says how long it paused.
+local function resumed_note(job, results)
+  if not job.resumed then return end
+  for _, r in ipairs(results) do
+    if r.status == "done" then
+      local said = P.paused_note(job.resumed)
+      r.note = r.note and (r.note .. "; " .. said) or said
+    end
+  end
+  job.resumed = nil
+end
+
 function PHASE.organise(job)
-  local op = job.rest[job.next_op]
-  job.next_op = job.next_op + 1
-  append(job.results, M.execute({ op }, job.ctx))
+  local ctx = job.ctx
+  local index = job.next_op
+  job.next_op = index + 1
+  ctx.taken = nil
+  local results = M.execute({ job.rest[index] }, ctx)
+  if ctx.taken then
+    if (job.pauses or 0) < P.MAX_PAUSES then return pause_began(job, index, results) end
+    moves_end(ctx, results, ctx.taken, P.PAUSES_SPENT)
+  end
+  resumed_note(job, results)
+  append(job.results, results)
+  if job.next_op > #job.rest then return "finish" end
+  return "organise"
+end
+
+-- The pause: the pointer read every POLL_SECONDS on a timer, so Hammerspoon's
+-- run loop turns and the toast can show it. Once it is still, the person may
+-- have switched a desktop and the release left the window where it was, so
+-- each display's shown desktop is read again, the hand is a fresh one, whose
+-- last point is where the pointer is now, and the op runs again.
+function PHASE.still(job)
+  local pause, ctx = job.pause, job.ctx
+  local t = hs.timer.secondsSinceEpoch()
+  local verdict, look = P.still_verdict(t, pause.look, hs.mouse.absolutePosition(), hands_free() == true, pause.began)
+  pause.look = look
+  if verdict == "wait" then return "still", POLL_SECONDS end
+  job.pause = nil
+  if verdict == "still" then
+    wait_ended(job, "still", "done")
+    ctx.hand = new_hand()
+    local took, why = take_hand(ctx)
+    if took then
+      local op = job.rest[pause.index]
+      -- Its move is tried again, so a place of its window may run after it.
+      if op.window then ctx.unmoved[op.window] = nil end
+      job.next_op, job.step_i = pause.index, (pause.i or 1) - 1
+      job.resumed = (job.resumed or 0) + (t - pause.began)
+      return "organise"
+    end
+    moves_end(ctx, pause.results, pause.taken, why)
+  else
+    wait_ended(job, "still", "timed out")
+    moves_end(ctx, pause.results, pause.taken, P.PAUSE_GAVE_UP)
+  end
+  job.resumed = nil
+  append(job.results, pause.results)
   if job.next_op > #job.rest then return "finish" end
   return "organise"
 end
@@ -1800,10 +1894,12 @@ function PHASE.finish(job)
   write_log(job.lg, "engine", function() return L.report_pairs(lines, code, tally) end)
   local own_sizes, changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
   -- A read after the changes that failed the filter and left an entry unseen
-  -- asks the CLI to reload and run apply again (ST6d8eed9 WP a45b3aeb).
+  -- asks the CLI to reload and run apply again (ST6d8eed9 WP a45b3aeb), and
+  -- the answer says how many times the run paused for the pointer (WP
+  -- 4cb617e2).
   job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
     own_sizes = own_sizes, own_sizes_changed = changed, tally = tally,
-    reload = P.reload_reason(job.ops, job.request_options.may_reload) })
+    reload = P.reload_reason(job.ops, job.request_options.may_reload), paused = job.pauses or 0 })
 end
 
 -- The error response for a verb that raised: refused (nothing changed), a
@@ -1825,6 +1921,7 @@ end
 local function failed_after_change(job, err)
   local out = error_response("apply", err)
   out.results = job.results
+  out.paused = job.pauses or 0
   -- What it read back still counts: the CLI keeps the records it returns.
   out.own_sizes, out.own_sizes_changed = P.own_sizes_after(job.request_options.own_sizes, job.results)
   return out

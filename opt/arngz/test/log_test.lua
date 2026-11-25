@@ -484,6 +484,11 @@ arm("the tally", function()
   check("finished: an apply that ran and asks for a reload says reload, and an answer that asks none says it does not",
     ran.reload == true and done.reload == false and refused.reload == false and errored.reload == false,
     table.concat({ tostring(ran.reload), tostring(done.reload), tostring(refused.reload), tostring(errored.reload) }, " / "))
+  -- ST6d8eed9 WP 4cb617e2 (AC-4cb617e2.4): how many times the run paused.
+  local paused = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = {}, paused = 2 }, 1,
+    "/tmp/arngz.log")
+  check("finished: paused says how many times the run paused for the pointer, and 0 when it did not",
+    paused.paused == 2 and done.paused == 0 and refused.paused == 0, tostring(paused.paused) .. " / " .. tostring(done.paused))
   check("options: the start record says when the engine may ask for a reload, and which run a retry follows",
     L.options_text({ may_reload = true }) == "may_reload=true"
       and L.options_text({ may_reload = false, after_reload_of = "R-FIRST" }) == "after_reload_of=R-FIRST",
@@ -1160,6 +1165,219 @@ arm("the reload and state verbs", function()
     again and again.kind == "refused" and again.fix == P.FILTER_FIX_AFTER_RELOAD and again.desk == nil
       and plain and plain.kind == "refused" and plain.fix == P.FILTER_FIX and plain.desk == nil,
     tostring(again and again.fix) .. " / " .. tostring(plain and plain.fix))
+end)
+
+-- ------------------- ST6d8eed9 WP 4cb617e2: a pause when the pointer moves
+-- The engine's side of AC-4cb617e2.2, .3 and .4. Each move's legs are
+-- scripted, since the hand that carries a window is not faked here (the top
+-- of this file says why): a move the person takes the pointer from fails as
+-- run_legs makes a stopped one fail, with ctx.taken marked and its window
+-- left part-way. Everything else runs as the engine runs it.
+
+-- What run_legs says when the person takes the pointer: hand:check's words.
+local TAKEN = "the pointer moved 63 px from where arngz put it, while carrying the window"
+
+-- Where a window is left when the pointer is taken from it mid-carry.
+local PART_WAY = { x = 240, y = 180, w = 1200, h = 800 }
+
+-- The fake's hand and windows for WORLD: the Move-space keys set, a pointer
+-- that stays put, or moves at every read while f.wander is set, no button or
+-- modifier held, and each window's frame and desktop, read and set as
+-- Hammerspoon's are. The first desktop is the one shown.
+local function with_hand(f, world)
+  local screen = world.screens[1]
+  f.pointer = { x = 500, y = 400 }
+  f.frames, f.window_space = {}, {}
+  for _, sp in ipairs(screen.spaces) do
+    for _, w in ipairs(sp.windows) do
+      f.frames[w.id] = { x = w.frame.x, y = w.frame.y, w = w.frame.w, h = w.frame.h }
+      f.window_space[w.id] = sp.id
+    end
+  end
+  local prefs = f.hs.plist.readString()
+  prefs.AppleSymbolicHotKeys = {
+    [tostring(P.MOVE_LEFT)] = { enabled = true, value = { parameters = { 65535, 123, 8650752 } } },
+    [tostring(P.MOVE_RIGHT)] = { enabled = true, value = { parameters = { 65535, 124, 8650752 } } },
+  }
+  f.hs.plist.readString = function() return prefs end
+  f.hs.mouse = {
+    absolutePosition = function(p)
+      if p then
+        f.pointer = p
+        return nil
+      end
+      if f.wander then f.pointer = { x = f.pointer.x + 20, y = f.pointer.y } end
+      return f.pointer
+    end,
+    getButtons = function() return {} end,
+  }
+  f.hs.eventtap = { checkKeyboardModifiers = function() return {} end }
+  f.hs.window = {
+    get = function(id)
+      if not f.frames[id] then return nil end
+      return {
+        frame = function() return f.frames[id] end,
+        setFrame = function(_, frame) f.frames[id] = { x = frame.x, y = frame.y, w = frame.w, h = frame.h } end,
+      }
+    end,
+    focusedWindow = function() return nil end,
+  }
+  f.hs.spaces.activeSpaceOnScreen = function() return screen.spaces[1].id end
+  f.hs.spaces.windowSpaces = function(id) return { f.window_space[id] } end
+  f.hs.spaces.spaceDisplay = function() return screen.uuid end
+end
+
+-- M.execute with each move's legs scripted by TURNS, one per move it runs, in
+-- order: "taken" or "done". A move once the moves have ended, and every other
+-- op, runs as the engine runs it. CALLS gets each scripted move's window.
+local function scripted_execute(real, f, turns, calls)
+  return function(ops, ctx)
+    local op = ops[1]
+    if op.op ~= "move" or ctx.stopped then return real(ops, ctx) end
+    calls[#calls + 1] = op.window
+    local r
+    if table.remove(turns, 1) == "taken" then
+      -- As run_legs leaves it: the take marked and the window part-way; and
+      -- the move failed as a stopped one does, which execute marks unmoved.
+      ctx.taken = TAKEN
+      f.frames[op.window] = { x = PART_WAY.x, y = PART_WAY.y, w = PART_WAY.w, h = PART_WAY.h }
+      ctx.unmoved[op.window] = true
+      r = { status = "failed", reason = "stopped: " .. TAKEN }
+    else
+      r = { status = "done", reason = "moved" }
+    end
+    r.op, r.index, r.path, r.bundle = op.op, 1, op.path, op.bundle
+    return { r }
+  end
+end
+
+-- The base world with VSCode's window on the first desktop, where the base
+-- desk wants it on the second: one move, and its place.
+local function moving_world()
+  local w = F.base_world()
+  w.accessibility = true
+  table.insert(w.screens[1].spaces[1].windows, table.remove(w.screens[1].spaces[2].windows, 1))
+  return w
+end
+
+-- The base world with Mail's window and VSCode's each on the other's
+-- desktop: two moves, each with its place.
+local function swapped_world()
+  local w = F.base_world()
+  w.accessibility = true
+  local first, second = w.screens[1].spaces[1].windows, w.screens[1].spaces[2].windows
+  local mail, vscode = table.remove(first, 1), table.remove(second, 1)
+  table.insert(first, vscode)
+  table.insert(second, mail)
+  return w
+end
+
+-- How many of TURNS are takes.
+local function takes_in(turns)
+  local n = 0
+  for _, t in ipairs(turns) do
+    if t == "taken" then n = n + 1 end
+  end
+  return n
+end
+
+-- One apply of the base desk under RUN, from the world WORLD_OF gives, with
+-- the moves' legs scripted by TURNS; its answer and the scripted moves.
+local function scripted_apply(log, run, world_of, turns, wander)
+  fresh_globals()
+  local f = new_fake()
+  with_hand(f, world_of())
+  f.wander = wander
+  _G.arngz_screens = watcher_of(f, log)
+  M.observe = world_of
+  local real_execute, calls = M.execute, {}
+  M.execute = scripted_execute(real_execute, f, turns, calls)
+  local ok, response = pcall(run_engine, f, { verb = "apply", desk = F.base_desk(), options = {}, run = run, log = log })
+  M.execute = real_execute
+  if not ok then error(response, 0) end
+  return response, calls
+end
+
+-- The result of RESPONSE's first op of KIND that MATCH holds for.
+local function result_of(response, kind, match)
+  for _, r in ipairs(response and response.results or {}) do
+    if r.op == kind and (not match or match(r)) then return r end
+  end
+  return nil
+end
+
+-- AC-4cb617e2.2 and AC-4cb617e2.4
+arm("a pause for the pointer, then the move goes on", function()
+  local log = tmpdir() .. "/arngz.log"
+  local turns = { "taken", "done" }
+  local takes, scripted = takes_in(turns), #turns
+  local response, calls = scripted_apply(log, "R-PAUSE", moving_world, turns, false)
+  local recs = records(log)
+  local moved = result_of(response, "move")
+  local paused_for = moved and moved.note and tonumber(tostring(moved.note):match("^paused (%d+) s for the pointer$"))
+  check("pause: the move the pointer was taken from runs again once the pointer is still, and takes",
+    response and response.status == "ok" and response.exit == 0 and #calls == scripted and calls[1] == calls[2]
+      and moved and moved.status == "done",
+    response and (tostring(response.status) .. " / exit " .. tostring(response.exit) .. " / " .. #calls .. " move(s)"))
+  check("pause: the move says how long it paused, in whole seconds, never under STILL_SECONDS, in its report line",
+    paused_for ~= nil and paused_for >= P.STILL_SECONDS
+      and find(recs, "report", "(" .. P.paused_note(paused_for) .. ")") ~= nil,
+    moved and tostring(moved.note))
+  check("pause: the points go start, observed, planned, step, waiting, step, step, finished",
+    point_names(recs, "R-PAUSE") == "start observed planned step waiting step step finished", point_names(recs, "R-PAUSE"))
+  local waiting = point_of(recs, "R-PAUSE", "waiting")
+  check("pause: its waiting point is for the pointer to be still, with PAUSE_LIMIT and STILL_SECONDS",
+    waiting:find("for=the pointer to be still", 1, true) ~= nil and waiting:match(" seconds=(%d+)") == tostring(P.PAUSE_LIMIT)
+      and waiting:match(" still=(%d+)") == tostring(P.STILL_SECONDS), waiting)
+  local steps = {}
+  for _, r in ipairs(recs) do
+    if r.run == "R-PAUSE" and r.event == "point" and r.text:match("^step ") and r.text:find("kind=move", 1, true) then
+      steps[#steps + 1] = r.text
+    end
+  end
+  check("pause: the move's step goes out again under its own number, with the window's frame as it is now",
+    #steps == takes + 1 and steps[1]:match(" i=(%d+)") == steps[#steps]:match(" i=(%d+)")
+      and steps[1]:match(" n=(%d+)") == steps[#steps]:match(" n=(%d+)")
+      and steps[#steps]:match(" x=(%-?%d+)") == tostring(PART_WAY.x)
+      and steps[#steps]:match(" y=(%-?%d+)") == tostring(PART_WAY.y),
+    table.concat(steps, " / "))
+  local finished = point_of(recs, "R-PAUSE", "finished")
+  check("pause: the wait ended done, and finished says how many times the run paused",
+    find(recs, "wait", "still: done after") ~= nil and finished:match(" paused=(%d+)") == tostring(takes), finished)
+end)
+
+-- AC-4cb617e2.3
+arm("a pause that gives up, and a take after the last pause", function()
+  local log = tmpdir() .. "/arngz.log"
+  local turns = { "taken" }
+  local takes = takes_in(turns)
+  local gave_up = scripted_apply(log, "R-GAVE-UP", swapped_world, turns, true)
+  local spent_turns = {}
+  for i = 1, P.MAX_PAUSES + 1 do spent_turns[i] = "taken" end
+  local spent = scripted_apply(log, "R-SPENT", moving_world, spent_turns, false)
+  local recs = records(log)
+  local taken_from = result_of(gave_up, "move", function(r) return tostring(r.reason):find("stopped: ", 1, true) == 1 end)
+  local other = result_of(gave_up, "move", function(r) return tostring(r.reason):find("not tried: ", 1, true) == 1 end)
+  check("give up: the move the pointer was taken from fails with the take's words, the give-up's, and the way out",
+    taken_from and taken_from.status == "failed" and tostring(taken_from.reason):find(TAKEN, 1, true) ~= nil
+      and tostring(taken_from.reason):find(P.PAUSE_GAVE_UP, 1, true) ~= nil and taken_from.fix == P.PAUSE_FIX,
+    taken_from and (tostring(taken_from.reason) .. " / " .. tostring(taken_from.fix)))
+  check("give up: every move after it is not tried, saying the pointer was taken back",
+    other and other.status == "failed"
+      and tostring(other.reason):find("the pointer was taken back during an earlier move (" .. TAKEN .. ")", 1, true) ~= nil,
+    other and tostring(other.reason))
+  check("give up: the wait timed out, and finished says how many times the run paused",
+    find(recs, "wait", "still: timed out") ~= nil
+      and point_of(recs, "R-GAVE-UP", "finished"):match(" paused=(%d+)") == tostring(takes),
+    point_of(recs, "R-GAVE-UP", "finished"))
+  local move = result_of(spent, "move")
+  check("fourth take: the take after the last pause ends the moves at once, with why and the way out",
+    move and move.status == "failed" and tostring(move.reason):find(TAKEN, 1, true) ~= nil
+      and tostring(move.reason):find(P.PAUSES_SPENT, 1, true) ~= nil and move.fix == P.PAUSE_FIX,
+    move and (tostring(move.reason) .. " / " .. tostring(move.fix)))
+  check("fourth take: finished says the run paused MAX_PAUSES times",
+    point_of(recs, "R-SPENT", "finished"):match(" paused=(%d+)") == tostring(P.MAX_PAUSES),
+    point_of(recs, "R-SPENT", "finished"))
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))

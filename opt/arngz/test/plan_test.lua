@@ -814,6 +814,41 @@ do
     tostring(verdict) .. " / " .. tostring(why) .. " / " .. tostring(fix))
 end
 
+-- ---------------------------- the pointer is still (ST6d8eed9 WP 4cb617e2)
+
+-- AC-4cb617e2.1 cites this arm: still after STILL_SECONDS within STILL_PX
+-- with hands free, a wait before that, and a give-up at PAUSE_LIMIT.
+print("the pointer is still")
+do
+  local began = 1795000000
+  local at = { x = 500, y = 400 }
+  local verdict, look = P.still_verdict(began, nil, at, true, began)
+  check("still: the first look waits, and keeps where the pointer is and when",
+    verdict == "wait" and look ~= nil and look.at.x == at.x and look.at.y == at.y and look.since == began,
+    tostring(verdict))
+  local near = { x = at.x + P.STILL_PX, y = at.y }
+  local still, kept = P.still_verdict(began + P.STILL_SECONDS, look, near, true, began)
+  check("still: within STILL_PX of one point, with hands free, for STILL_SECONDS, is still",
+    still == "still" and kept.since == began, tostring(still))
+  check("still: before STILL_SECONDS it waits",
+    P.still_verdict(began + P.STILL_SECONDS / 2, look, near, true, began) == "wait")
+  local far = { x = at.x + P.STILL_PX + 1, y = at.y }
+  local moved, again = P.still_verdict(began + P.STILL_SECONDS, look, far, true, began)
+  check("still: a pointer past STILL_PX waits, and the look starts again where it is now",
+    moved == "wait" and again.since == began + P.STILL_SECONDS and again.at.x == far.x, tostring(moved))
+  local held, none = P.still_verdict(began + P.STILL_SECONDS, look, at, false, began)
+  check("still: a mouse button or modifier key held is never still, and the look starts again",
+    held == "wait" and none == nil, tostring(held))
+  check("still: a pointer not still for STILL_SECONDS by PAUSE_LIMIT gives up",
+    P.still_verdict(began + P.PAUSE_LIMIT, look, far, true, began) == "give_up")
+  check("still: a pointer still for STILL_SECONDS at the limit itself is still, not a give-up",
+    P.still_verdict(began + P.PAUSE_LIMIT, { at = at, since = began + P.PAUSE_LIMIT - P.STILL_SECONDS }, at, true, began)
+      == "still")
+  check("note: a pause is said in whole seconds rounded up, so never 0 s",
+    P.paused_note(0.2) == "paused 1 s for the pointer" and P.paused_note(2) == "paused 2 s for the pointer"
+      and P.paused_note(2.01) == "paused 3 s for the pointer", P.paused_note(0.2))
+end
+
 -- ------------------------------------------------------------- moving (D21)
 
 print("moving")
