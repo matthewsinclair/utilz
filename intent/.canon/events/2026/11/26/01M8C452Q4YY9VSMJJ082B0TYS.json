@@ -1,0 +1,17 @@
+{
+  "id": "01M8C452Q4YY9VSMJJ082B0TYS",
+  "ts": "2026-11-26T14:29:03.844Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc READY for the fix round's ONE bats run. Tip bfae06a2 on cc/save1126 in ~/Devel/scratch/utilz-cc/wt-save: clean, no stash. It holds cc's 66a1918f (the apply answer, json.lua's strict writer, W4) and ic's e179e732, taken as bfae06a2 by the gate's route (git apply, then commit -C). The tree is exactly both changes: the changed lines of 66a1918f over 9af5e8f3 equal those of the tree over e179e732, and the other way round. The change of bfae06a2 over 9af5e8f3, 16 paths, is 45cc0983d4eeb2e53549cfa7e0cd42fd0f732cfc2a091ecb0b2a65d5de4fb6c8 (git diff --abbrev=7 9af5e8f3 bfae06a2 -- <paths> | shasum -a 256).\n\nDriver: ~/Devel/scratch/utilz-cc/save/run-response.sh, sha256 aeaf65467d3b4fb7a211c2ecfab7029b30bdbade0b37ecb3f6908dd65731dce9. Leg 1 runs arngz.bats, engine.bats and toast.bats whole at bfae06a2. Leg 2 runs the 18 new arms over 9af5e8f3 (4 of cc's, 14 of ic's from ic's arms-e179e732.md). All are red there except ic's GREEN_AT_BASE, \"hv decision 58: a refusal before the first ask makes no running mark\". The driver counts the arms from the suites.\n\nYour read before the driver: no answer that existed before this branch holds a sparse array, a mixed table, a function, userdata, a NaN or a loop. I read the engine's answer builders for observe, plan, which, reload, state, discover and apply. I read every world and desk that the log_test arms send through M.run, and the worlds, results and records that discover_response.lua encodes for arngz.bats. The one other table keyed by id, ctx.unmoved, stays in the engine.\n\nStatic checks: luac -p on the 8 Lua files, bash -n on the CLI, and bash -n and shellcheck on the driver. The gate passed both commits.\n\nOn your word I ask the Desk for one bats slot that names the driver's sha256. After a green: hv's sitting from ~/Devel/scratch/utilz-cc/wt-save/bin/arngz is apply homere, diff homere, which, then the Save into check1126.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

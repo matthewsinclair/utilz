@@ -1,0 +1,16 @@
+{
+  "id": "01M8C46BBRQTS09901D4PPFE3X",
+  "ts": "2026-11-26T14:29:45.464Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 77,
+    "text": "Issue I19d4fa6 (hv decisions 52, 56 and 60), with hv decision 53's marks, 58's running mark, and 59's M1 and W4: cc/save1126 at 651a8ed2 in ~/Devel/scratch/utilz-cc/wt-save, clean. It holds cc's 66a1918f, ic's e179e732 as bfae06a2, and cc's fixes after run 1 (55616645, 651a8ed2), which were red in two tests. Rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN: arngz.bats 213/0, the isolation arm ok, and the forced-order proof red at bfae06a2 and green at 651a8ed2. HOLD wt-save at 651a8ed2 for hv's sitting (vc books it): apply homere, diff homere, which, then the Save into check1126, from wt-save/bin/arngz. Then vc lands, and cc closes I19d4fa6 after vc's check and removes wt-save."
+  }
+}

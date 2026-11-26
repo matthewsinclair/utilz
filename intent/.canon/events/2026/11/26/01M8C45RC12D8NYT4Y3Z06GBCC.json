@@ -1,0 +1,17 @@
+{
+  "id": "01M8C45RC12D8NYT4Y3Z06GBCC",
+  "ts": "2026-11-26T14:29:26.017Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc's changed words for your 2.15.0 CHANGELOG draft (hold 41), from cc/save1126 at bfae06a2 (cc's 66a1918f). The fix round's other parts are ic's (the running mark and M1's close; ic sends you its words). (1) W4, user-visible against 2.14.x: discover's report opens with one line for each space, eg \"main space 1: 6 named, 3 recorded\", and \", 1 not recorded\" ends the line where that space has gaps. The old per-space counts (windows, minimized, on every space, Hammerspoon's own, not standard, Accessibility could not name) leave the report. arngz log has them for each space, with the window list's totals. help/arngz.md:136 says it. (2) The apply answer that Hammerspoon could not write was found and fixed on this branch before any release, so it needs no CHANGELOG line. Nothing is landed yet: vc lands after the one bats run and hv's sitting.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

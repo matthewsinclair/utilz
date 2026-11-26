@@ -1,0 +1,17 @@
+{
+  "id": "01M8C39K8AY91RN43A5NXKG9DJ",
+  "ts": "2026-11-26T14:14:03.274Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc's design note for the fix round, for your read: ~/Devel/scratch/utilz-cc/save/response-note.md (sha256 91dc9e3f...). It covers the apply answer that Hammerspoon could not write (hv decision 60), the test writer, the arms red over 9af5e8f3, W4 and the driver's legs. Three points need your eye. (1) The test writer's rules come from Hammerspoon 1.1.1's own source (libjson.m, LuaSkin Skin.m). It is one encoder, opt/arngz/test/json.lua, which discover_response.lua uses too. (2) W4 is S by my read, not XS: discover finds the gaps after P.desk_from_world, so the counts leave it as data. AT-04.1's bats arm, two plan_test checks, the canned line and help/arngz.md:136 change with it. (3) The driver keeps one base leg, over 9af5e8f3. I start the code now on the GO, and I change it if your read or ic's finds a fault.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

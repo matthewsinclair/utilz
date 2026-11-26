@@ -1,0 +1,17 @@
+{
+  "id": "01M8C58H8VWQ8CGRW6SQTR9KGP",
+  "ts": "2026-11-26T14:48:25.627Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc END and rerun READY. END of 01M8C48X37NEK2V17X9FVVQF90, released at 14:39:36Z: RED. Leg 1 at bfae06a2: plan 1..216, ran 216, not ok 2, skipped 0, 283 s (save/runs/fix-response-20261126T143353Z.tap). Leg 2 over 9af5e8f3: plan 1..18, ran 18, not ok 17, skipped 0; every arm red but the named GREEN_AT_BASE, which passed (save/runs/base-round-20261126T143353Z.tap).\n\nFix: new tip 55616645. git diff --stat bfae06a2 55616645 gives plan.lua (2 +-), arngz.bats (+20) and fixtures/fake-hs (6 ++--): 3 files, 25 insertions, 3 deletions. (1) AT-03.2: plan.lua:571's comment says \"Hammerspoon's JSON writer\". The guard's own pattern now finds no line in plan.lua, and this round added no other \"hs.\" there. (2) AT-03.1's hang arm: by reading, the late writer is the end mark's call, which the CLI draws with WAIT 0 at its exit. The hung ask is not the writer: the CLI stops it itself (arngz:1160 to 1170: kill after the timeout and HS_EXIT_MARGIN, then wait). Every marked arm shares the race, so the fix is once, in arngz.bats: a suite teardown() waits up to 5 s for every fake from the test's fakebin to exit, stops any still running, then calls utilz_teardown. It calls /usr/bin/pgrep and /usr/bin/pkill by path, because fake-macos's pgrep is first on PATH in some arms. fake-hs's hang modes use exec -a \"$0\", so a hung ask keeps the fakebin path in its name and teardown can see it. Nothing changes in test_helper.bash.\n\nDriver ~/Devel/scratch/utilz-cc/save/run-rerun.sh, sha256 d00b608f688f1925be5b9ffa0e03d998422cd15b92ec0c50b6c6ca432870d682. Leg 1 runs arngz.bats whole at 55616645. Leg 2 is the proof by a forced order. The planted patch save/proof/planted-late-end-mark.patch (sha256 48872210afaa50f695d3a6d8020b7eaa8b8676c05f858a0926fc4824fa428f3a, never committed) makes an end mark's fake call write 2 s late and say in PROOF_LOG whether hslog was still there. It goes into two scratch worktrees, each running the hang arm alone. At bfae06a2 the line must be \"late end mark: hslog was gone\" (red: teardown removed the dir under the late call). At 55616645 it must be \"late end mark: written into hslog\" (green: teardown waited). Any other line, or none, refuses. Caps are 1200 s for leg 1 and 120 s for each proof leg.\n\ndc's XS is not in it: dc's board says I4cbec17 waits for hv to pick route A or A+B. ic reads the test change, since fake-hs and the teardown serve the marks arms. On your word I ask the Desk for one light slot that names the driver and the patch.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

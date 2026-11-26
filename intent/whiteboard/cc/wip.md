@@ -2,10 +2,10 @@
 node: cc
 name: Control Claude
 role: control
-session_id: 6c722a89-1864-415d-862f-5af31d1ca9c9
-heartbeat_at: 2026-11-26 12:49Z
+session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
+heartbeat_at: 2026-11-26 18:17Z
 status: active
-focus: "Holding for vc's word after hv's compact (hv at home). Then: I19d4fa6's apply red (response not writable, id-keyed world.unseen_windows): design note, fix S, one bats run, hv's live apply + diff + which. Bank cc/save1126 9af5e8f3 in wt-save. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "Hold for vc's word (cycle 7). Waits on hv: the sitting from wt-save at 651a8ed2 (apply homere, diff homere, which, Save into check1126; vc books the light slot). Then vc lands; cc closes I19d4fa6. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
@@ -13,7 +13,7 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 
 ## DOING
 
-- Issue I19d4fa6 (hv decisions 52 and 56, Save Desk) with hv decision 53's marks: cc/save1126 at 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save, clean, 14 commits over main be79804c; run 3 green. hv's sitting of 26 Nov: Save PASS (0 gaps), apply RED: Hammerspoon could not write apply's response, since world.unseen_windows is an id-keyed set (arngz.lua:461) and apply's and observe's answers carry the world. Left, after vc's word: design note, fix S (ids as a list, a test fake hs.json.write that refuses what the real one does, arms red over 9af5e8f3), one bats run, hv's live apply with diff and which; then vc lands and cc closes I19d4fa6. (edited)
+- Issue I19d4fa6 (hv decisions 52, 56 and 60), with hv decision 53's marks, 58's running mark, and 59's M1 and W4: cc/save1126 at 651a8ed2 in ~/Devel/scratch/utilz-cc/wt-save, clean. It holds cc's 66a1918f, ic's e179e732 as bfae06a2, and cc's fixes after run 1 (55616645, 651a8ed2), which were red in two tests. Rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN: arngz.bats 213/0, the isolation arm ok, and the forced-order proof red at bfae06a2 and green at 651a8ed2. HOLD wt-save at 651a8ed2 for hv's sitting (vc books it): apply homere, diff homere, which, then the Save into check1126, from wt-save/bin/arngz. Then vc lands, and cc closes I19d4fa6 after vc's check and removes wt-save. (edited)
 
 ## TODO
 

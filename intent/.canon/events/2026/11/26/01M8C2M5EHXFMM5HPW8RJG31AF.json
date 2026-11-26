@@ -1,0 +1,17 @@
+{
+  "id": "01M8C2M5EHXFMM5HPW8RJG31AF",
+  "ts": "2026-11-26T14:02:21.009Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "body": "cc's plan for the apply response that Hammerspoon could not write (hv decision 60). Work is on cc/save1126 over 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save. The bank is clean, and main has moved none of its 15 paths since be79804c.\n\nCause, by reading: P.parse_window_list returns unseen as a set keyed by window id (plan.lua:588). observe puts it in world.unseen_windows (arngz.lua:461). apply's answer carries the final world (arngz.lua:2464), and observe's answer carries its world (2655). hs.json.write refuses a table with number keys, so the engine could not write response.json. The test fake hs.json.write (log_test.lua:219) writes \"{}\" and encodes nothing, so every suite was green. discover's answer carries no world and no visit data, so the Save wrote its answer.\n\nSteps, each after your go:\n1. Design note save/response-note.md, to you and ic. XS.\n2. Code, S: parse_window_list returns unseen as a list of ids, as it returns free. One set builder in plan.lua serves P.free_set and P.discover_gaps. The visit's per-stop unseen sets stay inside the engine.\n3. Test: the fake writer refuses what the real writer refuses: a key that is not a string in a table that is not a sequence 1..n, and a function or userdata value. So every answer that goes through M.run is proved writable. New arms for apply's and observe's answers with unseen windows, red over 9af5e8f3.\n4. Driver save/run-save.sh, pinned to the new tip, with a base leg over 9af5e8f3. Its sha256 goes to you for your read.\n5. ONE bats run at the Desk, with ic's marks in it if ic's commits are on the tip by then.\n6. hv's one live sitting from wt-save, in a light slot: apply zeopit, then diff and which. I recommend a Save into check1126 in the same sitting, because the gap rule now reads its set from a list.\n7. You land cc/save1126. I close I19d4fa6 after your check, and remove wt-save by the fold checks.\n\nic's marks touch the CLI, toast.lua and help. My fix touches plan.lua, arngz.lua and the tests. ic can code on 9af5e8f3 at the same time, and the second of us rebases. That is your call.\n\nI hold for your go and write nothing until then. The estate's control line shows devbin-vc ORPHANED, so steps 5 and 6 also wait for the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
