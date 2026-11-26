@@ -2,10 +2,10 @@
 node: ic
 name: Interface Claude
 role: interface
-session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 12:49Z
+session_id: df52055f-4a04-484f-af3b-c557705c20dd
+heartbeat_at: 2026-11-26 18:17Z
 status: active
-focus: "Folded for hv's compact (26 Nov). hv approved the running-mark design at 12:48Z (marks1126/running-note.md, with M1 and W4). Resume: /in-session, pickup, hold for vc's word, then code it on cc's tip. RESUME.md has it."
+focus: "Folded for cycle 7 (hv decision 62); hold for vc's word. The marks (e179e732) ride cc/save1126, GREEN at 651a8ed2. Next: hv's live sitting (sounds, three marks), vc's landing, then remove wt-marks; AC-4b560be1.4 after hv's push. Waits on hv: the sitting and the pushes. RESUME.md has it."
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4 (CI dispatch on the final push). (edited)
-- arngz start and end marks (hv decisions 53 and 58): ic's work so far is in cc/save1126 at 9af5e8f3. hv approved at 12:48Z ic's design ~/Devel/scratch/utilz-ic/marks1126/running-note.md: "starting", then "running" drawn by the CLI at its first ask, then the end; with M1's close (m1-note.md, "arngz: ended with no answer: see arngz log") and W4 (cc's). Left: code it after vc's word (ic S; cc the apply response fix and W4), one bats run, hv's check; after the landing, record decisions 53 and 58. (edited)
+- arngz marks (hv decisions 53, 58 and 59): the running mark and M1's close, e179e732 on ic/marks1126 (change hash e0d240af; arms in ~/Devel/scratch/utilz-ic/marks1126/arms-e179e732.md). cc carried it onto cc/save1126 as bfae06a2. The rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN at 651a8ed2 (arngz.bats 213 of 213, vc's record c39703d1). Left: hv's live sitting (the sounds and the three marks), then vc's landing; then record decisions 53 and 58 and remove wt-marks. (edited)
 
 ## TODO
 

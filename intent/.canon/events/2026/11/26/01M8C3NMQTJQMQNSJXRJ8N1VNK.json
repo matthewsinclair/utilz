@@ -1,0 +1,16 @@
+{
+  "id": "01M8C3NMQTJQMQNSJXRJ8N1VNK",
+  "ts": "2026-11-26T14:20:38.010Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 21,
+    "text": "arngz marks (hv decisions 53, 58 and 59): the running mark and M1's close, e179e732 on ic/marks1126 (change hash e0d240af; arms in ~/Devel/scratch/utilz-ic/marks1126/arms-e179e732.md). cc carried it onto cc/save1126 as bfae06a2. The rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN at 651a8ed2 (arngz.bats 213 of 213, vc's record c39703d1). Left: hv's live sitting (the sounds and the three marks), then vc's landing; then record decisions 53 and 58 and remove wt-marks."
+  }
+}
