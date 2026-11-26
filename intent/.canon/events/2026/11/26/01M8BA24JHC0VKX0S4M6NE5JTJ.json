@@ -1,0 +1,16 @@
+{
+  "id": "01M8BA24JHC0VKX0S4M6NE5JTJ",
+  "ts": "2026-11-26T06:53:04.465Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 40,
+    "text": "CHANGELOG lines for 2.15.0, after cc's green END and hv's probe, at vc's word: arngz's own Mission Control finder, with create restored on macOS 27; and WP A (ST6d8eed9 WP 8850, the desk's desktop count, on cc/desks1126 1ee77ee1). In WP A's step, correct CHANGELOG.md:15 (ST589246c's toast line): it says the counts \"go on to a second\" line, and ic's toast parts (2f914ba9) let a busy run's Finished counts take a third, so that no count is cut. Then STca1b7f9's spike parts' lines."
+  }
+}

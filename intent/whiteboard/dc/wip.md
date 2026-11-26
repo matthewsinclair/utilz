@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8bd6bdc9-a0e8-43ed-9077-c54e4fa150db
-heartbeat_at: 2026-11-25 16:41Z
+heartbeat_at: 2026-11-26 06:53Z
 status: active
-focus: "25 Nov fold for hv decision 40's compact. After it: /in-session, then hold for vc's word. (c) 266cb1ef on dc/cl0114 stays banked for 0114 (hold 39). After the probe: WP A's CHANGELOG line, which also corrects CHANGELOG.md:15 (hold 40), then STca1b7f9's spike parts' lines. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "26 Nov fold for hv decision 45's compact. After it: /in-session, then hold for vc's word. Hold 40: after cc's green END and hv's probe, the CHANGELOG lines for arngz's Mission Control finder (create restored on macOS 27) and WP A (cc/desks1126 1ee77ee1), with the CHANGELOG.md:15 fix, then STca1b7f9's spike parts. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
-- WP A's CHANGELOG step (ST6d8eed9 WP 8850, the desk's desktop count), with STca1b7f9's spike parts' lines after it. In the same step, correct CHANGELOG.md:15 (ST589246c's toast line): it says the counts "go on to a second" line, and ic's toast parts for A (2f914ba9 on ic/desks1125-a-toasts) let a busy run's Finished counts take a third, so that no count is cut (vc, 25 Nov). Releases at vc's word after the removeSpace probe and WP A's READY.
+- CHANGELOG lines for 2.15.0, after cc's green END and hv's probe, at vc's word: arngz's own Mission Control finder, with create restored on macOS 27; and WP A (ST6d8eed9 WP 8850, the desk's desktop count, on cc/desks1126 1ee77ee1). In WP A's step, correct CHANGELOG.md:15 (ST589246c's toast line): it says the counts "go on to a second" line, and ic's toast parts (2f914ba9) let a busy run's Finished counts take a third, so that no count is cut. Then STca1b7f9's spike parts' lines. (edited)
 
 ## Watch-outs
 
