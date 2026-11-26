@@ -2397,8 +2397,10 @@ P.GAP_LIST_FAILED = "arngz showed that desktop, and could not read the window li
 -- failed, or the list read failed) stays a gap: the safe side. One list
 -- holds every gap, so the count, the lines and the verdict agree (ic's W3).
 -- Returns { {id, name, bundle, place, display, cause, why} } and the names of
--- the hidden apps whose windows it left out as unseen (ic's R2), in world
--- order, each once. CAUSE is "on_shown", "shown", "list_failed", "failed",
+-- the hidden apps whose windows it left out as unseen and of which the run
+-- named no window on any desktop (ic's R2, vc's F3): a hidden app keeps its
+-- helper windows, and Accessibility names its real ones, so an app with a
+-- named window is not said. In world order, each once. CAUSE is "on_shown", "shown", "list_failed", "failed",
 -- "not_reached" or "late".
 function P.discover_gaps(world, desk, visit)
   visit = visit or {}
@@ -2407,6 +2409,15 @@ function P.discover_gaps(world, desk, visit)
   local names = {}
   for _, d in ipairs((desk and desk.displays) or {}) do
     if d.match and d.match.uuid then names[d.match.uuid] = d.name end
+  end
+  -- The apps the run named a window of, on any desktop.
+  local named_app = {}
+  for _, s in ipairs(world.screens or {}) do
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        if w.named and w.bundle then named_app[w.bundle] = true end
+      end
+    end
   end
   local gaps, hidden, said = {}, {}, {}
   for _, s in ipairs(world.screens or {}) do
@@ -2434,7 +2445,7 @@ function P.discover_gaps(world, desk, visit)
           end
           if unseen then
             local label = o.name or o.bundle
-            if o.hidden and not said[label] then
+            if o.hidden and not named_app[o.bundle] and not said[label] then
               said[label] = true
               hidden[#hidden + 1] = label
             end
@@ -2454,14 +2465,14 @@ function P.gap_line(g)
   return string.format("not recorded: %s on desktop %d on %s: %s", tostring(g.name), g.place, tostring(g.display), g.why)
 end
 
--- The report line for the windows left out with no gap (ic's R2, R2b): the
--- hidden apps among the owners of the windows no person could see. A
--- minimised window is not onscreen either, but one Accessibility cannot name
--- cannot be told from a helper window, so it is left out and not said. Nil when there is none; it
--- never changes the exit.
+-- The report line for the windows left out with no gap (ic's R2, R2b, and
+-- its words on vc's F3): the hidden apps of which the run named no window.
+-- An unnamed window no person sees, minimised or of a hidden app with other
+-- windows named, cannot be told from a helper window, so it is left out and
+-- not said. Nil when there is none; it never changes the exit.
 function P.left_out_line(hidden)
   if #(hidden or {}) == 0 then return nil end
-  return "left out, not counted as gaps: windows of hidden apps, which Accessibility could not name ("
+  return "left out, not counted as gaps: windows of hidden apps whose windows Accessibility could not name ("
     .. table.concat(hidden, ", ") .. "); show them and Save Desk again to record them"
 end
 

@@ -35,7 +35,7 @@ function run() {
     // a person may see: the safe side.
 
     lines.push([w.kCGWindowNumber, w.kCGWindowLayer, w.kCGWindowOwnerPID, Math.round(b.Width || 0), Math.round(b.Height || 0),
-      w.kCGWindowIsOnscreen ? 1 : 0, w.kCGWindowAlpha === undefined ? 1 : w.kCGWindowAlpha]
+      w.kCGWindowIsOnscreen ? 1 : 0, (w.kCGWindowAlpha === undefined ? 1 : w.kCGWindowAlpha).toFixed(3)]
       .map(String).join(" "));
   }
   return lines.join("\n");

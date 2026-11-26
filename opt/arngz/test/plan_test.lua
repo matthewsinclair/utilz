@@ -2523,8 +2523,8 @@ end
 print("Save Desk's gaps are windows a person sees")
 do
   local free, owned, unseen = P.parse_window_list(P.WINDOW_LIST_HEADER
-    .. "\n102 0 88 900 545 1 1\n103 0 88 900 545 0 1\n104 0 88 900 545 1 0\n501 24 77 10 10 0 1\n")
-  check("window list v4: an onscreen window with alpha is seen; one offscreen, or with alpha 0, is not",
+    .. "\n102 0 88 900 545 1 1.000\n103 0 88 900 545 0 1.000\n104 0 88 900 545 1 0.000\n501 24 77 10 10 0 1.000\n")
+  check("window list v4: an onscreen window with alpha is seen; one offscreen, or with alpha 0.000, is not (alpha in windows.js's fixed form, vc's N2)",
     free and owned and unseen and not unseen[102] and unseen[103] and unseen[104] and not unseen[501],
     tostring(free and #free))
   local _, _, old = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n102 0 88 900 545\n")
@@ -2565,10 +2565,19 @@ do
   check("gaps: a hidden app's windows no person sees are no gaps, and its name is kept once for the report (ic's R2)",
     #hgaps == 0 and #hid == 1 and hid[1] == "Safari", tostring(#hgaps) .. " / " .. tostring(#hid))
   check("report: the line for windows left out names the hidden apps (ic's R2)", P.left_out_line(hid)
-    == "left out, not counted as gaps: windows of hidden apps, which Accessibility could not name (Safari);"
+    == "left out, not counted as gaps: windows of hidden apps whose windows Accessibility could not name (Safari);"
       .. " show them and Save Desk again to record them", P.left_out_line(hid))
   local _, none = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
   check("report: no line when no hidden app's window was left out", P.left_out_line(none) == nil)
+  -- Safari hidden, with its window 104 named on desktop 11 and its helpers
+  -- unseen on desktop 12 (vc's F3, ic's rule: any desktop).
+  local named_elsewhere = helper_world()
+  named_elsewhere.layer0_owned[1].hidden = true
+  table.insert(named_elsewhere.screens[1].spaces[1].windows, { id = 104, bundle = "com.apple.Safari", named = true })
+  local _, quiet = P.discover_gaps(named_elsewhere, desk,
+    { visited = { [12] = true }, unseen = { [12] = { [102] = true, [103] = true } } })
+  check("report: a hidden app with a window named, on any desktop, gives no line, though its helpers are unseen (vc's F3)",
+    P.left_out_line(quiet) == nil, P.left_out_line(quiet))
 end
 
 -- ------------------- the end mark the engine draws (hv decision 53)
