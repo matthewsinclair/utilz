@@ -2565,7 +2565,7 @@ do
   check("gaps: a hidden app's windows no person sees are no gaps, and its name is kept once for the report (ic's R2)",
     #hgaps == 0 and #hid == 1 and hid[1] == "Safari", tostring(#hgaps) .. " / " .. tostring(#hid))
   check("report: the line for windows left out names the hidden apps (ic's R2)", P.left_out_line(hid)
-    == "left out, not counted as gaps: windows of hidden apps or minimised, which Accessibility could not name (Safari);"
+    == "left out, not counted as gaps: windows of hidden apps, which Accessibility could not name (Safari);"
       .. " show them and Save Desk again to record them", P.left_out_line(hid))
   local _, none = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
   check("report: no line when no hidden app's window was left out", P.left_out_line(none) == nil)

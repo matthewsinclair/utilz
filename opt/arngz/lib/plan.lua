@@ -2454,15 +2454,14 @@ function P.gap_line(g)
   return string.format("not recorded: %s on desktop %d on %s: %s", tostring(g.name), g.place, tostring(g.display), g.why)
 end
 
--- The report line for the windows left out with no gap (ic's R2): the
+-- The report line for the windows left out with no gap (ic's R2, R2b): the
 -- hidden apps among the owners of the windows no person could see. A
--- minimised window is not onscreen either, and Accessibility names a
--- minimised window it can read, so one it cannot read is left out with the
--- helper windows, and the line's words cover it. Nil when there is none; it
+-- minimised window is not onscreen either, but one Accessibility cannot name
+-- cannot be told from a helper window, so it is left out and not said. Nil when there is none; it
 -- never changes the exit.
 function P.left_out_line(hidden)
   if #(hidden or {}) == 0 then return nil end
-  return "left out, not counted as gaps: windows of hidden apps or minimised, which Accessibility could not name ("
+  return "left out, not counted as gaps: windows of hidden apps, which Accessibility could not name ("
     .. table.concat(hidden, ", ") .. "); show them and Save Desk again to record them"
 end
 
