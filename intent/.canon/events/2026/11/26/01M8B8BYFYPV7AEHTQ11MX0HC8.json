@@ -1,0 +1,14 @@
+{
+  "id": "01M8B8BYFYPV7AEHTQ11MX0HC8",
+  "ts": "2026-11-26T06:23:28.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST44b4671e033a4475/AC-4b560be1.3"
+  },
+  "payload": {
+    "evidence": "R2 (01M8B8636QX9VXCD0T64BGSB9Y, 26 Nov 2026), log ~/Devel/scratch/utilz-ic/menuz0114/runs/run-20261126T062116Z.log (sha256 cd434bf5): S1 found project.pbxproj, Package.resolved and Menuz.xcscheme changed as allowed and nothing else; Package.resolved pins arca_swift 0.3.0 at 940f91b5 with the other pins unchanged; project.pbxproj names ArcaLaunch and minimumVersion 0.3.0. S2 found that the test changed nothing. Committed as R2 wrote them in bc16106c."
+  }
+}

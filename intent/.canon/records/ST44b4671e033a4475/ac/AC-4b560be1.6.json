@@ -3,6 +3,7 @@
   "text": "menuz's copies are gone (drawsImage, setAppIcon and isTestHost), and help/menuz.md says that a second launch quits, and why.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "At bc16106c: git grep finds no drawsImage, setAppIcon or isTestHost copy under native/macos/Menuz (drawsImage is only the name of IdentityRowTests' test arm); help/menuz.md's start paragraph says a second launch quits, because the copy that runs holds ~/Library/Application Support/Menuz/instance.lock through arca_swift's launch call, and that start quits nothing, so restart moves between builds."
   }
 }

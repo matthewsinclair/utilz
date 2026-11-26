@@ -1,0 +1,14 @@
+{
+  "id": "01M8B8BYKBP0J2RZ9Z2RS2ZPHW",
+  "ts": "2026-11-26T06:23:28.876Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST44b4671e033a4475/AC-4b560be1.6"
+  },
+  "payload": {
+    "evidence": "At bc16106c: git grep finds no drawsImage, setAppIcon or isTestHost copy under native/macos/Menuz (drawsImage is only the name of IdentityRowTests' test arm); help/menuz.md's start paragraph says a second launch quits, because the copy that runs holds ~/Library/Application Support/Menuz/instance.lock through arca_swift's launch call, and that start quits nothing, so restart moves between builds."
+  }
+}

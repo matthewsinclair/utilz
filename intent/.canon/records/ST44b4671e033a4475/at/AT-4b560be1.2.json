@@ -1,0 +1,10 @@
+{
+  "id": "AT-4b560be1.2",
+  "kind": "test",
+  "file": "native/macos/Menuz/MenuzTests/TestHostTests.swift",
+  "covers": [
+    "AC-4b560be1.2"
+  ],
+  "status": "green",
+  "note": "GREEN_AT_BASE: named in red-leg.md (71367312) before R2 and never seen red; the red proof is arca_swift's R1 (01M896DE8C7H2NJT194DXSXNYY), as vc ruled (a). Green on R2 (01M8B8636QX9VXCD0T64BGSB9Y, 26 Nov 2026) at bc16106c: menuz test --unsigned passed, with its arms seen passing by name."
+}
