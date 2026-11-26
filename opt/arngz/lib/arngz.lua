@@ -1437,7 +1437,7 @@ local function give_back(ctx, results)
   -- Each display back on the desktop it began on (hv decision 50), before
   -- focus, so the window that had focus is most likely on a desktop shown.
   if ctx.start_shown then
-    restore("showing each display its start desktop", function() M.way_back(ctx.start_shown, results) end)
+    restore("showing each display its start desktop", function() M.way_back(ctx.start_shown, results, ctx.start_words) end)
   end
   if ctx.focused then
     restore("giving focus back", function()
@@ -1569,10 +1569,16 @@ end
 -- from the first inventory's world), if that desktop still exists, is a user
 -- desktop (never a full-screen space) and is not the one shown now: one show
 -- per display, through show_by_tile, and none once BACK_SECONDS have passed.
--- A show that fails is a note in RESULTS, which counts against nothing.
+-- A show that fails is a note in RESULTS, which counts against nothing, and
+-- WORDS ({[screen] = {display, place}}) name the desktop in it (ic's W1).
 M.BACK_SECONDS = 20
 
-function M.way_back(start, results)
+function M.way_back(start, results, words)
+  local function said(screen, space)
+    local w = (words or {})[screen]
+    if w and w.display and w.place then return string.format("%s desktop %d", w.display, w.place) end
+    return string.format("screen %s desktop %s", screen, tostring(space))
+  end
   local deadline = now() + M.BACK_SECONDS * 1e9
   local screens = {}
   for screen in pairs(start or {}) do screens[#screens + 1] = screen end
@@ -1581,8 +1587,8 @@ function M.way_back(start, results)
     local space = start[screen]
     if now() >= deadline then
       results[#results + 1] = { op = "restore", status = "note",
-        reason = string.format("screen %s not shown its start desktop %s: the %s s to go back ran out", screen,
-          tostring(space), tostring(M.BACK_SECONDS)) }
+        reason = string.format("%s not shown again: the %s s to go back ran out", said(screen, space),
+          tostring(M.BACK_SECONDS)) }
       break
     end
     -- Cheapest first: a display that shows it already, then a desktop gone,
@@ -1597,7 +1603,7 @@ function M.way_back(start, results)
       local ok, why = show_by_tile(screen, space)
       if not ok then
         results[#results + 1] = { op = "restore", status = "note",
-          reason = "showing the desktop screen " .. screen .. " began on failed: " .. tostring(why) }
+          reason = string.format("showing %s again, where it began, failed: %s", said(screen, space), tostring(why)) }
       end
     end
   end
@@ -2123,7 +2129,17 @@ function PHASE.inventory(job)
         if at == nil and sp.active then at = sp.id end
       end
       if s.uuid and at then job.start_shown[s.uuid] = at end
+      -- The words for the way back's notes (ic's W1): the desk's name for
+      -- the display, and the desktop's place among its user desktops.
+      for ui, sp in ipairs(P.user_spaces(s)) do
+        if sp.id == at then
+          job.start_words = job.start_words or {}
+          job.start_words[s.uuid] = { place = ui }
+        end
+      end
     end
+    local names = P.display_names(job.desk, job.world, job.options)
+    for uuid, w in pairs(job.start_words or {}) do w.display = P.display_label(names, uuid) end
   end
   log_world(job.lg, "start", job.world)
   point(job.lg, "observed", function() return L.observed_fields(job.world) end)
@@ -2367,10 +2383,11 @@ end
 function PHASE.finish(job)
   if job.ctx then
     job.ctx.start_shown = job.start_shown
+    job.ctx.start_words = job.start_words
     give_back(job.ctx, job.results)
   elseif job.start_shown then
     -- A run that changed nothing but its visit step still goes back.
-    local ok, err = pcall(M.way_back, job.start_shown, job.results)
+    local ok, err = pcall(M.way_back, job.start_shown, job.results, job.start_words)
     if not ok then
       job.results[#job.results + 1] = { op = "restore", status = "failed",
         reason = "showing each display its start desktop: " .. tostring(err) }
