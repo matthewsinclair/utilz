@@ -1555,5 +1555,67 @@ arm("an apply that removes a desktop", function()
     finished:find(" removed=1", 1, true) ~= nil and finished:find(" extra=0", 1, true) ~= nil, finished)
 end)
 
+-- The visit step before and after a removal (vc's ask, 26 Nov 2026): the
+-- removal case above, with Safari's window unnamed on desktop 12, which the
+-- display does not show, so the first plan and the re-plan after the removal
+-- both leave Safari unseen. apply visits before the removal and again after
+-- it, once each.
+arm("an apply that visits before and after a removal", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local new = 20
+  f.live = { new }
+  for _, sp in ipairs(base.spaces) do f.live[#f.live + 1] = sp.id end
+  local shown = base.spaces[1].id
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    shown = id
+    return true
+  end
+  f.hs.spaces.windowsForSpace = function() return {} end
+  f.hs.spaces.removeSpace = function(id)
+    local kept = {}
+    for _, s in ipairs(f.live) do
+      if s ~= id then kept[#kept + 1] = s end
+    end
+    f.live = kept
+    return true
+  end
+  -- Safari answers no window, shown or not: it stays unseen, so each visit
+  -- step is seen in the log.
+  f.hs.application = { get = function() return { allWindows = function() return {} end } end }
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    local s = w.screens[1]
+    s.live = f.live
+    table.remove(s.spaces[1].windows, 2)
+    table.insert(s.spaces[2].windows, { id = 102, named = false })
+    w.layer0_windows = { { bundle = "com.apple.Safari", ids = { 102 } } }
+    if f.live[1] == new then
+      table.insert(s.spaces, 1, { id = new, type = "user", uuid = "SPACE-" .. new, active = false, windows = {} })
+      for i, sp in ipairs(s.spaces) do sp.ordinal = i end
+    end
+    for _, sp in ipairs(s.spaces) do sp.active = sp.id == shown end
+    s.active_space = shown
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-VISIT2", log = log })
+  local recs = records(log)
+  local visits = 0
+  for _, r in ipairs(recs) do
+    if r.event == "visit" and r.text:find("^finding windows: showing desktop") then visits = visits + 1 end
+  end
+  check("visit twice: apply answers ok and removes the new desktop",
+    response and response.status == "ok" and L.ids(f.live) == L.ids({ 11, 12 }),
+    response and (tostring(response.status) .. " / " .. L.ids(f.live)))
+  check("visit twice: the visit step runs before the removal and again after it",
+    visits == 2, tostring(visits))
+end)
+
 print(string.format("log_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

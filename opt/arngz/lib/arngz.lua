@@ -2168,6 +2168,12 @@ end
 -- desktop edits. It never removes or creates: an excess it finds is an extra
 -- note (WP 88504807).
 function PHASE.replan(job)
+  -- One more visit step after the desktop edits (vc's ask, 26 Nov 2026): a
+  -- removal's proof leaves a display on another desktop and can leave the
+  -- window filter without windows it knew, so the re-plan can find new
+  -- unseen entries. So a run has at most two visit steps, each under
+  -- VISIT_SECONDS.
+  job.visit_done = nil
   job.options = {
     no_create = true, no_remove = true, after_create = #job.creates > 0,
     user_no_create = job.request_options.no_create,
