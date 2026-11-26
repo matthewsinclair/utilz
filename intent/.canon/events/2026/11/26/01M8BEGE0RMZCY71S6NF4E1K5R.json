@@ -1,0 +1,15 @@
+{
+  "id": "01M8BEGE0RMZCY71S6NF4E1K5R",
+  "ts": "2026-11-26T08:10:47.192Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 08:10Z. hv's words, on the fix for the engine's window lookup: \"ok, call me when the design is ready. and yes, that fix needs to go into this release. it's useless otherwise.\" The rest is vc's wording. Two fixes are in 2.15.0, both cc's, both found in hv's sitting of 26 Nov. (1) WP A's empty rule: the live dry run planned no remove of a new empty desktop, because the rule counts the windows macOS itself puts on each desktop. cc designs a rule that excludes those by what they are and counts every other window, named or not. (2) The engine's window lookup: hs.window.get once per op re-reads every app's windows through Accessibility, and one app that never answers hangs an apply. The engine looks a window up in the index it built at observe. cc sends vc and ic the design for both before any code, and vc calls hv when it is ready. Also from the sitting: probe r2 is green for P1 to P3 on all three displays (run 20261126T075840Z) and P4 is void; hv's apply (run 20261126T080529Z-88063) passes WP B's and WP D's live ACs by cc's read of the log."
+  }
+}

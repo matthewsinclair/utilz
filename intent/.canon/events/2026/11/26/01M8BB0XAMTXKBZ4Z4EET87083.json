@@ -1,0 +1,15 @@
+{
+  "id": "01M8BB0XAMTXKBZ4Z4EET87083",
+  "ts": "2026-11-26T07:09:52.852Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:09Z. hv's words, on yabai in spcz's design draft: \"I don't want _anything_ to do with this approach and I don't want to have to touch SIP.\" The rest is vc's wording. vc reads it so: spcz never needs a SIP change, injects no code into the Dock or WindowManager, and does not use yabai's methods. The draft's open question 6 is answered \"No\": spcz uses exported names only, and the bridged window move (method B, a symbol that SkyLight does not export) is not built and is not in the spike. yabai is not a model for spcz. vc keeps in the draft only the methods that Hammerspoon or arngz use today and that need no SIP change. If hv also wants yabai's source removed as a reference, hv says so."
+  }
+}

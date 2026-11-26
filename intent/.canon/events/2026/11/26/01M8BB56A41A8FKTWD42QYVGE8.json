@@ -1,0 +1,15 @@
+{
+  "id": "01M8BB56A41A8FKTWD42QYVGE8",
+  "ts": "2026-11-26T07:12:13.124Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:12Z. Three rulings on spcz's design draft, each in hv's words. (1) To vc's \"keep the yabai notes as reference only\": \"Yes\". (2) On macOS versions: \"Let's just target >27.x. I can't be arsed mucking around with older versions. I'm on 27.x and this is for me, so that's good enough.\" (3) On the title-bar hold against the private workspace call for a window move: \"I'm inclined to look into Hammerspoon's code and just copy out what it is doing.\" The rest is vc's wording. The draft's open question 7 is answered: spcz supports macOS 27 and later only, with no Dock shape for macOS 26 and no fixtures for it. For the window move, the spike tries Hammerspoon's method first (its workspace call, ported from its MIT source with a citation), and the title-bar hold is the fallback. (3) is a lean and not a final choice: the spike's result on macOS 27 decides, and vc puts it to hv again if Hammerspoon's method does not move a window there. It does not change arngz in 2.15.0, whose finder keeps its Dock fallback."
+  }
+}

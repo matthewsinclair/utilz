@@ -1,0 +1,15 @@
+{
+  "id": "01M8BAJW1P6SFBAVYF04NJFTF6",
+  "ts": "2026-11-26T07:02:12.790Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:02Z. hv's words, on spcz against Hammerspoon: \"Yeah, agree. If spcz can manipulate the things that need manipulating from a simple rust cli interface, then the rest doesn't matter.\" The rest is vc's wording. hv agreed with vc's view: spcz is a plain Rust CLI with commands and JSON output. Compatibility with Hammerspoon, its Lua API or its .lua config file is not a goal. spcz's design reads Hammerspoon's and yabai's source as a reference and cites it. Earlier in the sitting hv asked for one design agent to draft spcz's design for hv's review while the estate waits. The agent writes ~/Devel/scratch/utilz-vc/spcz/design-draft.md and nothing else. It amends hv decision 43's \"no design work before the cut\" for that one draft only. The spcz thread still opens after the 2.15.0 cut."
+  }
+}

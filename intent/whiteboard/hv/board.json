@@ -465,6 +465,39 @@
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 06:52Z. hv's words: \"Ok, we should call in a localfold+compact here in the currently working CLaude Teams while we wait.\" The rest is the wording of devbin-vc and vc. Every Utilz seat localfolds with no release, commits its own files by path and pushes nothing. cc folds at the END of its bats run 01M8B9X6SMHY67F13BAJ6Q638X. No seat asks the Desk until devbin-vc's word after the cycle. vc sends devbin-vc one report. After hv's compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's.",
       "state": "live",
       "recorded_at": "2026-11-26T06:52:47.230Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 46,
+      "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:02Z. hv's words, on spcz against Hammerspoon: \"Yeah, agree. If spcz can manipulate the things that need manipulating from a simple rust cli interface, then the rest doesn't matter.\" The rest is vc's wording. hv agreed with vc's view: spcz is a plain Rust CLI with commands and JSON output. Compatibility with Hammerspoon, its Lua API or its .lua config file is not a goal. spcz's design reads Hammerspoon's and yabai's source as a reference and cites it. Earlier in the sitting hv asked for one design agent to draft spcz's design for hv's review while the estate waits. The agent writes ~/Devel/scratch/utilz-vc/spcz/design-draft.md and nothing else. It amends hv decision 43's \"no design work before the cut\" for that one draft only. The spcz thread still opens after the 2.15.0 cut.",
+      "state": "live",
+      "recorded_at": "2026-11-26T07:02:12.790Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 47,
+      "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:09Z. hv's words, on yabai in spcz's design draft: \"I don't want _anything_ to do with this approach and I don't want to have to touch SIP.\" The rest is vc's wording. vc reads it so: spcz never needs a SIP change, injects no code into the Dock or WindowManager, and does not use yabai's methods. The draft's open question 6 is answered \"No\": spcz uses exported names only, and the bridged window move (method B, a symbol that SkyLight does not export) is not built and is not in the spike. yabai is not a model for spcz. vc keeps in the draft only the methods that Hammerspoon or arngz use today and that need no SIP change. If hv also wants yabai's source removed as a reference, hv says so.",
+      "state": "live",
+      "recorded_at": "2026-11-26T07:09:52.852Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 48,
+      "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:12Z. Three rulings on spcz's design draft, each in hv's words. (1) To vc's \"keep the yabai notes as reference only\": \"Yes\". (2) On macOS versions: \"Let's just target >27.x. I can't be arsed mucking around with older versions. I'm on 27.x and this is for me, so that's good enough.\" (3) On the title-bar hold against the private workspace call for a window move: \"I'm inclined to look into Hammerspoon's code and just copy out what it is doing.\" The rest is vc's wording. The draft's open question 7 is answered: spcz supports macOS 27 and later only, with no Dock shape for macOS 26 and no fixtures for it. For the window move, the spike tries Hammerspoon's method first (its workspace call, ported from its MIT source with a citation), and the title-bar hold is the fallback. (3) is a lean and not a final choice: the spike's result on macOS 27 decides, and vc puts it to hv again if Hammerspoon's method does not move a window there. It does not change arngz in 2.15.0, whose finder keeps its Dock fallback.",
+      "state": "live",
+      "recorded_at": "2026-11-26T07:12:13.124Z",
+      "edited_at": "2026-11-26T07:12:19.308Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 49,
+      "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 08:10Z. hv's words, on the fix for the engine's window lookup: \"ok, call me when the design is ready. and yes, that fix needs to go into this release. it's useless otherwise.\" The rest is vc's wording. Two fixes are in 2.15.0, both cc's, both found in hv's sitting of 26 Nov. (1) WP A's empty rule: the live dry run planned no remove of a new empty desktop, because the rule counts the windows macOS itself puts on each desktop. cc designs a rule that excludes those by what they are and counts every other window, named or not. (2) The engine's window lookup: hs.window.get once per op re-reads every app's windows through Accessibility, and one app that never answers hangs an apply. The engine looks a window up in the index it built at observe. cc sends vc and ic the design for both before any code, and vc calls hv when it is ready. Also from the sitting: probe r2 is green for P1 to P3 on all three displays (run 20261126T075840Z) and P4 is void; hv's apply (run 20261126T080529Z-88063) passes WP B's and WP D's live ACs by cc's read of the log.",
+      "state": "live",
+      "recorded_at": "2026-11-26T08:10:47.192Z"
     }
   ],
   "sent": [],
