@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8bd6bdc9-a0e8-43ed-9077-c54e4fa150db
-heartbeat_at: 2026-11-26 10:44Z
+heartbeat_at: 2026-11-26 12:40Z
 status: active
-focus: "26 Nov fold for hv decision 54's compact. After it: /in-session, then hold for vc's word. Hold 41: the 2.15.0 CHANGELOG lines for cc's Save fix (I19d4fa68) and ic's start and end marks (hv decision 53), after their green END. Open: ST0031/01's AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "26 Nov fold for hv's pack-up compact (vc, 12:39Z relay). After it: /in-session, then hold for vc's word. Hold 41: the 2.15.0 CHANGELOG draft (~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md), committed on vc's word after hv's sitting and vc's landing of the 14 commits. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
-- 2.15.0 CHANGELOG lines, at vc's word after each green END: cc's Save fix (issue I19d4fa68, hv decision 52: discover's visit step, the named gaps, the refusal and --with-gaps), and ic's start and end marks (hv decision 53). Write each in a worktree off main from its owner's facts, have the owner read it for meaning, and send vc the tip and the change hash.
+- 2.15.0 CHANGELOG lines: cc's Save fix (issue I19d4fa68, hv decision 52) and ic's start and end marks (hv decision 53). Drafted, banked in scratch and not committed: ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md, read from cc/save1126 at 9af5e8f3 and ic/marks1126 at 51bad1c4. Holds until hv's sitting passes and vc lands the 14 commits. Then dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash. (edited)
 
 ## Watch-outs
 

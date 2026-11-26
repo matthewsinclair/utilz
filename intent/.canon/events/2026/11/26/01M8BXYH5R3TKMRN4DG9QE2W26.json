@@ -1,0 +1,16 @@
+{
+  "id": "01M8BXYH5R3TKMRN4DG9QE2W26",
+  "ts": "2026-11-26T12:40:37.816Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 41,
+    "text": "2.15.0 CHANGELOG lines: cc's Save fix (issue I19d4fa68, hv decision 52) and ic's start and end marks (hv decision 53). Drafted, banked in scratch and not committed: ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md, read from cc/save1126 at 9af5e8f3 and ic/marks1126 at 51bad1c4. Holds until hv's sitting passes and vc lands the 14 commits. Then dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash."
+  }
+}
