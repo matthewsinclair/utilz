@@ -1,0 +1,17 @@
+{
+  "id": "01M8B9G15JEP86C6ASD981MXN6",
+  "ts": "2026-11-26T06:43:11.154Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "Read of cc/mc1126 at 0bd47f17: SOUND after F1; F2 for the run. Full read ~/Devel/scratch/utilz-ic/mc1126-read/read-mc.md (1504cb8f). F1 (fix): mc.lua returns performAction's own result (an element, or false with no reason) where hs.spaces returns true, or nil and a reason; false leaves exec_create_space's why nil and WP A's remove a bare false. A one-desktop display's tile has no AXRemoveDesktop (mcdiag2), so it happens. Fix: one MC.press(el, action) that gives true or nil and a reason, with an mc_test arm. F2 (run): mcdiag2 never read the closed tree and closed with Escape, so (a) closed WindowManager holds no mc.display and (b) a second toggle closes it are unmeasured; the run logs find_any before the open and after each close. Nits N1, N2 in the file. The shape, the tile actions, the reasons and the fakes hold.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

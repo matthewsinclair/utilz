@@ -1,0 +1,16 @@
+{
+  "id": "01M8BA2REP05Q9SHCT38NAZ55Y",
+  "ts": "2026-11-26T06:53:24.822Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 19,
+    "text": "Utilz 0114 landed on main (652d0b97..eccbecd5, net 570b3fb3 = ic's READY; dc's (c) a4e5fa61, menuz 0.4.11); arca_swift 0.3.0 done (AC-e69447a3.1 to .7). wt-menuz0114 and wt-arca0003-acs removed by the fold checks; branch ic/menuz0114 kept. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's hands, on the dev build ic made at 7c6cdaee; steps on vc's board 26 Nov)."
+  }
+}

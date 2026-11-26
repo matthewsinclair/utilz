@@ -1,0 +1,17 @@
+{
+  "id": "01M8B9CCPBH6ZJHFYA01844EGD",
+  "ts": "2026-11-26T06:41:11.883Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "hv's two hands-on checks, ready for one short sitting. Neither waits for the final push or the cut.\n\n(1) QR scan, AC-702cceb9.8 (STb8e4fb6). No slot: the tree's showreel binary is fresh (prez's build stamp is 16:13Z 25 Nov, after the last crate commit ac2ddc60 at 15:14Z), so prez builds nothing. If prez prints a cargo build line, stop: that is a build, and it wants a slot. hv runs, in a scratch folder:\n  d=$(mktemp -d)\n  printf 'artist: {handle: x}\\nsocials:\\n  - {label: Web, handle: a, url: \"https://example.com/utilz-qr\"}\\n' > \"$d/showreel.yaml\"\n  utilz prez showreel qr \"$d\" && open \"$d/assets/qr/web.svg\"\nIt prints one \"showreel:\" line for socials: Web, and the browser shows the QR. hv scans it with the phone's camera and reports the address the phone offers: it must be https://example.com/utilz-qr. Then rm -rf \"$d\".\n\n(2) 0114's AC .5 (ST44b4671e033a4475). It needs a build: hv's dev build is from 29 Oct (menuz 0.4.9, commit 2d02dc3d), and the menu bar runs the installed ~/Applications/Menuz.app (no use file). The build is xcodebuild, so it wants a heavy slot. Rec: ic books it and runs `bin/utilz menuz build` from the primary on main (it writes hv's dev build under ~/.local/state/menuz/build); ic asks vc first, since it writes hv's real state. Then hv:\n  utilz menuz use dev && utilz menuz restart\n  Look: the masthead row (top of the menu) shows menuz's icon, not a blank, beside its name and version (0.4.11).\n  open -n ~/.local/state/menuz/build/macos/Build/Products/Debug/Menuz.app\n  Look: no second menu bar item appears, and pgrep -fl 'Menuz.app/Contents/MacOS/Menuz' shows one process. The log says why:\n  /usr/bin/log show --last 2m --predicate 'subsystem == \"com.matthewsinclair.utilz.menuz\"' --style compact | grep 'already runs'\n  It must show \"Menuz already runs as pid <n>, so this copy quits. To run this one, quit that copy first.\"\n  To go back: utilz menuz use installed && utilz menuz restart\nhv reports: icon seen (yes/no), second copy quit (yes/no) and the log line.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

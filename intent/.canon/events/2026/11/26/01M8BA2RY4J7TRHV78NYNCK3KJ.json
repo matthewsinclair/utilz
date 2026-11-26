@@ -1,0 +1,16 @@
+{
+  "id": "01M8BA2RY4J7TRHV78NYNCK3KJ",
+  "ts": "2026-11-26T06:53:25.316Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 20,
+    "text": "A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 44: A back in 2.15.0 on mc.lua). In cc/desks1126 as ff6047fc (equal to 365d3cf3's lines), A on the finder at 1ee77ee1, which ic read SOUND (delta 26 Nov). After cc's green END of A's run: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua) to-write, red (red-a-toasts.sh 972f71c0, base 90bc0d8e), green, at lint. Remove wt-desks-a-toasts once A lands."
+  }
+}

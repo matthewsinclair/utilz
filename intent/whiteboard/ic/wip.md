@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 06:19Z
+heartbeat_at: 2026-11-26 06:53Z
 status: active
-focus: "25 Nov fold for hv decision 40, no release. Resume: /in-session, then hold for vc's word. Next, after hv's arca_swift line, vc's CI read and hv's 0.3.0 tag: AC-e69447a3.6 and .7 READY, then R2 for 0114 (run-r2.sh 06b1645b at 23a57e87, read SOUND). At cc's END of A's run: mint AT-88504807.8 (A's toasts, 365d3cf3 in cc's stack). Open: doing 15 (hv's QR scan). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "26 Nov fold for hv decision 45, no release. Resume: /in-session, then hold for vc's word. 0114 and arca_swift 0.3.0 landed; open: AC-4b560be1.4 (CI after the final push), .5 and AC-702cceb9.8 (hv's hands; steps in RESUME and on vc's board; dev build made at 7c6cdaee). At cc's green END of A's run: AT-88504807.8. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -14,8 +14,8 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
-- arca_swift 0003 done: 0.3.0 tagged (d6b053ec on 940f91b5), AC-e69447a3.1 to .7 satisfied (.6/.7 at bd63c765, on arca main); wt-arca0003r and branches ic/arca0003, ic/arca0003r removed. Utilz 0114: R2 green (01M8B8636QX9VXCD0T64BGSB9Y; exit 1 is clean-up only). READY to vc 26 Nov: ic/menuz0114 at 514259e0 over cf80cc76, change 570b3fb3, 47 paths; AC-4b560be1.1/.2/.3/.6 satisfied. vc lands it with dc's (c) 266cb1ef. Open: AC .4 (CI dispatch after the push) and .5 (hv's hands: masthead row, open -n). Then remove wt-menuz0114 and wt-arca0003-acs by the fold checks. (edited)
-- A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 23 (3)), on vc's go after hv decision 39, at risk and not run: ic's 2f914ba9 on ic/desks1125-a-toasts (worktree ~/Devel/scratch/utilz-ic/wt-desks-a-toasts), over cc's 90bc0d8e, is in cc's stack as 365d3cf3 on cc/desks1125, and ic checked it by change: 061437f9 for both. The remove step, the wait for "desktop changes", Finished's removed and extra counts, a third count line so no count is cut, help/arngz.md's Toasts lines, and toast_test's arms. cc's run-a.sh leg 3 pins the red leg ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh (972f71c0, base 90bc0d8e), and vc reads the driver. The run goes at vc's word after the removeSpace probe, and cc sends ic its END. If the probe sends A back to design, the parts go back with it. After a green END: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua), to-write, red, green; remove wt-desks-a-toasts once A lands. (edited)
+- Utilz 0114 landed on main (652d0b97..eccbecd5, net 570b3fb3 = ic's READY; dc's (c) a4e5fa61, menuz 0.4.11); arca_swift 0.3.0 done (AC-e69447a3.1 to .7). wt-menuz0114 and wt-arca0003-acs removed by the fold checks; branch ic/menuz0114 kept. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's hands, on the dev build ic made at 7c6cdaee; steps on vc's board 26 Nov). (edited)
+- A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 44: A back in 2.15.0 on mc.lua). In cc/desks1126 as ff6047fc (equal to 365d3cf3's lines), A on the finder at 1ee77ee1, which ic read SOUND (delta 26 Nov). After cc's green END of A's run: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua) to-write, red (red-a-toasts.sh 972f71c0, base 90bc0d8e), green, at lint. Remove wt-desks-a-toasts once A lands. (edited)
 
 ## TODO
 

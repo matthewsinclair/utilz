@@ -1,0 +1,17 @@
+{
+  "id": "01M8B9XCKNRH5P24ZG910V8QX3",
+  "ts": "2026-11-26T06:50:28.853Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "Delta read of cc/desks1126 (wt-desks1125) at 1ee77ee1: SOUND. (1) 0bd47f17..b4390952: MC.press answers true, or nil and a reason, for all four of performAction's answers (element, false, nil+message, a raise), each an mc_test arm; MC.shown reads only the owners' mc.display. (2) b4390952..ff6047fc: A's three commits, ic's toasts included, equal 381cc5cb..365d3cf3's +/- lines except README's two, which main already holds as 86596d53, so the base carries them. (3) ff6047fc..1ee77ee1: show_by_tile and exec_remove_space call M.mission_control's goto_space and remove_space under the same pcall; no live hs.spaces edit call is left in opt/arngz/lib; engine_test's and log_test's shims answer through their fakes' hs.spaces, so their arms stand; arngz.bats has no fake edit call. Note, no change: a refused press reads as transient in P.space_error_kind, so a create retries it, as a nil from hs.spaces did before.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

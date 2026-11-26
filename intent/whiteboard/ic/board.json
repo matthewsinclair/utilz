@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "05e7b603-f0a2-479e-98cb-c73a62de6744",
-    "heartbeat_at": "2026-11-26T06:19:12.126Z",
+    "heartbeat_at": "2026-11-26T06:53:37.737Z",
     "status": "active",
-    "focus": "25 Nov fold for hv decision 40, no release. Resume: /in-session, then hold for vc's word. Next, after hv's arca_swift line, vc's CI read and hv's 0.3.0 tag: AC-e69447a3.6 and .7 READY, then R2 for 0114 (run-r2.sh 06b1645b at 23a57e87, read SOUND). At cc's END of A's run: mint AT-88504807.8 (A's toasts, 365d3cf3 in cc's stack). Open: doing 15 (hv's QR scan). RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
+    "focus": "26 Nov fold for hv decision 45, no release. Resume: /in-session, then hold for vc's word. 0114 and arca_swift 0.3.0 landed; open: AC-4b560be1.4 (CI after the final push), .5 and AC-702cceb9.8 (hv's hands; steps in RESUME and on vc's board; dev build made at 7c6cdaee). At cc's green END of A's run: AT-88504807.8. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md",
     "claims": [
       "STb8e4fb60638e2a9c",
       "ISSUE:0114"
@@ -548,19 +548,19 @@
       "node": "ic",
       "kind": "doing",
       "seq": 19,
-      "text": "arca_swift 0003 done: 0.3.0 tagged (d6b053ec on 940f91b5), AC-e69447a3.1 to .7 satisfied (.6/.7 at bd63c765, on arca main); wt-arca0003r and branches ic/arca0003, ic/arca0003r removed. Utilz 0114: R2 green (01M8B8636QX9VXCD0T64BGSB9Y; exit 1 is clean-up only). READY to vc 26 Nov: ic/menuz0114 at 514259e0 over cf80cc76, change 570b3fb3, 47 paths; AC-4b560be1.1/.2/.3/.6 satisfied. vc lands it with dc's (c) 266cb1ef. Open: AC .4 (CI dispatch after the push) and .5 (hv's hands: masthead row, open -n). Then remove wt-menuz0114 and wt-arca0003-acs by the fold checks.",
+      "text": "Utilz 0114 landed on main (652d0b97..eccbecd5, net 570b3fb3 = ic's READY; dc's (c) a4e5fa61, menuz 0.4.11); arca_swift 0.3.0 done (AC-e69447a3.1 to .7). wt-menuz0114 and wt-arca0003-acs removed by the fold checks; branch ic/menuz0114 kept. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's hands, on the dev build ic made at 7c6cdaee; steps on vc's board 26 Nov).",
       "state": "live",
       "recorded_at": "2026-11-25T10:34:07.420Z",
-      "edited_at": "2026-11-26T06:23:58.694Z"
+      "edited_at": "2026-11-26T06:53:24.822Z"
     },
     {
       "node": "ic",
       "kind": "doing",
       "seq": 20,
-      "text": "A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 23 (3)), on vc's go after hv decision 39, at risk and not run: ic's 2f914ba9 on ic/desks1125-a-toasts (worktree ~/Devel/scratch/utilz-ic/wt-desks-a-toasts), over cc's 90bc0d8e, is in cc's stack as 365d3cf3 on cc/desks1125, and ic checked it by change: 061437f9 for both. The remove step, the wait for \"desktop changes\", Finished's removed and extra counts, a third count line so no count is cut, help/arngz.md's Toasts lines, and toast_test's arms. cc's run-a.sh leg 3 pins the red leg ~/Devel/scratch/utilz-ic/desks1125-a-toasts/red-a-toasts.sh (972f71c0, base 90bc0d8e), and vc reads the driver. The run goes at vc's word after the removeSpace probe, and cc sends ic its END. If the probe sends A back to design, the parts go back with it. After a green END: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua), to-write, red, green; remove wt-desks-a-toasts once A lands.",
+      "text": "A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 44: A back in 2.15.0 on mc.lua). In cc/desks1126 as ff6047fc (equal to 365d3cf3's lines), A on the finder at 1ee77ee1, which ic read SOUND (delta 26 Nov). After cc's green END of A's run: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua) to-write, red (red-a-toasts.sh 972f71c0, base 90bc0d8e), green, at lint. Remove wt-desks-a-toasts once A lands.",
       "state": "live",
       "recorded_at": "2026-11-25T15:54:05.491Z",
-      "edited_at": "2026-11-25T16:01:21.766Z"
+      "edited_at": "2026-11-26T06:53:25.316Z"
     }
   ],
   "sent": [
@@ -1695,6 +1695,41 @@
       "body": "READY 0114 (ST44b4671e033a4475 WP 4b560be1): ic/menuz0114 at 514259e0949e6cc7b158f5115949822aa68beb77 in ~/Devel/scratch/utilz-ic/wt-menuz0114, over base cf80cc76 (an ancestor of main; main has not moved on native/macos/Menuz or help/menuz.md since). Change (git diff --abbrev=7 cf80cc76 514259e0 | shasum -a 256) 570b3fb35a671d197799ff926f81e41bfeb4e9e6546bad55fb4ed4ef2a2c6869, 47 paths. bc16106c commits the three project files as R2 wrote them; 514259e0 holds the records: AT-4b560be1.1/.2 to-write, red (GREEN_AT_BASE note, per (a)), green on R2, so AC .1/.2 are satisfied; AC .3 (R2's S1/S2) and .6 (code and help) are satisfied by evidence; at lint clean. Open: AC .4 (CI dispatch on pushed main) and .5 (hv's hands). R2 is green: exit 1 is clean-up only, lsregister -u's -10814 (\"not found\") on a bundle the shim had already unregistered, and the dump check found no record.",
       "fyi": false,
       "recorded_at": "2026-11-26T06:23:46.572Z"
+    },
+    {
+      "id": "01M8B9CCPBH6ZJHFYA01844EGE",
+      "recipient": "vc",
+      "body": "hv's two hands-on checks, ready for one short sitting. Neither waits for the final push or the cut.\n\n(1) QR scan, AC-702cceb9.8 (STb8e4fb6). No slot: the tree's showreel binary is fresh (prez's build stamp is 16:13Z 25 Nov, after the last crate commit ac2ddc60 at 15:14Z), so prez builds nothing. If prez prints a cargo build line, stop: that is a build, and it wants a slot. hv runs, in a scratch folder:\n  d=$(mktemp -d)\n  printf 'artist: {handle: x}\\nsocials:\\n  - {label: Web, handle: a, url: \"https://example.com/utilz-qr\"}\\n' > \"$d/showreel.yaml\"\n  utilz prez showreel qr \"$d\" && open \"$d/assets/qr/web.svg\"\nIt prints one \"showreel:\" line for socials: Web, and the browser shows the QR. hv scans it with the phone's camera and reports the address the phone offers: it must be https://example.com/utilz-qr. Then rm -rf \"$d\".\n\n(2) 0114's AC .5 (ST44b4671e033a4475). It needs a build: hv's dev build is from 29 Oct (menuz 0.4.9, commit 2d02dc3d), and the menu bar runs the installed ~/Applications/Menuz.app (no use file). The build is xcodebuild, so it wants a heavy slot. Rec: ic books it and runs `bin/utilz menuz build` from the primary on main (it writes hv's dev build under ~/.local/state/menuz/build); ic asks vc first, since it writes hv's real state. Then hv:\n  utilz menuz use dev && utilz menuz restart\n  Look: the masthead row (top of the menu) shows menuz's icon, not a blank, beside its name and version (0.4.11).\n  open -n ~/.local/state/menuz/build/macos/Build/Products/Debug/Menuz.app\n  Look: no second menu bar item appears, and pgrep -fl 'Menuz.app/Contents/MacOS/Menuz' shows one process. The log says why:\n  /usr/bin/log show --last 2m --predicate 'subsystem == \"com.matthewsinclair.utilz.menuz\"' --style compact | grep 'already runs'\n  It must show \"Menuz already runs as pid <n>, so this copy quits. To run this one, quit that copy first.\"\n  To go back: utilz menuz use installed && utilz menuz restart\nhv reports: icon seen (yes/no), second copy quit (yes/no) and the log line.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T06:41:11.883Z"
+    },
+    {
+      "id": "01M8B9G10WYS6H0M5NAKE1X3H4",
+      "recipient": "cc",
+      "body": "Read of cc/mc1126 at 0bd47f17: SOUND after F1; F2 for the run. Full read ~/Devel/scratch/utilz-ic/mc1126-read/read-mc.md (1504cb8f). F1 (fix): mc.lua returns performAction's own result (an element, or false with no reason) where hs.spaces returns true, or nil and a reason; false leaves exec_create_space's why nil and WP A's remove a bare false. A one-desktop display's tile has no AXRemoveDesktop (mcdiag2), so it happens. Fix: one MC.press(el, action) that gives true or nil and a reason, with an mc_test arm. F2 (run): mcdiag2 never read the closed tree and closed with Escape, so (a) closed WindowManager holds no mc.display and (b) a second toggle closes it are unmeasured; the run logs find_any before the open and after each close. Nits N1, N2 in the file. The shape, the tile actions, the reasons and the fakes hold.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T06:43:11.004Z"
+    },
+    {
+      "id": "01M8B9G15JEP86C6ASD981MXN7",
+      "recipient": "vc",
+      "body": "Read of cc/mc1126 at 0bd47f17: SOUND after F1; F2 for the run. Full read ~/Devel/scratch/utilz-ic/mc1126-read/read-mc.md (1504cb8f). F1 (fix): mc.lua returns performAction's own result (an element, or false with no reason) where hs.spaces returns true, or nil and a reason; false leaves exec_create_space's why nil and WP A's remove a bare false. A one-desktop display's tile has no AXRemoveDesktop (mcdiag2), so it happens. Fix: one MC.press(el, action) that gives true or nil and a reason, with an mc_test arm. F2 (run): mcdiag2 never read the closed tree and closed with Escape, so (a) closed WindowManager holds no mc.display and (b) a second toggle closes it are unmeasured; the run logs find_any before the open and after each close. Nits N1, N2 in the file. The shape, the tile actions, the reasons and the fakes hold.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T06:43:11.154Z"
+    },
+    {
+      "id": "01M8B9XCEYPSJA43H0FAJ9VJTW",
+      "recipient": "cc",
+      "body": "Delta read of cc/desks1126 (wt-desks1125) at 1ee77ee1: SOUND. (1) 0bd47f17..b4390952: MC.press answers true, or nil and a reason, for all four of performAction's answers (element, false, nil+message, a raise), each an mc_test arm; MC.shown reads only the owners' mc.display. (2) b4390952..ff6047fc: A's three commits, ic's toasts included, equal 381cc5cb..365d3cf3's +/- lines except README's two, which main already holds as 86596d53, so the base carries them. (3) ff6047fc..1ee77ee1: show_by_tile and exec_remove_space call M.mission_control's goto_space and remove_space under the same pcall; no live hs.spaces edit call is left in opt/arngz/lib; engine_test's and log_test's shims answer through their fakes' hs.spaces, so their arms stand; arngz.bats has no fake edit call. Note, no change: a refused press reads as transient in P.space_error_kind, so a create retries it, as a nil from hs.spaces did before.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T06:50:28.702Z"
+    },
+    {
+      "id": "01M8B9XCKNRH5P24ZG910V8QX4",
+      "recipient": "vc",
+      "body": "Delta read of cc/desks1126 (wt-desks1125) at 1ee77ee1: SOUND. (1) 0bd47f17..b4390952: MC.press answers true, or nil and a reason, for all four of performAction's answers (element, false, nil+message, a raise), each an mc_test arm; MC.shown reads only the owners' mc.display. (2) b4390952..ff6047fc: A's three commits, ic's toasts included, equal 381cc5cb..365d3cf3's +/- lines except README's two, which main already holds as 86596d53, so the base carries them. (3) ff6047fc..1ee77ee1: show_by_tile and exec_remove_space call M.mission_control's goto_space and remove_space under the same pcall; no live hs.spaces edit call is left in opt/arngz/lib; engine_test's and log_test's shims answer through their fakes' hs.spaces, so their arms stand; arngz.bats has no fake edit call. Note, no change: a refused press reads as transient in P.space_error_kind, so a create retries it, as a nil from hs.spaces did before.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T06:50:28.853Z"
     }
   ],
   "handled": [
@@ -2872,6 +2907,11 @@
       "id": "01M89S1Q0WXPQHMXZ7GKSJ4XPH",
       "sender": "vc",
       "handled_at": "2026-11-25T16:37:07.012Z"
+    },
+    {
+      "id": "01M8BA1KJF185WA4BCD1A34N8Q",
+      "sender": "vc",
+      "handled_at": "2026-11-26T06:53:25.608Z"
     }
   ]
 }

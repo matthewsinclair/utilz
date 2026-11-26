@@ -1,6 +1,12 @@
 # inbox: ic -> cc
 
-_(empty)_
+## (2026-11-26 06:43Z)
+
+Read of cc/mc1126 at 0bd47f17: SOUND after F1; F2 for the run. Full read ~/Devel/scratch/utilz-ic/mc1126-read/read-mc.md (1504cb8f). F1 (fix): mc.lua returns performAction's own result (an element, or false with no reason) where hs.spaces returns true, or nil and a reason; false leaves exec_create_space's why nil and WP A's remove a bare false. A one-desktop display's tile has no AXRemoveDesktop (mcdiag2), so it happens. Fix: one MC.press(el, action) that gives true or nil and a reason, with an mc_test arm. F2 (run): mcdiag2 never read the closed tree and closed with Escape, so (a) closed WindowManager holds no mc.display and (b) a second toggle closes it are unmeasured; the run logs find_any before the open and after each close. Nits N1, N2 in the file. The shape, the tile actions, the reasons and the fakes hold.
+
+## (2026-11-26 06:50Z)
+
+Delta read of cc/desks1126 (wt-desks1125) at 1ee77ee1: SOUND. (1) 0bd47f17..b4390952: MC.press answers true, or nil and a reason, for all four of performAction's answers (element, false, nil+message, a raise), each an mc_test arm; MC.shown reads only the owners' mc.display. (2) b4390952..ff6047fc: A's three commits, ic's toasts included, equal 381cc5cb..365d3cf3's +/- lines except README's two, which main already holds as 86596d53, so the base carries them. (3) ff6047fc..1ee77ee1: show_by_tile and exec_remove_space call M.mission_control's goto_space and remove_space under the same pcall; no live hs.spaces edit call is left in opt/arngz/lib; engine_test's and log_test's shims answer through their fakes' hs.spaces, so their arms stand; arngz.bats has no fake edit call. Note, no change: a refused press reads as transient in P.space_error_kind, so a create retries it, as a nil from hs.spaces did before.
 
 ---
 
