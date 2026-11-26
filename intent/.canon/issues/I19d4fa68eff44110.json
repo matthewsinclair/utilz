@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "I19d4fa68eff44110",
+  "origin": "01M8BPQQWZHK0336HVV094T3PK",
+  "realised": true,
+  "slug": "arngz-discover-leaves-out-windows-on-desktops-no",
+  "title": "arngz discover leaves out windows on desktops not shown, so Save Desk writes a desk without them",
+  "status": "open",
+  "severity": "high",
+  "created": "2026-11-26",
+  "reporter": "Matthew Sinclair",
+  "body": "Save Desk (`arngz discover --save <desk> --force`, from menuz) records only the windows Hammerspoon names, and it names a window on a desktop that is not shown only through the window filter, which can lose such a window (issue I426f2a7). discover has no visit step, so it saves a desk without those windows, and says nothing a person can read.\n\nOn 26 Nov 2026 hv ran Save Desk for zeopit (run 20261126T102944Z-84214, exit 0) after adding a desktop for Music. It wrote Music on main's 8th desktop, but left out Console (window 281, 900x545, on main's 6th) and Screen Sharing's session window (1909, on the 7th), and wrote Screen Sharing's small window (146) on the 1st with no window pattern, so the next apply would have moved the session window there. Both lost windows were at layer 0 in the window list (vc's read). The report's \"N Accessibility could not name\" counts macOS's own windows for each desktop too, so the loss could not be read from it. vc put hv's zeopit right by hand.\n\nThe fix (hv decision 52, \"Fix Save fully now\"): before it records, discover shows each user desktop not shown that holds a layer-0 window of a running app that it did not name, names those windows, and shows each display its start desktop again. Its report names, per app and desktop, any ordinary window it still could not record, and its unnamed count leaves out macOS's own windows. A second window of an app named late still gets its window pattern. Design: cc's note, to vc and ic first.\n"
+}

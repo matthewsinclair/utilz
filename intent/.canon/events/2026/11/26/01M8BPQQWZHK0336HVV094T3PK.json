@@ -1,0 +1,15 @@
+{
+  "id": "01M8BPQQWZHK0336HVV094T3PK",
+  "ts": "2026-11-26T10:34:35.298Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I19d4fa68eff44110"
+  },
+  "payload": {
+    "severity": "high",
+    "title": "arngz discover leaves out windows on desktops not shown, so Save Desk writes a desk without them"
+  }
+}
