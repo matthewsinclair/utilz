@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48
-heartbeat_at: 2026-11-25 16:41Z
+heartbeat_at: 2026-11-26 05:25Z
 status: active
-focus: "Folded for hv decision 40's compact. After it: /in-session, then hold for devbin-vc's word. First: hv's arca_swift line (940f91b5) in vc's window, then vc's CI read and hv's 0.3.0 tag, then ic's R2. Spike and probe at hv's ready, then WP A's run (365d3cf3). RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Back from hv decision 40's compact. Utilz waits on hv (hv decision 41): hv's arca_swift line in vc's window, which vc's session refused, then vc's CI read on 940f91b5, the 0.3.0 tag and ic's R2. The spike and the probe at hv's ready, then WP A's run. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 

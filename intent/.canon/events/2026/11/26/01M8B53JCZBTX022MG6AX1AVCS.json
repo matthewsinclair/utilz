@@ -1,0 +1,15 @@
+{
+  "id": "01M8B53JCZBTX022MG6AX1AVCS",
+  "ts": "2026-11-26T05:26:28.511Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 05:25Z. hv's words: \"I need you to take stock of where we are up to, bank anything that can be banked, and close out anything that can be closed out from yesterday. Then I want you to sync/synth with devbin-vc (who has The Desk today). devbin-vc will sync/synth with me and then come back to everyone with a ratified plan. As always I DO NOT WANT TO WASTE TIME AND BURN TOKENS WITH BITTY RELEASES. I want all outstanding work done in this session and built and tested locally before we worry about pushing stuff up for a release.\" The rest is vc's wording. vc's stock-take: nothing changed overnight. Every bank is committed and clean, and nothing from yesterday is left to close, because each open item waits on hv's hands or word. vc sent devbin-vc Utilz's state and a plan for one release, 2.15.0, with everything built and tested locally first. The plan has four steps. (1) hv's arca_swift line, the 0.3.0 tag and \"ready\" for the spike and the probe. (2) R2 and 0114, WP A's run and STca1b7f9's spike parts, on the Desk. (3) hv's live session, the QR scan and the menuz check. (4) One push, CI and the 2.15.0 cut. cc, ic and dc hold until vc passes on devbin-vc's ratified plan."
+  }
+}
