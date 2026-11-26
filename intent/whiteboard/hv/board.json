@@ -449,6 +449,14 @@
       "text": "hv, 26 Nov 2026, first-hand in vc's session, across vc's date -u of 06:20Z to 06:36Z. (1) hv's words: \"ok, build the finder, I'll do the diagnostic\", after cc found that every hs.spaces call that needs Mission Control fails on macOS 27.2.1. (2) hv proposed a new thread. hv's words: \"Why don't we build into Utilz a Rust util that can do all of the window/space manipulation directly from the command line, and then arngz just usees that when it needs to manip the spaces?\" and \"there are two orthogonal concerns here: 1. Manipulate the macOS spaces, desktops, and windows programmatically [spcz, as a working title] 2. Manage a set of desktop/space/app arrangements [arngz]\". vc recommended it. (3) On releases, hv answered vc's \"ship 2.15.0 now and spcz after it (two releases, my recommendation)\" with \"Yes.\" (4) On landing cc's Mission Control finder in 2.15.0 as a stopgap, hv's words: \"Ok, if we can get that work, then it's worth a try.\" (5) hv ran cc's diagnostic twice and saw Mission Control open at A (hs.spaces' notification) and not at B (Ctrl+Up, whose key codes went to the terminal). In both runs the Dock's AX tree and its on-screen windows did not change. The rest is vc's wording. 2.15.0 ships what is finished. spcz is a new thread, design first, in the release after 2.15.0, and arngz is rebuilt on it. ST6d8eed9's WP A and STca1b7f9's create parts stop where they are. The stopgap gets one more diagnostic of where macOS 27 shows Mission Control. If no process shows it, the stopgap ends and cc/mc1126 stays unlanded as input to spcz.",
       "state": "live",
       "recorded_at": "2026-11-26T06:35:35.230Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 44,
+      "text": "hv, 26 Nov 2026, first-hand in vc's session, answered before vc's date -u of 06:43Z, picking from vc's question after cc's second diagnostic. The diagnostic, which hv ran, found that on macOS 27 Mission Control's AX tree lives in WindowManager, with tiles, an add button and a remove action, so cc's finder can drive it. hv picked \"Desktop-count only (Recommended)\". The rest is vc's wording. This amends hv decision 43. In 2.15.0: arngz's own Mission Control finder with STca1b7f9's WP6 create, and ST6d8eed9's WP A rebased onto it, with the removeSpace probe re-pointed to the finder and run once with hv. STca1b7f9's WP1, WP2 and its Mission Control leg stay unwritten and move to the spcz thread, after 2.15.0.",
+      "state": "live",
+      "recorded_at": "2026-11-26T06:43:49.840Z"
     }
   ],
   "sent": [],
