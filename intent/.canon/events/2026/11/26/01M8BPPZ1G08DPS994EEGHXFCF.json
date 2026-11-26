@@ -1,0 +1,15 @@
+{
+  "id": "01M8BPPZ1G08DPS994EEGHXFCF",
+  "ts": "2026-11-26T10:34:09.840Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:34Z. hv's words, on the zeopit desk: \"I have Music on the last space, where it is now. I just re-ran the Save for zeopit with it in the right spot. Did that work?\" vc then asked what 2.15.0 should do about Save, and hv chose: \"Fix Save fully now (Recommended)\". The rest is vc's wording. hv's Save (menuz, run 20261126T102944Z-84214, exit 0) wrote Music on main's 8th desktop, but it left out Console (window 281, on the 6th) and Screen Sharing's session window (1909, on the 7th), and it wrote Screen Sharing's small window on the 1st with no pattern, so an apply would have taken the session window there. arngz could not name those two windows on desktops that were not shown: the fault of issue I426f2a7, in discover, which has no visit step. Its report counts macOS's own windows among those it could not name, so the loss cannot be read from it. vc put zeopit right by hand: the edit of decision 51 with Music's desktop added as main's 8th; hv's saved file is kept as zeopit.hv-saved-1029Z.yaml beside the other backups. In 2.15.0, cc's: discover shows each desktop that holds a window it cannot name, as apply does, records, and shows each display its start desktop again; its report names any running app's window it still could not record. Design first, then ic's read, one bats run, and one live Save by hv. The push and the cut wait for it. Also: devbin-vc swept Utilz to devbin 0.1.34 (86448b67); check all is green there, and macos doctor reads the notary profile PRESENT, so hv needs no store-creds before the cut."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M8BQ1K6CXRV98FXB6TR98ZK3",
+  "ts": "2026-11-26T10:39:58.156Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:39Z. hv's words: \"If we are going to make this change, I also suggest that we do something to show that argnz has started (as the very first thing it does) and that it has finished (as the very last thing it does). It's hard to know when to take back control with mouse/keyb without some idea of knowing when it is and isn't running. I suggest we play a \\\"tada\\\" sound (something going up) at the begginign and a \\\"tading\\\" sound (something going done) at the end, and I'd also suggest we have an \\\"argnz: starting\\\" at the very beginning (with the up tone) and a dedicated \\\"arngz: done\\\" (with the down tone) at the end. These toats should be independent of any of the toats doing actual work so that it is clear when arngz is running and when it isn't. We might as well do this now given we have that other fix to do.\" The rest is vc's wording. In 2.15.0, with the Save fix (hv decision 52): a verb that takes the desktops, the pointer or the keyboard (apply, auto, and discover with its new step) marks its start and its end. The first thing it does is show \"arngz: starting\" and play a rising sound. The last thing it does, on every way out, is show \"arngz: done\" and play a falling sound. These two marks are apart from the toasts that say what the run is doing. ic designs the marks (the toast and the sounds), cc gives the points where a run truly starts and ends, design first. One bats run and one live check by hv cover both changes."
+  }
+}

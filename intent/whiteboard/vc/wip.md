@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48
-heartbeat_at: 2026-11-26 07:01Z
+heartbeat_at: 2026-11-26 10:45Z
 status: active
-focus: "Folded for hv decision 45's compact. After it: /in-session, then hold for devbin-vc's word. Then: cc asks the probe's light slot; hv's one sitting (probe r2, live arngz run on zeopit, QR scan, menuz check); vc lands cc/desks1126 1ee77ee1 (run-tip green 195/195); 0.1.34 sweep; hv's push and the 2.15.0 cut. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Folded for hv decision 54's compact. After it: /in-session, then: ic finishes the start and end marks on cc/save1126 (Save fix I19d4fa68), cc's one driver and bats run, hv's one live check (Save into a scratch desk, an apply with the marks), vc lands; then hv's push, CI and dispatch, and the 2.15.0 cut. main is on the 0.1.34 sweep 86448b67, unpushed. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
