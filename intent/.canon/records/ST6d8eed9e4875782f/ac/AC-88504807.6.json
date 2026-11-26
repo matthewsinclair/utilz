@@ -3,6 +3,7 @@
   "text": "The probe's results are in design.md's Runs: P1 to P3 on every display, the proofs, and P4's window.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "probe r2 run 20261126T075840Z (desks1125/probe/runs; slot 01M8BDMAASHKZ010RN2J62VCPS): on 3 displays each of 7 removals through mc.lua took exactly its desktop; design.md Runs 1"
   }
 }

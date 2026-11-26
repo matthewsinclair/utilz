@@ -3,6 +3,7 @@
   "text": "Live: at hv's plug-in, apply removes macOS's new empty desktop, and each display's count matches the desk.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's live apply run 20261126T085320Z-31033 at eea1a72a on zeopit (slot 01M8BGCC9Q20FH7EVDEZWCZXS0): removed desktop 132 exactly, 1 removed, extra 0, diff no change; design.md Runs 3"
   }
 }

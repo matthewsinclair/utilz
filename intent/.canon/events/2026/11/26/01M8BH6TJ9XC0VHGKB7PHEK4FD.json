@@ -1,0 +1,14 @@
+{
+  "id": "01M8BH6TJ9XC0VHGKB7PHEK4FD",
+  "ts": "2026-11-26T08:57:58.090Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST6d8eed9e4875782f/AC-88504807.7"
+  },
+  "payload": {
+    "evidence": "hv's live apply run 20261126T085320Z-31033 at eea1a72a on zeopit (slot 01M8BGCC9Q20FH7EVDEZWCZXS0): removed desktop 132 exactly, 1 removed, extra 0, diff no change; design.md Runs 3"
+  }
+}

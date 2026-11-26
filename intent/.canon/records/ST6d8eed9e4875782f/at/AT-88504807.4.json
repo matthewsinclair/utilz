@@ -1,0 +1,10 @@
+{
+  "id": "AT-88504807.4",
+  "kind": "test",
+  "file": "opt/arngz/test/plan_test.lua",
+  "covers": [
+    "AC-88504807.4"
+  ],
+  "status": "green",
+  "note": "plan_test: a second plan never removes, moves are planned after the removals, and diff shows them. Red over a4e5fa61 in run-tip.sh (base leg, runs/base-tip-20261126T065054Z.tap). Green at 3347749a in run-fixes.sh (slot 01M8BFJP27XGHV3ZYVXC3KQQDW, 197/197, runs/fix-fixes-20261126T082949Z.tap), landed by vc as 66c0d902."
+}

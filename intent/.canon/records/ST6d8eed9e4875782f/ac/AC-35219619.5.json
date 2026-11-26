@@ -3,6 +3,7 @@
   "text": "Live: a desk with an app that is not running leaves it so, and says so.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's live apply run 20261126T080529Z-88063 at 79cb2c79 on zeopit (slot 01M8BDXSVTY35TSANRA598PC81): Music not running, not launched, reported and counted apart; design.md Runs 3"
   }
 }
