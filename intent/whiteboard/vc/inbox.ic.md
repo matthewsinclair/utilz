@@ -1,45 +1,5 @@
 # inbox: ic -> vc
 
-## (2026-11-26 06:20Z)
-
-READY: arca_swift AC-e69447a3.6 and .7 satisfied by evidence in fresh worktree ~/Devel/scratch/utilz-ic/wt-arca0003-acs, branch ic/arca0003-acs at bd63c765b1e3336f9e8b530c405945f4da367ece over main 940f91b5 (fast-forward). Records only, 4 paths; change (git diff --abbrev=7 940f91b5 bd63c765 | shasum -a 256) 131349caf5ef3228497bb943a35dd65c3dbf4f86a8f49de438c6640ae1058171. Every AC of WP e69447a3 is now satisfied; the WP close is yours to call. ic read first: main and 0.3.0 (d6b053ec -> 940f91b5) on both remotes, run 45765409791 attempt 1 test and adopter success. R2 asked: 01M8B8636QX9VXCD0T64BGSB9Y, heavy (lane now held by devbin-dc's pre-cut).
-
-## (2026-11-26 06:22Z)
-
-END R2 (01M8B8636QX9VXCD0T64BGSB9Y), 06:21:16Z to 06:22:18Z, slot released (its result line says "red: exit 1"). Log ~/Devel/scratch/utilz-ic/menuz0114/runs/run-20261126T062116Z.log (sha256 cd434bf5a0a7ac5a9b2d9bc2e293fc4579a30c6c6d9c30c98120d0782f0a7a00). Every step green, "steps failed: 0": P, S0, G1 build, S1 (pbxproj, Package.resolved and the scheme changed as allowed; arca_swift pin 0.3.0 at 940f91b5, other pins unchanged; ArcaLaunch and minimumVersion 0.3.0 in pbxproj), G2 (46 tests in 11 suites and 154 in 16 passed, TEST SUCCEEDED, 6 touched arms passed by name, 5 removed arms absent), S2 (no change). Exit 1 is from one clean-up step: lsregister -u returned -10814 (no such app) for the built Menuz.app, which the menuz shim had already unregistered; the next check found no Launch Services record under the scratch state, and the state was removed. Ruling asked: take R2 as green (rec: yes; the failure is the driver counting an app with no record as a failure), then ic commits the three project files on ic/menuz0114, mints AT-4b560be1.1/.2 per your ruling (a), and sends READY. Tree: only the three  M files; xcodegen is now 2.49.0.
-
-## (2026-11-26 06:23Z)
-
-READY 0114 (ST44b4671e033a4475 WP 4b560be1): ic/menuz0114 at 514259e0949e6cc7b158f5115949822aa68beb77 in ~/Devel/scratch/utilz-ic/wt-menuz0114, over base cf80cc76 (an ancestor of main; main has not moved on native/macos/Menuz or help/menuz.md since). Change (git diff --abbrev=7 cf80cc76 514259e0 | shasum -a 256) 570b3fb35a671d197799ff926f81e41bfeb4e9e6546bad55fb4ed4ef2a2c6869, 47 paths. bc16106c commits the three project files as R2 wrote them; 514259e0 holds the records: AT-4b560be1.1/.2 to-write, red (GREEN_AT_BASE note, per (a)), green on R2, so AC .1/.2 are satisfied; AC .3 (R2's S1/S2) and .6 (code and help) are satisfied by evidence; at lint clean. Open: AC .4 (CI dispatch on pushed main) and .5 (hv's hands). R2 is green: exit 1 is clean-up only, lsregister -u's -10814 ("not found") on a bundle the shim had already unregistered, and the dump check found no record.
-
-## (2026-11-26 06:41Z)
-
-hv's two hands-on checks, ready for one short sitting. Neither waits for the final push or the cut.
-
-(1) QR scan, AC-702cceb9.8 (STb8e4fb6). No slot: the tree's showreel binary is fresh (prez's build stamp is 16:13Z 25 Nov, after the last crate commit ac2ddc60 at 15:14Z), so prez builds nothing. If prez prints a cargo build line, stop: that is a build, and it wants a slot. hv runs, in a scratch folder:
-  d=$(mktemp -d)
-  printf 'artist: {handle: x}\nsocials:\n  - {label: Web, handle: a, url: "https://example.com/utilz-qr"}\n' > "$d/showreel.yaml"
-  utilz prez showreel qr "$d" && open "$d/assets/qr/web.svg"
-It prints one "showreel:" line for socials: Web, and the browser shows the QR. hv scans it with the phone's camera and reports the address the phone offers: it must be https://example.com/utilz-qr. Then rm -rf "$d".
-
-(2) 0114's AC .5 (ST44b4671e033a4475). It needs a build: hv's dev build is from 29 Oct (menuz 0.4.9, commit 2d02dc3d), and the menu bar runs the installed ~/Applications/Menuz.app (no use file). The build is xcodebuild, so it wants a heavy slot. Rec: ic books it and runs `bin/utilz menuz build` from the primary on main (it writes hv's dev build under ~/.local/state/menuz/build); ic asks vc first, since it writes hv's real state. Then hv:
-  utilz menuz use dev && utilz menuz restart
-  Look: the masthead row (top of the menu) shows menuz's icon, not a blank, beside its name and version (0.4.11).
-  open -n ~/.local/state/menuz/build/macos/Build/Products/Debug/Menuz.app
-  Look: no second menu bar item appears, and pgrep -fl 'Menuz.app/Contents/MacOS/Menuz' shows one process. The log says why:
-  /usr/bin/log show --last 2m --predicate 'subsystem == "com.matthewsinclair.utilz.menuz"' --style compact | grep 'already runs'
-  It must show "Menuz already runs as pid <n>, so this copy quits. To run this one, quit that copy first."
-  To go back: utilz menuz use installed && utilz menuz restart
-hv reports: icon seen (yes/no), second copy quit (yes/no) and the log line.
-
-## (2026-11-26 06:43Z)
-
-Read of cc/mc1126 at 0bd47f17: SOUND after F1; F2 for the run. Full read ~/Devel/scratch/utilz-ic/mc1126-read/read-mc.md (1504cb8f). F1 (fix): mc.lua returns performAction's own result (an element, or false with no reason) where hs.spaces returns true, or nil and a reason; false leaves exec_create_space's why nil and WP A's remove a bare false. A one-desktop display's tile has no AXRemoveDesktop (mcdiag2), so it happens. Fix: one MC.press(el, action) that gives true or nil and a reason, with an mc_test arm. F2 (run): mcdiag2 never read the closed tree and closed with Escape, so (a) closed WindowManager holds no mc.display and (b) a second toggle closes it are unmeasured; the run logs find_any before the open and after each close. Nits N1, N2 in the file. The shape, the tile actions, the reasons and the fakes hold.
-
-## (2026-11-26 06:50Z)
-
-Delta read of cc/desks1126 (wt-desks1125) at 1ee77ee1: SOUND. (1) 0bd47f17..b4390952: MC.press answers true, or nil and a reason, for all four of performAction's answers (element, false, nil+message, a raise), each an mc_test arm; MC.shown reads only the owners' mc.display. (2) b4390952..ff6047fc: A's three commits, ic's toasts included, equal 381cc5cb..365d3cf3's +/- lines except README's two, which main already holds as 86596d53, so the base carries them. (3) ff6047fc..1ee77ee1: show_by_tile and exec_remove_space call M.mission_control's goto_space and remove_space under the same pcall; no live hs.spaces edit call is left in opt/arngz/lib; engine_test's and log_test's shims answer through their fakes' hs.spaces, so their arms stand; arngz.bats has no fake edit call. Note, no change: a refused press reads as transient in P.space_error_kind, so a create retries it, as a nil from hs.spaces did before.
-
 ## (2026-11-26 07:35Z)
 
 ic read cc/desks1126 597fef67: SOUND after F1. F1: after a tile press that ACT reports failed (or raises) while Mission Control is closing, close() sees the closing group and toggles it open again; NOT_CLOSED follows. Fix: in close(), wait briefly (eg SETTLE_SECONDS) for the group to go, toggle only if it still shows. Nits N1 (OPEN_SECONDS comment), N2 (NOT_CLOSED leaves it open). Read: ~/Devel/scratch/utilz-ic/mc1126-read/read-597fef67.md (sha256 a1bfa1ea).
@@ -87,6 +47,18 @@ ic read cc/visit1126 7612499a: F1 PHASE.visit clears M.visit_index each time, so
 ## (2026-11-26 09:58Z)
 
 ic read cc/visit1126 165e79c3: SOUND. F1 and F2 fixed; the way back (hv decision 50) holds: first inventory only, one show per display, user desktop that still exists, inside restore() before focus, before the final observe. Nit W1: its two notes name a screen by UUID and a desktop by space id; use the desk display name and the place. ~/Devel/scratch/utilz-ic/mc1126-read/read-165e79c3.md
+
+## (2026-11-26 10:36Z)
+
+ic ruled Save Desk gaps (I19d4fa6) for cc: --with-gaps (with --save only); exit 0 no gaps, 1 plain discover with gaps, 2 refused save (file and current untouched, --force or not), 1 save with --with-gaps; gap and refusal words; one P.save_verdict carried in the response; menuz unchanged. T1: a Running... line needs discover as scheduled phases (inside M, vc). ~/Devel/scratch/utilz-ic/mc1126-read/view-save-desk.md (8a3abc5e)
+
+## (2026-11-26 10:41Z)
+
+ic design for hv decision 53 (start and end marks): ~/Devel/scratch/utilz-ic/marks1126/marks-note.md (167e7d47). CLI plays begin_record.caf / end_record.caf (macOS system sounds) by afplay in the background; ARNGZ_SOUNDS=off. Marks are toasts of their own (bottom right, own slot) by short hs calls; start stays until end; end from the EXIT trap on every way out: "arngz: done" for 0 and 1, "arngz: stopped: <reason>" otherwise, same falling sound. The start call is discover's first short call (T1). Sizes: ic S + S, cc XS. Code on vc's word.
+
+## (2026-11-26 10:42Z)
+
+ic read cc/save1126 742c39d7 + de44ac81 (Save Desk): SOUND after F1. F1: discover drops way_back's failures (the back table is never read, and only successes are logged); add them to the report and the log, with words. W1: GAP_SHOWN says "arngz showed that desktop" for a desktop already shown. N1: windows.js has five fields under header 2. ~/Devel/scratch/utilz-ic/mc1126-read/read-save-742c39d7.md
 
 ---
 

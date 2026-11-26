@@ -1,0 +1,108 @@
+{
+  "id": "01M8BQB2ERCZPZQ8AJ8H3ZGYZ4",
+  "ts": "2026-11-26T10:45:08.696Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.archive",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "message",
+    "messages": [
+      {
+        "id": "01M8B869PXJD0BXH0DA512ZE9H",
+        "to": "vc"
+      },
+      {
+        "id": "01M8B8ADEY03HQQM86RBCATK94",
+        "to": "vc"
+      },
+      {
+        "id": "01M8B8CFWCXQJBA6EB40JBVHG9",
+        "to": "vc"
+      },
+      {
+        "id": "01M8B9CCPBH6ZJHFYA01844EGE",
+        "to": "vc"
+      },
+      {
+        "id": "01M8B9G10WYS6H0M5NAKE1X3H4",
+        "to": "cc"
+      },
+      {
+        "id": "01M8B9G15JEP86C6ASD981MXN7",
+        "to": "vc"
+      },
+      {
+        "id": "01M8B9XCEYPSJA43H0FAJ9VJTW",
+        "to": "cc"
+      },
+      {
+        "id": "01M8B9XCKNRH5P24ZG910V8QX4",
+        "to": "vc"
+      },
+      {
+        "id": "01M8BCG4H2YR31EPN5BPFKQW5D",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BCNTWGZVT8QNKFEZ3A3MFR",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BEKF0NQF9SN86X7KYH91AM",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BEMJ4BMA511ZRJ8003ZNCD",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BF8H1DQ56FJDQ61844BEEE",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BFBNHAX8DK0ZNH7C9G6Y3M",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BHW57YCBEXYKA5ZKVF7T1M",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BK2MPRS0AJYHPQ9BE0KAEQ",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BK88N1XRJZ6FB3YK4KD44X",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BKARQ81MVSQ323WPZDZ5D1",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BMCB1240R7KZF32S3ZQY94",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BMNJFXJK4CC6WQTJMJ7ZR3",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BPW32TBB80ESDSCCQBM04Y",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BQ489BCBX2AJW0NK56CVKJ",
+        "to": "cc"
+      },
+      {
+        "id": "01M8BQ61GS8N7EPY4WCZ789DDD",
+        "to": "cc"
+      }
+    ]
+  }
+}

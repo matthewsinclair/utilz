@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 07:01Z
+heartbeat_at: 2026-11-26 10:45Z
 status: active
-focus: "26 Nov fold for hv decision 45, no release. Resume: /in-session, then hold for vc's word. 0114 and arca_swift 0.3.0 landed; open: AC-4b560be1.4 (CI after the final push), .5 and AC-702cceb9.8 (hv's hands; steps in RESUME and on vc's board; dev build made at 7c6cdaee). At cc's green END of A's run: AT-88504807.8. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
+focus: "Folded (hv decision 54). Resume: the marks, part 2 (M.mark, toast.lua mark slot), arms and help in ~/Devel/scratch/utilz-ic/wt-marks (ic/marks1126 at cf493a89 over cc's 50f6be51); RESUME.md says what is left."
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -13,7 +13,8 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 
 ## DOING
 
-- Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done; AC-4b560be1.5 satisfied by hv's menuz check of 26 Nov. Open: AC-4b560be1.4 (CI dispatch on the final push). wt-desks-a-toasts removed on vc's word; branch kept. (edited)
+- Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4 (CI dispatch on the final push). (edited)
+- arngz start and end marks (hv decision 53), on ic/marks1126 in ~/Devel/scratch/utilz-ic/wt-marks over cc's 50f6be51. Part 1 (CLI) at cf493a89. Left: part 2 (arngz.lua M.mark, toast.lua mark slot), arngz.bats and toast_test arms red over 50f6be51, help/arngz.md; then cc's XS (engine ends a stopped-waiting mark), cc's one driver, hv's live check. Note ~/Devel/scratch/utilz-ic/marks1126/marks-note.md.
 
 ## TODO
 

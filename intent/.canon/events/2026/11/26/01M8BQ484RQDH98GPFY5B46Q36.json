@@ -1,0 +1,17 @@
+{
+  "id": "01M8BQ484RQDH98GPFY5B46Q36",
+  "ts": "2026-11-26T10:41:25.145Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic design for hv decision 53 (start and end marks): ~/Devel/scratch/utilz-ic/marks1126/marks-note.md (167e7d47). CLI plays begin_record.caf / end_record.caf (macOS system sounds) by afplay in the background; ARNGZ_SOUNDS=off. Marks are toasts of their own (bottom right, own slot) by short hs calls; start stays until end; end from the EXIT trap on every way out: \"arngz: done\" for 0 and 1, \"arngz: stopped: <reason>\" otherwise, same falling sound. The start call is discover's first short call (T1). Sizes: ic S + S, cc XS. Code on vc's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M8BQ61GS8N7EPY4WCZ789DDC",
+  "ts": "2026-11-26T10:42:23.897Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/save1126 742c39d7 + de44ac81 (Save Desk): SOUND after F1. F1: discover drops way_back's failures (the back table is never read, and only successes are logged); add them to the report and the log, with words. W1: GAP_SHOWN says \"arngz showed that desktop\" for a desktop already shown. N1: windows.js has five fields under header 2. ~/Devel/scratch/utilz-ic/mc1126-read/read-save-742c39d7.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

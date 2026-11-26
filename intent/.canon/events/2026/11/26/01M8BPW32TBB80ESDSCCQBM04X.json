@@ -1,0 +1,17 @@
+{
+  "id": "01M8BPW32TBB80ESDSCCQBM04X",
+  "ts": "2026-11-26T10:36:57.818Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic ruled Save Desk gaps (I19d4fa6) for cc: --with-gaps (with --save only); exit 0 no gaps, 1 plain discover with gaps, 2 refused save (file and current untouched, --force or not), 1 save with --with-gaps; gap and refusal words; one P.save_verdict carried in the response; menuz unchanged. T1: a Running... line needs discover as scheduled phases (inside M, vc). ~/Devel/scratch/utilz-ic/mc1126-read/view-save-desk.md (8a3abc5e)",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}
