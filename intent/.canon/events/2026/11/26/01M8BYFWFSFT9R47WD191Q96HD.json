@@ -1,0 +1,15 @@
+{
+  "id": "01M8BYFWFSFT9R47WD191Q96HD",
+  "ts": "2026-11-26T12:50:06.457Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in cc's window, stamped 12:49:30Z in cc's transcript, which vc read by its date -u of 12:50Z; cc relayed it to vc. hv's words: \"Ok, approved. Bank, fold, and hold. Then we can pick it up at home.\" The rest is the wording of cc and vc. By cc's account it approves cc's plan for the fault hv's live apply showed on cc/save1126 at 9af5e8f3 (the engine could not write its response): the world's unseen window ids go in a form Hammerspoon's JSON writer takes, the test's writer refuses what the real one refuses, with arms red over 9af5e8f3, size S, and a design note first. cc folded again at dd3553b4 and codes nothing until vc's word after hv's compact. The fix round then runs as hv decisions 58 and 59 and this one say: cc's fix, ic's marks, vc's read, ONE bats run, hv's one live sitting."
+  }
+}
