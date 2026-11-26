@@ -548,35 +548,33 @@ end
 -- than 0 (cc's read r3). A window a person places is at layer 0, whether
 -- Accessibility can name it or not. windows.js reads the window server's
 -- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer> <pid>" line
--- per window, the pid being its owner's (version 2; version 1 printed
--- "<id> <layer>", and either is read). An id at a layer other than 0 is FREE:
+-- per window, the pid being its owner's. windows.js ships beside this file, so
+-- no producer prints the version 1 list (ic's N3). An id at a layer other than 0 is FREE:
 -- it holds no desktop. So an always-on-top or floating window, or an overlay,
 -- holds no desktop either: arngz can remove a desktop while such a window is
 -- on it.
 P.WINDOW_LIST_HEADER = "arngz-windows 2"
-local WINDOW_LIST_HEADERS = { [P.WINDOW_LIST_HEADER] = true, ["arngz-windows 1"] = true }
 
 -- The free ids in windows.js's TEXT, as a list, and its layer-0 windows by
--- owner pid ({ [pid] = {ids} }, empty for a version 1 list); or nil and why
+-- owner pid ({ [pid] = {ids} }); or nil and why
 -- the text is not a window list. A list with no free id is a list, not a
 -- failure.
 function P.parse_window_list(text)
   if type(text) ~= "string" then return nil, "windows.js printed nothing" end
   local lines = {}
   for line in text:gmatch("[^\n]+") do lines[#lines + 1] = line end
-  if not WINDOW_LIST_HEADERS[lines[1]] then
+  if lines[1] ~= P.WINDOW_LIST_HEADER then
     return nil, "windows.js did not print a window list: " .. tostring(lines[1] or "nothing"):sub(1, 200)
   end
   local free, owned = {}, {}
   for i = 2, #lines do
-    local id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+)$")
-    if not id then id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$") end
+    local id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$")
     if not id then
       return nil, "windows.js printed a line that is not '<id> <layer> <pid>': " .. lines[i]:sub(1, 200)
     end
     if tonumber(layer) ~= 0 then
       free[#free + 1] = tonumber(id)
-    elseif pid then
+    else
       local p = tonumber(pid)
       owned[p] = owned[p] or {}
       owned[p][#owned[p] + 1] = tonumber(id)
@@ -920,12 +918,19 @@ end
 -- What an unseen entry of BUNDLE says of where its window is, or nil when the
 -- window list places none: on a desktop apply showed (options.visited, a set
 -- of space ids), on one not yet shown (diff, --dry-run, or a visit step that
--- ran out of its time, options.visit_out_of_time), or on a full-screen space.
+-- ran out of its time, options.visit_out_of_time; or one whose display's show
+-- failed, options.visit_failed, {[screen] = why}, ic's F1), or on a full-screen
+-- space.
 function P.unseen_where(desk, world, screens, bundle, options)
   local fullscreen = false
   for _, d in ipairs(P.window_desktops(world, screens, bundle)) do
     if d.user and not d.shown then
-      local where = string.format("desktop %d of %s", d.place, P.desk_display_phrase(desk, d.di))
+      local where = string.format("desktop %d on %s", d.place, P.desk_display_phrase(desk, d.di))
+      local failed = ((options or {}).visit_failed or {})[d.screen]
+      if failed then
+        return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply could not show: %s",
+          where, tostring(failed))
+      end
       if ((options or {}).visited or {})[d.space] then
         return string.format("its window is on %s, which arngz showed, and Accessibility still could not name it", where)
       end

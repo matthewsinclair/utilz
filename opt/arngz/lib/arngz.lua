@@ -1566,7 +1566,7 @@ end
 -- hs.window.get), and keeps each named window in M.visit_index, which
 -- observe takes into its index. It stops once VISIT_SECONDS have passed,
 -- and a show that fails stops it on that display. Then it shows each display
--- the desktop START gave it ({[screen] = space}). SAY(display, place) is
+-- its start desktop, which START gives ({[screen] = space}). SAY(item) is
 -- called before each show, for the run log and the toast. Returns { shown,
 -- named, visited = {[space] = true}, out_of_time, failed = {[screen] = why},
 -- back = {[screen] = why} }.
@@ -2085,24 +2085,29 @@ end
 -- desktops were shown, for the words of an entry still unseen.
 function PHASE.visit(job)
   job.visit_done = true
+  -- This run's windows alone (ic's N1).
+  M.visit_index = {}
   local screens = P.match_displays(job.desk, job.world, job.options)
   local list = screens and P.visit_list(job.desk, job.world, screens, job.ops) or {}
   if #list == 0 then return "unseen", POLL_SECONDS end
   local start = {}
   for _, s in ipairs(job.world.screens or {}) do start[s.uuid] = s.active_space end
   local r = M.visit(list, start, function(item)
-    local words = string.format("finding windows: showing desktop %d of %s", item.place,
-      P.desk_display_phrase(job.desk, item.di))
-    note(job.lg, "visit", words .. " (" .. table.concat(item.bundles, ", ") .. ")")
-    point(job.lg, "waiting", { ["for"] = words, seconds = M.VISIT_SECONDS })
+    local display = P.desk_display_phrase(job.desk, item.di)
+    note(job.lg, "visit", string.format("finding windows: showing desktop %d on %s (%s)", item.place, display,
+      table.concat(item.bundles, ", ")))
+    -- The toast reads these fields (ic's T1): "finding windows", the
+    -- desktop's place and its display, and no seconds.
+    point(job.lg, "waiting", { ["for"] = "finding windows", place = item.place, display = display })
   end)
   note(job.lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
     r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
   for screen, why in pairs(r.failed) do note(job.lg, "visit", "a show failed on " .. screen .. ": " .. tostring(why)) end
-  for screen, why in pairs(r.back) do note(job.lg, "visit", "showing " .. screen .. "'s first desktop again failed: " .. tostring(why)) end
+  for screen, why in pairs(r.back) do note(job.lg, "visit", "showing " .. screen .. " its start desktop again failed: " .. tostring(why)) end
   job.shown = r.shown
   job.options.visited = r.visited
   job.options.visit_out_of_time = r.out_of_time
+  job.options.visit_failed = r.failed
   return "unseen", POLL_SECONDS
 end
 

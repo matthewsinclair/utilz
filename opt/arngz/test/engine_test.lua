@@ -448,8 +448,9 @@ end
 -- layers other than 0, and 777 for a window opened since the plan.
 do
   local BACKDROP, MENU_BAR = -2147483624, 24
+  local SYSTEM_PID = 1 -- the window server's pid in this fake
   local listed = {
-    text = string.format("%s\n501 %d\n502 %d\n", P.WINDOW_LIST_HEADER, BACKDROP, MENU_BAR),
+    text = string.format("%s\n501 %d %d\n502 %d %d\n", P.WINDOW_LIST_HEADER, BACKDROP, SYSTEM_PID, MENU_BAR, SYSTEM_PID),
     ok = true, kind = "exit", rc = 0,
   }
   local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, windows = { [3] = { 501, 502 } } } },

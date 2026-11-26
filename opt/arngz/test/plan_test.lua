@@ -2235,10 +2235,12 @@ print("the window list")
 local BACKDROP, MENU_BAR, STRIP = -2147483624, 24, -2147483602
 local LAYER_0 = 0
 
--- windows.js's text: its header, then "<id> <layer>" for each pair given.
+-- windows.js's text: its header, then "<id> <layer> <pid>" for each pair given,
+-- each owned by OWNER.
+local OWNER = 88
 local function list_text(pairs_)
   local lines = { P.WINDOW_LIST_HEADER }
-  for _, p in ipairs(pairs_) do lines[#lines + 1] = p[1] .. " " .. p[2] end
+  for _, p in ipairs(pairs_) do lines[#lines + 1] = p[1] .. " " .. p[2] .. " " .. OWNER end
   return table.concat(lines, "\n") .. "\n"
 end
 
@@ -2351,13 +2353,13 @@ do
     free and #free == 1 and free[1] == 501 and owned and owned[88] and table.concat(owned[88], ",") == "102,103"
       and owned[77] == nil, tostring(owned))
   local v1 = P.parse_window_list("arngz-windows 1\n501 24\n")
-  check("window list v1 is still read", v1 and v1[1] == 501)
+  check("window list: a version 1 list is not read (windows.js ships beside it)", v1 == nil)
 
   local w = safari_on_12()
   local ops, err = P.plan(base_desk(), w, {})
   local op = unseen_op(ops)
   check("unseen: a window on a desktop not shown says it is not yet seen since Hammerspoon started, and where",
-    op.reason == SAFARI .. " is running and not yet seen since Hammerspoon started: its window is on desktop 2 of"
+    op.reason == SAFARI .. " is running and not yet seen since Hammerspoon started: its window is on desktop 2 on"
       .. " display left, which apply shows", err or tostring(op.reason))
   local screens = P.match_displays(base_desk(), w, {})
   local list = P.visit_list(base_desk(), w, screens, ops)
@@ -2367,7 +2369,7 @@ do
 
   local visited = P.plan(base_desk(), safari_on_12(), { visited = { [12] = true } })
   check("unseen: after apply showed the desktop, the entry says so",
-    unseen_op(visited).reason == SAFARI .. " is running and its window is on desktop 2 of display left, which arngz"
+    unseen_op(visited).reason == SAFARI .. " is running and its window is on desktop 2 on display left, which arngz"
       .. " showed, and Accessibility still could not name it", tostring(unseen_op(visited).reason))
 
   local late = P.plan(base_desk(), safari_on_12(), { visit_out_of_time = 20 })
@@ -2375,6 +2377,11 @@ do
     string.find(tostring(unseen_op(late).reason), "not yet seen since Hammerspoon started", 1, true) ~= nil
       and string.find(tostring(unseen_op(late).reason), "this run's 20 s to show desktops ran out first", 1, true) ~= nil,
     tostring(unseen_op(late).reason))
+
+  local failed = P.plan(base_desk(), safari_on_12(), { visit_failed = { ["SCREEN-A"] = "Mission Control refused AXPress" } })
+  check("unseen: a desktop whose show failed says apply could not show it, and why (ic's F1)",
+    string.find(tostring(unseen_op(failed).reason), "which apply could not show: Mission Control refused AXPress", 1, true)
+      ~= nil, tostring(unseen_op(failed).reason))
 
   local shown = safari_on_12()
   shown.screens[1].spaces[1].active, shown.screens[1].spaces[2].active = false, true
