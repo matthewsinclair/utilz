@@ -842,11 +842,13 @@ end
 
 -- ---------------- windows on desktops not shown (cc's visit-note, 26 Nov 2026)
 --
--- After Hammerspoon starts, arngz names a window on a desktop not shown only
--- through the window filter, which knows a window once its desktop has been
--- shown. So a running app whose one window sits on such a desktop reads as
--- unseen until then. apply shows those desktops first (the visit step); diff
--- and --dry-run never switch desktops and say so in the entry's words.
+-- arngz names a window on a desktop not shown only through the window filter,
+-- which can lose such a window, as it did on 26 Nov 2026 after desktops were
+-- added or removed (issue I426f2a7), and names it again once that desktop is
+-- shown. So a running app whose one window sits on such a desktop can read as
+-- unseen. apply shows those desktops (the visit step), before and after its
+-- desktop edits; diff and --dry-run never switch desktops and say where the
+-- window is in the entry's words.
 
 -- Where BUNDLE's layer-0 windows (world.layer0_windows) are, on the matched
 -- SCREENS: { {di, screen, space, place, user, shown} }, place being the
@@ -917,7 +919,7 @@ end
 
 -- What an unseen entry of BUNDLE says of where its window is, or nil when the
 -- window list places none: on a desktop apply showed (options.visited, a set
--- of space ids), on one not yet shown (diff, --dry-run, or a visit step that
+-- of space ids), on one apply has not shown (diff, --dry-run, or a visit step that
 -- ran out of its time, options.visit_out_of_time; or one whose display's show
 -- failed, options.visit_failed, {[screen] = why}, ic's F1), or on a full-screen
 -- space.
@@ -933,10 +935,10 @@ function P.unseen_where(desk, world, screens, bundle, options)
       end
       local failed = ((options or {}).visit_failed or {})[d.screen]
       if failed then
-        return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply could not show: %s",
+        return string.format("its window is not named yet: it is on %s, which apply could not show: %s",
           where, tostring(failed))
       end
-      return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply shows%s", where,
+      return string.format("its window is not named yet: it is on %s, which apply shows%s", where,
         (options or {}).visit_out_of_time and string.format("; this run's %s s to show desktops ran out first",
           tostring(options.visit_out_of_time)) or "")
     elseif not d.user then
@@ -1273,8 +1275,8 @@ function P.plan(desk, world, options)
       -- decided: P.apply_report and P.plan_exit read the mark (issue 0132).
       if took == 0 then
         -- Where the window list puts its window, when it puts one: a desktop
-        -- not shown since Hammerspoon started, one apply showed, or a
-        -- full-screen space (cc's visit-note).
+        -- not shown, one apply showed, or a full-screen space (cc's
+        -- visit-note).
         local where = P.unseen_where(desk, world, screens, bundle, options)
         windows[#windows + 1] = {
           op = "unseen", bundle = bundle, path = e.path, uncounted = unread_note == "",

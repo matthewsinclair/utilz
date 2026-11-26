@@ -509,9 +509,9 @@ function M.observe(bundles)
       end
       if #apps > 0 then
         world.apps_running[#world.apps_running + 1] = b
-        -- Its layer-0 windows from the window list, for the visit step: a
-        -- window on a desktop not shown is named only once that desktop has
-        -- been shown since Hammerspoon started (cc's visit-note).
+        -- Its layer-0 windows from the window list, for the visit step: the
+        -- window filter can lose a window on a desktop not shown, and names it
+        -- again once that desktop is shown (issue I426f2a7).
         local ids = {}
         for _, app in ipairs(apps) do
           local pid = app:pid()
@@ -1619,9 +1619,9 @@ function M.way_back(start, results, words, lg)
   if tried == 0 and not ran_out then note(lg, "back", "no display needed showing again: each shows the desktop it began on, or that desktop is gone") end
 end
 
--- THE VISIT STEP (cc's visit-note, 26 Nov 2026). After Hammerspoon starts, a
--- window on a desktop not shown is named only once that desktop has been
--- shown. M.visit shows each desktop in LIST (P.visit_list) once, reads
+-- THE VISIT STEP (cc's visit-note, 26 Nov 2026; issue I426f2a7). The window
+-- filter can lose a window on a desktop not shown, and names it again once
+-- that desktop is shown. M.visit shows each desktop in LIST (P.visit_list) once, reads
 -- app:allWindows for its bundles while it shows (one call per app, never
 -- hs.window.get), and keeps each named window in M.visit_index, which
 -- observe takes into its index. It stops once VISIT_SECONDS have passed,

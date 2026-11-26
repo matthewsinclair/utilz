@@ -2358,8 +2358,8 @@ do
   local w = safari_on_12()
   local ops, err = P.plan(base_desk(), w, {})
   local op = unseen_op(ops)
-  check("unseen: a window on a desktop not shown says it is not yet seen since Hammerspoon started, and where",
-    op.reason == SAFARI .. " is running and not yet seen since Hammerspoon started: its window is on desktop 2 on"
+  check("unseen: a window on a desktop not shown says it is not named yet, and where",
+    op.reason == SAFARI .. " is running and its window is not named yet: it is on desktop 2 on"
       .. " display left, which apply shows", err or tostring(op.reason))
   local screens = P.match_displays(base_desk(), w, {})
   local list = P.visit_list(base_desk(), w, screens, ops)
@@ -2373,8 +2373,8 @@ do
       .. " showed, and Accessibility still could not name it", tostring(unseen_op(visited).reason))
 
   local late = P.plan(base_desk(), safari_on_12(), { visit_out_of_time = 20 })
-  check("unseen: an app the visit step did not reach stays not yet seen, and says the time ran out",
-    string.find(tostring(unseen_op(late).reason), "not yet seen since Hammerspoon started", 1, true) ~= nil
+  check("unseen: an app the visit step did not reach stays not named yet, and says the time ran out",
+    string.find(tostring(unseen_op(late).reason), "its window is not named yet", 1, true) ~= nil
       and string.find(tostring(unseen_op(late).reason), "this run's 20 s to show desktops ran out first", 1, true) ~= nil,
     tostring(unseen_op(late).reason))
 
