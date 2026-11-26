@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "I426f2a7a5edde0bb",
+  "origin": "01M8BMY2JWYZNHH81MD1V8S24A",
+  "realised": true,
+  "slug": "arngz-leaves-a-running-app-unseen-when-its-windo",
+  "title": "arngz leaves a running app unseen when its window is on a desktop not shown since Hammerspoon started",
+  "status": "open",
+  "severity": "high",
+  "created": "2026-11-26",
+  "reporter": "Matthew Sinclair",
+  "body": "After Hammerspoon starts, arngz names a window on a desktop that is not shown only through `hs.window.filter.default`, which knows such a window once its desktop has been shown. `hs.window.allWindows` and `app:allWindows` cover the shown desktops alone (Hammerspoon's docs). So a running app whose window sits on a desktop not shown read as unseen, and apply left it unplaced. On 26 Nov 2026 the same desk read 3, 5, 6 and 8 apps unseen in runs minutes apart. A removal through Mission Control made it worse: 3 unseen before the removal, 8 at the re-plan after it (run 20261126T085320Z-31033). hv showing one desktop took 5 unseen to 1 (diff 20261126T092104Z-41077).\n\nThe fix (cc's visit-note, vc SOUND; cc/visit1126, green at 8b185fb6): before it changes anything, and again after it adds or removes desktops, apply shows each desktop that holds a layer-0 window of a running app the desk names and the plan leaves unseen. It shows each such desktop once, through Mission Control, and names that app's windows while it is shown. The step stops after 20 s and never shows a full-screen space. diff and --dry-run never switch desktops; they say \"not yet seen since Hammerspoon started\". With it, hv decision 50: at the end of every apply, each display shows again the desktop it showed when the run began.\n\nhv's live runs: 20261126T094614Z-10745 and 20261126T094830Z-16479 (one unseen app named by the visit, 0 unseen at the end).\n"
+}

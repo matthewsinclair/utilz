@@ -1,0 +1,15 @@
+{
+  "id": "01M8BMY2JWYZNHH81MD1V8S24A",
+  "ts": "2026-11-26T10:03:05.694Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I426f2a7a5edde0bb"
+  },
+  "payload": {
+    "severity": "high",
+    "title": "arngz leaves a running app unseen when its window is on a desktop not shown since Hammerspoon started"
+  }
+}
