@@ -13,6 +13,7 @@
 		184F74B5C1A84C179E4FFD0A /* MenuSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746C4473977A35828A0457CF /* MenuSource.swift */; };
 		29A8876E8DAA2E3A3553409B /* Masthead.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7AACE446A510BA56FFFBC42 /* Masthead.swift */; };
 		3EC6549C623D9165FE8920F6 /* Realiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A012D3FACA5B5E47D174B0E /* Realiser.swift */; };
+		488B32A4451A8FB32E0CB9A5 /* ArcaLaunch in Frameworks */ = {isa = PBXBuildFile; productRef = 4386FD5F6D983AF4BF29227A /* ArcaLaunch */; };
 		4DA752B867A63455306A814A /* RealiserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1E15B0CAAED35AF88ADCB2 /* RealiserTests.swift */; };
 		5E613632DB47D5AC9BB87171 /* MenuzKit in Frameworks */ = {isa = PBXBuildFile; productRef = 179FB1D9697FE3912ACB93C8 /* MenuzKit */; };
 		62C965197DA12DC3512B59A3 /* about.css in Resources */ = {isa = PBXBuildFile; fileRef = AC16420CA18E009A87B27503 /* about.css */; };
@@ -102,6 +103,7 @@
 				FB37AB1536AE3C8EEDC49F8F /* MenuzKit in Frameworks */,
 				94B23A16E55B53B76F9A8F40 /* ArcaMasthead in Frameworks */,
 				89B31A304753B045E259888F /* ArcaLogConsole in Frameworks */,
+				488B32A4451A8FB32E0CB9A5 /* ArcaLaunch in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +217,7 @@
 				E176BB28E1D45EFD0D08551C /* MenuzKit */,
 				3CBD4F68970793021B1CB251 /* ArcaMasthead */,
 				768D3FBAABC7FD84D8859C41 /* ArcaLogConsole */,
+				4386FD5F6D983AF4BF29227A /* ArcaLaunch */,
 			);
 			productName = Menuz;
 			productReference = 6847D972D776B11DB1D40E76 /* Menuz.app */;
@@ -604,7 +607,7 @@
 			repositoryURL = "https://github.com/builtwitharca/arca_swift";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 0.2.0;
+				minimumVersion = 0.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -618,6 +621,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */;
 			productName = ArcaMasthead;
+		};
+		4386FD5F6D983AF4BF29227A /* ArcaLaunch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B0461F0572CC3BFC026FE41A /* XCRemoteSwiftPackageReference "arca_swift" */;
+			productName = ArcaLaunch;
 		};
 		768D3FBAABC7FD84D8859C41 /* ArcaLogConsole */ = {
 			isa = XCSwiftPackageProductDependency;

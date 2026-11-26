@@ -1,13 +1,13 @@
 {
-  "originHash" : "4a2233a33c3d5409a0df525053a7e7a2dad5069ad5c0f9af503439e19181a82c",
+  "originHash" : "e5202b6a3b93d4b82b3d89c9e748a589077fd500ea5ce88523a609e7fdf0236e",
   "pins" : [
     {
       "identity" : "arca_swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/builtwitharca/arca_swift",
       "state" : {
-        "revision" : "f7742b163c09b11f121930e4cddee0e0b06659a4",
-        "version" : "0.2.0"
+        "revision" : "940f91b5440b2ca5b280c9283a0164a884157426",
+        "version" : "0.3.0"
       }
     },
     {
