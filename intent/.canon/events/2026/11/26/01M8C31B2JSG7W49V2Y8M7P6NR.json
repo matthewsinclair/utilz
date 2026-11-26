@@ -1,0 +1,16 @@
+{
+  "id": "01M8C31B2JSG7W49V2Y8M7P6NR",
+  "ts": "2026-11-26T14:09:32.754Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 41,
+    "text": "2.15.0 CHANGELOG lines: cc's Save fix (issue I19d4fa68, hv decision 52) with W4's discover line, and ic's run marks (hv decisions 53 and 58: starting, running, the end; M1's close, hv decision 59). cc's apply-response fix (hv decision 60) gets no line, since that fault never shipped (vc, 14:05Z). Drafted in scratch, not committed: ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md, from cc/save1126 at 9af5e8f3 and ic's notes that hv approved. Holds until the fix round's bats run and hv's live sitting pass and vc lands cc/save1126. Then dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash."
+  }
+}

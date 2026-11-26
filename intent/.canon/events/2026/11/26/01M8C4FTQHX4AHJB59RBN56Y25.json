@@ -1,0 +1,15 @@
+{
+  "id": "01M8C4FTQHX4AHJB59RBN56Y25",
+  "ts": "2026-11-26T14:34:56.116Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I4cbec172f937d058"
+  },
+  "payload": {
+    "severity": "medium",
+    "title": "A utility's --version tool line names utilz, not the utility"
+  }
+}
