@@ -124,17 +124,17 @@ utilz 2.7.0 (brew, 0123456789ab)
 $ utilz mdagg --version  # either invocation form, byte-identical
 utilz:2.7.0/mdagg:1.0.0
 Markdown aggregator
-utilz 2.7.0 (brew, 0123456789ab)
+mdagg 2.7.0 (brew, 0123456789ab)
 
 $ mdagg --version
 utilz:2.7.0/mdagg:1.0.0
 Markdown aggregator
-utilz 2.7.0 (brew, 0123456789ab)
+mdagg 2.7.0 (brew, 0123456789ab)
 ```
 
 **Both invocation forms give the same bytes**: `bin/utilz` answers `--version` from one place for both.
 
-Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>)`. It names **which tree replied**, dev, opt or brew, and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads the line up to its closing parenthesis and ignores anything after it. A utility's answer is the pair and its description, with that line last.
+Utilz's own answer is **one line**, the version line every tool released through Homebrew prints (the dev, opt, brew contract): `utilz <version> (<tree>, <commit>)`. It names **which tree replied**, dev, opt or brew, and the commit it came from: in opt and brew the one its manifest records, in dev HEAD, followed by `+dirty` while a file of the runtime set is uncommitted. `(dev, unknown)` means git cannot read the checkout, and `(<tree>, old manifest)` an install from before the contract. The line names no path: where the running copy lives is the answer `command -v utilz` gives. A reader reads the line up to its closing parenthesis and ignores anything after it. A utility's answer is the pair and its description, then that line under the utility's own name, eg `mdagg 2.7.0 (brew, 0123456789ab)`. The version, the tree and the commit are Utilz's, because a utility comes only with its tree.
 
 `-v` is deliberately unbound: it reads as a verbose flag, and no utility binds it.
 

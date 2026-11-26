@@ -478,6 +478,19 @@ assert_output_matches() {
   fi
 }
 
+# THE PLACES OF A UTILITY'S --version LINES (issue I4cbec17): hv's pair
+# (ST0015's D2) first, then the description, and the tool's version line last,
+# under the utility's own name (T4). A row that reads one of these lines through
+# these two functions follows the line when it moves, by one change here.
+# Usage: version_pair_line "$output"; version_tool_line "$output"
+version_pair_line() {
+  printf '%s\n' "$1" | sed -n '1p'
+}
+
+version_tool_line() {
+  printf '%s\n' "$1" | sed -n '$p'
+}
+
 # Assert file exists
 # Usage: assert_file_exists "path/to/file"
 assert_file_exists() {

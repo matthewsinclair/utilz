@@ -168,10 +168,24 @@ teardown() {
   [[ "$output" == "utilz $(cat "$UTILZ_HOME/VERSION") ("* ]] || fail "the version is not ./VERSION's: '$output'"
 }
 
-@test "AT11 / AC09: a utility keeps its pair and description, and ends with the tool's version line (issue 0105)" {
-  local solo out
+@test "AT11 / AC09: a utility keeps its pair and description, and gives the tool's version line under its own name (issues 0105, I4cbec17)" {
+  # T4 gives each binary of a tool the tool's one line under the binary's own
+  # name. So each utility's line is utilz's own, with the utility's name in its
+  # first field: the same version, tree and commit. Every utility is read,
+  # because the line is built once for all of them.
+  local fw solo want u out pair tool n=0 bad=0
+  fw=$(cat "$UTILZ_HOME/VERSION")
   solo=$("$UTILZ_BIN_DIR/utilz" --version 2>&1)
-  out=$("$UTILZ_BIN_DIR/utilz" syncz --version 2>&1)
-  [[ "$(printf '%s\n' "$out" | head -1)" == "utilz:$(cat "$UTILZ_HOME/VERSION")/syncz:"* ]] || fail "the pair is gone: $out"
-  [[ "$(printf '%s\n' "$out" | tail -1)" == "$solo" ]] || fail "the last line is not utilz's own: '$(printf '%s\n' "$out" | tail -1)' against '$solo'"
+  [[ "$solo" == "utilz $fw ("* ]] || fail "utilz's own line is not its version line: '$solo'"
+  for u in $(_utilities); do
+    n=$((n + 1))
+    out=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1)
+    pair=$(version_pair_line "$out")
+    tool=$(version_tool_line "$out")
+    want="$u ${solo#utilz }"
+    [[ "$pair" == "utilz:$fw/$u:"* ]] || { echo "  $u: the pair is gone: '$pair'"; bad=$((bad + 1)); }
+    [[ "$tool" == "$want" ]] || { echo "  $u: '$tool', not '$want'"; bad=$((bad + 1)); }
+  done
+  assert_swept_all "$n"
+  [ "$bad" -eq 0 ] || fail "$bad lines are not the pair, or not the tool's line under the utility's own name"
 }

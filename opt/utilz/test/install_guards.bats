@@ -456,6 +456,24 @@ teardown_file() {
   [ "$bad" -eq 0 ] || fail "$bad install-side version failures"
 }
 
+@test "every installed utility gives the install's own version line under its own name (issue I4cbec17)" {
+  # T4 gives each binary of a tool the tool's one line under the binary's own
+  # name, so each installed utility's line is the install's, read through the
+  # install's own utilz, with the utility's name in its first field.
+  local solo want u n=0 bad=0 tool
+  solo=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" --version 2>&1)
+  [[ "$solo" == "utilz "*" (opt, "* ]] || fail "the install's own line is not an opt line: '$solo'"
+  for u in $(_utilities); do
+    [ -e "$GUARD_INSTALL/bin/$u" ] || continue
+    n=$((n + 1))
+    tool=$(version_tool_line "$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1)")
+    want="$u ${solo#utilz }"
+    [[ "$tool" == "$want" ]] || { echo "  $u: '$tool', not '$want'"; bad=$((bad + 1)); }
+  done
+  assert_swept_all "$n"
+  [ "$bad" -eq 0 ] || fail "$bad installed utilities do not give the install's line under their own name"
+}
+
 @test "AT09 / AC08 (ST0016): both --help forms hold from a PUBLISHED install, rendering the curated file" {
   # THE EIGHT ROWS IN help_dispatch.bats CANNOT SEE THIS, for the same reason
   # AT12 above exists: test_helper.bash exports UTILZ_HOME from its own

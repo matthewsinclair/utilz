@@ -336,7 +336,10 @@ show_version() {
     # three lines (`utilz:<version>`, the description, the tree).
     #
     # A utility keeps hv's pair and its description, and the tool's line comes
-    # last (utilz-vc, 24 Oct), so a utility's answer also names the tree.
+    # last (utilz-vc, 24 Oct), so a utility's answer also names the tree. That
+    # line names the utility, as T4 gives each binary of a tool the tool's line
+    # under its own name (issue I4cbec17). Its place is the one statement that
+    # prints it below.
     #
     # NO `v` PREFIX ANYWHERE (hv, 2026-09-08, resolving D3 toward symmetry):
     # it is noise, and it was the only thing separating the framework's shape
@@ -349,7 +352,7 @@ show_version() {
     if [[ -n "$description" && "$description" != "null" ]]; then
       echo "$description"
     fi
-    utilz_version_line
+    utilz_version_line "$util"
   else
     # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
     # unconditionally, and printed it for a tree whose yaml was present and
@@ -1268,11 +1271,16 @@ print_path_remedy() {
   esac
 }
 
-# Echo the one version line: `utilz <version> (<tree>, <sha12>[+dirty])`. It
-# names no path: where the running copy lives is `command -v utilz`'s answer
-# (contract A3, hv's ruling, issue 0109).
+# Echo the one version line: `<name> <version> (<tree>, <sha12>[+dirty])`, where
+# <name> is utilz unless a utility's name is given. The version, the tree and
+# the commit are always Utilz's: a utility is built, published and released
+# only with its tree, and devbin's contract (T4) gives each binary of a tool the
+# tool's one line under that binary's own name (issue I4cbec17). It names no
+# path: where the running copy lives is `command -v`'s answer (contract A3,
+# hv's ruling, issue 0109).
 utilz_version_line() {
-  printf 'utilz %s (%s)\n' "$(get_utilz_version)" "$(utilz_tree_provenance "$UTILZ_HOME")"
+  local name="${1:-utilz}"
+  printf '%s %s (%s)\n' "$name" "$(get_utilz_version)" "$(utilz_tree_provenance "$UTILZ_HOME")"
 }
 
 # Check if a required command is installed

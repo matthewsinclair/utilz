@@ -170,10 +170,20 @@ run_without_yq() {
   assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\)$"
 }
 
-@test "show_version() extracts version from utility help file" {
+@test "show_version() gives a utility its pair, then the tool's line under the utility's own name (issue I4cbec17)" {
+  local fw declared pair tool
+  fw=$(cat "$UTILZ_HOME/VERSION")
+  declared=$(cat "$UTILZ_HOME/opt/mdagg/VERSION")
+  [ -n "$declared" ] || fail "mdagg's VERSION is empty"
   run run_common_function show_version mdagg
   assert_success
-  assert_output_contains "mdagg"
+  pair=$(version_pair_line "$output")
+  tool=$(version_tool_line "$output")
+  [[ "$pair" == "utilz:$fw/mdagg:$declared" ]] || fail "not mdagg's pair: '$pair'"
+  # The tool's line carries Utilz's version, tree and commit, as utilz's own
+  # line does (T4), under the utility's name.
+  [[ "$tool" == "mdagg $fw ("* ]] || fail "not the tool's line under mdagg's name: '$tool'"
+  [[ "$tool" =~ \((dev|opt|brew),\ [0-9a-f]{12}(\+dirty)?\)$ ]] || fail "the tool's line names no tree and commit: '$tool'"
 }
 
 @test "show_version() handles missing utility gracefully" {

@@ -204,6 +204,22 @@ teardown_file() {
   assert_output "$line"
 }
 
+# Each utility prints the line the manifest records under its own name, as T4
+# gives each binary of a tool the tool's one line (issue I4cbec17).
+@test "each installed utility prints the manifest's line under its own name (issue I4cbec17)" {
+  local line want u n=0 bad=0 tool
+  line=$(sed -n 's/^# line: //p' "$E2E_PREFIX/manifest.sha256")
+  [[ "$line" == "utilz "* ]] || fail "the manifest records no line of utilz's: '$line'"
+  for u in $(_utilities); do
+    n=$((n + 1))
+    tool=$(version_tool_line "$(env -u UTILZ_HOME "$E2E_PREFIX/bin/$u" --version 2>&1)")
+    want="$u ${line#utilz }"
+    [[ "$tool" == "$want" ]] || { echo "  $u: '$tool', not '$want'"; bad=$((bad + 1)); }
+  done
+  assert_swept_all "$n"
+  [ "$bad" -eq 0 ] || fail "$bad installed utilities do not print the manifest's line under their own name"
+}
+
 @test "nothing in the install names an absolute home path" {
   # THE .md EXEMPTION IS GONE, AND ITS REMOVAL IS THE POINT. This was
   # restricted to files that RUN because eight opt/*/README.md carried a
