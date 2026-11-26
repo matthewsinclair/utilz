@@ -1,0 +1,16 @@
+{
+  "id": "01M8B8CVQ6246FXQV1XV7S5BTC",
+  "ts": "2026-11-26T06:23:58.694Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 19,
+    "text": "arca_swift 0003 done: 0.3.0 tagged (d6b053ec on 940f91b5), AC-e69447a3.1 to .7 satisfied (.6/.7 at bd63c765, on arca main); wt-arca0003r and branches ic/arca0003, ic/arca0003r removed. Utilz 0114: R2 green (01M8B8636QX9VXCD0T64BGSB9Y; exit 1 is clean-up only). READY to vc 26 Nov: ic/menuz0114 at 514259e0 over cf80cc76, change 570b3fb3, 47 paths; AC-4b560be1.1/.2/.3/.6 satisfied. vc lands it with dc's (c) 266cb1ef. Open: AC .4 (CI dispatch after the push) and .5 (hv's hands: masthead row, open -n). Then remove wt-menuz0114 and wt-arca0003-acs by the fold checks."
+  }
+}

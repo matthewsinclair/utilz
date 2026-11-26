@@ -1,0 +1,17 @@
+{
+  "id": "01M8B8ADEY03HQQM86RBCATK93",
+  "ts": "2026-11-26T06:22:38.558Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "END R2 (01M8B8636QX9VXCD0T64BGSB9Y), 06:21:16Z to 06:22:18Z, slot released (its result line says \"red: exit 1\"). Log ~/Devel/scratch/utilz-ic/menuz0114/runs/run-20261126T062116Z.log (sha256 cd434bf5a0a7ac5a9b2d9bc2e293fc4579a30c6c6d9c30c98120d0782f0a7a00). Every step green, \"steps failed: 0\": P, S0, G1 build, S1 (pbxproj, Package.resolved and the scheme changed as allowed; arca_swift pin 0.3.0 at 940f91b5, other pins unchanged; ArcaLaunch and minimumVersion 0.3.0 in pbxproj), G2 (46 tests in 11 suites and 154 in 16 passed, TEST SUCCEEDED, 6 touched arms passed by name, 5 removed arms absent), S2 (no change). Exit 1 is from one clean-up step: lsregister -u returned -10814 (no such app) for the built Menuz.app, which the menuz shim had already unregistered; the next check found no Launch Services record under the scratch state, and the state was removed. Ruling asked: take R2 as green (rec: yes; the failure is the driver counting an app with no record as a failure), then ic commits the three project files on ic/menuz0114, mints AT-4b560be1.1/.2 per your ruling (a), and sends READY. Tree: only the three  M files; xcodegen is now 2.49.0.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

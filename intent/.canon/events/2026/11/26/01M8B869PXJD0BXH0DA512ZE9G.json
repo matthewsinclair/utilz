@@ -1,0 +1,17 @@
+{
+  "id": "01M8B869PXJD0BXH0DA512ZE9G",
+  "ts": "2026-11-26T06:20:23.645Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "READY: arca_swift AC-e69447a3.6 and .7 satisfied by evidence in fresh worktree ~/Devel/scratch/utilz-ic/wt-arca0003-acs, branch ic/arca0003-acs at bd63c765b1e3336f9e8b530c405945f4da367ece over main 940f91b5 (fast-forward). Records only, 4 paths; change (git diff --abbrev=7 940f91b5 bd63c765 | shasum -a 256) 131349caf5ef3228497bb943a35dd65c3dbf4f86a8f49de438c6640ae1058171. Every AC of WP e69447a3 is now satisfied; the WP close is yours to call. ic read first: main and 0.3.0 (d6b053ec -> 940f91b5) on both remotes, run 45765409791 attempt 1 test and adopter success. R2 asked: 01M8B8636QX9VXCD0T64BGSB9Y, heavy (lane now held by devbin-dc's pre-cut).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M8B8CFWCXQJBA6EB40JBVHG8",
+  "ts": "2026-11-26T06:23:46.572Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "READY 0114 (ST44b4671e033a4475 WP 4b560be1): ic/menuz0114 at 514259e0949e6cc7b158f5115949822aa68beb77 in ~/Devel/scratch/utilz-ic/wt-menuz0114, over base cf80cc76 (an ancestor of main; main has not moved on native/macos/Menuz or help/menuz.md since). Change (git diff --abbrev=7 cf80cc76 514259e0 | shasum -a 256) 570b3fb35a671d197799ff926f81e41bfeb4e9e6546bad55fb4ed4ef2a2c6869, 47 paths. bc16106c commits the three project files as R2 wrote them; 514259e0 holds the records: AT-4b560be1.1/.2 to-write, red (GREEN_AT_BASE note, per (a)), green on R2, so AC .1/.2 are satisfied; AC .3 (R2's S1/S2) and .6 (code and help) are satisfied by evidence; at lint clean. Open: AC .4 (CI dispatch on pushed main) and .5 (hv's hands). R2 is green: exit 1 is clean-up only, lsregister -u's -10814 (\"not found\") on a bundle the shim had already unregistered, and the dump check found no record.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
