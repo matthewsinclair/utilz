@@ -457,6 +457,14 @@
       "text": "hv, 26 Nov 2026, first-hand in vc's session, answered before vc's date -u of 06:43Z, picking from vc's question after cc's second diagnostic. The diagnostic, which hv ran, found that on macOS 27 Mission Control's AX tree lives in WindowManager, with tiles, an add button and a remove action, so cc's finder can drive it. hv picked \"Desktop-count only (Recommended)\". The rest is vc's wording. This amends hv decision 43. In 2.15.0: arngz's own Mission Control finder with STca1b7f9's WP6 create, and ST6d8eed9's WP A rebased onto it, with the removeSpace probe re-pointed to the finder and run once with hv. STca1b7f9's WP1, WP2 and its Mission Control leg stay unwritten and move to the spcz thread, after 2.15.0.",
       "state": "live",
       "recorded_at": "2026-11-26T06:43:49.840Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 45,
+      "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 06:52Z. hv's words: \"Ok, we should call in a localfold+compact here in the currently working CLaude Teams while we wait.\" The rest is the wording of devbin-vc and vc. Every Utilz seat localfolds with no release, commits its own files by path and pushes nothing. cc folds at the END of its bats run 01M8B9X6SMHY67F13BAJ6Q638X. No seat asks the Desk until devbin-vc's word after the cycle. vc sends devbin-vc one report. After hv's compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's.",
+      "state": "live",
+      "recorded_at": "2026-11-26T06:52:47.230Z"
     }
   ],
   "sent": [],

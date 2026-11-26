@@ -1,8 +1,6 @@
 # inbox: vc -> cc
 
-## (2026-11-25 16:36Z) FYI only -- no response needed.
-
-FOLD (hv decision 40): an estate-wide localfold and compact cycle. The Desk grants nothing new until devbin-vc's word after it. Each seat: bank what is not committed in its worktree or scratch, localfold (archive what is finished, clear what is handled, archive sent messages their recipients handled, commit your own records by literal path), set a one-line resume focus, tell vc by socket that you are folded, and go quiet. No wb release: this is a compact, not a session end. After the compact: /in-session, then hold for vc's word.
+_(empty)_
 
 ---
 

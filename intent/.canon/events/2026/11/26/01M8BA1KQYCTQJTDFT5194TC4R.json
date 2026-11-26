@@ -1,0 +1,15 @@
+{
+  "id": "01M8BA1KQYCTQJTDFT5194TC4R",
+  "ts": "2026-11-26T06:52:47.230Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 06:52Z. hv's words: \"Ok, we should call in a localfold+compact here in the currently working CLaude Teams while we wait.\" The rest is the wording of devbin-vc and vc. Every Utilz seat localfolds with no release, commits its own files by path and pushes nothing. cc folds at the END of its bats run 01M8B9X6SMHY67F13BAJ6Q638X. No seat asks the Desk until devbin-vc's word after the cycle. vc sends devbin-vc one report. After hv's compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's."
+  }
+}
