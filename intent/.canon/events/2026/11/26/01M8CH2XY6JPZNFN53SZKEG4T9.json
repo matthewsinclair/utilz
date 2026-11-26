@@ -1,0 +1,17 @@
+{
+  "id": "01M8CH2XY6JPZNFN53SZKEG4T9",
+  "ts": "2026-11-26T18:15:04.902Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.\nBank: dc/i4cbec17 stays at e58c15db (A e8031acd) in wt-i4cbec17, held for hv's D2 route word. The CHANGELOG draft stays banked (ecb06c6a).\nLocalfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.\nCommit your own board files and events by path, then send vc the fold sha.\nThen hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

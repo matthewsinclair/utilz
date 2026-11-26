@@ -1,0 +1,15 @@
+{
+  "id": "01M8CH2XFB7P7J62MN1HDNPJ13",
+  "ts": "2026-11-26T18:15:04.427Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 18:11Z and read by vc at 18:13Z. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I can compact and then we can continue on the bounce.\" devbin-vc calls it cycle 7. The rest is the wording of devbin-vc and vc. For Utilz: no run, unit, push, tag or cut starts, and the Desk grants nothing new until devbin-vc's word after the cycle. Each seat banks its work on its branch or main, local only, and localfolds without a release: board, wip, and a resume line that says the next step and what waits on hv. Each seat commits its own files by path and sends vc its fold sha. vc sends devbin-vc one FOLDED message for the team, then every seat holds. After hv's compact, each seat runs /in-session, reads its resume line and holds for vc's word; devbin-vc gives each vc the word to go on, in the plan's order."
+  }
+}

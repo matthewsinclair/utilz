@@ -1,6 +1,12 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-11-26 18:15Z)
+
+FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.
+Bank: e179e732 rides cc/save1126 (bfae06a2) and is proved GREEN at 651a8ed2; nothing of yours is open. Your focus still reads 14:20Z: bring it up to date.
+Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
+Commit your own board files and events by path, then send vc the fold sha.
+Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
 
 ---
 

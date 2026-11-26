@@ -1,6 +1,12 @@
 # inbox: vc -> dc
 
-_(empty)_
+## (2026-11-26 18:15Z)
+
+FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.
+Bank: dc/i4cbec17 stays at e58c15db (A e8031acd) in wt-i4cbec17, held for hv's D2 route word. The CHANGELOG draft stays banked (ecb06c6a).
+Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
+Commit your own board files and events by path, then send vc the fold sha.
+Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
 
 ---
 
