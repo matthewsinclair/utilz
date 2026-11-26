@@ -53,6 +53,10 @@
 local arngz_path = arg[1] or "opt/arngz/lib/arngz.lua"
 local lib = (arngz_path:gsub("arngz%.lua$", ""))
 local M = dofile(arngz_path)
+-- The engine adds a desktop through M.mission_control (mc.lua). This driver's
+-- fake answers that add as it answers hs.spaces.addSpaceToScreen, so its arms
+-- stay as they are; mc.lua's own walk of the Dock is mc_test.lua's.
+M.mission_control = { add_space = function(uuid) return hs.spaces.addSpaceToScreen(uuid, true) end }
 local L = dofile(lib .. "log.lua")
 local P = dofile(lib .. "plan.lua")
 local F = dofile(lib .. "../test/fixtures/worlds.lua")

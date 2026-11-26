@@ -576,6 +576,15 @@ fake_hs() {
   assert_lua_suite_summary plan_test
 }
 
+@test "the Mission Control finder's pure part passes under plain Lua" {
+  local lua
+  lua="$(lua_bin)" || fail "no Lua interpreter (lua5.4, lua or luajit) on PATH; CI installs lua5.4"
+  run "$lua" "$UTILZ_HOME/opt/arngz/test/mc_test.lua" "$UTILZ_HOME/opt/arngz/lib/mc.lua" "$UTILZ_HOME/opt/arngz/lib/plan.lua"
+  echo "$output"
+  assert_success
+  assert_lua_suite_summary mc_test
+}
+
 # ============================================================================
 # AT-03.4 -- Lua is a declared language, and CI can run the planner (AC-03.4)
 # ============================================================================

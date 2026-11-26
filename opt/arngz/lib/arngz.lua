@@ -14,7 +14,8 @@
 -- it, and planned leg by leg in plan.lua.
 --
 -- ONLY PUBLIC hs.* CALLS (D15). hs.spaces is Hammerspoon's own module over the
--- private Spaces API; arngz makes no private call of its own.
+-- private Spaces API; arngz makes no private call of its own. Mission
+-- Control's buttons are pressed by mc.lua, through hs.axuielement.
 
 local function dirname(path)
   return path:match("^(.*)/[^/]*$")
@@ -26,10 +27,16 @@ if not here then error("arngz: cannot tell which directory this module was loade
 local P = dofile(here .. "/plan.lua")
 -- log.lua, beside it: the run log's formatters and its one write (ST589246c).
 local L = dofile(here .. "/log.lua")
+-- mc.lua, beside it: arngz's own Mission Control finder, which adds a
+-- desktop where hs.spaces' lookup fails on macOS 27 (desks1125/mc-design.md).
+local MC = dofile(here .. "/mc.lua")
 -- This file's own path, which keys the display watcher (M.watch).
 local MODULE = (debug.getinfo(1, "S").source:gsub("^@", ""))
 
 local M = {}
+
+-- The desktop edits made through Mission Control. A test puts its own here.
+M.mission_control = MC
 
 -- A wait reads this often: between phases, or inside the plan verb's call.
 local POLL_SECONDS = 0.25
@@ -655,7 +662,7 @@ local function exec_create_space(op, ctx)
   local made, why, last_ids
   local ok, res = attempts(M.CREATE_SPACE_TRIES, function()
     if not made then
-      made, why = hs.spaces.addSpaceToScreen(op.screen, true)
+      made, why = M.mission_control.add_space(op.screen)
     end
     local now, nerr, now_ids = user_space_count(op.screen)
     if not now then error("could not count the desktops back: " .. tostring(nerr), 0) end

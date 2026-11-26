@@ -1,0 +1,186 @@
+-- mc.lua: arngz's own Mission Control finder (cc, 26 Nov 2026; design note
+-- desks1125/mc-design.md, for ST6d8eed9 WP A and STca1b7f9 WP6).
+--
+-- hs.spaces (Hammerspoon 1.1.1) does every desktop edit through Mission
+-- Control, and on macOS 27.2.1 its lookup never finds Mission Control's group
+-- in the Dock: it looks for 1 to 2 s, on whole seconds of os.time, for a
+-- Dock child with AXIdentifier "mc". This file does the three edits arngz
+-- makes (add, show, remove) with its own lookup, through hs.axuielement, a
+-- public module (D15). Reading the desktops stays with hs.spaces.
+--
+-- The pure part walks a Dock tree through an accessor A = { kids, attr }, so
+-- mc_test.lua gives it plain tables. The impure part opens Mission Control,
+-- waits for the group, acts, and closes Mission Control on every path.
+--
+-- The reasons keep hs.spaces' words, so plan.lua's P.space_error_kind reads
+-- them with no change.
+
+local MC = {}
+
+MC.NO_GROUP = "unable to get Mission Control data from the Dock"
+MC.NO_DISPLAY = "no display with specified id found"
+MC.OPEN_SECONDS = 4      -- how long Mission Control's group may take to appear
+MC.SETTLE_SECONDS = 0.3  -- after it appears, before a button is pressed (hs.spaces' MCwaitTime)
+MC.POLL_US = 50000       -- the group is looked for this often, in microseconds
+
+-- ------------------------------------------------------------- pure
+
+-- Whether a Dock child is Mission Control's group. THE ONE MATCH THE
+-- DIAGNOSTIC (desks1125/mcdiag) FILLS IN: until its result is read, it is
+-- hs.spaces' own test.
+function MC.is_group(A, el)
+  return A.attr(el, "AXIdentifier") == "mc"
+end
+
+-- The first child of EL that WANT accepts, or nil.
+local function child(A, el, want)
+  for _, k in ipairs(A.kids(el) or {}) do
+    if want(k) then return k end
+  end
+  return nil
+end
+
+local function with_id(A, id)
+  return function(k) return A.attr(k, "AXIdentifier") == id end
+end
+
+-- Mission Control's group among the Dock's children, or nil.
+function MC.find_group(A, dock)
+  return child(A, dock, function(k) return MC.is_group(A, k) end)
+end
+
+-- In GROUP, the node WANT names for the display with DISPLAY_ID: "add", the
+-- button that adds a desktop, or "list", the group of desktop tiles in the
+-- order spacesForScreen lists the desktops. nil and a reason if it is not
+-- there.
+function MC.locate(A, group, display_id, want)
+  local display = child(A, group, function(k)
+    return A.attr(k, "AXIdentifier") == "mc.display" and A.attr(k, "AXDisplayID") == display_id
+  end)
+  if not display then return nil, MC.NO_DISPLAY end
+  local spaces = child(A, display, with_id(A, "mc.spaces"))
+  if not spaces then return nil, "unable to locate mc.spaces group for display" end
+  local id = want == "add" and "mc.spaces.add" or "mc.spaces.list"
+  local node = child(A, spaces, with_id(A, id))
+  if not node then return nil, string.format("unable to find target %s for display", id) end
+  return node
+end
+
+-- The tile at INDEX in a "list" node, or nil and a reason.
+function MC.tile(A, list, index)
+  local tile = (A.kids(list) or {})[index]
+  if not tile then return nil, string.format("no desktop tile %s in Mission Control", tostring(index)) end
+  return tile
+end
+
+-- The place of SPACE in IDS (spacesForScreen's list), or nil.
+function MC.index_of(ids, space)
+  for i, id in ipairs(ids or {}) do
+    if id == space then return i end
+  end
+  return nil
+end
+
+-- ------------------------------------------------------------- impure
+
+-- The accessor over live AX elements.
+local AX = {
+  kids = function(el) return el:attributeValue("AXChildren") or {} end,
+  attr = function(el, name) return el:attributeValue(name) end,
+}
+
+local function now() return hs.timer.absoluteTime() end
+
+local function dock_element()
+  local app = hs.application.get("com.apple.dock")
+  if not app then return nil, "the Dock is not running" end
+  local el = hs.axuielement.applicationElement(app)
+  if not el then return nil, "no Accessibility element for the Dock" end
+  return el
+end
+
+-- Opens Mission Control as hs.spaces does. If the diagnostic shows that only
+-- the keyboard opens it, this is the one place that changes.
+function MC.open()
+  hs.spaces.toggleMissionControl()
+end
+
+-- Closes Mission Control, if its group is there.
+local function close(dock)
+  if MC.find_group(AX, dock) then MC.open() end
+end
+
+-- The group, waited for up to OPEN_SECONDS on the monotonic clock.
+local function wait_group(dock)
+  local deadline = now() + MC.OPEN_SECONDS * 1e9
+  repeat
+    local group = MC.find_group(AX, dock)
+    if group then return group end
+    hs.timer.usleep(MC.POLL_US)
+  until now() >= deadline
+  return MC.find_group(AX, dock)
+end
+
+local function screen_id(uuid)
+  for _, s in ipairs(hs.screen.allScreens()) do
+    if s:getUUID() == uuid then return s:id() end
+  end
+  return nil
+end
+
+-- Opens Mission Control, finds WANT for the display UUID, calls ACT on it,
+-- and closes Mission Control on every path, a raise in ACT included. ACT
+-- returns true, or nil and a reason; CLOSES says ACT closes it itself.
+local function with_mc(uuid, want, act, closes)
+  local id = screen_id(uuid)
+  if not id then return nil, MC.NO_DISPLAY end
+  local dock, derr = dock_element()
+  if not dock then return nil, derr end
+  if not MC.find_group(AX, dock) then MC.open() end
+  local group = wait_group(dock)
+  if not group then return nil, MC.NO_GROUP end
+  hs.timer.usleep(math.floor(MC.SETTLE_SECONDS * 1e6))
+  local node, nerr = MC.locate(AX, group, id, want)
+  if not node then
+    close(dock)
+    return nil, nerr
+  end
+  local ok, res, why = pcall(act, node)
+  if not (ok and res and closes) then close(dock) end
+  if not ok then return nil, tostring(res) end
+  return res, why
+end
+
+-- As hs.spaces.addSpaceToScreen(uuid, true).
+function MC.add_space(uuid)
+  return with_mc(uuid, "add", function(add)
+    return add:performAction("AXPress")
+  end)
+end
+
+-- The tile of SPACE, by its place in spacesForScreen, as hs.spaces finds it.
+local function on_tile(space, action, closes)
+  local uuid = hs.spaces.spaceDisplay(space)
+  if not uuid then return nil, "space not found in managed displays" end
+  local index = MC.index_of(hs.spaces.spacesForScreen(uuid), space)
+  if not index then return nil, "space not found in managed displays" end
+  return with_mc(uuid, "list", function(list)
+    local tile, terr = MC.tile(AX, list, index)
+    if not tile then return nil, terr end
+    return tile:performAction(action)
+  end, closes)
+end
+
+-- As hs.spaces.gotoSpace(space): pressing a tile shows it and closes
+-- Mission Control.
+function MC.goto_space(space)
+  return on_tile(space, "AXPress", true)
+end
+
+-- As hs.spaces.removeSpace(space, true). The checks hs.spaces makes first (the
+-- only user desktop, the desktop shown) are WP A's proof's, before it calls.
+function MC.remove_space(space)
+  return on_tile(space, "AXRemoveDesktop", false)
+end
+
+return MC
