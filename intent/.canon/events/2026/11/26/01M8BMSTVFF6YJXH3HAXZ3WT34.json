@@ -1,0 +1,15 @@
+{
+  "id": "01M8BMSTVFF6YJXH3HAXZ3WT34",
+  "ts": "2026-11-26T10:00:46.703Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:00Z. hv's words, on the zeopit desk, after hv closed the built-in's two empty desktops by hand: \"That config isn't right. I have set things up now as I want them at zeopit now. The only difference is that at homere, the top-right screen isn't there and I want the Chrome+Safari windows to go onto a new space on the right-hand monito, at slot 2.\" The rest is vc's wording. vc edited hv's two desk files in ~/.config/arngz/desks on that word, with the files as they were kept in ~/Devel/scratch/utilz-vc/desks-before-20261126-hv-edit. zeopit: main loses its 7th desktop (Music's) and its empty 9th, so it names 7 desktops there, and Music has no entry. homere: main's desktops are now the same as zeopit's; its monitor's three desktops are unchanged, and Chrome and Safari were already on its 2nd. `arngz list` and `arngz show` take both files. Neither is proved against the screens yet: zeopit by the next dry run, homere by hv at that place."
+  }
+}

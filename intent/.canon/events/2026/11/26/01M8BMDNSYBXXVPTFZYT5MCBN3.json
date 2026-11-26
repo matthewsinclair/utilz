@@ -1,0 +1,15 @@
+{
+  "id": "01M8BMDNSYBXXVPTFZYT5MCBN3",
+  "ts": "2026-11-26T09:54:08.318Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 09:54Z. vc asked: \"When an arngz apply ends, should each screen go back to the desktop it was showing when the run began?\" hv chose: \"Yes, go back (Recommended)\". The rest is vc's wording. At the end of apply, arngz shows each display its start desktop again, if that desktop still exists and is not the one shown. It is in 2.15.0, size S, cc's, with one test. Also in 2.15.0 from the same sitting, each put to hv in vc's window with no objection: the CLI no longer stops its hs helper while Hammerspoon may still reply, which crashed Hammerspoon (issue I7085193, landed 9ce62335); and apply's visit step, which shows a desktop that holds a window arngz cannot yet name, before and after the desktop edits (cc/visit1126). Ruled out by proof runs: an app hidden with Cmd-H is named and placed as usual, and the 2 s Accessibility timeout does not make apps unseen. Not established: what made 5 to 8 apps unseen on the morning of 26 Nov. A run 12 s after a Hammerspoon restart had 1 unseen. vc's candidate is a Mission Control act that changes the desktops."
+  }
+}
