@@ -1574,7 +1574,7 @@ end
 M.BACK_SECONDS = 20
 
 function M.way_back(start, results, words, lg)
-  local shown_back, ran_out = 0, false
+  local tried, ran_out = 0, false
   local function said(screen, space)
     local w = (words or {})[screen]
     if w and w.display and w.place then return string.format("%s desktop %d", w.display, w.place) end
@@ -1603,8 +1603,8 @@ function M.way_back(start, results, words, lg)
     end
     if exists and hs.spaces.spaceType(space) == "user" then
       local ok, why = show_by_tile(screen, space)
+      tried = tried + 1
       if ok then
-        shown_back = shown_back + 1
         -- A way back that worked is in the log too (vc's ask), so a live
         -- check reads from the log alone where each display ended.
         note(lg, "back", string.format("%s shown again, where it began", said(screen, space)))
@@ -1614,7 +1614,9 @@ function M.way_back(start, results, words, lg)
       end
     end
   end
-  if shown_back == 0 and not ran_out then note(lg, "back", "no display needed showing again: each shows the desktop it began on, or that desktop is gone") end
+  -- Said only when no show was tried: a show that failed is a note of its
+  -- own, and one past the time is too (vc's read of c873aa9d).
+  if tried == 0 and not ran_out then note(lg, "back", "no display needed showing again: each shows the desktop it began on, or that desktop is gone") end
 end
 
 -- THE VISIT STEP (cc's visit-note, 26 Nov 2026). After Hammerspoon starts, a

@@ -1686,5 +1686,63 @@ arm("an apply that ends each display on its start desktop", function()
     find(records(log), "back", "left desktop 3 shown again, where it began") ~= nil, last_line(records(log)))
 end)
 
+-- The way back that fails (vc's read of c873aa9d): as above, but once the
+-- removal is done Mission Control refuses to show the start desktop. The
+-- failure is a note in the results, and the log never says no display needed
+-- showing again.
+arm("an apply whose way back fails says so, and never that none was needed", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local new, start = 20, base.spaces[2].id
+  f.live = { new }
+  for _, sp in ipairs(base.spaces) do f.live[#f.live + 1] = sp.id end
+  local shown, removed = start, false
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    if removed and id == start then return nil, "Mission Control refused AXPress" end
+    shown = id
+    return true
+  end
+  f.hs.spaces.windowsForSpace = function() return {} end
+  f.hs.spaces.removeSpace = function(id)
+    local kept = {}
+    for _, s in ipairs(f.live) do
+      if s ~= id then kept[#kept + 1] = s end
+    end
+    f.live, removed = kept, true
+    return true
+  end
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    local s = w.screens[1]
+    s.live = f.live
+    if f.live[1] == new then
+      table.insert(s.spaces, 1, { id = new, type = "user", uuid = "SPACE-" .. new, active = false, windows = {} })
+      for i, sp in ipairs(s.spaces) do sp.ordinal = i end
+    end
+    for _, sp in ipairs(s.spaces) do sp.active = sp.id == shown end
+    s.active_space = shown
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-BACKFAIL", log = log })
+  local note_found = false
+  for _, r in ipairs((response or {}).results or {}) do
+    if r.op == "restore" and r.status == "note" and tostring(r.reason):find("left desktop 3 again, where it began, failed", 1, true) then
+      note_found = true
+    end
+  end
+  local recs = records(log)
+  check("way back fails: the run still answers ok and exit 0, the failure a note that counts against nothing",
+    response and response.status == "ok" and response.exit == 0 and note_found,
+    response and (tostring(response.status) .. " / " .. tostring(response.exit)))
+  check("way back fails: the log never says no display needed showing again",
+    find(recs, "back", "no display needed showing again") == nil, last_line(recs))
+end)
+
 print(string.format("log_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)
