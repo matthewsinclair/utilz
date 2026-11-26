@@ -3,7 +3,7 @@
   "origin": "01M88YXTPW1V5ED6X8Z1J5PRZD",
   "title": "A pause when the pointer moves, then the move goes on",
   "scope": "S",
-  "status": "wip",
+  "status": "done",
   "objective": "When the person takes the pointer during a move, apply lets go, waits until the pointer is still, then goes on with that move (hv decision 26).",
   "body": "# A pause when the pointer moves, then the move goes on\n\ncc's work package under the thread's design.md, section D (hv decision 26). ic is the second reader.\n\n## The change\n\n- **opt/arngz/lib/plan.lua.** `P.still_verdict`, with STILL_PX (4 px), STILL_SECONDS (2 s), PAUSE_LIMIT (30 s) and MAX_PAUSES (3).\n- **opt/arngz/lib/arngz.lua.** While pauses remain, run_legs lets go and marks the op paused, in place of setting `ctx.stopped`. `PHASE.organise` keeps the op, and a new phase, `still`, reads the pointer on a timer. Once the pointer is still, the op runs again, planned from where its window is now, with each display's shown desktop read again. A pause that gives up, and the fourth take, end the moves as today, with the fix.\n- **opt/arngz/lib/log.lua and ST589246c's progress.md.** The `waiting` point for \"the pointer to be still\", with `seconds` and `still`; the resumed step, with the window's frame as it is now; `finished.paused`; and the moved entry's note.\n- **help/arngz.md.** What apply does when the pointer moves.\n\n## Acceptance\n\nAC-4cb617e2.1 to .6, as design.md's Acceptance gives them. AC-4cb617e2.6 is ic's.\n\n## Tests\n\n- plan_test.lua: `P.still_verdict`.\n- engine_test.lua, with the fake hs widened to the pointer: a pause, the resume, the give-up and the fourth take.\n- log_test.lua: the fields.\n\n## Size\n\nS.\n",
   "preamble": ""
