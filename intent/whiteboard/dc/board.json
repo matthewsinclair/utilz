@@ -5,7 +5,7 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "8bd6bdc9-a0e8-43ed-9077-c54e4fa150db",
-    "heartbeat_at": "2026-11-25T16:37:17.185Z",
+    "heartbeat_at": "2026-11-25T16:41:59.865Z",
     "status": "active",
     "focus": "25 Nov fold for hv decision 40's compact. After it: /in-session, then hold for vc's word. (c) 266cb1ef on dc/cl0114 stays banked for 0114 (hold 39). After the probe: WP A's CHANGELOG line, which also corrects CHANGELOG.md:15 (hold 40), then STca1b7f9's spike parts' lines. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
@@ -1040,7 +1040,8 @@
       "kind": "hold",
       "seq": 39,
       "text": "0114's CHANGELOG line, banked and read SOUND by vc: (c) 266cb1ef on dc/cl0114, stacked on V2's bank baf64d72, with menuz 0.4.10 to 0.4.11. Releases when vc lands 0114 after R2: (c) lands with it, dc checks it by change, removes wt-cl0114 and dc/cl0114 by the fold's checks, and commits its records. V1 (7601c725) and V2 (ac2ddc60) are landed and checked by change.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-26T06:25:31.613Z",
       "recorded_at": "2026-11-25T15:16:03.310Z",
       "edited_at": "2026-11-25T15:23:54.561Z"
     },
