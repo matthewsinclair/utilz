@@ -1,0 +1,16 @@
+{
+  "id": "01M8BNG23T67KXD9KPAC35XZY2",
+  "ts": "2026-11-26T10:12:55.036Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.hold",
+  "subject": {
+    "type": "thread",
+    "id": "STca1b7f9d59191dfc"
+  },
+  "payload": {
+    "from": "wip",
+    "reason": "hv decision 44 (26 Nov 2026): its unwritten parts (WP 026e, b9d4, the mission leg, and the spike's open runs) go to the spcz thread, which opens after the 2.15.0 cut. The creates at the Dock landed through arngz's own Mission Control finder (mc.lua, 2.15.0). Nothing on it is in progress.",
+    "to": "hold"
+  }
+}
