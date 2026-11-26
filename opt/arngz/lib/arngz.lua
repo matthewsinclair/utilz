@@ -1571,6 +1571,7 @@ end
 -- named, visited = {[space] = true}, out_of_time, failed = {[screen] = why},
 -- back = {[screen] = why} }.
 M.VISIT_SECONDS = 20
+M.VISIT_READ_TRIES = 20 -- reads of an app's windows after a show, POLL_US apart, as grab_point waits
 M.visit_index = {}
 
 function M.visit(list, start, say)
@@ -1593,9 +1594,26 @@ function M.visit(list, start, say)
         r.shown = r.shown + 1
         r.visited[item.space] = true
         for _, bundle in ipairs(item.bundles or {}) do
+          -- A desktop just shown takes a moment to show its windows to
+          -- Accessibility (grab_point waits the same way): the app's windows
+          -- are read until the one the window list put there is among them,
+          -- up to VISIT_READ_TRIES reads, POLL_US apart, and never past the
+          -- step's deadline. What the last read named is kept either way.
           local app = hs.application.get(bundle)
-          local read, wins = pcall(function() return app and app:allWindows() or {} end)
-          for _, w in ipairs(read and wins or {}) do
+          local want = (item.ids or {})[bundle]
+          local wins = {}
+          for try = 1, M.VISIT_READ_TRIES do
+            local read, got = pcall(function() return app and app:allWindows() or {} end)
+            wins = read and got or {}
+            local seen = want == nil
+            for _, w in ipairs(wins) do
+              local named, id = pcall(function() return w:id() end)
+              if named and id == want then seen = true end
+            end
+            if seen or try == M.VISIT_READ_TRIES or now() >= deadline then break end
+            hs.timer.usleep(POLL_US)
+          end
+          for _, w in ipairs(wins) do
             local got, id = pcall(function() return w:id() end)
             if got and id and not M.visit_index[id] then
               M.visit_index[id] = { win = w, via = "visit" }

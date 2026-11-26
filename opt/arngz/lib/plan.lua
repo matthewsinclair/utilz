@@ -868,7 +868,7 @@ function P.window_desktops(world, screens, bundle)
       for _, w in ipairs(sp.windows or {}) do
         if ids[w.id] then
           out[#out + 1] = { di = di, screen = s.uuid, space = sp.id, place = place[sp.id], user = place[sp.id] ~= nil,
-            shown = sp.active == true }
+            shown = sp.active == true, id = w.id }
           break
         end
       end
@@ -900,11 +900,13 @@ function P.visit_list(desk, world, screens, ops)
       if d.user and not d.shown then
         local item = by_space[d.space]
         if not item then
-          item = { di = d.di, screen = d.screen, space = d.space, place = d.place, bundles = {} }
+          item = { di = d.di, screen = d.screen, space = d.space, place = d.place, bundles = {}, ids = {} }
           by_space[d.space] = item
           list[#list + 1] = item
         end
         item.bundles[#item.bundles + 1] = bundle
+        -- The window the list puts there, which the visit step waits to read.
+        item.ids[bundle] = d.id
       end
     end
   end

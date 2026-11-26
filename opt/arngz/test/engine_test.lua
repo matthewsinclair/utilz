@@ -723,12 +723,18 @@ do
       return true
     end }
     local win = { id = function() return 700 end }
+    f.lists = 0
     _G.hs = {
       spaces = { activeSpaceOnScreen = function(uuid) return f.active[uuid] end },
       timer = { usleep = function(us) f.clock = f.clock + us * 1000 end, absoluteTime = function() return f.clock end },
       application = { get = function(b)
         f.reads[#f.reads + 1] = b
-        return { allWindows = function() return { win } end }
+        -- Shown but not yet readable for opts.late reads, or never (opts.never).
+        return { allWindows = function()
+          f.lists = f.lists + 1
+          if opts.never or f.lists <= (opts.late or 0) then return {} end
+          return { win }
+        end }
       end },
     }
     M.visit_index = {}
@@ -736,7 +742,9 @@ do
   end
   local saved = M.mission_control
   local start = { [SCREEN_V] = 11 }
-  local function item(space, place) return { di = 1, screen = SCREEN_V, space = space, place = place, bundles = { SAFARI } } end
+  local function item(space, place)
+    return { di = 1, screen = SCREEN_V, space = space, place = place, bundles = { SAFARI }, ids = { [SAFARI] = 700 } }
+  end
 
   local f = fake({})
   local r = M.visit({ item(12, 2) }, start)
@@ -755,6 +763,17 @@ do
   check("visit: a show that fails stops the step on that display, names why, and leaves nothing named",
     r.shown == 0 and r.failed[SCREEN_V] ~= nil and table.concat(f.shows, ",") == "12" and next(M.visit_index) == nil,
     table.concat(f.shows, ",") .. " / " .. tostring(r.failed[SCREEN_V]))
+
+  local late = 2
+  f = fake({ late = late })
+  r = M.visit({ item(12, 2) }, start)
+  check("visit: a window not yet readable just after the show is read again until it is, and named",
+    r.named == 1 and M.visit_index[700] ~= nil and f.lists == late + 1, tostring(f.lists))
+
+  f = fake({ never = true })
+  r = M.visit({ item(12, 2) }, start)
+  check("visit: a window never readable is read VISIT_READ_TRIES times, then the step goes on with nothing named",
+    r.named == 0 and f.lists == M.VISIT_READ_TRIES and r.shown == 1, tostring(f.lists))
 
   M.mission_control = saved
   M.visit_index = {}
