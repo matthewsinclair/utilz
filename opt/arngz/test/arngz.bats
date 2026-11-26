@@ -415,6 +415,26 @@ fake_hs() {
   mkdir -p "$TMPDIR"
 }
 
+# The CLI waits for neither the end mark's hs call nor a sound (mark_draw with
+# WAIT 0, and mark_sound), and a scheduled fake writes its response from a
+# child. So a fake from this test's fakebin can still write under the test's
+# dir when an arm ends, and rm -rf then finds that dir filled again (AT-03.1's
+# hang arm, run 20261126T143353Z). Teardown waits up to 5 s for each such fake
+# to exit, stops any still running, then calls utilz_teardown, as isolation.bats
+# asks of a suite with its own teardown. It calls the real tools by their
+# paths, since some arms put fixtures/fake-macos's pgrep first on PATH.
+teardown() {
+  local fakes deadline=$((SECONDS + 5))
+  if [[ -n "${BATS_TEST_TMPDIR:-}" && -x /usr/bin/pgrep && -x /usr/bin/pkill ]]; then
+    fakes="$BATS_TEST_TMPDIR/fakebin/"
+    while /usr/bin/pgrep -f -- "$fakes" >/dev/null 2>&1 && [[ $SECONDS -lt $deadline ]]; do
+      /bin/sleep 0.1
+    done
+    /usr/bin/pkill -f -- "$fakes" 2>/dev/null || true
+  fi
+  utilz_teardown
+}
+
 @test "AT-03.1: the request holds exactly verb, desk, options, run, log and end_sound, and hs runs the module's run on it" {
   fake_hs ok
   run_arngz discover

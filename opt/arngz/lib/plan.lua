@@ -568,7 +568,7 @@ P.MIN_WINDOW_SIDE = 50
 -- a list of ids (not onscreen, or with an alpha of 0); or nil and why the
 -- text is not a window list. A list with no free id is a list, not a
 -- failure. The free and unseen ids are lists because observe's world carries
--- them in apply's and observe's answers, and Hammerspoon's hs.json.write
+-- them in apply's and observe's answers, and Hammerspoon's JSON writer
 -- refuses a table keyed by window id (issue I19d4fa6, hv decision 60):
 -- P.id_set makes the set a reader needs.
 function P.parse_window_list(text)

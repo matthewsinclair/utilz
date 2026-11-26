@@ -110,11 +110,13 @@ if [[ "${FAKE_HS_MODE:-ok}" == sequence ]]; then
   [[ -n "$FAKE_HS_MODE" ]] || { echo "fake-hs: no answer for ask $asks in $FAKE_HS_SEQUENCE" >&2; exit 64; }
 fi
 
+# A hang keeps this fake's path as its name (exec -a), so arngz.bats's
+# teardown finds and stops a hung ask that outlives its arm.
 case "${FAKE_HS_MODE:-ok}" in
   ok) cp "$FAKE_HS_RESPONSE" "$response"; echo "arngz: ok observe" ;;
   none) exit 0 ;;
-  hang) exec sleep 300 ;;
-  hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec sleep 300 ;;
+  hang) exec -a "$0" sleep 300 ;;
+  hang-after-reply) cp "$FAKE_HS_RESPONSE" "$response"; exec -a "$0" sleep 300 ;;
   reply-then-exit) cp "$FAKE_HS_RESPONSE" "$response"; sleep "${FAKE_HS_EXIT_AFTER:?}"; echo "arngz: ok" ;;
   exit-69) echo "error: can't access Hammerspoon message port" >&2; exit 69 ;;
   receive-timeout) echo "error: receive timeout" >&2; exit 69 ;;
