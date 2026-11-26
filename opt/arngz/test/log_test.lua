@@ -2043,17 +2043,21 @@ arm("the CLI's mark call hands its mark to the toast, and raises what it cannot 
   M.toast, M.toast_error = saved_toast, saved_error
 end)
 
-arm("a still mark that comes after the run's finish draws nothing (vc's R1)", function()
+-- The CLI reads the still call's answer to know who ends the mark (M1, ic's
+-- m1-note), so each case answers its own line; arngz.bats holds the CLI's
+-- copies of the two lines to these.
+arm("a still mark that comes after the run's finish draws nothing, and its answer says so (vc's R1, M1)", function()
   local saved_toast, saved_running = M.toast, rawget(_G, "arngz_running")
   local marks = {}
   M.toast = { point = function() end, mark = function(kind) marks[#marks + 1] = kind end }
   rawset(_G, "arngz_running", nil)
   local line = M.mark("still", "arngz: still running in Hammerspoon (arngz stopped waiting after 20 s)", 40)
-  check("still: with no run in progress nothing is drawn, and the call answers, not raises", #marks == 0
-    and type(line) == "string" and line:find("not drawn", 1, true) ~= nil, tostring(line))
+  check("still: with no run in progress nothing is drawn, and the call answers M.MARK_NO_RUN, not raises",
+    #marks == 0 and M.MARK_NO_RUN ~= nil and line == M.MARK_NO_RUN, tostring(line))
   rawset(_G, "arngz_running", { verb = "apply", at = "2026-11-26T00:00:00Z" })
-  M.mark("still", "arngz: still running in Hammerspoon (arngz stopped waiting after 20 s)", 40)
-  check("still: while the run is in progress it is drawn", #marks == 1 and marks[1] == "still", #marks .. " marks")
+  line = M.mark("still", "arngz: still running in Hammerspoon (arngz stopped waiting after 20 s)", 40)
+  check("still: while the run is in progress it is drawn, and the call answers M.MARK_DRAWN",
+    #marks == 1 and marks[1] == "still" and M.MARK_DRAWN ~= nil and line == M.MARK_DRAWN, tostring(line))
   M.toast = saved_toast
   rawset(_G, "arngz_running", saved_running)
 end)

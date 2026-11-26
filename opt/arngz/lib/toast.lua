@@ -547,16 +547,18 @@ end
 -- let go. The CLI makes them, with a sound of its own, through a short hs
 -- call each: arngz.lua's M.mark, then T.mark. They are in a slot of their own,
 -- "mark", apart from Starting, Running... and Finished, which stay as they
--- are. The start mark stays until the end mark takes its place, or for the
+-- are. The start mark stays until the next mark takes its place, or for the
 -- seconds the CLI gives it, so a CLI killed by SIGKILL leaves it only that
--- long. The end mark stays T.MARK_LINGER. "still" is the CLI's end when it
--- stopped waiting for an apply that is still at work: it stays for the
--- seconds given, and the engine's own finish ends it.
+-- long. "running" (hv decision 58, ic's running-note) is the CLI's mark at its
+-- first ask of the run's verb, with no sound: it takes the start mark's place
+-- and stays as the start mark does. The end mark stays T.MARK_LINGER. "still"
+-- is the CLI's end when it stopped waiting for an apply that is still at
+-- work: it stays for the seconds given, and the engine's own finish ends it.
 T.MARK_LINGER = 3    -- seconds the end mark stays
 T.MARK_LINE = 36     -- characters in a mark's line
 T.MARK_TEXT_SIZE = 13
 
-local MARK_KINDS = { start = true, ["end"] = true, still = true }
+local MARK_KINDS = { start = true, running = true, ["end"] = true, still = true }
 
 -- Where a mark of `size` sits on a display whose visible frame is `screen`:
 -- its bottom right, a margin in from the frame's right and bottom edges. Its
@@ -571,10 +573,10 @@ end
 
 -- The plan for a mark: its words on at most T.LONG_LINES lines of
 -- T.MARK_LINE, its place, and how long it stays. A kind it does not know,
--- no words, or a start or still with no time to stay breaks the CLI's call,
--- so it is raised.
+-- no words, or a start, running or still with no time to stay breaks the
+-- CLI's call, so it is raised.
 function T.on_mark(kind, words, seconds)
-  if not MARK_KINDS[kind] then error("a mark is start, end or still, not " .. tostring(kind), 0) end
+  if not MARK_KINDS[kind] then error("a mark is start, running, end or still, not " .. tostring(kind), 0) end
   if type(words) ~= "string" or words == "" then error("the " .. kind .. " mark has no words", 0) end
   local plan = { slot = "mark", lines = T.wrap(words, T.MARK_LINE, T.LONG_LINES), layout = T.mark_layout,
     text_size = T.MARK_TEXT_SIZE }
@@ -740,10 +742,10 @@ function T.point(name, fields)
 end
 
 -- The hook the CLI's mark call reaches, through arngz.lua's M.mark: KIND
--- (start, end or still), its WORDS, and the SECONDS a start or still may
--- stay. Whatever fails is raised with the mark's kind, so the hs call exits
--- non-zero and the CLI's run log says so. A failure a timer kept is left for
--- the next point, whose error the engine logs in full.
+-- (start, running, end or still), its WORDS, and the SECONDS a start,
+-- running or still may stay. Whatever fails is raised with the mark's kind,
+-- so the hs call exits non-zero and the CLI's run log says so. A failure a
+-- timer kept is left for the next point, whose error the engine logs in full.
 function T.mark(kind, words, seconds)
   local ok, err = pcall(function() draw(shared(), T.on_mark(kind, words, seconds)) end)
   if not ok then error("arngz toast: the " .. tostring(kind) .. " mark: " .. tostring(err), 0) end

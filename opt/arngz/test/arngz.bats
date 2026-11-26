@@ -2879,11 +2879,11 @@ log_events() {
   log="$(run_log)"
   [ -f "$log" ] || fail "no run log at $log"
   # A kill record comes between hs and answer when hs is still running as the
-  # response lands, which the fake may or may not be. discover marks its start
-  # and its end (hv decision 53), each a mark record inside the run's start
-  # and end.
-  [[ "$(log_events "$log")" =~ ^start\ mark\ request\ hs\ (kill\ )?answer\ mark\ end\ $ ]] ||
-    fail "the records are not start, mark, request, hs, answer, mark, end: $(log_events "$log")"
+  # response lands, which the fake may or may not be. discover marks its
+  # start, its first ask and its end (hv decisions 53 and 58), each a mark
+  # record inside the run's start and end.
+  [[ "$(log_events "$log")" =~ ^start\ mark\ mark\ request\ hs\ (kill\ )?answer\ mark\ end\ $ ]] ||
+    fail "the records are not start, mark, mark, request, hs, answer, mark, end: $(log_events "$log")"
   [ "$(awk '{ print $2 }' "$log" | sort -u | wc -l | tr -d ' ')" = 1 ] || fail "more than one run id: $(cat "$log")"
   [[ "$(awk '{ print $2; exit }' "$log")" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]] || fail "the run id is not <UTC stamp>-<pid>"
   [ "$(awk '{ print $3 }' "$log" | sort -u)" = cli ] || fail "a record not the CLI's: $(cat "$log")"
@@ -3204,10 +3204,11 @@ sounds_on() {
 }
 
 # The CLI does not wait for the end mark's call or for a sound, so an arm reads
-# them once the end mark (end or still) is logged, or 5 s have passed.
+# them once the end mark (end or still) is logged, or the call PATTERN names,
+# or 5 s have passed.
 marks_settled() {
-  local deadline=$((SECONDS + 5))
-  until grep -qE '^mark (end|still) ' "$FAKE_HS_LOG/calls" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
+  local pattern="${1:-^mark (end|still) }" deadline=$((SECONDS + 5))
+  until grep -qE "$pattern" "$FAKE_HS_LOG/calls" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
     sleep 0.1
   done
 }
@@ -3219,16 +3220,19 @@ sounds_settled() {
   done
 }
 
-# The calls a marked run made: the start mark first, for LIFE seconds; only
-# asks between, at least one; and LAST, the end mark, last.
+# The calls a marked run made: the start mark first, for LIFE seconds; the
+# running mark next, for the same LIFE, before the first ask (hv decision 58);
+# only asks between it and the end, at least one; and LAST, the end mark,
+# last.
 assert_marks() {
   local life="$1" last="$2" calls
   marks_settled
   calls="$(cat "$FAKE_HS_LOG/calls")" || fail "no hs call was logged"
-  [ "$(head -n 1 <<<"$calls")" = "mark start $life arngz: starting" ] || fail "the first call is not the start mark: $calls"
+  [ "$(sed -n 1p <<<"$calls")" = "mark start $life arngz: starting" ] || fail "the first call is not the start mark: $calls"
+  [ "$(sed -n 2p <<<"$calls")" = "mark running $life arngz: running" ] || fail "the second call is not the running mark: $calls"
   [ "$(tail -n 1 <<<"$calls")" = "$last" ] || fail "the last call is not '$last': $calls"
-  if sed '1d;$d' <<<"$calls" | grep -q '^mark '; then fail "a mark between the start and the end: $calls"; fi
-  sed '1d;$d' <<<"$calls" | grep -q '^run ' || fail "no ask between the marks: $calls"
+  if sed '1,2d;$d' <<<"$calls" | grep -q '^mark '; then fail "a mark between the running mark and the end: $calls"; fi
+  sed '1,2d;$d' <<<"$calls" | grep -q '^run ' || fail "no ask between the marks: $calls"
 }
 
 # The sounds a run played, as one sorted list, against WANT's files.
@@ -3290,6 +3294,8 @@ assert_sounds() {
   assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: stopped: refused"
   assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
   grep -q " cli mark the start mark's hs call exited 69$" "$(run_log)" || fail "the failed mark is not logged: $(cat "$(run_log)")"
+  grep -q " cli mark the running mark's hs call exited 69$" "$(run_log)" ||
+    fail "the failed running mark is not logged: $(cat "$(run_log)")"
 }
 
 @test "hv decision 53: an apply the CLI stopped waiting for says it is still running, plays no falling sound, and leaves the engine its file" {
@@ -3381,12 +3387,12 @@ interrupted_apply() {
   [ ! -e "$FAKE_HS_LOG/sounds" ] || fail "a sound played: $(cat "$FAKE_HS_LOG/sounds")"
 }
 
-# late_answer_claim alone, from the CLI's own source: the answer that comes
-# as the CLI stops waiting. Each case is laid out on disk first, so no arm
-# rests on timing: the remove of stopped-waiting is the claim, and exactly
-# one side ends the mark.
+# late_answer_claim alone, with the claim it makes, from the CLI's own source:
+# the answer that comes as the CLI stops waiting. Each case is laid out on
+# disk first, so no arm rests on timing: the remove of stopped-waiting is the
+# claim, and exactly one side ends the mark.
 @test "hv decision 53: an answer that comes as the CLI stops waiting has its mark ended by one side alone" {
-  eval "$(sed -n '/^late_answer_claim() {$/,/^}$/p' "$UTILZ_HOME/opt/arngz/arngz")"
+  eval "$(sed -n '/^stopped_waiting_claim() {$/,/^}$/p; /^late_answer_claim() {$/,/^}$/p' "$UTILZ_HOME/opt/arngz/arngz")"
   declare -F late_answer_claim >/dev/null || fail "the CLI has no late_answer_claim"
   local dir="$BATS_TEST_TMPDIR/late" flag rc
   mkdir -p "$dir"
@@ -3414,4 +3420,99 @@ interrupted_apply() {
   late_answer_claim "$dir/response.json" "$flag" 1 || fail "an answer with a file the CLI cannot remove was left pending"
   chmod 755 "$dir"
   [ "$ENGINE_MARK_BY_ENGINE" -eq 0 ] || fail "a file neither side can remove left the mark to nobody"
+}
+
+# ============================================================================
+# hv decision 58 -- the running mark (ic's running-note), and M1's close (ic's
+# m1-note), from hv's sitting of 26 Nov 2026
+# ============================================================================
+
+@test "hv decision 58: a refusal before the first ask makes no running mark" {
+  apply_machine ok "$FIXTURES/responses/observe.json"
+  pref com.apple.dock mru-spaces 1
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz apply zeop1
+  assert_exit_code 2
+  assert_output_contains "auto-rearrange is on"
+  marks_settled
+  local life=$((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT)))
+  [ "$(cat "$FAKE_HS_LOG/calls")" = "$(printf 'mark start %s arngz: starting\nmark end 0 arngz: stopped: refused' "$life")" ] ||
+    fail "the calls were: $(cat "$FAKE_HS_LOG/calls")"
+}
+
+@test "hv decision 58: auto draws the running mark as apply does, at apply's first ask and not at which's" {
+  which_apply_fixture which-one.json
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz auto
+  marks_settled
+  local life=$((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT))) want
+  want="$(printf 'run which\nmark start %s arngz: starting\nmark running %s arngz: running\nrun apply' "$life" "$life")"
+  [ "$(sed '$d' "$FAKE_HS_LOG/calls")" = "$want" ] || fail "the calls were: $(cat "$FAKE_HS_LOG/calls")"
+  tail -n 1 "$FAKE_HS_LOG/calls" | grep -q '^mark end 0 ' || fail "the last call is not the end mark: $(cat "$FAKE_HS_LOG/calls")"
+}
+
+@test "hv decision 58: a reload and the ask again draw the running mark once, just before the first apply" {
+  local response
+  response="$(apply_response placed_results)"
+  apply_machine sequence
+  reload_sequence
+  answer 1 "$(reload_refusal apply)"
+  answer 2 "$RELOADING"
+  answer 3 "$FRESH_STATE"
+  cp "$response" "$FAKE_HS_SEQUENCE/4.json"
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz apply zeop1
+  assert_success
+  assert_marks "$((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT)))" "mark end 0 arngz: done"
+  [ "$(sed -n 3p "$FAKE_HS_LOG/calls")" = "run apply" ] || fail "the running mark is not just before the first ask: $(cat "$FAKE_HS_LOG/calls")"
+  [ "$(grep -c '^run apply$' "$FAKE_HS_LOG/calls")" -gt 1 ] || fail "apply was not asked again: $(cat "$FAKE_HS_LOG/calls")"
+}
+
+# M1: an apply whose engine finished before the CLI stopped waiting, with an
+# answer that never came. The fake's still answer stands for the engine's
+# M.mark, so each line is read from the engine's source, which the next arm
+# holds to the CLI's: MARK_NO_RUN, the run has finished; MARK_DRAWN, it is
+# still in progress.
+@test "hv decision 53 M1: an engine that finished with no answer has its mark ended by the CLI, and one still at work ends its own" {
+  apply_machine scheduled-never "$(apply_response placed_results)"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30 ARNGZ_APPLY_TIMEOUT=1
+  local engine="$UTILZ_HOME/opt/arngz/lib/arngz.lua" kept
+
+  FAKE_HS_STILL_ANSWER="$(sed -n 's/^M\.MARK_NO_RUN = "\(.*\)"$/\1/p' "$engine")"
+  export FAKE_HS_STILL_ANSWER
+  run_arngz apply zeop1
+  assert_exit_code 1
+  marks_settled '^mark end '
+  [ "$(tail -n 1 "$FAKE_HS_LOG/calls")" = "mark end 0 arngz: ended with no answer: see arngz log" ] ||
+    fail "the last call is not the CLI's end: $(cat "$FAKE_HS_LOG/calls")"
+  [[ "$(tail -n 2 "$FAKE_HS_LOG/calls" | sed -n 1p)" =~ ^mark\ still\  ]] ||
+    fail "the still call is not just before the end: $(cat "$FAKE_HS_LOG/calls")"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+  kept="$(printf '%s\n' "$output" | sed -n 's/.*(request kept at \([^)]*\)).*/\1/p')"
+  [ -n "$kept" ] || fail "no request was kept: $output"
+  [ ! -e "${kept%/request.json}/stopped-waiting" ] || fail "the CLI ended the mark and left stopped-waiting beside $kept"
+  grep -q ' cli mark end: arngz: ended with no answer: see arngz log$' "$(run_log)" || fail "no end record: $(cat "$(run_log)")"
+
+  rm -f "$FAKE_HS_LOG/calls" "$FAKE_HS_LOG/sounds"
+  FAKE_HS_STILL_ANSWER="$(sed -n 's/^M\.MARK_DRAWN = "\(.*\)"$/\1/p' "$engine")"
+  export FAKE_HS_STILL_ANSWER
+  run_arngz apply zeop1
+  assert_exit_code 1
+  marks_settled
+  [[ "$(tail -n 1 "$FAKE_HS_LOG/calls")" =~ ^mark\ still\  ]] || fail "the last call is not the still mark: $(cat "$FAKE_HS_LOG/calls")"
+  assert_sounds "$ARNGZ_SOUND_START"
+  kept="$(printf '%s\n' "$output" | sed -n 's/.*(request kept at \([^)]*\)).*/\1/p')"
+  [ -n "$kept" ] || fail "no request was kept: $output"
+  [ -f "${kept%/request.json}/stopped-waiting" ] || fail "the engine's stopped-waiting is gone from beside $kept"
+}
+
+@test "hv decision 53 M1: the CLI reads the still call's answers in the engine's own words" {
+  local name cli lua
+  for name in MARK_DRAWN MARK_NO_RUN; do
+    cli="$(sed -n "s/^$name=\"\(.*\)\"\$/\1/p" "$UTILZ_HOME/opt/arngz/arngz")"
+    lua="$(sed -n "s/^M\.$name = \"\(.*\)\"\$/\1/p" "$UTILZ_HOME/opt/arngz/lib/arngz.lua")"
+    [ -n "$cli" ] || fail "the CLI has no $name"
+    [ "$cli" = "$lua" ] || fail "$name: the CLI's '$cli' is not the engine's '$lua'"
+  done
 }

@@ -155,15 +155,17 @@ While `apply` runs, Hammerspoon shows a toast at the bottom of the main display,
 
 A toast takes no click and no focus: a click on it goes to the window under it. It stays in view while arngz switches desktops, and steps out of the way of a window arngz is about to take by its title bar. The other verbs show none. A refusal before Hammerspoon is asked, such as a desk that does not validate, shows none either: the CLI's message says it, and Menuz's notice for a non-zero exit. A toast that cannot be drawn changes nothing else: the apply runs and reports as it would without it, and the run log says why.
 
-### The start and end marks
+### The start, running and end marks
 
-A run that can take the desktops, the pointer or the keyboard marks its start and its end, so you know when to use the mouse and keyboard again. These runs are `apply` (not `--dry-run`), `discover` (plain and `--save`), and `auto` when it applies. `diff`, `apply --dry-run` and the other verbs make no mark.
+A run that can take the desktops, the pointer or the keyboard marks its start, its work and its end, so you know when to use the mouse and keyboard again. These runs are `apply` (not `--dry-run`), `discover` (plain and `--save`), and `auto` when it applies. `diff`, `apply --dry-run` and the other verbs make no mark.
 
-- **The start.** A rising sound, and a small toast at the bottom right of the main display: `arngz: starting`. It stays until the end mark takes its place.
+- **The start.** A rising sound, and a small toast at the bottom right of the main display: `arngz: starting`. It stays until the next mark takes its place.
+- **Running.** When the CLI first asks Hammerspoon for the run's work, the toast says `arngz: running`, with no sound, until the end mark takes its place. While `discover --save` or `apply` waits for the displays to settle, it says `arngz: running` too. A run refused before that ask, eg by a preference that does not hold, goes from `arngz: starting` to its end.
 - **The end.** A falling sound, and the toast says how the run ended for 3 s: `arngz: done` (exit 0 or 1; Finished and the report say what happened), `arngz: stopped: refused` (exit 2), `arngz: stopped: interrupted` (Ctrl-C or TERM), or `arngz: stopped: exit <n>`. The sound is the same for each: arngz has let go.
 - **When the CLI stops waiting** for an apply (`ARNGZ_APPLY_TIMEOUT`), the apply may still be at work. Then no sound plays, and the toast says `arngz: still running in Hammerspoon (arngz stopped waiting after <n> s)`. When the apply finishes, Hammerspoon plays the falling sound and shows its end: `arngz: done`, `arngz: stopped: refused`, or `arngz: stopped: error`.
+- **When the apply finished and its answer never came**, Hammerspoon says so when the CLI stops waiting. Then the CLI plays the falling sound, and the toast says `arngz: ended with no answer: see arngz log`. `arngz log` shows what the run did.
 
-The sounds are macOS's own screen-recording sounds, and the CLI plays them, so they come even when Hammerspoon does not answer. `ARNGZ_SOUNDS=off` turns them off. The mark toasts are apart from the toasts above, and step out of the way of a grab as they do. A CLI killed with SIGKILL makes no end mark and no falling sound: its start mark goes when twice the run's longest wait has passed. The run log has a `mark` record for each mark, and for a mark that could not be drawn.
+The sounds are macOS's own screen-recording sounds, and the CLI plays them, so they come even when Hammerspoon does not answer. `ARNGZ_SOUNDS=off` turns them off. The mark toasts are apart from the toasts above, and step out of the way of a grab as they do. A CLI killed with SIGKILL makes no end mark and no falling sound: its mark goes when twice the run's longest wait has passed. So does the mark of an apply the CLI stopped waiting for when Hammerspoon does not answer then, since the CLI cannot tell whether the apply still works. The run log has a `mark` record for each mark, and for a mark that could not be drawn.
 
 ### current
 

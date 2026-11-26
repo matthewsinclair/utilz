@@ -46,6 +46,8 @@
 # <verb>", so an arm reads the marks and the asks in the order they came.
 # FAKE_HS_MARK_EXIT makes a mark call exit so after its line, eg 69, as hs
 # does when Hammerspoon cannot be reached; FAKE_HS_MODE is for the asks alone.
+# A still call prints FAKE_HS_STILL_ANSWER, the engine's answer that the CLI
+# reads (M1, hv decision 53), and prints nothing when it is empty or unset.
 
 set -euo pipefail
 code="" prev=""
@@ -56,6 +58,9 @@ done
 mark="$(printf '%s\n' "$code" | sed -n 's/^return dofile("[^"]*")\.mark("\([^"]*\)", "\([^"]*\)", \([0-9]*\))$/\1 \3 \2/p')"
 if [[ -n "$mark" ]]; then
   printf 'mark %s\n' "$mark" >>"$FAKE_HS_LOG/calls"
+  if [[ "$mark" == "still "* && -n "${FAKE_HS_STILL_ANSWER:-}" ]]; then
+    printf '%s\n' "$FAKE_HS_STILL_ANSWER"
+  fi
   exit "${FAKE_HS_MARK_EXIT:-0}"
 fi
 printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"

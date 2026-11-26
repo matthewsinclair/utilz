@@ -358,11 +358,25 @@ ARNGZ_SOUND_END="${ARNGZ_SOUND_END:-/System/Library/Components/CoreAudio.compone
 # How long a mark's hs call may take, in seconds: it only draws.
 MARK_HS_SECONDS=2
 # Set by mark_start: 1 once the start mark is made, so the EXIT trap makes the
-# end mark; whether the sounds play (ARNGZ_SOUNDS); and how long the start mark
-# may stay if no end mark comes (a CLI killed by SIGKILL runs no trap).
+# end mark; whether the sounds play (ARNGZ_SOUNDS); how long the start mark
+# may stay if no end mark comes (a CLI killed by SIGKILL runs no trap); and
+# the verb the run marks, whose first ask draws the running mark.
 ARNGZ_MARKED=0
 ARNGZ_SOUNDS_ON=1
 ARNGZ_MARK_LIFE=0
+ARNGZ_MARK_VERB=""
+# Set by mark_running: 1 once the running mark is drawn, so it is drawn once.
+ARNGZ_MARK_RUNNING=0
+# The two answers of the engine's mark call to a still mark (hv decision 53,
+# ic's m1-note). THE SAME LINES AS M.MARK_DRAWN and M.MARK_NO_RUN in
+# lib/arngz.lua, which arngz.bats holds the two to. MARK_DRAWN: a run is in
+# progress, and its finish ends the mark. MARK_NO_RUN: no run is in progress,
+# so the engine finished, and its answer never reached the CLI.
+MARK_DRAWN="arngz: still mark drawn"
+MARK_NO_RUN="arngz: no run in progress"
+# The answer of the last mark call made with WAIT 1: what hs printed, or empty
+# when the call did not end in time.
+MARK_ANSWER=""
 
 # The end sound's file, or empty when the sounds are off: the request carries
 # it, so an engine the CLI stopped waiting for plays the same sound at its own
@@ -387,14 +401,16 @@ mark_sound() {
   ("$player" "$file" </dev/null >/dev/null 2>&1 &)
 }
 
-# A mark's toast, through a short hs call of its own: KIND (start, end or
-# still), WORDS, and SECONDS it may stay. WAIT 1 waits for the call, up to
-# its own -t and HS_EXIT_MARGIN, so the start mark is drawn before the work
-# call; a call still running then is left to end on its own, never stopped
-# (issue I7085193). WAIT 0 leaves it running, so a Hammerspoon that does not
-# answer adds nothing to the exit. What fails is a line in the run log.
+# A mark's toast, through a short hs call of its own: KIND (start, running,
+# end or still), WORDS, and SECONDS it may stay. WAIT 1 waits for the call, up
+# to its own -t and HS_EXIT_MARGIN, so the mark is drawn before the work call,
+# and keeps what the call printed in MARK_ANSWER; a call still running then is
+# left to end on its own, never stopped (issue I7085193). WAIT 0 leaves it
+# running, so a Hammerspoon that does not answer adds nothing to the exit.
+# What fails is a line in the run log.
 mark_draw() {
-  local kind="$1" words="$2" seconds="$3" wait="$4" tool state hs fix module pid deadline rc=0
+  local kind="$1" words="$2" seconds="$3" wait="$4" tool state hs fix module pid deadline rc=0 kept="" why
+  MARK_ANSWER=""
   tool="$(hs_tool_state "$(hs_prefix)")"
   IFS=$'\037' read -r state hs fix <<<"$tool"
   if [[ "$state" != ok ]]; then
@@ -408,8 +424,14 @@ mark_draw() {
       return 0
       ;;
   esac
+  # A waited call's answer goes to a file of its own; a call not waited for
+  # prints to nothing.
+  if [[ $wait -eq 1 ]] && ! kept="$(mktemp "${TMPDIR:-/tmp}/arngz-mark.XXXXXX" 2>&1)"; then
+    log_record mark "the $kind mark's answer cannot be kept: $kept"
+    kept=""
+  fi
   "$hs" -a -t "$MARK_HS_SECONDS" -c "return dofile(\"$module\").mark(\"$kind\", \"$words\", $seconds)" \
-    </dev/null >/dev/null 2>&1 &
+    </dev/null >"${kept:-/dev/null}" 2>&1 &
   pid=$!
   [[ $wait -eq 1 ]] || return 0
   deadline=$((SECONDS + MARK_HS_SECONDS + HS_EXIT_MARGIN))
@@ -418,10 +440,19 @@ mark_draw() {
   done
   if kill -0 "$pid" 2>/dev/null; then
     log_record mark "the $kind mark's hs call still runs after $((MARK_HS_SECONDS + HS_EXIT_MARGIN)) s; it is left to end on its own"
-    return 0
+  else
+    wait "$pid" || rc=$?
+    if [[ $rc -ne 0 ]]; then log_record mark "the $kind mark's hs call exited $rc"; fi
+    if [[ -n "$kept" ]] && ! MARK_ANSWER="$(cat -- "$kept" 2>&1)"; then
+      log_record mark "the $kind mark's answer could not be read: $MARK_ANSWER"
+      MARK_ANSWER=""
+    fi
   fi
-  wait "$pid" || rc=$?
-  if [[ $rc -ne 0 ]]; then log_record mark "the $kind mark's hs call exited $rc"; fi
+  # A call left running still writes to the file it holds open, which the
+  # remove takes out of the directory alone.
+  if [[ -n "$kept" ]] && ! why="$(rm -f -- "$kept" 2>&1)"; then
+    log_record mark "could not remove $kept: $why"
+  fi
   return 0
 }
 
@@ -443,23 +474,41 @@ mark_start() {
   esac
   ARNGZ_MARK_LIFE=$((2 * (timeout + waited)))
   ARNGZ_MARKED=1
+  ARNGZ_MARK_VERB="$verb"
   log_record mark "start: arngz: starting"
   mark_sound "$ARNGZ_SOUND_START"
   mark_draw start "arngz: starting" "$ARNGZ_MARK_LIFE" 1
 }
 
+# The running mark (hv decision 58, ic's running-note): "arngz: running",
+# once a run, just before the CLI's first ask of the marked VERB, for as long
+# as the start mark may stay. The CLI draws it, and not the engine, because
+# discover does its work inside one Hammerspoon call, and Hammerspoon draws
+# nothing until that call returns. An ask of another verb (plan, which,
+# state, reload) draws nothing, and the ask again after a reload draws it no
+# second time. No sound: the two sounds stay the start and the end.
+mark_running() {
+  local verb="$1"
+  [[ $ARNGZ_MARKED -eq 1 && $ARNGZ_MARK_RUNNING -eq 0 && "$verb" == "$ARNGZ_MARK_VERB" ]] || return 0
+  ARNGZ_MARK_RUNNING=1
+  log_record mark "running: arngz: running"
+  mark_draw running "arngz: running" "$ARNGZ_MARK_LIFE" 1
+}
+
 # The end mark, from the EXIT trap, by the exit code RC. "done" only for 0 and
 # 1 (done with problems), so it never stands for a failure; the falling sound
 # is the same for each, since each means arngz has let go. A scheduled verb
-# the CLI stopped waiting for is still at work in Hammerspoon: no sound, and
-# words that say so; the engine ends that mark at its own finish.
+# the CLI stopped waiting for may still be at work in Hammerspoon: no sound,
+# and words that say so, and the still call's answer says who ends that mark
+# (mark_still_answered).
 mark_end() {
   local rc="$1" words
   [[ $ARNGZ_MARKED -eq 1 ]] || return 0
   if [[ ${ENGINE_PENDING:-0} -eq 1 ]]; then
     words="arngz: still running in Hammerspoon (arngz stopped waiting after $((SECONDS - ARNGZ_LOG_T0)) s)"
-    log_record mark "end: $words; no sound, since the engine ends this mark"
-    mark_draw still "$words" "$ARNGZ_MARK_LIFE" 0
+    log_record mark "still: $words; no sound"
+    mark_draw still "$words" "$ARNGZ_MARK_LIFE" 1
+    mark_still_answered
     return 0
   fi
   if [[ ${ENGINE_MARK_BY_ENGINE:-0} -eq 1 ]]; then
@@ -472,6 +521,35 @@ mark_end() {
     130 | 143) words="arngz: stopped: interrupted" ;;
     *) words="arngz: stopped: exit $rc" ;;
   esac
+  log_record mark "end: $words"
+  mark_sound "$ARNGZ_SOUND_END"
+  mark_draw end "$words" 0 0
+}
+
+# M1 (hv decision 53, ic's m1-note): who ends the mark of a run the CLI
+# stopped waiting for, from the still call's answer (MARK_ANSWER). MARK_DRAWN:
+# the run is in progress, and its finish ends the mark through stopped-waiting.
+# MARK_NO_RUN: the engine finished, and its answer never came (eg it could not
+# write it); the CLI claims stopped-waiting (stopped_waiting_claim) and ends
+# the mark itself, the falling sound and the end words, unless the engine took
+# the file first. Any other answer, or none, says nothing for certain, so the
+# CLI ends no mark, and the mark goes at its life, as after SIGKILL.
+mark_still_answered() {
+  local words="arngz: ended with no answer: see arngz log" nl=$'\n' said
+  if grep -qxF "$MARK_DRAWN" <<<"$MARK_ANSWER"; then
+    log_record mark "still: drawn, so the engine ends the mark at its finish"
+    return 0
+  fi
+  if ! grep -qxF "$MARK_NO_RUN" <<<"$MARK_ANSWER"; then
+    said="no answer"
+    if [[ -n "$MARK_ANSWER" ]]; then said="the answer '${MARK_ANSWER//$nl/ }'"; fi
+    log_record mark "still: $said, so the CLI ends no mark, and the mark goes at its life"
+    return 0
+  fi
+  if ! stopped_waiting_claim "$ENGINE_DIR/$STOPPED_WAITING" "$ENGINE_STOPPED_WROTE"; then
+    log_record mark "still: no run in progress, and the engine took $STOPPED_WAITING, so it ended the mark"
+    return 0
+  fi
   log_record mark "end: $words"
   mark_sound "$ARNGZ_SOUND_END"
   mark_draw end "$words" 0 0
@@ -929,20 +1007,37 @@ STOPPED_WAITING=stopped-waiting
 # 1 when the engine, and not the CLI, ends the run's mark: its answer came as
 # the CLI stopped waiting, and the engine took the file first.
 ENGINE_MARK_BY_ENGINE=0
+# 1 when the CLI wrote the stopped-waiting file for the request it stopped
+# waiting for, 0 when it did not or could not.
+ENGINE_STOPPED_WROTE=0
+
+# The claim on the stopped-waiting file FLAG, which the CLI wrote (WROTE 1) or
+# could not write (WROTE 0), when the CLI would end the run's mark. The remove
+# is the claim, as it is in the engine, which writes its answer and then
+# removes the file: each side does its step and then looks at the other's, so
+# exactly one ends the mark. Returns 1 when the engine took the file first, so
+# the engine ends the mark; else 0, and the CLI ends it. A file the CLI could
+# not write the engine never saw, and one the CLI cannot remove and is still
+# there the engine cannot take either, so the CLI ends that mark. THE ONE RULE
+# for both of the CLI's claims: late_answer_claim's and mark_still_answered's.
+stopped_waiting_claim() {
+  local flag="$1" wrote="$2"
+  if [[ $wrote -eq 1 ]] && ! rm -- "$flag" 2>/dev/null && [[ ! -e "$flag" ]]; then
+    return 1
+  fi
+  return 0
+}
 
 # After the CLI wrote the stopped-waiting file FLAG (WROTE 1) or could not
 # (WROTE 0), the engine's answer RESPONSE may have come in that moment.
 # Returns 1 when there is still no answer, so the run stays pending. Else 0,
-# with ENGINE_MARK_BY_ENGINE saying who ends the mark. The remove is the
-# claim, as it is in the engine, which writes its answer and then removes the
-# file: each side does its step and then looks at the other's, so exactly one
-# ends the mark. A file the CLI cannot remove, and is still there, the engine
-# cannot take either, so the CLI ends that mark.
+# with ENGINE_MARK_BY_ENGINE saying who ends the mark, by
+# stopped_waiting_claim.
 late_answer_claim() {
   local response="$1" flag="$2" wrote="$3"
   ENGINE_MARK_BY_ENGINE=0
   [[ -f "$response" ]] || return 1
-  if [[ $wrote -eq 1 ]] && ! rm -- "$flag" 2>/dev/null && [[ ! -e "$flag" ]]; then
+  if ! stopped_waiting_claim "$flag" "$wrote"; then
     ENGINE_MARK_BY_ENGINE=1
   fi
   return 0
@@ -981,6 +1076,7 @@ engine_ask_run() {
   ENGINE_DIR=""
   ENGINE_PENDING=0
   ENGINE_MARK_BY_ENGINE=0
+  ENGINE_STOPPED_WROTE=0
   ENGINE_KIND=""
   ENGINE_HS_RC=""
   # The hs tool as doctor and init tell it, so the three cannot disagree.
@@ -1116,12 +1212,12 @@ engine_ask_run() {
       # The engine reads the request once, so this file, kept beside it, is
       # how it learns at its finish that the CLI stopped waiting: then it ends
       # the run's mark itself (hv decision 53). A write that fails is said.
-      local wrote=1
+      ENGINE_STOPPED_WROTE=1
       if ! why="$({ : >"$ENGINE_DIR/$STOPPED_WAITING"; } 2>&1)"; then
         log_record mark "could not tell the engine the CLI stopped waiting: $why"
-        wrote=0
+        ENGINE_STOPPED_WROTE=0
       fi
-      if ! late_answer_claim "$response" "$ENGINE_DIR/$STOPPED_WAITING" "$wrote"; then
+      if ! late_answer_claim "$response" "$ENGINE_DIR/$STOPPED_WAITING" "$ENGINE_STOPPED_WROTE"; then
         ENGINE_PENDING=1
         ENGINE_ERROR="the engine was sent $verb and has not answered within ${waited}s; it may still be running"
         ENGINE_FIX="see Hammerspoon's console (its menu bar icon: Console); a slower $verb takes ARNGZ_APPLY_TIMEOUT=<seconds>"
@@ -1203,11 +1299,12 @@ engine_ask_run() {
   ENGINE_KIND=ok
 }
 
-# engine_ask: engine_ask_run, then the run log's account of how the asking
-# ended, and the warnings the engine's response carries (its records or its
-# toast hook could not do their part), each said once. Its exits are
-# engine_ask_run's.
+# engine_ask: the running mark at the marked verb's first ask (mark_running),
+# then engine_ask_run, then the run log's account of how the asking ended, and
+# the warnings the engine's response carries (its records or its toast hook
+# could not do their part), each said once. Its exits are engine_ask_run's.
 engine_ask() {
+  mark_running "$1"
   local rc=0 t0=$SECONDS pending=""
   engine_ask_run "$@" || rc=$?
   if [[ $ENGINE_PENDING -eq 1 ]]; then pending="; pending"; fi

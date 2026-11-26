@@ -841,8 +841,10 @@ end
 print("hv decision 53: the start and end marks")
 -- ============================================================================
 
--- The words as the CLI gives them (opt/arngz/arngz, mark_start and mark_end).
+-- The words as the CLI gives them (opt/arngz/arngz, mark_start, mark_running
+-- and mark_end).
 local STARTING = "arngz: starting"
+local RUNNING = "arngz: running"
 local DONE = "arngz: done"
 local STILL = "arngz: still running in Hammerspoon (arngz stopped waiting after 600 s)"
 local LIFE = 1440
@@ -853,6 +855,10 @@ do
     ok and p.slot == "mark" and shown(p.lines) == STARTING, ok and shown(p.lines) or tostring(p))
   check("mark: start stays for the seconds the CLI gives, with no linger", ok and p.life == LIFE and p.linger == nil,
     ok and tostring(p.life) or tostring(p))
+  ok, p = pcall(T.on_mark, "running", RUNNING, LIFE)
+  check("mark: running (hv decision 58) is one line in the mark slot, and stays as the start does",
+    ok and p.slot == "mark" and shown(p.lines) == RUNNING and p.life == LIFE and p.linger == nil,
+    ok and shown(p.lines) or tostring(p))
   ok, p = pcall(T.on_mark, "end", DONE, 0)
   check("mark: end says its words and stays T.MARK_LINGER", ok and shown(p.lines) == DONE and p.linger == T.MARK_LINGER,
     ok and tostring(p.linger) or tostring(p))
@@ -866,6 +872,7 @@ do
     { "a kind the CLI does not send", { "begin", STARTING, LIFE }, "not begin" },
     { "no words", { "start", "", LIFE }, "has no words" },
     { "a start with no time to stay", { "start", STARTING, 0 }, "needs the seconds" },
+    { "a running with no time to stay", { "running", RUNNING, 0 }, "needs the seconds" },
   }
   for _, b in ipairs(bad) do
     local raised, err = pcall(T.on_mark, (table.unpack or unpack)(b[2]))
@@ -915,6 +922,22 @@ do
   if life then quietly(life.fn) end
   check("mark (drawn): a start mark with no end, as after SIGKILL, goes when its seconds are up",
     life ~= nil and log.canvases[1] and log.canvases[1].deleted and _G.arngz_toast.slots.mark == nil)
+end
+
+do
+  local running_text
+  local log, prints, ok, err = drive(function(M, lg)
+    M.mark("start", STARTING, LIFE)
+    M.mark("running", RUNNING, LIFE)
+    running_text = lg.canvases[1].elements[2].text
+    M.mark("end", DONE, 0)
+  end)
+  local mark = log.canvases[1]
+  check("mark (drawn): running takes the start mark's place on its canvas, and the end takes running's place",
+    ok and prints == 0 and #log.canvases == 1 and running_text == RUNNING and mark.elements[2].text == DONE
+      and not mark.deleted, tostring(err) .. ", " .. tostring(running_text))
+  local life = last_timer(log, LIFE)
+  check("mark (drawn): the end stops running's life", life ~= nil and life.stopped)
 end
 
 do
