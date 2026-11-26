@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "8bd6bdc9-a0e8-43ed-9077-c54e4fa150db",
-    "heartbeat_at": "2026-11-26T07:01:00.318Z",
+    "heartbeat_at": "2026-11-26T10:44:41.185Z",
     "status": "active",
-    "focus": "26 Nov fold for hv decision 45's compact. After it: /in-session, then hold for vc's word. Hold 40: after cc's green END and hv's probe, the CHANGELOG lines for arngz's Mission Control finder (create restored on macOS 27) and WP A (cc/desks1126 1ee77ee1), with the CHANGELOG.md:15 fix, then STca1b7f9's spike parts. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
+    "focus": "26 Nov fold for hv decision 54's compact. After it: /in-session, then hold for vc's word. Hold 41: the 2.15.0 CHANGELOG lines for cc's Save fix (I19d4fa68) and ic's start and end marks (hv decision 53), after their green END. Open: ST0031/01's AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
       "ST0031/01"
     ],
@@ -1050,9 +1050,18 @@
       "kind": "hold",
       "seq": 40,
       "text": "2.15.0 CHANGELOG lines for arngz's finder, WP A's removal and I40cbb9b are landed (31952800, 4d7c113d, a65037a9; vc's LANDING END). Released when vc says that cc's N3 measure needs no fix forward to those lines, or when dc lands the fix forward that vc names.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-26T10:44:40.731Z",
       "recorded_at": "2026-11-25T16:00:26.757Z",
       "edited_at": "2026-11-26T08:56:43.618Z"
+    },
+    {
+      "node": "dc",
+      "kind": "hold",
+      "seq": 41,
+      "text": "2.15.0 CHANGELOG lines, at vc's word after each green END: cc's Save fix (issue I19d4fa68, hv decision 52: discover's visit step, the named gaps, the refusal and --with-gaps), and ic's start and end marks (hv decision 53). Write each in a worktree off main from its owner's facts, have the owner read it for meaning, and send vc the tip and the change hash.",
+      "state": "live",
+      "recorded_at": "2026-11-26T10:44:40.931Z"
     }
   ],
   "sent": [

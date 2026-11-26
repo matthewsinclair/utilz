@@ -1,0 +1,15 @@
+{
+  "id": "01M8BQA7B31WY03BCNSCT0VXJZ",
+  "ts": "2026-11-26T10:44:40.931Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "2.15.0 CHANGELOG lines, at vc's word after each green END: cc's Save fix (issue I19d4fa68, hv decision 52: discover's visit step, the named gaps, the refusal and --with-gaps), and ic's start and end marks (hv decision 53). Write each in a worktree off main from its owner's facts, have the owner read it for meaning, and send vc the tip and the change hash."
+  }
+}

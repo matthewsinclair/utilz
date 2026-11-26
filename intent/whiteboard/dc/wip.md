@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 8bd6bdc9-a0e8-43ed-9077-c54e4fa150db
-heartbeat_at: 2026-11-26 07:01Z
+heartbeat_at: 2026-11-26 10:44Z
 status: active
-focus: "26 Nov fold for hv decision 45's compact. After it: /in-session, then hold for vc's word. Hold 40: after cc's green END and hv's probe, the CHANGELOG lines for arngz's Mission Control finder (create restored on macOS 27) and WP A (cc/desks1126 1ee77ee1), with the CHANGELOG.md:15 fix, then STca1b7f9's spike parts. Open: ST0031/01 at hv's cut (AC-01.4); ST0029 after the 2.15.0 cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "26 Nov fold for hv decision 54's compact. After it: /in-session, then hold for vc's word. Hold 41: the 2.15.0 CHANGELOG lines for cc's Save fix (I19d4fa68) and ic's start and end marks (hv decision 53), after their green END. Open: ST0031/01's AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01]
 ---
 
@@ -22,7 +22,7 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
-- 2.15.0 CHANGELOG lines for arngz's finder, WP A's removal and I40cbb9b are landed (31952800, 4d7c113d, a65037a9; vc's LANDING END). Released when vc says that cc's N3 measure needs no fix forward to those lines, or when dc lands the fix forward that vc names. (edited)
+- 2.15.0 CHANGELOG lines, at vc's word after each green END: cc's Save fix (issue I19d4fa68, hv decision 52: discover's visit step, the named gaps, the refusal and --with-gaps), and ic's start and end marks (hv decision 53). Write each in a worktree off main from its owner's facts, have the owner read it for meaning, and send vc the tip and the change hash.
 
 ## Watch-outs
 
