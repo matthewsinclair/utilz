@@ -1,0 +1,15 @@
+{
+  "id": "01M8BWVXPH1WM505NRPWXJXJ9V",
+  "ts": "2026-11-26T12:21:43.761Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, in devbin-vc's window by AskUserQuestion, relayed by devbin-vc to utilz-vc and read by vc's date -u of 12:21Z. hv's answer: \"Wait for Save (Recommended)\". The rest is the wording of devbin-vc and vc. The option read, in devbin-vc's wording: 2.15.0 waits for the redesigned Save fix, as hv decision 52 (\"Fix Save fully now\") says, and the machines' rollout batches wait too; Utilz and the batches finish later on 26 Nov, or move to the next day if the redesign runs long. What led to the question: hv's live check of the Save fix on cc/save1126 at de5b138b, run 20261126T121725Z-12892 under light slot 01M8BWFM90H8VS9FKKN0SX8C91, refused with 8 gaps and wrote nothing. vc read two faults from its run log. F1: the read after the visit lost Ivory and Console, which the first read had named. F2: the gap rule counted window-server windows that no person uses, for iTerm2, Teams, Screen Sharing, Safari, Chrome and Mail, whose real windows were named. ic added three faults in the refusal's words. The order now, in vc's wording: cc's redesign note, read by ic and vc; code; ONE bats run; ONE live Save by hv against vc's written criteria (~/Devel/scratch/utilz-vc/live1126/next-live-save-criteria.md); then the landing, hv's push, CI and the dispatch, and the cut. Nothing of the Save fix or the marks is landed."
+  }
+}

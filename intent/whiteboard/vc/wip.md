@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48
-heartbeat_at: 2026-11-26 11:41Z
+heartbeat_at: 2026-11-26 12:21Z
 status: active
-focus: "2.15.0, hv decision 55 (crack on): step 1, ic finishes the marks on cc/save1126 260e70f5 and cc adds its CLI step and the one driver; then vc's read, one bats run, hv's live check, the landing, hv's push, CI and dispatch, the cut after Intent's. main 47f4db24 unpushed. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "2.15.0 waits for the Save redesign (hv decision 56). hv's live Save at de5b138b was RED: F1 a read lost named windows, F2 false gaps, plus ic's three words faults. cc writes one note, ic and vc read, code, ONE bats run, ONE live Save against ~/Devel/scratch/utilz-vc/live1126/next-live-save-criteria.md; then land, hv's push, CI and dispatch, the cut. main 47f4db24 unpushed plus records. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
