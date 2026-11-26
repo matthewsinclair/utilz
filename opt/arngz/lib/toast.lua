@@ -489,11 +489,25 @@ local function running(st, id)
   return run
 end
 
+-- The visit step (cc's visit-note, 26 Nov 2026): before any change, apply
+-- shows each desktop not shown that holds an unseen app's window, through
+-- Mission Control. Its point is waiting with `for` FINDING_FOR, the
+-- desktop's `place` and its `display`, and no seconds. Its line says which
+-- desktop is shown, so the change of desktops does not read as a fault, and
+-- Hands off is under it from the first, since Mission Control is on screen.
+local FINDING_FOR = "finding windows"
+
+local function finding_line(f)
+  local which = type(f.place) == "number" and ("desktop " .. int(f.place)) or "a desktop"
+  return "Running... finding windows: showing " .. which .. on_display(f)
+end
+
 function ON.waiting(st, f)
   local run = running(st, f.run)
   if not run then return nil end
-  local body = { T.cut(waiting_line(f)) }
-  if run.stepped then body[#body + 1] = T.HANDS_OFF end
+  local finding = f["for"] == FINDING_FOR
+  local body = { T.cut(finding and finding_line(f) or waiting_line(f)) }
+  if run.stepped or finding then body[#body + 1] = T.HANDS_OFF end
   return { slot = "main", lines = headed(run, body) }
 end
 

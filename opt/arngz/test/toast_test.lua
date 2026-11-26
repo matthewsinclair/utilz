@@ -545,6 +545,27 @@ do
 end
 
 -- ============================================================================
+print("the visit step: finding windows on desktops not shown")
+-- ============================================================================
+
+-- cc's visit-note (26 Nov 2026): before any change, apply shows each desktop
+-- not shown that holds an unseen app's window. Its point is waiting with
+-- `for` "finding windows", the desktop's place and its display, and no
+-- seconds. The line says which desktop is shown, with Hands off under it
+-- before any step, since Mission Control changes the desktops on screen.
+do
+  local st = fresh()
+  apply_start(st, "r1")
+  local p = T.on_point(st, "waiting", { run = "r1", ["for"] = "finding windows", place = 2, display = "main" }, name_of)
+  check("visit: names the desktop shown and its display, with Hands off before any step",
+    p and shown(p.lines) == "arngz: zeopit | Running... finding windows: showing desktop 2 on main | " .. T.HANDS_OFF,
+    p and shown(p.lines))
+  p = T.on_point(st, "waiting", { run = "r1", ["for"] = "finding windows", display = "main" }, name_of)
+  check("visit: with no place it says a desktop",
+    p and p.lines[2] == "Running... finding windows: showing a desktop on main", p and shown(p.lines))
+end
+
+-- ============================================================================
 -- The fake hs: what a real canvas and timer would be asked to do, recorded.
 -- opts.no_canvas leaves hs.canvas out; opts.delete_raises makes a canvas's
 -- delete raise.
