@@ -2423,7 +2423,7 @@ end
 function P.save_refusal(gaps, name)
   local n = #gaps
   local first = gaps[1]
-  local why = string.format("refused, nothing saved: %d window%s could not be named, so desk %q would leave %s out", n,
+  local why = string.format("%d window%s could not be named, so desk %q would leave %s out", n,
     n == 1 and "" or "s", tostring(name), n == 1 and "it" or "them")
   local fix = string.format("show desktop %d on %s%s, then Save Desk again, or run arngz discover --save %s --with-gaps"
     .. " to save without %s", first.place, tostring(first.display), n == 1 and "" or " and the others above",

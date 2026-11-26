@@ -2,7 +2,7 @@
   "status": "error",
   "kind": "refused",
   "verb": "discover",
-  "error": "refused, nothing saved: 1 window could not be named, so desk \"zeop2\" would leave it out",
+  "error": "1 window could not be named, so desk \"zeop2\" would leave it out",
   "fix": "show desktop 3 on main, then Save Desk again, or run arngz discover --save zeop2 --with-gaps to save without it",
   "gaps": [
     "not recorded: Console on desktop 3 on main: arngz showed that desktop, and Accessibility still could not name its window"

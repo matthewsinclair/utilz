@@ -2490,8 +2490,8 @@ do
       and P.save_verdict(gaps, { save = "x", with_gaps = true }) == "save with gaps"
       and P.save_verdict(gaps, { save = "x", force = true }) == "refused")
   local why, fix = P.save_refusal(gaps, "zeopit")
-  check("refusal: says nothing saved and how many, and the fix names the desktop and --with-gaps",
-    why == 'refused, nothing saved: 1 window could not be named, so desk "zeopit" would leave it out'
+  check("refusal: says how many, once, and the fix names the desktop and --with-gaps",
+    why == '1 window could not be named, so desk "zeopit" would leave it out'
       and string.find(fix, "show desktop 2 on ", 1, true) == 1
       and string.find(fix, "arngz discover --save zeopit --with-gaps", 1, true) ~= nil, tostring(why) .. " / " .. tostring(fix))
 

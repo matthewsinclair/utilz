@@ -319,6 +319,17 @@ do
   check("refused: nothing saved, why, and the fix",
     p and shown(p.lines) == "arngz: Save Desk | Refused, nothing saved: no display could be read | Fix: run arngz doctor",
     p and shown(p.lines))
+  -- A save refused for a gap (issue I19d4fa6), in the words plan.lua gives
+  -- it, so the toast's own "Refused, nothing saved:" is the line's one
+  -- "refused" (vc's W3). A wrapped line is read whole again.
+  local P = dofile((toast_path:match("^(.*)/") or ".") .. "/plan.lua")
+  local why, fix = P.save_refusal({ { place = 3, display = "main" } }, "zeop2")
+  T.on_point(st, "start", { run = "d5", verb = "discover", desk = "zeop2" }, name_of)
+  p = T.on_point(st, "finished", { run = "d5", outcome = "refused", first = why, fix = fix }, name_of)
+  local whole = p and shown(p.lines):gsub(" | ", " ") or ""
+  local _, refusals = whole:lower():gsub("refused", "")
+  check("refused save: says refused once, then how many windows and the desk",
+    refusals == 1 and whole:find("Refused, nothing saved: " .. why, 1, true) ~= nil, whole)
   check("every other verb draws nothing", T.on_point(st, "start", { run = "w1", verb = "which", desk = "" }, name_of) == nil
     and T.on_point(st, "finished", { run = "w1", outcome = "done" }, name_of) == nil)
 end

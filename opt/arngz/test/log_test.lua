@@ -1811,7 +1811,7 @@ arm("Save Desk names a window on a desktop not shown", function()
   local refused = discover_save_run(false, { grid = "8x4", name = "zeopit", save = "zeopit", force = true }, "R-SAVE2")
   check("save: a window still not named refuses --save, though --force, and names it",
     refused and refused.kind == "refused" and refused.desk == nil
-      and string.find(tostring(refused.error), "refused, nothing saved: 1 window could not be named", 1, true) ~= nil
+      and string.find(tostring(refused.error), "1 window could not be named", 1, true) ~= nil
       and refused.gaps and refused.gaps[1] and string.find(refused.gaps[1], "not recorded: Safari on desktop 2 on", 1, true) ~= nil,
     refused and tostring(refused.error))
 
