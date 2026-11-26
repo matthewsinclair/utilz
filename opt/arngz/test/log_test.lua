@@ -1744,5 +1744,79 @@ arm("an apply whose way back fails says so, and never that none was needed", fun
     find(recs, "back", "no display needed showing again") == nil, last_line(recs))
 end)
 
+-- Save Desk's visit step (issue I19d4fa6), through M.run: the base world with
+-- Safari's window 102 unnamed on desktop 12, not shown. discover shows 12,
+-- names the window, shows 11 again, reads the screens again and saves; with a
+-- window that stays unnamed, a --save is refused and names it.
+local function discover_save_run(named_on_show, options, run)
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  local base = F.base_world().screens[1]
+  local start = base.spaces[1].id
+  local shown, shows = start, {}
+  f.live = { base.spaces[1].id, base.spaces[2].id }
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    shows[#shows + 1] = id
+    shown = id
+    return true
+  end
+  local safari_window = { id = function() return 102 end }
+  f.hs.application = { get = function() return { allWindows = function()
+    return named_on_show and { safari_window } or {}
+  end } end }
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    local sp = w.screens[1].spaces
+    local safari = table.remove(sp[1].windows, 2)
+    if M.visit_index[102] then
+      table.insert(sp[2].windows, safari)
+    else
+      table.insert(sp[2].windows, { id = 102, named = false })
+    end
+    w.layer0_owned = { { pid = 88, bundle = "com.apple.Safari", name = "Safari", ids = { 102 } } }
+    for _, s in ipairs(sp) do s.active = s.id == shown end
+    return w
+  end
+  local response = run_engine(f, { verb = "discover", options = options, run = run, log = log })
+  return response, shows, shown, start, records(log)
+end
+
+arm("Save Desk names a window on a desktop not shown", function()
+  local response, shows, shown, start = discover_save_run(true, { grid = "8x4", name = "zeopit", save = "zeopit" }, "R-SAVE1")
+  local has_safari = false
+  for _, d in ipairs(((response or {}).desk or {}).displays or {}) do
+    for _, sp in ipairs(d.spaces or {}) do
+      for _, a in ipairs(sp.apps or {}) do
+        if a.app == "com.apple.Safari" then has_safari = true end
+      end
+    end
+  end
+  check("save: the window on the desktop not shown is named and in the desk, and the verdict is save",
+    response and response.status == "ok" and response.verdict == "save" and has_safari and #(response.gaps or {}) == 0
+      and response.shown == 1, response and (tostring(response.status) .. " / " .. tostring(response.verdict)))
+  check("save: discover showed that desktop and then the start desktop again",
+    shows[1] == 12 and shown == start, L.ids(shows))
+
+  local refused = discover_save_run(false, { grid = "8x4", name = "zeopit", save = "zeopit", force = true }, "R-SAVE2")
+  check("save: a window still not named refuses --save, though --force, and names it",
+    refused and refused.kind == "refused" and refused.desk == nil
+      and string.find(tostring(refused.error), "refused, nothing saved: 1 window could not be named", 1, true) ~= nil
+      and refused.gaps and refused.gaps[1] and string.find(refused.gaps[1], "not recorded: Safari on desktop 2 on", 1, true) ~= nil,
+    refused and tostring(refused.error))
+
+  local with_gaps = discover_save_run(false, { grid = "8x4", name = "zeopit", save = "zeopit", with_gaps = true }, "R-SAVE3")
+  check("save: --with-gaps saves the desk without it, the gap named",
+    with_gaps and with_gaps.status == "ok" and with_gaps.verdict == "save with gaps" and #(with_gaps.gaps or {}) == 1,
+    with_gaps and tostring(with_gaps.verdict))
+
+  local plain = discover_save_run(false, { grid = "8x4", name = "discovered" }, "R-SAVE4")
+  check("save: a plain discover prints the desk and names the gap, verdict print",
+    plain and plain.status == "ok" and plain.verdict == "print" and #(plain.gaps or {}) == 1, plain and tostring(plain.verdict))
+end)
+
 print(string.format("log_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

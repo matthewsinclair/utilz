@@ -760,6 +760,48 @@ engine_response() {
   assert_success
 }
 
+# Issue I19d4fa6: a desk that would leave out windows arngz could not name.
+@test "I19d4fa6: a plain discover with gaps prints the desk, names each gap, and exits 1" {
+  fake_hs ok "$FIXTURES/responses/discover-gaps.json"
+  run_arngz discover
+  assert_exit_code 1
+  assert_output_contains "desk: discovered"
+  assert_output_contains "not recorded: Console on desktop 3 on main:"
+}
+
+@test "I19d4fa6: a refused save names each gap, exits 2, and leaves the desk file byte for byte, though --force" {
+  fake_hs ok "$FIXTURES/responses/discover-refused.json"
+  mkdir -p "$XDG_CONFIG_HOME/arngz/desks"
+  echo "desk: keep me" >"$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml"
+  cp "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" "$BATS_TEST_TMPDIR/before.yaml"
+  run_arngz discover --save zeop2 --force
+  assert_exit_code 2
+  assert_output_contains "not recorded: Console on desktop 3 on main:"
+  assert_output_contains "arngz: refused, nothing saved: 1 window could not be named"
+  assert_output_contains "--with-gaps"
+  cmp -s "$BATS_TEST_TMPDIR/before.yaml" "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ||
+    fail "the refused save changed the desk file"
+  run yq -r '.options.force' "$FAKE_HS_LOG/request.json"
+  assert_output "true"
+}
+
+@test "I19d4fa6: --save --with-gaps saves the desk, names each gap, and exits 1; --with-gaps alone is refused" {
+  local response
+  response="$(engine_response discover discover_world "" "zeop3")"
+  yq -o json '.gaps = ["not recorded: Console on desktop 3 on main: arngz showed that desktop, and Accessibility still could not name its window"] | .verdict = "save with gaps"' \
+    "$response" >"$BATS_TEST_TMPDIR/with-gaps.json"
+  fake_hs ok "$BATS_TEST_TMPDIR/with-gaps.json"
+  run_arngz discover --save zeop3 --with-gaps
+  assert_exit_code 1
+  assert_output_contains "not recorded: Console on desktop 3 on main:"
+  [ -s "$XDG_CONFIG_HOME/arngz/desks/zeop3.yaml" ] || fail "nothing saved"
+  run yq -r '.options.with_gaps' "$FAKE_HS_LOG/request.json"
+  assert_output "true"
+  run_arngz discover --with-gaps
+  assert_exit_code 2
+  assert_output_contains "--with-gaps only means something with --save <desk>"
+}
+
 @test "AT-04.3: discover --save refuses a name the validator refuses, and a grid that is not WxH" {
   fake_hs ok "$FIXTURES/responses/discover.json"
   run_arngz discover --save list

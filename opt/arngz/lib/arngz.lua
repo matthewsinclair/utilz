@@ -537,6 +537,27 @@ function M.observe(bundles)
     end
   end
 
+  -- With no desk (discover, observe): every running app's layer-0 windows of
+  -- a size a person uses, for discover's visit step and its gaps (issue
+  -- I19d4fa6). A regular app only (one with a Dock icon): an agent's or a
+  -- daemon's window is not one a desk records.
+  if not bundles then
+    world.layer0_owned = {}
+    local pids = {}
+    for pid in pairs(owned) do pids[#pids + 1] = pid end
+    table.sort(pids)
+    for _, pid in ipairs(pids) do
+      local got, app = pcall(hs.application.applicationForPID, pid)
+      local kind = got and app and select(2, pcall(function() return app:kind() end))
+      if kind == 1 then
+        local bundle = app:bundleID()
+        if bundle then
+          world.layer0_owned[#world.layer0_owned + 1] = { pid = pid, bundle = bundle, name = app:name(), ids = owned[pid] }
+        end
+      end
+    end
+  end
+
   local dock_prefs, dock_err = read_defaults("com.apple.dock")
   local wm_prefs, wm_err = read_defaults("com.apple.WindowManager")
   world.prefs_errors = { spaces = spaces_err, dock = dock_err, window_manager = wm_err }
@@ -2430,7 +2451,9 @@ end
 -- error, for the CLI (D25).
 local function error_response(verb, err)
   if type(err) == "table" and err.refused then
-    return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused), fix = err.fix }
+    -- A refused save carries the lines of the windows it would leave out
+    -- (issue I19d4fa6), which the CLI prints before its refusal.
+    return { status = "error", kind = "refused", verb = verb, error = tostring(err.refused), fix = err.fix, gaps = err.gaps }
   end
   if type(err) == "table" and err.reload then
     return { status = "error", kind = "reload", verb = verb, error = tostring(err.reload),
@@ -2635,9 +2658,47 @@ local VERBS = {
       refuse(why .. ", so windows on desktops not shown could not be named, and a desk read now would leave them out",
         options.after_reload_of and P.FILTER_FIX_AFTER_RELOAD or P.FILTER_FIX)
     end
+    -- THE VISIT STEP FOR SAVE DESK (issue I19d4fa6): each desktop not shown
+    -- that holds a window of a running app observe did not name is shown, its
+    -- windows named, and each display shown its start desktop again; then
+    -- the screens are read again. The step runs inside this one call, so the
+    -- toast draws nothing while it runs: Finished counts the desktops shown.
+    local visit = {}
+    local list = P.discover_visit_list(world)
+    if #list > 0 then
+      local start = {}
+      for _, s in ipairs(world.screens or {}) do
+        for _, sp in ipairs(s.spaces or {}) do
+          if sp.active then start[s.uuid] = sp.id end
+        end
+      end
+      M.visit_index = {}
+      local r = M.visit(list, start, function(item)
+        note(lg, "visit", string.format("finding windows: showing desktop %d on %s (%s)", item.place,
+          tostring((world.screens[item.di] or {}).name), table.concat(item.bundles, ", ")))
+      end)
+      local back = {}
+      M.way_back(start, back, nil, lg)
+      visit = { visited = r.visited, failed = r.failed, out_of_time = r.out_of_time, shown = r.shown }
+      note(lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
+        r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
+      world = M.observe()
+      log_world(lg, "after the visit", world)
+    end
     local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
     if not desk then refuse(notes, fix) end
-    return { desk = desk, report = notes }
+    local gaps = P.discover_gaps(world, desk, visit)
+    local lines = {}
+    for _, g in ipairs(gaps) do lines[#lines + 1] = P.gap_line(g) end
+    if (visit.shown or 0) > 0 then
+      notes[#notes + 1] = string.format("showed %d desktop(s) to name the windows on them, then each display's start desktop again", visit.shown)
+    end
+    local verdict = P.save_verdict(gaps, options)
+    if verdict == "refused" then
+      local why, sfix = P.save_refusal(gaps, options.save)
+      error({ refused = why, fix = sfix, gaps = lines }, 0)
+    end
+    return { desk = desk, report = notes, gaps = lines, verdict = verdict, shown = visit.shown or 0 }
   end,
   -- plan: what apply would do, and nothing done (diff, and apply --dry-run).
   -- execute is never called on this path.

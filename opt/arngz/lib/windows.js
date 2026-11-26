@@ -4,11 +4,11 @@
 //   osascript -l JavaScript windows.js
 //
 // and plan.lua's P.parse_window_list reads what it prints: the header line
-// "arngz-windows 2", then one "<id> <layer> <pid>" line per window, the pid
-// being the owner's, so arngz can find a running app's windows on a desktop
+// "arngz-windows 2", then one "<id> <layer> <pid> <w> <h>" line per window, the
+// pid being the owner's and w and h its size in points, so arngz can find a running app's windows on a desktop
 // not shown (cc's visit-note, 26 Nov 2026). It reads
 // CGWindowListCopyWindowInfo(kCGWindowListOptionAll, kCGNullWindowID)
-// through the ObjC bridge: each window's number, layer and owner pid,
+// through the ObjC bridge: each window's number, layer, owner pid and size,
 // and nothing else.
 // It reads no title, needs no Accessibility and no Screen Recording, changes
 // nothing, and launches nothing. A failure prints a line that is not the
@@ -26,7 +26,9 @@ function run() {
   if (!Array.isArray(list)) return "error: CGWindowListCopyWindowInfo gave no list";
   const lines = [HEADER];
   for (const w of list) {
-    lines.push(String(w.kCGWindowNumber) + " " + String(w.kCGWindowLayer) + " " + String(w.kCGWindowOwnerPID));
+    const b = w.kCGWindowBounds || {};
+    lines.push([w.kCGWindowNumber, w.kCGWindowLayer, w.kCGWindowOwnerPID, Math.round(b.Width || 0), Math.round(b.Height || 0)]
+      .map(String).join(" "));
   }
   return lines.join("\n");
 }

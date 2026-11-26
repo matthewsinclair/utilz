@@ -554,6 +554,9 @@ end
 -- holds no desktop either: arngz can remove a desktop while such a window is
 -- on it.
 P.WINDOW_LIST_HEADER = "arngz-windows 2"
+-- A layer-0 window smaller than this, in points, on either side, is no window
+-- a person places (issue I19d4fa6).
+P.MIN_WINDOW_SIDE = 50
 
 -- The free ids in windows.js's TEXT, as a list, and its layer-0 windows by
 -- owner pid ({ [pid] = {ids} }); or nil and why
@@ -568,12 +571,17 @@ function P.parse_window_list(text)
   end
   local free, owned = {}, {}
   for i = 2, #lines do
-    local id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$")
+    local id, layer, pid, w, h = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+) (%d+) (%d+)$")
+    if not id then id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$") end
     if not id then
-      return nil, "windows.js printed a line that is not '<id> <layer> <pid>': " .. lines[i]:sub(1, 200)
+      return nil, "windows.js printed a line that is not '<id> <layer> <pid> <w> <h>': " .. lines[i]:sub(1, 200)
     end
     if tonumber(layer) ~= 0 then
       free[#free + 1] = tonumber(id)
+    elseif w and (tonumber(w) < P.MIN_WINDOW_SIDE or tonumber(h) < P.MIN_WINDOW_SIDE) then
+      -- A layer-0 window too small to be one a person uses (a helper's 1x1,
+      -- eg Chrome's): it holds its desktop, but discover never waits for it
+      -- or names it as a gap (issue I19d4fa6).
     else
       local p = tonumber(pid)
       owned[p] = owned[p] or {}
@@ -2308,6 +2316,116 @@ local function sort_apps(apps)
   end)
 end
 
+-- ------------------- Save Desk's windows on desktops not shown (I19d4fa6)
+--
+-- discover has no desk, so it asks the window list which windows it did not
+-- name: world.layer0_owned holds each running regular app's layer-0 windows
+-- of a size a person uses ({ {pid, bundle, name, ids} }).
+
+-- The app that owns each such window: { [id] = {bundle, name} }.
+local function owned_by(world)
+  local out = {}
+  for _, o in ipairs(world.layer0_owned or {}) do
+    for _, id in ipairs(o.ids or {}) do out[id] = { bundle = o.bundle, name = o.name } end
+  end
+  return out
+end
+
+-- Each user desktop no display shows that lists a window of OWNED that
+-- observe did not name: { {di, screen, space, place, bundles, ids} }, in
+-- world order and on each display in Mission Control's order, each desktop
+-- once. M.visit shows them. A full-screen space is never in it.
+function P.discover_visit_list(world)
+  local owner = owned_by(world)
+  local list = {}
+  for di, s in ipairs(world.screens or {}) do
+    for ui, sp in ipairs(P.user_spaces(s)) do
+      if not sp.active then
+        local item
+        for _, w in ipairs(sp.windows or {}) do
+          local o = owner[w.id]
+          if o and not w.named then
+            item = item or { di = di, screen = s.uuid, space = sp.id, place = ui, bundles = {}, ids = {} }
+            if not item.ids[o.bundle] then
+              item.bundles[#item.bundles + 1] = o.bundle
+              item.ids[o.bundle] = w.id
+            end
+          end
+        end
+        if item then list[#list + 1] = item end
+      end
+    end
+  end
+  return list
+end
+
+-- Why a window discover did not name stays out of the desk, by VISIT ({
+-- visited = {[space] = true}, failed = {[screen] = why}, out_of_time }).
+P.GAP_SHOWN = "arngz showed that desktop, and Accessibility still could not name its window"
+P.GAP_NOT_REACHED = "the 20 s to show desktops ran out before that desktop"
+
+-- The windows the desk leaves out: each layer-0 window of a running regular
+-- app on a user desktop that observe did not name, with its app's name, its
+-- desktop's place, its display (by DESK's name for it where DESK has one) and
+-- why. { {name, bundle, place, display, why} }.
+function P.discover_gaps(world, desk, visit)
+  visit = visit or {}
+  local owner = owned_by(world)
+  local names = {}
+  for _, d in ipairs((desk and desk.displays) or {}) do
+    if d.match and d.match.uuid then names[d.match.uuid] = d.name end
+  end
+  local gaps = {}
+  for _, s in ipairs(world.screens or {}) do
+    for ui, sp in ipairs(P.user_spaces(s)) do
+      for _, w in ipairs(sp.windows or {}) do
+        local o = owner[w.id]
+        if o and not w.named then
+          local why
+          if (visit.failed or {})[s.uuid] and not (visit.visited or {})[sp.id] then
+            why = "arngz could not show that desktop: " .. tostring(visit.failed[s.uuid])
+          elseif visit.out_of_time and not sp.active and not (visit.visited or {})[sp.id] then
+            why = P.GAP_NOT_REACHED
+          else
+            why = P.GAP_SHOWN
+          end
+          gaps[#gaps + 1] = { name = o.name or o.bundle, bundle = o.bundle, place = ui,
+            display = names[s.uuid] or s.name or s.uuid, why = why }
+        end
+      end
+    end
+  end
+  return gaps
+end
+
+-- One gap's stderr line (ic's words).
+function P.gap_line(g)
+  return string.format("not recorded: %s on desktop %d on %s: %s", tostring(g.name), g.place, tostring(g.display), g.why)
+end
+
+-- THE ONE DECISION for a desk discover read (ic's ruling): "print" (no
+-- --save), "save" (no gaps), "save with gaps" (--with-gaps), or "refused".
+-- --force means overwrite and nothing else, so it never saves a desk with gaps.
+function P.save_verdict(gaps, options)
+  options = options or {}
+  if not options.save or options.save == "" then return "print" end
+  if #(gaps or {}) == 0 then return "save" end
+  if options.with_gaps then return "save with gaps" end
+  return "refused"
+end
+
+-- A refused save's words and fix (ic's): nil when the verdict is not refused.
+function P.save_refusal(gaps, name)
+  local n = #gaps
+  local first = gaps[1]
+  local why = string.format("refused, nothing saved: %d window%s could not be named, so desk %q would leave %s out", n,
+    n == 1 and "" or "s", tostring(name), n == 1 and "it" or "them")
+  local fix = string.format("show desktop %d on %s%s, then Save Desk again, or run arngz discover --save %s --with-gaps"
+    .. " to save without %s", first.place, tostring(first.display), n == 1 and "" or " and the others above",
+    tostring(name), n == 1 and "it" or "them")
+  return why, fix
+end
+
 -- A desk from a world (WP-04): what discover prints. PURE, like plan.
 --
 -- options: grid ("WxH", default 8x4, D19) and name (the desk's name). Returns
@@ -2335,6 +2453,10 @@ function P.desk_from_world(world, options)
   -- A window listed on more than one space is on every space; it is no
   -- space's, so it is said and left out.
   local listed = P.listings(world)
+  -- macOS's own windows for each desktop are free in the window list: they
+  -- are no window a person could miss, so they are not counted as unnamed
+  -- (issue I19d4fa6).
+  local free = P.free_set(world)
 
   -- The primary first, then the rest by position and uuid, so the same world
   -- always gives the same desk.
@@ -2409,7 +2531,7 @@ function P.desk_from_world(world, options)
       local named, recorded, minimized, unnamed, everywhere, own, other = 0, 0, 0, 0, 0, 0, 0
       for _, w in ipairs(sp.windows or {}) do
         if not w.named then
-          unnamed = unnamed + 1
+          if not free[w.id] then unnamed = unnamed + 1 end
         else
           named = named + 1
           if listed[w.id].count > 1 then

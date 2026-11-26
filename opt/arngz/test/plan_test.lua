@@ -2260,7 +2260,7 @@ do
     bad == nil and string.find(tostring(bwhy), "did not print a window list: error:", 1, true) ~= nil, bwhy)
   local odd, owhy = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n501 x\n")
   check("window list: a line that is not '<id> <layer>' fails the list", odd == nil
-    and string.find(tostring(owhy), "not '<id> <layer> <pid>': 501 x", 1, true) ~= nil, owhy)
+    and string.find(tostring(owhy), "not '<id> <layer> <pid> <w> <h>': 501 x", 1, true) ~= nil, owhy)
   local silent, swhy = P.parse_window_list(nil)
   check("window list: no text at all is not a list", silent == nil and swhy == "windows.js printed nothing", swhy)
 end
@@ -2422,6 +2422,84 @@ do
   check("unseen: with no window list, the entry keeps the words it had",
     string.find(tostring(unseen_op(plain).reason), "no standard window of it on a desktop space could be named", 1, true)
       ~= nil, tostring(unseen_op(plain).reason))
+end
+
+-- ------------------------- Save Desk's windows not named (issue I19d4fa6)
+--
+-- The base world with Safari's window 102 unnamed on desktop 12, which the
+-- display does not show, and the window list giving it to Safari.
+
+print("Save Desk's windows not named")
+
+local SAFARI_PID = 88
+
+local function save_world()
+  local w = base_world()
+  local sp = w.screens[1].spaces
+  table.remove(sp[1].windows, 2)
+  table.insert(sp[2].windows, { id = 102, named = false })
+  w.layer0_owned = { { pid = SAFARI_PID, bundle = "com.apple.Safari", name = "Safari", ids = { 102 } } }
+  return w
+end
+
+do
+  local free, owned = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n102 0 88 900 545\n103 0 88 1 1\n")
+  check("window list: a window smaller than MIN_WINDOW_SIDE is not owned, one a person uses is",
+    owned and owned[88] and #owned[88] == 1 and owned[88][1] == 102 and #free == 0, tostring(owned and owned[88]))
+
+  local w = save_world()
+  local list = P.discover_visit_list(w)
+  check("discover visit: the desktop not shown with the unnamed window of a running app, once",
+    #list == 1 and list[1].space == 12 and list[1].place == 2 and list[1].bundles[1] == "com.apple.Safari"
+      and list[1].ids["com.apple.Safari"] == 102, tostring(#list))
+
+  local shown = save_world()
+  shown.screens[1].spaces[1].active, shown.screens[1].spaces[2].active = false, true
+  check("discover visit: a shown desktop is not in the list", #P.discover_visit_list(shown) == 0)
+
+  local named = base_world()
+  named.layer0_owned = { { pid = SAFARI_PID, bundle = "com.apple.Safari", name = "Safari", ids = { 102 } } }
+  check("discover visit: a window observe named is not in the list", #P.discover_visit_list(named) == 0)
+
+  local fs = save_world()
+  table.remove(fs.screens[1].spaces[2].windows)
+  table.insert(fs.screens[1].spaces, { id = 99, ordinal = 3, type = "fullscreen", uuid = "SPACE-99",
+    windows = { { id = 102, named = false } } })
+  check("discover visit: a full-screen space is never in the list", #P.discover_visit_list(fs) == 0)
+
+  local desk = P.desk_from_world(save_world(), { grid = "8x4", name = "x" })
+  local gaps = P.discover_gaps(save_world(), desk, { visited = { [12] = true } })
+  check("gaps: a window still not named after its desktop was shown is a gap, with its app, desktop and display",
+    #gaps == 1 and gaps[1].name == "Safari" and gaps[1].place == 2 and gaps[1].why == P.GAP_SHOWN,
+    gaps[1] and P.gap_line(gaps[1]))
+  check("gaps: the line in ic's words",
+    gaps[1] and P.gap_line(gaps[1]) == "not recorded: Safari on desktop 2 on " .. tostring(gaps[1].display) .. ": " .. P.GAP_SHOWN)
+  local failed = P.discover_gaps(save_world(), desk, { failed = { ["SCREEN-A"] = "Mission Control refused AXPress" } })
+  check("gaps: a desktop whose show failed says so", failed[1] and failed[1].why
+    == "arngz could not show that desktop: Mission Control refused AXPress", failed[1] and failed[1].why)
+  local late = P.discover_gaps(save_world(), desk, { out_of_time = 20 })
+  check("gaps: a desktop the step did not reach says the time ran out", late[1] and late[1].why == P.GAP_NOT_REACHED)
+
+  check("verdict: no --save prints, no gap saves, --with-gaps saves with gaps, else refused; --force changes none",
+    P.save_verdict(gaps, {}) == "print" and P.save_verdict({}, { save = "x" }) == "save"
+      and P.save_verdict(gaps, { save = "x", with_gaps = true }) == "save with gaps"
+      and P.save_verdict(gaps, { save = "x", force = true }) == "refused")
+  local why, fix = P.save_refusal(gaps, "zeopit")
+  check("refusal: says nothing saved and how many, and the fix names the desktop and --with-gaps",
+    why == 'refused, nothing saved: 1 window could not be named, so desk "zeopit" would leave it out'
+      and string.find(fix, "show desktop 2 on ", 1, true) == 1
+      and string.find(fix, "arngz discover --save zeopit --with-gaps", 1, true) ~= nil, tostring(why) .. " / " .. tostring(fix))
+
+  local counted = save_world()
+  table.insert(counted.screens[1].spaces[2].windows, { id = 621, named = false })
+  counted.free_windows = { 621 }
+  local _, notes = P.desk_from_world(counted, { grid = "8x4", name = "x" })
+  local line
+  for _, n in ipairs(notes or {}) do
+    if n:find("space 2", 1, true) then line = n end
+  end
+  check("report: a free window (macOS's own) is not counted as one Accessibility could not name",
+    line and line:find("1 Accessibility could not name", 1, true) ~= nil, tostring(line))
 end
 
 print(string.format("plan_test: %d passed, %d failed", passed, failed))

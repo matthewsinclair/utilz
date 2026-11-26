@@ -2245,10 +2245,11 @@ cmd_diff() {
 # validator has accepted it. Everything the engine did not record is said on
 # stderr, so stdout is the desk alone.
 cmd_discover() {
-  local save="" force=0 grid="8x4" dir options yaml target reason rc
+  local save="" force=0 with_gaps=0 grid="8x4" dir options yaml target reason rc gaps
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --force) force=1; shift ;;
+      --with-gaps) with_gaps=1; shift ;;
       --save)
         if [[ $# -lt 2 ]]; then refuse "--save takes a desk name"; fi
         save="$2"
@@ -2270,6 +2271,9 @@ cmd_discover() {
   if [[ $force -eq 1 && -z "$save" ]]; then
     refuse "--force only means something with --save <desk>"
   fi
+  if [[ $with_gaps -eq 1 && -z "$save" ]]; then
+    refuse "--with-gaps only means something with --save <desk>"
+  fi
   if [[ -n "$save" ]]; then
     target="$(desk_file "$save")"
     if reason="$(desk_name_refusal "$save")"; then
@@ -2282,7 +2286,11 @@ cmd_discover() {
 
   dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-discover.XXXXXX")"
   options="$dir/options.json"
-  G="$grid" N="${save:-discovered}" yq -n -o json '.grid = strenv(G) | .name = strenv(N)' >"$options"
+  # The save, its force and --with-gaps ride in the request, so the engine
+  # makes the one decision, P.save_verdict, and the CLI acts on it (issue
+  # I19d4fa6, ic's ruling).
+  G="$grid" N="${save:-discovered}" S="$save" F="$force" W="$with_gaps" yq -n -o json \
+    '.grid = strenv(G) | .name = strenv(N) | .save = strenv(S) | .force = (strenv(F) == "1") | .with_gaps = (strenv(W) == "1")' >"$options"
   # Refused as engine_call refuses, once this verb's own temp dir is gone: the
   # request the engine kept carries the options in it.
   rc=0
@@ -2299,11 +2307,16 @@ cmd_discover() {
     rm -rf -- "$dir"
     # Hammerspoon's config reloaded and not back is never "nothing changed".
     if [[ $ENGINE_RELOAD_LOST -eq 1 ]]; then engine_reloaded_exit; fi
+    # A refused save names each window it would have left out, first.
+    if [[ -n "$ENGINE_RESPONSE" && -f "$ENGINE_RESPONSE" ]]; then yq -r '.gaps[]?' "$ENGINE_RESPONSE" >&2; fi
     engine_refuse
   fi
   yaml="$dir/desk.yaml"
   render_desk "$ENGINE_RESPONSE" >"$yaml"
   render_report "$ENGINE_RESPONSE" >&2
+  # Each window the desk leaves out, on stderr (issue I19d4fa6): exit 1 below.
+  gaps="$(yq -r '.gaps[]?' "$ENGINE_RESPONSE")"
+  [[ -z "$gaps" ]] || printf '%s\n' "$gaps" >&2
   # What discover writes, the validator must accept: a refusal here is a bug in
   # discover, and it is said rather than saved.
   validate_desk_file "${save:-discovered}" "$yaml" || refuse "discover built a desk the validator refuses (kept at $yaml)"
@@ -2319,6 +2332,8 @@ cmd_discover() {
     record_current "$save"
   fi
   rm -rf "$dir"
+  # A desk that leaves windows out is done with problems: exit 1, as apply's.
+  [[ -z "$gaps" ]] || exit 1
 }
 
 # The options which and auto send the engine: every desk in the catalogue, in
