@@ -2308,7 +2308,7 @@ do
   unread.free_windows, unread.free_error = nil, "osascript windows.js ended by signal 14: "
   local rops, rerr = P.plan(base_desk(), unread, {})
   check("window list: a list that could not be read removes nothing, and the kept desktop says why",
-    kinds(rops) == "extra" and string.find(rops[1].reason, P.NO_WINDOW_LIST .. ": osascript windows.js ended by signal 14",
+    kinds(rops) == "extra" and string.find(rops[1].reason, "desktops not removed: " .. P.NO_WINDOW_LIST .. ": osascript windows.js ended by signal 14",
       1, true) ~= nil, rerr or ops_text(rops))
 
   local again = P.plan(base_desk(), unread, { no_remove = true })

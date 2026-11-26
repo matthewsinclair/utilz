@@ -619,6 +619,7 @@ local function fake_place_hs(takes, gets)
   local window = {
     setFrame = function(_, frame) set[#set + 1] = frame end,
     frame = function() return takes end,
+    id = function() return 102 end,
   }
   M.window_index = { [102] = { win = window, via = "allWindows" } }
   return {
@@ -683,8 +684,24 @@ do
     bundle = "com.apple.Safari", reason = "r" }
   ok, results = pcall(M.execute, { gone }, { unmoved = {} })
   r = ok and results and results[1] or {}
-  check("lookup: a window not in the index (closed since observe) fails its op with why, and no hs.window.get call",
+  check("lookup: a window observe never named fails its op with why, and no hs.window.get call",
     r.status == "failed" and string.find(tostring(r.reason), "window 909 is no longer in this run's windows", 1, true)
+      ~= nil and gets.n == 0, tostring(r.status) .. " / " .. tostring(r.reason) .. " / gets " .. gets.n)
+
+  -- ic's F1: a window that closed after observe is still in the index, as
+  -- an element that no longer answers for its id.
+  gets.n = 0
+  M.window_index[910] = { via = "allWindows", win = {
+    id = function() error("the element is no longer valid", 0) end,
+    setFrame = function() error("setFrame on a closed window", 0) end,
+    frame = function() error("frame of a closed window", 0) end,
+  } }
+  local closed = { op = "place", window = 910, frame = CELL, path = "displays[0].spaces[0].apps[1]",
+    bundle = "com.apple.Safari", reason = "r" }
+  ok, results = pcall(M.execute, { closed }, { unmoved = {} })
+  r = ok and results and results[1] or {}
+  check("lookup: a window that closed after observe, still in the index, fails its op saying it is gone",
+    r.status == "failed" and string.find(tostring(r.reason), "window 910 is no longer in this run's windows", 1, true)
       ~= nil and gets.n == 0, tostring(r.status) .. " / " .. tostring(r.reason) .. " / gets " .. gets.n)
   _G.hs = nil
 end

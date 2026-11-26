@@ -611,9 +611,11 @@ local function empty_desktop(sp, listed, free)
   return (P.empty_by(ids, function(id) return (listed[id] or {}).count or 0 end, free))
 end
 
--- What a run that could not read the window list says of the desktops it
--- keeps (ic's words, ~/Devel/scratch/utilz-ic/mc1126-read/view-window-reader.md).
-P.NO_WINDOW_LIST = "desktops not removed: arngz could not read the window list"
+-- What a run that could not read the window list says, in one place (ic's
+-- words, ~/Devel/scratch/utilz-ic/mc1126-read/view-window-reader.md): the
+-- plan's kept desktop puts "desktops not removed: " before it, and a
+-- removal's note "not removed: ". The toast keys its line on it.
+P.NO_WINDOW_LIST = "arngz could not read the window list"
 
 -- The apps with a claimable window on each space, by space id, for the score.
 local function apps_by_space(world)
@@ -789,7 +791,7 @@ local function plan_removals(desk, world, screens, options)
         end
         local said = ""
         if world.free_error and not options.no_remove then
-          said = "; " .. P.NO_WINDOW_LIST .. ": " .. tostring(world.free_error)
+          said = "; desktops not removed: " .. P.NO_WINDOW_LIST .. ": " .. tostring(world.free_error)
         elseif #holding == 1 then
           said = "; desktop " .. holding[1] .. " holds windows"
         elseif #holding > 1 then

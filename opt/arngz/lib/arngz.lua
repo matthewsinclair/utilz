@@ -92,18 +92,30 @@ end
 -- that hangs ends at WINDOW_LIST_SECONDS and is a read that failed. It uses no
 -- Accessibility, so one app that does not answer cannot hold it. Returns the
 -- free ids, or nil and why. observe reads it once, and each removal again.
+-- The list is read from stdout alone; stderr goes to a file of its own and
+-- is said only in the reason, so a warning osascript prints cannot break the
+-- list (ic's N1).
 local WINDOW_LIST_SECONDS = 5
 local WINDOW_LIST_JS = here .. "/windows.js"
 
+local function quoted(path) return "'" .. path:gsub("'", "'\\''") .. "'" end
+
 function M.read_window_list()
-  local command = string.format("/usr/bin/perl -e 'alarm %d; exec @ARGV' /usr/bin/osascript -l JavaScript '%s' 2>&1",
-    WINDOW_LIST_SECONDS, (WINDOW_LIST_JS:gsub("'", "'\\''")))
+  local err_path = os.tmpname()
+  local command = string.format("/usr/bin/perl -e 'alarm %d; exec @ARGV' /usr/bin/osascript -l JavaScript %s 2>%s",
+    WINDOW_LIST_SECONDS, quoted(WINDOW_LIST_JS), quoted(err_path))
   local text, ok, kind, rc = hs.execute(command)
+  local h = io.open(err_path, "r")
+  local err_text = h and h:read("a") or ""
+  if h then h:close() end
+  os.remove(err_path)
+  local said = err_text ~= "" and ("; stderr: " .. err_text:gsub("%c", " "):sub(1, 200)) or ""
   if not ok then
-    return nil, string.format("osascript windows.js ended by %s %s: %s", tostring(kind), tostring(rc),
-      tostring(text or ""):sub(1, 200))
+    return nil, string.format("osascript windows.js ended by %s %s%s", tostring(kind), tostring(rc), said)
   end
-  return P.parse_window_list(text)
+  local free, why = P.parse_window_list(text)
+  if not free then return nil, why .. said end
+  return free
 end
 
 -- com.apple.spaces and its Monitors list, which holds each display's desktops
@@ -299,13 +311,19 @@ end
 -- window.find, which reads every running app's windows through
 -- Accessibility at each call (Hammerspoon's window.lua:203-236), so one app
 -- that does not answer held each op, and Hammerspoon with it. The plan
--- places and moves only windows observe named, so a window not here closed
--- after observe, and its op fails with WINDOW_GONE.
+-- places and moves only windows observe named. A window that closed after
+-- observe is still in the index, as an element that no longer answers for
+-- its id: window_of asks it its id, which asks that window's app alone, and
+-- gives nil unless it answers with the same id, so its op fails with
+-- window_gone (ic's F1).
 M.window_index = {}
 
 local function window_of(id)
   local hit = M.window_index[id]
-  return hit and hit.win or nil
+  if not hit then return nil end
+  local ok, got = pcall(function() return hit.win:id() end)
+  if ok and got == id then return hit.win end
+  return nil
 end
 
 local function window_gone(id)
@@ -2462,7 +2480,12 @@ end
 -- AX_DEFAULT_SECONDS, macOS's default, at its end. Hammerspoon's setting is
 -- global and has no getter; hv's ~/.hammerspoon sets none. A Hammerspoon with
 -- no hs.window.timeout (a test's fake) is left alone; one that refuses the
--- value is said in the log.
+-- value is said in the log. begin_run sets it and finish_run puts it back, and
+-- every path that calls begin_run ends in finish_run; the quiet gate's
+-- `unsettled` answer calls neither, so it changes nothing. A run that never
+-- reaches finish_run (Hammerspoon reloaded or quit in the middle of an apply)
+-- leaves 2 s set until the next run's finish_run (ic's N2); a reload of the
+-- config does not set it back.
 M.AX_SECONDS = 2
 M.AX_DEFAULT_SECONDS = 6
 

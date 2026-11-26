@@ -1276,6 +1276,7 @@ local function with_hand(f, world)
     return {
       frame = function() return f.frames[id] end,
       setFrame = function(_, frame) f.frames[id] = { x = frame.x, y = frame.y, w = frame.w, h = frame.h } end,
+      id = function() return id end,
     }
   end
   M.window_index = setmetatable({}, { __index = function(_, id)
