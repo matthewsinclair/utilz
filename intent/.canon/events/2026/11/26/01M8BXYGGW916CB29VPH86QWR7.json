@@ -1,0 +1,16 @@
+{
+  "id": "01M8BXYGGW916CB29VPH86QWR7",
+  "ts": "2026-11-26T12:40:37.148Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 21,
+    "text": "arngz start and end marks (hv decision 53): all of ic's work is in cc/save1126 at 9af5e8f3 (run 3 GREEN, 211 ok); ic/marks1126 at 56462eff is behind it and holds nothing more. Left: hv's verdict on the sounds and the two toasts at hv's one sitting (a change to the sounds or words comes to ic); after the landing, record decision 53's work. Notes: ~/Devel/scratch/utilz-ic/marks1126/ (marks-note.md, arms-69bfa3be.md); Save reads in ~/Devel/scratch/utilz-ic/mc1126-read/."
+  }
+}

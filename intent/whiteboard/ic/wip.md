@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 10:45Z
+heartbeat_at: 2026-11-26 12:40Z
 status: active
-focus: "Folded (hv decision 54). Resume: the marks, part 2 (M.mark, toast.lua mark slot), arms and help in ~/Devel/scratch/utilz-ic/wt-marks (ic/marks1126 at cf493a89 over cc's 50f6be51); RESUME.md says what is left."
+focus: "Folded (hv's pack-up, 26 Nov). Resume: hv's one sitting first, with hv's verdict on the marks' sounds and two toasts (a change comes to ic); after the landing, record decision 53's work; after the push and CI, close ST44b4671/4b56, its thread and issue 0114. RESUME.md has it."
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4 (CI dispatch on the final push). (edited)
-- arngz start and end marks (hv decision 53), on ic/marks1126 in ~/Devel/scratch/utilz-ic/wt-marks over cc's 50f6be51. Part 1 (CLI) at cf493a89. Left: part 2 (arngz.lua M.mark, toast.lua mark slot), arngz.bats and toast_test arms red over 50f6be51, help/arngz.md; then cc's XS (engine ends a stopped-waiting mark), cc's one driver, hv's live check. Note ~/Devel/scratch/utilz-ic/marks1126/marks-note.md.
+- arngz start and end marks (hv decision 53): all of ic's work is in cc/save1126 at 9af5e8f3 (run 3 GREEN, 211 ok); ic/marks1126 at 56462eff is behind it and holds nothing more. Left: hv's verdict on the sounds and the two toasts at hv's one sitting (a change to the sounds or words comes to ic); after the landing, record decision 53's work. Notes: ~/Devel/scratch/utilz-ic/marks1126/ (marks-note.md, arms-69bfa3be.md); Save reads in ~/Devel/scratch/utilz-ic/mc1126-read/. (edited)
 
 ## TODO
 
