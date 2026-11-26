@@ -540,6 +540,55 @@ function T.on_point(st, name, f, name_of)
   return on(st, f, name_of)
 end
 
+-- ---------------------------------------------------------------- the marks
+
+-- The start and end marks (hv decision 53, ic's marks-note of 26 Nov 2026).
+-- hv's need: to know when arngz has the mouse and keyboard, and when it has
+-- let go. The CLI makes them, with a sound of its own, through a short hs
+-- call each: arngz.lua's M.mark, then T.mark. They are in a slot of their own,
+-- "mark", apart from Starting, Running... and Finished, which stay as they
+-- are. The start mark stays until the end mark takes its place, or for the
+-- seconds the CLI gives it, so a CLI killed by SIGKILL leaves it only that
+-- long. The end mark stays T.MARK_LINGER. "still" is the CLI's end when it
+-- stopped waiting for an apply that is still at work: it stays for the
+-- seconds given, and the engine's own finish ends it.
+T.MARK_LINGER = 3    -- seconds the end mark stays
+T.MARK_LINE = 36     -- characters in a mark's line
+T.MARK_TEXT_SIZE = 13
+
+local MARK_KINDS = { start = true, ["end"] = true, still = true }
+
+-- Where a mark of `size` sits on a display whose visible frame is `screen`:
+-- its bottom right, a margin in from the frame's right and bottom edges. Its
+-- width is held to the band right of the widest work toast (T.MAX_WIDTH of
+-- the width, centred), so the two never meet.
+function T.mark_layout(size, screen)
+  local band = math.floor(screen.w * (1 - T.MAX_WIDTH) / 2) - T.MARGIN
+  local w = math.min(math.ceil(size.w) + 2 * T.PADDING, band)
+  local h = math.ceil(size.h) + 2 * T.PADDING
+  return { x = screen.x + screen.w - T.MARGIN - w, y = screen.y + screen.h - T.MARGIN - h, w = w, h = h }
+end
+
+-- The plan for a mark: its words on at most T.LONG_LINES lines of
+-- T.MARK_LINE, its place, and how long it stays. A kind it does not know,
+-- no words, or a start or still with no time to stay breaks the CLI's call,
+-- so it is raised.
+function T.on_mark(kind, words, seconds)
+  if not MARK_KINDS[kind] then error("a mark is start, end or still, not " .. tostring(kind), 0) end
+  if type(words) ~= "string" or words == "" then error("the " .. kind .. " mark has no words", 0) end
+  local plan = { slot = "mark", lines = T.wrap(words, T.MARK_LINE, T.LONG_LINES), layout = T.mark_layout,
+    text_size = T.MARK_TEXT_SIZE }
+  if kind == "end" then
+    plan.linger = T.MARK_LINGER
+  else
+    if type(seconds) ~= "number" or seconds <= 0 then
+      error("the " .. kind .. " mark needs the seconds it may stay, not " .. tostring(seconds), 0)
+    end
+    plan.life = seconds
+  end
+  return plan
+end
+
 -- ---------------------------------------------------------------- drawing
 
 -- The state the toasts share across IPC calls. dofile makes this module anew
@@ -577,14 +626,14 @@ end
 -- above app windows and the Dock and below menus; on every desktop, and left
 -- alone by Mission Control, so it stays in view while the engine switches a
 -- display's desktop.
-local function new_canvas()
+local function new_canvas(text_size)
   local canvas = hs_module("canvas")
   local c = canvas.new({ x = 0, y = 0, w = 1, h = 1 })
   c:appendElements(
     { type = "rectangle", action = "strokeAndFill", fillColor = { white = 0, alpha = 0.78 },
       strokeColor = { white = 1, alpha = 0.8 }, strokeWidth = 1,
       roundedRectRadii = { xRadius = T.RADIUS, yRadius = T.RADIUS } },
-    { type = "text", text = "", textSize = T.TEXT_SIZE, textColor = { white = 1 }, textLineBreak = "truncateTail" })
+    { type = "text", text = "", textSize = text_size, textColor = { white = 1 }, textLineBreak = "truncateTail" })
   c:level(canvas.windowLevels.status)
   c:behaviorAsLabels({ "canJoinAllSpaces", "stationary" })
   return c
@@ -623,14 +672,18 @@ local function place(slot, frame)
     { x = T.PADDING, y = T.PADDING, w = frame.w - 2 * T.PADDING, h = frame.h - 2 * T.PADDING })
 end
 
--- Draw a plan: the slot's text rewritten in place and the toast sized to it; a
+-- Draw a plan: the slot's text rewritten in place and the toast sized to it,
+-- where the plan's own layout puts it (a mark), else as T.layout does; a
 -- notice kept just above the running toast; every toast hidden that would
 -- cover the title bar a move is about to grab, and shown again otherwise; the
--- slot's life renewed, and Finished given its linger.
+-- slot's life renewed, for the plan's own life or T.LIFETIME, and Finished
+-- given its linger. A mark comes in a call of its own, between the work
+-- points, so it keeps the grab the last work point named (st.step): a toast
+-- hidden for a grab stays hidden, and the mark hides too.
 local function draw(st, plan)
   local slot = st.slots[plan.slot]
   if not slot then
-    slot = { canvas = new_canvas(), screen = primary_frame() }
+    slot = { canvas = new_canvas(plan.text_size or T.TEXT_SIZE), screen = primary_frame() }
     st.slots[plan.slot] = slot
   end
   stop(slot.linger)
@@ -639,10 +692,16 @@ local function draw(st, plan)
   slot.canvas:elementAttribute(2, "text", text)
   slot.size = slot.canvas:minimumTextSize(2, text)
   local main, notice = st.slots.main, st.slots.notice
-  place(slot, T.layout(slot.size, slot.screen, plan.slot == "notice" and main and main.frame or nil))
+  if plan.layout then
+    place(slot, plan.layout(slot.size, slot.screen))
+  else
+    place(slot, T.layout(slot.size, slot.screen, plan.slot == "notice" and main and main.frame or nil))
+  end
   if plan.slot == "main" and notice then place(notice, T.layout(notice.size, notice.screen, slot.frame)) end
+  local step = plan.step
+  if plan.slot == "mark" then step = st.step else st.step = step end
   for _, s in pairs(st.slots) do
-    local covers = T.hides(s.frame, plan.step)
+    local covers = T.hides(s.frame, step)
     if covers and s.shown then
       s.canvas:hide()
       s.shown = false
@@ -653,7 +712,7 @@ local function draw(st, plan)
   end
   local timer = hs_module("timer")
   stop(slot.life)
-  slot.life = timer.doAfter(T.LIFETIME, take_down(st, plan.slot))
+  slot.life = timer.doAfter(plan.life or T.LIFETIME, take_down(st, plan.slot))
   if plan.linger then slot.linger = timer.doAfter(plan.linger, take_down(st, plan.slot)) end
 end
 
@@ -678,6 +737,16 @@ function T.point(name, fields)
     end
   end)
   if not ok then error("arngz toast: the " .. tostring(name) .. " point: " .. tostring(err), 0) end
+end
+
+-- The hook the CLI's mark call reaches, through arngz.lua's M.mark: KIND
+-- (start, end or still), its WORDS, and the SECONDS a start or still may
+-- stay. Whatever fails is raised with the mark's kind, so the hs call exits
+-- non-zero and the CLI's run log says so. A failure a timer kept is left for
+-- the next point, whose error the engine logs in full.
+function T.mark(kind, words, seconds)
+  local ok, err = pcall(function() draw(shared(), T.on_mark(kind, words, seconds)) end)
+  if not ok then error("arngz toast: the " .. tostring(kind) .. " mark: " .. tostring(err), 0) end
 end
 
 return T
