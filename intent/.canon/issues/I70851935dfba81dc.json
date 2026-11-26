@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "I70851935dfba81dc",
+  "origin": "01M8BHP19YWJBGEVQEXPT09KRR",
+  "realised": true,
+  "slug": "arngz-s-cli-kills-its-hs-helper-while-hammerspoo",
+  "title": "arngz's CLI kills its hs helper while Hammerspoon may still reply, which crashed Hammerspoon",
+  "status": "open",
+  "severity": "critical",
+  "created": "2026-11-26",
+  "reporter": "Matthew Sinclair",
+  "body": "arngz's CLI stops its hs helper when the helper still runs HS_EXIT_GRACE (3) seconds after the engine's response file appears (opt/arngz/arngz:882-892, F3's fix of 23 Nov 2026). On 26 Nov 2026 that kill crashed Hammerspoon. Run 20261126T090241Z-73396 (`arngz diff zeopit`, load about 17, during cc's N3 measure) took 47 s; the CLI killed hs 3 s after the response, and Hammerspoon then trapped in hs.ipc's reply to the dead port: EXC_BREAKPOINT in CFMessagePortSendRequest, called from ipc_callback (crash report Hammerspoon-2026-11-26-130333.ips, 09:03:31Z). vc reopened Hammerspoon.\n\nThe cost: a slow machine can make arngz kill Hammerspoon, and every hotkey and arngz run fails until it is reopened.\n\nThe fix: the CLI never signals an hs that may still be taking Hammerspoon's reply. hs is bounded already by its own `-t` timeout, so after the response the CLI waits for hs to exit on its own until the call's deadline (the same `-t` seconds from its start) plus HS_EXIT_MARGIN seconds. Only an hs that outlives its own timeout by that margin is hung, and only that one is stopped, with its own log words. Size S.\n\nTests (arngz.bats, with the fake hs): (1) an hs that exits on its own 4.5 s after its response (past the old 3 s grace) is let exit, with no kill record; red over main, which kills it at 3 s. (2) AT-93ea7f8a.6's hung arm changes its claim: an hs that hangs after replying is stopped only once its own timeout plus the margin has passed, not after the grace; red over main, which stops it at 3 s.\n\nhv decisions 24 and 49 put it in 2.15.0 (vc tells hv, who can refuse).\n"
+}
