@@ -1,9 +1,10 @@
 ---
 issue: I426f2a7
 title: arngz leaves a running app unseen when its window is on a desktop not shown since Hammerspoon started
-status: OPEN
+status: CLOSED
 severity: high
 created: 2026-11-26
+closed: 2026-11-26
 reporter: Matthew Sinclair
 ---
 
