@@ -1752,6 +1752,9 @@ end)
 -- window that stays unnamed, a --save is refused and names it.
 local function discover_save_run(named_on_show, options, run, fail_back)
   fresh_globals()
+  -- M lives on from arm to arm here, where Hammerspoon makes it anew at
+  -- each call, so a window an earlier arm named must not name Safari here.
+  M.visit_index = {}
   local log = tmpdir() .. "/arngz.log"
   local f = new_fake()
   local base = F.base_world().screens[1]

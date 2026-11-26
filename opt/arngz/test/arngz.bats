@@ -786,7 +786,7 @@ engine_response() {
   run_arngz discover --save zeop2 --force
   assert_exit_code 2
   assert_output_contains "not recorded: Console on desktop 3 on main:"
-  assert_output_contains "arngz: refused, nothing saved: 1 window could not be named"
+  assert_output_contains "arngz: the engine refused discover: refused, nothing saved: 1 window could not be named"
   assert_output_contains "--with-gaps"
   cmp -s "$BATS_TEST_TMPDIR/before.yaml" "$XDG_CONFIG_HOME/arngz/desks/zeop2.yaml" ||
     fail "the refused save changed the desk file"
