@@ -2432,9 +2432,10 @@ function P.save_refusal(gaps, name)
 end
 
 -- The end mark's words for an engine RESPONSE (hv decision 53), when the
--- engine ends a mark the CLI stopped waiting for. The words are those the
--- CLI gives by its exit code: "done" for a run that answered ok, with or
--- without problems; "refused" for a refusal; "error" for any other answer.
+-- engine ends a mark the CLI stopped waiting for: "done" for a run that
+-- answered ok, with or without problems, and "refused" for a refusal, as the
+-- CLI says by its exit code; "error" for any other answer, where the CLI says
+-- "exit <n>", since the engine has no exit code.
 P.MARK_DONE = "arngz: done"
 P.MARK_REFUSED = "arngz: stopped: refused"
 P.MARK_ERROR = "arngz: stopped: error"

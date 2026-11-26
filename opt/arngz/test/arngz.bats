@@ -3371,3 +3371,38 @@ interrupted_apply() {
   done
   [ ! -e "$FAKE_HS_LOG/sounds" ] || fail "a sound played: $(cat "$FAKE_HS_LOG/sounds")"
 }
+
+# late_answer_claim alone, from the CLI's own source: the answer that comes
+# as the CLI stops waiting. Each case is laid out on disk first, so no arm
+# rests on timing: the remove of stopped-waiting is the claim, and exactly
+# one side ends the mark.
+@test "hv decision 53: an answer that comes as the CLI stops waiting has its mark ended by one side alone" {
+  eval "$(sed -n '/^late_answer_claim() {$/,/^}$/p' "$UTILZ_HOME/opt/arngz/arngz")"
+  declare -F late_answer_claim >/dev/null || fail "the CLI has no late_answer_claim"
+  local dir="$BATS_TEST_TMPDIR/late" flag rc
+  mkdir -p "$dir"
+  flag="$dir/stopped-waiting"
+
+  : >"$flag"
+  rc=0
+  late_answer_claim "$dir/response.json" "$flag" 1 || rc=$?
+  [ "$rc" -ne 0 ] || fail "no answer yet, and the run was not left pending"
+  [ -e "$flag" ] || fail "a pending run lost the engine's file"
+
+  : >"$dir/response.json"
+  late_answer_claim "$dir/response.json" "$flag" 1 || fail "an answer that came was left pending"
+  [ "$ENGINE_MARK_BY_ENGINE" -eq 0 ] || fail "the CLI removed the file, and still left the mark to the engine"
+  [ ! -e "$flag" ] || fail "the CLI's claim left the file for the engine to take as well"
+
+  late_answer_claim "$dir/response.json" "$flag" 1 || fail "an answer the engine had claimed was left pending"
+  [ "$ENGINE_MARK_BY_ENGINE" -eq 1 ] || fail "the engine took the file first, and the CLI ends the mark too"
+
+  late_answer_claim "$dir/response.json" "$flag" 0 || fail "an answer with no file written was left pending"
+  [ "$ENGINE_MARK_BY_ENGINE" -eq 0 ] || fail "no file was written, so the engine cannot end the mark, and the CLI left it"
+
+  : >"$flag"
+  chmod 555 "$dir"
+  late_answer_claim "$dir/response.json" "$flag" 1 || fail "an answer with a file the CLI cannot remove was left pending"
+  chmod 755 "$dir"
+  [ "$ENGINE_MARK_BY_ENGINE" -eq 0 ] || fail "a file neither side can remove left the mark to nobody"
+}

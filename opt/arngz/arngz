@@ -462,6 +462,10 @@ mark_end() {
     mark_draw still "$words" "$ARNGZ_MARK_LIFE" 0
     return 0
   fi
+  if [[ ${ENGINE_MARK_BY_ENGINE:-0} -eq 1 ]]; then
+    log_record mark "end: the engine ends the mark, since its answer came as the CLI stopped waiting"
+    return 0
+  fi
   case "$rc" in
     0 | 1) words="arngz: done" ;;
     2) words="arngz: stopped: refused" ;;
@@ -919,6 +923,30 @@ ENGINE_FIX=""
 ENGINE_DIR=""
 ENGINE_PENDING=0
 ENGINE_KIND=""
+# The file the CLI leaves beside a request it stopped waiting for (hv
+# decision 53); the engine's M.STOPPED_WAITING names the same file.
+STOPPED_WAITING=stopped-waiting
+# 1 when the engine, and not the CLI, ends the run's mark: its answer came as
+# the CLI stopped waiting, and the engine took the file first.
+ENGINE_MARK_BY_ENGINE=0
+
+# After the CLI wrote the stopped-waiting file FLAG (WROTE 1) or could not
+# (WROTE 0), the engine's answer RESPONSE may have come in that moment.
+# Returns 1 when there is still no answer, so the run stays pending. Else 0,
+# with ENGINE_MARK_BY_ENGINE saying who ends the mark. The remove is the
+# claim, as it is in the engine, which writes its answer and then removes the
+# file: each side does its step and then looks at the other's, so exactly one
+# ends the mark. A file the CLI cannot remove, and is still there, the engine
+# cannot take either, so the CLI ends that mark.
+late_answer_claim() {
+  local response="$1" flag="$2" wrote="$3"
+  ENGINE_MARK_BY_ENGINE=0
+  [[ -f "$response" ]] || return 1
+  if [[ $wrote -eq 1 ]] && ! rm -- "$flag" 2>/dev/null && [[ ! -e "$flag" ]]; then
+    ENGINE_MARK_BY_ENGINE=1
+  fi
+  return 0
+}
 
 # The verbs the engine runs on a timer and answers later (D20 as amended).
 # THE SAME LIST AS `SCHEDULED` in lib/arngz.lua, which arngz.bats holds the
@@ -952,6 +980,7 @@ engine_ask_run() {
   ENGINE_FIX=""
   ENGINE_DIR=""
   ENGINE_PENDING=0
+  ENGINE_MARK_BY_ENGINE=0
   ENGINE_KIND=""
   ENGINE_HS_RC=""
   # The hs tool as doctor and init tell it, so the three cannot disagree.
@@ -1084,16 +1113,21 @@ engine_ask_run() {
       sleep 0.2
     done
     if [[ ! -f "$response" ]]; then
-      ENGINE_PENDING=1
       # The engine reads the request once, so this file, kept beside it, is
       # how it learns at its finish that the CLI stopped waiting: then it ends
       # the run's mark itself (hv decision 53). A write that fails is said.
-      if ! why="$({ : >"$ENGINE_DIR/stopped-waiting"; } 2>&1)"; then
+      local wrote=1
+      if ! why="$({ : >"$ENGINE_DIR/$STOPPED_WAITING"; } 2>&1)"; then
         log_record mark "could not tell the engine the CLI stopped waiting: $why"
+        wrote=0
       fi
-      ENGINE_ERROR="the engine was sent $verb and has not answered within ${waited}s; it may still be running"
-      ENGINE_FIX="see Hammerspoon's console (its menu bar icon: Console); a slower $verb takes ARNGZ_APPLY_TIMEOUT=<seconds>"
-      return 1
+      if ! late_answer_claim "$response" "$ENGINE_DIR/$STOPPED_WAITING" "$wrote"; then
+        ENGINE_PENDING=1
+        ENGINE_ERROR="the engine was sent $verb and has not answered within ${waited}s; it may still be running"
+        ENGINE_FIX="see Hammerspoon's console (its menu bar icon: Console); a slower $verb takes ARNGZ_APPLY_TIMEOUT=<seconds>"
+        return 1
+      fi
+      log_record wait "the engine answered $verb as the CLI stopped waiting"
     fi
   elif [[ ! -f "$response" ]]; then
     case "$rc" in
