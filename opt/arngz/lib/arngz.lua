@@ -91,7 +91,8 @@ end
 -- windows.js, beside this file, under osascript, with a perl alarm so a read
 -- that hangs ends at WINDOW_LIST_SECONDS and is a read that failed. It uses no
 -- Accessibility, so one app that does not answer cannot hold it. Returns the
--- free ids, or nil and why. observe reads it once, and each removal again.
+-- free ids, the layer-0 windows by owner and the ones no person can see
+-- (P.parse_window_list), or nil and why. observe reads it once, and each removal again.
 -- The list is read from stdout alone; stderr goes to a file of its own and
 -- is said only in the reason, so a warning osascript prints cannot break the
 -- list (ic's N1).
@@ -113,9 +114,9 @@ function M.read_window_list()
   if not ok then
     return nil, string.format("osascript windows.js ended by %s %s%s", tostring(kind), tostring(rc), said)
   end
-  local free, why = P.parse_window_list(text)
-  if not free then return nil, why .. said end
-  return free, why
+  local free, owned, unseen = P.parse_window_list(text)
+  if not free then return nil, owned .. said end
+  return free, owned, unseen
 end
 
 -- com.apple.spaces and its Monitors list, which holds each display's desktops
@@ -281,7 +282,7 @@ end
 -- fail twice, or fail on one route and be named by the other.
 -- Returns the index, the filter's note, the listing's error, and
 -- { count = n, first = error } for the id reads that failed.
-local function nameable()
+function M.nameable()
   local index, id_errors = {}, { count = 0 }
   local function take(w, via)
     local got, id = pcall(function() return w:id() end)
@@ -303,13 +304,21 @@ local function nameable()
   end
   local note = "ran"
   if not ok then note = "failed: " .. tostring(windows) end
-  -- The windows this run's visit step named on desktops it showed (M.visit),
-  -- each still answering for its id, so one that closed since is dropped.
-  for id, hit in pairs(M.visit_index or {}) do
+  -- EVERY WINDOW THIS RUN HAS NAMED (cc's save-note addendum, F1): an
+  -- earlier read's, and those the visit step named on desktops it showed
+  -- (M.visit), each still answering for its id, so one that closed since is
+  -- dropped. Once Mission Control has shown desktops, the filter can drop a
+  -- window on a desktop not shown, which a read before named: this keeps it.
+  -- Then this read's windows join the run's, for the reads after it.
+  for id, hit in pairs(M.run_index or {}) do
     if not index[id] then
       local named, got = pcall(function() return hit.win:id() end)
       if named and got == id then index[id] = hit end
     end
+  end
+  M.run_index = M.run_index or {}
+  for id, hit in pairs(index) do
+    if not M.run_index[id] then M.run_index[id] = hit end
   end
   return index, note, nil, id_errors
 end
@@ -417,7 +426,7 @@ function M.observe(bundles)
     end
   end
 
-  local index, filter_note, list_err, id_errors = nameable()
+  local index, filter_note, list_err, id_errors = M.nameable()
   M.window_index = index
   local primary = hs.screen.primaryScreen()
   local primary_frame = rect(primary:fullFrame())
@@ -445,8 +454,11 @@ function M.observe(bundles)
   -- The window list before the desktops' own lists, so a window opened
   -- between the two reads is one the list does not hold: it holds its
   -- desktop (P.empty_by).
-  local free, owned = M.read_window_list()
+  local free, owned, unseen = M.read_window_list()
   if free then world.free_windows = free else world.free_error = owned end
+  -- The layer-0 windows no person can see now, for Save Desk's gaps on the
+  -- desktops shown (P.discover_gaps).
+  world.unseen_windows = free and unseen or nil
   owned = free and owned or {}
 
   for _, scr in ipairs(hs.screen.allScreens()) do
@@ -552,7 +564,9 @@ function M.observe(bundles)
       if kind == 1 then
         local bundle = app:bundleID()
         if bundle then
-          world.layer0_owned[#world.layer0_owned + 1] = { pid = pid, bundle = bundle, name = app:name(), ids = owned[pid] }
+          local hid, hidden = pcall(function() return app:isHidden() end)
+          world.layer0_owned[#world.layer0_owned + 1] = { pid = pid, bundle = bundle, name = app:name(), ids = owned[pid],
+            hidden = hid and hidden == true }
         end
       end
     end
@@ -1644,19 +1658,25 @@ end
 -- filter can lose a window on a desktop not shown, and names it again once
 -- that desktop is shown. M.visit shows each desktop in LIST (P.visit_list) once, reads
 -- app:allWindows for its bundles while it shows (one call per app, never
--- hs.window.get), and keeps each named window in M.visit_index, which
+-- hs.window.get), and keeps each named window in M.run_index, which
 -- observe takes into its index. It stops once VISIT_SECONDS have passed,
 -- and a show that fails stops it on that display. Then it shows each display
 -- its start desktop, which START gives ({[screen] = space}). SAY(item) is
--- called before each show, for the run log and the toast. Returns { shown,
--- named, visited = {[space] = true}, out_of_time, failed = {[screen] = why},
--- back = {[screen] = why} }.
+-- called before each show, for the run log and the toast. With READ_LIST
+-- (Save Desk), the window list is read at each stop too, after the
+-- Accessibility reads, so the gaps know which windows of that desktop a
+-- person can see (cc's save-note addendum, F2 (a)). Returns { shown, named,
+-- visited = {[space] = true}, out_of_time, failed = {[screen] = why}, back =
+-- {[screen] = why}, unseen = {[space] = {[id] = true}}, list_failed =
+-- {[space] = why} }.
 M.VISIT_SECONDS = 20
 M.VISIT_READ_TRIES = 20 -- reads of an app's windows after a show, POLL_US apart, as grab_point waits
-M.visit_index = {}
+-- Every window this run has named (M.nameable, M.visit): cleared once, at the
+-- start of each request (M.run).
+M.run_index = {}
 
-function M.visit(list, start, say)
-  local r = { shown = 0, named = 0, visited = {}, failed = {}, back = {} }
+function M.visit(list, start, say, read_list)
+  local r = { shown = 0, named = 0, visited = {}, failed = {}, back = {}, unseen = {}, list_failed = {} }
   local deadline = now() + M.VISIT_SECONDS * 1e9
   local touched, order = {}, {}
   for _, item in ipairs(list or {}) do
@@ -1696,11 +1716,17 @@ function M.visit(list, start, say)
           end
           for _, w in ipairs(wins) do
             local got, id = pcall(function() return w:id() end)
-            if got and id and not M.visit_index[id] then
-              M.visit_index[id] = { win = w, via = "visit" }
+            if got and id and not M.run_index[id] then
+              M.run_index[id] = { win = w, via = "visit" }
               r.named = r.named + 1
             end
           end
+        end
+        if read_list then
+          -- A list that could not be read judges nothing: that desktop's
+          -- unnamed windows stay gaps (vc's note 1).
+          local free, owned_or_why, unseen = M.read_window_list()
+          if free then r.unseen[item.space] = unseen else r.list_failed[item.space] = owned_or_why end
         end
       else
         r.failed[item.screen] = why
@@ -2188,10 +2214,6 @@ end
 -- desktops were shown, for the words of an entry still unseen.
 function PHASE.visit(job)
   job.visit_done = true
-  -- This run's windows alone (ic's N1), cleared at the run's first visit
-  -- only, so a second visit keeps what the first one named (ic's F1 on
-  -- 7612499a).
-  if not job.visits then M.visit_index = {} end
   job.visits = (job.visits or 0) + 1
   local screens = P.match_displays(job.desk, job.world, job.options)
   local list = screens and P.visit_list(job.desk, job.world, screens, job.ops) or {}
@@ -2672,11 +2694,13 @@ local VERBS = {
           if sp.active then start[s.uuid] = sp.id end
         end
       end
-      M.visit_index = {}
       local r = M.visit(list, start, function(item)
         note(lg, "visit", string.format("finding windows: showing desktop %d on %s (%s)", item.place,
           tostring((world.screens[item.di] or {}).name), table.concat(item.bundles, ", ")))
-      end)
+      end, true)
+      for space, why in pairs(r.list_failed) do
+        note(lg, "visit", string.format("the window list could not be read at desktop %s: %s", tostring(space), tostring(why)))
+      end
       -- The way back names each display by its screen and each desktop by
       -- its place, and a failure is said in the log and the report (ic's F1).
       local back, words = {}, {}
@@ -2692,7 +2716,8 @@ local VERBS = {
       for _, b in ipairs(back) do
         note(lg, "back", tostring(b.reason))
       end
-      visit = { visited = r.visited, failed = r.failed, out_of_time = r.out_of_time, shown = r.shown, back = back }
+      visit = { visited = r.visited, failed = r.failed, out_of_time = r.out_of_time, shown = r.shown, back = back,
+        unseen = r.unseen, list_failed = r.list_failed }
       note(lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
         r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
       world = M.observe()
@@ -2700,9 +2725,29 @@ local VERBS = {
     end
     local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
     if not desk then refuse(notes, fix) end
-    local gaps = P.discover_gaps(world, desk, visit)
+    -- A window list that could not be read judges nothing: with no list, no
+    -- gap could be found, so a save is refused unless --with-gaps (vc's note
+    -- 1), and a plain discover says so.
+    if world.free_error then
+      local why = "the window list could not be read, so arngz cannot tell which windows it could not name: "
+        .. tostring(world.free_error)
+      if options.save and options.save ~= "" and not options.with_gaps then
+        refuse(why, "Save Desk again, or run arngz discover --save " .. tostring(options.save)
+          .. " --with-gaps to save what it could name")
+      end
+      notes[#notes + 1] = why
+    end
+    local gaps, hidden = P.discover_gaps(world, desk, visit)
     local lines = {}
-    for _, g in ipairs(gaps) do lines[#lines + 1] = P.gap_line(g) end
+    for _, g in ipairs(gaps) do
+      lines[#lines + 1] = P.gap_line(g)
+      -- Each gap by its window id, for a check against the screen (vc's
+      -- criteria).
+      note(lg, "gap", string.format("window %s (%s) on desktop %d on %s: %s", tostring(g.id), tostring(g.bundle), g.place,
+        tostring(g.display), g.cause))
+    end
+    local left_out = P.left_out_line(hidden)
+    if left_out then notes[#notes + 1] = left_out end
     if (visit.shown or 0) > 0 then
       notes[#notes + 1] = string.format("showed %d desktop(s) to name the windows on them, then each display's start desktop again", visit.shown)
     end
@@ -2983,6 +3028,10 @@ function M.run(request_path)
   end
   -- From here the request names its run and its log (ST589246c), and every
   -- answer goes through finish_run, but the quiet gate's unsettled.
+  -- This request's windows alone (ic's N1): every read and visit of the run
+  -- adds to it, and nothing clears it before the run ends (cc's save-note
+  -- addendum, F1).
+  M.run_index = {}
   local lg = new_log(request)
   M.watch(lg)
   local gated = quiet_answer(request, lg, response_path)

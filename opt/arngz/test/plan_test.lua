@@ -2260,7 +2260,7 @@ do
     bad == nil and string.find(tostring(bwhy), "did not print a window list: error:", 1, true) ~= nil, bwhy)
   local odd, owhy = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n501 x\n")
   check("window list: a line that is not '<id> <layer>' fails the list", odd == nil
-    and string.find(tostring(owhy), "not '<id> <layer> <pid> <w> <h>': 501 x", 1, true) ~= nil, owhy)
+    and string.find(tostring(owhy), "not '<id> <layer> <pid> <w> <h> <onscreen> <alpha>': 501 x", 1, true) ~= nil, owhy)
   local silent, swhy = P.parse_window_list(nil)
   check("window list: no text at all is not a list", silent == nil and swhy == "windows.js printed nothing", swhy)
 end
@@ -2490,10 +2490,21 @@ do
       and P.save_verdict(gaps, { save = "x", with_gaps = true }) == "save with gaps"
       and P.save_verdict(gaps, { save = "x", force = true }) == "refused")
   local why, fix = P.save_refusal(gaps, "zeopit")
-  check("refusal: says how many, once, and the fix names the desktop and --with-gaps",
+  check("refusal: says how many, once; a gap arngz showed has no step but --with-gaps, and arngz log (ic's R1)",
     why == '1 window could not be named, so desk "zeopit" would leave it out'
-      and string.find(fix, "show desktop 2 on ", 1, true) == 1
-      and string.find(fix, "arngz discover --save zeopit --with-gaps", 1, true) ~= nil, tostring(why) .. " / " .. tostring(fix))
+      and fix == "run arngz discover --save zeopit --with-gaps to save without it; arngz log names each window",
+    tostring(why) .. " / " .. tostring(fix))
+  local _, sfix = P.save_refusal(failed, "zeopit")
+  check("refusal: a desktop whose show failed is named to show, then --with-gaps (ic's R1)",
+    sfix == "show desktop 2 on " .. tostring(failed[1].display) .. ", then Save Desk again, or run arngz discover --save zeopit"
+      .. " --with-gaps to save without it", sfix)
+  local _, lfix = P.save_refusal({ { cause = "late", place = 1, display = "d" }, gaps[1] }, "zeopit")
+  check("refusal: a gap that came late, with one arngz showed, takes Save Desk again; no shown desktop is named",
+    lfix == "Save Desk again, or run arngz discover --save zeopit --with-gaps to save without them", lfix)
+  local _, mfix = P.save_refusal({ gaps[1], late[1], failed[1] }, "zeopit")
+  check("refusal: mixed causes name only the desktops a show can help, once each",
+    mfix == "show desktop 2 on " .. tostring(failed[1].display) .. ", then Save Desk again, or run arngz discover --save zeopit"
+      .. " --with-gaps to save without them", mfix)
 
   local counted = save_world()
   table.insert(counted.screens[1].spaces[2].windows, { id = 621, named = false })
@@ -2505,6 +2516,59 @@ do
   end
   check("report: a free window (macOS's own) is not counted as one Accessibility could not name",
     line and line:find("1 Accessibility could not name", 1, true) ~= nil, tostring(line))
+end
+
+-- ------------- Save Desk's gaps are windows a person sees (save-note addendum)
+
+print("Save Desk's gaps are windows a person sees")
+do
+  local free, owned, unseen = P.parse_window_list(P.WINDOW_LIST_HEADER
+    .. "\n102 0 88 900 545 1 1\n103 0 88 900 545 0 1\n104 0 88 900 545 1 0\n501 24 77 10 10 0 1\n")
+  check("window list v4: an onscreen window with alpha is seen; one offscreen, or with alpha 0, is not",
+    free and owned and unseen and not unseen[102] and unseen[103] and unseen[104] and not unseen[501],
+    tostring(free and #free))
+  local _, _, old = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n102 0 88 900 545\n")
+  check("window list: a line with no onscreen state counts as seen, the safe side", old and not old[102])
+  local v3, v3why = P.parse_window_list("arngz-windows 3\n102 0 88 900 545\n")
+  check("window list: a version 3 list is refused by its header", v3 == nil
+    and string.find(tostring(v3why), "did not print a window list: arngz-windows 3", 1, true) ~= nil, v3why)
+
+  -- Safari owns 102 (the real window) and 103 (a helper) on desktop 12, not
+  -- shown, and neither is named.
+  local function helper_world()
+    local w = save_world()
+    table.insert(w.screens[1].spaces[2].windows, { id = 103, named = false })
+    w.layer0_owned[1].ids = { 102, 103 }
+    return w
+  end
+  local desk = P.desk_from_world(save_world(), { grid = "8x4", name = "x" })
+  local seen = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
+  check("gaps: on a desktop the visit showed, a helper no person sees is no gap, and the window seen is (F2)",
+    #seen == 1 and seen[1].id == 102 and seen[1].cause == "shown", tostring(#seen))
+  local stop_failed = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, list_failed = { [12] = "osascript ended" } })
+  check("gaps: a stop whose window list could not be read judges nothing: both stay gaps, with its words (vc's note 1)",
+    #stop_failed == 2 and stop_failed[1].cause == "list_failed"
+      and stop_failed[1].why == P.GAP_LIST_FAILED .. ": osascript ended", tostring(#stop_failed))
+  local on_shown = helper_world()
+  on_shown.screens[1].spaces[1].active, on_shown.screens[1].spaces[2].active = false, true
+  on_shown.unseen_windows = { [103] = true }
+  local sgaps = P.discover_gaps(on_shown, desk, {})
+  check("gaps: on a desktop shown at the start, the start's list judges: the helper is no gap (F2)",
+    #sgaps == 1 and sgaps[1].id == 102 and sgaps[1].cause == "on_shown", tostring(#sgaps))
+  local late = P.discover_gaps(save_world(), desk, {})
+  check("gaps: a window on a desktop the visit did not show, with no failure and time to spare, is late, never shown (ic's W1)",
+    late[1] and late[1].cause == "late" and late[1].why == P.GAP_LATE, late[1] and late[1].why)
+
+  local hidden = helper_world()
+  hidden.layer0_owned[1].hidden = true
+  local hgaps, hid = P.discover_gaps(hidden, desk, { visited = { [12] = true }, unseen = { [12] = { [102] = true, [103] = true } } })
+  check("gaps: a hidden app's windows no person sees are no gaps, and its name is kept once for the report (ic's R2)",
+    #hgaps == 0 and #hid == 1 and hid[1] == "Safari", tostring(#hgaps) .. " / " .. tostring(#hid))
+  check("report: the line for windows left out names the hidden apps (ic's R2)", P.left_out_line(hid)
+    == "left out, not counted as gaps: windows of hidden apps or minimised, which Accessibility could not name (Safari);"
+      .. " show them and Save Desk again to record them", P.left_out_line(hid))
+  local _, none = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
+  check("report: no line when no hidden app's window was left out", P.left_out_line(none) == nil)
 end
 
 -- ------------------- the end mark the engine draws (hv decision 53)

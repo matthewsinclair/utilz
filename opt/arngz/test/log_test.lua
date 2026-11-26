@@ -1626,7 +1626,7 @@ arm("an apply that visits before and after a removal", function()
   check("visit twice: the visit step runs before the removal and again after it",
     visits == 2, tostring(visits))
   check("visit twice: the second visit keeps the window the first one named (ic's F1)",
-    M.visit_index[102] ~= nil)
+    M.run_index[102] ~= nil)
   check("visit twice: a run that ends where it began says no display needed showing again",
     find(recs, "back", "no display needed showing again") ~= nil, last_line(recs))
   check("visit twice: the finished point counts the desktops both visits showed (ic's F2)",
@@ -1752,9 +1752,6 @@ end)
 -- window that stays unnamed, a --save is refused and names it.
 local function discover_save_run(named_on_show, options, run, fail_back)
   fresh_globals()
-  -- M lives on from arm to arm here, where Hammerspoon makes it anew at
-  -- each call, so a window an earlier arm named must not name Safari here.
-  M.visit_index = {}
   local log = tmpdir() .. "/arngz.log"
   local f = new_fake()
   local base = F.base_world().screens[1]
@@ -1779,7 +1776,7 @@ local function discover_save_run(named_on_show, options, run, fail_back)
     w.accessibility = true
     local sp = w.screens[1].spaces
     local safari = table.remove(sp[1].windows, 2)
-    if M.visit_index[102] then
+    if M.run_index[102] then
       table.insert(sp[2].windows, safari)
     else
       table.insert(sp[2].windows, { id = 102, named = false })
@@ -1831,6 +1828,61 @@ arm("Save Desk names a window on a desktop not shown", function()
   local plain = discover_save_run(false, { grid = "8x4", name = "discovered" }, "R-SAVE4")
   check("save: a plain discover prints the desk and names the gap, verdict print",
     plain and plain.status == "ok" and plain.verdict == "print" and #(plain.gaps or {}) == 1, plain and tostring(plain.verdict))
+end)
+
+-- ------- an apply keeps the windows its first read named (vc's note 3, F1)
+
+-- VSCode's 103, on desktop 12, not shown, is named by the window filter on
+-- the first read alone, as Ivory's was in hv's refused Save. Safari's 102,
+-- moved there and never named, makes the visit run, so the reads after it
+-- come once Mission Control has shown desktops. observe here builds its
+-- world from the real M.nameable, so the run-wide index is what keeps 103.
+arm("an apply keeps a window its first read named, when the filter drops it after the visit", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local shown = base.spaces[1].id
+  f.live = { base.spaces[1].id, base.spaces[2].id }
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    shown = id
+    return true
+  end
+  local vscode = { id = function() return 103 end }
+  local filtered = { vscode }
+  f.hs.window = { allWindows = function() return {} end, filter = { default = { getWindows = function()
+    local out = filtered
+    filtered = {}
+    return out
+  end } } }
+  f.hs.application = { get = function() return { allWindows = function() return {} end } end }
+  M.observe = function()
+    local index = M.nameable()
+    M.window_index = index
+    local w = F.base_world()
+    w.accessibility = true
+    local s = w.screens[1]
+    table.remove(s.spaces[1].windows, 2)
+    table.insert(s.spaces[2].windows, { id = 102, named = false })
+    if not index[103] then s.spaces[2].windows[1] = { id = 103, named = false } end
+    w.layer0_windows = { { bundle = "com.apple.Safari", ids = { 102 } }, { bundle = "com.microsoft.VSCode", ids = { 103 } } }
+    for _, sp in ipairs(s.spaces) do sp.active = sp.id == shown end
+    s.active_space = shown
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-KEEP", log = log })
+  local vscode_unseen = false
+  for _, r in ipairs((response or {}).results or {}) do
+    if r.op == "unseen" and r.bundle == "com.microsoft.VSCode" then vscode_unseen = true end
+  end
+  check("keep: apply answers ok, and VSCode, named by the first read alone, is not unseen (F1)",
+    response and response.status == "ok" and not vscode_unseen and response.tally and response.tally.unseen == 1,
+    response and (tostring(response.status) .. " / unseen " .. tostring(response.tally and response.tally.unseen)))
+  check("keep: the visit ran, so the reads after it came once desktops were shown",
+    find(records(log), "visit", "finding windows: showing desktop") ~= nil, last_line(records(log)))
 end)
 
 -- ------------- an apply the CLI stopped waiting for ends its mark (hv decision 53)

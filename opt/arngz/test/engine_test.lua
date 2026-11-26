@@ -725,7 +725,15 @@ do
     end }
     local win = { id = function() return 700 end }
     f.lists = 0
+    f.executes = 0
     _G.hs = {
+      -- windows.js at each stop when the visit reads the window list:
+      -- opts.list is what it prints, and opts.list_fails makes it fail.
+      execute = function()
+        f.executes = f.executes + 1
+        if opts.list_fails then return "", false, "exit", 1 end
+        return opts.list or (P.WINDOW_LIST_HEADER .. "\n"), true, "exit", 0
+      end,
       spaces = { activeSpaceOnScreen = function(uuid) return f.active[uuid] end },
       timer = { usleep = function(us) f.clock = f.clock + us * 1000 end, absoluteTime = function() return f.clock end },
       application = { get = function(b)
@@ -738,7 +746,7 @@ do
         end }
       end },
     }
-    M.visit_index = {}
+    M.run_index = {}
     return f
   end
   local saved = M.mission_control
@@ -750,7 +758,7 @@ do
   local f = fake({})
   local r = M.visit({ item(12, 2) }, start)
   check("visit: shows the desktop, names the app's window there, and shows the first desktop again",
-    r.shown == 1 and r.visited[12] and M.visit_index[700] ~= nil and r.named == 1 and table.concat(f.shows, ",") == "12,11"
+    r.shown == 1 and r.visited[12] and M.run_index[700] ~= nil and r.named == 1 and table.concat(f.shows, ",") == "12,11"
       and #f.reads == 1 and f.active[SCREEN_V] == 11, table.concat(f.shows, ","))
 
   f = fake({ slow = true })
@@ -762,23 +770,68 @@ do
   f = fake({ fail = true })
   r = M.visit({ item(12, 2), item(13, 3) }, start)
   check("visit: a show that fails stops the step on that display, names why, and leaves nothing named",
-    r.shown == 0 and r.failed[SCREEN_V] ~= nil and table.concat(f.shows, ",") == "12" and next(M.visit_index) == nil,
+    r.shown == 0 and r.failed[SCREEN_V] ~= nil and table.concat(f.shows, ",") == "12" and next(M.run_index) == nil,
     table.concat(f.shows, ",") .. " / " .. tostring(r.failed[SCREEN_V]))
 
   local late = 2
   f = fake({ late = late })
   r = M.visit({ item(12, 2) }, start)
   check("visit: a window not yet readable just after the show is read again until it is, and named",
-    r.named == 1 and M.visit_index[700] ~= nil and f.lists == late + 1, tostring(f.lists))
+    r.named == 1 and M.run_index[700] ~= nil and f.lists == late + 1, tostring(f.lists))
 
   f = fake({ never = true })
   r = M.visit({ item(12, 2) }, start)
   check("visit: a window never readable is read VISIT_READ_TRIES times, then the step goes on with nothing named",
     r.named == 0 and f.lists == M.VISIT_READ_TRIES and r.shown == 1, tostring(f.lists))
 
+  check("visit: with no list to read (apply), the window list is not read at the stops", f.executes == 0, tostring(f.executes))
+
+  f = fake({ list = P.WINDOW_LIST_HEADER .. "\n700 0 88 900 545 1 1\n701 0 88 900 545 0 1\n" })
+  r = M.visit({ item(12, 2), item(13, 3) }, start, nil, true)
+  check("visit: Save Desk reads the window list once at each stop, and keeps by desktop the windows no person sees (F2)",
+    f.executes == 2 and r.unseen[12] and r.unseen[12][701] and not r.unseen[12][700] and r.unseen[13] ~= nil,
+    tostring(f.executes))
+
+  f = fake({ list_fails = true })
+  r = M.visit({ item(12, 2) }, start, nil, true)
+  check("visit: a stop whose window list cannot be read says why, and judges nothing (vc's note 1)",
+    r.list_failed[12] ~= nil and r.unseen[12] == nil, tostring(r.list_failed[12]))
+
   M.mission_control = saved
-  M.visit_index = {}
+  M.run_index = {}
   _G.hs = nil
+end
+
+-- EVERY WINDOW THIS RUN HAS NAMED (cc's save-note addendum, F1): once
+-- Mission Control has shown desktops, the window filter can drop a window
+-- on a desktop not shown. M.nameable keeps each window an earlier read of
+-- the run named, while it still answers for its id. Ivory's 188 as in hv's
+-- refused Save of 26 Nov 2026.
+do
+  local IVORY = 188
+  local open = true
+  local ivory = { id = function()
+    if not open then error("the window is gone", 0) end
+    return IVORY
+  end }
+  local filtered = { ivory }
+  _G.hs = {
+    window = {
+      allWindows = function() return {} end,
+      filter = { default = { getWindows = function() return filtered end } },
+    },
+    timer = { usleep = function() end },
+  }
+  M.run_index = {}
+  local first = M.nameable()
+  filtered = {}
+  local second = M.nameable()
+  open = false
+  local third = M.nameable()
+  _G.hs = nil
+  check("F1: a window the first read named is named by the read after it, though the filter dropped it",
+    first[IVORY] ~= nil and second[IVORY] ~= nil and second[IVORY].win == ivory)
+  check("F1: a window that no longer answers for its id is dropped", third[IVORY] == nil)
 end
 
 print(string.format("engine_test: %d passed, %d failed", passed, failed))

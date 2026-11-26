@@ -547,21 +547,26 @@ end
 -- (WindowManager), the menu bar and a strip (Window Server), at layers other
 -- than 0 (cc's read r3). A window a person places is at layer 0, whether
 -- Accessibility can name it or not. windows.js reads the window server's
--- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer> <pid> <w> <h>"
--- line per window, the pid being its owner's and w and h its size (version 3,
--- ic's N1; a line with no size is still read). windows.js ships beside this file, so
+-- full list and prints WINDOW_LIST_HEADER, then one
+-- "<id> <layer> <pid> <w> <h> <onscreen> <alpha>" line per window: the pid
+-- is its owner's, w and h its size (version 3, ic's N1), and onscreen and
+-- alpha say whether a person can see it while its desktop is shown (version
+-- 4, cc's save-note addendum, F2). A line with no onscreen state, or no size,
+-- is still read, and its window counts as one a person may see: the safe
+-- side for Save Desk's gaps. windows.js ships beside this file, so
 -- no producer prints the version 1 list (ic's N3). An id at a layer other than 0 is FREE:
 -- it holds no desktop. So an always-on-top or floating window, or an overlay,
 -- holds no desktop either: arngz can remove a desktop while such a window is
 -- on it.
-P.WINDOW_LIST_HEADER = "arngz-windows 3"
+P.WINDOW_LIST_HEADER = "arngz-windows 4"
 -- A layer-0 window smaller than this, in points, on either side, is no window
 -- a person places (issue I19d4fa6).
 P.MIN_WINDOW_SIDE = 50
 
--- The free ids in windows.js's TEXT, as a list, and its layer-0 windows by
--- owner pid ({ [pid] = {ids} }); or nil and why
--- the text is not a window list. A list with no free id is a list, not a
+-- The free ids in windows.js's TEXT, as a list, its layer-0 windows by owner
+-- pid ({ [pid] = {ids} }), and its layer-0 windows no person can see now
+-- ({ [id] = true }: not onscreen, or with an alpha of 0); or nil and why the
+-- text is not a window list. A list with no free id is a list, not a
 -- failure.
 function P.parse_window_list(text)
   if type(text) ~= "string" then return nil, "windows.js printed nothing" end
@@ -570,12 +575,17 @@ function P.parse_window_list(text)
   if lines[1] ~= P.WINDOW_LIST_HEADER then
     return nil, "windows.js did not print a window list: " .. tostring(lines[1] or "nothing"):sub(1, 200)
   end
-  local free, owned = {}, {}
+  local free, owned, unseen = {}, {}, {}
   for i = 2, #lines do
-    local id, layer, pid, w, h = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+) (%d+) (%d+)$")
+    local id, layer, pid, w, h, onscreen, alpha = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+) (%d+) (%d+) ([01]) ([%d%.]+)$")
+    if not id then id, layer, pid, w, h = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+) (%d+) (%d+)$") end
     if not id then id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$") end
     if not id then
-      return nil, "windows.js printed a line that is not '<id> <layer> <pid> <w> <h>': " .. lines[i]:sub(1, 200)
+      return nil, "windows.js printed a line that is not '<id> <layer> <pid> <w> <h> <onscreen> <alpha>': "
+        .. lines[i]:sub(1, 200)
+    end
+    if tonumber(layer) == 0 and onscreen and (onscreen == "0" or tonumber(alpha) <= 0) then
+      unseen[tonumber(id)] = true
     end
     if tonumber(layer) ~= 0 then
       free[#free + 1] = tonumber(id)
@@ -589,7 +599,7 @@ function P.parse_window_list(text)
       owned[p][#owned[p] + 1] = tonumber(id)
     end
   end
-  return free, owned
+  return free, owned, unseen
 end
 
 -- The free ids of WORLD, as a set: observe's world.free_windows. A world that
@@ -2321,13 +2331,14 @@ end
 --
 -- discover has no desk, so it asks the window list which windows it did not
 -- name: world.layer0_owned holds each running regular app's layer-0 windows
--- of a size a person uses ({ {pid, bundle, name, ids} }).
+-- of a size a person uses, and whether the app is hidden
+-- ({ {pid, bundle, name, ids, hidden} }).
 
--- The app that owns each such window: { [id] = {bundle, name} }.
+-- The app that owns each such window: { [id] = {bundle, name, hidden} }.
 local function owned_by(world)
   local out = {}
   for _, o in ipairs(world.layer0_owned or {}) do
-    for _, id in ipairs(o.ids or {}) do out[id] = { bundle = o.bundle, name = o.name } end
+    for _, id in ipairs(o.ids or {}) do out[id] = { bundle = o.bundle, name = o.name, hidden = o.hidden } end
   end
   return out
 end
@@ -2360,52 +2371,99 @@ function P.discover_visit_list(world)
   return list
 end
 
--- Why a window discover did not name stays out of the desk, by VISIT ({
--- visited = {[space] = true}, failed = {[screen] = why}, out_of_time }).
+-- Why a window discover did not name stays out of the desk, by what happened
+-- to its desktop (ic's W1): each gap's words come from VISIT's record, never
+-- by default. VISIT is { visited = {[space] = true}, failed = {[screen] =
+-- why}, out_of_time, unseen = {[space] = {[id] = true}}, list_failed =
+-- {[space] = why} }: unseen and list_failed are the window list read at
+-- each stop (M.visit).
 P.GAP_SHOWN = "arngz showed that desktop, and Accessibility still could not name its window"
 P.GAP_NOT_REACHED = "the 20 s to show desktops ran out before that desktop"
 -- A desktop already shown, which arngz did not need to show (ic's W1).
 P.GAP_ON_SHOWN = "that desktop is shown, and Accessibility could not name its window"
+-- A window on a desktop not on the visit's list: it was not in the first
+-- read, so it appeared, or first lost its name, during the visit.
+P.GAP_LATE = "it appeared during the visit, after the desktops to show were chosen"
+-- A stop whose window list could not be read: no window there is taken as
+-- one no person sees (vc's note 1).
+P.GAP_LIST_FAILED = "arngz showed that desktop, and could not read the window list there"
 
 -- The windows the desk leaves out: each layer-0 window of a running regular
--- app on a user desktop that observe did not name, with its app's name, its
--- desktop's place, its display (by DESK's name for it where DESK has one) and
--- why. { {name, bundle, place, display, why} }.
+-- app on a user desktop that observe did not name, and that a person can see
+-- while its desktop is shown (cc's save-note addendum, F2 (a)): it is not in
+-- the window list's unseen set for that desktop, read at the start for a
+-- desktop shown then (WORLD.unseen_windows) and at the visit's stop for one
+-- it showed. A window the list cannot judge (no stop reached it, its show
+-- failed, or the list read failed) stays a gap: the safe side. One list
+-- holds every gap, so the count, the lines and the verdict agree (ic's W3).
+-- Returns { {id, name, bundle, place, display, cause, why} } and the names of
+-- the hidden apps whose windows it left out as unseen (ic's R2), in world
+-- order, each once. CAUSE is "on_shown", "shown", "list_failed", "failed",
+-- "not_reached" or "late".
 function P.discover_gaps(world, desk, visit)
   visit = visit or {}
+  local visited, failed = visit.visited or {}, visit.failed or {}
   local owner = owned_by(world)
   local names = {}
   for _, d in ipairs((desk and desk.displays) or {}) do
     if d.match and d.match.uuid then names[d.match.uuid] = d.name end
   end
-  local gaps = {}
+  local gaps, hidden, said = {}, {}, {}
   for _, s in ipairs(world.screens or {}) do
     for ui, sp in ipairs(P.user_spaces(s)) do
       for _, w in ipairs(sp.windows or {}) do
         local o = owner[w.id]
         if o and not w.named then
-          local why
-          if (visit.failed or {})[s.uuid] and not (visit.visited or {})[sp.id] then
-            why = "arngz could not show that desktop: " .. tostring(visit.failed[s.uuid])
-          elseif visit.out_of_time and not sp.active and not (visit.visited or {})[sp.id] then
-            why = P.GAP_NOT_REACHED
-          elseif sp.active and not (visit.visited or {})[sp.id] then
-            why = P.GAP_ON_SHOWN
+          local cause, why, unseen
+          if visited[sp.id] then
+            if (visit.list_failed or {})[sp.id] then
+              cause, why = "list_failed", P.GAP_LIST_FAILED .. ": " .. tostring(visit.list_failed[sp.id])
+            else
+              unseen = ((visit.unseen or {})[sp.id] or {})[w.id]
+              cause, why = "shown", P.GAP_SHOWN
+            end
+          elseif sp.active then
+            unseen = (world.unseen_windows or {})[w.id]
+            cause, why = "on_shown", P.GAP_ON_SHOWN
+          elseif failed[s.uuid] then
+            cause, why = "failed", "arngz could not show that desktop: " .. tostring(failed[s.uuid])
+          elseif visit.out_of_time then
+            cause, why = "not_reached", P.GAP_NOT_REACHED
           else
-            why = P.GAP_SHOWN
+            cause, why = "late", P.GAP_LATE
           end
-          gaps[#gaps + 1] = { name = o.name or o.bundle, bundle = o.bundle, place = ui,
-            display = names[s.uuid] or s.name or s.uuid, why = why }
+          if unseen then
+            local label = o.name or o.bundle
+            if o.hidden and not said[label] then
+              said[label] = true
+              hidden[#hidden + 1] = label
+            end
+          else
+            gaps[#gaps + 1] = { id = w.id, name = o.name or o.bundle, bundle = o.bundle, place = ui,
+              display = names[s.uuid] or s.name or s.uuid, cause = cause, why = why }
+          end
         end
       end
     end
   end
-  return gaps
+  return gaps, hidden
 end
 
 -- One gap's stderr line (ic's words).
 function P.gap_line(g)
   return string.format("not recorded: %s on desktop %d on %s: %s", tostring(g.name), g.place, tostring(g.display), g.why)
+end
+
+-- The report line for the windows left out with no gap (ic's R2): the
+-- hidden apps among the owners of the windows no person could see. A
+-- minimised window is not onscreen either, and Accessibility names a
+-- minimised window it can read, so one it cannot read is left out with the
+-- helper windows, and the line's words cover it. Nil when there is none; it
+-- never changes the exit.
+function P.left_out_line(hidden)
+  if #(hidden or {}) == 0 then return nil end
+  return "left out, not counted as gaps: windows of hidden apps or minimised, which Accessibility could not name ("
+    .. table.concat(hidden, ", ") .. "); show them and Save Desk again to record them"
 end
 
 -- THE ONE DECISION for a desk discover read (ic's ruling): "print" (no
@@ -2419,15 +2477,39 @@ function P.save_verdict(gaps, options)
   return "refused"
 end
 
--- A refused save's words and fix (ic's): nil when the verdict is not refused.
+-- A refused save's words and fix (ic's R1): the fix carries the step that
+-- can help, by the gaps' causes, and never names a desktop that was shown or
+-- that arngz showed. A desktop arngz could not show, or did not reach in
+-- time, is named to show; else a gap that came late, or whose stop could not
+-- read the window list, takes Save Desk again; else no step arngz knows
+-- helps, so the fix is the --with-gaps route alone, and says that arngz log
+-- names each window. Each fix offers the --with-gaps route.
 function P.save_refusal(gaps, name)
   local n = #gaps
-  local first = gaps[1]
+  local it = n == 1 and "it" or "them"
   local why = string.format("%d window%s could not be named, so desk %q would leave %s out", n,
-    n == 1 and "" or "s", tostring(name), n == 1 and "it" or "them")
-  local fix = string.format("show desktop %d on %s%s, then Save Desk again, or run arngz discover --save %s --with-gaps"
-    .. " to save without %s", first.place, tostring(first.display), n == 1 and "" or " and the others above",
-    tostring(name), n == 1 and "it" or "them")
+    n == 1 and "" or "s", tostring(name), it)
+  local shows, seen, again = {}, {}, false
+  for _, g in ipairs(gaps) do
+    if g.cause == "failed" or g.cause == "not_reached" then
+      local where = string.format("desktop %d on %s", g.place, tostring(g.display))
+      if not seen[where] then
+        seen[where] = true
+        shows[#shows + 1] = where
+      end
+    elseif g.cause == "late" or g.cause == "list_failed" then
+      again = true
+    end
+  end
+  local route = string.format("run arngz discover --save %s --with-gaps to save without %s", tostring(name), it)
+  local fix
+  if #shows > 0 then
+    fix = "show " .. table.concat(shows, " and ") .. ", then Save Desk again, or " .. route
+  elseif again then
+    fix = "Save Desk again, or " .. route
+  else
+    fix = route .. "; arngz log names each window"
+  end
   return why, fix
 end
 
