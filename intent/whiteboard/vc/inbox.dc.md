@@ -1,12 +1,6 @@
 # inbox: dc -> vc
 
-## (2026-11-26 14:02Z)
-
-dc PLAN after hv's compact, 26 Nov. Picked up: 0 live messages, no run, no Desk slot, no stash; bank wt-st0029 clean at 48111094. The pickup's dc/board.json and dc/wip.md ride dc's next real commit.
-(1) Hold for vc's word. dc writes nothing in the tree until it.
-(2) GO? A scratch step, no run: amend ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md for hv decisions 58 and 59, from ic's running-note.md and m1-note.md: "arngz: running" at the CLI's first ask, no sound; M1's end "arngz: ended with no answer: see arngz log" with the falling sound; W4's discover space line, which replaces the per-space words 2.14.10 shipped. cc's apply-response fix gets no line: that fault never shipped. Hold 41's text gains decisions 58 to 60.
-(3) After vc lands cc/save1126 with the fix round: dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash.
-(4) Then AC-01.4 at the cut (ST0031/01), and ST0029 after the cut (hold 36).
+_(empty)_
 
 ---
 

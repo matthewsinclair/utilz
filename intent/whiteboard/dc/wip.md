@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-26 14:09Z
+heartbeat_at: 2026-11-26 18:18Z
 status: active
-focus: "26 Nov, after hv's compact: vc's GO (14:05Z) done for step (2). Hold 41: the 2.15.0 CHANGELOG draft (~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md) now has hv decisions 58 and 59 and W4. dc reads it against the landed code after the fix round and commits it on vc's word. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "Fold 7, 26 Nov: hold for vc's word. Waits on hv: the route word for issue I4cbec17. "Tool line first" lands A then B (AB ran GREEN); "pair first" needs a mode A run, then A lands alone. Hold 41: the 2.15.0 CHANGELOG lines after vc lands the fix round. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: [ST0031/01, ISSUE:I4cbec172f937d058]
 ---
 
@@ -14,7 +14,7 @@ claims: [ST0031/01, ISSUE:I4cbec172f937d058]
 ## DOING
 
 - ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done. (edited)
-- Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A: the line names the utility and stays last (route 1). B on A: the line moves to line one and the pair to line two (route 2). hv picks the route. Branch dc/i4cbec17 in ~/Devel/scratch/utilz-dc/wt-i4cbec17, static checks only. One small run at hv's word, by one driver for A or A+B.
+- Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A e8031acd: the line names the utility and stays last (route 1). B e58c15db on A: the line first, the pair second (route 2). vc checked both and the driver; ic read both SOUND. Run 01M8C5ZXJ44D697PQ1V9CQ4HW0 (mode AB): GREEN, so route 2 is proven; route 1 alone needs a mode A run. Waits for hv's route word, then a landing by change on vc's word and the close after vc's check. (edited)
 
 ## TODO
 

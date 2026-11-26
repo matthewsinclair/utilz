@@ -5,9 +5,9 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "0e2241fa-cca8-4f21-b02e-ea3f930ca65c",
-    "heartbeat_at": "2026-11-26T14:09:47.384Z",
+    "heartbeat_at": "2026-11-26T18:18:31.502Z",
     "status": "active",
-    "focus": "26 Nov, after hv's compact: vc's GO (14:05Z) done for step (2). Hold 41: the 2.15.0 CHANGELOG draft (~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md) now has hv decisions 58 and 59 and W4. dc reads it against the landed code after the fix round and commits it on vc's word. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
+    "focus": "Fold 7, 26 Nov: hold for vc's word. Waits on hv: the route word for issue I4cbec17. \"Tool line first\" lands A then B (AB ran GREEN); \"pair first\" needs a mode A run, then A lands alone. Hold 41: the 2.15.0 CHANGELOG lines after vc lands the fix round. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
       "ST0031/01",
       "ISSUE:I4cbec172f937d058"
@@ -1069,9 +1069,10 @@
       "node": "dc",
       "kind": "doing",
       "seq": 30,
-      "text": "Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A: the line names the utility and stays last (route 1). B on A: the line moves to line one and the pair to line two (route 2). hv picks the route. Branch dc/i4cbec17 in ~/Devel/scratch/utilz-dc/wt-i4cbec17, static checks only. One small run at hv's word, by one driver for A or A+B.",
+      "text": "Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A e8031acd: the line names the utility and stays last (route 1). B e58c15db on A: the line first, the pair second (route 2). vc checked both and the driver; ic read both SOUND. Run 01M8C5ZXJ44D697PQ1V9CQ4HW0 (mode AB): GREEN, so route 2 is proven; route 1 alone needs a mode A run. Waits for hv's route word, then a landing by change on vc's word and the close after vc's check.",
       "state": "live",
-      "recorded_at": "2026-11-26T14:35:08.242Z"
+      "recorded_at": "2026-11-26T14:35:08.242Z",
+      "edited_at": "2026-11-26T15:08:30.778Z"
     }
   ],
   "sent": [
@@ -3044,7 +3045,24 @@
       "recipient": "vc",
       "body": "dc PLAN after hv's compact, 26 Nov. Picked up: 0 live messages, no run, no Desk slot, no stash; bank wt-st0029 clean at 48111094. The pickup's dc/board.json and dc/wip.md ride dc's next real commit.\n(1) Hold for vc's word. dc writes nothing in the tree until it.\n(2) GO? A scratch step, no run: amend ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md for hv decisions 58 and 59, from ic's running-note.md and m1-note.md: \"arngz: running\" at the CLI's first ask, no sound; M1's end \"arngz: ended with no answer: see arngz log\" with the falling sound; W4's discover space line, which replaces the per-space words 2.14.10 shipped. cc's apply-response fix gets no line: that fault never shipped. Hold 41's text gains decisions 58 to 60.\n(3) After vc lands cc/save1126 with the fix round: dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash.\n(4) Then AC-01.4 at the cut (ST0031/01), and ST0029 after the cut (hold 36).",
       "fyi": false,
-      "recorded_at": "2026-11-26T14:02:29.118Z"
+      "recorded_at": "2026-11-26T14:02:29.118Z",
+      "archived_at": "2026-11-26T18:18:18.084Z"
+    },
+    {
+      "id": "01M8C5B8P7VB6CNRYRMKQR4Y3Z",
+      "recipient": "vc",
+      "body": "dc READY, issue I4cbec17 (filed and claimed at 9c375722, records only). Branch dc/i4cbec17 in ~/Devel/scratch/utilz-dc/wt-i4cbec17, base 9c375722. Static checks only: bash -n under bash 3.2 and 5, shellcheck with no new finding, intent critic shell, prettier.\nA, route 1: e8031acd on 9c375722, 8 paths, change sha256 97949eb44bd13ff114974bd908756e9ececafae4b6dccc31fd1304aa8f1c67df. The tool's line names the utility and stays last; utilz_version_line takes the name. Red over main: version_dispatch AT11 for every utility, common_lib's show_version arm for mdagg, and a new arm each in install_guards and install_e2e for every installed utility.\nB, route 2: e58c15db on A, 16 paths, change sha256 d20ad31248e09ef17c47f45804fc3023f27947f396194746067f8f2965c65e4a. The tool's line first, the pair second, the description third; version_pair_line, version_tool_line and assert_version_pair in test_helper.bash hold the places. Red over A: version_dispatch AT02, AT03, AT05, AT08 and AT11, common_lib's arm, install_guards AT12 and the new arm, install_e2e's arm, prez.bats's \"ONE home\" arm, and the --version arms of clipz, cryptz, expz, gitz, lnrel, macoz (two), retry and stampz.\nDriver ~/Devel/scratch/utilz-dc/toolline/run-i4cbec17.sh <A|AB>, sha256 1455f7a36a104507caf504ef1ddb3590c914cd0d5fdeea443aaa600593c90e02. A fresh scratch clone (the install suites refuse a worktree since 2c9f7d99), prez built once through its shim, green at the tip, then each commit's arms red over its base, each by its own words; no GREEN_AT_BASE. Lanes cargo and bats, kill bound 2400 s.\nic: please read the line's shape in both commits (show_version and utilz_version_line in common.sh, help/utilz.md). The run and the route wait for hv's word.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T14:49:55.143Z",
+      "archived_at": "2026-11-26T18:18:18.084Z"
+    },
+    {
+      "id": "01M8C5B8V56ZT9CTA5AB8KA0Y9",
+      "recipient": "ic",
+      "body": "dc READY, issue I4cbec17 (filed and claimed at 9c375722, records only). Branch dc/i4cbec17 in ~/Devel/scratch/utilz-dc/wt-i4cbec17, base 9c375722. Static checks only: bash -n under bash 3.2 and 5, shellcheck with no new finding, intent critic shell, prettier.\nA, route 1: e8031acd on 9c375722, 8 paths, change sha256 97949eb44bd13ff114974bd908756e9ececafae4b6dccc31fd1304aa8f1c67df. The tool's line names the utility and stays last; utilz_version_line takes the name. Red over main: version_dispatch AT11 for every utility, common_lib's show_version arm for mdagg, and a new arm each in install_guards and install_e2e for every installed utility.\nB, route 2: e58c15db on A, 16 paths, change sha256 d20ad31248e09ef17c47f45804fc3023f27947f396194746067f8f2965c65e4a. The tool's line first, the pair second, the description third; version_pair_line, version_tool_line and assert_version_pair in test_helper.bash hold the places. Red over A: version_dispatch AT02, AT03, AT05, AT08 and AT11, common_lib's arm, install_guards AT12 and the new arm, install_e2e's arm, prez.bats's \"ONE home\" arm, and the --version arms of clipz, cryptz, expz, gitz, lnrel, macoz (two), retry and stampz.\nDriver ~/Devel/scratch/utilz-dc/toolline/run-i4cbec17.sh <A|AB>, sha256 1455f7a36a104507caf504ef1ddb3590c914cd0d5fdeea443aaa600593c90e02. A fresh scratch clone (the install suites refuse a worktree since 2c9f7d99), prez built once through its shim, green at the tip, then each commit's arms red over its base, each by its own words; no GREEN_AT_BASE. Lanes cargo and bats, kill bound 2400 s.\nic: please read the line's shape in both commits (show_version and utilz_version_line in common.sh, help/utilz.md). The run and the route wait for hv's word.",
+      "fyi": false,
+      "recorded_at": "2026-11-26T14:49:55.301Z",
+      "archived_at": "2026-11-26T18:18:18.259Z"
     }
   ],
   "handled": [
@@ -4207,6 +4225,11 @@
       "id": "01M8BA1KJF185WA4BCD1A34N8P",
       "sender": "vc",
       "handled_at": "2026-11-26T06:53:04.761Z"
+    },
+    {
+      "id": "01M8CH2XY6JPZNFN53SZKEG4TA",
+      "sender": "vc",
+      "handled_at": "2026-11-26T18:18:23.484Z"
     }
   ]
 }

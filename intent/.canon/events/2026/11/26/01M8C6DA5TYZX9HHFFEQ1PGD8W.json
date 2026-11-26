@@ -1,0 +1,16 @@
+{
+  "id": "01M8C6DA5TYZX9HHFFEQ1PGD8W",
+  "ts": "2026-11-26T15:08:30.778Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 30,
+    "text": "Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A e8031acd: the line names the utility and stays last (route 1). B e58c15db on A: the line first, the pair second (route 2). vc checked both and the driver; ic read both SOUND. Run 01M8C5ZXJ44D697PQ1V9CQ4HW0 (mode AB): GREEN, so route 2 is proven; route 1 alone needs a mode A run. Waits for hv's route word, then a landing by change on vc's word and the close after vc's check."
+  }
+}

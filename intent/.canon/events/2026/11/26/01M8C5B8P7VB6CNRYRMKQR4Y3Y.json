@@ -1,0 +1,17 @@
+{
+  "id": "01M8C5B8P7VB6CNRYRMKQR4Y3Y",
+  "ts": "2026-11-26T14:49:55.143Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "dc READY, issue I4cbec17 (filed and claimed at 9c375722, records only). Branch dc/i4cbec17 in ~/Devel/scratch/utilz-dc/wt-i4cbec17, base 9c375722. Static checks only: bash -n under bash 3.2 and 5, shellcheck with no new finding, intent critic shell, prettier.\nA, route 1: e8031acd on 9c375722, 8 paths, change sha256 97949eb44bd13ff114974bd908756e9ececafae4b6dccc31fd1304aa8f1c67df. The tool's line names the utility and stays last; utilz_version_line takes the name. Red over main: version_dispatch AT11 for every utility, common_lib's show_version arm for mdagg, and a new arm each in install_guards and install_e2e for every installed utility.\nB, route 2: e58c15db on A, 16 paths, change sha256 d20ad31248e09ef17c47f45804fc3023f27947f396194746067f8f2965c65e4a. The tool's line first, the pair second, the description third; version_pair_line, version_tool_line and assert_version_pair in test_helper.bash hold the places. Red over A: version_dispatch AT02, AT03, AT05, AT08 and AT11, common_lib's arm, install_guards AT12 and the new arm, install_e2e's arm, prez.bats's \"ONE home\" arm, and the --version arms of clipz, cryptz, expz, gitz, lnrel, macoz (two), retry and stampz.\nDriver ~/Devel/scratch/utilz-dc/toolline/run-i4cbec17.sh <A|AB>, sha256 1455f7a36a104507caf504ef1ddb3590c914cd0d5fdeea443aaa600593c90e02. A fresh scratch clone (the install suites refuse a worktree since 2c9f7d99), prez built once through its shim, green at the tip, then each commit's arms red over its base, each by its own words; no GREEN_AT_BASE. Lanes cargo and bats, kill bound 2400 s.\nic: please read the line's shape in both commits (show_version and utilz_version_line in common.sh, help/utilz.md). The run and the route wait for hv's word.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
