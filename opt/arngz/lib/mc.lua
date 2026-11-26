@@ -2,11 +2,13 @@
 -- desks1125/mc-design.md, for ST6d8eed9 WP A and STca1b7f9 WP6).
 --
 -- hs.spaces (Hammerspoon 1.1.1) does every desktop edit through Mission
--- Control, and on macOS 27.2.1 its lookup never finds Mission Control's group
--- in the Dock: it looks for 1 to 2 s, on whole seconds of os.time, for a
--- Dock child with AXIdentifier "mc". This file does the three edits arngz
--- makes (add, show, remove) with its own lookup, through hs.axuielement, a
--- public module (D15). Reading the desktops stays with hs.spaces.
+-- Control, and on macOS 27.2.1 its lookup never finds Mission Control's
+-- group: it looks for a Dock child with AXIdentifier "mc", and macOS 27
+-- shows Mission Control in WindowManager (desks1125/mcdiag2). This file does
+-- the three edits arngz makes (add, show, remove) with its own lookup,
+-- through hs.axuielement, a public module (D15): WindowManager first, then
+-- the Dock, so macOS 26 keeps working. Reading the desktops stays with
+-- hs.spaces.
 --
 -- The pure part walks a Dock tree through an accessor A = { kids, attr }, so
 -- mc_test.lua gives it plain tables. The impure part opens Mission Control,
@@ -25,13 +27,6 @@ MC.POLL_US = 50000       -- the group is looked for this often, in microseconds
 
 -- ------------------------------------------------------------- pure
 
--- Whether a Dock child is Mission Control's group. THE ONE MATCH THE
--- DIAGNOSTIC (desks1125/mcdiag) FILLS IN: until its result is read, it is
--- hs.spaces' own test.
-function MC.is_group(A, el)
-  return A.attr(el, "AXIdentifier") == "mc"
-end
-
 -- The first child of EL that WANT accepts, or nil.
 local function child(A, el, want)
   for _, k in ipairs(A.kids(el) or {}) do
@@ -44,9 +39,20 @@ local function with_id(A, id)
   return function(k) return A.attr(k, "AXIdentifier") == id end
 end
 
--- Mission Control's group among the Dock's children, or nil.
-function MC.find_group(A, dock)
-  return child(A, dock, function(k) return MC.is_group(A, k) end)
+-- Whether EL is Mission Control's group: the element that holds one
+-- mc.display per display. The second diagnostic (desks1125/mcdiag2, 26 Nov
+-- 2026) read it on macOS 27.2.1 as WindowManager's application element
+-- itself. On macOS 26 it is the Dock's child "mc", as hs.spaces looks for,
+-- and that child holds the same mc.display groups.
+function MC.is_group(A, el)
+  return child(A, el, with_id(A, "mc.display")) ~= nil
+end
+
+-- Mission Control's group under ROOT, an owner's application element: ROOT
+-- itself, or one of its children. nil while Mission Control is closed.
+function MC.find_group(A, root)
+  if MC.is_group(A, root) then return root end
+  return child(A, root, function(k) return MC.is_group(A, k) end)
 end
 
 -- In GROUP, the node WANT names for the display with DISPLAY_ID: "add", the
@@ -91,12 +97,28 @@ local AX = {
 
 local function now() return hs.timer.absoluteTime() end
 
-local function dock_element()
-  local app = hs.application.get("com.apple.dock")
-  if not app then return nil, "the Dock is not running" end
-  local el = hs.axuielement.applicationElement(app)
-  if not el then return nil, "no Accessibility element for the Dock" end
-  return el
+-- The processes Mission Control's group is looked for in, in order:
+-- WindowManager on macOS 27, then the Dock, which held it before.
+MC.OWNERS = { "com.apple.WindowManager", "com.apple.dock" }
+
+-- The application elements of the owners that run.
+local function owners()
+  local out = {}
+  for _, bundle in ipairs(MC.OWNERS) do
+    local app = hs.application.get(bundle)
+    local el = app and hs.axuielement.applicationElement(app)
+    if el then out[#out + 1] = el end
+  end
+  return out
+end
+
+-- Mission Control's group in the first owner that shows it, or nil.
+local function find_any(roots)
+  for _, root in ipairs(roots) do
+    local group = MC.find_group(AX, root)
+    if group then return group end
+  end
+  return nil
 end
 
 -- Opens Mission Control as hs.spaces does. If the diagnostic shows that only
@@ -106,19 +128,19 @@ function MC.open()
 end
 
 -- Closes Mission Control, if its group is there.
-local function close(dock)
-  if MC.find_group(AX, dock) then MC.open() end
+local function close(roots)
+  if find_any(roots) then MC.open() end
 end
 
 -- The group, waited for up to OPEN_SECONDS on the monotonic clock.
-local function wait_group(dock)
+local function wait_group(roots)
   local deadline = now() + MC.OPEN_SECONDS * 1e9
   repeat
-    local group = MC.find_group(AX, dock)
+    local group = find_any(roots)
     if group then return group end
     hs.timer.usleep(MC.POLL_US)
   until now() >= deadline
-  return MC.find_group(AX, dock)
+  return find_any(roots)
 end
 
 local function screen_id(uuid)
@@ -134,19 +156,19 @@ end
 local function with_mc(uuid, want, act, closes)
   local id = screen_id(uuid)
   if not id then return nil, MC.NO_DISPLAY end
-  local dock, derr = dock_element()
-  if not dock then return nil, derr end
-  if not MC.find_group(AX, dock) then MC.open() end
-  local group = wait_group(dock)
+  local roots = owners()
+  if #roots == 0 then return nil, "neither WindowManager nor the Dock is running" end
+  if not find_any(roots) then MC.open() end
+  local group = wait_group(roots)
   if not group then return nil, MC.NO_GROUP end
   hs.timer.usleep(math.floor(MC.SETTLE_SECONDS * 1e6))
   local node, nerr = MC.locate(AX, group, id, want)
   if not node then
-    close(dock)
+    close(roots)
     return nil, nerr
   end
   local ok, res, why = pcall(act, node)
-  if not (ok and res and closes) then close(dock) end
+  if not (ok and res and closes) then close(roots) end
   if not ok then return nil, tostring(res) end
   return res, why
 end

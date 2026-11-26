@@ -58,9 +58,32 @@ print("the group")
 do
   check("a closed Dock has no group", MC.find_group(A, dock(false)) == nil)
   local g = MC.find_group(A, dock(true))
-  check("an open Dock's group is found", g and g.name == "group", g and g.name)
-  check("is_group takes the child mc", MC.is_group(A, node({ AXIdentifier = "mc" })))
+  check("an open Dock's group is found (macOS 26)", g and g.name == "group", g and g.name)
+  check("is_group takes an element that holds an mc.display", MC.is_group(A, node({}, { mc_display(1, 1) })))
+  check("is_group refuses an element with no mc.display", not MC.is_group(A, node({ AXIdentifier = "mc" })))
   check("is_group refuses the Dock's list", not MC.is_group(A, node({ AXRole = "AXList" })))
+end
+
+-- WindowManager on macOS 27 (mcdiag2): its application element holds the
+-- mc.display groups itself, beside buttons for each app's windows.
+local function window_manager(open)
+  local kids = {}
+  if open then
+    kids = { mc_display(2, 1), mc_display(1, 3) }
+    table.insert(kids[2].kids, 1, node({ AXRole = "AXButton", AXIdentifier = "com.example.app.space.1" }))
+  end
+  return node({ AXRole = "AXApplication", name = "wm" }, kids)
+end
+
+print("WindowManager")
+do
+  check("a closed WindowManager has no group", MC.find_group(A, window_manager(false)) == nil)
+  local g = MC.find_group(A, window_manager(true))
+  check("an open WindowManager is its own group", g and g.name == "wm", g and g.name)
+  local list = MC.locate(A, g, 1, "list")
+  check("its display 1 tiles are found past an app's button", list and #list.kids == 3, list and #list.kids)
+  local add = MC.locate(A, g, 2, "add")
+  check("its display 2 add button is found", add and add.name == "add2", add and add.name)
 end
 
 print("locate")
