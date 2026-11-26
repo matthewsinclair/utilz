@@ -115,6 +115,26 @@ do
   check("index_of a space not listed is nil", MC.index_of({ 5, 9 }, 7) == nil)
 end
 
+print("press")
+do
+  -- A fake element whose performAction answers as hs.axuielement may.
+  local function el(answer, err, raise)
+    return { performAction = function(self, action)
+      if raise then error(raise, 0) end
+      if answer == "self" then return self end
+      return answer, err
+    end }
+  end
+  local ok, why = MC.press(el("self"), "AXPress")
+  check("an action that answers the element is true", ok == true and why == nil, tostring(why))
+  ok, why = MC.press(el(false), "AXRemoveDesktop")
+  check("an action that answers false gives a reason", ok == nil and why == "Mission Control refused AXRemoveDesktop", why)
+  ok, why = MC.press(el(nil, "kAXErrorCannotComplete"), "AXPress")
+  check("an action that answers nil keeps its message", ok == nil and why == "kAXErrorCannotComplete", why)
+  ok, why = MC.press(el(nil, nil, "no such action"), "AXRemoveDesktop")
+  check("an action that raises gives its words", ok == nil and why == "no such action", why)
+end
+
 print("the reasons")
 do
   local plan_path = arg[2]

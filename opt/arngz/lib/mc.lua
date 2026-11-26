@@ -87,6 +87,17 @@ function MC.index_of(ids, space)
   return nil
 end
 
+-- One AX action on EL, answered as hs.spaces answers: true, or nil and a
+-- reason. hs.axuielement's performAction answers the element itself, or false
+-- with no reason, or nil and a message; and a tile with no such action (the
+-- only desktop on a display has no AXRemoveDesktop, mcdiag2) raises. ic's F1.
+function MC.press(el, action)
+  local ok, res, err = pcall(function() return el:performAction(action) end)
+  if not ok then return nil, tostring(res) end
+  if res then return true end
+  return nil, err and tostring(err) or string.format("Mission Control refused %s", action)
+end
+
 -- ------------------------------------------------------------- impure
 
 -- The accessor over live AX elements.
@@ -119,6 +130,12 @@ local function find_any(roots)
     if group then return group end
   end
   return nil
+end
+
+-- Whether Mission Control shows now, read only from the owners' mc.display
+-- groups, never from other windows: the probe's mc_before and mc_after.
+function MC.shown()
+  return find_any(owners()) ~= nil
 end
 
 -- Opens Mission Control as hs.spaces does. If the diagnostic shows that only
@@ -176,7 +193,7 @@ end
 -- As hs.spaces.addSpaceToScreen(uuid, true).
 function MC.add_space(uuid)
   return with_mc(uuid, "add", function(add)
-    return add:performAction("AXPress")
+    return MC.press(add, "AXPress")
   end)
 end
 
@@ -189,7 +206,7 @@ local function on_tile(space, action, closes)
   return with_mc(uuid, "list", function(list)
     local tile, terr = MC.tile(AX, list, index)
     if not tile then return nil, terr end
-    return tile:performAction(action)
+    return MC.press(tile, action)
   end, closes)
 end
 
