@@ -610,22 +610,27 @@ end
 
 -- A recheck is executed as a place: shown, setFrame, a readback. Its fake
 -- answers exactly what exec_place reaches for when the window's desktop is
--- the one shown: three hs.spaces readers, hs.window.get and the sleep. The
--- window takes `takes` whatever frame it is given, which is how an app that
--- holds its own size answers.
-local function fake_place_hs(takes)
+-- the one shown: three hs.spaces readers, observe's index of windows (issue
+-- I40cbb9b) and the sleep. Window 102 is in the index; hs.window.get counts
+-- any call made to it in GETS. The window takes `takes` whatever frame it is
+-- given, which is how an app that holds its own size answers.
+local function fake_place_hs(takes, gets)
   local set = {}
   local window = {
     setFrame = function(_, frame) set[#set + 1] = frame end,
     frame = function() return takes end,
   }
+  M.window_index = { [102] = { win = window, via = "allWindows" } }
   return {
     spaces = {
       windowSpaces = function() return { 1 } end,
       spaceDisplay = function() return "SCREEN-A" end,
       activeSpaceOnScreen = function() return 1 end,
     },
-    window = { get = function() return window end },
+    window = { get = function()
+      if gets then gets.n = gets.n + 1 end
+      return window
+    end },
     timer = { usleep = function() end },
   }, set
 end
@@ -656,6 +661,32 @@ do
   recs = P.own_sizes_after and P.own_sizes_after({ { bundle = "com.apple.safari", want = { w = 600, h = 800 },
     size = { w = 375, h = 667 } } }, results or {}) or nil
   check("recheck: and its result clears the record", recs and #recs == 0, recs and tostring(#recs) or "no merge")
+end
+
+-- The window lookup (issue I40cbb9b, hv decision 49): a place finds its
+-- window in observe's index, and makes no hs.window.get call, which reads
+-- every running app through Accessibility.
+do
+  local CELL = { x = 600, y = 25, w = 600, h = 800 }
+  local gets = { n = 0 }
+  local fake, set = fake_place_hs(CELL, gets)
+  _G.hs = fake
+  local op = { op = "place", window = 102, frame = CELL, path = "displays[0].spaces[0].apps[1]",
+    bundle = "com.apple.Safari", reason = "r" }
+  local ok, results = pcall(M.execute, { op }, { unmoved = {} })
+  local r = ok and results and results[1] or {}
+  check("lookup: a place on a window in observe's index is done, with no hs.window.get call",
+    r.status == "done" and #set == 1 and gets.n == 0, tostring(r.status) .. " / gets " .. gets.n)
+
+  gets.n = 0
+  local gone = { op = "place", window = 909, frame = CELL, path = "displays[0].spaces[0].apps[1]",
+    bundle = "com.apple.Safari", reason = "r" }
+  ok, results = pcall(M.execute, { gone }, { unmoved = {} })
+  r = ok and results and results[1] or {}
+  check("lookup: a window not in the index (closed since observe) fails its op with why, and no hs.window.get call",
+    r.status == "failed" and string.find(tostring(r.reason), "window 909 is no longer in this run's windows", 1, true)
+      ~= nil and gets.n == 0, tostring(r.status) .. " / " .. tostring(r.reason) .. " / gets " .. gets.n)
+  _G.hs = nil
 end
 
 print(string.format("engine_test: %d passed, %d failed", passed, failed))

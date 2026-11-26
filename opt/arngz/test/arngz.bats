@@ -924,6 +924,15 @@ apply_response() {
   [ -s "$BATS_TEST_TMPDIR/windows.scpt" ] || fail "osacompile wrote no script: $output"
 }
 
+# Issue I40cbb9b (hv decision 49): hs.window.get reads every running app's
+# windows through Accessibility at each call, so the engine looks a window up
+# in observe's index and calls it nowhere.
+@test "I40cbb9b: arngz's engine makes no hs.window.get call" {
+  run grep -n -E 'hs\.window\.get[[:space:]]*\(|window\.windowForID[[:space:]]*\(' "$UTILZ_HOME"/opt/arngz/lib/*.lua
+  # grep's 1 is "no line matched"; its 2 would be a file it could not read.
+  [ "$status" -eq 1 ] || fail "grep exited $status: $output"
+}
+
 # ============================================================================
 # ST6d8eed9 WP a45b3aeb -- a reload and one retry after the window filter fails
 # ============================================================================

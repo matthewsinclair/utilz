@@ -294,6 +294,24 @@ local function nameable()
   return index, note, nil, id_errors
 end
 
+-- THE WINDOWS THIS RUN NAMED (issue I40cbb9b, hv decision 49): the last
+-- observe's index, which the ops look a window up in. hs.window.get is
+-- window.find, which reads every running app's windows through
+-- Accessibility at each call (Hammerspoon's window.lua:203-236), so one app
+-- that does not answer held each op, and Hammerspoon with it. The plan
+-- places and moves only windows observe named, so a window not here closed
+-- after observe, and its op fails with WINDOW_GONE.
+M.window_index = {}
+
+local function window_of(id)
+  local hit = M.window_index[id]
+  return hit and hit.win or nil
+end
+
+local function window_gone(id)
+  return "window " .. tostring(id) .. " is no longer in this run's windows"
+end
+
 -- One window read, or, when it went away or is not backed yet between being
 -- listed and being read, unnamed with why: it is not seen, and says so,
 -- rather than failing the whole observe.
@@ -374,6 +392,7 @@ function M.observe(bundles)
   end
 
   local index, filter_note, list_err, id_errors = nameable()
+  M.window_index = index
   local primary = hs.screen.primaryScreen()
   local primary_frame = rect(primary:fullFrame())
   local world = {
@@ -775,8 +794,8 @@ local function exec_place(op, ctx)
   -- that desktop is shown (design.md, "Moving a window").
   local shown, why = show_desktop(ctx, op.window)
   if not shown then return { status = "failed", reason = "not placed: " .. why } end
-  local w = hs.window.get(op.window)
-  if not w then return { status = "failed", reason = "window " .. tostring(op.window) .. " is not visible to Accessibility" } end
+  local w = window_of(op.window)
+  if not w then return { status = "failed", reason = "not placed: " .. window_gone(op.window) } end
   w:setFrame(op.frame, 0)
   hs.timer.usleep(150000)
   local got = rect(w:frame())
@@ -990,15 +1009,19 @@ end
 -- A point on the window's title bar that lands on the bar itself, with the
 -- window's frame, or nil and every point tried.
 local function grab_point(id)
-  local win
+  local win = window_of(id)
+  if not win then return nil, window_gone(id) end
   -- A desktop just brought into view takes a moment to show its windows to
-  -- Accessibility.
+  -- Accessibility: the window's own frame is read until it can be, in place
+  -- of a full read of every app at each try (issue I40cbb9b).
+  local seen
   for _ = 1, 20 do
-    win = hs.window.get(id)
-    if win then break end
+    local ok, f = pcall(function() return win:frame() end)
+    seen = ok and f and f.w and f.w > 0
+    if seen then break end
     hs.timer.usleep(POLL_US)
   end
-  if not win then return nil, "window " .. tostring(id) .. " is not visible to Accessibility on its desktop" end
+  if not seen then return nil, "window " .. tostring(id) .. " is not visible to Accessibility on its desktop" end
   -- Raised first: a window behind another cannot be held, and a press there
   -- takes the other app's window (vc's hand run at 9907e17, 16 Oct 2026).
   -- The readback is the hit test, read fresh from Accessibility at each
@@ -1127,7 +1150,7 @@ end
 -- and a Move-space pressed holding nothing switches the display and leaves
 -- the window behind (vc's hands-off re-run at 45acc46, 16 Oct 2026).
 local function take_hold(hand, id, g, dx)
-  local win = hs.window.get(id)
+  local win = window_of(id)
   local app = win and win:application()
   hand:press(g.point)
   hand:drag({ { x = g.point.x + dx, y = g.point.y } })
@@ -2247,7 +2270,7 @@ local function steps_before(job, nxt)
       job.step_i = (job.step_i or 0) + 1
       local frame, via
       if op.op == "move" then
-        local w = hs.window.get(op.window)
+        local w = window_of(op.window)
         frame = w and rect(w:frame())
         via = step_via(op, job.ctx)
       end
@@ -2433,9 +2456,36 @@ local function answer(request, lg)
   return out
 end
 
+-- THE ACCESSIBILITY TIMEOUT (issue I40cbb9b): how long one Accessibility
+-- message may wait for an app's answer. A run sets AX_SECONDS at its start, so
+-- one app that does not answer costs each read at most that, and puts back
+-- AX_DEFAULT_SECONDS, macOS's default, at its end. Hammerspoon's setting is
+-- global and has no getter; hv's ~/.hammerspoon sets none. A Hammerspoon with
+-- no hs.window.timeout (a test's fake) is left alone; one that refuses the
+-- value is said in the log.
+M.AX_SECONDS = 2
+M.AX_DEFAULT_SECONDS = 6
+
+local function ax_timeout(lg, seconds)
+  -- rawget, then require: the first hs.window through Hammerspoon's lazy
+  -- loader prints a line, and a run starts before observe has loaded it.
+  local w = rawget(hs, "window")
+  if w == nil then
+    local loaded, mod = pcall(require, "hs.window")
+    w = loaded and mod or nil
+  end
+  if type(w) ~= "table" or type(w.timeout) ~= "function" then return end
+  local ok, set = pcall(w.timeout, seconds)
+  if not (ok and set) then
+    note(lg, "error", string.format("the Accessibility timeout could not be set to %s s: %s", tostring(seconds),
+      ok and "hs.window.timeout said no" or tostring(set)))
+  end
+end
+
 -- A run's start (ST589246c): its record, the toast hook's state, and the
 -- start point (progress.md).
 local function begin_run(lg, request)
+  ax_timeout(lg, M.AX_SECONDS)
   local desk = type(request.desk) == "table" and request.desk.desk
     or (type(request.options) == "table" and request.options.name) or ""
   note(lg, "start", function()
@@ -2467,6 +2517,7 @@ end
 -- could not do. Every path that answers a request comes through here, once,
 -- but the quiet gate's `unsettled`, which ends nothing (M.run).
 local function finish_run(response_path, response, lg)
+  ax_timeout(lg, M.AX_DEFAULT_SECONDS)
   local clocked, t = pcall(function() return hs.timer.secondsSinceEpoch() end)
   local seconds = (clocked and lg.started) and math.floor((t - lg.started) * 10 + 0.5) / 10 or 0
   if response.status ~= "ok" then

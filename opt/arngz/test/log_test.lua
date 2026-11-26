@@ -805,6 +805,32 @@ arm("the window list's read", function()
     unread == "unread: osascript windows.js ended by signal 14: ", tostring(unread))
 end)
 
+-- ----------------------- the Accessibility timeout (issue I40cbb9b)
+
+arm("the Accessibility timeout", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  local set = {}
+  f.hs.window = { timeout = function(seconds) set[#set + 1] = seconds; return true end }
+  M.observe = function() return world_fixture() end
+  run_engine(f, { verb = "observe", options = {}, run = "R-AX", log = log })
+  check("ax: a run sets the Accessibility timeout to AX_SECONDS at its start and macOS's default at its end",
+    #set == 2 and set[1] == M.AX_SECONDS and set[2] == M.AX_DEFAULT_SECONDS, table.concat(set, ","))
+
+  fresh_globals()
+  local refused_log = tmpdir() .. "/arngz.log"
+  local g = new_fake()
+  g.hs.window = { timeout = function() return false end }
+  M.observe = function() return world_fixture() end
+  local response = run_engine(g, { verb = "observe", options = {}, run = "R-AX2", log = refused_log })
+  local recs = records(refused_log)
+  check("ax: a timeout Hammerspoon refuses is said in the log, and the run still answers",
+    response and response.status == "ok"
+      and find(recs, "error", "the Accessibility timeout could not be set to " .. M.AX_SECONDS .. " s") ~= nil,
+    last_line(recs))
+end)
+
 -- -------------------------------- arm 14: the displays settle (93ea7f8a)
 -- AT-93ea7f8a.4
 
@@ -1243,13 +1269,23 @@ local function with_hand(f, world)
     getButtons = function() return {} end,
   }
   f.hs.eventtap = { checkKeyboardModifiers = function() return {} end }
+  -- Each window with a frame, as observe's index holds it (issue I40cbb9b):
+  -- the engine looks a window up there, never through hs.window.get.
+  local function window(id)
+    if not f.frames[id] then return nil end
+    return {
+      frame = function() return f.frames[id] end,
+      setFrame = function(_, frame) f.frames[id] = { x = frame.x, y = frame.y, w = frame.w, h = frame.h } end,
+    }
+  end
+  M.window_index = setmetatable({}, { __index = function(_, id)
+    local w = window(id)
+    return w and { win = w, via = "allWindows" } or nil
+  end })
   f.hs.window = {
     get = function(id)
-      if not f.frames[id] then return nil end
-      return {
-        frame = function() return f.frames[id] end,
-        setFrame = function(_, frame) f.frames[id] = { x = frame.x, y = frame.y, w = frame.w, h = frame.h } end,
-      }
+      f.window_gets = (f.window_gets or 0) + 1
+      return window(id)
     end,
     focusedWindow = function() return nil end,
   }
