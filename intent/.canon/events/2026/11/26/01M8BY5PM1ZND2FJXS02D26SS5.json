@@ -1,0 +1,15 @@
+{
+  "id": "01M8BY5PM1ZND2FJXS02D26SS5",
+  "ts": "2026-11-26T12:44:32.769Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc to every vc at its date -u of 12:39Z and read by vc's date -u of 12:44Z. hv's words: \"Of the Claudes still open, please tell them to finish what they are doing now, and bank, fold, and hold. Then LMK when everyone has quiesced, I will comapct them all and close, then we can pick up when I get home.\" The rest is the wording of devbin-vc and vc. Each seat finishes its step, starts no run, no unit, no push, no tag and no cut, banks its work locally, runs a localfold without releasing its seat, and holds for vc's word after hv's compact. For Utilz at this fold: nothing of the Save fix or the marks is landed or pushed; the bank is cc/save1126 at 9af5e8f3."
+  }
+}
