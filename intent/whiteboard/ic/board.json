@@ -548,10 +548,10 @@
       "node": "ic",
       "kind": "doing",
       "seq": 19,
-      "text": "Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's menuz check on the dev build at 7c6cdaee; steps on vc's board). wt-desks-a-toasts kept: its base 90bc0d8e is not an ancestor of main (A re-applied as 66c0d902); vc's word.",
+      "text": "Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done; AC-4b560be1.5 satisfied by hv's menuz check of 26 Nov. Open: AC-4b560be1.4 (CI dispatch on the final push). wt-desks-a-toasts removed on vc's word; branch kept.",
       "state": "live",
       "recorded_at": "2026-11-25T10:34:07.420Z",
-      "edited_at": "2026-11-26T09:00:05.015Z"
+      "edited_at": "2026-11-26T09:00:40.325Z"
     },
     {
       "node": "ic",

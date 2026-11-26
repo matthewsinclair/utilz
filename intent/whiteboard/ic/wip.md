@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - STb8e4fb6, showreel qr: landed; AC-702cceb9.8 satisfied by hv's phone scan of 26 Nov (relayed by vc). Thread and WP 702c close are vc's call. (edited)
-- Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's menuz check on the dev build at 7c6cdaee; steps on vc's board). wt-desks-a-toasts kept: its base 90bc0d8e is not an ancestor of main (A re-applied as 66c0d902); vc's word. (edited)
+- Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done; AC-4b560be1.5 satisfied by hv's menuz check of 26 Nov. Open: AC-4b560be1.4 (CI dispatch on the final push). wt-desks-a-toasts removed on vc's word; branch kept. (edited)
 
 ## TODO
 

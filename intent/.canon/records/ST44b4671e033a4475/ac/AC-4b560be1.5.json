@@ -3,6 +3,7 @@
   "text": "On hv's hands, once: the masthead row shows its image and menuz's icon, and a second copy opened with open -n says that menuz already runs, and quits.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's hands on macOS 27, 26 Nov 2026, first-hand in vc's window and relayed by vc. Dev build 7c6cdaee (0.4.11): after utilz menuz use dev && restart, the masthead row shows menuz's icon, \"Menuz 0.4.11\" and \"7c6cdaee · dev\". open -n of the Debug app quit with the log line \"Menuz already runs as pid 58986, so this copy quits. To run this one, quit that copy first.\" (12:59:09.730 local), and one menuz item shows in the menu bar. Back on installed: ~/Applications/Menuz.app, masthead \"Menuz 0.4.10\", \"4553a289 · release\". PASS."
   }
 }
