@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+# A stand-in for afplay, for arngz.bats (hv decision 53). It plays nothing:
+# it writes the file it was given as one line in FAKE_HS_LOG/sounds, so an arm
+# reads which of the marks' sounds a run made.
+
+set -euo pipefail
+printf '%s\n' "$1" >>"${FAKE_HS_LOG:?}/sounds"

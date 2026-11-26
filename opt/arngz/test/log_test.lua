@@ -1886,5 +1886,46 @@ arm("an apply the CLI stopped waiting for ends its own mark", function()
     #off_marks .. " / " .. #off_sounds)
 end)
 
+-- ------------- the CLI's mark call reaches the toast's mark slot (hv decision 53)
+
+arm("the CLI's mark call hands its mark to the toast, and raises what it cannot draw", function()
+  local saved_toast, saved_error = M.toast, M.toast_error
+  local marks = {}
+  M.toast = { point = function() end, mark = function(kind, words, seconds)
+    marks[#marks + 1] = { kind = kind, words = words, seconds = seconds }
+  end }
+  local line = M.mark("start", "arngz: starting", 1440)
+  check("M.mark: hands the toast its kind, words and seconds as given",
+    #marks == 1 and marks[1].kind == "start" and marks[1].words == "arngz: starting" and marks[1].seconds == 1440,
+    #marks .. " marks")
+  check("M.mark: and answers one line that names the kind", line == "arngz: start mark drawn", tostring(line))
+
+  M.toast = { point = function() end, mark = function() error("this canvas could not be drawn", 0) end }
+  local ok, err = pcall(M.mark, "end", "arngz: done", 0)
+  check("M.mark: a mark the toast cannot draw is raised, so the hs call exits non-zero", ok == false
+    and tostring(err):find("this canvas could not be drawn", 1, true) ~= nil, tostring(err))
+
+  M.toast, M.toast_error = nil, "could not load toast.lua: a fake fault"
+  ok, err = pcall(M.mark, "end", "arngz: done", 0)
+  check("M.mark: with no toast loaded it raises the load's own error", ok == false
+    and tostring(err):find("a fake fault", 1, true) ~= nil, tostring(err))
+  M.toast, M.toast_error = saved_toast, saved_error
+end)
+
+arm("a still mark that comes after the run's finish draws nothing (vc's R1)", function()
+  local saved_toast, saved_running = M.toast, rawget(_G, "arngz_running")
+  local marks = {}
+  M.toast = { point = function() end, mark = function(kind) marks[#marks + 1] = kind end }
+  rawset(_G, "arngz_running", nil)
+  local line = M.mark("still", "arngz: still running in Hammerspoon (arngz stopped waiting after 20 s)", 40)
+  check("still: with no run in progress nothing is drawn, and the call answers, not raises", #marks == 0
+    and type(line) == "string" and line:find("not drawn", 1, true) ~= nil, tostring(line))
+  rawset(_G, "arngz_running", { verb = "apply", at = "2026-11-26T00:00:00Z" })
+  M.mark("still", "arngz: still running in Hammerspoon (arngz stopped waiting after 20 s)", 40)
+  check("still: while the run is in progress it is drawn", #marks == 1 and marks[1] == "still", #marks .. " marks")
+  M.toast = saved_toast
+  rawset(_G, "arngz_running", saved_running)
+end)
+
 print(string.format("log_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

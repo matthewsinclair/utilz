@@ -2937,6 +2937,30 @@ local function end_mark_if_stopped(request_dir, request, response, lg)
   if not drawn then note(lg, "mark", "no end mark drawn: " .. tostring(derr)) end
 end
 
+-- The CLI's mark call (hv decision 53): `hs -c 'return dofile(<this>).mark(
+-- kind, words, seconds)'`, at a run's start and end, apart from the run's own
+-- call. It runs no verb, reads no request and writes no log: the CLI logs
+-- each mark. It hands the mark to the toast's mark slot. A toast that did not
+-- load, or a mark it could not draw, is raised, so the hs call exits non-zero
+-- and the CLI's run log says so.
+--
+-- A "still" mark is drawn only while a scheduled run is in progress
+-- (arngz_running). The CLI does not wait for its call, so it can arrive after
+-- the run's done(), which writes the response, ends the mark and clears
+-- arngz_running in one Lua call. The CLI wrote stopped-waiting before it saw
+-- no response, so that engine has ended the mark already: a late "still"
+-- draws nothing, or it would say a finished run is running (vc's R1).
+function M.mark(kind, words, seconds)
+  if kind == "still" and not rawget(_G, "arngz_running") then
+    return "arngz: still mark not drawn: the run has finished, and the engine ended its mark"
+  end
+  if not (M.toast and M.toast.mark) then
+    error("arngz: no mark drawn: " .. tostring(M.toast_error or "the toast has no mark"), 0)
+  end
+  M.toast.mark(kind, words, seconds)
+  return "arngz: " .. tostring(kind) .. " mark drawn"
+end
+
 -- The IPC entry. Reads {verb, desk, options} from request_path, writes the
 -- response to response.json beside it, and returns one status line. A failure
 -- inside run is a response too; a failure loading this module surfaces through

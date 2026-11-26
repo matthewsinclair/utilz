@@ -826,6 +826,112 @@ do
   check("and nothing is printed on the way", prints == 0, tostring(prints))
 end
 
+-- ============================================================================
+print("hv decision 53: the start and end marks")
+-- ============================================================================
+
+-- The words as the CLI gives them (opt/arngz/arngz, mark_start and mark_end).
+local STARTING = "arngz: starting"
+local DONE = "arngz: done"
+local STILL = "arngz: still running in Hammerspoon (arngz stopped waiting after 600 s)"
+local LIFE = 1440
+
+do
+  local ok, p = pcall(T.on_mark, "start", STARTING, LIFE)
+  check("mark: start is one line, its words as given, in the mark slot",
+    ok and p.slot == "mark" and shown(p.lines) == STARTING, ok and shown(p.lines) or tostring(p))
+  check("mark: start stays for the seconds the CLI gives, with no linger", ok and p.life == LIFE and p.linger == nil,
+    ok and tostring(p.life) or tostring(p))
+  ok, p = pcall(T.on_mark, "end", DONE, 0)
+  check("mark: end says its words and stays T.MARK_LINGER", ok and shown(p.lines) == DONE and p.linger == T.MARK_LINGER,
+    ok and tostring(p.linger) or tostring(p))
+  ok, p = pcall(T.on_mark, "still", STILL, LIFE)
+  check("mark: still is broken between words, on lines no longer than T.MARK_LINE, and loses nothing",
+    ok and #p.lines > 1 and longest(p.lines) <= T.MARK_LINE and table.concat(p.lines, " ") == STILL,
+    ok and shown(p.lines) or tostring(p))
+  check("mark: still stays for the seconds the CLI gives", ok and p.life == LIFE, ok and tostring(p.life) or tostring(p))
+
+  local bad = {
+    { "a kind the CLI does not send", { "begin", STARTING, LIFE }, "not begin" },
+    { "no words", { "start", "", LIFE }, "has no words" },
+    { "a start with no time to stay", { "start", STARTING, 0 }, "needs the seconds" },
+  }
+  for _, b in ipairs(bad) do
+    local raised, err = pcall(T.on_mark, (table.unpack or unpack)(b[2]))
+    check("mark: " .. b[1] .. " is raised", raised == false and tostring(err):find(b[3], 1, true) ~= nil, tostring(err))
+  end
+
+  local placed, frame = pcall(T.mark_layout, { w = 120, h = 18 }, SCREEN)
+  check("mark: it sits at the bottom right, a margin in from each edge", placed
+    and frame.x + frame.w == SCREEN.x + SCREEN.w - T.MARGIN and frame.y + frame.h == SCREEN.y + SCREEN.h - T.MARGIN,
+    placed and string.format("%d,%d %dx%d", frame.x, frame.y, frame.w, frame.h) or tostring(frame))
+  local widest = T.layout({ w = SCREEN.w * 2, h = 18 }, SCREEN)
+  local wide_ok, wide = pcall(T.mark_layout, { w = SCREEN.w * 2, h = 18 }, SCREEN)
+  check("mark: however long, it stays right of the widest work toast", wide_ok and wide.x >= widest.x + widest.w,
+    wide_ok and string.format("mark x %d, work toast right %d", wide.x, widest.x + widest.w) or tostring(wide))
+end
+
+do
+  local mark_text, main_text
+  local log, prints, ok, err = drive(function(M, lg)
+    M.mark("start", STARTING, LIFE)
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("step", { run = "r1", i = 1, n = 2, kind = "place", app = "com.apple.Safari", display = "laptop" })
+    mark_text = lg.canvases[1].elements[2].text
+    main_text = lg.canvases[2].elements[2].text
+    M.point("finished", { run = "r1", outcome = "done", exit = 0, placed = 1, seconds = 2 })
+    M.mark("end", DONE, 0)
+  end)
+  local mark, main = log.canvases[1], log.canvases[2]
+  check("mark (drawn): a start, a run and an end draw without error, and print nothing", ok and prints == 0,
+    tostring(err) .. ", " .. tostring(prints) .. " prints")
+  check("mark (drawn): the mark has a canvas of its own, apart from the work toast", #log.canvases == 2
+    and mark_text == STARTING and main_text ~= nil and main_text:find("placing Safari", 1, true) ~= nil,
+    tostring(mark_text) .. " / " .. tostring(main_text))
+  check("mark (drawn): the start mark is shown through the run, and the end takes its place on the same canvas",
+    mark and mark.shows == 1 and not mark.deleted and mark.elements[2].text == DONE, mark and tostring(mark.elements[2].text))
+  local life, linger = last_timer(log, LIFE), last_timer(log, T.MARK_LINGER)
+  check("mark (drawn): the end stops the start's life and stays T.MARK_LINGER",
+    life ~= nil and life.stopped and linger ~= nil and not linger.stopped)
+  check("mark (drawn): at its own size", mark and mark.elements[2].textSize == T.MARK_TEXT_SIZE
+    and main and main.elements[2].textSize == T.TEXT_SIZE)
+  if linger then quietly(linger.fn) end
+  check("mark (drawn): when its time is up the end mark goes, and the work toast is left as it was",
+    mark and mark.deleted and _G.arngz_toast.slots.mark == nil and main and not main.deleted)
+
+  log = drive(function(M) M.mark("start", STARTING, LIFE) end)
+  life = last_timer(log, LIFE)
+  if life then quietly(life.fn) end
+  check("mark (drawn): a start mark with no end, as after SIGKILL, goes when its seconds are up",
+    life ~= nil and log.canvases[1] and log.canvases[1].deleted and _G.arngz_toast.slots.mark == nil)
+end
+
+do
+  local hid, still_hid, main_shown
+  local log, _, ok, err = drive(function(M, lg)
+    M.mark("start", STARTING, LIFE)
+    local f = lg.canvases[1].at
+    M.point("start", { run = "r1", verb = "apply", desk = "zeopit" })
+    M.point("step", { run = "r1", i = 1, n = 2, kind = "move", app = "Slack", x = f.x, y = f.y + 2, w = f.w, h = 400 })
+    hid = not lg.canvases[1].showing
+    main_shown = lg.canvases[2].showing
+    M.mark("still", STILL, LIFE)
+    still_hid = not lg.canvases[1].showing and lg.canvases[2].showing
+    M.point("step", { run = "r1", i = 2, n = 2, kind = "place", app = "Safari", display = "laptop" })
+  end)
+  check("mark (drawn): a move whose title bar the mark would cover hides it, and only it", ok and hid and main_shown,
+    tostring(err))
+  check("mark (drawn): a mark drawn during that grab stays hidden, and shows nothing the grab hid", still_hid)
+  check("mark (drawn): the next point shows it again", log.canvases[1] and log.canvases[1].showing)
+end
+
+do
+  local log, prints, ok, err = drive(function(M) M.mark("start", STARTING, LIFE) end, { no_canvas = true })
+  check("mark (drawn): with no canvas to draw on, mark raises, naming the mark", ok == false
+    and tostring(err):find("the start mark", 1, true) ~= nil, tostring(err))
+  check("mark (drawn): and nothing is printed", prints == 0 and #log.canvases == 0, tostring(prints))
+end
+
 _G.hs, _G.arngz_toast = nil, nil
 
 print(string.format("toast_test: %d passed, %d failed", passed, failed))

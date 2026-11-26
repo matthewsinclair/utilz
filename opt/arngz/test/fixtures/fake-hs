@@ -38,8 +38,26 @@
 #
 # Every ask is also kept as FAKE_HS_LOG/request.<n>.json, counting from 1, for
 # a verb that asks more than once.
+#
+# A MARK CALL IS NOT AN ASK (hv decision 53). The CLI's short call
+# `.mark("<kind>", "<words>", <seconds>)` is one line in FAKE_HS_LOG/calls,
+# "mark <kind> <seconds> <words>", and touches nothing an ask's arms read
+# (argv, stdin, asks, request.json). Each ask is a line there too, "run
+# <verb>", so an arm reads the marks and the asks in the order they came.
+# FAKE_HS_MARK_EXIT makes a mark call exit so after its line, eg 69, as hs
+# does when Hammerspoon cannot be reached; FAKE_HS_MODE is for the asks alone.
 
 set -euo pipefail
+code="" prev=""
+for arg in "$@"; do
+  if [[ "$prev" == -c ]]; then code="$arg"; fi
+  prev="$arg"
+done
+mark="$(printf '%s\n' "$code" | sed -n 's/^return dofile("[^"]*")\.mark("\([^"]*\)", "\([^"]*\)", \([0-9]*\))$/\1 \3 \2/p')"
+if [[ -n "$mark" ]]; then
+  printf 'mark %s\n' "$mark" >>"$FAKE_HS_LOG/calls"
+  exit "${FAKE_HS_MARK_EXIT:-0}"
+fi
 printf '%s\n' "$@" >"$FAKE_HS_LOG/argv"
 # Whether the caller gave hs /dev/null as stdin, which the real hs needs.
 if [[ /dev/fd/0 -ef /dev/null ]]; then
@@ -47,16 +65,10 @@ if [[ /dev/fd/0 -ef /dev/null ]]; then
 else
   echo other >"$FAKE_HS_LOG/stdin"
 fi
-code=""
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    -c) code="$2"; shift 2 ;;
-    *) shift ;;
-  esac
-done
 request="$(printf '%s\n' "$code" | sed -n 's/.*\.run("\(.*\)").*/\1/p')"
-[[ -n "$request" ]] || { echo "fake-hs: no run(\"...\") in: $code" >&2; exit 64; }
+[[ -n "$request" ]] || { echo "fake-hs: no run(\"...\") or mark(...) in: $code" >&2; exit 64; }
 cp "$request" "$FAKE_HS_LOG/request.json"
+printf 'run %s\n' "$(yq -r '.verb' "$request")" >>"$FAKE_HS_LOG/calls"
 asks=0
 if [[ -f "$FAKE_HS_LOG/asks" ]]; then asks="$(cat "$FAKE_HS_LOG/asks")"; fi
 asks=$((asks + 1))

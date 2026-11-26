@@ -37,6 +37,12 @@ UTILZ_TEST_PLATFORM=Darwin
 # arm that sets its own keeps it.
 export ARNGZ_APPLY_TIMEOUT=20
 
+# NO ARM PLAYS A REAL SOUND (hv decision 53). apply and discover play the
+# marks' sounds through afplay, and an arm whose PATH has /usr/bin finds the
+# real one. So the sounds are off for every arm; the marks' arms set them on,
+# with the fake afplay first on PATH.
+export ARNGZ_SOUNDS=off
+
 run_arngz() {
   run "$UTILZ_BIN_DIR/arngz" "$@"
 }
@@ -401,6 +407,7 @@ fake_hs() {
   export FAKE_HS_RESPONSE="${2:-$FIXTURES/responses/discover.json}"
   mkdir -p "$FAKE_HS_LOG" "$BATS_TEST_TMPDIR/fakebin"
   cp "$FIXTURES/fake-hs" "$BATS_TEST_TMPDIR/fakebin/hs"
+  cp "$FIXTURES/fake-macos/afplay" "$BATS_TEST_TMPDIR/fakebin/afplay"
   export PATH="$BATS_TEST_TMPDIR/fakebin:$PATH"
   export XDG_CONFIG_HOME="$BATS_TEST_TMPDIR/config"
   export XDG_STATE_HOME="$BATS_TEST_TMPDIR/state"
@@ -408,11 +415,13 @@ fake_hs() {
   mkdir -p "$TMPDIR"
 }
 
-@test "AT-03.1: the request holds exactly verb, desk, options, run and log, and hs runs the module's run on it" {
+@test "AT-03.1: the request holds exactly verb, desk, options, run, log and end_sound, and hs runs the module's run on it" {
   fake_hs ok
   run_arngz discover
   run yq -o json -I0 'keys' "$FAKE_HS_LOG/request.json"
-  assert_output '["verb","desk","options","run","log"]'
+  # end_sound is the end mark's sound, for an engine the CLI stopped waiting
+  # for (hv decision 53); empty here, since the suite's sounds are off.
+  assert_output '["verb","desk","options","run","log","end_sound"]'
   # run and log are the run's id and its log (ST589246c), for the engine's records.
   run yq -r '.log' "$FAKE_HS_LOG/request.json"
   assert_output "$XDG_STATE_HOME/arngz/arngz.log"
@@ -2864,9 +2873,11 @@ log_events() {
   log="$(run_log)"
   [ -f "$log" ] || fail "no run log at $log"
   # A kill record comes between hs and answer when hs is still running as the
-  # response lands, which the fake may or may not be.
-  [[ "$(log_events "$log")" =~ ^start\ request\ hs\ (kill\ )?answer\ end\ $ ]] ||
-    fail "the records are not start, request, hs, answer, end: $(log_events "$log")"
+  # response lands, which the fake may or may not be. discover marks its start
+  # and its end (hv decision 53), each a mark record inside the run's start
+  # and end.
+  [[ "$(log_events "$log")" =~ ^start\ mark\ request\ hs\ (kill\ )?answer\ mark\ end\ $ ]] ||
+    fail "the records are not start, mark, request, hs, answer, mark, end: $(log_events "$log")"
   [ "$(awk '{ print $2 }' "$log" | sort -u | wc -l | tr -d ' ')" = 1 ] || fail "more than one run id: $(cat "$log")"
   [[ "$(awk '{ print $2; exit }' "$log")" =~ ^[0-9]{8}T[0-9]{6}Z-[0-9]+$ ]] || fail "the run id is not <UTC stamp>-<pid>"
   [ "$(awk '{ print $3 }' "$log" | sort -u)" = cli ] || fail "a record not the CLI's: $(cat "$log")"
@@ -3169,4 +3180,194 @@ log_events() {
   assert_success
   run sed -n '/^-t$/{n;p;}' "$FAKE_HS_LOG/argv"
   assert_output "$ARNGZ_HS_TIMEOUT"
+}
+
+# ============================================================================
+# hv decision 53 -- the start and end marks (ic's marks-note, 26 Nov 2026)
+# ============================================================================
+
+# The marks' sounds on, each a file of this test's own, so the arms hear a
+# sound on any machine; the fake afplay, first on PATH in fake_hs and in the
+# fixture machine, logs each file it is given.
+sounds_on() {
+  export ARNGZ_SOUNDS=on
+  export ARNGZ_SOUND_START="$BATS_TEST_TMPDIR/begin_record.caf"
+  export ARNGZ_SOUND_END="$BATS_TEST_TMPDIR/end_record.caf"
+  : >"$ARNGZ_SOUND_START"
+  : >"$ARNGZ_SOUND_END"
+}
+
+# The CLI does not wait for the end mark's call or for a sound, so an arm reads
+# them once the end mark (end or still) is logged, or 5 s have passed.
+marks_settled() {
+  local deadline=$((SECONDS + 5))
+  until grep -qE '^mark (end|still) ' "$FAKE_HS_LOG/calls" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
+    sleep 0.1
+  done
+}
+
+sounds_settled() {
+  local deadline=$((SECONDS + 5))
+  until grep -qxF "$ARNGZ_SOUND_END" "$FAKE_HS_LOG/sounds" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
+    sleep 0.1
+  done
+}
+
+# The calls a marked run made: the start mark first, for LIFE seconds; only
+# asks between, at least one; and LAST, the end mark, last.
+assert_marks() {
+  local life="$1" last="$2" calls
+  marks_settled
+  calls="$(cat "$FAKE_HS_LOG/calls")" || fail "no hs call was logged"
+  [ "$(head -n 1 <<<"$calls")" = "mark start $life arngz: starting" ] || fail "the first call is not the start mark: $calls"
+  [ "$(tail -n 1 <<<"$calls")" = "$last" ] || fail "the last call is not '$last': $calls"
+  if sed '1d;$d' <<<"$calls" | grep -q '^mark '; then fail "a mark between the start and the end: $calls"; fi
+  sed '1d;$d' <<<"$calls" | grep -q '^run ' || fail "no ask between the marks: $calls"
+}
+
+# The sounds a run played, as one sorted list, against WANT's files.
+assert_sounds() {
+  local want="$1" got
+  sounds_settled
+  got="$(sort "$FAKE_HS_LOG/sounds" 2>/dev/null)" || got=""
+  [ "$got" = "$(sort <<<"$want")" ] || fail "the sounds were: '$got', not: '$want'"
+}
+
+@test "hv decision 53: discover marks its start and 'done', with the rising and the falling sound" {
+  fake_hs ok
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz discover
+  assert_success
+  assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: done"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+  grep -q ' cli mark start: arngz: starting$' "$(run_log)" || fail "no start mark record: $(cat "$(run_log)")"
+  grep -q ' cli mark end: arngz: done$' "$(run_log)" || fail "no end mark record: $(cat "$(run_log)")"
+}
+
+@test "hv decision 53: done with problems, exit 1, is 'done' too" {
+  fake_hs ok "$FIXTURES/responses/discover-gaps.json"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz discover
+  assert_exit_code 1
+  assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: done"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+}
+
+@test "hv decision 53: an apply marks its start and 'done', and its start mark stays for twice its longest wait" {
+  apply_machine scheduled "$(apply_response placed_results)"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz apply zeop1
+  assert_success
+  assert_marks "$((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT)))" "mark end 0 arngz: done"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+}
+
+@test "hv decision 53: a refusal by the engine, exit 2, ends 'stopped: refused' with the falling sound" {
+  fake_hs ok "$FIXTURES/responses/discover-refused.json"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30
+  run_arngz discover
+  assert_exit_code 2
+  assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: stopped: refused"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+}
+
+@test "hv decision 53: a Hammerspoon that does not answer still gets both sounds, and the mark's failure is logged" {
+  fake_hs exit-69
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30 FAKE_HS_MARK_EXIT=69
+  run_arngz discover
+  assert_exit_code 2
+  assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: stopped: refused"
+  assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+  grep -q " cli mark the start mark's hs call exited 69$" "$(run_log)" || fail "the failed mark is not logged: $(cat "$(run_log)")"
+}
+
+@test "hv decision 53: an apply the CLI stopped waiting for says it is still running, plays no falling sound, and leaves the engine its file" {
+  apply_machine scheduled-never "$(apply_response placed_results)"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30 ARNGZ_APPLY_TIMEOUT=1
+  run_arngz apply zeop1
+  assert_exit_code 1
+  marks_settled
+  local last kept
+  last="$(tail -n 1 "$FAKE_HS_LOG/calls")"
+  [[ "$last" =~ ^mark\ still\ $((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT)))\ arngz:\ still\ running\ in\ Hammerspoon\ \(arngz\ stopped\ waiting\ after\ [0-9]+\ s\)$ ]] ||
+    fail "the last call is not the still mark: $(cat "$FAKE_HS_LOG/calls")"
+  assert_sounds "$ARNGZ_SOUND_START"
+  kept="$(printf '%s\n' "$output" | sed -n 's/.*(request kept at \([^)]*\)).*/\1/p')"
+  [ -f "${kept%/request.json}/stopped-waiting" ] || fail "no stopped-waiting file beside $kept"
+  run yq -r '.end_sound' "$kept"
+  assert_output "$ARNGZ_SOUND_END"
+}
+
+# One apply sent SIGNAL once the engine has its ask, in a job of its own so
+# the signal is not ignored as a background job's SIGINT is; STATUS is its
+# exit. Each trial starts with no calls and no sounds logged.
+interrupted_apply() {
+  local signal="$1" pid deadline
+  rm -f "$FAKE_HS_LOG/calls" "$FAKE_HS_LOG/sounds"
+  set -m
+  "$UTILZ_BIN_DIR/arngz" apply zeop1 >/dev/null 2>&1 3>&- &
+  pid=$!
+  set +m
+  deadline=$((SECONDS + 10))
+  until grep -qx 'run apply' "$FAKE_HS_LOG/calls" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
+    sleep 0.1
+  done
+  kill -s "$signal" "$pid"
+  status=0
+  wait "$pid" || status=$?
+  ! kill -0 "$pid" 2>/dev/null || fail "the CLI still runs after $signal"
+}
+
+@test "hv decision 53: SIGINT and SIGTERM end 'stopped: interrupted' with the falling sound, on every trial" {
+  apply_machine scheduled-never "$(apply_response placed_results)"
+  sounds_on
+  export ARNGZ_HS_TIMEOUT=30
+  local signal want trial
+  for signal in INT TERM; do
+    want=130
+    [ "$signal" = INT ] || want=143
+    for trial in 1 2 3 4 5; do
+      interrupted_apply "$signal"
+      [ "$status" -eq "$want" ] || fail "trial $trial: $signal exited $status, not $want"
+      assert_marks "$((2 * (ARNGZ_HS_TIMEOUT + ARNGZ_APPLY_TIMEOUT)))" "mark end 0 arngz: stopped: interrupted"
+      assert_sounds "$(printf '%s\n%s' "$ARNGZ_SOUND_START" "$ARNGZ_SOUND_END")"
+    done
+  done
+}
+
+@test "hv decision 53: ARNGZ_SOUNDS=off draws the marks and plays nothing; a bad value is refused before any mark" {
+  fake_hs ok
+  sounds_on
+  export ARNGZ_SOUNDS=off ARNGZ_HS_TIMEOUT=30
+  run_arngz discover
+  assert_success
+  assert_marks "$((2 * ARNGZ_HS_TIMEOUT))" "mark end 0 arngz: done"
+  [ ! -e "$FAKE_HS_LOG/sounds" ] || fail "a sound played: $(cat "$FAKE_HS_LOG/sounds")"
+
+  rm -f "$FAKE_HS_LOG/calls"
+  export ARNGZ_SOUNDS=loud
+  run_arngz discover
+  assert_exit_code 2
+  assert_output_contains "ARNGZ_SOUNDS = 'loud': it takes on or off"
+  [ ! -e "$FAKE_HS_LOG/calls" ] || fail "hs was called: $(cat "$FAKE_HS_LOG/calls")"
+  [ ! -e "$FAKE_HS_LOG/sounds" ] || fail "a sound played: $(cat "$FAKE_HS_LOG/sounds")"
+}
+
+@test "hv decision 53: diff and apply --dry-run change nothing, so they make no mark and no sound" {
+  apply_machine ok "$(engine_response plan base_world base_desk)"
+  sounds_on
+  local verb
+  for verb in diff "apply --dry-run"; do
+    rm -f "$FAKE_HS_LOG/calls"
+    # shellcheck disable=SC2086 # the verb and its flag, split on purpose
+    run_arngz $verb zeop1
+    [ "$(cat "$FAKE_HS_LOG/calls")" = "run plan" ] || fail "$verb called: $(cat "$FAKE_HS_LOG/calls")"
+  done
+  [ ! -e "$FAKE_HS_LOG/sounds" ] || fail "a sound played: $(cat "$FAKE_HS_LOG/sounds")"
 }

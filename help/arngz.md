@@ -154,6 +154,16 @@ While `apply` runs, Hammerspoon shows a toast at the bottom of the main display,
 
 A toast takes no click and no focus: a click on it goes to the window under it. It stays in view while arngz switches desktops, and steps out of the way of a window arngz is about to take by its title bar. The other verbs show none. A refusal before Hammerspoon is asked, such as a desk that does not validate, shows none either: the CLI's message says it, and Menuz's notice for a non-zero exit. A toast that cannot be drawn changes nothing else: the apply runs and reports as it would without it, and the run log says why.
 
+### The start and end marks
+
+A run that can take the desktops, the pointer or the keyboard marks its start and its end, so you know when to use the mouse and keyboard again. These runs are `apply` (not `--dry-run`), `discover` (plain and `--save`), and `auto` when it applies. `diff`, `apply --dry-run` and the other verbs make no mark.
+
+- **The start.** A rising sound, and a small toast at the bottom right of the main display: `arngz: starting`. It stays until the end mark takes its place.
+- **The end.** A falling sound, and the toast says how the run ended for 3 s: `arngz: done` (exit 0 or 1; Finished and the report say what happened), `arngz: stopped: refused` (exit 2), `arngz: stopped: interrupted` (Ctrl-C or TERM), or `arngz: stopped: exit <n>`. The sound is the same for each: arngz has let go.
+- **When the CLI stops waiting** for an apply (`ARNGZ_APPLY_TIMEOUT`), the apply may still be at work. Then no sound plays, and the toast says `arngz: still running in Hammerspoon (arngz stopped waiting after <n> s)`. When the apply finishes, Hammerspoon plays the falling sound and shows its end.
+
+The sounds are macOS's own screen-recording sounds, and the CLI plays them, so they come even when Hammerspoon does not answer. `ARNGZ_SOUNDS=off` turns them off. The mark toasts are apart from the toasts above, and step out of the way of a grab as they do. A CLI killed with SIGKILL makes no end mark and no falling sound: its start mark goes when twice the run's longest wait has passed. The run log has a `mark` record for each mark, and for a mark that could not be drawn.
+
 ### current
 
 `current` prints the name of the desk the screen was last arranged as. An `apply` that ran records it, whatever its report says, because windows may have moved. A `discover --save` records the desk it saved. A `--dry-run`, and a refusal before anything changed, leave the record as it was. `delete` of that desk clears the record.
@@ -294,6 +304,8 @@ arngz current                 # the desk applied or saved last
 - `ARNGZ_HS_TIMEOUT`: how many seconds one call to Hammerspoon may take; 60 when unset, 180 for `discover`, which reads every window on every desktop in one call, and 5 for a reload and for each check after it that Hammerspoon is back.
 - `ARNGZ_APPLY_TIMEOUT`: how many seconds the CLI waits for apply's answer; 600 when unset. Hammerspoon may still be working when it gives up, and it says so.
 - `ARNGZ_RELOAD_TIMEOUT`: how many seconds the CLI waits, after it reloads Hammerspoon's config because the window filter failed, for Hammerspoon to answer from the fresh config; 30 when unset.
+- `ARNGZ_SOUNDS`: `on` or `off`, whether the start and end marks play their sounds; `on` when unset. Any other value is refused, exit 2.
+- `ARNGZ_SOUND_START`, `ARNGZ_SOUND_END`: the sound files the start and end marks play; macOS's `begin_record.caf` and `end_record.caf` when unset.
 - `TMPDIR`: where each call's request and response are written; `/tmp` when unset.
 
 ---

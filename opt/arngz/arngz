@@ -351,9 +351,10 @@ log_close() {
 # and a one-line toast, which Hammerspoon draws in a slot of its own. The
 # start mark stays until the end mark takes its place. The end mark comes from
 # the EXIT trap (log_close), so it is the last thing on every way out.
-# Both sounds ship with macOS, so no asset is added.
-ARNGZ_SOUND_START="/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/begin_record.caf"
-ARNGZ_SOUND_END="/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/end_record.caf"
+# Both sounds ship with macOS, so no asset is added. The environment can name
+# other files, which is how arngz.bats gives its arms a sound on any machine.
+ARNGZ_SOUND_START="${ARNGZ_SOUND_START:-/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/begin_record.caf}"
+ARNGZ_SOUND_END="${ARNGZ_SOUND_END:-/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/end_record.caf}"
 # How long a mark's hs call may take, in seconds: it only draws.
 MARK_HS_SECONDS=2
 # Set by mark_start: 1 once the start mark is made, so the EXIT trap makes the
