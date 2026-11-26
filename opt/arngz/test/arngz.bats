@@ -480,9 +480,12 @@ fake_hs() {
   [ $((SECONDS - start)) -lt 10 ]
 }
 
-@test "AT-03.1: an hs that writes its response and then hangs is not waited for" {
+# Issue I7085193: an hs that hangs after its response is waited for only until
+# its own timeout and the margin have passed, never stopped while it may still
+# take Hammerspoon's reply; its report is rendered all the same.
+@test "AT-03.1: an hs that writes its response and then hangs is waited for only to its own timeout" {
   fake_hs hang-after-reply
-  export ARNGZ_HS_TIMEOUT=30
+  export ARNGZ_HS_TIMEOUT=2
   local start=$SECONDS
   run_arngz discover
   assert_output_contains "FIXTURE-LINE-1"
