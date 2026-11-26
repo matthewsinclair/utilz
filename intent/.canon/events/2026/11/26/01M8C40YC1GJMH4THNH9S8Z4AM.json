@@ -1,0 +1,15 @@
+{
+  "id": "01M8C40YC1GJMH4THNH9S8Z4AM",
+  "ts": "2026-11-26T14:26:48.322Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 26 Nov 2026, on devbin-vc's word of 14:25Z from devbin issue Icb1329b: 2.15.0 gains an XS. A Utilz utility's third `--version` line, the tool line, names the utility in place of `utilz`: `<util> <utilz version> (<tree>, <sha12>[+dirty])`. dc builds it in a worktree off main. dc files a Utilz issue first, and the arms are red over main: version_dispatch.bats, common_lib.bats's show_version arms, and the install arms that read the tool line. ic reads it second for its shape. The pair stays on line one by hv's ST0015/D2 unless hv says otherwise. devbin-vc puts the choice to hv: vc's route (D2 stays, and devbin's reader takes the line by its first word) or devbin-cc's (the tool line first, which needs hv's word in vc's window). The XS rides the ONE bats run only if it is ready when cc's driver is. Nobody holds that run for it, and if it is late, it takes one small bats run of its own before the cut. Also: vc accepted ic's e179e732 by change (e0d240af), and cc takes it onto cc/save1126."
+  }
+}
