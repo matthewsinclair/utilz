@@ -1,0 +1,15 @@
+{
+  "id": "01M8BQA8W0M33SCN6HBXDAKR3X",
+  "ts": "2026-11-26T10:44:42.496Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue I19d4fa6 (hv decision 52, Save Desk leaves out windows on desktops not shown) with hv decision 53's start and end marks: cc/save1126 at 50f6be51 in ~/Devel/scratch/utilz-cc/wt-save (visit step, gaps, --with-gaps, exits 0/1/2/1; ic SOUND after F1, fixed). Left: ic's marks on top; cc's XS (PHASE.finish checks $ENGINE_DIR/stopped-waiting, then the end mark and falling sound); one driver and bats run over both; hv's live Save into a scratch desk name vs zeopit, and an apply with the marks; vc lands; close I19d4fa6."
+  }
+}

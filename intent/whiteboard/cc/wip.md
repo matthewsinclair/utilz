@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 6c722a89-1864-415d-862f-5af31d1ca9c9
-heartbeat_at: 2026-11-26 07:01Z
+heartbeat_at: 2026-11-26 10:44Z
 status: active
-focus: "Folded for hv decision 45. After the compact: /in-session, then hold for vc's word. Next: the probe r2 with hv (hold 54), then WP A's landing at 1ee77ee1 (finder plus A, run-tip GREEN, ic SOUND), then the live run. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "Folded for hv decision 54. After the compact: /in-session, then I19d4fa6 Save fix from RESUME's FOLD 5 step (1): ic's marks on cc/save1126 50f6be51 (wt-save), my stopped-waiting XS, one bats run, hv's live Save into a scratch desk. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
@@ -13,8 +13,7 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 
 ## DOING
 
-- STca1b7f9: WP6's create ships in 2.15.0 with arngz's Mission Control finder (mc.lua, in WindowManager on macOS 27; mcdiag2). WP1, WP2 and the mission leg go to the spcz thread (hv's pick) and stay unwritten. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6 until the spcz split is recorded. (edited)
-- ST6d8eed9e4875782f: B, C and D landed (df4f5e74); WP C done; B and D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is back in 2.15.0 on arngz's own Mission Control finder (hv decision 43, "Desktop-count only"): tip cc/desks1126 at 1ee77ee1 in ~/Devel/scratch/utilz-cc/wt-desks1125 (finder cc/mc1126 at b4390952, A re-applied, its two calls swapped); ic SOUND; run-tip.sh (1670381a) GREEN in 01M8B9X6SMHY67F13BAJ6Q638X: 195/195, 4 arms red over a4e5fa61, toast leg as named. Next on vc's word: the probe r2 with hv (desks1125/probe, zsh 8c29d64a, lua 06424982, mc.lua dd47851b), then the landing with its records, then the live run (steps sent to vc). (edited)
+- Issue I19d4fa6 (hv decision 52, Save Desk leaves out windows on desktops not shown) with hv decision 53's start and end marks: cc/save1126 at 50f6be51 in ~/Devel/scratch/utilz-cc/wt-save (visit step, gaps, --with-gaps, exits 0/1/2/1; ic SOUND after F1, fixed). Left: ic's marks on top; cc's XS (PHASE.finish checks $ENGINE_DIR/stopped-waiting, then the end mark and falling sound); one driver and bats run over both; hv's live Save into a scratch desk name vs zeopit, and an apply with the marks; vc lands; close I19d4fa6.
 
 ## TODO
 
@@ -22,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST6d8eed9's removeSpace probe r2 (desks1125/probe: probe.zsh 8c29d64a, probe.lua 06424982, pinning wt-desks1125's mc.lua dd47851b, read SOUND by vc): released when vc calls hv's sitting. It proves on macOS 27 that a remove through mc.lua takes exactly the tile's desktop, and records whether Mission Control showed before and after each step (ic's F2). P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Another id gone sends WP A back to design. (edited)
+_(none)_
 
 ## Watch-outs
 
