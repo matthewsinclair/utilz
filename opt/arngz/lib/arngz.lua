@@ -2096,9 +2096,11 @@ function PHASE.visit(job)
     local display = P.desk_display_phrase(job.desk, item.di)
     note(job.lg, "visit", string.format("finding windows: showing desktop %d on %s (%s)", item.place, display,
       table.concat(item.bundles, ", ")))
-    -- The toast reads these fields (ic's T1): "finding windows", the
-    -- desktop's place and its display, and no seconds.
-    point(job.lg, "waiting", { ["for"] = "finding windows", place = item.place, display = display })
+    -- The toast reads these fields (ic's T1, T2): "finding windows", the
+    -- desktop's place and its display's bare name, as step points carry it,
+    -- and no seconds.
+    point(job.lg, "waiting", { ["for"] = "finding windows", place = item.place,
+      display = (job.desk.displays[item.di] or {}).name or display })
   end)
   note(job.lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
     r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))

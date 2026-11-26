@@ -926,13 +926,15 @@ function P.unseen_where(desk, world, screens, bundle, options)
   for _, d in ipairs(P.window_desktops(world, screens, bundle)) do
     if d.user and not d.shown then
       local where = string.format("desktop %d on %s", d.place, P.desk_display_phrase(desk, d.di))
+      -- A desktop shown counts as shown, though a later show on its display
+      -- failed (ic's F1b).
+      if ((options or {}).visited or {})[d.space] then
+        return string.format("its window is on %s, which arngz showed, and Accessibility still could not name it", where)
+      end
       local failed = ((options or {}).visit_failed or {})[d.screen]
       if failed then
         return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply could not show: %s",
           where, tostring(failed))
-      end
-      if ((options or {}).visited or {})[d.space] then
-        return string.format("its window is on %s, which arngz showed, and Accessibility still could not name it", where)
       end
       return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply shows%s", where,
         (options or {}).visit_out_of_time and string.format("; this run's %s s to show desktops ran out first",

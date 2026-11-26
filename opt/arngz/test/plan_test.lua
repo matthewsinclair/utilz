@@ -2383,6 +2383,11 @@ do
     string.find(tostring(unseen_op(failed).reason), "which apply could not show: Mission Control refused AXPress", 1, true)
       ~= nil, tostring(unseen_op(failed).reason))
 
+  local both = P.plan(base_desk(), safari_on_12(), { visited = { [12] = true },
+    visit_failed = { ["SCREEN-A"] = "Mission Control refused AXPress" } })
+  check("unseen: a desktop shown before a later show on its display failed still says arngz showed it (ic's F1b)",
+    string.find(tostring(unseen_op(both).reason), "which arngz showed", 1, true) ~= nil, tostring(unseen_op(both).reason))
+
   local shown = safari_on_12()
   shown.screens[1].spaces[1].active, shown.screens[1].spaces[2].active = false, true
   local sops = P.plan(base_desk(), shown, {})
