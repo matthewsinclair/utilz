@@ -3083,8 +3083,13 @@ log_events() {
   grep -q " cli kill stopped hs (pid [0-9]*): it outlived its own $ARNGZ_HS_TIMEOUT s timeout by [0-9]* s after its response came" \
     "$(run_log)" || fail "the hung hs was not stopped past its timeout: $(grep ' cli kill ' "$(run_log)")"
   took="$(sed -n 's/.* cli answer discover: returned 0 after \([0-9]*\) s; hs exited killed;.*/\1/p' "$(run_log)")"
-  [ -n "$took" ] && [ "$took" -ge "$ARNGZ_HS_TIMEOUT" ] ||
-    fail "the hung hs was stopped before its own timeout ran out: '$took' s"
+  # The margin as the CLI sets it; less one, since the log counts whole
+  # seconds (ic's N1 on a43e31cd).
+  local margin
+  margin="$(sed -n 's/^HS_EXIT_MARGIN=\([0-9]*\)$/\1/p' "$UTILZ_HOME/opt/arngz/arngz")"
+  [ -n "$margin" ] || fail "the CLI sets no HS_EXIT_MARGIN"
+  [ -n "$took" ] && [ "$took" -ge $((ARNGZ_HS_TIMEOUT + margin - 1)) ] ||
+    fail "the hung hs was stopped before its own timeout and the margin ran out: '$took' s"
 }
 
 # Issue I7085193: on 26 Nov 2026 the CLI stopped an hs 3 s after its
