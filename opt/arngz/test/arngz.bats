@@ -902,13 +902,26 @@ apply_response() {
 # AT-35219619.3 (ST6d8eed9 acceptance.md) cites this arm.
 @test "ST6d8eed9: arngz holds no code that launches an app (AC-35219619.3)" {
   # The engine is where apply launched apps: no launch call is left in it.
-  run grep -n -E 'open -b|launchOrFocus|launchApplication|exec_launch|LAUNCH_TIMEOUT' "$UTILZ_HOME"/opt/arngz/lib/*.lua
+  # windows.js (WP 88504807) is read too: doShellScript and .launch( are the
+  # ways JXA launches an app.
+  run grep -n -E 'open -b|launchOrFocus|launchApplication|exec_launch|LAUNCH_TIMEOUT|doShellScript|\.launch\(' \
+    "$UTILZ_HOME"/opt/arngz/lib/*.lua "$UTILZ_HOME"/opt/arngz/lib/*.js
   # grep's 1 is "no line matched"; its 2 would be a file it could not read.
   [ "$status" -eq 1 ] || fail "grep exited $status: $output"
   # The CLI runs no open command. Its fix lines that tell a person to run
   # `open -b` for Hammerspoon itself are words it prints, never a command.
   run grep -n -E '^[[:space:]]*(command[[:space:]]+)?open[[:space:]]' "$UTILZ_HOME/opt/arngz/arngz"
   [ "$status" -eq 1 ] || fail "grep exited $status: $output"
+}
+
+# dc's arm for windows.js, the window list's reader (WP 88504807, hv decision
+# 49). osacompile only compiles, so the script never runs. The absolute path,
+# not uname, says macOS: test_helper stubs uname as Darwin.
+@test "ST6d8eed9: lib/windows.js compiles as JavaScript for Automation" {
+  [[ -x /usr/bin/osacompile ]] || skip "osacompile is macOS's, and arngz refuses off macOS"
+  run /usr/bin/osacompile -l JavaScript -o "$BATS_TEST_TMPDIR/windows.scpt" "$UTILZ_HOME/opt/arngz/lib/windows.js"
+  assert_success
+  [ -s "$BATS_TEST_TMPDIR/windows.scpt" ] || fail "osacompile wrote no script: $output"
 }
 
 # ============================================================================

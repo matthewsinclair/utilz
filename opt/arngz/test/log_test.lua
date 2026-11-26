@@ -793,6 +793,18 @@ arm("the observed order", function()
   check("observed order: no displays is said, never record", order_of() == "no displays", order_of())
 end)
 
+-- ----------------------------- the window list's read (WP 88504807)
+
+arm("the window list's read", function()
+  local free = { 501, 502 }
+  local read = L.observed_fields({ screens = {}, free_windows = free }).window_list
+  check("observed: the window list's read says how many windows it frees", read == #free .. " free", tostring(read))
+  local unread = L.observed_fields({ screens = {}, free_error = "osascript windows.js ended by signal 14: " })
+    .window_list
+  check("observed: a window list that could not be read says why",
+    unread == "unread: osascript windows.js ended by signal 14: ", tostring(unread))
+end)
+
 -- -------------------------------- arm 14: the displays settle (93ea7f8a)
 -- AT-93ea7f8a.4
 

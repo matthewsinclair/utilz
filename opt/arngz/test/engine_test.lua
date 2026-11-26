@@ -332,8 +332,11 @@ end
 --   lag       how many readbacks after the call still list the id
 --   reorder_after, reorder: once gotoSpace(reorder_after) is asked, the live
 --             list is reorder
-local function fake_desktops_hs(by_screen)
-  local log = { go = {}, remove = {}, add = 0, usleep = 0 }
+-- LIST is what hs.execute answers for windows.js (WP 88504807): { text, ok,
+-- kind, rc }, by default a window list with no window in it.
+local function fake_desktops_hs(by_screen, list)
+  local log = { go = {}, remove = {}, add = 0, usleep = 0, execute = {} }
+  list = list or { text = P.WINDOW_LIST_HEADER .. "\n", ok = true, kind = "exit", rc = 0 }
   local clock = 0
   local function scripted(uuid)
     local s = by_screen[uuid]
@@ -349,6 +352,10 @@ local function fake_desktops_hs(by_screen)
     error("the fake holds no desktop " .. tostring(space), 0)
   end
   local hs = {
+    execute = function(command)
+      log.execute[#log.execute + 1] = command
+      return list.text, list.ok, list.kind, list.rc
+    end,
     spaces = {
       spacesForScreen = function(uuid)
         local s = scripted(uuid)
@@ -409,9 +416,9 @@ local function fake_desktops_hs(by_screen)
   return hs, log
 end
 
-local function drive_desktops(by_screen, ops)
+local function drive_desktops(by_screen, ops, list)
   local ctx = {}
-  local hs, log = fake_desktops_hs(by_screen)
+  local hs, log = fake_desktops_hs(by_screen, list)
   _G.hs = hs
   local ok, results = pcall(M.execute, ops, ctx)
   _G.hs = nil
@@ -434,6 +441,41 @@ do
     joined(log.go) == "3,2" and joined(log.remove) == "3", joined(log.go) .. " / " .. joined(log.remove))
   check("remove: its readback is the live list after it", r[1].readback and joined(r[1].readback.live) == "1,2",
     r[1].readback and joined(r[1].readback.live) or "no readback")
+end
+
+-- The window list (WP 88504807, hv decision 49): the removal reads it afresh
+-- through windows.js. The ids stand for a desktop's own system windows, at
+-- layers other than 0, and 777 for a window opened since the plan.
+do
+  local BACKDROP, MENU_BAR = -2147483624, 24
+  local listed = {
+    text = string.format("%s\n501 %d\n502 %d\n", P.WINDOW_LIST_HEADER, BACKDROP, MENU_BAR),
+    ok = true, kind = "exit", rc = 0,
+  }
+  local r, log = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, windows = { [3] = { 501, 502 } } } },
+    { remove_on(SCREEN, 3) }, listed)
+  check("remove: a desktop that lists only free system windows is removed", r[1].status == "done"
+    and joined(log.remove) == "3", tostring(r[1].status) .. " / " .. tostring(r[1].reason))
+  check("remove: the window list is read through osascript windows.js, under a perl alarm",
+    #log.execute == 1 and string.find(log.execute[1], "alarm 5; exec @ARGV' /usr/bin/osascript -l JavaScript", 1, true)
+      ~= nil and string.find(log.execute[1], "/windows.js'", 1, true) ~= nil, log.execute[1])
+
+  local opened, olog = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1,
+    windows = { [3] = { 501, 502, 777 } }, on = { [777] = { 3 } } } }, { remove_on(SCREEN, 3) }, listed)
+  check("remove: a window the fresh list does not hold (opened since the plan) holds its desktop",
+    opened[1].status == "note" and says(opened[1], "window 777 is on it alone") and #olog.remove == 0,
+    tostring(opened[1].status) .. " / " .. tostring(opened[1].reason))
+
+  local hung, hlog = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1, windows = { [3] = { 501 } } } },
+    { remove_on(SCREEN, 3) }, { text = "", ok = false, kind = "signal", rc = 14 })
+  check("remove: a window list that could not be read (its alarm ended it) removes nothing, and says why",
+    hung[1].status == "note" and says(hung[1], P.NO_WINDOW_LIST) and says(hung[1], "ended by signal 14")
+      and #hlog.remove == 0, tostring(hung[1].status) .. " / " .. tostring(hung[1].reason))
+
+  local garbled = drive_desktops({ [SCREEN] = { live = { 1, 2, 3 }, shown = 1 } }, { remove_on(SCREEN, 3) },
+    { text = "error: CGWindowListCopyWindowInfo gave no list", ok = true, kind = "exit", rc = 0 })
+  check("remove: text that is not a window list removes nothing, and says what it printed",
+    garbled[1].status == "note" and says(garbled[1], "did not print a window list"), tostring(garbled[1].reason))
 end
 
 -- A proof that shows another desktop: the tile at the target's index is not

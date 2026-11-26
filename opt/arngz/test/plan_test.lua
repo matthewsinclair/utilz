@@ -2224,5 +2224,101 @@ do
     tostring(alone_why) .. " / " .. tostring(unread_why))
 end
 
+-- ------------------------------ the window list (WP 88504807, hv decision 49)
+--
+-- macOS 27 gives each desktop system windows of its own, listed on it alone
+-- and at layers other than 0 (cc's read r3, 26 Nov 2026). The ids here stand
+-- for them; LAYER_0 is the layer of a window a person places.
+
+print("the window list")
+
+local BACKDROP, MENU_BAR, STRIP = -2147483624, 24, -2147483602
+local LAYER_0 = 0
+
+-- windows.js's text: its header, then "<id> <layer>" for each pair given.
+local function list_text(pairs_)
+  local lines = { P.WINDOW_LIST_HEADER }
+  for _, p in ipairs(pairs_) do lines[#lines + 1] = p[1] .. " " .. p[2] end
+  return table.concat(lines, "\n") .. "\n"
+end
+
+-- A desktop's own system windows, which Accessibility does not name.
+local function system_windows(first)
+  return { { id = first, named = false }, { id = first + 1, named = false }, { id = first + 2, named = false } }
+end
+
+do
+  local free, why = P.parse_window_list(list_text({ { 501, BACKDROP }, { 502, MENU_BAR }, { 503, STRIP }, { 104, LAYER_0 } }))
+  check("window list: every id at a layer other than 0 is free, and a layer-0 window is not",
+    free and table.concat(free, ",") == "501,502,503", why or table.concat(free or {}, ","))
+  local none, nwhy = P.parse_window_list(list_text({}))
+  check("window list: a list with no free window is a list, not a failure", none and #none == 0, nwhy)
+  local bad, bwhy = P.parse_window_list("error: CGWindowListCopyWindowInfo gave no list")
+  check("window list: text with no header is not a list, and says what it printed",
+    bad == nil and string.find(tostring(bwhy), "did not print a window list: error:", 1, true) ~= nil, bwhy)
+  local odd, owhy = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n501 x\n")
+  check("window list: a line that is not '<id> <layer>' fails the list", odd == nil
+    and string.find(tostring(owhy), "not '<id> <layer>': 501 x", 1, true) ~= nil, owhy)
+  local silent, swhy = P.parse_window_list(nil)
+  check("window list: no text at all is not a list", silent == nil and swhy == "windows.js printed nothing", swhy)
+end
+
+-- A world whose new desktop 20 lists only its own system windows, and every
+-- desktop's are free in the window list.
+local function world_with_system_windows()
+  local w = world_of({ 11, 12, 20 })
+  local first = { [11] = 601, [12] = 611, [20] = 621 }
+  w.free_windows = {}
+  for _, sp in ipairs(w.screens[1].spaces) do
+    for _, sw in ipairs(system_windows(first[sp.id])) do
+      sp.windows[#sp.windows + 1] = sw
+      w.free_windows[#w.free_windows + 1] = sw.id
+    end
+  end
+  return w, w.screens[1].spaces[3]
+end
+
+do
+  local ops, err = P.plan(base_desk(), world_with_system_windows(), {})
+  check("window list: a new desktop that lists only its own free system windows is empty, and removed",
+    removed_ids(ops) == "20" and kinds(ops) == "remove_space", err or ops_text(ops))
+
+  local unfreed = world_with_system_windows()
+  unfreed.free_windows = nil
+  local kops, kerr = P.plan(base_desk(), unfreed, {})
+  check("window list: with no window list, the same desktop's system windows hold it (the live run's fault)",
+    kinds(kops) == "extra", kerr or ops_text(kops))
+
+  local unseen, sp20 = world_with_system_windows()
+  sp20.windows[#sp20.windows + 1] = { id = 705, named = false }
+  local uops, uerr = P.plan(base_desk(), unseen, {})
+  check("window list: an unseen app's layer-0 window, which Accessibility cannot name, holds its desktop",
+    kinds(uops) == "extra" and string.find(uops[1].reason, "desktops 1, 2, 3 hold windows", 1, true) ~= nil,
+    uerr or ops_text(uops))
+
+  local floating, fsp = world_with_system_windows()
+  fsp.windows[#fsp.windows + 1] = { id = 706, named = false }
+  floating.free_windows[#floating.free_windows + 1] = 706
+  local fops, ferr = P.plan(base_desk(), floating, {})
+  check("window list: a desktop that holds only a floating window (a layer other than 0) is empty, and removed;"
+    .. " macOS moves the window to another desktop",
+    removed_ids(fops) == "20", ferr or ops_text(fops))
+
+  local unread = world_with_system_windows()
+  unread.free_windows, unread.free_error = nil, "osascript windows.js ended by signal 14: "
+  local rops, rerr = P.plan(base_desk(), unread, {})
+  check("window list: a list that could not be read removes nothing, and the kept desktop says why",
+    kinds(rops) == "extra" and string.find(rops[1].reason, P.NO_WINDOW_LIST .. ": osascript windows.js ended by signal 14",
+      1, true) ~= nil, rerr or ops_text(rops))
+
+  local again = P.plan(base_desk(), unread, { no_remove = true })
+  check("window list: a second plan, which never removes, does not blame the window list",
+    kinds(again) == "extra" and not string.find(again[1].reason, P.NO_WINDOW_LIST, 1, true), ops_text(again))
+
+  local free = P.free_set({ free_windows = { 5 } })
+  check("empty_by: a free id holds no desktop, though it is listed there alone",
+    P.empty_by({ 5 }, function() return 1 end, free) and not P.empty_by({ 5, 6 }, function() return 1 end, free))
+end
+
 print(string.format("plan_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

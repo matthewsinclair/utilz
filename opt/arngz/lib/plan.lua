@@ -541,33 +541,79 @@ end
 
 -- --------------------- extra empty desktops (ST6d8eed9 WP 88504807)
 
+-- THE WINDOW LIST (hv decision 49, the live run of 26 Nov 2026). What
+-- windowsForSpace lists for a desktop is every item macOS calls a window, and
+-- on macOS 27 each desktop lists system windows of its own: its backdrop
+-- (WindowManager), the menu bar and a strip (Window Server), at layers other
+-- than 0 (cc's read r3). A window a person places is at layer 0, whether
+-- Accessibility can name it or not. windows.js reads the window server's
+-- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer>" line per
+-- window. An id at a layer other than 0 is FREE: it holds no desktop. So an
+-- always-on-top or floating window, or an overlay, holds no desktop either,
+-- and macOS moves it to another desktop when its desktop goes.
+P.WINDOW_LIST_HEADER = "arngz-windows 1"
+
+-- The free ids in windows.js's TEXT, as a list, or nil and why the text is
+-- not a window list. A list with no free id is a list, not a failure.
+function P.parse_window_list(text)
+  if type(text) ~= "string" then return nil, "windows.js printed nothing" end
+  local lines = {}
+  for line in text:gmatch("[^\n]+") do lines[#lines + 1] = line end
+  if lines[1] ~= P.WINDOW_LIST_HEADER then
+    return nil, "windows.js did not print a window list: " .. tostring(lines[1] or "nothing"):sub(1, 200)
+  end
+  local free = {}
+  for i = 2, #lines do
+    local id, layer = lines[i]:match("^(%-?%d+) (%-?%d+)$")
+    if not id then return nil, "windows.js printed a line that is not '<id> <layer>': " .. lines[i]:sub(1, 200) end
+    if tonumber(layer) ~= 0 then free[#free + 1] = tonumber(id) end
+  end
+  return free
+end
+
+-- The free ids of WORLD, as a set: observe's world.free_windows. A world that
+-- carries none (a read that failed, or a fixture) frees nothing.
+function P.free_set(world)
+  local set = {}
+  for _, id in ipairs((world and world.free_windows) or {}) do set[id] = true end
+  return set
+end
+
 -- THE RULE FOR AN EMPTY DESKTOP, in one place: the plan's choice and the
 -- engine's read before each removal both ask it. A desktop is empty when
--- every window it lists is listed on another space too, so no window lives on
--- it alone. A window on every space holds no desktop. IDS are the windows the
--- desktop lists; COUNT(id) is how many spaces list window id, or nil and why
--- it could not be read, which is never taken as empty. Returns true, or false
--- and why not.
-function P.empty_by(ids, count)
+-- every window it lists is free (FREE, a set, P.parse_window_list) or is
+-- listed on another space too, so no window lives on it alone. A window on
+-- every space holds no desktop. IDS are the windows the desktop lists;
+-- COUNT(id) is how many spaces list window id, or nil and why it could not
+-- be read, which is never taken as empty. An id the window list does not
+-- hold (a window opened after the read) is not free, so it holds its
+-- desktop. Returns true, or false and why not.
+function P.empty_by(ids, count, free)
   for _, id in ipairs(ids or {}) do
-    local n, why = count(id)
-    if n == nil then
-      return false, string.format("the desktops of window %s could not be read: %s", tostring(id), tostring(why))
+    if not (free and free[id]) then
+      local n, why = count(id)
+      if n == nil then
+        return false, string.format("the desktops of window %s could not be read: %s", tostring(id), tostring(why))
+      end
+      if n < 2 then return false, string.format("window %s is on it alone", tostring(id)) end
     end
-    if n < 2 then return false, string.format("window %s is on it alone", tostring(id)) end
   end
   return true
 end
 
 -- Whether user desktop SP, as observe read it, is empty for a removal: its
 -- windows were read (no windows_error), and P.empty_by holds over LISTED
--- (P.listings).
-local function empty_desktop(sp, listed)
+-- (P.listings) and FREE (P.free_set).
+local function empty_desktop(sp, listed, free)
   if sp.windows_error then return false end
   local ids = {}
   for _, w in ipairs(sp.windows or {}) do ids[#ids + 1] = w.id end
-  return (P.empty_by(ids, function(id) return (listed[id] or {}).count or 0 end))
+  return (P.empty_by(ids, function(id) return (listed[id] or {}).count or 0 end, free))
 end
+
+-- What a run that could not read the window list says of the desktops it
+-- keeps (ic's words, ~/Devel/scratch/utilz-ic/mc1126-read/view-window-reader.md).
+P.NO_WINDOW_LIST = "desktops not removed: arngz could not read the window list"
 
 -- The apps with a claimable window on each space, by space id, for the score.
 local function apps_by_space(world)
@@ -688,6 +734,7 @@ end
 local function plan_removals(desk, world, screens, options)
   local removes, notes, gone = {}, {}, {}
   local listed = P.listings(world)
+  local free = P.free_set(world)
   local apps_on = apps_by_space(world)
   for di, d in ipairs(desk.displays or {}) do
     local s = screens[di]
@@ -701,10 +748,11 @@ local function plan_removals(desk, world, screens, options)
     local excess = excess_of(d, s)
     if excess > 0 then
       local chosen = {}
-      if not options.no_remove then
+      -- A window list that could not be read removes nothing, said below.
+      if not options.no_remove and not world.free_error then
         local empties = {}
         for _, sp in ipairs(users) do
-          if empty_desktop(sp, listed) then empties[#empties + 1] = sp end
+          if empty_desktop(sp, listed, free) then empties[#empties + 1] = sp end
         end
         local k = math.min(excess, #empties)
         local best, best_score
@@ -737,10 +785,12 @@ local function plan_removals(desk, world, screens, options)
       if kept > 0 then
         local holding = {}
         for _, sp in ipairs(users) do
-          if not gone[sp.id] and not empty_desktop(sp, listed) then holding[#holding + 1] = tostring(place[sp.id]) end
+          if not gone[sp.id] and not empty_desktop(sp, listed, free) then holding[#holding + 1] = tostring(place[sp.id]) end
         end
         local said = ""
-        if #holding == 1 then
+        if world.free_error and not options.no_remove then
+          said = "; " .. P.NO_WINDOW_LIST .. ": " .. tostring(world.free_error)
+        elseif #holding == 1 then
           said = "; desktop " .. holding[1] .. " holds windows"
         elseif #holding > 1 then
           said = "; desktops " .. table.concat(holding, ", ") .. " hold windows"

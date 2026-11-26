@@ -262,6 +262,13 @@ function L.observed_fields(world)
       unread = unread + 1
     end
   end
+  -- The window list's read (WP 88504807): how many windows it frees, or why
+  -- it could not be read.
+  if world.free_error then
+    f.window_list = "unread: " .. tostring(world.free_error)
+  elseif world.free_windows then
+    f.window_list = #world.free_windows .. " free"
+  end
   local parts = {}
   if from_live > 0 then parts[#parts + 1] = "live on " .. from_live end
   if unread > 0 then parts[#parts + 1] = "unread on " .. unread end

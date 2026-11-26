@@ -87,6 +87,25 @@ local function read_defaults(domain)
   return t
 end
 
+-- THE WINDOW LIST's reader (P.parse_window_list says what it is for):
+-- windows.js, beside this file, under osascript, with a perl alarm so a read
+-- that hangs ends at WINDOW_LIST_SECONDS and is a read that failed. It uses no
+-- Accessibility, so one app that does not answer cannot hold it. Returns the
+-- free ids, or nil and why. observe reads it once, and each removal again.
+local WINDOW_LIST_SECONDS = 5
+local WINDOW_LIST_JS = here .. "/windows.js"
+
+function M.read_window_list()
+  local command = string.format("/usr/bin/perl -e 'alarm %d; exec @ARGV' /usr/bin/osascript -l JavaScript '%s' 2>&1",
+    WINDOW_LIST_SECONDS, (WINDOW_LIST_JS:gsub("'", "'\\''")))
+  local text, ok, kind, rc = hs.execute(command)
+  if not ok then
+    return nil, string.format("osascript windows.js ended by %s %s: %s", tostring(kind), tostring(rc),
+      tostring(text or ""):sub(1, 200))
+  end
+  return P.parse_window_list(text)
+end
+
 -- com.apple.spaces and its Monitors list, which holds each display's desktops
 -- in Mission Control's order as of the last display change (D22, WP
 -- 93ea7f8a): the one reader observe and the display
@@ -376,6 +395,10 @@ function M.observe(bundles)
     apps_running = {},
     app_bindings = {},
   }
+  -- The window list before the desktops' own lists, so a window opened
+  -- between the two reads is one the list does not hold: it holds its
+  -- desktop (P.empty_by).
+  world.free_windows, world.free_error = M.read_window_list()
 
   for _, scr in ipairs(hs.screen.allScreens()) do
     local entry, spaces = read_screen(scr, primary:getUUID(), primary_frame)
@@ -1508,13 +1531,17 @@ local function exec_remove_space(op, ctx)
   if not contains(users, op.space) then return not_removed("it is no longer a user desktop on its display") end
   local place = P.removal_place(users, op.space)
   if not place then return not_removed("it is its display's only desktop") end
+  -- The window list afresh, before the desktop's own list, as observe reads
+  -- them: a window opened since the plan holds its desktop.
+  local free, ferr = M.read_window_list()
+  if not free then return not_removed(P.NO_WINDOW_LIST .. ": " .. tostring(ferr)) end
   local ids, werr = hs.spaces.windowsForSpace(op.space)
   if not ids then return not_removed("its windows could not be read: windowsForSpace: " .. tostring(werr)) end
   local empty, held = P.empty_by(list(ids), function(id)
     local on, oerr = hs.spaces.windowSpaces(id)
     if not on then return nil, "windowSpaces: " .. tostring(oerr) end
     return #list(on)
-  end)
+  end, P.free_set({ free_windows = free }))
   if not empty then return not_removed(held) end
   -- 2. The proof. A press is seen only when the screen showed another
   -- desktop before it, so a screen that shows the target already shows the
