@@ -5,9 +5,9 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "6c722a89-1864-415d-862f-5af31d1ca9c9",
-    "heartbeat_at": "2026-11-26T12:40:35.632Z",
+    "heartbeat_at": "2026-11-26T12:49:41.277Z",
     "status": "active",
-    "focus": "Folded for hv's pack-up (26 Nov). Hold for vc's word. Then hv's ONE sitting: live Save into check1126, then apply zeopit, from wt-save at 9af5e8f3, judged by vc's criteria file; on a pass vc lands, cc closes I19d4fa6; a red comes back to cc. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
+    "focus": "Holding for vc's word after hv's compact (hv at home). Then: I19d4fa6's apply red (response not writable, id-keyed world.unseen_windows): design note, fix S, one bats run, hv's live apply + diff + which. Bank cc/save1126 9af5e8f3 in wt-save. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
       "STca1b7f9d59191dfc",
       "ST6d8eed9e4875782f"
@@ -1930,10 +1930,10 @@
       "node": "cc",
       "kind": "doing",
       "seq": 77,
-      "text": "Issue I19d4fa6 (hv decisions 52 and 56, Save Desk) with hv decision 53's start and end marks: cc/save1126 at 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save, clean, 14 commits over main be79804c (the Save fix, the marks, and the redesign after hv's refused live Save: run-wide index, onscreen gaps by windows.js v4, gap words by cause). Run 3 green (211/0; 18 of 19 red over main, 3 of 3 red over de5b138b). Left: hv's ONE sitting, a live Save into check1126 then apply zeopit from wt-save, judged by vc against next-live-save-criteria.md; on a pass vc lands and cc closes I19d4fa6; a red comes back to cc.",
+      "text": "Issue I19d4fa6 (hv decisions 52 and 56, Save Desk) with hv decision 53's marks: cc/save1126 at 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save, clean, 14 commits over main be79804c; run 3 green. hv's sitting of 26 Nov: Save PASS (0 gaps), apply RED: Hammerspoon could not write apply's response, since world.unseen_windows is an id-keyed set (arngz.lua:461) and apply's and observe's answers carry the world. Left, after vc's word: design note, fix S (ids as a list, a test fake hs.json.write that refuses what the real one does, arms red over 9af5e8f3), one bats run, hv's live apply with diff and which; then vc lands and cc closes I19d4fa6.",
       "state": "live",
       "recorded_at": "2026-11-26T10:44:42.496Z",
-      "edited_at": "2026-11-26T12:40:35.145Z"
+      "edited_at": "2026-11-26T12:49:41.046Z"
     }
   ],
   "sent": [

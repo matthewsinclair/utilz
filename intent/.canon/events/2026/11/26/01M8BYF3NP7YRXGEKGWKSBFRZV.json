@@ -1,0 +1,16 @@
+{
+  "id": "01M8BYF3NP7YRXGEKGWKSBFRZV",
+  "ts": "2026-11-26T12:49:41.046Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 77,
+    "text": "Issue I19d4fa6 (hv decisions 52 and 56, Save Desk) with hv decision 53's marks: cc/save1126 at 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save, clean, 14 commits over main be79804c; run 3 green. hv's sitting of 26 Nov: Save PASS (0 gaps), apply RED: Hammerspoon could not write apply's response, since world.unseen_windows is an id-keyed set (arngz.lua:461) and apply's and observe's answers carry the world. Left, after vc's word: design note, fix S (ids as a list, a test fake hs.json.write that refuses what the real one does, arms red over 9af5e8f3), one bats run, hv's live apply with diff and which; then vc lands and cc closes I19d4fa6."
+  }
+}
