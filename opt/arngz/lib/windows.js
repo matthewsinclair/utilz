@@ -4,7 +4,7 @@
 //   osascript -l JavaScript windows.js
 //
 // and plan.lua's P.parse_window_list reads what it prints: the header line
-// "arngz-windows 2", then one "<id> <layer> <pid> <w> <h>" line per window, the
+// "arngz-windows 3", then one "<id> <layer> <pid> <w> <h>" line per window, the
 // pid being the owner's and w and h its size in points, so arngz can find a running app's windows on a desktop
 // not shown (cc's visit-note, 26 Nov 2026). It reads
 // CGWindowListCopyWindowInfo(kCGWindowListOptionAll, kCGNullWindowID)
@@ -16,7 +16,7 @@
 
 ObjC.import("CoreGraphics");
 
-const HEADER = "arngz-windows 2";
+const HEADER = "arngz-windows 3";
 const OPTION_ALL = 0; // kCGWindowListOptionAll
 const NULL_WINDOW = 0; // kCGNullWindowID
 

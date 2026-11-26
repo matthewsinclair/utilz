@@ -2479,6 +2479,11 @@ do
     == "arngz could not show that desktop: Mission Control refused AXPress", failed[1] and failed[1].why)
   local late = P.discover_gaps(save_world(), desk, { out_of_time = 20 })
   check("gaps: a desktop the step did not reach says the time ran out", late[1] and late[1].why == P.GAP_NOT_REACHED)
+  local on_shown = save_world()
+  on_shown.screens[1].spaces[1].active, on_shown.screens[1].spaces[2].active = false, true
+  local sgaps = P.discover_gaps(on_shown, desk, {})
+  check("gaps: a window on a desktop already shown says that desktop is shown, not that arngz showed it (ic's W1)",
+    sgaps[1] and sgaps[1].why == P.GAP_ON_SHOWN, sgaps[1] and sgaps[1].why)
 
   check("verdict: no --save prints, no gap saves, --with-gaps saves with gaps, else refused; --force changes none",
     P.save_verdict(gaps, {}) == "print" and P.save_verdict({}, { save = "x" }) == "save"

@@ -2677,9 +2677,22 @@ local VERBS = {
         note(lg, "visit", string.format("finding windows: showing desktop %d on %s (%s)", item.place,
           tostring((world.screens[item.di] or {}).name), table.concat(item.bundles, ", ")))
       end)
-      local back = {}
-      M.way_back(start, back, nil, lg)
-      visit = { visited = r.visited, failed = r.failed, out_of_time = r.out_of_time, shown = r.shown }
+      -- The way back names each display by its screen and each desktop by
+      -- its place, and a failure is said in the log and the report (ic's F1).
+      local back, words = {}, {}
+      for _, s in ipairs(world.screens or {}) do
+        for ui, sp in ipairs(P.user_spaces(s)) do
+          if sp.id == start[s.uuid] then words[s.uuid] = { display = s.name or s.uuid, place = ui } end
+        end
+      end
+      for screen, why in pairs(r.back or {}) do
+        back[#back + 1] = { reason = string.format("showing %s its start desktop again failed: %s", tostring((words[screen] or {}).display or screen), tostring(why)) }
+      end
+      M.way_back(start, back, words, lg)
+      for _, b in ipairs(back) do
+        note(lg, "back", tostring(b.reason))
+      end
+      visit = { visited = r.visited, failed = r.failed, out_of_time = r.out_of_time, shown = r.shown, back = back }
       note(lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
         r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
       world = M.observe()
@@ -2693,6 +2706,7 @@ local VERBS = {
     if (visit.shown or 0) > 0 then
       notes[#notes + 1] = string.format("showed %d desktop(s) to name the windows on them, then each display's start desktop again", visit.shown)
     end
+    for _, b in ipairs(visit.back or {}) do notes[#notes + 1] = tostring(b.reason) end
     local verdict = P.save_verdict(gaps, options)
     if verdict == "refused" then
       local why, sfix = P.save_refusal(gaps, options.save)

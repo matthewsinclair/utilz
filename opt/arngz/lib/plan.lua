@@ -547,13 +547,14 @@ end
 -- (WindowManager), the menu bar and a strip (Window Server), at layers other
 -- than 0 (cc's read r3). A window a person places is at layer 0, whether
 -- Accessibility can name it or not. windows.js reads the window server's
--- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer> <pid>" line
--- per window, the pid being its owner's. windows.js ships beside this file, so
+-- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer> <pid> <w> <h>"
+-- line per window, the pid being its owner's and w and h its size (version 3,
+-- ic's N1; a line with no size is still read). windows.js ships beside this file, so
 -- no producer prints the version 1 list (ic's N3). An id at a layer other than 0 is FREE:
 -- it holds no desktop. So an always-on-top or floating window, or an overlay,
 -- holds no desktop either: arngz can remove a desktop while such a window is
 -- on it.
-P.WINDOW_LIST_HEADER = "arngz-windows 2"
+P.WINDOW_LIST_HEADER = "arngz-windows 3"
 -- A layer-0 window smaller than this, in points, on either side, is no window
 -- a person places (issue I19d4fa6).
 P.MIN_WINDOW_SIDE = 50
@@ -2363,6 +2364,8 @@ end
 -- visited = {[space] = true}, failed = {[screen] = why}, out_of_time }).
 P.GAP_SHOWN = "arngz showed that desktop, and Accessibility still could not name its window"
 P.GAP_NOT_REACHED = "the 20 s to show desktops ran out before that desktop"
+-- A desktop already shown, which arngz did not need to show (ic's W1).
+P.GAP_ON_SHOWN = "that desktop is shown, and Accessibility could not name its window"
 
 -- The windows the desk leaves out: each layer-0 window of a running regular
 -- app on a user desktop that observe did not name, with its app's name, its
@@ -2386,6 +2389,8 @@ function P.discover_gaps(world, desk, visit)
             why = "arngz could not show that desktop: " .. tostring(visit.failed[s.uuid])
           elseif visit.out_of_time and not sp.active and not (visit.visited or {})[sp.id] then
             why = P.GAP_NOT_REACHED
+          elseif sp.active and not (visit.visited or {})[sp.id] then
+            why = P.GAP_ON_SHOWN
           else
             why = P.GAP_SHOWN
           end

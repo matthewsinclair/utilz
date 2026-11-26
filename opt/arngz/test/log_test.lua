@@ -1748,7 +1748,7 @@ end)
 -- Safari's window 102 unnamed on desktop 12, not shown. discover shows 12,
 -- names the window, shows 11 again, reads the screens again and saves; with a
 -- window that stays unnamed, a --save is refused and names it.
-local function discover_save_run(named_on_show, options, run)
+local function discover_save_run(named_on_show, options, run, fail_back)
   fresh_globals()
   local log = tmpdir() .. "/arngz.log"
   local f = new_fake()
@@ -1760,6 +1760,8 @@ local function discover_save_run(named_on_show, options, run)
   f.hs.spaces.activeSpaceOnScreen = function() return shown end
   f.hs.spaces.gotoSpace = function(id)
     shows[#shows + 1] = id
+    -- With FAIL_BACK, Mission Control refuses to show the start desktop again.
+    if fail_back and id == start then return nil, "Mission Control refused AXPress" end
     shown = id
     return true
   end
@@ -1812,6 +1814,14 @@ arm("Save Desk names a window on a desktop not shown", function()
   check("save: --with-gaps saves the desk without it, the gap named",
     with_gaps and with_gaps.status == "ok" and with_gaps.verdict == "save with gaps" and #(with_gaps.gaps or {}) == 1,
     with_gaps and tostring(with_gaps.verdict))
+
+  local stuck = discover_save_run(true, { grid = "8x4", name = "discovered" }, "R-SAVE5", true)
+  local said = false
+  for _, line in ipairs((stuck or {}).report or {}) do
+    if line:find("start desktop again failed", 1, true) or line:find("again, where it began, failed", 1, true) then said = true end
+  end
+  check("save: a way back that fails is said in discover's report (ic's F1)", stuck and stuck.status == "ok" and said,
+    stuck and table.concat(stuck.report or {}, " | "))
 
   local plain = discover_save_run(false, { grid = "8x4", name = "discovered" }, "R-SAVE4")
   check("save: a plain discover prints the desk and names the gap, verdict print",
