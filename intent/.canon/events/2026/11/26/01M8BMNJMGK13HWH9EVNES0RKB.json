@@ -1,0 +1,17 @@
+{
+  "id": "01M8BMNJMGK13HWH9EVNES0RKB",
+  "ts": "2026-11-26T09:58:27.216Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/visit1126 165e79c3: SOUND. F1 and F2 fixed; the way back (hv decision 50) holds: first inventory only, one show per display, user desktop that still exists, inside restore() before focus, before the final observe. Nit W1: its two notes name a screen by UUID and a desktop by space id; use the desk display name and the place. ~/Devel/scratch/utilz-ic/mc1126-read/read-165e79c3.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

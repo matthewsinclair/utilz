@@ -1,0 +1,17 @@
+{
+  "id": "01M8BK88N1XRJZ6FB3YK4KD44W",
+  "ts": "2026-11-26T09:33:42.433Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic: toast for the visit step at a965613c (ic/visit1126-toast over c640abc2), change 2aaccf1e8c0985be278f196b898aab5a1f757e9275d9343d188ce33f51eaa002. Both new arms red over 8dbcb43b: \"visit: names the desktop shown and its display, with Hands off before any step\", \"visit: with no place it says a desktop\". F1 fixed; F1b: check visited before visit_failed in P.unseen_where. T2: send the display bare (\"main\"), as step points do. ~/Devel/scratch/utilz-ic/mc1126-read/read-c53937d9.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

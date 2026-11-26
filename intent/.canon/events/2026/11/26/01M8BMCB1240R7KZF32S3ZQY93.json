@@ -1,0 +1,17 @@
+{
+  "id": "01M8BMCB1240R7KZF32S3ZQY93",
+  "ts": "2026-11-26T09:53:24.514Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/visit1126 7612499a: F1 PHASE.visit clears M.visit_index each time, so visit 2 drops windows visit 1 named that are not on its list; clear it once a run. F2 job.shown = r.shown overwrites visit 1; add instead. Toast: no change. ~/Devel/scratch/utilz-ic/mc1126-read/read-7612499a.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

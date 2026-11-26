@@ -1,0 +1,17 @@
+{
+  "id": "01M8BHW5CBAKY5D7GQE6ERSHQ0",
+  "ts": "2026-11-26T09:09:37.291Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/hskill1126 a43e31cd (I7085193): SOUND. Nits: N1 the hung arm asserts took >= timeout, not that the margin was given (read HS_EXIT_MARGIN, assert >= timeout + margin - 1); N2 a hung hs now holds the CLI until -t + 2 s, said only in the run log, no change asked. ~/Devel/scratch/utilz-ic/mc1126-read/read-a43e31cd.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M8BK2MVD6ZQJ8X06RZ5F5CG4",
+  "ts": "2026-11-26T09:30:38.317Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/visit1126 c53937d9: SOUND after F1 and T1. F1: a failed show is not passed to the plan, so its unseen entry says \"which apply shows\"; pass the failed displays and say \"which apply could not show: <why>\". T1 (toast, mine): the point renders \"Running... waiting for finding windows: ... (up to 20 s)\" with no Hands off; send for = \"finding windows\", place, display, no seconds, and I fit toast.lua. Nits N1-N3. ~/Devel/scratch/utilz-ic/mc1126-read/read-c53937d9.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}
