@@ -1,0 +1,16 @@
+{
+  "id": "01M8BYE2S8H18B2M0GRSB64V68",
+  "ts": "2026-11-26T12:49:07.368Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 21,
+    "text": "arngz start and end marks (hv decisions 53 and 58): ic's work so far is in cc/save1126 at 9af5e8f3. hv approved at 12:48Z ic's design ~/Devel/scratch/utilz-ic/marks1126/running-note.md: \"starting\", then \"running\" drawn by the CLI at its first ask, then the end; with M1's close (m1-note.md, \"arngz: ended with no answer: see arngz log\") and W4 (cc's). Left: code it after vc's word (ic S; cc the apply response fix and W4), one bats run, hv's check; after the landing, record decisions 53 and 58."
+  }
+}

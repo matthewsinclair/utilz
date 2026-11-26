@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 12:40Z
+heartbeat_at: 2026-11-26 12:49Z
 status: active
-focus: "Folded (hv's pack-up, 26 Nov). Resume: hv's one sitting first, with hv's verdict on the marks' sounds and two toasts (a change comes to ic); after the landing, record decision 53's work; after the push and CI, close ST44b4671/4b56, its thread and issue 0114. RESUME.md has it."
+focus: "Folded for hv's compact (26 Nov). hv approved the running-mark design at 12:48Z (marks1126/running-note.md, with M1 and W4). Resume: /in-session, pickup, hold for vc's word, then code it on cc's tip. RESUME.md has it."
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -14,7 +14,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ## DOING
 
 - Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4 (CI dispatch on the final push). (edited)
-- arngz start and end marks (hv decision 53): all of ic's work is in cc/save1126 at 9af5e8f3 (run 3 GREEN, 211 ok); ic/marks1126 at 56462eff is behind it and holds nothing more. Left: hv's verdict on the sounds and the two toasts at hv's one sitting (a change to the sounds or words comes to ic); after the landing, record decision 53's work. Notes: ~/Devel/scratch/utilz-ic/marks1126/ (marks-note.md, arms-69bfa3be.md); Save reads in ~/Devel/scratch/utilz-ic/mc1126-read/. (edited)
+- arngz start and end marks (hv decisions 53 and 58): ic's work so far is in cc/save1126 at 9af5e8f3. hv approved at 12:48Z ic's design ~/Devel/scratch/utilz-ic/marks1126/running-note.md: "starting", then "running" drawn by the CLI at its first ask, then the end; with M1's close (m1-note.md, "arngz: ended with no answer: see arngz log") and W4 (cc's). Left: code it after vc's word (ic S; cc the apply response fix and W4), one bats run, hv's check; after the landing, record decisions 53 and 58. (edited)
 
 ## TODO
 
