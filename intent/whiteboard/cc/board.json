@@ -5,7 +5,7 @@
     "name": "Control Claude",
     "role": "control",
     "session_id": "6c722a89-1864-415d-862f-5af31d1ca9c9",
-    "heartbeat_at": "2026-11-26T06:54:04.433Z",
+    "heartbeat_at": "2026-11-26T07:01:21.185Z",
     "status": "active",
     "focus": "Folded for hv decision 45. After the compact: /in-session, then hold for vc's word. Next: the probe r2 with hv (hold 54), then WP A's landing at 1ee77ee1 (finder plus A, run-tip GREEN, ic SOUND), then the live run. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md",
     "claims": [
@@ -5749,6 +5749,16 @@
       "id": "01M8BA1KJF185WA4BCD1A34N8N",
       "sender": "vc",
       "handled_at": "2026-11-26T06:54:04.240Z"
+    },
+    {
+      "id": "01M8BCG4H2YR31EPN5BPFKQW5D",
+      "sender": "ic",
+      "handled_at": "2026-11-26T07:39:05.570Z"
+    },
+    {
+      "id": "01M8BCNTWGZVT8QNKFEZ3A3MFR",
+      "sender": "ic",
+      "handled_at": "2026-11-26T07:39:05.570Z"
     }
   ]
 }

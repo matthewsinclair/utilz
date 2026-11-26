@@ -3,7 +3,7 @@ node: cc
 name: Control Claude
 role: control
 session_id: 6c722a89-1864-415d-862f-5af31d1ca9c9
-heartbeat_at: 2026-11-26 06:54Z
+heartbeat_at: 2026-11-26 07:01Z
 status: active
 focus: "Folded for hv decision 45. After the compact: /in-session, then hold for vc's word. Next: the probe r2 with hv (hold 54), then WP A's landing at 1ee77ee1 (finder plus A, run-tip GREEN, ic SOUND), then the live run. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
