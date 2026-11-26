@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: 6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48
-heartbeat_at: 2026-11-26 10:45Z
+heartbeat_at: 2026-11-26 11:41Z
 status: active
-focus: "Folded for hv decision 54's compact. After it: /in-session, then: ic finishes the start and end marks on cc/save1126 (Save fix I19d4fa68), cc's one driver and bats run, hv's one live check (Save into a scratch desk, an apply with the marks), vc lands; then hv's push, CI and dispatch, and the 2.15.0 cut. main is on the 0.1.34 sweep 86448b67, unpushed. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "2.15.0, hv decision 55 (crack on): step 1, ic finishes the marks on cc/save1126 260e70f5 and cc adds its CLI step and the one driver; then vc's read, one bats run, hv's live check, the landing, hv's push, CI and dispatch, the cut after Intent's. main 47f4db24 unpushed. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 

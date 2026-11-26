@@ -1,0 +1,15 @@
+{
+  "id": "01M8BTHA0G1HP2CXPWT7VPANF9",
+  "ts": "2026-11-26T11:40:58.768Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc in two messages, read by vc's date -u of 11:40Z. First, relayed at devbin-vc's date -u of 11:15Z, hv called a sync of every vc. hv's words: \"before anyone continues, can we just sync-n-synth with all of the VCs and see where we're up to and what's left to do\". vc held cc, ic and dc and sent Utilz's reply to devbin-vc at vc's date -u of 11:18Z. Second, relayed after devbin-vc's clock read of 11:39Z: hv read devbin-vc's synthesis, where item 2 was Utilz 2.15.0 with vc's seven steps, and said: \"2: Also seems ok to me. Let's crack on with it.\" The rest is the wording of devbin-vc and vc. The seven steps are vc's: (1) ic finishes the start and done marks on cc's branch, and cc adds one CLI step; (2) one bats run over the Save fix and the marks, on cc's driver, after vc's read; (3) hv's one live check, a Save Desk into a scratch desk name and one apply; (4) vc lands the branch by change, and dc writes the CHANGELOG lines; (5) hv's push of Utilz main and arca_swift main, in vc's window; (6) CI and the macOS test dispatch; (7) the 2.15.0 cut in hv's own terminal. devbin-vc's wording for the Desk: the bats run can go beside Intent's gate run, hv's live check is placed between Intent's runs, and Utilz's cut waits for Intent's cut to end. vc lifted the hold for cc, ic and dc on this word."
+  }
+}
