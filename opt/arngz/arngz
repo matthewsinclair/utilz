@@ -336,7 +336,140 @@ log_open() {
 }
 
 log_close() {
+  # The end mark first (hv decision 53), so its record is inside the run's
+  # start and end records.
+  mark_end "$1"
   log_record end "exit $1 in $((SECONDS - ARNGZ_LOG_T0)) s"
+}
+
+# THE MARKS (hv decision 53, 26 Nov 2026; ic's marks-note). hv's need: "It's
+# hard to know when to take back control with mouse/keyb without some idea of
+# knowing when it is and isn't running." A run that can take the desktops, the
+# pointer or the keyboard (apply but --dry-run, discover, and auto when it
+# applies) marks its start and its end, apart from the work toasts. Each mark
+# is a sound, which the CLI plays itself, so it does not depend on Hammerspoon,
+# and a one-line toast, which Hammerspoon draws in a slot of its own. The
+# start mark stays until the end mark takes its place. The end mark comes from
+# the EXIT trap (log_close), so it is the last thing on every way out.
+# Both sounds ship with macOS, so no asset is added.
+ARNGZ_SOUND_START="/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/begin_record.caf"
+ARNGZ_SOUND_END="/System/Library/Components/CoreAudio.component/Contents/SharedSupport/SystemSounds/system/end_record.caf"
+# How long a mark's hs call may take, in seconds: it only draws.
+MARK_HS_SECONDS=2
+# Set by mark_start: 1 once the start mark is made, so the EXIT trap makes the
+# end mark; whether the sounds play (ARNGZ_SOUNDS); and how long the start mark
+# may stay if no end mark comes (a CLI killed by SIGKILL runs no trap).
+ARNGZ_MARKED=0
+ARNGZ_SOUNDS_ON=1
+ARNGZ_MARK_LIFE=0
+
+# The end sound's file, or empty when the sounds are off: the request carries
+# it, so an engine the CLI stopped waiting for plays the same sound at its own
+# finish.
+mark_end_sound() {
+  if [[ $ARNGZ_MARKED -eq 1 && $ARNGZ_SOUNDS_ON -eq 1 ]]; then printf '%s' "$ARNGZ_SOUND_END"; fi
+}
+
+# A mark's sound, in the background and never waited for. A missing afplay or
+# file is a line in the run log, and nothing else.
+mark_sound() {
+  local file="$1" player
+  [[ $ARNGZ_SOUNDS_ON -eq 1 ]] || return 0
+  if ! player="$(command -v afplay)" || [[ ! -x "$player" ]]; then
+    log_record mark "no sound: afplay cannot be run"
+    return 0
+  fi
+  if [[ ! -r "$file" ]]; then
+    log_record mark "no sound: $file cannot be read"
+    return 0
+  fi
+  ("$player" "$file" </dev/null >/dev/null 2>&1 &)
+}
+
+# A mark's toast, through a short hs call of its own: KIND (start, end or
+# still), WORDS, and SECONDS it may stay. WAIT 1 waits for the call, up to
+# its own -t and HS_EXIT_MARGIN, so the start mark is drawn before the work
+# call; a call still running then is left to end on its own, never stopped
+# (issue I7085193). WAIT 0 leaves it running, so a Hammerspoon that does not
+# answer adds nothing to the exit. What fails is a line in the run log.
+mark_draw() {
+  local kind="$1" words="$2" seconds="$3" wait="$4" tool state hs fix module pid deadline rc=0
+  tool="$(hs_tool_state "$(hs_prefix)")"
+  IFS=$'\037' read -r state hs fix <<<"$tool"
+  if [[ "$state" != ok ]]; then
+    log_record mark "no $kind mark drawn: the hs tool is missing: $hs"
+    return 0
+  fi
+  module="$(engine_module)"
+  case "$module$words" in
+    *'"'* | *\\*)
+      log_record mark "no $kind mark drawn: a quote or backslash cannot go into the hs call: $module"
+      return 0
+      ;;
+  esac
+  "$hs" -a -t "$MARK_HS_SECONDS" -c "return dofile(\"$module\").mark(\"$kind\", \"$words\", $seconds)" \
+    </dev/null >/dev/null 2>&1 &
+  pid=$!
+  [[ $wait -eq 1 ]] || return 0
+  deadline=$((SECONDS + MARK_HS_SECONDS + HS_EXIT_MARGIN))
+  while kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $deadline ]]; do
+    sleep 0.1
+  done
+  if kill -0 "$pid" 2>/dev/null; then
+    log_record mark "the $kind mark's hs call still runs after $((MARK_HS_SECONDS + HS_EXIT_MARGIN)) s; it is left to end on its own"
+    return 0
+  fi
+  wait "$pid" || rc=$?
+  if [[ $rc -ne 0 ]]; then log_record mark "the $kind mark's hs call exited $rc"; fi
+  return 0
+}
+
+# The start mark, once a run, for VERB: the rising sound, then "arngz:
+# starting", which stays until the end mark or for twice the verb's longest
+# wait (a reload and the run again is one command). A bad ARNGZ_SOUNDS is
+# refused before the mark, so it makes no sound.
+mark_start() {
+  local verb="$1" timeout waited=0
+  [[ $ARNGZ_MARKED -eq 0 ]] || return 0
+  case "${ARNGZ_SOUNDS:-on}" in
+    on) ARNGZ_SOUNDS_ON=1 ;;
+    off) ARNGZ_SOUNDS_ON=0 ;;
+    *) refuse "ARNGZ_SOUNDS = '${ARNGZ_SOUNDS}': it takes on or off" ;;
+  esac
+  timeout="$(engine_timeout "$verb")" || exit 2
+  case " $SCHEDULED_VERBS " in
+    *" $verb "*) waited="$(engine_scheduled_timeout)" || exit 2 ;;
+  esac
+  ARNGZ_MARK_LIFE=$((2 * (timeout + waited)))
+  ARNGZ_MARKED=1
+  log_record mark "start: arngz: starting"
+  mark_sound "$ARNGZ_SOUND_START"
+  mark_draw start "arngz: starting" "$ARNGZ_MARK_LIFE" 1
+}
+
+# The end mark, from the EXIT trap, by the exit code RC. "done" only for 0 and
+# 1 (done with problems), so it never stands for a failure; the falling sound
+# is the same for each, since each means arngz has let go. A scheduled verb
+# the CLI stopped waiting for is still at work in Hammerspoon: no sound, and
+# words that say so; the engine ends that mark at its own finish.
+mark_end() {
+  local rc="$1" words
+  [[ $ARNGZ_MARKED -eq 1 ]] || return 0
+  if [[ ${ENGINE_PENDING:-0} -eq 1 ]]; then
+    words="arngz: still running in Hammerspoon (arngz stopped waiting after $((SECONDS - ARNGZ_LOG_T0)) s)"
+    log_record mark "end: $words; no sound, since the engine ends this mark"
+    mark_draw still "$words" "$ARNGZ_MARK_LIFE" 0
+    return 0
+  fi
+  case "$rc" in
+    0 | 1) words="arngz: done" ;;
+    2) words="arngz: stopped: refused" ;;
+    130 | 143) words="arngz: stopped: interrupted" ;;
+    *) words="arngz: stopped: exit $rc" ;;
+  esac
+  log_record mark "end: $words"
+  mark_sound "$ARNGZ_SOUND_END"
+  mark_draw end "$words" 0 0
 }
 
 # arngz log: the last run, from its start record to the end of the log, with
@@ -860,14 +993,16 @@ engine_ask_run() {
   fi
   # The run's id and its log ride in the request (ST589246c), empty when the
   # run does not log, so the engine's records land beside the CLI's.
+  # The end mark's sound rides in it too (hv decision 53), empty when there is
+  # none, so an engine the CLI stopped waiting for ends the mark with it.
   rc=0
   if [[ -n "$desk_file" ]]; then
-    why="$(V="$verb" D="$desk_file" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" yq -n -o json \
-      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG)' \
+    why="$(V="$verb" D="$desk_file" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" ES="$(mark_end_sound)" yq -n -o json \
+      '.verb = strenv(V) | .desk = load(strenv(D)) | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG) | .end_sound = strenv(ES)' \
       2>&1 >"$request")" || rc=$?
   else
-    why="$(V="$verb" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" yq -n -o json \
-      '.verb = strenv(V) | .desk = null | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG)' \
+    why="$(V="$verb" O="$options_file" R="$ARNGZ_RUN" LG="$ARNGZ_LOG" ES="$(mark_end_sound)" yq -n -o json \
+      '.verb = strenv(V) | .desk = null | .options = load(strenv(O)) | .run = strenv(R) | .log = strenv(LG) | .end_sound = strenv(ES)' \
       2>&1 >"$request")" || rc=$?
   fi
   if [[ $rc -ne 0 ]]; then
@@ -949,6 +1084,12 @@ engine_ask_run() {
     done
     if [[ ! -f "$response" ]]; then
       ENGINE_PENDING=1
+      # The engine reads the request once, so this file, kept beside it, is
+      # how it learns at its finish that the CLI stopped waiting: then it ends
+      # the run's mark itself (hv decision 53). A write that fails is said.
+      if ! why="$({ : >"$ENGINE_DIR/stopped-waiting"; } 2>&1)"; then
+        log_record mark "could not tell the engine the CLI stopped waiting: $why"
+      fi
       ENGINE_ERROR="the engine was sent $verb and has not answered within ${waited}s; it may still be running"
       ENGINE_FIX="see Hammerspoon's console (its menu bar icon: Console); a slower $verb takes ARNGZ_APPLY_TIMEOUT=<seconds>"
       return 1
@@ -2139,6 +2280,9 @@ cmd_apply() {
   if [[ -z "$desk" ]]; then refuse "apply takes a desk: arngz apply <desk>"; fi
   validate_desk "$desk" || exit 2
   if [[ $dry -eq 0 ]]; then
+    # The start mark (hv decision 53), before anything is asked of the
+    # machine; a dry run changes nothing, so it makes none.
+    mark_start apply
     apply_prefs
   fi
 
@@ -2283,6 +2427,10 @@ cmd_discover() {
       refuse "desk '$save' exists: $target (--force overwrites it)"
     fi
   fi
+  # The start mark (hv decision 53): discover shows desktops in its visit
+  # step, plain or --save. After the option checks, so a bad option makes no
+  # sound, and before the settle wait, which can end in a refusal.
+  mark_start discover
 
   dir="$(mktemp -d "${TMPDIR:-/tmp}/arngz-discover.XXXXXX")"
   options="$dir/options.json"
