@@ -27,7 +27,7 @@
     ]
   },
   "report": [
-    "FIXTURE-LINE-1 main space 1 (user): 3 windows, 3 named, 1 recorded",
+    "FIXTURE-LINE-1 main space 1: 3 named, 1 recorded",
     "FIXTURE-LINE-2 0 Dock bindings: 0 to all spaces, 0 to one space; a v1 desk records none of them"
   ],
   "gaps": [

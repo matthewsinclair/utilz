@@ -453,7 +453,7 @@ fake_hs() {
   fake_hs ok
   run_arngz discover
   assert_success
-  assert_output_contains "FIXTURE-LINE-1 main space 1 (user): 3 windows, 3 named, 1 recorded"
+  assert_output_contains "FIXTURE-LINE-1 main space 1: 3 named, 1 recorded"
   assert_output_contains "FIXTURE-LINE-2 0 Dock bindings"
   # The temp dir of a call that succeeded is removed: the request was made
   # under TMPDIR, which is still there, and holds nothing now.
@@ -675,9 +675,15 @@ engine_response() {
   response="$(engine_response discover discover_world "" "")"
   fake_hs ok "$response"
   run_arngz discover
-  assert_output_contains "1 minimized"
-  assert_output_contains "1 Accessibility could not name"
-  assert_output_contains "on every space"
+  # ic's W4: one line for each space with its named and recorded counts.
+  # The named windows a desk does not record (minimized, on every space,
+  # Hammerspoon's own) and those Accessibility could not name are counted in
+  # the run log, not in the report. discover_world's main space 1 names 6
+  # windows and records 3 of them.
+  assert_output_contains "main space 1: 6 named, 3 recorded"
+  refute_output_contains "Accessibility could not name"
+  refute_output_contains "1 minimized"
+  refute_output_contains "on every space"
   assert_output_contains "2 Dock bindings: 1 to all spaces, 1 to one space"
 }
 

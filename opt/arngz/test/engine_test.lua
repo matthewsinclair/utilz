@@ -788,8 +788,10 @@ do
 
   f = fake({ list = P.WINDOW_LIST_HEADER .. "\n700 0 88 900 545 1 1\n701 0 88 900 545 0 1\n" })
   r = M.visit({ item(12, 2), item(13, 3) }, start, nil, true)
+  -- Each stop's windows no person sees are a list of ids, as the parser
+  -- gives them (issue I19d4fa6): P.discover_gaps makes the set it reads.
   check("visit: Save Desk reads the window list once at each stop, and keeps by desktop the windows no person sees (F2)",
-    f.executes == 2 and r.unseen[12] and r.unseen[12][701] and not r.unseen[12][700] and r.unseen[13] ~= nil,
+    f.executes == 2 and r.unseen[12] and r.unseen[12][1] == 701 and r.unseen[12][2] == nil and r.unseen[13] ~= nil,
     tostring(f.executes))
 
   f = fake({ list_fails = true })

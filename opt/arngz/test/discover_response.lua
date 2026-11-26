@@ -11,54 +11,33 @@
 --
 -- <world>, <desk> and <results> name functions in worlds.lua (eg
 -- discover_world, base_world, base_desk, not_running_results). An apply
--- response's report and exit code come from the real apply_report. A test-only JSON encoder, because plain Lua has none;
--- keys are written in sorted order, and the CLI reorders them anyway.
+-- response's report and exit code come from the real apply_report. The JSON
+-- is json.lua's, beside this file: it refuses what Hammerspoon's
+-- hs.json.write refuses (issue I19d4fa6), so the fake hs hands back no answer
+-- that Hammerspoon could not write.
 
 -- dofile(nil) would read Lua from stdin and wait there, so the paths are
 -- required rather than defaulted.
 assert(arg[1] and arg[2] and arg[3], "usage: discover_response.lua <plan.lua> <worlds.lua> <discover|plan> ...")
 local P = dofile(arg[1])
 local F = dofile(arg[2])
+local J = dofile(((arg[0] or ""):match("^(.*)/[^/]*$") or ".") .. "/json.lua")
 local verb = arg[3]
-
-local function encode(v)
-  local t = type(v)
-  if t == "nil" then return "null" end
-  if t == "boolean" then return tostring(v) end
-  if t == "number" then
-    if v == math.floor(v) then return string.format("%d", v) end
-    return string.format("%.17g", v)
-  end
-  if t == "string" then
-    return '"' .. v:gsub('[%c"\\]', function(c)
-      local named = { ['"'] = '\\"', ["\\"] = "\\\\", ["\n"] = "\\n", ["\t"] = "\\t", ["\r"] = "\\r" }
-      return named[c] or string.format("\\u%04x", string.byte(c))
-    end) .. '"'
-  end
-  local n = 0
-  for _ in pairs(v) do n = n + 1 end
-  if n == #v and n > 0 then
-    local parts = {}
-    for i = 1, #v do parts[i] = encode(v[i]) end
-    return "[" .. table.concat(parts, ",") .. "]"
-  end
-  if n == 0 then return "[]" end
-  local keys = {}
-  for k in pairs(v) do keys[#keys + 1] = k end
-  table.sort(keys)
-  local parts = {}
-  for _, k in ipairs(keys) do parts[#parts + 1] = encode(tostring(k)) .. ":" .. encode(v[k]) end
-  return "{" .. table.concat(parts, ",") .. "}"
-end
 
 -- A refusal is answered as the engine's error_response answers one: kind
 -- refused, and the fix where the refusal names one (issue 0077).
 local response
 if verb == "discover" then
   local function given(v) if v == nil or v == "" then return nil end return v end
-  local desk, notes, fix = P.desk_from_world(F[arg[4]](), { grid = given(arg[5]), name = given(arg[6]) })
+  local world = F[arg[4]]()
+  local desk, notes, fix, counts = P.desk_from_world(world, { grid = given(arg[5]), name = given(arg[6]) })
   if desk then
-    response = { status = "ok", verb = "discover", desk = desk, report = notes }
+    -- The report as the engine's discover builds it: each space's line, then
+    -- the notes (ic's W4). Only where the plan.lua under test has it: a
+    -- plan.lua from before W4 answers as the engine of its day did.
+    local report = notes
+    if P.with_space_lines then report = P.with_space_lines(counts, (P.discover_gaps(world, desk)), notes) end
+    response = { status = "ok", verb = "discover", desk = desk, report = report }
   else
     response = { status = "error", kind = "refused", verb = "discover", error = notes, fix = fix }
   end
@@ -81,4 +60,4 @@ elseif verb == "apply" then
 else
   error("verb is discover, plan or apply, not " .. tostring(verb))
 end
-print(encode(response))
+print((assert(J.encode(response))))

@@ -69,6 +69,7 @@ M.mission_control = {
 local L = dofile(lib .. "log.lua")
 local P = dofile(lib .. "plan.lua")
 local F = dofile(lib .. "../test/fixtures/worlds.lua")
+local J = dofile(lib .. "../test/json.lua")
 M.toast, M.toast_error = nil, nil
 
 local failed, passed = 0, 0
@@ -82,11 +83,21 @@ local function check(name, ok, detail)
   end
 end
 
+-- Every answer the fake hs.json.write refused, from any arm, with why
+-- (json.lua). An arm whose run wrote an answer that Hammerspoon could not
+-- write fails on it, so every answer the arms send through M.run is proved
+-- writable (issue I19d4fa6, hv decision 60).
+local refusals = {}
+
 -- One arm, under its own guard: a raise is a FAIL naming it, and the arms
 -- after it still run.
 local function arm(name, body)
+  local before = #refusals
   local ok, err = pcall(body)
   if not ok then check(name .. " raised", false, err) end
+  if #refusals > before then
+    check(name .. ": hs.json.write takes every answer it wrote", false, refusals[#refusals])
+  end
   _G.hs = nil
 end
 
@@ -214,9 +225,16 @@ local function new_fake()
     },
     json = {
       read = function() return f.request end,
+      -- As Hammerspoon's: an answer it could not write is written nowhere,
+      -- kept with why in refusals, and the call returns false (json.lua).
       write = function(response, path)
+        local text, why = J.encode(response)
+        if not text then
+          refusals[#refusals + 1] = why
+          return false
+        end
         local h = assert(io.open(path, "w"))
-        h:write("{}")
+        h:write(text)
         h:close()
         f.responses[#f.responses + 1] = response
         return true
@@ -632,6 +650,45 @@ arm("an apply to its end", function()
   check("apply: the report, every entry in place", find(recs, "report",
     "exit 0: 0 placed, " .. entries(desk) .. " in place") ~= nil)
   check("apply: finished is the last record", recs[#recs] and recs[#recs].text:match("^finished") ~= nil, last_line(recs))
+end)
+
+-- ------ apply's and observe's answers with a window no person sees (I19d4fa6)
+
+-- hv's live apply of 26 Nov at 9af5e8f3 (run 20261126T124113Z-95413) did its
+-- work and could not write its answer: the world it carries held the windows
+-- no person sees as a set keyed by window id, which hs.json.write refuses
+-- (hv decision 60). Here each world takes free_windows and unseen_windows
+-- from P.parse_window_list's own answer to a version 4 list, as observe does.
+arm("apply's and observe's answers, whose world holds a window no person sees, are written", function()
+  local free, _, unseen = P.parse_window_list(P.WINDOW_LIST_HEADER
+    .. "\n501 24 77 1440 25 1 1.000\n102 0 88 900 545 0 1.000\n103 0 88 900 545 1 0.000\n")
+  local function with_list(w)
+    w.free_windows, w.unseen_windows = free, unseen
+    return w
+  end
+  local before = #refusals
+  fresh_globals()
+  local f = new_fake()
+  M.observe = function() return with_list(world_fixture()) end
+  local observed = run_engine(f, { verb = "observe", options = {}, run = "R-UNSEEN-OBS", log = tmpdir() .. "/arngz.log" })
+  check("observe: its answer is written, its world holding the windows no person sees",
+    observed and observed.status == "ok" and observed.world and observed.world.unseen_windows == unseen,
+    refusals[#refusals])
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  M.observe = function()
+    local w = with_list(F.base_world())
+    w.accessibility = true
+    return w
+  end
+  local applied = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-UNSEEN-APPLY", log = log })
+  check("apply: its answer is written, its last read's world holding the windows no person sees",
+    applied and applied.status == "ok" and applied.world and applied.world.unseen_windows == unseen,
+    refusals[#refusals])
+  check("hs.json.write refused neither answer, and the list held windows no person sees",
+    #refusals == before and #unseen > 0, refusals[#refusals])
 end)
 
 -- ---------------------------------------- arm 8: a toast hook that raises
@@ -1790,7 +1847,19 @@ local function discover_save_run(named_on_show, options, run, fail_back)
 end
 
 arm("Save Desk names a window on a desktop not shown", function()
-  local response, shows, shown, start = discover_save_run(true, { grid = "8x4", name = "zeopit", save = "zeopit" }, "R-SAVE1")
+  local response, shows, shown, start, recs = discover_save_run(true, { grid = "8x4", name = "zeopit", save = "zeopit" }, "R-SAVE1")
+  -- ic's W4: the report opens with hv's line for each space, and the run log
+  -- holds each space's counts and the window list's totals.
+  local spaces = #F.base_world().screens[1].spaces
+  local led = 0
+  for i = 1, spaces do
+    if tostring(((response or {}).report or {})[i]):match("^%S+ space %d+: %d+ named, %d+ recorded$") then led = led + 1 end
+  end
+  check("save: the report opens with one line for each space, its named and recorded counts, and no gap (ic's W4)",
+    led == spaces, response and table.concat(response.report or {}, " | "))
+  check("save: the run log holds each space's counts and the window list's totals (ic's W4)",
+    count(recs, "spaces") == spaces and find(recs, "spaces", "Accessibility could not name") ~= nil
+      and find(recs, "window_list", "unnamed left out as not drawn") ~= nil, last_line(recs))
   local has_safari = false
   for _, d in ipairs(((response or {}).desk or {}).displays or {}) do
     for _, sp in ipairs(d.spaces or {}) do
@@ -1828,6 +1897,13 @@ arm("Save Desk names a window on a desktop not shown", function()
   local plain = discover_save_run(false, { grid = "8x4", name = "discovered" }, "R-SAVE4")
   check("save: a plain discover prints the desk and names the gap, verdict print",
     plain and plain.status == "ok" and plain.verdict == "print" and #(plain.gaps or {}) == 1, plain and tostring(plain.verdict))
+  local not_recorded = 0
+  for _, line in ipairs((plain or {}).report or {}) do
+    local n = line:match("^%S+ space %d+: %d+ named, %d+ recorded, (%d+) not recorded$")
+    if n then not_recorded = not_recorded + tonumber(n) end
+  end
+  check("save: the space lines say as many windows not recorded as there are gaps, from the one list (ic's W3, W4)",
+    #((plain or {}).gaps or {}) > 0 and not_recorded == #plain.gaps, plain and table.concat(plain.report or {}, " | "))
 end)
 
 -- ------- an apply keeps the windows its first read named (vc's note 3, F1)

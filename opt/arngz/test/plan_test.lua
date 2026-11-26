@@ -1496,9 +1496,32 @@ do
   check("and that escaped pattern matches its own title",
     docs and string.find("Docs (draft) 100%", docs.window) ~= nil)
   check("an app with one window in the world carries no pattern", by_app["com.apple.mail"] ~= nil)
-  check("minimized, unnamed, every-space and Hammerspoon's windows are not recorded but said",
-    has_note(notes, "1 minimized") and has_note(notes, "1 Accessibility could not name")
-      and has_note(notes, "on every space") and has_note(notes, "Hammerspoon's own"), notes_text(notes))
+  -- ic's W4: these counts leave hv's line for each space and go to the run
+  -- log, so P.desk_from_world returns them as data, and its notes say none.
+  local _, _, _, counts = P.desk_from_world(world, { name = "zeop2" })
+  local total = { minimized = 0, unnamed = 0, everywhere = 0, own = 0 }
+  for _, c in ipairs(counts or {}) do
+    for k in pairs(total) do total[k] = total[k] + (c[k] or 0) end
+  end
+  check("minimized, unnamed, every-space and Hammerspoon's windows are not recorded, and counted for the run log (ic's W4)",
+    total.minimized > 0 and total.unnamed > 0 and total.everywhere > 0 and total.own > 0
+      and not has_note(notes, "Accessibility could not name") and not has_note(notes, " minimized"), notes_text(notes))
+  local spaces = 0
+  for _, s in ipairs(world.screens) do spaces = spaces + #s.spaces end
+  local first = (counts or {})[1] or {}
+  local two_gaps = { { space = first.space }, { space = first.space } }
+  local lines = P.space_lines(counts, two_gaps)
+  check("space lines: one for each space, in hv's words, with 'not recorded' only where that space has a gap,"
+      .. " counted from the gaps (ic's W3, W4)",
+    #lines == spaces and #(counts or {}) == spaces
+      and lines[1] == string.format("%s space %d: %d named, %d recorded, %d not recorded", first.display, first.ordinal,
+        first.named, first.recorded, #two_gaps)
+      and lines[2] == string.format("%s space %d: %d named, %d recorded", counts[2].display, counts[2].ordinal,
+        counts[2].named, counts[2].recorded), table.concat(lines, " | "))
+  local report = P.with_space_lines(counts, {}, notes)
+  check("discover's report: the space lines first, then the notes (ic's W4)",
+    #report == spaces + #notes and report[1] == P.space_lines(counts, {})[1] and report[spaces + 1] == notes[1],
+    table.concat(report, " | "))
   local tv
   for _, a in ipairs(d1.spaces[1].apps) do if a.app == "com.apple.TV" then tv = a end end
   for _, a in ipairs(d1.spaces[2] and d1.spaces[2].apps or {}) do if a.app == "com.apple.TV" then tv = tv or a end end
@@ -2506,16 +2529,22 @@ do
     mfix == "show desktop 2 on " .. tostring(failed[1].display) .. ", then Save Desk again, or run arngz discover --save zeopit"
       .. " --with-gaps to save without them", mfix)
 
+  -- A free window (macOS's own) adds to its space's windows and not to the
+  -- ones Accessibility could not name (ic's W4 moved the count to data).
   local counted = save_world()
+  local id = counted.screens[1].spaces[2].id
   table.insert(counted.screens[1].spaces[2].windows, { id = 621, named = false })
   counted.free_windows = { 621 }
-  local _, notes = P.desk_from_world(counted, { grid = "8x4", name = "x" })
-  local line
-  for _, n in ipairs(notes or {}) do
-    if n:find("space 2", 1, true) then line = n end
+  local function count_of(world)
+    local _, _, _, counts = P.desk_from_world(world, { grid = "8x4", name = "x" })
+    for _, c in ipairs(counts or {}) do
+      if c.space == id then return c end
+    end
   end
-  check("report: a free window (macOS's own) is not counted as one Accessibility could not name",
-    line and line:find("1 Accessibility could not name", 1, true) ~= nil, tostring(line))
+  local with_free, without = count_of(counted), count_of(save_world())
+  check("counts: a free window (macOS's own) is not counted as one Accessibility could not name",
+    with_free and without and with_free.windows == without.windows + 1 and with_free.unnamed == without.unnamed,
+    with_free and (tostring(with_free.windows) .. " / " .. tostring(with_free.unnamed)))
 end
 
 -- ------------- Save Desk's gaps are windows a person sees (save-note addendum)
@@ -2524,11 +2553,19 @@ print("Save Desk's gaps are windows a person sees")
 do
   local free, owned, unseen = P.parse_window_list(P.WINDOW_LIST_HEADER
     .. "\n102 0 88 900 545 1 1.000\n103 0 88 900 545 0 1.000\n104 0 88 900 545 1 0.000\n501 24 77 10 10 0 1.000\n")
-  check("window list v4: an onscreen window with alpha is seen; one offscreen, or with alpha 0.000, is not (alpha in windows.js's fixed form, vc's N2)",
-    free and owned and unseen and not unseen[102] and unseen[103] and unseen[104] and not unseen[501],
+  -- The unseen windows are a list of ids in the list's order, as the free
+  -- ids are, since the world carries them in apply's and observe's answers
+  -- (issue I19d4fa6, hv decision 60).
+  check("window list v4: an onscreen window with alpha is seen; one offscreen, or with alpha 0.000, is not (alpha in windows.js's fixed form, vc's N2), as a list of ids",
+    free and owned and unseen and unseen[1] == 103 and unseen[2] == 104 and unseen[3] == nil,
     tostring(free and #free))
+  local set = P.id_set({ 102, 104 })
+  check("id_set: a list of ids becomes the set a reader needs, and no list is an empty set",
+    set[102] and set[104] and not set[103] and next(P.id_set(nil)) == nil)
+  check("free_set: a world's free ids as a set, and a world with none frees nothing",
+    P.free_set({ free_windows = { 501 } })[501] == true and next(P.free_set({})) == nil)
   local _, _, old = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n102 0 88 900 545\n")
-  check("window list: a line with no onscreen state counts as seen, the safe side", old and not old[102])
+  check("window list: a line with no onscreen state counts as seen, the safe side", old and old[1] == nil)
   local v3, v3why = P.parse_window_list("arngz-windows 3\n102 0 88 900 545\n")
   check("window list: a version 3 list is refused by its header", v3 == nil
     and string.find(tostring(v3why), "did not print a window list: arngz-windows 3", 1, true) ~= nil, v3why)
@@ -2542,16 +2579,20 @@ do
     return w
   end
   local desk = P.desk_from_world(save_world(), { grid = "8x4", name = "x" })
-  local seen = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
+  -- Each stop's unseen windows are a list, as M.visit keeps the parser's.
+  local stop_unseen = { 103 }
+  local seen, _, left = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = stop_unseen } })
   check("gaps: on a desktop the visit showed, a helper no person sees is no gap, and the window seen is (F2)",
     #seen == 1 and seen[1].id == 102 and seen[1].cause == "shown", tostring(#seen))
+  check("gaps: each gap names its desktop's id, and the helpers left out as not drawn are counted (ic's W4)",
+    seen[1] and seen[1].space == 12 and left == #stop_unseen, tostring(left))
   local stop_failed = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, list_failed = { [12] = "osascript ended" } })
   check("gaps: a stop whose window list could not be read judges nothing: both stay gaps, with its words (vc's note 1)",
     #stop_failed == 2 and stop_failed[1].cause == "list_failed"
       and stop_failed[1].why == P.GAP_LIST_FAILED .. ": osascript ended", tostring(#stop_failed))
   local on_shown = helper_world()
   on_shown.screens[1].spaces[1].active, on_shown.screens[1].spaces[2].active = false, true
-  on_shown.unseen_windows = { [103] = true }
+  on_shown.unseen_windows = { 103 }
   local sgaps = P.discover_gaps(on_shown, desk, {})
   check("gaps: on a desktop shown at the start, the start's list judges: the helper is no gap (F2)",
     #sgaps == 1 and sgaps[1].id == 102 and sgaps[1].cause == "on_shown", tostring(#sgaps))
@@ -2561,13 +2602,13 @@ do
 
   local hidden = helper_world()
   hidden.layer0_owned[1].hidden = true
-  local hgaps, hid = P.discover_gaps(hidden, desk, { visited = { [12] = true }, unseen = { [12] = { [102] = true, [103] = true } } })
+  local hgaps, hid = P.discover_gaps(hidden, desk, { visited = { [12] = true }, unseen = { [12] = { 102, 103 } } })
   check("gaps: a hidden app's windows no person sees are no gaps, and its name is kept once for the report (ic's R2)",
     #hgaps == 0 and #hid == 1 and hid[1] == "Safari", tostring(#hgaps) .. " / " .. tostring(#hid))
   check("report: the line for windows left out names the hidden apps (ic's R2)", P.left_out_line(hid)
     == "left out, not counted as gaps: windows of hidden apps whose windows Accessibility could not name (Safari);"
       .. " show them and Save Desk again to record them", P.left_out_line(hid))
-  local _, none = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { [103] = true } } })
+  local _, none = P.discover_gaps(helper_world(), desk, { visited = { [12] = true }, unseen = { [12] = { 103 } } })
   check("report: no line when no hidden app's window was left out", P.left_out_line(none) == nil)
   -- Safari hidden, with its window 104 named on desktop 11 and its helpers
   -- unseen on desktop 12 (vc's F3, ic's rule: any desktop).
@@ -2575,7 +2616,7 @@ do
   named_elsewhere.layer0_owned[1].hidden = true
   table.insert(named_elsewhere.screens[1].spaces[1].windows, { id = 104, bundle = "com.apple.Safari", named = true })
   local _, quiet = P.discover_gaps(named_elsewhere, desk,
-    { visited = { [12] = true }, unseen = { [12] = { [102] = true, [103] = true } } })
+    { visited = { [12] = true }, unseen = { [12] = { 102, 103 } } })
   check("report: a hidden app with a window named, on any desktop, gives no line, though its helpers are unseen (vc's F3)",
     P.left_out_line(quiet) == nil, P.left_out_line(quiet))
 end

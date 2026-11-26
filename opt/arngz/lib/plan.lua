@@ -564,10 +564,13 @@ P.WINDOW_LIST_HEADER = "arngz-windows 4"
 P.MIN_WINDOW_SIDE = 50
 
 -- The free ids in windows.js's TEXT, as a list, its layer-0 windows by owner
--- pid ({ [pid] = {ids} }), and its layer-0 windows no person can see now
--- ({ [id] = true }: not onscreen, or with an alpha of 0); or nil and why the
+-- pid ({ [pid] = {ids} }), and its layer-0 windows no person can see now, as
+-- a list of ids (not onscreen, or with an alpha of 0); or nil and why the
 -- text is not a window list. A list with no free id is a list, not a
--- failure.
+-- failure. The free and unseen ids are lists because observe's world carries
+-- them in apply's and observe's answers, and Hammerspoon's hs.json.write
+-- refuses a table keyed by window id (issue I19d4fa6, hv decision 60):
+-- P.id_set makes the set a reader needs.
 function P.parse_window_list(text)
   if type(text) ~= "string" then return nil, "windows.js printed nothing" end
   local lines = {}
@@ -585,7 +588,7 @@ function P.parse_window_list(text)
         .. lines[i]:sub(1, 200)
     end
     if tonumber(layer) == 0 and onscreen and (onscreen == "0" or tonumber(alpha) <= 0) then
-      unseen[tonumber(id)] = true
+      unseen[#unseen + 1] = tonumber(id)
     end
     if tonumber(layer) ~= 0 then
       free[#free + 1] = tonumber(id)
@@ -602,12 +605,20 @@ function P.parse_window_list(text)
   return free, owned, unseen
 end
 
+-- The ids in the list IDS, as a set ({ [id] = true }): the one place a list
+-- of window ids becomes a set. A set stays in the code that reads it, never
+-- in a world or an answer (P.parse_window_list says why). No list is an
+-- empty set.
+function P.id_set(ids)
+  local set = {}
+  for _, id in ipairs(ids or {}) do set[id] = true end
+  return set
+end
+
 -- The free ids of WORLD, as a set: observe's world.free_windows. A world that
 -- carries none (a read that failed, or a fixture) frees nothing.
 function P.free_set(world)
-  local set = {}
-  for _, id in ipairs((world and world.free_windows) or {}) do set[id] = true end
-  return set
+  return P.id_set(world and world.free_windows)
 end
 
 -- THE RULE FOR AN EMPTY DESKTOP, in one place: the plan's choice and the
@@ -2374,9 +2385,9 @@ end
 -- Why a window discover did not name stays out of the desk, by what happened
 -- to its desktop (ic's W1): each gap's words come from VISIT's record, never
 -- by default. VISIT is { visited = {[space] = true}, failed = {[screen] =
--- why}, out_of_time, unseen = {[space] = {[id] = true}}, list_failed =
--- {[space] = why} }: unseen and list_failed are the window list read at
--- each stop (M.visit).
+-- why}, out_of_time, unseen = {[space] = {ids}}, list_failed = {[space] =
+-- why} }: unseen and list_failed are the window list read at each stop
+-- (M.visit), each stop's unseen ids a list, as P.parse_window_list gives it.
 P.GAP_SHOWN = "arngz showed that desktop, and Accessibility still could not name its window"
 P.GAP_NOT_REACHED = "the 20 s to show desktops ran out before that desktop"
 -- A desktop already shown, which arngz did not need to show (ic's W1).
@@ -2391,20 +2402,24 @@ P.GAP_LIST_FAILED = "arngz showed that desktop, and could not read the window li
 -- The windows the desk leaves out: each layer-0 window of a running regular
 -- app on a user desktop that observe did not name, and that a person can see
 -- while its desktop is shown (cc's save-note addendum, F2 (a)): it is not in
--- the window list's unseen set for that desktop, read at the start for a
+-- the window list's unseen ids for that desktop, read at the start for a
 -- desktop shown then (WORLD.unseen_windows) and at the visit's stop for one
 -- it showed. A window the list cannot judge (no stop reached it, its show
 -- failed, or the list read failed) stays a gap: the safe side. One list
 -- holds every gap, so the count, the lines and the verdict agree (ic's W3).
--- Returns { {id, name, bundle, place, display, cause, why} } and the names of
--- the hidden apps whose windows it left out as unseen and of which the run
--- named no window on any desktop (ic's R2, vc's F3): a hidden app keeps its
--- helper windows, and Accessibility names its real ones, so an app with a
--- named window is not said. In world order, each once. CAUSE is "on_shown", "shown", "list_failed", "failed",
--- "not_reached" or "late".
+-- Returns { {id, name, bundle, place, space, display, cause, why} }, where
+-- SPACE is its desktop's id (for P.space_lines); the names of the hidden apps
+-- whose windows it left out as unseen and of which the run named no window
+-- on any desktop (ic's R2, vc's F3): a hidden app keeps its helper windows,
+-- and Accessibility names its real ones, so an app with a named window is
+-- not said; and how many unnamed windows it left out because no person sees
+-- them, for the run log (ic's W4). In world order, each once. CAUSE is
+-- "on_shown", "shown", "list_failed", "failed", "not_reached" or "late".
 function P.discover_gaps(world, desk, visit)
   visit = visit or {}
   local visited, failed = visit.visited or {}, visit.failed or {}
+  local unseen_now, unseen_at = P.id_set(world.unseen_windows), {}
+  for space, ids in pairs(visit.unseen or {}) do unseen_at[space] = P.id_set(ids) end
   local owner = owned_by(world)
   local names = {}
   for _, d in ipairs((desk and desk.displays) or {}) do
@@ -2419,7 +2434,7 @@ function P.discover_gaps(world, desk, visit)
       end
     end
   end
-  local gaps, hidden, said = {}, {}, {}
+  local gaps, hidden, said, left_out = {}, {}, {}, 0
   for _, s in ipairs(world.screens or {}) do
     for ui, sp in ipairs(P.user_spaces(s)) do
       for _, w in ipairs(sp.windows or {}) do
@@ -2430,11 +2445,11 @@ function P.discover_gaps(world, desk, visit)
             if (visit.list_failed or {})[sp.id] then
               cause, why = "list_failed", P.GAP_LIST_FAILED .. ": " .. tostring(visit.list_failed[sp.id])
             else
-              unseen = ((visit.unseen or {})[sp.id] or {})[w.id]
+              unseen = (unseen_at[sp.id] or {})[w.id]
               cause, why = "shown", P.GAP_SHOWN
             end
           elseif sp.active then
-            unseen = (world.unseen_windows or {})[w.id]
+            unseen = unseen_now[w.id]
             cause, why = "on_shown", P.GAP_ON_SHOWN
           elseif failed[s.uuid] then
             cause, why = "failed", "arngz could not show that desktop: " .. tostring(failed[s.uuid])
@@ -2444,20 +2459,21 @@ function P.discover_gaps(world, desk, visit)
             cause, why = "late", P.GAP_LATE
           end
           if unseen then
+            left_out = left_out + 1
             local label = o.name or o.bundle
             if o.hidden and not named_app[o.bundle] and not said[label] then
               said[label] = true
               hidden[#hidden + 1] = label
             end
           else
-            gaps[#gaps + 1] = { id = w.id, name = o.name or o.bundle, bundle = o.bundle, place = ui,
+            gaps[#gaps + 1] = { id = w.id, name = o.name or o.bundle, bundle = o.bundle, place = ui, space = sp.id,
               display = names[s.uuid] or s.name or s.uuid, cause = cause, why = why }
           end
         end
       end
     end
   end
-  return gaps, hidden
+  return gaps, hidden, left_out
 end
 
 -- One gap's stderr line (ic's words).
@@ -2541,19 +2557,22 @@ end
 -- A desk from a world (WP-04): what discover prints. PURE, like plan.
 --
 -- options: grid ("WxH", default 8x4, D19) and name (the desk's name). Returns
--- the desk and the report lines that say what was not recorded and why --
--- minimized windows, windows on every space, windows Accessibility could not
--- name, a window whose title cannot tell it from its app's others, windows
--- that span part of a cell, and the Dock bindings, which a v1 desk does not
--- hold. Every display is recorded with all four match fields; a display's
--- desk name is its position, which the validator needs unique. A refusal is
--- nil, why and, where it names one, its fix.
+-- the desk; the report lines that say what was not recorded and why: a
+-- window whose title cannot tell it from its app's others, windows that span
+-- part of a cell, and the Dock bindings, which a v1 desk does not hold; nil;
+-- and each space's counts, in world order: { {display, ordinal, space, type,
+-- windows, named, recorded, other, minimized, everywhere, own, unnamed} },
+-- for discover's line for each space (P.space_lines) and its run log
+-- (L.discover_pairs), since the line needs the gaps that discover finds
+-- after this (ic's W4). Every display is recorded with all four match
+-- fields; a display's desk name is its position, which the validator needs
+-- unique. A refusal is nil, why and, where it names one, its fix.
 function P.desk_from_world(world, options)
   options = options or {}
   local grid_text = options.grid or "8x4"
   local grid = P.parse_grid(grid_text)
   if not grid or grid.w < 1 or grid.h < 1 then return nil, "the grid is not WxH: " .. tostring(grid_text) end
-  local notes = {}
+  local notes, counts = {}, {}
   local function note(fmt, ...) notes[#notes + 1] = string.format(fmt, ...) end
 
   -- What observe could not read is refused, never written down as empty: a
@@ -2662,13 +2681,9 @@ function P.desk_from_world(world, options)
           end
         end
       end
-      note("%s space %d (%s): %d windows, %d named, %d recorded%s%s%s%s%s", label, sp.ordinal or 0, tostring(sp.type),
-        #(sp.windows or {}), named, recorded,
-        other > 0 and string.format(", %d not standard windows", other) or "",
-        minimized > 0 and string.format(", %d minimized (no frame worth keeping)", minimized) or "",
-        everywhere > 0 and string.format(", %d on every space", everywhere) or "",
-        own > 0 and string.format(", %d Hammerspoon's own", own) or "",
-        unnamed > 0 and string.format(", %d Accessibility could not name", unnamed) or "")
+      counts[#counts + 1] = { display = label, ordinal = sp.ordinal or 0, space = sp.id, type = sp.type,
+        windows = #(sp.windows or {}), named = named, recorded = recorded, other = other, minimized = minimized,
+        everywhere = everywhere, own = own, unnamed = unnamed }
     end
     -- A full-screen window goes under the desktop before it; one with no
     -- desktop before it waits for the next, and one left over here means the
@@ -2741,7 +2756,36 @@ function P.desk_from_world(world, options)
     note("%d Dock bindings: %d to all spaces, %d to one space%s; a v1 desk records none of them",
       #(world.app_bindings or {}), all, one, other > 0 and string.format(", %d unreadable", other) or "")
   end
-  return desk, notes
+  return desk, notes, nil, counts
+end
+
+-- hv's report line for each space discover read (ic's W4, hv decision 59):
+-- what it named and what it recorded there, and how many windows of a
+-- person's size it did not record, counted from the one list of gaps (ic's
+-- W3), said only where that space has one. COUNTS is P.desk_from_world's
+-- fourth value and GAPS is P.discover_gaps' list. Every other count goes to
+-- the run log (L.discover_pairs). The lines come first in discover's report,
+-- before the notes P.desk_from_world returns: P.with_space_lines.
+function P.space_lines(counts, gaps)
+  local on = {}
+  for _, g in ipairs(gaps or {}) do
+    if g.space ~= nil then on[g.space] = (on[g.space] or 0) + 1 end
+  end
+  local lines = {}
+  for _, c in ipairs(counts or {}) do
+    local n = on[c.space] or 0
+    lines[#lines + 1] = string.format("%s space %d: %d named, %d recorded%s", tostring(c.display), c.ordinal,
+      c.named, c.recorded, n > 0 and string.format(", %d not recorded", n) or "")
+  end
+  return lines
+end
+
+-- Discover's report: P.space_lines, then NOTES. The engine's discover verb
+-- and the CLI's fake engine (test/discover_response.lua) both build it here.
+function P.with_space_lines(counts, gaps, notes)
+  local report = P.space_lines(counts, gaps)
+  for _, n in ipairs(notes or {}) do report[#report + 1] = n end
+  return report
 end
 
 -- ------------------------------------------------------------- diff

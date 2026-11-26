@@ -294,6 +294,33 @@ function L.plan_pairs(ops, lines)
   return out
 end
 
+-- What discover read, as records (ic's W4): each space's counts, those its
+-- report line says (P.space_lines) and those that left that line; then the
+-- window list's totals: its free ids, the layer-0 windows of running regular
+-- apps, the ids no person sees, and LEFT_OUT, the unnamed windows discover
+-- left out because no person sees them (P.discover_gaps' third value).
+-- COUNTS is P.desk_from_world's fourth value.
+function L.discover_pairs(counts, world, left_out)
+  local out = {}
+  for _, c in ipairs(counts or {}) do
+    out[#out + 1] = { "spaces", string.format("%s space %d (%s): %d windows, %d named, %d recorded, %d not standard,"
+      .. " %d minimized, %d on every space, %d Hammerspoon's own, %d Accessibility could not name", tostring(c.display),
+      c.ordinal, tostring(c.type), c.windows, c.named, c.recorded, c.other, c.minimized, c.everywhere, c.own, c.unnamed) }
+  end
+  -- One word for the event, since a record's fields are split at spaces.
+  world = world or {}
+  if world.free_error then
+    out[#out + 1] = { "window_list", "not read: " .. tostring(world.free_error) }
+  else
+    local layer0 = 0
+    for _, o in ipairs(world.layer0_owned or {}) do layer0 = layer0 + #(o.ids or {}) end
+    out[#out + 1] = { "window_list", string.format("%d free, %d layer-0 of regular apps, %d no person sees;"
+      .. " %d unnamed left out as not drawn", #(world.free_windows or {}), layer0, #(world.unseen_windows or {}),
+      left_out or 0) }
+  end
+  return out
+end
+
 -- Which planned field counts each kind of op the engine executes: the
 -- progress point's own words (progress.md). log_test ties it to the kinds the
 -- engine runs, so a kind added there and not here goes red.

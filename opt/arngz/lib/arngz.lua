@@ -457,7 +457,9 @@ function M.observe(bundles)
   local free, owned, unseen = M.read_window_list()
   if free then world.free_windows = free else world.free_error = owned end
   -- The layer-0 windows no person can see now, for Save Desk's gaps on the
-  -- desktops shown (P.discover_gaps).
+  -- desktops shown (P.discover_gaps): a list of ids, as free_windows is,
+  -- since apply's and observe's answers carry the world, and hs.json.write
+  -- refuses a table keyed by window id (issue I19d4fa6, hv decision 60).
   world.unseen_windows = free and unseen or nil
   owned = free and owned or {}
 
@@ -1667,8 +1669,9 @@ end
 -- Accessibility reads, so the gaps know which windows of that desktop a
 -- person can see (cc's save-note addendum, F2 (a)). Returns { shown, named,
 -- visited = {[space] = true}, out_of_time, failed = {[screen] = why}, back =
--- {[screen] = why}, unseen = {[space] = {[id] = true}}, list_failed =
--- {[space] = why} }.
+-- {[screen] = why}, unseen = {[space] = {ids}}, list_failed = {[space] = why}
+-- }. It stays in the engine: its tables are keyed by desktop id, which
+-- hs.json.write refuses, so no answer carries it (issue I19d4fa6).
 M.VISIT_SECONDS = 20
 M.VISIT_READ_TRIES = 20 -- reads of an app's windows after a show, POLL_US apart, as grab_point waits
 -- Every window this run has named (M.nameable, M.visit): cleared once, at the
@@ -2723,7 +2726,7 @@ local VERBS = {
       world = M.observe()
       log_world(lg, "after the visit", world)
     end
-    local desk, notes, fix = P.desk_from_world(world, { grid = options.grid, name = options.name })
+    local desk, notes, fix, counts = P.desk_from_world(world, { grid = options.grid, name = options.name })
     if not desk then refuse(notes, fix) end
     -- A window list that could not be read judges nothing: with no list, no
     -- gap could be found, so a save is refused unless --with-gaps (vc's note
@@ -2737,7 +2740,10 @@ local VERBS = {
       end
       notes[#notes + 1] = why
     end
-    local gaps, hidden = P.discover_gaps(world, desk, visit)
+    local gaps, hidden, not_drawn = P.discover_gaps(world, desk, visit)
+    -- Each space's counts and the window list's totals, for vc's read of a
+    -- Save, before any refusal (ic's W4): the report says less.
+    write_log(lg, "engine", function() return L.discover_pairs(counts, world, not_drawn) end)
     local lines = {}
     for _, g in ipairs(gaps) do
       lines[#lines + 1] = P.gap_line(g)
@@ -2757,7 +2763,9 @@ local VERBS = {
       local why, sfix = P.save_refusal(gaps, options.save)
       error({ refused = why, fix = sfix, gaps = lines }, 0)
     end
-    return { desk = desk, report = notes, gaps = lines, verdict = verdict, shown = visit.shown or 0 }
+    -- hv's line for each space first, then the notes (ic's W4).
+    return { desk = desk, report = P.with_space_lines(counts, gaps, notes), gaps = lines, verdict = verdict,
+      shown = visit.shown or 0 }
   end,
   -- plan: what apply would do, and nothing done (diff, and apply --dry-run).
   -- execute is never called on this path.
