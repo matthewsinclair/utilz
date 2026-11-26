@@ -1,0 +1,15 @@
+{
+  "id": "01M8BYF7HA703HWEK6W6V21HP5",
+  "ts": "2026-11-26T12:49:45.003Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 26 Nov 2026, first-hand in ic's window, stamped 12:48:56Z in ic's transcript, which vc read by its date -u of 12:49Z; ic relayed it to vc at ic's date -u of 12:48Z. hv's words: \"Approved. Document that approval, then bank, fold, and hold, and then I will compact\". The rest is the wording of ic and vc. By ic's account it approves ic's design note ~/Devel/scratch/utilz-ic/marks1126/running-note.md for hv decision 58: the mark says \"arngz: starting\" until the CLI's first ask of the marked verb; just before that ask the CLI draws \"arngz: running\" itself, once a run, with no sound; then the end words as now. With it go M1's close (a run whose answer never arrives ends with the falling sound and \"arngz: ended with no answer: see arngz log\") and W4 (discover's space line says named, recorded and not recorded, and the window-list totals go to the run log). vc had not read the note when hv approved it; vc reads it before ic codes, and brings to hv only a fault that changes what hv approved. ic codes it on cc's tip after hv's compact, on vc's word; no run before vc's read."
+  }
+}
