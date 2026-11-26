@@ -3063,7 +3063,7 @@ log_events() {
 }
 
 # AT-93ea7f8a.6
-@test "AT-93ea7f8a.6: an hs that exits on its own just after its response is let exit, and one that hangs is stopped after the grace (F3)" {
+@test "AT-93ea7f8a.6: an hs that exits on its own just after its response is let exit, and one that hangs is stopped only past its own timeout (F3, I7085193)" {
   local took
   fake_hs reply-then-exit
   export FAKE_HS_EXIT_AFTER=0.5
@@ -3073,17 +3073,33 @@ log_events() {
   assert_output "0"
   grep -qE ' cli answer discover: returned 0 after [0-9]+ s; hs exited 0; ' "$(run_log)" ||
     fail "hs's own exit is not the answer's: $(grep ' cli answer ' "$(run_log)")"
-  # One that hangs after replying is stopped once its grace runs out, well
-  # before its deadline.
+  # One that hangs after replying (the fake ignores -t, as the 16 Oct hang
+  # did) is stopped only once its own timeout has run out, never while it may
+  # still be taking Hammerspoon's reply (issue I7085193).
   fake_hs hang-after-reply
+  export ARNGZ_HS_TIMEOUT=2
+  run_arngz discover
+  assert_success
+  grep -q " cli kill stopped hs (pid [0-9]*): it outlived its own $ARNGZ_HS_TIMEOUT s timeout by [0-9]* s after its response came" \
+    "$(run_log)" || fail "the hung hs was not stopped past its timeout: $(grep ' cli kill ' "$(run_log)")"
+  took="$(sed -n 's/.* cli answer discover: returned 0 after \([0-9]*\) s; hs exited killed;.*/\1/p' "$(run_log)")"
+  [ -n "$took" ] && [ "$took" -ge "$ARNGZ_HS_TIMEOUT" ] ||
+    fail "the hung hs was stopped before its own timeout ran out: '$took' s"
+}
+
+# Issue I7085193: on 26 Nov 2026 the CLI stopped an hs 3 s after its
+# response, and Hammerspoon crashed replying to it. An hs that ends on its own
+# later than that, within its timeout, is let end.
+@test "I7085193: an hs that exits on its own seconds after its response is let exit, not stopped" {
+  fake_hs reply-then-exit
+  export FAKE_HS_EXIT_AFTER=4.5
   export ARNGZ_HS_TIMEOUT=30
   run_arngz discover
   assert_success
-  grep -q ' cli kill stopped hs (pid [0-9]*): it still ran [0-9]* s after its response came' "$(run_log)" ||
-    fail "the hung hs was not stopped after the grace: $(grep ' cli kill ' "$(run_log)")"
-  took="$(sed -n 's/.* cli answer discover: returned 0 after \([0-9]*\) s; hs exited killed;.*/\1/p' "$(run_log)")"
-  [ -n "$took" ] && [ "$took" -lt "$ARNGZ_HS_TIMEOUT" ] ||
-    fail "the hung hs was stopped at its deadline, not after its grace: '$took' s"
+  run grep -c ' cli kill ' "$(run_log)"
+  assert_output "0"
+  grep -qE ' cli answer discover: returned 0 after [0-9]+ s; hs exited 0; ' "$(run_log)" ||
+    fail "hs's own exit is not the answer's: $(grep ' cli answer ' "$(run_log)")"
 }
 
 # AT-93ea7f8a.6

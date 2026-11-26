@@ -790,12 +790,24 @@ ENGINE_KIND=""
 # THE SAME LIST AS `SCHEDULED` in lib/arngz.lua, which arngz.bats holds the
 # two to: the CLI needs its own copy to check the deadline before it sends.
 SCHEDULED_VERBS="apply"
-# How long hs is given to exit on its own once the response has come, in
-# seconds (F3, ST589246c/93ea7f8a): an hs stopped the moment its response
-# landed, while it still ran, once left Hammerspoon's IPC port stale for the
-# next call. Counted in tenths of a second, so it is never under its value,
-# as a SECONDS deadline, which ticks in whole seconds, could be.
-HS_EXIT_GRACE=3
+# NEVER STOP AN hs THAT MAY STILL TAKE HAMMERSPOON'S REPLY (issue I7085193).
+# hs returns only once Hammerspoon's reply has come, so an hs still running
+# after the response file appeared may still be taking that reply. F3
+# (ST589246c/93ea7f8a) stopped such an hs 3 s after the response; on 26 Nov
+# 2026, on a busy machine, that stop crashed Hammerspoon: it trapped replying
+# to the stopped hs's port (EXC_BREAKPOINT in CFMessagePortSendRequest, from
+# hs.ipc). hs is bounded by its own -t timeout, so after the response the CLI
+# lets it end on its own until the call's deadline (the same -t seconds from
+# its start) plus HS_EXIT_MARGIN seconds, the slack a SECONDS deadline needs
+# because it ticks in whole seconds. Only an hs that outlives its own timeout
+# by that margin is hung, as the 16 Oct hang after a reply was, and only that
+# one is stopped.
+# STILL TRUE AFTER THE FIX: a stop past the timeout and the margin meets the
+# same trap if Hammerspoon replies at that moment. That is accepted: by then
+# hs's own -t has run out, and an hs that ends by its own timeout leaves
+# Hammerspoon to reply to a closed port in the same way, so the stop adds no
+# exposure that hs does not already have.
+HS_EXIT_MARGIN=2
 # hs's exit code for the run log: a number, or killed, or empty when hs never
 # ran.
 ENGINE_HS_RC=""
@@ -878,18 +890,16 @@ engine_ask_run() {
   done
 
   if [[ -f "$response" ]]; then
-    # hs is let finish its own IPC first (F3), and stopped only if it still
-    # runs HS_EXIT_GRACE seconds after its response came, as one that hangs
-    # after replying does (16 Oct).
-    local tenths=$((HS_EXIT_GRACE * 10))
-    while kill -0 "$pid" 2>/dev/null && [[ $tenths -gt 0 ]]; do
+    # hs is let end on its own within its own timeout, and stopped only once
+    # it has outlived that by HS_EXIT_MARGIN (I7085193; HS_EXIT_MARGIN says
+    # why).
+    while kill -0 "$pid" 2>/dev/null && [[ $SECONDS -lt $((deadline + HS_EXIT_MARGIN)) ]]; do
       sleep 0.1
-      tenths=$((tenths - 1))
     done
     if kill -0 "$pid" 2>/dev/null; then
       kill "$pid" 2>/dev/null || true
       ENGINE_HS_RC=killed
-      log_record kill "stopped hs (pid $pid): it still ran $HS_EXIT_GRACE s after its response came"
+      log_record kill "stopped hs (pid $pid): it outlived its own $timeout s timeout by $HS_EXIT_MARGIN s after its response came"
     fi
     # The response is the answer, so hs's status changes nothing here; it is
     # kept for the run log's answer record, which says how hs ended.
