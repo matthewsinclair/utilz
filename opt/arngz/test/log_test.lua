@@ -810,6 +810,16 @@ arm("the window list's read", function()
     unread == "unread: osascript windows.js ended by signal 14: ", tostring(unread))
 end)
 
+-- ------------------------ the visit step's count (cc's visit-note, 26 Nov)
+
+arm("the visit step's count", function()
+  local shown = 2
+  local f = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = {}, shown = shown }, 1, "/tmp/arngz.log")
+  check("finished: the desktops the visit step showed are counted", f.shown == shown, tostring(f.shown))
+  local none = L.finished_fields({ status = "ok", verb = "apply", exit = 0, tally = {} }, 1, "/tmp/arngz.log")
+  check("finished: a run that showed none says 0", none.shown == 0, tostring(none.shown))
+end)
+
 -- ----------------------- the Accessibility timeout (issue I40cbb9b)
 
 arm("the Accessibility timeout", function()

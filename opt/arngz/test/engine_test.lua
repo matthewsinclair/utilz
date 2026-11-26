@@ -706,5 +706,60 @@ do
   _G.hs = nil
 end
 
+-- The visit step (cc's visit-note, 26 Nov 2026): M.visit shows each desktop
+-- in its list once through Mission Control, reads app:allWindows for its
+-- apps while it shows, keeps the windows it names, stops at VISIT_SECONDS,
+-- and shows each display its first desktop again. A fake Mission Control
+-- and a fake clock that only usleep and a show move.
+do
+  local SAFARI, SCREEN_V = "com.apple.Safari", "SCREEN-V"
+  local function fake(opts)
+    local f = { active = { [SCREEN_V] = 11 }, shows = {}, reads = {}, clock = 0 }
+    M.mission_control = { goto_space = function(space)
+      f.shows[#f.shows + 1] = space
+      if opts.fail then return nil, "Mission Control refused AXPress" end
+      if opts.slow then f.clock = f.clock + M.VISIT_SECONDS * 1e9 end
+      f.active[SCREEN_V] = space
+      return true
+    end }
+    local win = { id = function() return 700 end }
+    _G.hs = {
+      spaces = { activeSpaceOnScreen = function(uuid) return f.active[uuid] end },
+      timer = { usleep = function(us) f.clock = f.clock + us * 1000 end, absoluteTime = function() return f.clock end },
+      application = { get = function(b)
+        f.reads[#f.reads + 1] = b
+        return { allWindows = function() return { win } end }
+      end },
+    }
+    M.visit_index = {}
+    return f
+  end
+  local saved = M.mission_control
+  local start = { [SCREEN_V] = 11 }
+  local function item(space, place) return { di = 1, screen = SCREEN_V, space = space, place = place, bundles = { SAFARI } } end
+
+  local f = fake({})
+  local r = M.visit({ item(12, 2) }, start)
+  check("visit: shows the desktop, names the app's window there, and shows the first desktop again",
+    r.shown == 1 and r.visited[12] and M.visit_index[700] ~= nil and r.named == 1 and table.concat(f.shows, ",") == "12,11"
+      and #f.reads == 1 and f.active[SCREEN_V] == 11, table.concat(f.shows, ","))
+
+  f = fake({ slow = true })
+  r = M.visit({ item(12, 2), item(13, 3) }, start)
+  check("visit: past VISIT_SECONDS it shows no more desktops, says so, and still shows the first desktop again",
+    r.shown == 1 and r.out_of_time == M.VISIT_SECONDS and not r.visited[13] and table.concat(f.shows, ",") == "12,11",
+    table.concat(f.shows, ",") .. " / " .. tostring(r.out_of_time))
+
+  f = fake({ fail = true })
+  r = M.visit({ item(12, 2), item(13, 3) }, start)
+  check("visit: a show that fails stops the step on that display, names why, and leaves nothing named",
+    r.shown == 0 and r.failed[SCREEN_V] ~= nil and table.concat(f.shows, ",") == "12" and next(M.visit_index) == nil,
+    table.concat(f.shows, ",") .. " / " .. tostring(r.failed[SCREEN_V]))
+
+  M.mission_control = saved
+  M.visit_index = {}
+  _G.hs = nil
+end
+
 print(string.format("engine_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

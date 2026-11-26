@@ -460,6 +460,9 @@ function L.finished_fields(response, seconds, log_path)
     -- (ST6d8eed9 WP 88504807).
     removed = t.removed or 0,
     extra = tonumber(response.extra),
+    -- The desktops apply showed to name windows on desktops not shown (the
+    -- visit step, cc's visit-note).
+    shown = tonumber(response.shown) or 0,
     seconds = seconds or 0,
     first = tostring(response.error or t.first or ""),
     -- What the entry `first` names was, in the tally's own keys ("failed" or

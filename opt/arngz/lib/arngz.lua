@@ -115,7 +115,7 @@ function M.read_window_list()
   end
   local free, why = P.parse_window_list(text)
   if not free then return nil, why .. said end
-  return free
+  return free, why
 end
 
 -- com.apple.spaces and its Monitors list, which holds each display's desktops
@@ -303,6 +303,14 @@ local function nameable()
   end
   local note = "ran"
   if not ok then note = "failed: " .. tostring(windows) end
+  -- The windows this run's visit step named on desktops it showed (M.visit),
+  -- each still answering for its id, so one that closed since is dropped.
+  for id, hit in pairs(M.visit_index or {}) do
+    if not index[id] then
+      local named, got = pcall(function() return hit.win:id() end)
+      if named and got == id then index[id] = hit end
+    end
+  end
   return index, note, nil, id_errors
 end
 
@@ -431,11 +439,15 @@ function M.observe(bundles)
     screens = {},
     apps_running = {},
     app_bindings = {},
+    -- { {bundle, ids} }: each running desk app's layer-0 windows (visit step).
+    layer0_windows = {},
   }
   -- The window list before the desktops' own lists, so a window opened
   -- between the two reads is one the list does not hold: it holds its
   -- desktop (P.empty_by).
-  world.free_windows, world.free_error = M.read_window_list()
+  local free, owned = M.read_window_list()
+  if free then world.free_windows = free else world.free_error = owned end
+  owned = free and owned or {}
 
   for _, scr in ipairs(hs.screen.allScreens()) do
     local entry, spaces = read_screen(scr, primary:getUUID(), primary_frame)
@@ -495,7 +507,18 @@ function M.observe(bundles)
         world.apps_running_error = b .. " could not be read four times: " .. tostring(apps)
         break
       end
-      if #apps > 0 then world.apps_running[#world.apps_running + 1] = b end
+      if #apps > 0 then
+        world.apps_running[#world.apps_running + 1] = b
+        -- Its layer-0 windows from the window list, for the visit step: a
+        -- window on a desktop not shown is named only once that desktop has
+        -- been shown since Hammerspoon started (cc's visit-note).
+        local ids = {}
+        for _, app in ipairs(apps) do
+          local pid = app:pid()
+          for _, id in ipairs(owned[pid] or {}) do ids[#ids + 1] = id end
+        end
+        if #ids > 0 then world.layer0_windows[#world.layer0_windows + 1] = { bundle = b, ids = ids } end
+      end
     end
   else
     world.apps_running_source = "runningApplications"
@@ -1536,6 +1559,65 @@ local function show_by_tile(uuid, space)
     (not ok) and why or nil
 end
 
+-- THE VISIT STEP (cc's visit-note, 26 Nov 2026). After Hammerspoon starts, a
+-- window on a desktop not shown is named only once that desktop has been
+-- shown. M.visit shows each desktop in LIST (P.visit_list) once, reads
+-- app:allWindows for its bundles while it shows (one call per app, never
+-- hs.window.get), and keeps each named window in M.visit_index, which
+-- observe takes into its index. It stops once VISIT_SECONDS have passed,
+-- and a show that fails stops it on that display. Then it shows each display
+-- the desktop START gave it ({[screen] = space}). SAY(display, place) is
+-- called before each show, for the run log and the toast. Returns { shown,
+-- named, visited = {[space] = true}, out_of_time, failed = {[screen] = why},
+-- back = {[screen] = why} }.
+M.VISIT_SECONDS = 20
+M.visit_index = {}
+
+function M.visit(list, start, say)
+  local r = { shown = 0, named = 0, visited = {}, failed = {}, back = {} }
+  local deadline = now() + M.VISIT_SECONDS * 1e9
+  local touched, order = {}, {}
+  for _, item in ipairs(list or {}) do
+    if now() >= deadline then
+      r.out_of_time = M.VISIT_SECONDS
+      break
+    end
+    if not r.failed[item.screen] then
+      if not touched[item.screen] then
+        touched[item.screen] = true
+        order[#order + 1] = item.screen
+      end
+      if say then say(item) end
+      local shown, why = show_by_tile(item.screen, item.space)
+      if shown then
+        r.shown = r.shown + 1
+        r.visited[item.space] = true
+        for _, bundle in ipairs(item.bundles or {}) do
+          local app = hs.application.get(bundle)
+          local read, wins = pcall(function() return app and app:allWindows() or {} end)
+          for _, w in ipairs(read and wins or {}) do
+            local got, id = pcall(function() return w:id() end)
+            if got and id and not M.visit_index[id] then
+              M.visit_index[id] = { win = w, via = "visit" }
+              r.named = r.named + 1
+            end
+          end
+        end
+      else
+        r.failed[item.screen] = why
+      end
+    end
+  end
+  for _, screen in ipairs(order) do
+    local back = start and start[screen]
+    if back and hs.spaces.activeSpaceOnScreen(screen) ~= back then
+      local ok, why = show_by_tile(screen, back)
+      if not ok then r.back[screen] = why end
+    end
+  end
+  return r
+end
+
 local function exec_remove_space(op, ctx)
   local function not_removed(why) return { status = "note", reason = "not removed: " .. tostring(why) } end
   -- A proof that failed stops the removals on its display: that display's
@@ -1936,6 +2018,9 @@ local function plan_then(job, after)
   job.planned = true
   job.ops, job.after_unseen = ops, after
   job.deadlines.unseen, job.observed.unseen, job.observe_errors.unseen = nil, nil, nil
+  -- An entry left unseen: apply first shows the desktops that hold its
+  -- app's windows, once a run (the visit step), then waits as before.
+  if has_unseen(ops) and not job.visit_done then return "visit", POLL_SECONDS end
   if has_unseen(ops) then return "unseen", POLL_SECONDS end
   return after
 end
@@ -1974,6 +2059,33 @@ function PHASE.inventory(job)
   local nxt, err, fix = plan_then(job, "prepare")
   if not nxt then refuse(err, fix) end
   return nxt
+end
+
+-- The visit step (M.visit): once a run, before any desktop edit or move. Its
+-- desktops come from the plan in hand; its words go to the run log and the
+-- waiting point (the toast's Running... line). The plan after it knows which
+-- desktops were shown, for the words of an entry still unseen.
+function PHASE.visit(job)
+  job.visit_done = true
+  local screens = P.match_displays(job.desk, job.world, job.options)
+  local list = screens and P.visit_list(job.desk, job.world, screens, job.ops) or {}
+  if #list == 0 then return "unseen", POLL_SECONDS end
+  local start = {}
+  for _, s in ipairs(job.world.screens or {}) do start[s.uuid] = s.active_space end
+  local r = M.visit(list, start, function(item)
+    local words = string.format("finding windows: showing desktop %d of %s", item.place,
+      P.desk_display_phrase(job.desk, item.di))
+    note(job.lg, "visit", words .. " (" .. table.concat(item.bundles, ", ") .. ")")
+    point(job.lg, "waiting", { ["for"] = words, seconds = M.VISIT_SECONDS })
+  end)
+  note(job.lg, "visit", string.format("showed %d desktop(s), named %d window(s)%s", r.shown, r.named,
+    r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
+  for screen, why in pairs(r.failed) do note(job.lg, "visit", "a show failed on " .. screen .. ": " .. tostring(why)) end
+  for screen, why in pairs(r.back) do note(job.lg, "visit", "showing " .. screen .. "'s first desktop again failed: " .. tostring(why)) end
+  job.shown = r.shown
+  job.options.visited = r.visited
+  job.options.visit_out_of_time = r.out_of_time
+  return "unseen", POLL_SECONDS
 end
 
 function PHASE.unseen(job)
@@ -2181,6 +2293,7 @@ function PHASE.finish(job)
   job.answer({ ops = job.first_ops, results = job.results, report = lines, exit = code, world = final,
     own_sizes = own_sizes, own_sizes_changed = changed, tally = tally,
     reload = P.reload_reason(job.ops, job.request_options.may_reload), paused = job.pauses or 0,
+    shown = job.shown or 0,
     extra = final and P.extra_desktops(job.desk, final, { map = job.request_options.map }) or nil })
 end
 

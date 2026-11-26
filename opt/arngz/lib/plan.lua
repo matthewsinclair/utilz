@@ -547,28 +547,42 @@ end
 -- (WindowManager), the menu bar and a strip (Window Server), at layers other
 -- than 0 (cc's read r3). A window a person places is at layer 0, whether
 -- Accessibility can name it or not. windows.js reads the window server's
--- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer>" line per
--- window. An id at a layer other than 0 is FREE: it holds no desktop. So an
--- always-on-top or floating window, or an overlay, holds no desktop either:
--- arngz can remove a desktop while such a window is on it.
-P.WINDOW_LIST_HEADER = "arngz-windows 1"
+-- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer> <pid>" line
+-- per window, the pid being its owner's (version 2; version 1 printed
+-- "<id> <layer>", and either is read). An id at a layer other than 0 is FREE:
+-- it holds no desktop. So an always-on-top or floating window, or an overlay,
+-- holds no desktop either: arngz can remove a desktop while such a window is
+-- on it.
+P.WINDOW_LIST_HEADER = "arngz-windows 2"
+local WINDOW_LIST_HEADERS = { [P.WINDOW_LIST_HEADER] = true, ["arngz-windows 1"] = true }
 
--- The free ids in windows.js's TEXT, as a list, or nil and why the text is
--- not a window list. A list with no free id is a list, not a failure.
+-- The free ids in windows.js's TEXT, as a list, and its layer-0 windows by
+-- owner pid ({ [pid] = {ids} }, empty for a version 1 list); or nil and why
+-- the text is not a window list. A list with no free id is a list, not a
+-- failure.
 function P.parse_window_list(text)
   if type(text) ~= "string" then return nil, "windows.js printed nothing" end
   local lines = {}
   for line in text:gmatch("[^\n]+") do lines[#lines + 1] = line end
-  if lines[1] ~= P.WINDOW_LIST_HEADER then
+  if not WINDOW_LIST_HEADERS[lines[1]] then
     return nil, "windows.js did not print a window list: " .. tostring(lines[1] or "nothing"):sub(1, 200)
   end
-  local free = {}
+  local free, owned = {}, {}
   for i = 2, #lines do
-    local id, layer = lines[i]:match("^(%-?%d+) (%-?%d+)$")
-    if not id then return nil, "windows.js printed a line that is not '<id> <layer>': " .. lines[i]:sub(1, 200) end
-    if tonumber(layer) ~= 0 then free[#free + 1] = tonumber(id) end
+    local id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+)$")
+    if not id then id, layer, pid = lines[i]:match("^(%-?%d+) (%-?%d+) (%d+)$") end
+    if not id then
+      return nil, "windows.js printed a line that is not '<id> <layer> <pid>': " .. lines[i]:sub(1, 200)
+    end
+    if tonumber(layer) ~= 0 then
+      free[#free + 1] = tonumber(id)
+    elseif pid then
+      local p = tonumber(pid)
+      owned[p] = owned[p] or {}
+      owned[p][#owned[p] + 1] = tonumber(id)
+    end
   end
-  return free
+  return free, owned
 end
 
 -- The free ids of WORLD, as a set: observe's world.free_windows. A world that
@@ -826,6 +840,102 @@ function P.extra_desktops(desk, world, options)
   local n = 0
   for di, d in ipairs(desk.displays or {}) do n = n + excess_of(d, screens[di]) end
   return n
+end
+
+-- ---------------- windows on desktops not shown (cc's visit-note, 26 Nov 2026)
+--
+-- After Hammerspoon starts, arngz names a window on a desktop not shown only
+-- through the window filter, which knows a window once its desktop has been
+-- shown. So a running app whose one window sits on such a desktop reads as
+-- unseen until then. apply shows those desktops first (the visit step); diff
+-- and --dry-run never switch desktops and say so in the entry's words.
+
+-- Where BUNDLE's layer-0 windows (world.layer0_windows) are, on the matched
+-- SCREENS: { {di, screen, space, place, user, shown} }, place being the
+-- desktop's place among its display's user desktops.
+function P.window_desktops(world, screens, bundle)
+  local ids = {}
+  for _, aw in ipairs(world.layer0_windows or {}) do
+    if aw.bundle == bundle then
+      for _, id in ipairs(aw.ids or {}) do ids[id] = true end
+    end
+  end
+  local out = {}
+  for di, s in pairs(screens or {}) do
+    local place = {}
+    for ui, sp in ipairs(P.user_spaces(s)) do place[sp.id] = ui end
+    for _, sp in ipairs(s.spaces or {}) do
+      for _, w in ipairs(sp.windows or {}) do
+        if ids[w.id] then
+          out[#out + 1] = { di = di, screen = s.uuid, space = sp.id, place = place[sp.id], user = place[sp.id] ~= nil,
+            shown = sp.active == true }
+          break
+        end
+      end
+    end
+  end
+  table.sort(out, function(a, b)
+    if a.di ~= b.di then return a.di < b.di end
+    return (a.place or math.huge) < (b.place or math.huge)
+  end)
+  return out
+end
+
+-- The desktops apply shows to name the windows of the entries OPS leaves
+-- unseen: each user desktop its display does not show that holds a layer-0
+-- window of such an app, once, in the desk's display order and on each
+-- display in Mission Control's order. A full-screen space is never in it.
+-- { {di, screen, space, place, bundles = {...}} }.
+function P.visit_list(desk, world, screens, ops)
+  local unseen, order = {}, {}
+  for _, op in ipairs(ops or {}) do
+    if op.op == "unseen" and op.bundle and not unseen[op.bundle] then
+      unseen[op.bundle] = true
+      order[#order + 1] = op.bundle
+    end
+  end
+  local by_space, list = {}, {}
+  for _, bundle in ipairs(order) do
+    for _, d in ipairs(P.window_desktops(world, screens, bundle)) do
+      if d.user and not d.shown then
+        local item = by_space[d.space]
+        if not item then
+          item = { di = d.di, screen = d.screen, space = d.space, place = d.place, bundles = {} }
+          by_space[d.space] = item
+          list[#list + 1] = item
+        end
+        item.bundles[#item.bundles + 1] = bundle
+      end
+    end
+  end
+  table.sort(list, function(a, b)
+    if a.di ~= b.di then return a.di < b.di end
+    return a.place < b.place
+  end)
+  return list
+end
+
+-- What an unseen entry of BUNDLE says of where its window is, or nil when the
+-- window list places none: on a desktop apply showed (options.visited, a set
+-- of space ids), on one not yet shown (diff, --dry-run, or a visit step that
+-- ran out of its time, options.visit_out_of_time), or on a full-screen space.
+function P.unseen_where(desk, world, screens, bundle, options)
+  local fullscreen = false
+  for _, d in ipairs(P.window_desktops(world, screens, bundle)) do
+    if d.user and not d.shown then
+      local where = string.format("desktop %d of %s", d.place, P.desk_display_phrase(desk, d.di))
+      if ((options or {}).visited or {})[d.space] then
+        return string.format("its window is on %s, which arngz showed, and Accessibility still could not name it", where)
+      end
+      return string.format("not yet seen since Hammerspoon started: its window is on %s, which apply shows%s", where,
+        (options or {}).visit_out_of_time and string.format("; this run's %s s to show desktops ran out first",
+          tostring(options.visit_out_of_time)) or "")
+    elseif not d.user then
+      fullscreen = true
+    end
+  end
+  if fullscreen then return "its window is on a full-screen space, which arngz leaves alone" end
+  return nil
 end
 
 -- plan(desk, world, options) -> ops, or nil, a refusal and, where the
@@ -1153,9 +1263,14 @@ function P.plan(desk, world, options)
       -- the window not read may be this entry's. This is the one place that is
       -- decided: P.apply_report and P.plan_exit read the mark (issue 0132).
       if took == 0 then
+        -- Where the window list puts its window, when it puts one: a desktop
+        -- not shown since Hammerspoon started, one apply showed, or a
+        -- full-screen space (cc's visit-note).
+        local where = P.unseen_where(desk, world, screens, bundle, options)
         windows[#windows + 1] = {
           op = "unseen", bundle = bundle, path = e.path, uncounted = unread_note == "",
-          reason = string.format("%s is running and no standard window of it on a desktop space%s could be named"
+          reason = where and string.format("%s is running and %s%s", bundle, where, unread_note)
+            or string.format("%s is running and no standard window of it on a desktop space%s could be named"
             .. " (a full-screen window is left alone, and one Accessibility cannot name is not seen)%s", bundle,
             a.window and (" matching " .. string.format("%q", a.window)) or "", unread_note),
           fix = filter_failed and filter_fix or nil,

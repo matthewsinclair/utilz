@@ -2258,7 +2258,7 @@ do
     bad == nil and string.find(tostring(bwhy), "did not print a window list: error:", 1, true) ~= nil, bwhy)
   local odd, owhy = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n501 x\n")
   check("window list: a line that is not '<id> <layer>' fails the list", odd == nil
-    and string.find(tostring(owhy), "not '<id> <layer>': 501 x", 1, true) ~= nil, owhy)
+    and string.find(tostring(owhy), "not '<id> <layer> <pid>': 501 x", 1, true) ~= nil, owhy)
   local silent, swhy = P.parse_window_list(nil)
   check("window list: no text at all is not a list", silent == nil and swhy == "windows.js printed nothing", swhy)
 end
@@ -2317,6 +2317,99 @@ do
   local free = P.free_set({ free_windows = { 5 } })
   check("empty_by: a free id holds no desktop, though it is listed there alone",
     P.empty_by({ 5 }, function() return 1 end, free) and not P.empty_by({ 5, 6 }, function() return 1 end, free))
+end
+
+-- ------------------ windows on desktops not shown (cc's visit-note, 26 Nov)
+--
+-- After a Hammerspoon restart, a window on a desktop not shown is named only
+-- once its desktop has been shown. The base world with Safari's window 102
+-- unnamed on desktop 12, which its display does not show.
+
+print("windows on desktops not shown")
+
+local SAFARI = "com.apple.Safari"
+
+local function safari_on_12()
+  local w = base_world()
+  local sp = w.screens[1].spaces
+  table.remove(sp[1].windows, 2)
+  table.insert(sp[2].windows, { id = 102, named = false })
+  w.layer0_windows = { { bundle = SAFARI, ids = { 102 } } }
+  return w
+end
+
+local function unseen_op(ops)
+  for _, op in ipairs(ops or {}) do
+    if op.op == "unseen" then return op end
+  end
+  return {}
+end
+
+do
+  local free, owned = P.parse_window_list(P.WINDOW_LIST_HEADER .. "\n501 24 77\n102 0 88\n103 0 88\n")
+  check("window list v2: the free ids, and each owner's layer-0 windows",
+    free and #free == 1 and free[1] == 501 and owned and owned[88] and table.concat(owned[88], ",") == "102,103"
+      and owned[77] == nil, tostring(owned))
+  local v1 = P.parse_window_list("arngz-windows 1\n501 24\n")
+  check("window list v1 is still read", v1 and v1[1] == 501)
+
+  local w = safari_on_12()
+  local ops, err = P.plan(base_desk(), w, {})
+  local op = unseen_op(ops)
+  check("unseen: a window on a desktop not shown says it is not yet seen since Hammerspoon started, and where",
+    op.reason == SAFARI .. " is running and not yet seen since Hammerspoon started: its window is on desktop 2 of"
+      .. " display left, which apply shows", err or tostring(op.reason))
+  local screens = P.match_displays(base_desk(), w, {})
+  local list = P.visit_list(base_desk(), w, screens, ops)
+  check("visit: the list holds the desktop not shown that holds the unseen app's window, once",
+    #list == 1 and list[1].space == 12 and list[1].place == 2 and list[1].screen == "SCREEN-A"
+      and table.concat(list[1].bundles, ",") == SAFARI, tostring(#list))
+
+  local visited = P.plan(base_desk(), safari_on_12(), { visited = { [12] = true } })
+  check("unseen: after apply showed the desktop, the entry says so",
+    unseen_op(visited).reason == SAFARI .. " is running and its window is on desktop 2 of display left, which arngz"
+      .. " showed, and Accessibility still could not name it", tostring(unseen_op(visited).reason))
+
+  local late = P.plan(base_desk(), safari_on_12(), { visit_out_of_time = 20 })
+  check("unseen: an app the visit step did not reach stays not yet seen, and says the time ran out",
+    string.find(tostring(unseen_op(late).reason), "not yet seen since Hammerspoon started", 1, true) ~= nil
+      and string.find(tostring(unseen_op(late).reason), "this run's 20 s to show desktops ran out first", 1, true) ~= nil,
+    tostring(unseen_op(late).reason))
+
+  local shown = safari_on_12()
+  shown.screens[1].spaces[1].active, shown.screens[1].spaces[2].active = false, true
+  local sops = P.plan(base_desk(), shown, {})
+  check("visit: a desktop its display shows is not in the list",
+    #P.visit_list(base_desk(), shown, P.match_displays(base_desk(), shown, {}), sops) == 0)
+
+  local fs = safari_on_12()
+  table.remove(fs.screens[1].spaces[2].windows)
+  table.insert(fs.screens[1].spaces, { id = 99, ordinal = 3, type = "fullscreen", uuid = "SPACE-99",
+    windows = { { id = 102, named = false } } })
+  local fops = P.plan(base_desk(), fs, {})
+  check("unseen: a window on a full-screen space says so, and the space is never in the list",
+    unseen_op(fops).reason == SAFARI .. " is running and its window is on a full-screen space, which arngz leaves alone"
+      and #P.visit_list(base_desk(), fs, P.match_displays(base_desk(), fs, {}), fops) == 0,
+    tostring(unseen_op(fops).reason))
+
+  local two = safari_on_12()
+  two.apps_running[#two.apps_running + 1] = "com.apple.mail"
+  table.remove(two.screens[1].spaces[1].windows, 1)
+  table.insert(two.screens[1].spaces[2].windows, { id = 101, named = false })
+  two.layer0_windows[#two.layer0_windows + 1] = { bundle = "com.apple.mail", ids = { 101 } }
+  local tops = P.plan(base_desk(), two, {})
+  local tlist = P.visit_list(base_desk(), two, P.match_displays(base_desk(), two, {}), tops)
+  check("visit: two unseen apps on one desktop show it once, with both apps",
+    #tlist == 1 and #tlist[1].bundles == 2, tostring(#tlist))
+
+  local plain = P.plan(base_desk(), (function()
+    local w2 = safari_on_12()
+    w2.layer0_windows = nil
+    return w2
+  end)(), {})
+  check("unseen: with no window list, the entry keeps the words it had",
+    string.find(tostring(unseen_op(plain).reason), "no standard window of it on a desktop space could be named", 1, true)
+      ~= nil, tostring(unseen_op(plain).reason))
 end
 
 print(string.format("plan_test: %d passed, %d failed", passed, failed))
