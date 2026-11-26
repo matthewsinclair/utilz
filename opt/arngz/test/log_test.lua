@@ -241,7 +241,12 @@ local function new_fake()
       end,
       activeSpaceOnScreen = function() return 3 end,
     },
-    execute = function() return "<plist/>", true, "exit", 0 end,
+    -- defaults export answers a plist; windows.js (WP 88504807) a window
+    -- list with no window in it, so no id is free.
+    execute = function(command)
+      if tostring(command):find("windows.js", 1, true) then return P.WINDOW_LIST_HEADER .. "\n", true, "exit", 0 end
+      return "<plist/>", true, "exit", 0
+    end,
     plist = { readString = function() return { SpacesDisplayConfiguration = { ["Management Data"] = { Monitors = MONITORS } } } end },
   }
   function f.drain()
