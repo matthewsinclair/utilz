@@ -1,0 +1,16 @@
+{
+  "id": "01M8BA3SZ71B7HCN1J6KQSNPZ4",
+  "ts": "2026-11-26T06:53:59.143Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 54,
+    "text": "ST6d8eed9's removeSpace probe r2 (desks1125/probe: probe.zsh 8c29d64a, probe.lua 06424982, pinning wt-desks1125's mc.lua dd47851b, read SOUND by vc): released when vc calls hv's sitting. It proves on macOS 27 that a remove through mc.lua takes exactly the tile's desktop, and records whether Mission Control showed before and after each step (ic's F2). P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Another id gone sends WP A back to design."
+  }
+}

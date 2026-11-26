@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 6c722a89-1864-415d-862f-5af31d1ca9c9
-heartbeat_at: 2026-11-25 16:37Z
+heartbeat_at: 2026-11-26 06:54Z
 status: active
-focus: "Folded for hv decision 40. After the compact: /in-session, then hold for vc's word. At hv's ready: spike v3 and the probe (holds 53, 54), then A's run (run-a.sh f118d73e at 365d3cf3), then STca1b7f9's spike parts. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "Folded for hv decision 45. After the compact: /in-session, then hold for vc's word. Next: the probe r2 with hv (hold 54), then WP A's landing at 1ee77ee1 (finder plus A, run-tip GREEN, ic SOUND), then the live run. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 ---
 
@@ -13,8 +13,8 @@ claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
 
 ## DOING
 
-- STca1b7f9's spike and the spike's code. The code before the spike is on main (18870cc5, AT ids at 3fd0923c, by hv decision 18). Next: spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) on hv's ready through vc; then the spike's code (WP1, WP2, the mission leg, WP6's create) and its own booked run. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6. (edited)
-- ST6d8eed9e4875782f (hv decisions 23, 26 and 31): B, C and D landed (df4f5e74); WP C done; WP B and WP D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. README's --no-launch fix landed as 86596d53 (vc decision 119). WP A's code, at risk and not run: 90bc0d8e (b26cd5a1 plus ic's S1) on cc/desks1125 in ~/Devel/scratch/utilz-cc/wt-desks1125 (net over 381cc5cb sha256 c4b3f263, 7 paths); vc READ it for its stage, ic SOUND. ic stacks A's toast parts (AC-88504807.8) on 90bc0d8e at vc's go; ic AGREED the contract draft desks1125/progress-a.md (bfadc705). Next: the probe (hold 54), A's booked run, the landing with its records (AT rows, design r6 d824d6e4, progress.md), then one live run of A, B and D with hv. (edited)
+- STca1b7f9: WP6's create ships in 2.15.0 with arngz's Mission Control finder (mc.lua, in WindowManager on macOS 27; mcdiag2). WP1, WP2 and the mission leg go to the spcz thread (hv's pick) and stay unwritten. Issue I7fce35c stays open for AC-322a6511.7, AC-026eadfc.1 to .4 and AC-322a6511.6 until the spcz split is recorded. (edited)
+- ST6d8eed9e4875782f: B, C and D landed (df4f5e74); WP C done; B and D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is back in 2.15.0 on arngz's own Mission Control finder (hv decision 43, "Desktop-count only"): tip cc/desks1126 at 1ee77ee1 in ~/Devel/scratch/utilz-cc/wt-desks1125 (finder cc/mc1126 at b4390952, A re-applied, its two calls swapped); ic SOUND; run-tip.sh (1670381a) GREEN in 01M8B9X6SMHY67F13BAJ6Q638X: 195/195, 4 arms red over a4e5fa61, toast leg as named. Next on vc's word: the probe r2 with hv (desks1125/probe, zsh 8c29d64a, lua 06424982, mc.lua dd47851b), then the landing with its records, then the live run (steps sent to vc). (edited)
 
 ## TODO
 
@@ -22,8 +22,7 @@ _(none)_
 
 ## Holds
 
-- STca1b7f9's spike v3, M1 and M2 (spike.zsh 2692ed78, spike.lua e499c9c5, read SOUND by vc), in one slot with hold 54's probe: released when vc says hv is ready. Slot 01M892ET35S55KFTBZ1PR1DGY4 was granted at 10:01Z on 25 Nov and released not run at 11:31Z for hv decision 33's fold. Then a fresh light ask naming spike_zsh=2692ed78dc3d6e79, spike_lua=e499c9c594340c6d, probe_zsh=185cbd7a639af91e, probe_lua=653aa999bea077d1; the two load-only checks, then hv's go; END at the probe's end, with the results and the load at each step. (edited)
-- ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999, read SOUND by vc, in desks1125/probe/): runs after spike v3 in hold 53's slot, released when vc says hv is ready. P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Then WP A's at-risk code (b04b86ea on cc/desks1125) goes on, or goes back to design if the probe shows another id gone. (edited)
+- ST6d8eed9's removeSpace probe r2 (desks1125/probe: probe.zsh 8c29d64a, probe.lua 06424982, pinning wt-desks1125's mc.lua dd47851b, read SOUND by vc): released when vc calls hv's sitting. It proves on macOS 27 that a remove through mc.lua takes exactly the tile's desktop, and records whether Mission Control showed before and after each step (ic's F2). P4 needs hv's hands once. Its results go in design.md's Runs (AC-88504807.6). Another id gone sends WP A back to design. (edited)
 
 ## Watch-outs
 

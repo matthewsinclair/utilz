@@ -1,0 +1,16 @@
+{
+  "id": "01M89SF5NG0T4BF1TQ7TWDZR7Y",
+  "ts": "2026-11-25T16:43:51.344Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 76,
+    "text": "ST6d8eed9e4875782f: B, C and D landed (df4f5e74); WP C done; B and D wait for their live ACs (AC-35219619.5, AC-4cb617e2.5) in the live run with hv. WP A is back in 2.15.0 on arngz's own Mission Control finder (hv decision 43, \"Desktop-count only\"): tip cc/desks1126 at 1ee77ee1 in ~/Devel/scratch/utilz-cc/wt-desks1125 (finder cc/mc1126 at b4390952, A re-applied, its two calls swapped); ic SOUND; run-tip.sh (1670381a) GREEN in 01M8B9X6SMHY67F13BAJ6Q638X: 195/195, 4 arms red over a4e5fa61, toast leg as named. Next on vc's word: the probe r2 with hv (desks1125/probe, zsh 8c29d64a, lua 06424982, mc.lua dd47851b), then the landing with its records, then the live run (steps sent to vc)."
+  }
+}
