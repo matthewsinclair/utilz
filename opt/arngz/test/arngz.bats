@@ -3304,16 +3304,19 @@ assert_sounds() {
   assert_output "$ARNGZ_SOUND_END"
 }
 
-# One apply sent SIGNAL once the engine has its ask, in a job of its own so
-# the signal is not ignored as a background job's SIGINT is; STATUS is its
-# exit. Each trial starts with no calls and no sounds logged.
+# One apply sent SIGNAL once the engine has its ask; STATUS is its exit. Each
+# trial starts with no calls and no sounds logged. bash starts a background
+# job with SIGINT ignored, and a shell cannot trap a signal ignored when it
+# starts, so the CLI would never see the INT (set -m did not change this in
+# cc's run of f90fda57: INT exited 1, after the whole wait). perl puts SIGINT
+# back to its default and then execs the CLI, so the CLI's trap is set as it
+# is under a terminal's Ctrl-C.
 interrupted_apply() {
   local signal="$1" pid deadline
   rm -f "$FAKE_HS_LOG/calls" "$FAKE_HS_LOG/sounds"
-  set -m
-  "$UTILZ_BIN_DIR/arngz" apply zeop1 >/dev/null 2>&1 3>&- &
+  perl -e '$SIG{INT} = "DEFAULT"; exec @ARGV or die "exec $ARGV[0]: $!\n"' \
+    "$UTILZ_BIN_DIR/arngz" apply zeop1 >/dev/null 2>&1 3>&- &
   pid=$!
-  set +m
   deadline=$((SECONDS + 10))
   until grep -qx 'run apply' "$FAKE_HS_LOG/calls" 2>/dev/null || [[ $SECONDS -ge $deadline ]]; do
     sleep 0.1
