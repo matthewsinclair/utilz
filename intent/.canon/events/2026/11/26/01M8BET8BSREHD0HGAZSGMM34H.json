@@ -1,0 +1,16 @@
+{
+  "id": "01M8BET8BSREHD0HGAZSGMM34H",
+  "ts": "2026-11-26T08:16:09.081Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "seq": 40,
+    "text": "2.15.0 CHANGELOG lines for arngz's finder, WP A's removal and I40cbb9b are landed (31952800, 4d7c113d, a65037a9; vc's LANDING END). Released when vc says that cc's N3 measure needs no fix forward to those lines, or when dc lands the fix forward that vc names."
+  }
+}
