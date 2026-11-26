@@ -1,0 +1,14 @@
+{
+  "id": "01M8BP1XQS5N1ZV8NN7XW5Z5CD",
+  "ts": "2026-11-26T10:22:40.378Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "STca1b7f9d59191dfc/AC-322a6511.7"
+  },
+  "payload": {
+    "evidence": "hv's live apply run 20261126T101454Z-39279 at cc/visit1126 8b185fb6 (landed in main 83488730), zeopit: arngz's own Mission Control finder (mc.lua) created desktop 156 on main, which needed 7 and had 6 (1477 ms), and the moves to it read back on 156"
+  }
+}

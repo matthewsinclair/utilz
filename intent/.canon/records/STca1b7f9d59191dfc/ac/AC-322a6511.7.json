@@ -3,6 +3,7 @@
   "text": "M2's result decides the create. If Mission Control's group appeared within 2 s, arngz opens Mission Control itself before a create and looks for the group across callbacks, and the live run creates a desktop on a display that needs one. Otherwise AC-322a6511.4's failure is the answer.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's live apply run 20261126T101454Z-39279 at cc/visit1126 8b185fb6 (landed in main 83488730), zeopit: arngz's own Mission Control finder (mc.lua) created desktop 156 on main, which needed 7 and had 6 (1477 ms), and the moves to it read back on 156"
   }
 }
