@@ -447,8 +447,8 @@ teardown_file() {
   for u in $(_utilities); do
     [ -e "$GUARD_INSTALL/bin/$u" ] || continue
     n=$((n + 1))
-    a=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1 | head -1)
-    b=$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" "$u" --version 2>&1 | head -1)
+    a=$(version_pair_line "$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/$u" --version 2>&1)")
+    b=$(version_pair_line "$(env -u UTILZ_HOME "$GUARD_INSTALL/bin/utilz" "$u" --version 2>&1)")
     [[ "$a" == "utilz:$fw/$u:"* ]] || { echo "  $u (symlink form): $a"; bad=$((bad + 1)); }
     [ "$a" = "$b" ] || { echo "  $u: forms differ from the install"; bad=$((bad + 1)); }
   done

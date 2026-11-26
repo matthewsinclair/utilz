@@ -25,7 +25,7 @@ SEMVER='[0-9]+\.[0-9]+\.[0-9]+'
   local u line bad=0 n=0
   for u in $(_utilities); do
     n=$((n + 1))
-    line=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1 | head -1)
+    line=$(version_pair_line "$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1)")
     # THE FORM is the requirement. A `contains` check cannot see a malformed
     # pair that happens to hold the right characters -- the ST0013 lesson.
     [[ "$line" =~ ^utilz:${SEMVER}/${u}:${SEMVER}$ ]] || {
@@ -43,7 +43,7 @@ SEMVER='[0-9]+\.[0-9]+\.[0-9]+'
   [ -n "$fw" ] || fail "./VERSION is empty"
   for u in $(_utilities); do
     n=$((n + 1))
-    line=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1 | head -1)
+    line=$(version_pair_line "$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1)")
     [[ "$line" == "utilz:$fw/"* ]] || fail "$u reports '$line', which does not open with the framework's own $fw"
   done
   assert_swept_all "$n"
@@ -70,9 +70,9 @@ SEMVER='[0-9]+\.[0-9]+\.[0-9]+'
   # tolerated them would pass while exactly these two stayed broken.
   local u out
   for u in todo prez; do
-    out=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1 | head -1)
+    out=$(version_pair_line "$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1)")
     [[ "$out" =~ ^utilz:${SEMVER}/${u}:${SEMVER}$ ]] || fail "$u (dispatcher form) reports '$out'"
-    out=$("$UTILZ_BIN_DIR/$u" --version 2>&1 | head -1)
+    out=$(version_pair_line "$("$UTILZ_BIN_DIR/$u" --version 2>&1)")
     [[ "$out" =~ ^utilz:${SEMVER}/${u}:${SEMVER}$ ]] || fail "$u (symlink form) reports '$out'"
   done
 }
@@ -125,8 +125,8 @@ teardown() {
   assert_success
 
   local a b
-  a=$("$UTILZ_BIN_DIR/$name" --version 2>&1 | head -1)
-  b=$("$UTILZ_BIN_DIR/utilz" "$name" --version 2>&1 | head -1)
+  a=$(version_pair_line "$("$UTILZ_BIN_DIR/$name" --version 2>&1)")
+  b=$(version_pair_line "$("$UTILZ_BIN_DIR/utilz" "$name" --version 2>&1)")
 
   # `--` keeps a `-`-leading pattern a PATTERN. Without it grep parses
   # `--version)` as an option, errors, returns non-zero, and the refutation

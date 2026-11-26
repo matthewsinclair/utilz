@@ -335,10 +335,12 @@ show_version() {
     # every tool released through Homebrew says it. It replaced the framework's
     # three lines (`utilz:<version>`, the description, the tree).
     #
-    # A utility keeps hv's pair and its description, and the tool's line comes
-    # last (utilz-vc, 24 Oct), so a utility's answer also names the tree. That
-    # line names the utility, as T4 gives each binary of a tool the tool's line
-    # under its own name (issue I4cbec17). Its place is the one statement that
+    # A utility's answer also names the tree: the tool's line, under the
+    # utility's own name, as T4 gives each binary of a tool the tool's line
+    # under its own name (issue I4cbec17). That line comes FIRST, route 2 of
+    # issue I4cbec17, which moves hv's pair from D2's line one to line two:
+    # devbin's reader takes a tool's line from line one (tool_copy_line). The
+    # description follows the pair. The line's place is the one statement that
     # prints it below.
     #
     # NO `v` PREFIX ANYWHERE (hv, 2026-09-08, resolving D3 toward symmetry):
@@ -348,11 +350,11 @@ show_version() {
       utilz_version_line
       return 0
     fi
+    utilz_version_line "$util"
     echo "utilz:$(get_utilz_version)/$util:$version"
     if [[ -n "$description" && "$description" != "null" ]]; then
       echo "$description"
     fi
-    utilz_version_line "$util"
   else
     # NAME WHAT IS ACTUALLY MISSING. This said "missing $util.yaml"
     # unconditionally, and printed it for a tree whose yaml was present and

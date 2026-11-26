@@ -478,17 +478,34 @@ assert_output_matches() {
   fi
 }
 
-# THE PLACES OF A UTILITY'S --version LINES (issue I4cbec17): hv's pair
-# (ST0015's D2) first, then the description, and the tool's version line last,
-# under the utility's own name (T4). A row that reads one of these lines through
-# these two functions follows the line when it moves, by one change here.
+# THE PLACES OF A UTILITY'S --version LINES (issue I4cbec17): the tool's
+# version line first, under the utility's own name (T4), where devbin's reader
+# takes it; then hv's pair (ST0015's D2); then the description. A row that
+# checks the pair or the tool's line reads it through these two functions, or
+# through assert_version_pair below, so a line that moves is one change here.
 # Usage: version_pair_line "$output"; version_tool_line "$output"
 version_pair_line() {
-  printf '%s\n' "$1" | sed -n '1p'
+  printf '%s\n' "$1" | sed -n '2p'
 }
 
 version_tool_line() {
-  printf '%s\n' "$1" | sed -n '$p'
+  printf '%s\n' "$1" | sed -n '1p'
+}
+
+# Assert that $output gives <util>'s pair on the pair's line: `utilz:<v>/<util>:<v>`,
+# with <version> as the utility's version when it is given. Every utility's
+# suite asks this one assertion, so the pair's form and place have one home.
+# Usage: assert_version_pair <util> [<version>]
+assert_version_pair() {
+  local util="$1" version="${2:-}" pair semver='[0-9]+\.[0-9]+\.[0-9]+'
+  pair=$(version_pair_line "$output")
+  if [[ -n "$version" ]]; then
+    if [[ ! "$pair" =~ ^utilz:${semver}/(.*)$ || "${BASH_REMATCH[1]}" != "$util:$version" ]]; then
+      fail "Expected the pair utilz:<v>/$util:$version on the pair's line, got '$pair'\nActual output:\n$output"
+    fi
+  elif [[ ! "$pair" =~ ^utilz:${semver}/${util}:${semver}$ ]]; then
+    fail "Expected the pair utilz:<v>/$util:<v> on the pair's line, got '$pair'\nActual output:\n$output"
+  fi
 }
 
 # Assert file exists

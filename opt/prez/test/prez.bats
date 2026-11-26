@@ -616,12 +616,12 @@ EOS
   # standing next to. The claim worth keeping is that both channels read the
   # ONE declared version; the framework's own line shape is not the binary's.
   run "$UTILZ_HOME/bin/utilz" prez --version
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/prez:$declared($|[^0-9.])"
+  assert_version_pair prez "$declared"
 
   # And the symlink form must agree with it EXACTLY -- the form-disagreement
   # was the defect, and a test exercising one form cannot see it.
   run "$UTILZ_HOME/bin/prez" --version
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/prez:$declared($|[^0-9.])"
+  assert_version_pair prez "$declared"
 
   if [ -x "$CRATE/target/release/prez" ]; then
     run "$CRATE/target/release/prez" --version

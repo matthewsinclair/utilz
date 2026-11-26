@@ -170,7 +170,7 @@ run_without_yq() {
   assert_output_matches "^utilz [0-9]+\.[0-9]+\.[0-9]+ \((dev|opt|brew), [0-9a-f]{12}(\+dirty)?\)$"
 }
 
-@test "show_version() gives a utility its pair, then the tool's line under the utility's own name (issue I4cbec17)" {
+@test "show_version() gives a utility the tool's line under the utility's own name, then its pair (issue I4cbec17)" {
   local fw declared pair tool
   fw=$(cat "$UTILZ_HOME/VERSION")
   declared=$(cat "$UTILZ_HOME/opt/mdagg/VERSION")

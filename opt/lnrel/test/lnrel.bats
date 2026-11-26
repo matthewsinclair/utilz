@@ -47,7 +47,7 @@ require_gnu_realpath() {
   # weak it was satisfied by the "v" in "every" inside a description, which
   # is why five of the ten tests carrying it stayed GREEN through a change
   # that rewrote every one of these lines. ST0015/AC01.
-  assert_output_matches "^utilz:[0-9]+\.[0-9]+\.[0-9]+/lnrel:[0-9]+\.[0-9]+\.[0-9]+($|[^0-9.])"
+  assert_version_pair lnrel
 }
 
 @test "lnrel with unknown option shows error" {
