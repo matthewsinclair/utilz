@@ -2300,8 +2300,7 @@ do
   fsp.windows[#fsp.windows + 1] = { id = 706, named = false }
   floating.free_windows[#floating.free_windows + 1] = 706
   local fops, ferr = P.plan(base_desk(), floating, {})
-  check("window list: a desktop that holds only a floating window (a layer other than 0) is empty, and removed;"
-    .. " macOS moves the window to another desktop",
+  check("window list: a desktop that holds only a floating window (a layer other than 0) is empty, and removed",
     removed_ids(fops) == "20", ferr or ops_text(fops))
 
   local unread = world_with_system_windows()

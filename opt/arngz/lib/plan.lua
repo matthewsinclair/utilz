@@ -549,8 +549,8 @@ end
 -- Accessibility can name it or not. windows.js reads the window server's
 -- full list and prints WINDOW_LIST_HEADER, then one "<id> <layer>" line per
 -- window. An id at a layer other than 0 is FREE: it holds no desktop. So an
--- always-on-top or floating window, or an overlay, holds no desktop either,
--- and macOS moves it to another desktop when its desktop goes.
+-- always-on-top or floating window, or an overlay, holds no desktop either:
+-- arngz can remove a desktop while such a window is on it.
 P.WINDOW_LIST_HEADER = "arngz-windows 1"
 
 -- The free ids in windows.js's TEXT, as a list, or nil and why the text is
