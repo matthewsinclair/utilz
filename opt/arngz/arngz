@@ -116,7 +116,7 @@ VERBS:
   <desk>                     the same as apply <desk>
   apply <desk> [--dry-run] [--no-create] [--map <name>=<uuid>]
                              arrange this machine's windows as the desk says
-  discover [--grid WxH] [--save <desk>] [--force]
+  discover [--grid WxH] [--save <desk>] [--force] [--with-gaps]
                              print the arrangement on screen now as a desk
   diff <desk>                print what apply would do, and change nothing
   list                       the desks in the catalogue, with display and app counts

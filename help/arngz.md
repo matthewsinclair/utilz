@@ -16,7 +16,7 @@
 ```bash
 arngz <desk>
 arngz apply <desk> [--dry-run] [--no-create] [--map <name>=<uuid>]
-arngz discover [--grid WxH] [--save <desk>] [--force]
+arngz discover [--grid WxH] [--save <desk>] [--force] [--with-gaps]
 arngz diff <desk>
 arngz list
 arngz show <desk>
@@ -138,6 +138,8 @@ The report names every app entry in the desk with its outcome: `placed`, `moved 
 
 The desk goes to stdout and the report to stderr, so `arngz discover > desk.yaml` keeps the desk alone. `--save <desk>` writes it into the catalogue instead, refusing an existing desk unless `--force` is given, and makes it the current desk. Either way, the desk is checked by the validator first. A desk saved is written from one reading of the screens, so `--save` first waits for the displays to settle, as apply does, and if they are still changing at 20 s it refuses, exit 2, and writes nothing. A plain `discover` only prints what it sees, and does not wait. A read in which Hammerspoon's window filter failed is never a desk, since it leaves out the windows on desktops not shown, and `--save --force` writes the whole desk. So the CLI reloads Hammerspoon's config and runs discover once more, as apply does. If the filter fails again, discover refuses, exit 2, prints and saves nothing, and its fix is to quit Hammerspoon, open it again, then run arngz again.
 
+Before it records, `discover` shows each desktop that is not shown and holds a window of a running app it could not name, once, through Mission Control, names that app's windows, shows each display the desktop it began on again, and reads the screens once more; a plain `discover` does so too, since it prints the desk a save would write. A window of a size no person uses (under 50 points a side) is left out of this. Any ordinary window it still could not name is a gap, one line each on stderr: `not recorded: Console on desktop 3 on main: <why>`. A plain `discover` with gaps prints the desk and exits 1. `--save` with gaps refuses, exit 2, and leaves the desk file and the current desk as they were, `--force` or not, since `--force` only means overwrite; its fix names the desktop to show, and `--with-gaps`, which saves the desk without them and exits 1. Save Desk from Menuz does not pass `--with-gaps`, so a gap there is a refusal and its notice.
+
 ### Toasts
 
 While `apply` runs, Hammerspoon shows a toast at the bottom of the main display, however the apply was started: from Menuz, in a terminal, or by `auto`.
@@ -234,17 +236,18 @@ Every verb that reads a desk validates it first, and refuses with exit 2 on any 
 
 ### Options
 
-| Option                | Verb       | Effect                                                       |
-| --------------------- | ---------- | ------------------------------------------------------------ |
-| `--dry-run`           | `apply`    | print the plan and change nothing                            |
-| `--no-create`         | `apply`    | do not create missing spaces; still remove extra empty ones  |
-| `--map <name>=<uuid>` | `apply`    | bind one desk display to one screen for this run             |
-| `--grid WxH`          | `discover` | the grid windows are snapped to; 8x4 when absent             |
-| `--save <desk>`       | `discover` | write the discovered desk into the catalogue                 |
-| `--force`             | `discover` | with `--save`, overwrite an existing desk                    |
-| `--yes`               | `init`     | do what init reports Hammerspoon needs, rather than print it |
-| `--help`, `-h`        |            | print this help                                              |
-| `--version`           |            | print arngz's version                                        |
+| Option                | Verb       | Effect                                                                                     |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------------ |
+| `--dry-run`           | `apply`    | print the plan and change nothing                                                          |
+| `--no-create`         | `apply`    | do not create missing spaces; still remove extra empty ones                                |
+| `--map <name>=<uuid>` | `apply`    | bind one desk display to one screen for this run                                           |
+| `--grid WxH`          | `discover` | the grid windows are snapped to; 8x4 when absent                                           |
+| `--save <desk>`       | `discover` | write the discovered desk into the catalogue                                               |
+| `--force`             | `discover` | with `--save`, overwrite an existing desk                                                  |
+| `--with-gaps`         | `discover` | with `--save`, save a desk that leaves out the windows arngz could not name, and name them |
+| `--yes`               | `init`     | do what init reports Hammerspoon needs, rather than print it                               |
+| `--help`, `-h`        |            | print this help                                                                            |
+| `--version`           |            | print arngz's version                                                                      |
 
 An option that takes a value also takes it after `=`: `--map=left=<uuid>`, `--grid=12x8`, `--save=zeop1`. `--map` may be given once per desk display.
 
