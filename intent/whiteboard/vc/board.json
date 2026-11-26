@@ -4,10 +4,10 @@
     "moniker": "vc",
     "name": "Validation Claude",
     "role": "validation",
-    "session_id": "6110fb4a-e5c9-40a3-b6f9-8bf020cbdd48",
-    "heartbeat_at": "2026-11-26T12:50:06.615Z",
+    "session_id": "bbf0140c-70da-4570-8e04-c18e29c296ad",
+    "heartbeat_at": "2026-11-26T14:06:53.469Z",
     "status": "active",
-    "focus": "Folded for hv decision 57 (hv compacts and closes, picks up from home). After the compact: /in-session, hold for devbin-vc's word that hv is back, then the fix round: cc's fix for the apply response that Hammerspoon could not write, ic's marks changes (hv decision 58: arngz: running), ONE bats run, hv's one live sitting in a slot booked first, then land cc/save1126, hv's push, CI and dispatch, the cut. Bank: cc/save1126 9af5e8f3, not landed. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md",
+    "focus": "Fix round GO at 14:05Z (vc decision on devbin-vc's word): cc's response fix + strict writer + W4, ic's running mark + M1 on 9af5e8f3, cc integrates; then vc's read, ONE bats run, hv's sitting at homere (apply, diff, which, Save into check1126). Ask hv: homere's Music desktop. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-09-11 16:33Z",
@@ -2780,6 +2780,14 @@
       "state": "archived",
       "archived_at": "2026-11-26T12:45:13.706Z",
       "recorded_at": "2026-11-25T15:03:53.793Z"
+    },
+    {
+      "node": "vc",
+      "kind": "decision",
+      "seq": 120,
+      "text": "vc, 26 Nov 2026, by vc's date -u of 14:05Z, on devbin-vc's word of 14:03Z that hv has started the estate's sessions: the fix round of hv decisions 58 to 60 is GO, with no run. cc writes its design note, then the apply response fix (unseen as a list, with one set builder), the strict fake writer with arms red over 9af5e8f3, W4 (discover's space line, XS) and the driver. ic codes running-note.md with M1 on 9af5e8f3 at the same time. vc read both notes (running-note.md 46f7ed11, m1-note.md f4cf7681) and found no fault that changes what hv approved. ic's dated correction, that both settle waits read \"running\", changes no rule, code or arm. cc takes ic's commits onto cc/save1126 by the gate's route and sends vc the final tip and the driver's sha256. dc amends the 2.15.0 CHANGELOG draft in scratch, with no line for the response fault, which never shipped, and makes devbin-vc's one doctor read. Then vc reads the notes, the diffs and the driver, and cc asks the Desk for ONE bats run. hv is at homere (the built-in and HG560T34 are attached), so hv's sitting is apply homere, diff homere, which, then the Save into check1126, against vc's criteria rewritten for homere. vc first puts homere's Music desktop to hv.",
+      "state": "live",
+      "recorded_at": "2026-11-26T14:06:53.316Z"
     }
   ],
   "sent": [
@@ -11730,6 +11738,16 @@
       "id": "01M8BQ61NJ2PCBZ2Q8K2CF8SPT",
       "sender": "ic",
       "handled_at": "2026-11-26T10:45:09.021Z"
+    },
+    {
+      "id": "01M8C2M5EHXFMM5HPW8RJG31AG",
+      "sender": "cc",
+      "handled_at": "2026-11-26T14:06:24.857Z"
+    },
+    {
+      "id": "01M8C2MDBX4X5FT2420467GKE4",
+      "sender": "dc",
+      "handled_at": "2026-11-26T14:06:25.006Z"
     }
   ]
 }

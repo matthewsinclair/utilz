@@ -1,0 +1,15 @@
+{
+  "id": "01M8C2WFC48E084YX2NJP0VQ6R",
+  "ts": "2026-11-26T14:06:53.316Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "vc, 26 Nov 2026, by vc's date -u of 14:05Z, on devbin-vc's word of 14:03Z that hv has started the estate's sessions: the fix round of hv decisions 58 to 60 is GO, with no run. cc writes its design note, then the apply response fix (unseen as a list, with one set builder), the strict fake writer with arms red over 9af5e8f3, W4 (discover's space line, XS) and the driver. ic codes running-note.md with M1 on 9af5e8f3 at the same time. vc read both notes (running-note.md 46f7ed11, m1-note.md f4cf7681) and found no fault that changes what hv approved. ic's dated correction, that both settle waits read \"running\", changes no rule, code or arm. cc takes ic's commits onto cc/save1126 by the gate's route and sends vc the final tip and the driver's sha256. dc amends the 2.15.0 CHANGELOG draft in scratch, with no line for the response fault, which never shipped, and makes devbin-vc's one doctor read. Then vc reads the notes, the diffs and the driver, and cc asks the Desk for ONE bats run. hv is at homere (the built-in and HG560T34 are attached), so hv's sitting is apply homere, diff homere, which, then the Save into check1126, against vc's criteria rewritten for homere. vc first puts homere's Music desktop to hv."
+  }
+}
