@@ -1625,6 +1625,8 @@ arm("an apply that visits before and after a removal", function()
     visits == 2, tostring(visits))
   check("visit twice: the second visit keeps the window the first one named (ic's F1)",
     M.visit_index[102] ~= nil)
+  check("visit twice: a run that ends where it began says no display needed showing again",
+    find(recs, "back", "no display needed showing again") ~= nil, last_line(recs))
   check("visit twice: the finished point counts the desktops both visits showed (ic's F2)",
     point_of(recs, "R-VISIT2", "finished"):find(" shown=" .. visits, 1, true) ~= nil, point_of(recs, "R-VISIT2", "finished"))
 end)
@@ -1679,6 +1681,9 @@ arm("an apply that ends each display on its start desktop", function()
     response and (tostring(response.status) .. " / " .. tostring(response.exit) .. " / " .. L.ids(f.live)))
   check("way back: the display ends on the desktop it showed when the run began, shown last",
     shown == start and shows[#shows] == start, L.ids(shows))
+  -- The start desktop was the display's 3rd user desktop, after the new one.
+  check("way back: the log says which desktop each display was shown again",
+    find(records(log), "back", "left desktop 3 shown again, where it began") ~= nil, last_line(records(log)))
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))

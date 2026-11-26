@@ -1437,7 +1437,7 @@ local function give_back(ctx, results)
   -- Each display back on the desktop it began on (hv decision 50), before
   -- focus, so the window that had focus is most likely on a desktop shown.
   if ctx.start_shown then
-    restore("showing each display its start desktop", function() M.way_back(ctx.start_shown, results, ctx.start_words) end)
+    restore("showing each display its start desktop", function() M.way_back(ctx.start_shown, results, ctx.start_words, ctx.lg) end)
   end
   if ctx.focused then
     restore("giving focus back", function()
@@ -1573,7 +1573,8 @@ end
 -- WORDS ({[screen] = {display, place}}) name the desktop in it (ic's W1).
 M.BACK_SECONDS = 20
 
-function M.way_back(start, results, words)
+function M.way_back(start, results, words, lg)
+  local shown_back, ran_out = 0, false
   local function said(screen, space)
     local w = (words or {})[screen]
     if w and w.display and w.place then return string.format("%s desktop %d", w.display, w.place) end
@@ -1589,6 +1590,7 @@ function M.way_back(start, results, words)
       results[#results + 1] = { op = "restore", status = "note",
         reason = string.format("%s not shown again: the %s s to go back ran out", said(screen, space),
           tostring(M.BACK_SECONDS)) }
+      ran_out = true
       break
     end
     -- Cheapest first: a display that shows it already, then a desktop gone,
@@ -1601,12 +1603,18 @@ function M.way_back(start, results, words)
     end
     if exists and hs.spaces.spaceType(space) == "user" then
       local ok, why = show_by_tile(screen, space)
-      if not ok then
+      if ok then
+        shown_back = shown_back + 1
+        -- A way back that worked is in the log too (vc's ask), so a live
+        -- check reads from the log alone where each display ended.
+        note(lg, "back", string.format("%s shown again, where it began", said(screen, space)))
+      else
         results[#results + 1] = { op = "restore", status = "note",
           reason = string.format("showing %s again, where it began, failed: %s", said(screen, space), tostring(why)) }
       end
     end
   end
+  if shown_back == 0 and not ran_out then note(lg, "back", "no display needed showing again: each shows the desktop it began on, or that desktop is gone") end
 end
 
 -- THE VISIT STEP (cc's visit-note, 26 Nov 2026). After Hammerspoon starts, a
@@ -2387,7 +2395,7 @@ function PHASE.finish(job)
     give_back(job.ctx, job.results)
   elseif job.start_shown then
     -- A run that changed nothing but its visit step still goes back.
-    local ok, err = pcall(M.way_back, job.start_shown, job.results, job.start_words)
+    local ok, err = pcall(M.way_back, job.start_shown, job.results, job.start_words, job.lg)
     if not ok then
       job.results[#job.results + 1] = { op = "restore", status = "failed",
         reason = "showing each display its start desktop: " .. tostring(err) }
