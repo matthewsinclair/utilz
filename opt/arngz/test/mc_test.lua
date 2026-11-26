@@ -135,6 +135,40 @@ do
   check("an action that raises gives its words", ok == nil and why == "no such action", why)
 end
 
+print("the close")
+do
+  -- A fake clock: sleep moves now on by the time asked for.
+  local function clock()
+    local c = { t = 0, sleeps = 0 }
+    c.now = function() return c.t end
+    c.sleep = function(us) c.t = c.t + us * 1e3; c.sleeps = c.sleeps + 1 end
+    return c
+  end
+  -- Mission Control that still shows for SHOWING reads, then does not.
+  local function closing(showing)
+    local reads = 0
+    return function()
+      reads = reads + 1
+      return reads <= showing
+    end
+  end
+
+  local c = clock()
+  local ok, why = MC.await_closed(closing(0), c)
+  check("a closed Mission Control is not waited for", ok == true and c.sleeps == 0, why)
+
+  local still = 3
+  c = clock()
+  ok, why = MC.await_closed(closing(still), c)
+  check("a closing Mission Control is waited for until it has closed", ok == true and c.sleeps == still, why)
+
+  c = clock()
+  ok, why = MC.await_closed(function() return true end, c)
+  local limit = MC.OPEN_SECONDS * 1e9
+  check("one that never closes fails with a reason", ok == nil and why == MC.NOT_CLOSED, why)
+  check("and fails at OPEN_SECONDS, not before or a poll after", c.t >= limit and c.t < limit + MC.POLL_US * 1e3, tostring(c.t))
+end
+
 print("the reasons")
 do
   local plan_path = arg[2]

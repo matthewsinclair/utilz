@@ -21,6 +21,7 @@ local MC = {}
 
 MC.NO_GROUP = "unable to get Mission Control data from the Dock"
 MC.NO_DISPLAY = "no display with specified id found"
+MC.NOT_CLOSED = "Mission Control did not close"
 MC.OPEN_SECONDS = 4      -- how long Mission Control's group may take to appear
 MC.SETTLE_SECONDS = 0.3  -- after it appears, before a button is pressed (hs.spaces' MCwaitTime)
 MC.POLL_US = 50000       -- the group is looked for this often, in microseconds
@@ -98,6 +99,25 @@ function MC.press(el, action)
   return nil, err and tostring(err) or string.format("Mission Control refused %s", action)
 end
 
+-- Waits until SHOWN() is false: true, or nil and MC.NOT_CLOSED after
+-- OPEN_SECONDS. CLOCK = { now (ns), sleep (us) }. A tile's press returns
+-- while Mission Control is still closing, and an edit that came next could
+-- find the closing group and act on it (probe r2, runs/20261126T073026Z).
+function MC.await_closed(shown, clock)
+  local deadline = clock.now() + MC.OPEN_SECONDS * 1e9
+  while shown() do
+    if clock.now() >= deadline then return nil, MC.NOT_CLOSED end
+    clock.sleep(MC.POLL_US)
+  end
+  return true
+end
+
+-- A reason, with a second one after it if there is one.
+local function joined(why, more)
+  if not more then return why end
+  return tostring(why) .. "; and " .. more
+end
+
 -- ------------------------------------------------------------- impure
 
 -- The accessor over live AX elements.
@@ -144,9 +164,17 @@ function MC.open()
   hs.spaces.toggleMissionControl()
 end
 
--- Closes Mission Control, if its group is there.
+local CLOCK = { now = now, sleep = function(us) hs.timer.usleep(us) end }
+
+-- Waits until no owner shows the group: true, or nil and a reason.
+local function closed(roots)
+  return MC.await_closed(function() return find_any(roots) ~= nil end, CLOCK)
+end
+
+-- Closes Mission Control, if its group is there, and waits until it has.
 local function close(roots)
   if find_any(roots) then MC.open() end
+  return closed(roots)
 end
 
 -- The group, waited for up to OPEN_SECONDS on the monotonic clock.
@@ -169,7 +197,9 @@ end
 
 -- Opens Mission Control, finds WANT for the display UUID, calls ACT on it,
 -- and closes Mission Control on every path, a raise in ACT included. ACT
--- returns true, or nil and a reason; CLOSES says ACT closes it itself.
+-- returns true, or nil and a reason; CLOSES says ACT closes it itself. It
+-- returns only once Mission Control has closed; one that does not close
+-- fails the step.
 local function with_mc(uuid, want, act, closes)
   local id = screen_id(uuid)
   if not id then return nil, MC.NO_DISPLAY end
@@ -181,13 +211,20 @@ local function with_mc(uuid, want, act, closes)
   hs.timer.usleep(math.floor(MC.SETTLE_SECONDS * 1e6))
   local node, nerr = MC.locate(AX, group, id, want)
   if not node then
-    close(roots)
-    return nil, nerr
+    local _, cerr = close(roots)
+    return nil, joined(nerr, cerr)
   end
   local ok, res, why = pcall(act, node)
-  if not (ok and res and closes) then close(roots) end
-  if not ok then return nil, tostring(res) end
-  return res, why
+  local shut, cerr
+  if ok and res and closes then
+    shut, cerr = closed(roots)
+  else
+    shut, cerr = close(roots)
+  end
+  if not ok then return nil, joined(tostring(res), cerr) end
+  if not res then return nil, joined(why, cerr) end
+  if not shut then return nil, cerr end
+  return res
 end
 
 -- As hs.spaces.addSpaceToScreen(uuid, true).
