@@ -1434,6 +1434,11 @@ local function give_back(ctx, results)
   if ctx.pointer then
     restore("putting the pointer back", function() hs.mouse.absolutePosition(ctx.pointer) end)
   end
+  -- Each display back on the desktop it began on (hv decision 50), before
+  -- focus, so the window that had focus is most likely on a desktop shown.
+  if ctx.start_shown then
+    restore("showing each display its start desktop", function() M.way_back(ctx.start_shown, results) end)
+  end
   if ctx.focused then
     restore("giving focus back", function()
       local shown, why = shown_space(ctx.focused:id())
@@ -1557,6 +1562,45 @@ local function show_by_tile(uuid, space)
     ok and string.format("returned, and after %s s", tostring(M.SHOW_SPACE_SECONDS)) or ("failed: " .. tostring(why)),
     tostring(uuid), at and ("space " .. tostring(at)) or ("what could not be read: " .. tostring(aerr))),
     (not ok) and why or nil
+end
+
+-- THE WAY BACK (hv decision 50, 26 Nov 2026): at a run's end, each display
+-- shows the desktop it showed when the run began (START, {[screen] = space},
+-- from the first inventory's world), if that desktop still exists, is a user
+-- desktop (never a full-screen space) and is not the one shown now: one show
+-- per display, through show_by_tile, and none once BACK_SECONDS have passed.
+-- A show that fails is a note in RESULTS, which counts against nothing.
+M.BACK_SECONDS = 20
+
+function M.way_back(start, results)
+  local deadline = now() + M.BACK_SECONDS * 1e9
+  local screens = {}
+  for screen in pairs(start or {}) do screens[#screens + 1] = screen end
+  table.sort(screens)
+  for _, screen in ipairs(screens) do
+    local space = start[screen]
+    if now() >= deadline then
+      results[#results + 1] = { op = "restore", status = "note",
+        reason = string.format("screen %s not shown its start desktop %s: the %s s to go back ran out", screen,
+          tostring(space), tostring(M.BACK_SECONDS)) }
+      break
+    end
+    -- Cheapest first: a display that shows it already, then a desktop gone,
+    -- then a full-screen space.
+    local exists = false
+    if hs.spaces.activeSpaceOnScreen(screen) ~= space then
+      for _, id in ipairs(hs.spaces.spacesForScreen(screen) or {}) do
+        if id == space then exists = true end
+      end
+    end
+    if exists and hs.spaces.spaceType(space) == "user" then
+      local ok, why = show_by_tile(screen, space)
+      if not ok then
+        results[#results + 1] = { op = "restore", status = "note",
+          reason = "showing the desktop screen " .. screen .. " began on failed: " .. tostring(why) }
+      end
+    end
+  end
 end
 
 -- THE VISIT STEP (cc's visit-note, 26 Nov 2026). After Hammerspoon starts, a
@@ -2069,6 +2113,18 @@ end
 function PHASE.inventory(job)
   job.bundles = P.desk_bundles(job.desk)
   job.world = M.observe(job.bundles)
+  -- Each display's desktop as the run began, for the way back (hv decision
+  -- 50). The first inventory's, never a later one's.
+  if not job.start_shown then
+    job.start_shown = {}
+    for _, s in ipairs(job.world.screens or {}) do
+      local at = s.active_space
+      for _, sp in ipairs(s.spaces or {}) do
+        if at == nil and sp.active then at = sp.id end
+      end
+      if s.uuid and at then job.start_shown[s.uuid] = at end
+    end
+  end
   log_world(job.lg, "start", job.world)
   point(job.lg, "observed", function() return L.observed_fields(job.world) end)
   -- Only Hammerspoon can say whether it holds the grant; the preferences are
@@ -2085,8 +2141,11 @@ end
 -- desktops were shown, for the words of an entry still unseen.
 function PHASE.visit(job)
   job.visit_done = true
-  -- This run's windows alone (ic's N1).
-  M.visit_index = {}
+  -- This run's windows alone (ic's N1), cleared at the run's first visit
+  -- only, so a second visit keeps what the first one named (ic's F1 on
+  -- 7612499a).
+  if not job.visits then M.visit_index = {} end
+  job.visits = (job.visits or 0) + 1
   local screens = P.match_displays(job.desk, job.world, job.options)
   local list = screens and P.visit_list(job.desk, job.world, screens, job.ops) or {}
   if #list == 0 then return "unseen", POLL_SECONDS end
@@ -2106,7 +2165,8 @@ function PHASE.visit(job)
     r.out_of_time and string.format("; its %s s ran out", tostring(r.out_of_time)) or ""))
   for screen, why in pairs(r.failed) do note(job.lg, "visit", "a show failed on " .. screen .. ": " .. tostring(why)) end
   for screen, why in pairs(r.back) do note(job.lg, "visit", "showing " .. screen .. " its start desktop again failed: " .. tostring(why)) end
-  job.shown = r.shown
+  -- Both visits count (ic's F2).
+  job.shown = (job.shown or 0) + r.shown
   job.options.visited = r.visited
   job.options.visit_out_of_time = r.out_of_time
   job.options.visit_failed = r.failed
@@ -2305,7 +2365,17 @@ end
 
 -- Step 11: the pointer and focus given back, a last observe, the report.
 function PHASE.finish(job)
-  if job.ctx then give_back(job.ctx, job.results) end
+  if job.ctx then
+    job.ctx.start_shown = job.start_shown
+    give_back(job.ctx, job.results)
+  elseif job.start_shown then
+    -- A run that changed nothing but its visit step still goes back.
+    local ok, err = pcall(M.way_back, job.start_shown, job.results)
+    if not ok then
+      job.results[#job.results + 1] = { op = "restore", status = "failed",
+        reason = "showing each display its start desktop: " .. tostring(err) }
+    end
+  end
   local final_ok, final = pcall(M.observe, job.bundles)
   if not final_ok then
     job.results[#job.results + 1] = { op = "final_observe", status = "failed", reason = tostring(final) }

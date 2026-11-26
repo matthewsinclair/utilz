@@ -240,6 +240,7 @@ local function new_fake()
         return f.live
       end,
       activeSpaceOnScreen = function() return 3 end,
+      spaceType = function() return "user" end,
     },
     -- defaults export answers a plist; windows.js (WP 88504807) a window
     -- list with no window in it, so no id is free.
@@ -1585,9 +1586,16 @@ arm("an apply that visits before and after a removal", function()
     f.live = kept
     return true
   end
-  -- Safari answers no window, shown or not: it stays unseen, so each visit
-  -- step is seen in the log.
-  f.hs.application = { get = function() return { allWindows = function() return {} end } end }
+  -- Safari answers its window to the first read alone, so the first visit
+  -- names it and the second names nothing: the index keeps the first visit's
+  -- window (ic's F1). observe here is a fixture, so Safari stays unseen and
+  -- each visit step is seen in the log.
+  local reads = 0
+  local safari_window = { id = function() return 102 end }
+  f.hs.application = { get = function() return { allWindows = function()
+    reads = reads + 1
+    return reads == 1 and { safari_window } or {}
+  end } end }
   M.observe = function()
     local w = F.base_world()
     w.accessibility = true
@@ -1615,6 +1623,62 @@ arm("an apply that visits before and after a removal", function()
     response and (tostring(response.status) .. " / " .. L.ids(f.live)))
   check("visit twice: the visit step runs before the removal and again after it",
     visits == 2, tostring(visits))
+  check("visit twice: the second visit keeps the window the first one named (ic's F1)",
+    M.visit_index[102] ~= nil)
+  check("visit twice: the finished point counts the desktops both visits showed (ic's F2)",
+    point_of(recs, "R-VISIT2", "finished"):find(" shown=" .. visits, 1, true) ~= nil, point_of(recs, "R-VISIT2", "finished"))
+end)
+
+-- The way back (hv decision 50): the removal case, with the display on
+-- desktop 12 when the run begins. The removal's proof leaves it on desktop
+-- 11, the one in the removed desktop's place; at the end apply shows it
+-- desktop 12 again, through Mission Control.
+arm("an apply that ends each display on its start desktop", function()
+  fresh_globals()
+  local log = tmpdir() .. "/arngz.log"
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  local base = F.base_world().screens[1]
+  local new, start = 20, base.spaces[2].id
+  f.live = { new }
+  for _, sp in ipairs(base.spaces) do f.live[#f.live + 1] = sp.id end
+  local shown = start
+  local shows = {}
+  f.hs.spaces.spaceType = function() return "user" end
+  f.hs.spaces.activeSpaceOnScreen = function() return shown end
+  f.hs.spaces.gotoSpace = function(id)
+    shows[#shows + 1] = id
+    shown = id
+    return true
+  end
+  f.hs.spaces.windowsForSpace = function() return {} end
+  f.hs.spaces.removeSpace = function(id)
+    local kept = {}
+    for _, s in ipairs(f.live) do
+      if s ~= id then kept[#kept + 1] = s end
+    end
+    f.live = kept
+    return true
+  end
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    local s = w.screens[1]
+    s.live = f.live
+    if f.live[1] == new then
+      table.insert(s.spaces, 1, { id = new, type = "user", uuid = "SPACE-" .. new, active = false, windows = {} })
+      for i, sp in ipairs(s.spaces) do sp.ordinal = i end
+    end
+    for _, sp in ipairs(s.spaces) do sp.active = sp.id == shown end
+    s.active_space = shown
+    return w
+  end
+  local response = run_engine(f, { verb = "apply", desk = F.base_desk(), options = {}, run = "R-BACK", log = log })
+  check("way back: apply answers ok, exit 0, and removes the new desktop",
+    response and response.status == "ok" and response.exit == 0 and L.ids(f.live) == L.ids({ 11, 12 }),
+    response and (tostring(response.status) .. " / " .. tostring(response.exit) .. " / " .. L.ids(f.live)))
+  check("way back: the display ends on the desktop it showed when the run began, shown last",
+    shown == start and shows[#shows] == start, L.ids(shows))
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))
