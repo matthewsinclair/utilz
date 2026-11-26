@@ -1,0 +1,16 @@
+{
+  "id": "01M8BXYEJ8XR8BVBR9941NA1T9",
+  "ts": "2026-11-26T12:40:35.145Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 77,
+    "text": "Issue I19d4fa6 (hv decisions 52 and 56, Save Desk) with hv decision 53's start and end marks: cc/save1126 at 9af5e8f3 in ~/Devel/scratch/utilz-cc/wt-save, clean, 14 commits over main be79804c (the Save fix, the marks, and the redesign after hv's refused live Save: run-wide index, onscreen gaps by windows.js v4, gap words by cause). Run 3 green (211/0; 18 of 19 red over main, 3 of 3 red over de5b138b). Left: hv's ONE sitting, a live Save into check1126 then apply zeopit from wt-save, judged by vc against next-live-save-criteria.md; on a pass vc lands and cc closes I19d4fa6; a red comes back to cc."
+  }
+}
