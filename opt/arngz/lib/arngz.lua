@@ -2900,6 +2900,43 @@ local function quiet_answer(request, lg, response_path)
   return finish_run(response_path, { status = "error", kind = "refused", verb = request.verb, error = a, fix = b }, lg)
 end
 
+-- The file the CLI leaves beside the request when it stopped waiting for a
+-- scheduled run (hv decision 53). Then the CLI has drawn "still running" and
+-- played no sound, so the engine ends the run's mark at its finish.
+M.STOPPED_WAITING = "stopped-waiting"
+local NO_SUCH_FILE = 2
+
+-- The end mark of a run the CLI stopped waiting for, after its response is
+-- written. Removing the file is the claim: the CLI also removes it when the
+-- response comes just after it gave up, and only the side whose remove works
+-- ends the mark. Each side does its step and then looks at the other's, so
+-- one of the two always ends it. The sound is the CLI's (REQUEST.end_sound,
+-- empty when ARNGZ_SOUNDS is off); what fails is said in the run log.
+local function end_mark_if_stopped(request_dir, request, response, lg)
+  local removed, why, code = os.remove(request_dir .. "/" .. M.STOPPED_WAITING)
+  if not removed then
+    if code ~= NO_SUCH_FILE then note(lg, "mark", "could not read whether the CLI stopped waiting: " .. tostring(why)) end
+    return
+  end
+  local words = P.mark_end_words(response)
+  note(lg, "mark", "end: " .. words .. "; the CLI stopped waiting, so the engine ends the mark")
+  local sound = request.end_sound
+  if type(sound) == "string" and sound ~= "" then
+    local played, perr = pcall(function()
+      local s = require("hs.sound").getByFile(sound)
+      if not s then error("hs.sound could not read " .. sound, 0) end
+      s:play()
+    end)
+    if not played then note(lg, "mark", "no sound: " .. tostring(perr)) end
+  end
+  if not (M.toast and M.toast.mark) then
+    note(lg, "mark", "no end mark drawn: the toast has no mark")
+    return
+  end
+  local drawn, derr = pcall(M.toast.mark, "end", words, 0)
+  if not drawn then note(lg, "mark", "no end mark drawn: " .. tostring(derr)) end
+end
+
 -- The IPC entry. Reads {verb, desk, options} from request_path, writes the
 -- response to response.json beside it, and returns one status line. A failure
 -- inside run is a response too; a failure loading this module surfaces through
@@ -2951,6 +2988,8 @@ function M.run(request_path)
   local function done(response)
     local ok, line = pcall(finish_run, response_path, response, lg)
     if not ok then print("arngz: error: " .. tostring(line)) end
+    local marked, merr = pcall(end_mark_if_stopped, dirname(request_path) or ".", request, response, lg)
+    if not marked then print("arngz: error: the end mark: " .. tostring(merr)) end
     rawset(_G, "arngz_running", nil)
     rawset(_G, "arngz_timer", nil)
   end

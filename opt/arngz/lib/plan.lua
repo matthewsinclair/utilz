@@ -2431,6 +2431,20 @@ function P.save_refusal(gaps, name)
   return why, fix
 end
 
+-- The end mark's words for an engine RESPONSE (hv decision 53), when the
+-- engine ends a mark the CLI stopped waiting for. The words are those the
+-- CLI gives by its exit code: "done" for a run that answered ok, with or
+-- without problems; "refused" for a refusal; "error" for any other answer.
+P.MARK_DONE = "arngz: done"
+P.MARK_REFUSED = "arngz: stopped: refused"
+P.MARK_ERROR = "arngz: stopped: error"
+function P.mark_end_words(response)
+  if type(response) ~= "table" then return P.MARK_ERROR end
+  if response.status == "ok" then return P.MARK_DONE end
+  if response.kind == "refused" then return P.MARK_REFUSED end
+  return P.MARK_ERROR
+end
+
 -- A desk from a world (WP-04): what discover prints. PURE, like plan.
 --
 -- options: grid ("WxH", default 8x4, D19) and name (the desk's name). Returns

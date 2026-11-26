@@ -2507,5 +2507,16 @@ do
     line and line:find("1 Accessibility could not name", 1, true) ~= nil, tostring(line))
 end
 
+-- ------------------- the end mark the engine draws (hv decision 53)
+
+print("the end mark the engine draws")
+do
+  check("mark: an ok answer is done, with problems or without",
+    P.mark_end_words({ status = "ok", exit = 0 }) == P.MARK_DONE and P.mark_end_words({ status = "ok", exit = 1 }) == P.MARK_DONE)
+  check("mark: a refusal is stopped: refused", P.mark_end_words({ status = "error", kind = "refused" }) == P.MARK_REFUSED)
+  check("mark: any other answer, or none, is stopped: error",
+    P.mark_end_words({ status = "error", kind = "error" }) == P.MARK_ERROR and P.mark_end_words(nil) == P.MARK_ERROR)
+end
+
 print(string.format("plan_test: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

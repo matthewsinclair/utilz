@@ -262,10 +262,12 @@ local function new_fake()
 end
 
 -- Run REQUEST through M.run with fake F, every timer drained; the response.
-local function run_engine(f, request)
+-- DIR, when given, is the request's directory, so an arm can put a file
+-- beside the request as the CLI does.
+local function run_engine(f, request, dir)
   f.request = request
   _G.hs = f.hs
-  M.run(tmpdir() .. "/request.json")
+  M.run((dir or tmpdir()) .. "/request.json")
   f.drain()
   _G.hs = nil
   return f.responses[#f.responses]
@@ -1826,6 +1828,62 @@ arm("Save Desk names a window on a desktop not shown", function()
   local plain = discover_save_run(false, { grid = "8x4", name = "discovered" }, "R-SAVE4")
   check("save: a plain discover prints the desk and names the gap, verdict print",
     plain and plain.status == "ok" and plain.verdict == "print" and #(plain.gaps or {}) == 1, plain and tostring(plain.verdict))
+end)
+
+-- ------------- an apply the CLI stopped waiting for ends its mark (hv decision 53)
+
+-- An apply with nothing to do, through M.run, in DIR; with STOPPED, the CLI's
+-- file is beside the request first. Returns the response, the log's records,
+-- the marks the fake toast drew and the sounds the fake hs.sound played.
+local function stopped_run(stopped, end_sound, run)
+  fresh_globals()
+  local dir = tmpdir()
+  local log = dir .. "/arngz.log"
+  if stopped then
+    local fh = assert(io.open(dir .. "/" .. M.STOPPED_WAITING, "w"))
+    fh:close()
+  end
+  local f = new_fake()
+  _G.arngz_screens = watcher_of(f, log)
+  M.observe = function()
+    local w = F.base_world()
+    w.accessibility = true
+    return w
+  end
+  local marks, sounds = {}, {}
+  M.toast = { point = function() end, mark = function(kind, words, seconds)
+    marks[#marks + 1] = { kind = kind, words = words, seconds = seconds }
+  end }
+  package.loaded["hs.sound"] = { getByFile = function(path)
+    return { play = function() sounds[#sounds + 1] = path end }
+  end }
+  local ok, response = pcall(run_engine, f, { verb = "apply", desk = F.base_desk(), options = {}, run = run, log = log,
+    end_sound = end_sound }, dir)
+  M.toast, package.loaded["hs.sound"] = nil, nil
+  if not ok then error(response, 0) end
+  local left = io.open(dir .. "/" .. M.STOPPED_WAITING, "r")
+  if left then left:close() end
+  return response, records(log), marks, sounds, left ~= nil
+end
+
+arm("an apply the CLI stopped waiting for ends its own mark", function()
+  local sound = "/fake/end_record.caf"
+  local response, recs, marks, sounds, left = stopped_run(true, sound, "R-MARK1")
+  check("mark: the run still answers ok", response and response.status == "ok", response and tostring(response.error))
+  check("mark: the engine draws one end mark, done, for the default time",
+    #marks == 1 and marks[1].kind == "end" and marks[1].words == P.MARK_DONE and marks[1].seconds == 0,
+    #marks == 1 and (marks[1].kind .. " / " .. marks[1].words) or (#marks .. " marks"))
+  check("mark: and plays the CLI's falling sound once", #sounds == 1 and sounds[1] == sound, table.concat(sounds, " | "))
+  check("mark: and takes the CLI's file, so the CLI cannot end the mark too", not left)
+  check("mark: and says so in the run log", find(recs, "mark", "end: " .. P.MARK_DONE) ~= nil, last_line(recs))
+
+  local _, quiet_recs, quiet_marks, quiet_sounds = stopped_run(false, sound, "R-MARK2")
+  check("mark: with no file the CLI ends the mark, so the engine draws none and plays none",
+    #quiet_marks == 0 and #quiet_sounds == 0 and find(quiet_recs, "mark") == nil, #quiet_marks .. " / " .. #quiet_sounds)
+
+  local _, _, off_marks, off_sounds = stopped_run(true, "", "R-MARK3")
+  check("mark: with the sounds off the engine draws the mark and plays nothing", #off_marks == 1 and #off_sounds == 0,
+    #off_marks .. " / " .. #off_sounds)
 end)
 
 print(string.format("log_test: %d passed, %d failed", passed, failed))
