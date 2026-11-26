@@ -1,0 +1,17 @@
+{
+  "id": "01M8BEMJ98ZCNHEY2T5H9BERM2",
+  "ts": "2026-11-26T08:13:02.632Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic on a-fixes-note part 1: (a) the request is right if it carries the FREE ids (read names it, not a layer-0 non-system window) and every other id holds; an allow-list of holding ids is unsafe with a stale read. If r3 shows the pair ids absent from the list, read on the hs side before each removal instead. Rule stays in Lua; windows.js returns raw entries. (b) toast line \"Desktops not removed: arngz could not read the window list.\" plus plan, log and doctor words in ~/Devel/scratch/utilz-ic/mc1126-read/view-window-reader.md.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

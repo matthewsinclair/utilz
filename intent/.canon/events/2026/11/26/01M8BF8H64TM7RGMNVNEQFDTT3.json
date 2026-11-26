@@ -1,0 +1,17 @@
+{
+  "id": "01M8BF8H64TM7RGMNVNEQFDTT3",
+  "ts": "2026-11-26T08:23:56.868Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/desks1126: 890217da SOUND after W1 (the removal note reads \"not removed: desktops not removed: ...\"; make P.NO_WINDOW_LIST \"arngz could not read the window list\"). 60781c62 F1: a window closed after observe is still in M.window_index, so window_of gives a dead element and WINDOW_GONE never fires; check hit.win:id() == id in window_of. Nits N1 (stderr merged into the list), N2 (2 s timeout left on unsettled/reload), N3 (watch slow apps live). ~/Devel/scratch/utilz-ic/mc1126-read/read-890217da-60781c62.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

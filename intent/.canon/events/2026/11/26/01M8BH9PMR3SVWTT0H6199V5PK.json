@@ -1,0 +1,14 @@
+{
+  "id": "01M8BH9PMR3SVWTT0H6199V5PK",
+  "ts": "2026-11-26T08:59:32.378Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "STb8e4fb60638e2a9c/AC-702cceb9.8"
+  },
+  "payload": {
+    "evidence": "hv's phone scan, 26 Nov 2026, first-hand in vc's window and relayed by vc: hv ran ic's three lines (showreel.yaml with url https://example.com/utilz-qr, utilz prez showreel qr, open assets/qr/web.svg), web.svg opened, the phone's camera read the code as https://example.com/utilz-qr, and its browser showed example.com's page. PASS."
+  }
+}

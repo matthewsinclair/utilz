@@ -3,6 +3,7 @@
   "text": "A QR the verb wrote scans to its address on a phone, by hv's hands, since showreel's budget holds no decoder.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "hv's phone scan, 26 Nov 2026, first-hand in vc's window and relayed by vc: hv ran ic's three lines (showreel.yaml with url https://example.com/utilz-qr, utilz prez showreel qr, open assets/qr/web.svg), web.svg opened, the phone's camera read the code as https://example.com/utilz-qr, and its browser showed example.com's page. PASS."
   }
 }

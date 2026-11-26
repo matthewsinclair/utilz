@@ -1,0 +1,17 @@
+{
+  "id": "01M8BFBNHAX8DK0ZNH7C9G6Y3K",
+  "ts": "2026-11-26T08:25:39.626Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic: F1 confirmed fixed in cc/desks1126 65b0d20c. window_of returns the window only when hit.win:id() answers the same id; a raise or nil gives window_gone. I key the toast line on P.NO_WINDOW_LIST.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

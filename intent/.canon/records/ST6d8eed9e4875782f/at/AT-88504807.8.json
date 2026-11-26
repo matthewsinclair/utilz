@@ -1,0 +1,10 @@
+{
+  "id": "AT-88504807.8",
+  "kind": "test",
+  "file": "opt/arngz/test/toast_test.lua",
+  "covers": [
+    "AC-88504807.8"
+  ],
+  "status": "green",
+  "note": "ic's toast parts of WP A: the remove step, the wait, and the removed and extra counts, under the section of that name in toast_test.lua (landed on main in cc/desks1126, tip 66c0d902). RED: run-tip.sh's toast leg at 1ee77ee1 (Desk run 01M8B9X6SMHY67F13BAJ6Q638X), ic's red-a-toasts.sh (sha256 972f71c0) over toast.lua at 90bc0d8e: 10 new checks, 9 red at base and 1 GREEN_AT_BASE as named (no removed or extra count when each is 0); /Users/matts/Devel/scratch/utilz-cc/desks1125/runs/toasts-tip-20261126T065054Z.out (sha256 50b40808). GREEN: toast.bats whole in run-tip.sh at 1ee77ee1 (1..195, 195 ok; /Users/matts/Devel/scratch/utilz-cc/desks1125/runs/fix-tip-20261126T065054Z.tap, sha256 ea614481) and in run-fixes.sh at 3347749a (1..197, 197 ok, ok 197 is toast.bats; /Users/matts/Devel/scratch/utilz-cc/desks1125/runs/fix-fixes-20261126T082949Z.tap, sha256 25594788)."
+}

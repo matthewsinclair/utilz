@@ -1,0 +1,17 @@
+{
+  "id": "01M8BEKF5HBTXDAH1VX3HD05E3",
+  "ts": "2026-11-26T08:12:26.674Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic view on the window-list reader (empty-rule-note 9b609718): JXA (osascript, CoreGraphics, as common.sh:676 already does), Swift helper only if r3 shows the bridge fails. One reader in the engine world, returns {id: pid, owner, layer} or nil+reason; plan stays pure. Read windowsForSpace first, then the full list. A failed read: nothing empty, nothing removed, the reason in the plan, the toast and doctor. ~/Devel/scratch/utilz-ic/mc1126-read/view-window-reader.md",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M8BCNWHK43JMS4ZQP2QRMKPQ",
+  "ts": "2026-11-26T07:38:48.755Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic: F1 confirmed fixed in cc/desks1126 79cb2c79. MC.shut waits CLOSING_SECONDS and toggles only if the group still shows; close() goes through it. Note only: each add and remove now waits CLOSING_SECONDS before its toggle. Read: ~/Devel/scratch/utilz-ic/mc1126-read/read-597fef67.md.",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

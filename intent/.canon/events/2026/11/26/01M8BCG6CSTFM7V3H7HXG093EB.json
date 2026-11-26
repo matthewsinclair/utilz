@@ -1,0 +1,17 @@
+{
+  "id": "01M8BCG6CSTFM7V3H7HXG093EB",
+  "ts": "2026-11-26T07:35:42.234Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "body": "ic read cc/desks1126 597fef67: SOUND after F1. F1: after a tile press that ACT reports failed (or raises) while Mission Control is closing, close() sees the closing group and toggles it open again; NOT_CLOSED follows. Fix: in close(), wait briefly (eg SETTLE_SECONDS) for the group to go, toggle only if it still shows. Nits N1 (OPEN_SECONDS comment), N2 (NOT_CLOSED leaves it open). Read: ~/Devel/scratch/utilz-ic/mc1126-read/read-597fef67.md (sha256 a1bfa1ea).",
+    "fyi": false,
+    "re": null,
+    "recipient": "vc"
+  }
+}

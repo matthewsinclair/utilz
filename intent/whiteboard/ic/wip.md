@@ -3,7 +3,7 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: 05e7b603-f0a2-479e-98cb-c73a62de6744
-heartbeat_at: 2026-11-26 06:53Z
+heartbeat_at: 2026-11-26 07:01Z
 status: active
 focus: "26 Nov fold for hv decision 45, no release. Resume: /in-session, then hold for vc's word. 0114 and arca_swift 0.3.0 landed; open: AC-4b560be1.4 (CI after the final push), .5 and AC-702cceb9.8 (hv's hands; steps in RESUME and on vc's board; dev build made at 7c6cdaee). At cc's green END of A's run: AT-88504807.8. RESUME in ~/Devel/scratch/utilz-ic/RESUME.md"
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
@@ -13,9 +13,8 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 
 ## DOING
 
-- STb8e4fb6, showreel qr: landed, thread and WP 702c WIP. Open: AC-702cceb9.8, hv's phone scan of one written QR. (edited)
-- Utilz 0114 landed on main (652d0b97..eccbecd5, net 570b3fb3 = ic's READY; dc's (c) a4e5fa61, menuz 0.4.11); arca_swift 0.3.0 done (AC-e69447a3.1 to .7). wt-menuz0114 and wt-arca0003-acs removed by the fold checks; branch ic/menuz0114 kept. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's hands, on the dev build ic made at 7c6cdaee; steps on vc's board 26 Nov). (edited)
-- A's toast parts for cc's desks WP A (ST6d8eed9 WP 88504807, AC-88504807.8; hv decision 44: A back in 2.15.0 on mc.lua). In cc/desks1126 as ff6047fc (equal to 365d3cf3's lines), A on the finder at 1ee77ee1, which ic read SOUND (delta 26 Nov). After cc's green END of A's run: mint AT-88504807.8 (--file opt/arngz/test/toast_test.lua) to-write, red (red-a-toasts.sh 972f71c0, base 90bc0d8e), green, at lint. Remove wt-desks-a-toasts once A lands. (edited)
+- STb8e4fb6, showreel qr: landed; AC-702cceb9.8 satisfied by hv's phone scan of 26 Nov (relayed by vc). Thread and WP 702c close are vc's call. (edited)
+- Utilz 0114 landed on main (652d0b97..eccbecd5); arca_swift 0.3.0 done. Open: AC-4b560be1.4 (CI dispatch on the final push) and .5 (hv's menuz check on the dev build at 7c6cdaee; steps on vc's board). wt-desks-a-toasts kept: its base 90bc0d8e is not an ancestor of main (A re-applied as 66c0d902); vc's word. (edited)
 
 ## TODO
 

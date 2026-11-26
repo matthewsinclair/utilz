@@ -1,0 +1,16 @@
+{
+  "id": "01M8BHAP17F79YZ1FXNMB9PQXB",
+  "ts": "2026-11-26T09:00:04.519Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 15,
+    "text": "STb8e4fb6, showreel qr: landed; AC-702cceb9.8 satisfied by hv's phone scan of 26 Nov (relayed by vc). Thread and WP 702c close are vc's call."
+  }
+}
