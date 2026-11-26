@@ -153,20 +153,70 @@ do
     end
   end
 
+  local poll_ns = MC.POLL_US * 1e3
+  local function never() return true end
+
   local c = clock()
-  local ok, why = MC.await_closed(closing(0), c)
+  local ok, why = MC.await_closed(closing(0), c, MC.OPEN_SECONDS)
   check("a closed Mission Control is not waited for", ok == true and c.sleeps == 0, why)
 
   local still = 3
   c = clock()
-  ok, why = MC.await_closed(closing(still), c)
+  ok, why = MC.await_closed(closing(still), c, MC.OPEN_SECONDS)
   check("a closing Mission Control is waited for until it has closed", ok == true and c.sleeps == still, why)
 
   c = clock()
-  ok, why = MC.await_closed(function() return true end, c)
+  ok, why = MC.await_closed(never, c, MC.OPEN_SECONDS)
   local limit = MC.OPEN_SECONDS * 1e9
   check("one that never closes fails with a reason", ok == nil and why == MC.NOT_CLOSED, why)
-  check("and fails at OPEN_SECONDS, not before or a poll after", c.t >= limit and c.t < limit + MC.POLL_US * 1e3, tostring(c.t))
+  check("and fails at OPEN_SECONDS, not before or a poll after", c.t >= limit and c.t < limit + poll_ns, tostring(c.t))
+
+  c = clock()
+  MC.await_closed(never, c, MC.CLOSING_SECONDS)
+  local short = MC.CLOSING_SECONDS * 1e9
+  check("the wait's limit is the one it is given", c.t >= short and c.t < short + poll_ns, tostring(c.t))
+end
+
+print("shut")
+do
+  local function clock()
+    local c = { t = 0 }
+    c.now = function() return c.t end
+    c.sleep = function(us) c.t = c.t + us * 1e3 end
+    return c
+  end
+  -- Mission Control that shows until it is toggled (OPEN), or for CLOSING
+  -- reads on its own, or never goes (STUCK). It counts the toggles.
+  local function mc(kind, closing)
+    local m = { toggles = 0, reads = 0 }
+    m.toggle = function() m.toggles = m.toggles + 1 end
+    m.shown = function()
+      m.reads = m.reads + 1
+      if kind == "closed" then return false end
+      if kind == "closing" then return m.reads <= closing end
+      if kind == "open" then return m.toggles == 0 end
+      return true
+    end
+    return m
+  end
+
+  local m = mc("closed")
+  local ok, why = MC.shut(m.shown, m.toggle, clock())
+  check("a closed Mission Control is not toggled", ok == true and m.toggles == 0, why)
+
+  -- Closing on its own within CLOSING_SECONDS: fewer reads than its polls.
+  local polls = math.floor(MC.CLOSING_SECONDS * 1e6 / MC.POLL_US)
+  m = mc("closing", polls - 1)
+  ok, why = MC.shut(m.shown, m.toggle, clock())
+  check("a Mission Control already closing is not opened again (ic's F1)", ok == true and m.toggles == 0, why)
+
+  m = mc("open")
+  ok, why = MC.shut(m.shown, m.toggle, clock())
+  check("an open Mission Control is toggled once and closes", ok == true and m.toggles == 1, why)
+
+  m = mc("stuck")
+  ok, why = MC.shut(m.shown, m.toggle, clock())
+  check("one that will not close is toggled once and fails", ok == nil and why == MC.NOT_CLOSED and m.toggles == 1, why)
 end
 
 print("the reasons")
