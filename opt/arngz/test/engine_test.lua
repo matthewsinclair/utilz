@@ -29,10 +29,15 @@
 
 local arngz_path = arg[1] or "opt/arngz/lib/arngz.lua"
 local M = dofile(arngz_path)
--- The engine adds a desktop through M.mission_control (mc.lua). This driver's
--- fake answers that add as it answers hs.spaces.addSpaceToScreen, so its arms
--- stay as they are; mc.lua's own walk of the Dock is mc_test.lua's.
-M.mission_control = { add_space = function(uuid) return hs.spaces.addSpaceToScreen(uuid, true) end }
+-- The engine adds, shows and removes a desktop through M.mission_control
+-- (mc.lua). This driver's fake answers each as it answers the hs.spaces call
+-- mc.lua stands in for, so its arms stay as they are; mc.lua's own walk of
+-- Mission Control is mc_test.lua's.
+M.mission_control = {
+  add_space = function(uuid) return hs.spaces.addSpaceToScreen(uuid, true) end,
+  goto_space = function(space) return hs.spaces.gotoSpace(space) end,
+  remove_space = function(space) return hs.spaces.removeSpace(space, true) end,
+}
 -- plan.lua holds the two pure predicates this driver's fake has to satisfy.
 local P = dofile((arngz_path:gsub("arngz%.lua$", "plan.lua")))
 

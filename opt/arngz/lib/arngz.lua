@@ -1430,7 +1430,7 @@ end
 
 -- ------------------------------------- removals (ST6d8eed9 WP 88504807)
 --
--- hs.spaces.removeSpace finds its Mission Control tile by the desktop's index
+-- mc.lua, as hs.spaces did, finds a Mission Control tile by the desktop's index
 -- in the live list (spacesForScreen), and the live list can part from Mission
 -- Control's order (P.order_spaces). Then the call removes another desktop. So
 -- each removal is PROVEN first: gotoSpace presses the tile at the same index,
@@ -1447,8 +1447,9 @@ end
 -- switches as it closes.
 M.SHOW_SPACE_SECONDS = 5
 
--- The desktop edits run before any move, with no pointer held: gotoSpace and
--- removeSpace press Mission Control's tiles through the Dock's accessibility.
+-- The desktop edits run before any move, with no pointer held: mc.lua's
+-- goto_space and remove_space press Mission Control's tiles through
+-- accessibility (WindowManager on macOS 27, the Dock before it).
 -- So their readbacks check no hand.
 local NO_HAND = { check = function() end }
 
@@ -1457,7 +1458,7 @@ local NO_HAND = { check = function() end }
 -- what the screen shows, and the call's own error, for the Dock's binding of
 -- the run. A call that failed proves nothing, whatever the screen shows.
 local function show_by_tile(uuid, space)
-  local called, ok, why = pcall(hs.spaces.gotoSpace, space)
+  local called, ok, why = pcall(M.mission_control.goto_space, space)
   if not called then ok, why = nil, ok end
   if ok and wait_for(NO_HAND, M.SHOW_SPACE_SECONDS, "", function()
     return hs.spaces.activeSpaceOnScreen(uuid) == space
@@ -1561,7 +1562,7 @@ local function exec_remove_space(op, ctx)
         error("the live list changed since the proof", 0)
       end
       asked = true
-      local called, r, w = pcall(hs.spaces.removeSpace, op.space, true)
+      local called, r, w = pcall(M.mission_control.remove_space, op.space)
       if called then removed, why = r, w else removed, why = nil, r end
     end
     local now_ids, nerr = hs.spaces.spacesForScreen(op.screen)
