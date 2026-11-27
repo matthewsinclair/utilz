@@ -1,9 +1,9 @@
 ---
 st_id: ST44b4671
 title: menuz uses arca_swift 0.3.0: its own copies go, and one copy runs at a time (issue 0114)
-status: WIP
+status: Completed
 created: 2026-11-25
-completed:
+completed: 2026-11-27
 ---
 
 # ST44b4671: menuz uses arca_swift 0.3.0: its own copies go, and one copy runs at a time (issue 0114)

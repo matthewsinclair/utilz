@@ -3,17 +3,17 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df52055f-4a04-484f-af3b-c557705c20dd
-heartbeat_at: 2026-11-27 06:09Z
+heartbeat_at: 2026-11-27 07:32Z
 status: active
-focus: "The marks are done: 161b3835 on main, hv's sitting PASSED, wt-marks removed. Next: on vc's word that the macOS dispatch is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. Waits on hv: the push of main. RESUME.md has it."
-claims: [STb8e4fb60638e2a9c, ISSUE:0114]
+focus: "Nothing open for ic. 0114 is closed: AC-4b560be1.4 on dispatch 45956474872, then ST44b4671/4b56, ST44b4671 and issue 0114. Hold for vc's word; the cut is hv's. RESUME.md has it."
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4, the macOS dispatch of tests.yml, which vc starts when CI on main is green after hv's push. On vc's word that it is green: satisfy AC-4b560be1.4, then close ST44b4671/4b56, ST44b4671 and issue 0114 (hv decision 66). (edited)
+_(none)_
 
 ## TODO
 

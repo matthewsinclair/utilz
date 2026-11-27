@@ -3,8 +3,8 @@
   "origin": "01M894B5WCE2K5H9C0B126NH3N",
   "title": "The pin, the row, the launch, the tests and help",
   "scope": "S",
-  "status": "wip",
-  "objective": "",
+  "status": "done",
+  "objective": "Move menuz to arca_swift 0.3.0. The pin in project.yml takes 0.3.0 and its ArcaLaunch. The masthead row and the XCTest-host check come from arca_swift, and menuz's own copies go. ArcaLaunch's guard makes a second launch say that menuz already runs, and quit. The tests and help follow.",
   "body": "",
   "preamble": ""
 }

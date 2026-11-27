@@ -1,0 +1,16 @@
+{
+  "id": "01M8DYPE6JVAK9VNY3NPYSD7PG",
+  "ts": "2026-11-27T07:32:10.066Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 19,
+    "text": "Utilz 0114 done: menuz uses arca_swift 0.3.0. AC-4b560be1.4 is satisfied by the macOS dispatch 45956474872 on pushed main 43454ef5 (menuz app under Xcode 27.1). ST44b4671/4b56, ST44b4671 and issue 0114 are closed (hv decision 66)."
+  }
+}

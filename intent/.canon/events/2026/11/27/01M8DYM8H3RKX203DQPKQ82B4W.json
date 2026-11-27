@@ -1,0 +1,14 @@
+{
+  "id": "01M8DYM8H3RKX203DQPKQ82B4W",
+  "ts": "2026-11-27T07:30:58.725Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "ac.satisfy",
+  "subject": {
+    "type": "ac",
+    "id": "ST44b4671e033a4475/AC-4b560be1.4"
+  },
+  "payload": {
+    "evidence": "Utilz Tests dispatch 45956474872 (workflow_dispatch, attempt 1) on pushed main 43454ef5, 27 Nov 2026: success, every job green. Its job \"menuz app (macOS)\" (140364017361) built and tested Menuz.app under Xcode 27.1 (Build version 27A9275). https://github.com/matthewsinclair/utilz/actions/runs/45956474872"
+  }
+}

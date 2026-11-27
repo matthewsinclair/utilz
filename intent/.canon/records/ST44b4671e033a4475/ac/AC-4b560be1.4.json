@@ -3,6 +3,7 @@
   "text": "The menuz-app job of a dispatch on Utilz's pushed main is green under Xcode 27.1.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "Utilz Tests dispatch 45956474872 (workflow_dispatch, attempt 1) on pushed main 43454ef5, 27 Nov 2026: success, every job green. Its job \"menuz app (macOS)\" (140364017361) built and tested Menuz.app under Xcode 27.1 (Build version 27A9275). https://github.com/matthewsinclair/utilz/actions/runs/45956474872"
   }
 }

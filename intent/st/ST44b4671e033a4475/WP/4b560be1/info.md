@@ -2,14 +2,14 @@
 wp_id: WP-4b56
 title: The pin, the row, the launch, the tests and help
 scope: S
-status: WIP
+status: Done
 ---
 
 # WP-4b56: The pin, the row, the launch, the tests and help
 
 ## Objective
 
-_(not yet written)_
+Move menuz to arca_swift 0.3.0. The pin in project.yml takes 0.3.0 and its ArcaLaunch. The masthead row and the XCTest-host check come from arca_swift, and menuz's own copies go. ArcaLaunch's guard makes a second launch say that menuz already runs, and quit. The tests and help follow.
 
 ## Acceptance
 
