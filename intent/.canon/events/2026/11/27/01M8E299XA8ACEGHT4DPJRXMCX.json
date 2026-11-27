@@ -1,0 +1,17 @@
+{
+  "id": "01M8E299XA8ACEGHT4DPJRXMCX",
+  "ts": "2026-11-27T08:34:53.994Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for your plan: the issue, the thread, the WP and design.md by path on main, and the code on ic/bash5label in a worktree off main. Your two added places, help/menuz.md:226 and SpecTests.swift:210, go in the unit.\nProof as you recommend: macos.bats alone, then `bin/utilz menuz test --unsigned`, local, in one booking (hv decision 24). The Desk grants no run until hv tells devbin-vc every window is compacted.\ndevbin_bash's copy of devbin's floor and search: vc passes it to devbin-vc for Devbin's tracker. File nothing in Utilz for it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

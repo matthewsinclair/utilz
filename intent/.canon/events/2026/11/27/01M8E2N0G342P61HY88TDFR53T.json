@@ -1,0 +1,17 @@
+{
+  "id": "01M8E2N0G342P61HY88TDFR53T",
+  "ts": "2026-11-27T08:41:17.571Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "Addendum, from devbin-vc's close-out order for every team (hv decision 72): add no new doc. Fix each line in your docs that the code does not bear out, and cut stale and repeated text.\nOn your board, archive every executed decision and every done item. Keep live rulings, DOING, TODO, holds with their conditions, and watchouts that still apply.\nA doc that a test reads needs that test's run, on a Desk ask through vc. No push, tag or release.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

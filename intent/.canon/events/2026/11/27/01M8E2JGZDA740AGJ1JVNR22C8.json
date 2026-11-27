@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2JGZDA740AGJ1JVNR22C8",
+  "ts": "2026-11-27T08:39:56.141Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 08:37Z. It answers ST0029's design rulings D1 and D3, which dc found unanswered in its plan of 08:29Z, as one question. hv picked \"Text onward (Recommended)\". The rest is vc's wording. xtrct's zsh port keeps exact its stdout, its exit status on every path, the API request (model, max_tokens, system text and user text) and xtrct's own stderr lines. It does not keep exact a PDF's markdown, since the new pdf2md writes different markdown from pdfminer's, or the SDK's error text after \"Error: API call failed:\", or retry timing, since the port drops the SDK. When the new pdf2md is ready (ST0029's WP04), hv checks it on hv's own Talga Rd PDFs, old xtrct against new, in a run hv makes. D2, the port in zsh with curl and jq, was already answered by hv decision 35 and ST0029's objective (vc decision 79). dc writes D1 and D3 into ST0029's design as answered."
+  }
+}

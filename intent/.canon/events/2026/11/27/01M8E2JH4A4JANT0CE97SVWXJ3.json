@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2JH4A4JANT0CE97SVWXJ3",
+  "ts": "2026-11-27T08:39:56.298Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, received after vc's date -u of 08:37Z. hv's words: \"Ok, I want to know if I can close out, and what. If we can, let me know. And before you close, I want you to sync as-written docs to as-built code, close out any STs, WPs, and Issues. In particular, if there are parts of a WP or an Issue that have been deferred to another ST, then we should move it out of the almost done ST/WP/Issue and either put it in a new unstarted ST or WP, or make a new ST and put it in that. Either way, I want anything that is partially done to be pruned and then closed and all unfinished work moved into a future, unstarted ST or WP. Make sense? Once that is done, I want you to do an aggressive lean out of all project docs. I'm espescially interested in ensuring that we are not writing tomes in the verblocks, WIPs, or restart files, and that they ONLY have WIP or TODO items, never DONE stuff. I want to draw a line under this weeks work so I can put all done work to bed and then concentrate on devvm, ae, and the zeop/* projects. Ok?\" The rest is vc's wording. Every seat stops new work: no new run, unit or Desk ask. cc prunes STca1b7f9 into spcz (ST6ae5a79baaa93e17) and closes it, and spcz stays unstarted. dc puts ST0029 back to unstarted. ic puts STb234935 back to unstarted and closes issue I669673a into it. Each seat syncs its remit's docs to the as-built code and leans them, by hv decision 21's split, and leans its board and RESUME to WIP and TODO only. vc leans intent/wip.md, intent/restart.md and hv's board, checks each change by change and lands it. hv pushes once. Then vc tells hv which sessions can close."
+  }
+}

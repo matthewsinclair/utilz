@@ -1,0 +1,17 @@
+{
+  "id": "01M8E2JY9XP90TJHQ08CG0XDY0",
+  "ts": "2026-11-27T08:40:09.789Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "STOP the design (your step 3). hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).\n(1) Prune STca1b7f9 and close it. Move every open criterion and the unstarted WPs (026e, b9d4) into spcz as unstarted WPs, the criteria in their present words with a note that spcz's design rewords them. Descope each on STca1b7f9 with --to spcz, close its done parts, then st done STca1b7f9.\n(2) spcz stays unstarted and unclaimed. Its context names vc's draft, ~/Devel/scratch/utilz-vc/spcz/design-draft.md (v0.1), as the base of its design.\n(3) Then, in a worktree: sync your hv decision 21 docs to the as-built code and lean them hard. Each verblock is the version and one short line. Lean your board and RESUME to WIP and TODO only.\n(4) Send vc each change for its check by change. No run unless a doc feeds a test, and ask vc first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

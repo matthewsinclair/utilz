@@ -666,6 +666,22 @@
       "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 08:27Z. hv picked \"Check Desks (Recommended)\" as the label of Menuz's Utilities item that runs `arngz doctor`, which said \"Hammerspoon\". It answers hv's own words earlier in the session: \"Oh, so why does it say \"Hammerspoon\"? We should just update the text, right?\" The rest is vc's wording. ic changes Utilz's copies, opt/menuz/lib/example.yaml line 31 and help/menuz.md lines 100 and 178, in one unit with its todo 16. hv's live file is Molt-matts' config/menuz/menuz.yaml line 43, since ~/.config/menuz links there, so molt-vc's seats change and commit it. The fixture in MenuBuilderTests.swift is test data, and it stays.",
       "state": "live",
       "recorded_at": "2026-11-27T08:28:02.552Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 71,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 08:37Z. It answers ST0029's design rulings D1 and D3, which dc found unanswered in its plan of 08:29Z, as one question. hv picked \"Text onward (Recommended)\". The rest is vc's wording. xtrct's zsh port keeps exact its stdout, its exit status on every path, the API request (model, max_tokens, system text and user text) and xtrct's own stderr lines. It does not keep exact a PDF's markdown, since the new pdf2md writes different markdown from pdfminer's, or the SDK's error text after \"Error: API call failed:\", or retry timing, since the port drops the SDK. When the new pdf2md is ready (ST0029's WP04), hv checks it on hv's own Talga Rd PDFs, old xtrct against new, in a run hv makes. D2, the port in zsh with curl and jq, was already answered by hv decision 35 and ST0029's objective (vc decision 79). dc writes D1 and D3 into ST0029's design as answered.",
+      "state": "live",
+      "recorded_at": "2026-11-27T08:39:56.141Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 72,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, received after vc's date -u of 08:37Z. hv's words: \"Ok, I want to know if I can close out, and what. If we can, let me know. And before you close, I want you to sync as-written docs to as-built code, close out any STs, WPs, and Issues. In particular, if there are parts of a WP or an Issue that have been deferred to another ST, then we should move it out of the almost done ST/WP/Issue and either put it in a new unstarted ST or WP, or make a new ST and put it in that. Either way, I want anything that is partially done to be pruned and then closed and all unfinished work moved into a future, unstarted ST or WP. Make sense? Once that is done, I want you to do an aggressive lean out of all project docs. I'm espescially interested in ensuring that we are not writing tomes in the verblocks, WIPs, or restart files, and that they ONLY have WIP or TODO items, never DONE stuff. I want to draw a line under this weeks work so I can put all done work to bed and then concentrate on devvm, ae, and the zeop/* projects. Ok?\" The rest is vc's wording. Every seat stops new work: no new run, unit or Desk ask. cc prunes STca1b7f9 into spcz (ST6ae5a79baaa93e17) and closes it, and spcz stays unstarted. dc puts ST0029 back to unstarted. ic puts STb234935 back to unstarted and closes issue I669673a into it. Each seat syncs its remit's docs to the as-built code and leans them, by hv decision 21's split, and leans its board and RESUME to WIP and TODO only. vc leans intent/wip.md, intent/restart.md and hv's board, checks each change by change and lands it. hv pushes once. Then vc tells hv which sessions can close.",
+      "state": "live",
+      "recorded_at": "2026-11-27T08:39:56.298Z"
     }
   ],
   "sent": [],

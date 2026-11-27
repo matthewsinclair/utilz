@@ -1,0 +1,17 @@
+{
+  "id": "01M8E2JY4DDC92N6NPKSJ8KRH6",
+  "ts": "2026-11-27T08:40:09.613Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "STOP: do not ask the Desk. hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).\n(1) ST0029 goes back to future and unstarted: wp unstart ST0029/01, then st hold with that reason, and unclaim. dc/st0029 (40e12842), wt-st0029 and the harness stay as they are.\n(2) hv decision 71, by vc's picker, is \"Text onward\": stdout, the exit status, the API request and xtrct's own stderr lines stay exact. A PDF's markdown, the SDK's error text and retry timing do not, and hv checks the new pdf2md on hv's own Talga Rd PDFs at WP04. Write D1 and D3 into ST0029's design as answered.\n(3) Then, in a worktree: sync your hv decision 21 docs to the as-built code and lean them hard. Each verblock is the version and one short line. Lean your board and RESUME to WIP and TODO only.\n(4) Send vc each change for its check by change. No run unless a doc feeds a test, and ask vc first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

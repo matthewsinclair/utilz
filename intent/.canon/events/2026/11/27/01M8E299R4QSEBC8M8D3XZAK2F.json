@@ -1,0 +1,17 @@
+{
+  "id": "01M8E299R4QSEBC8M8D3XZAK2F",
+  "ts": "2026-11-27T08:34:53.828Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO for (2) to (4). Your records 20ac7b55 check by change (6096a58a). (2): rebase onto main's head at the time (20ac7b55 now), not 44d4bc63.\n(3): the harness reads sound (pins 54506bce and 93478a82 re-checked; venv 3.14.10, brew 3.15.2). Fix one line first: run-st0029-wp01.sh line 31 prints \"nowhere\" every time. GENERATED always differs, so diff exits 1 and pipefail fails the pipeline after it lists real differences too. Capture the diff, then test it for empty.\nSend the new sha with the wrapper, and say how the 300 s kill ends the whole process group.\nD2 is answered: hv decision 35's \"zsh port\" and the objective's curl and jq (vc decision 79). vc puts D1 and D3 to hv now, as one question, and sends you the answer.",
+    "fyi": false,
+    "re": "2026-11-27 08:29Z",
+    "recipient": "dc"
+  }
+}

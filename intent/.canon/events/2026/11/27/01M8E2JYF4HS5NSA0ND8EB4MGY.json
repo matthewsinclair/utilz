@@ -1,0 +1,17 @@
+{
+  "id": "01M8E2JYF4HS5NSA0ND8EB4MGY",
+  "ts": "2026-11-27T08:40:09.956Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "STOP the build: no worktree for it and no run. hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).\n(1) STb234935 goes back to future and unstarted: wp unstart STb234935/dda1, then st hold with that reason, and unclaim. Its records keep every place you found and hv decision 70. Close issue I669673a with a resolution that its fix moves to STb234935.\n(2) Then, in a worktree: sync your hv decision 21 docs to the as-built code and lean them hard. Each verblock is the version and one short line. Lean your board and RESUME to WIP and TODO only.\n(3) Send vc each change for its check by change. No run unless a doc feeds a test, and ask vc first.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
