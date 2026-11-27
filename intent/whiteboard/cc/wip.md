@@ -3,17 +3,17 @@ node: cc
 name: Control Claude
 role: control
 session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
-heartbeat_at: 2026-11-26 18:17Z
+heartbeat_at: 2026-11-27 06:08Z
 status: active
-focus: "Hold for vc's word (cycle 7). Waits on hv: the sitting from wt-save at 651a8ed2 (apply homere, diff homere, which, Save into check1126; vc books the light slot). Then vc lands; cc closes I19d4fa6. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [STca1b7f9d59191dfc, ST6d8eed9e4875782f]
+focus: "2.15.0: cc's work is landed and issue I19d4fa6 is closed. Hold for vc's word. Hold 55: after the cut, STca1b7f9 and issue I7fce35c move to the spcz thread, design first. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: [STca1b7f9d59191dfc]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- Issue I19d4fa6 (hv decisions 52, 56 and 60), with hv decision 53's marks, 58's running mark, and 59's M1 and W4: cc/save1126 at 651a8ed2 in ~/Devel/scratch/utilz-cc/wt-save, clean. It holds cc's 66a1918f, ic's e179e732 as bfae06a2, and cc's fixes after run 1 (55616645, 651a8ed2), which were red in two tests. Rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN: arngz.bats 213/0, the isolation arm ok, and the forced-order proof red at bfae06a2 and green at 651a8ed2. HOLD wt-save at 651a8ed2 for hv's sitting (vc books it): apply homere, diff homere, which, then the Save into check1126, from wt-save/bin/arngz. Then vc lands, and cc closes I19d4fa6 after vc's check and removes wt-save. (edited)
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- Move STca1b7f9 and issue I7fce35c to the spcz thread, design first (hv decision 66), once the 2.15.0 cut is done (tag 2.15.0).
 
 ## Watch-outs
 
