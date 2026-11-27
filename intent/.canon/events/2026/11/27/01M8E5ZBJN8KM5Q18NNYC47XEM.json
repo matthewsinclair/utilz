@@ -1,0 +1,14 @@
+{
+  "id": "01M8E5ZBJN8KM5Q18NNYC47XEM",
+  "ts": "2026-11-27T09:39:22.330Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST27a3dbd072f31f92"
+  },
+  "payload": {
+    "title": "Code faults that the 27 Nov 2026 docs audit found, syncz's delete pass first"
+  }
+}
