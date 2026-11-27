@@ -1,0 +1,10 @@
+{
+  "id": "dda1de42",
+  "origin": "01M8E282FQ2CN1B8DVCZY5E1X2",
+  "title": "One search for a bash 5 in macos.bats, and the Check Desks label",
+  "scope": "S",
+  "status": "wip",
+  "objective": "macos.bats asks devbin_bash for its bash 5 (issue I669673a), and the example menu's item that runs arngz doctor says Check Desks (hv decision 70). The thread's design.md holds the change and its proof.",
+  "body": "",
+  "preamble": ""
+}

@@ -1,0 +1,14 @@
+{
+  "id": "01M8E27QGFP7XHMWH6B46F7FDQ",
+  "ts": "2026-11-27T08:34:02.386Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "STb23493523cd1b054"
+  },
+  "payload": {
+    "title": "menuz: one search for a bash 5 in macos.bats, and the Check Desks label (issue I669673a, hv decision 70)"
+  }
+}

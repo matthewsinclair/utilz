@@ -1,0 +1,8 @@
+{
+  "id": "AC-dda1de42.1",
+  "text": "macos.bats's setup_file takes BASH5 from devbin_bash, and macos.bats holds no search for a bash of its own. Its tests run and pass under bash 3.2 and bash 5, with none skipped (issue I669673a).",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

@@ -3,21 +3,21 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df52055f-4a04-484f-af3b-c557705c20dd
-heartbeat_at: 2026-11-27 08:09Z
+heartbeat_at: 2026-11-27 08:35Z
 status: active
-focus: "Folded for cycle 8, after the 2.15.0 cut; hold for vc's word. Next, after the bounce on vc's word: todo 16, file and fix the second search for a bash 5 in macos.bats. Waits on hv: nothing of ic's. RESUME.md has it."
-claims: []
+focus: "Doing issue I669673a with hv decision 70, one unit (STb234935/dda1de42): the edits in wt-bash5label, then a Desk run on vc's word. Waits on hv: nothing of ic's. RESUME.md has it."
+claims: [STb23493523cd1b054/dda1de42, ISSUE:I669673a10e1c3c99]
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-_(none)_
+- Issue I669673a with hv decision 70, as one unit (STb234935/dda1de42, its design.md attached): macos.bats takes its bash 5 from devbin_bash, and the example's arngz doctor item says Check Desks in example.yaml, help/menuz.md and SpecTests. Code on ic/bash5label in ~/Devel/scratch/utilz-ic/wt-bash5label, off main. Then a Desk run on vc's word: macos.bats under bash 3.2 and 5, and menuz test --unsigned.
 
 ## TODO
 
-- After the bounce, on vc's word: file and fix a second search for a bash 5 (Highlander). setup_file in opt/menuz/test/macos.bats, lines 28 to 32, searches UTILZ_TEST_BASH5 and each bash on the PATH. devbin_bash in opt/utilz/test/test_helper.bash:802 also searches for one, and macos.bats loads that file at line 24. From vc's FOLD, cycle 8 (cb704023).
+_(none)_
 
 ## Holds
 

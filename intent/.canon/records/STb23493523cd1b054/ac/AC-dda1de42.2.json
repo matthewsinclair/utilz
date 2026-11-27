@@ -1,0 +1,8 @@
+{
+  "id": "AC-dda1de42.2",
+  "text": "The example menu's item that runs arngz doctor is labelled \"Check Desks\" in opt/menuz/lib/example.yaml, in help/menuz.md (the example, the log example and the render) and in the render that SpecTests' example() expects. MenuzTests and MenuzKitTests pass (hv decision 70).",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

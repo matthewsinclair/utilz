@@ -1,0 +1,13 @@
+{
+  "schema": "intent/issue@4.0",
+  "id": "I669673a10e1c3c99",
+  "origin": "01M8E2403KSGP74YPZ4FKFJVZD",
+  "realised": true,
+  "slug": "macos-bats-searches-for-a-bash-5-a-second-time-b",
+  "title": "macos.bats searches for a bash 5 a second time, beside devbin_bash",
+  "status": "open",
+  "severity": "low",
+  "created": "2026-11-27",
+  "reporter": "Matthew Sinclair",
+  "body": "## What is wrong\n\n`setup_file` in `opt/menuz/test/macos.bats`, lines 28 to 32, searches for a bash 5. It reads `UTILZ_TEST_BASH5`, then each bash on the PATH (`type -ap bash`), with its own version test. `devbin_bash` in `opt/utilz/test/test_helper.bash` (line 802) also searches for a bash at devbin's floor, and `run_devbin` runs devbin under the bash it finds. `macos.bats` loads `test_helper.bash` at line 24, so it has `devbin_bash`, but it does not call it. Two searches do one job (Highlander).\n\nThe two searches read different places. `devbin_bash` reads `UTILZ_TEST_BASH5`, `$HOMEBREW_PREFIX/bin/bash`, `/opt/homebrew/bin/bash` and `/usr/local/bin/bash`, then the first bash on the PATH. `macos.bats` reads `UTILZ_TEST_BASH5`, then each bash on the PATH, and none of Homebrew's places. A change to one search does not reach the other. Issue I7854aef was that drift: `devbin_bash` did not read `UTILZ_TEST_BASH5`, and `macos.bats` did.\n\n## Fix\n\n`setup_file` gets `BASH5` from `devbin_bash`. When `devbin_bash` finds none, `BASH5` is empty, and `setup()` skips each test as it does now. The file's header comment and its two skip messages say where the bash comes from, and `devbin_bash`'s comment names `macos.bats` as a caller.\n\n## Proof\n\nStatic checks: `bash -n` under bash 3.2 and 5, and shellcheck with no new finding at the commit gate. Then one run of `macos.bats` alone, on vc's word and a Desk booking: every test runs and passes, and none skips. On a Mac with Homebrew's bash, on CI's macOS job (which sets `UTILZ_TEST_BASH5`) and on a Linux with bash 5 first on the PATH, both searches find the same bash, so no run is red at the base (no test of a test).\n\n## Provenance\n\nvc found it after the 2.15.0 cut and gave it to ic in its FOLD of cycle 8 (recorded in cb704023). ic files it and fixes it on vc's word after the bounce (ic's todo 16).\n"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "01M8E282FQ2CN1B8DVCZY5E1X2",
+  "ts": "2026-11-27T08:34:13.625Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "STb23493523cd1b054/dda1de42"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "One search for a bash 5 in macos.bats, and the Check Desks label"
+  }
+}

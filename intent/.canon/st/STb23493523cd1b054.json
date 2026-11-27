@@ -1,0 +1,14 @@
+{
+  "schema": "intent/thread@4.0",
+  "id": "STb23493523cd1b054",
+  "origin": "01M8E27QGFP7XHMWH6B46F7FDQ",
+  "realised": true,
+  "title": "menuz: one search for a bash 5 in macos.bats, and the Check Desks label (issue I669673a, hv decision 70)",
+  "slug": "menuz-one-search-for-a-bash-5-in-macos-bats-and",
+  "status": "wip",
+  "created": "2026-11-27",
+  "objective": "menuz's `macos.bats` takes its bash 5 from `devbin_bash`, the one search for a bash at devbin's floor in Utilz's tests (issue I669673a). In the same unit, the example menu's item that runs `arngz doctor` is labelled \"Check Desks\" (hv decision 70), in `opt/menuz/lib/example.yaml`, in `help/menuz.md`, and in MenuzKit's test of the example's render.",
+  "context": "vc gave both parts to ic as one unit in its BOUNCE of cycle 8, after the 2.15.0 cut. The bash search was ic's todo 16, from vc's FOLD of cycle 8 (cb704023). The label is hv's pick, \"Check Desks\", by vc's picker (hv decision 70); hv asked why the item says \"Hammerspoon\" when it runs `arngz doctor`. Molt-matts' `menuz.yaml`, hv's live menu, is changed by molt-vc's seats, not here. The fixtures in `MenuBuilderTests.swift` and `RunTests.swift` are test data and stay (vc).",
+  "body": "",
+  "preamble": ""
+}
