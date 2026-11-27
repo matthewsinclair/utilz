@@ -1,0 +1,15 @@
+{
+  "id": "01M8E1AB37ZJ0PV4N1FVS50EAD",
+  "ts": "2026-11-27T08:17:59.399Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session. hv's words: \"Can you give me the lines to use brew, please?\" vc gave one line, and hv ran it in vc's window, done before vc's date -u of 08:17Z: `cd ~/Devel/prj/Utilz && HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz && bin/devbin use brew`. The rest is vc's wording. brew's utilz went from 2.14.10 to 2.15.0, and `devbin use brew` removed all 18 links from ~/.local/bin, so each name answers \"2.15.0 (brew, 9fad28695cf1)\". brew's `utilz doctor` passes every check. rhadamanth is on brew from now on, which ends hv decision 19 (rhadamanth stays on utilz dev while the Utilz seats work). The seats work in worktrees and call their own tree's bin/, never PATH's. `bin/devbin use dev` puts rhadamanth back on dev, and that step is hv's."
+  }
+}

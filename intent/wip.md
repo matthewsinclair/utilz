@@ -8,7 +8,6 @@ verblock: "27 Nov 2026:v1.78: matts - after the 2.15.0 cut"
 
 ## TODO
 
-- hv: `brew upgrade utilz`. The switch stays on dev while the Utilz seats work (hv decision 19).
 - cc: the spcz thread, design first. STca1b7f9's open parts and issue I7fce35c move to it, and STca1b7f9 is then cancelled as superseded.
 - dc: ST0029, Retire Python (hv decision 35).
 - ic: one search for a bash 5 in the tests: opt/menuz/test/macos.bats uses devbin_bash from opt/utilz/test/test_helper.bash (Highlander).
