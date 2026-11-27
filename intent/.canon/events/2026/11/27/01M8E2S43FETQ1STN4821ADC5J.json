@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2S43FETQ1STN4821ADC5J",
+  "ts": "2026-11-27T08:43:32.335Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "hv decision 72's close-out (vc's STOP of 2026-11-27): sync dc's hv decision 21 docs to the as-built code and lean them, in a worktree off main: docs/releasing.md, docs/developer-guide.md, .github/workflows/README.md, opt/utilz/test/README.md, CHANGELOG's unreleased section and help/utilz.md. No new doc; fix each line the code does not bear out, and cut stale and repeated text. Each change goes to vc for its check by change. No run unless a doc feeds a test, and then on a Desk ask through vc."
+  }
+}

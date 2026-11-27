@@ -1,0 +1,16 @@
+{
+  "id": "01M8E2QD0MVAPDE0VWR6R2TW40",
+  "ts": "2026-11-27T08:42:35.926Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.hold",
+  "subject": {
+    "type": "thread",
+    "id": "ST0029"
+  },
+  "payload": {
+    "from": "wip",
+    "reason": "future work, unstarted: hv decision 72 drew a line under this week's Utilz work; resumes on hv's word",
+    "to": "hold"
+  }
+}

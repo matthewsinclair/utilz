@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-27 08:31Z
+heartbeat_at: 2026-11-27 08:43Z
 status: active
-focus: "27 Nov: ST0029 is resumed (vc's BOUNCE, cycle 8). Doing ST0029/01, xtrct's goldens: the plan went to vc at 08:29Z, then one booked run. Next WP02, the zsh port, byte-exact, then WP03, the pdf2md spike. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST0029/01]
+focus: "27 Nov, hv decision 72's close-out: ST0029 is held as future, unstarted work. Doing: dc's hv decision 21 docs synced to the as-built code and leaned, in a worktree, each change to vc by change. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: []
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-- ST0029/01, xtrct's goldens (hv decision 35; vc's BOUNCE, cycle 8). One booked run of run-st0029-wp01.sh after vc reads its bytes, then the golden pass is committed on dc/st0029 in wt-st0029 at opt/xtrct/test/fixtures/golden/. Next: WP02, xtrct's zsh port, byte-exact (Talga Rd, vc decision 79 (2)), then WP03, the pdf2md spike. The plan is dc's ask to vc of 2026-11-27 08:29Z.
+- hv decision 72's close-out (vc's STOP of 2026-11-27): sync dc's hv decision 21 docs to the as-built code and lean them, in a worktree off main: docs/releasing.md, docs/developer-guide.md, .github/workflows/README.md, opt/utilz/test/README.md, CHANGELOG's unreleased section and help/utilz.md. No new doc; fix each line the code does not bear out, and cut stale and repeated text. Each change goes to vc for its check by change. No run unless a doc feeds a test, and then on a Desk ask through vc.
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- ST0029, Retire Python, is held in Intent as future, unstarted work (hv decision 72). It holds until hv's word to resume it. At that word, dc resumes ST0029 and books WP01's goldens run from ~/Devel/scratch/utilz-dc/st0029-bounce/booking.md. D1 to D3 are answered in its design (hv decisions 35 and 71). dc/st0029 at 40e12842 (the untested jq draft) stays in wt-st0029, never main, and so does the harness.
 
 ## Watch-outs
 

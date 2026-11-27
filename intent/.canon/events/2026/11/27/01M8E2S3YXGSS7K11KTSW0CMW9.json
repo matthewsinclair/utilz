@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2S3YXGSS7K11KTSW0CMW9",
+  "ts": "2026-11-27T08:43:32.189Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "ST0029, Retire Python, is held in Intent as future, unstarted work (hv decision 72). It holds until hv's word to resume it. At that word, dc resumes ST0029 and books WP01's goldens run from ~/Devel/scratch/utilz-dc/st0029-bounce/booking.md. D1 to D3 are answered in its design (hv decisions 35 and 71). dc/st0029 at 40e12842 (the untested jq draft) stays in wt-st0029, never main, and so does the harness."
+  }
+}
