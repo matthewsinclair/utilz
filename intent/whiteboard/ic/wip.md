@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df52055f-4a04-484f-af3b-c557705c20dd
-heartbeat_at: 2026-11-26 18:17Z
+heartbeat_at: 2026-11-27 06:09Z
 status: active
-focus: "Folded for cycle 7 (hv decision 62); hold for vc's word. The marks (e179e732) ride cc/save1126, GREEN at 651a8ed2. Next: hv's live sitting (sounds, three marks), vc's landing, then remove wt-marks; AC-4b560be1.4 after hv's push. Waits on hv: the sitting and the pushes. RESUME.md has it."
+focus: "The marks are done: 161b3835 on main, hv's sitting PASSED, wt-marks removed. Next: on vc's word that the macOS dispatch is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. Waits on hv: the push of main. RESUME.md has it."
 claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 ---
 
@@ -13,8 +13,7 @@ claims: [STb8e4fb60638e2a9c, ISSUE:0114]
 
 ## DOING
 
-- Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4 (CI dispatch on the final push). (edited)
-- arngz marks (hv decisions 53, 58 and 59): the running mark and M1's close, e179e732 on ic/marks1126 (change hash e0d240af; arms in ~/Devel/scratch/utilz-ic/marks1126/arms-e179e732.md). cc carried it onto cc/save1126 as bfae06a2. The rerun 01M8C5H0E5MNE53V94XDQX1HTB is GREEN at 651a8ed2 (arngz.bats 213 of 213, vc's record c39703d1). Left: hv's live sitting (the sounds and the three marks), then vc's landing; then record decisions 53 and 58 and remove wt-marks. (edited)
+- Utilz 0114 landed on main; arca_swift 0.3.0 done; AC-4b560be1.5 satisfied. Open: AC-4b560be1.4, the macOS dispatch of tests.yml, which vc starts when CI on main is green after hv's push. On vc's word that it is green: satisfy AC-4b560be1.4, then close ST44b4671/4b56, ST44b4671 and issue 0114 (hv decision 66). (edited)
 
 ## TODO
 

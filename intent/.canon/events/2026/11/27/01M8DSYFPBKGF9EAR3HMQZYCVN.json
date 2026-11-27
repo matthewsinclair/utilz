@@ -1,0 +1,16 @@
+{
+  "id": "01M8DSYFPBKGF9EAR3HMQZYCVN",
+  "ts": "2026-11-27T06:09:10.859Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "doing",
+    "seq": 21,
+    "text": "arngz marks (hv decisions 53, 58 and 59): done. e179e732 landed on main as 161b3835, in cc's 18 commits 253d969b to da86ff7b. ic read it by change: each of its 8 paths has the same net change as e0d240af. hv's sitting PASSED (hv decision 65): \"Yep, all marks and all sounds.\" wt-marks is removed by the fold checks. Branch ic/marks1126 stays at e179e732."
+  }
+}
