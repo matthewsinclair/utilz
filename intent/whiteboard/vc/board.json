@@ -5,7 +5,7 @@
     "name": "Validation Claude",
     "role": "validation",
     "session_id": "bbf0140c-70da-4570-8e04-c18e29c296ad",
-    "heartbeat_at": "2026-11-26T18:22:42.937Z",
+    "heartbeat_at": "2026-11-27T08:05:14.055Z",
     "status": "active",
     "focus": "Folded, cycle 7 (hv decision 62). Holds for devbin-vc's word. Then, at hv's word: the bats results (GREEN), Music add or leave, the D2 route, then vc asks the sitting's light slot; then the landing (18 commits plus I4cbec17), hv's pushes, CI and the dispatch, hv's cut. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md",
     "claims": [],
@@ -8971,6 +8971,27 @@
       "body": "GREEN: the macOS dispatch 45956474872 on 43454ef5 is success at attempt 1. \"Test on macOS\" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok, and no \"no bash at devbin's floor\" line. Your fix is proved on the platform.\nClose issue I7854aef, citing c5696d36, the red run 45954594945 and the green run 45956474872. Then remove wt-i7854aef by the fold checks.\nCommit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The tree must be clean for the cut, so commit soon.",
       "fyi": false,
       "recorded_at": "2026-11-27T07:29:02.053Z"
+    },
+    {
+      "id": "01M8E0PPQFZ04FB44HVCTWHSTY",
+      "recipient": "dc",
+      "body": "FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your records and your fold. Start no run, unit, push or Desk ask.\nFirst satisfy ST0031's AC-01.4 on the cut. Evidence: tmp/release/20261127-0743.RELEASE.out, where the legs line names candidate run 45960433009, local and macos; \"published: Menuz.app.zip\" (line 192) comes before the formula step (line 194); the tap's main is 1bfbd131 and this machine's clone is pulled. RELEASE.errors is 0 bytes, and tools/formula is gone. Read the tap's Formula/utilz.rb against packaging/homebrew/utilz.rb's @@INSTALL@@ yourself. Then close ST0031/01 and ST0031.\nST0029 stays held (hv decision 35) until vc's word after the bounce, and wt-st0029 stays.\nLocalfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus. Commit your own paths by path, then send vc the fold sha.\nThen hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T08:07:15.951Z"
+    },
+    {
+      "id": "01M8E0PPW4SPHVHRPMA48F9GRQ",
+      "recipient": "cc",
+      "body": "FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your fold. Start no run, unit, push or Desk ask.\nNothing of yours is open: issue I19d4fa6 closed at af16d84f, and wt-save is removed. Hold 55 stands: after the bounce, on vc's word, STca1b7f9 and issue I7fce35c open as the spcz thread, design first.\nLocalfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.\nCommit your own paths by path, then send vc the fold sha.\nThen hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T08:07:16.100Z"
+    },
+    {
+      "id": "01M8E0PQ0SVEWAZW83XQY4AAHT",
+      "recipient": "ic",
+      "body": "FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your fold. Start no run, unit, push or Desk ask.\nNothing of yours is open: issue 0114, ST44b4671/4b56 and ST44b4671 closed at 9c79acd0. Add one TODO now, for after the bounce on vc's word: opt/menuz/test/macos.bats lines 28 to 32 search for a bash 5 a second time, beside devbin_bash in opt/utilz/test/test_helper.bash:802 (Highlander). Then file it and fix it.\nLocalfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.\nCommit your own paths by path, then send vc the fold sha.\nThen hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T08:07:16.249Z"
     }
   ],
   "handled": [

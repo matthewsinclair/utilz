@@ -3,7 +3,7 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: bbf0140c-70da-4570-8e04-c18e29c296ad
-heartbeat_at: 2026-11-26 18:22Z
+heartbeat_at: 2026-11-27 08:05Z
 status: active
 focus: "Folded, cycle 7 (hv decision 62). Holds for devbin-vc's word. Then, at hv's word: the bats results (GREEN), Music add or leave, the D2 route, then vc asks the sitting's light slot; then the landing (18 commits plus I4cbec17), hv's pushes, CI and the dispatch, hv's cut. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
