@@ -602,6 +602,14 @@
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 18:11Z and read by vc at 18:13Z. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I can compact and then we can continue on the bounce.\" devbin-vc calls it cycle 7. The rest is the wording of devbin-vc and vc. For Utilz: no run, unit, push, tag or cut starts, and the Desk grants nothing new until devbin-vc's word after the cycle. Each seat banks its work on its branch or main, local only, and localfolds without a release: board, wip, and a resume line that says the next step and what waits on hv. Each seat commits its own files by path and sends vc its fold sha. vc sends devbin-vc one FOLDED message for the team, then every seat holds. After hv's compact, each seat runs /in-session, reads its resume line and holds for vc's word; devbin-vc gives each vc the word to go on, in the plan's order.",
       "state": "live",
       "recorded_at": "2026-11-26T18:15:04.427Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 63,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 04:54Z. It follows devbin-vc's lift of fold cycle 7's hold for Utilz (its date -u of 18:25Z on 26 Nov), after which vc gave hv both bats results (GREEN) and put three questions. hv's picks, from options worded by vc: Music at homere, \"Add (Recommended)\"; the tool line, \"Tool line first (Recommended)\"; the order at the Mac, \"Intent's cut first\". The rest is vc's wording. (1) vc adds an 8th laptop desktop for Music to hv's homere.yaml, as at zeopit (com.apple.Music, layout 0,0 8x4), with the file as it was kept in ~/Devel/scratch/utilz-vc/live1126/homere.before.yaml, and checks it with `arngz show homere` and `arngz list`. (2) hv amends ST0015's D2 for 2.15.0: a utility's `--version` prints the tool line first, `<util> <utilz version> (<tree>, <sha12>[+dirty])`, then the pair `utilz:<framework>/<util>:<version>` on line two, then the description. devbin reads line one as it does now. dc's A e8031acd and B e58c15db on dc/i4cbec17 (issue I4cbec17; run 01M8C5ZXJ44D697PQ1V9CQ4HW0 GREEN) land by change with the fix round, after hv's verdict at the sitting. (3) Intent's 3.5.6 cut goes first on the Desk. vc asks the Desk for the sitting's light slot when hv says that cut is done.",
+      "state": "live",
+      "recorded_at": "2026-11-27T04:55:38.738Z"
     }
   ],
   "sent": [],

@@ -1,5 +1,5 @@
 ---
-verblock: "26 Nov 2026:v1.76: matts - the 2.15.0 fix round"
+verblock: "27 Nov 2026:v1.77: matts - the 2.15.0 fix round"
 ---
 
 # Work In Progress
@@ -7,13 +7,11 @@ verblock: "26 Nov 2026:v1.76: matts - the 2.15.0 fix round"
 ## DOING
 
 - cc: the 2.15.0 fix round on cc/save1126 (issue I19d4fa6, hv decisions 58 to 60), for hv's live sitting at homere.
-- dc: the tool-line XS on dc/i4cbec17 (issue I4cbec17, from devbin issue Icb1329b), in which a utility's `--version` names the utility, for hv's D2 route word.
+- dc: the tool-line XS on dc/i4cbec17 (issue I4cbec17, from devbin issue Icb1329b): a utility's `--version` opens with the tool line under the utility's name (hv decision 63).
 
 ## TODO
 
-- hv: homere's Music desktop, "add" or "leave".
-- hv: the D2 route for the tool line, "tool line first" or "pair first". "Pair first" takes dc's one small bats run in mode A.
-- hv: the live sitting at homere, in one light slot from the Desk.
+- hv: the live sitting at homere, in one light slot from the Desk, after Intent's 3.5.6 cut.
 - vc: land cc/save1126 and the tool-line XS by change. dc commits the 2.15.0 CHANGELOG lines, and cc closes I19d4fa6.
 - hv: push Utilz main and arca_swift main in vc's window.
 - vc: CI on Utilz main and the macOS tests dispatch. ic then closes ST44b4671/4b56, ST44b4671 and issue 0114.

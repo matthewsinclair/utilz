@@ -1,0 +1,15 @@
+{
+  "id": "01M8DNQTZJ05R8ZEX468JTP33M",
+  "ts": "2026-11-27T04:55:38.738Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 04:54Z. It follows devbin-vc's lift of fold cycle 7's hold for Utilz (its date -u of 18:25Z on 26 Nov), after which vc gave hv both bats results (GREEN) and put three questions. hv's picks, from options worded by vc: Music at homere, \"Add (Recommended)\"; the tool line, \"Tool line first (Recommended)\"; the order at the Mac, \"Intent's cut first\". The rest is vc's wording. (1) vc adds an 8th laptop desktop for Music to hv's homere.yaml, as at zeopit (com.apple.Music, layout 0,0 8x4), with the file as it was kept in ~/Devel/scratch/utilz-vc/live1126/homere.before.yaml, and checks it with `arngz show homere` and `arngz list`. (2) hv amends ST0015's D2 for 2.15.0: a utility's `--version` prints the tool line first, `<util> <utilz version> (<tree>, <sha12>[+dirty])`, then the pair `utilz:<framework>/<util>:<version>` on line two, then the description. devbin reads line one as it does now. dc's A e8031acd and B e58c15db on dc/i4cbec17 (issue I4cbec17; run 01M8C5ZXJ44D697PQ1V9CQ4HW0 GREEN) land by change with the fix round, after hv's verdict at the sitting. (3) Intent's 3.5.6 cut goes first on the Desk. vc asks the Desk for the sitting's light slot when hv says that cut is done."
+  }
+}
