@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
-heartbeat_at: 2026-11-27 06:08Z
+heartbeat_at: 2026-11-27 08:09Z
 status: active
-focus: "2.15.0: cc's work is landed and issue I19d4fa6 is closed. Hold for vc's word. Hold 55: after the cut, STca1b7f9 and issue I7fce35c move to the spcz thread, design first. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+focus: "Folded, cycle 8, after the 2.15.0 cut (GREEN; tag 2.15.0 at 9fad2869). Nothing of cc's is open. Waits on hv: the bounce. Then, on vc's word: hold 55, the spcz thread for STca1b7f9 and issue I7fce35c, design first. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: [STca1b7f9d59191dfc]
 ---
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Move STca1b7f9 and issue I7fce35c to the spcz thread, design first (hv decision 66), once the 2.15.0 cut is done (tag 2.15.0).
+- Move STca1b7f9 and issue I7fce35c to the spcz thread, design first (hv decision 66). Released by vc's word after the bounce that follows the 2.15.0 cut (vc's FOLD, cycle 8). (edited)
 
 ## Watch-outs
 
