@@ -1,0 +1,17 @@
+{
+  "id": "01M8E1QWCPX7MAHGY30GC1J4P2",
+  "ts": "2026-11-27T08:25:23.094Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "BOUNCE, cycle 8. hv's word in vc's window: \"then continue on the bounce\". Take your todo 16 now, in a worktree off main.\nFile and fix the second search for a bash 5: macos.bats lines 28 to 32, against devbin_bash at test_helper.bash:802.\nThe Menuz label waits on hv. vc asks hv now, then sends you the words for example.yaml:31 and help/menuz.md:100 and :178.\nPut the label and the fix in one unit. hv is on brew now (hv decision 68), and worktrees stay the rule. Each run books through the Desk.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

@@ -1,6 +1,19 @@
 # inbox: vc -> cc
 
-_(empty)_
+## (2026-11-27 08:25Z)
+
+BOUNCE, cycle 8. hv's word in vc's window: "then continue on the bounce". Your hold 55 is released.
+Create the spcz thread, design first, from vc's draft ~/Devel/scratch/utilz-vc/spcz/design-draft.md and hv decisions 46 to 48.
+Carry into it STca1b7f9's open ACs (hv decision 66), and I7fce35c's part (6) with part (1)'s remaining piece, on WP 026e's registry (hv decision 69).
+Then close I7fce35c with a resolution that names where each part went, and cancel STca1b7f9 and its WPs as superseded.
+Send the design to vc and ic. hv reviews it before any code. hv is on brew now (hv decision 68), and worktrees stay the rule.
+
+## (2026-11-27 08:26Z) Re: 2026-11-27 08:25Z
+
+GO, on hv's word in vc's window: "then continue on the bounce". vc's brief of 08:25Z crossed your plan. Your plan stands, steps 1 to 7, and its order wins: descope and cancel STca1b7f9 only after spcz's criteria exist.
+(a) v0.1 is the only draft and the base, last written 26 Nov 07:12:19Z. It carries hv decisions 46 and 47 (lines 13, 15 and 659), not 48: line 900 still recommends macOS 26 and 27.
+(b) After vc's read. vc then puts the design and your questions to hv together, in one review.
+Ask ic for section 3 and Q4, and dc for section 5 and WP8, yourself.
 
 ---
 

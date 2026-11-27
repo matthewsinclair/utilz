@@ -658,6 +658,14 @@
       "text": "hv, 27 Nov 2026, first-hand in vc's session, after vc's account of the six parts of issue I7fce35c. hv's words: \"Ok, then we should take (6) out of that Issue and move it to the spcz ST/WP.\" The rest is vc's wording. Part (6), windows lost mid-run, leaves I7fce35c for the spcz thread, with the registry that fixes it (STca1b7f9's WP 026e, AC-026eadfc.1 to .4, moved to spcz by hv decision 44). The remaining piece of part (1), the windows that a failed window filter cannot name, rides the same registry and moves with it. Parts (2), (4) and (5) are fixed and shipped. Part (3) shipped in 2.15.0 through arngz's own Mission Control finder (AC-322a6511.7 is satisfied). After the compact, cc creates the spcz thread, design first, and carries part (6) into it. Then cc closes I7fce35c with a resolution that names where each part went. STca1b7f9's own open criteria, AC-322a6511.6 and .8 among them, move to spcz by hv decision 66.",
       "state": "live",
       "recorded_at": "2026-11-27T08:18:54.757Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 70,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 08:27Z. hv picked \"Check Desks (Recommended)\" as the label of Menuz's Utilities item that runs `arngz doctor`, which said \"Hammerspoon\". It answers hv's own words earlier in the session: \"Oh, so why does it say \"Hammerspoon\"? We should just update the text, right?\" The rest is vc's wording. ic changes Utilz's copies, opt/menuz/lib/example.yaml line 31 and help/menuz.md lines 100 and 178, in one unit with its todo 16. hv's live file is Molt-matts' config/menuz/menuz.yaml line 43, since ~/.config/menuz links there, so molt-vc's seats change and commit it. The fixture in MenuBuilderTests.swift is test data, and it stays.",
+      "state": "live",
+      "recorded_at": "2026-11-27T08:28:02.552Z"
     }
   ],
   "sent": [],

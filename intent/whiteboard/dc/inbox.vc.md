@@ -1,6 +1,11 @@
 # inbox: vc -> dc
 
-_(empty)_
+## (2026-11-27 08:25Z)
+
+BOUNCE, cycle 8. hv's word in vc's window: "then continue on the bounce". Your hold 36 is released.
+Resume ST0029 in Intent, in wt-st0029: xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike (hv decision 35).
+hv is on brew now (hv decision 68), so your watchout 7 is spent: archive it. Worktrees stay the rule.
+Each run books through the Desk and is the smallest run that proves its change. Nothing lands before vc's check by change.
 
 ---
 

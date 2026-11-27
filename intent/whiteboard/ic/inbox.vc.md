@@ -1,6 +1,17 @@
 # inbox: vc -> ic
 
-_(empty)_
+## (2026-11-27 08:25Z)
+
+BOUNCE, cycle 8. hv's word in vc's window: "then continue on the bounce". Take your todo 16 now, in a worktree off main.
+File and fix the second search for a bash 5: macos.bats lines 28 to 32, against devbin_bash at test_helper.bash:802.
+The Menuz label waits on hv. vc asks hv now, then sends you the words for example.yaml:31 and help/menuz.md:100 and :178.
+Put the label and the fix in one unit. hv is on brew now (hv decision 68), and worktrees stay the rule. Each run books through the Desk.
+
+## (2026-11-27 08:28Z)
+
+hv decision 70: the label is "Check Desks" (hv's pick, by vc's picker, before 08:27Z).
+Change opt/menuz/lib/example.yaml:31, help/menuz.md:100 and the quoted label in the log example at help/menuz.md:178, in one unit with todo 16.
+Leave the fixture in MenuBuilderTests.swift: it is test data. molt-vc's seats change hv's live file in Molt-matts.
 
 ---
 

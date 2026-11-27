@@ -1,0 +1,17 @@
+{
+  "id": "01M8E1QW2R05CZ9YBK4F9B04TX",
+  "ts": "2026-11-27T08:25:22.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "BOUNCE, cycle 8. hv's word in vc's window: \"then continue on the bounce\". Your hold 55 is released.\nCreate the spcz thread, design first, from vc's draft ~/Devel/scratch/utilz-vc/spcz/design-draft.md and hv decisions 46 to 48.\nCarry into it STca1b7f9's open ACs (hv decision 66), and I7fce35c's part (6) with part (1)'s remaining piece, on WP 026e's registry (hv decision 69).\nThen close I7fce35c with a resolution that names where each part went, and cancel STca1b7f9 and its WPs as superseded.\nSend the design to vc and ic. hv reviews it before any code. hv is on brew now (hv decision 68), and worktrees stay the rule.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

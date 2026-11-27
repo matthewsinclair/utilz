@@ -1,0 +1,17 @@
+{
+  "id": "01M8E1WR8H464WDAC1PVBX40V6",
+  "ts": "2026-11-27T08:28:02.705Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decision 70: the label is \"Check Desks\" (hv's pick, by vc's picker, before 08:27Z).\nChange opt/menuz/lib/example.yaml:31, help/menuz.md:100 and the quoted label in the log example at help/menuz.md:178, in one unit with todo 16.\nLeave the fixture in MenuBuilderTests.swift: it is test data. molt-vc's seats change hv's live file in Molt-matts.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

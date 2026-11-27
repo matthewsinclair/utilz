@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: bbf0140c-70da-4570-8e04-c18e29c296ad
-heartbeat_at: 2026-11-27 08:19Z
+heartbeat_at: 2026-11-27 08:29Z
 status: active
-focus: "Folded, cycle 8 (hv decision 67). 2.15.0 is released (GREEN, 08:04:18Z), and hv is on brew (hv decision 68). Holds for devbin-vc's word. Then cc opens spcz (design first) with part (6) of I7fce35c (hv decision 69), dc takes ST0029, ic takes the bash 5 search and the Menuz label. With hv: the label, menuz install, the next push. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Bounced after cycle 8, on hv's word (08:25Z). cc: spcz's design, its plan steps 1 to 7, for vc's read and then hv's review. dc: ST0029, xtrct's goldens first. ic: todo 16 with the label "Check Desks" (hv decision 70). molt-vc: hv's menuz.yaml. The Desk grants no run until hv tells devbin-vc every window is compacted. With hv: menuz install, the next push. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 

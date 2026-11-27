@@ -1,0 +1,17 @@
+{
+  "id": "01M8E1TFS291H6T3RGW6FRS9TC",
+  "ts": "2026-11-27T08:26:48.482Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GO, on hv's word in vc's window: \"then continue on the bounce\". vc's brief of 08:25Z crossed your plan. Your plan stands, steps 1 to 7, and its order wins: descope and cancel STca1b7f9 only after spcz's criteria exist.\n(a) v0.1 is the only draft and the base, last written 26 Nov 07:12:19Z. It carries hv decisions 46 and 47 (lines 13, 15 and 659), not 48: line 900 still recommends macOS 26 and 27.\n(b) After vc's read. vc then puts the design and your questions to hv together, in one review.\nAsk ic for section 3 and Q4, and dc for section 5 and WP8, yourself.",
+    "fyi": false,
+    "re": "2026-11-27 08:25Z",
+    "recipient": "cc"
+  }
+}
