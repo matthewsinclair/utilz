@@ -3,8 +3,8 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-27 09:17Z
-status: active
+heartbeat_at: 2026-11-27 09:18Z
+status: paused
 focus: "27 Nov: dc shuts down on hv's word (hv decision 72). Open: ST0029, held as future, unstarted work until hv's word (hold 42). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
