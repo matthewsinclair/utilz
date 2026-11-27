@@ -1,0 +1,15 @@
+{
+  "id": "01M8E0SGJZRNCAPP97V6RGG0CG",
+  "ts": "2026-11-27T08:08:47.967Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, in devbin-vc's window, relayed by devbin-vc (hv's words read by its date -u of 07:55Z) and received by vc at 07:56Z by this session's log. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I can compact and then we can continue on the bounce.\" devbin-vc calls it cycle 8. The rest is the wording of devbin-vc and vc. For Utilz: the 2.15.0 cut runs to its END, and the seats fold after it, because a fold writes to the board. The cut ended GREEN (devbin's end stamp 08:04:18Z), and vc released its slot at 08:04:46Z. No new run, unit, push, tag or cut starts, and the Desk grants nothing new until devbin-vc's word after the cycle. Each seat localfolds without a release, commits its own files by path and sends vc its fold sha. vc sends devbin-vc one FOLDED message for the team, then every seat holds. The brew lines wait for hv after the bounce, unless hv is at the Mac at the END. After hv's compact, each seat runs /in-session, reads its resume line and holds for vc's word."
+  }
+}

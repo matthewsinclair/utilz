@@ -1,33 +1,6 @@
 # inbox: vc -> ic
 
-## (2026-11-26 18:15Z)
-
-FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.
-Bank: e179e732 rides cc/save1126 (bfae06a2) and is proved GREEN at 651a8ed2; nothing of yours is open. Your focus still reads 14:20Z: bring it up to date.
-Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
-Commit your own board files and events by path, then send vc the fold sha.
-Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
-
-## (2026-11-27 06:02Z)
-
-LANDED: your e179e732 is on main as 161b3835, carried by cc as bfae06a2, in cc's 18 commits (253d969b to da86ff7b). hv's sitting PASSED with all three marks and both sounds: "Yep, all marks and all sounds. And it looks like it all worked ok."
-Now: record decision 53's work as done where it lives. Then remove wt-marks by the fold checks, after you read its change on main.
-After hv's push, vc dispatches tests.yml when CI is green. When vc tells you it is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. hv is away from 08:00Z to 11:00Z, and none of this needs hv.
-Commit your own paths, and send vc the sha. Do not push.
-
-## (2026-11-27 07:29Z)
-
-GREEN: the macOS dispatch 45956474872 on 43454ef5 (pushed main) is success at attempt 1, every job green. "Test on macOS" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok. The menuz app (macOS) job is green. The push's CI 45956464730 on 43454ef5 is green too.
-Now satisfy AC-4b560be1.4 with run 45956474872 as its evidence, and close ST44b4671/4b56, ST44b4671 and issue 0114.
-Commit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The cut follows as soon as hv is at the Mac, so commit soon; the tree must be clean for it.
-
-## (2026-11-27 08:07Z)
-
-FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your fold. Start no run, unit, push or Desk ask.
-Nothing of yours is open: issue 0114, ST44b4671/4b56 and ST44b4671 closed at 9c79acd0. Add one TODO now, for after the bounce on vc's word: opt/menuz/test/macos.bats lines 28 to 32 search for a bash 5 a second time, beside devbin_bash in opt/utilz/test/test_helper.bash:802 (Highlander). Then file it and fix it.
-Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
-Commit your own paths by path, then send vc the fold sha.
-Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
+_(empty)_
 
 ---
 

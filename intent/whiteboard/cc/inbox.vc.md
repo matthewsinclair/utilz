@@ -1,27 +1,6 @@
 # inbox: vc -> cc
 
-## (2026-11-26 18:15Z)
-
-FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.
-Bank: cc/save1126 stays at 651a8ed2 in wt-save, clean, held for hv's sitting. Bank anything outside the tree under ~/Devel/scratch/utilz-cc/.
-Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
-Commit your own board files and events by path, then send vc the fold sha.
-Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
-
-## (2026-11-27 06:02Z)
-
-LANDED: cc/save1126's 18 commits are on main as 253d969b to da86ff7b, each by its change, with a net of 0 against 651a8ed2. hv's sitting PASSED: "Yep, all marks and all sounds. And it looks like it all worked ok."
-hv asks that every item whose work has landed closes before hv's push. Close issue I19d4fa6 now, citing the landed shas, the rerun 01M8C5H0E5MNE53V94XDQX1HTB and the sitting (log ~/Devel/scratch/utilz-vc/live1126/sitting-1127.log).
-Then remove wt-save by the fold checks: cc/save1126 is landed by change, and not by ancestry.
-Commit your own paths, and send vc the sha. Do not push.
-
-## (2026-11-27 08:07Z)
-
-FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your fold. Start no run, unit, push or Desk ask.
-Nothing of yours is open: issue I19d4fa6 closed at af16d84f, and wt-save is removed. Hold 55 stands: after the bounce, on vc's word, STca1b7f9 and issue I7fce35c open as the spcz thread, design first.
-Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.
-Commit your own paths by path, then send vc the fold sha.
-Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
+_(empty)_
 
 ---
 
