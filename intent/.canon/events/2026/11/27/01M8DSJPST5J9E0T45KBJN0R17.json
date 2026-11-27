@@ -1,0 +1,17 @@
+{
+  "id": "01M8DSJPST5J9E0T45KBJN0R17",
+  "ts": "2026-11-27T06:02:44.922Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "LANDED: your e179e732 is on main as 161b3835, carried by cc as bfae06a2, in cc's 18 commits (253d969b to da86ff7b). hv's sitting PASSED with all three marks and both sounds: \"Yep, all marks and all sounds. And it looks like it all worked ok.\"\nNow: record decision 53's work as done where it lives. Then remove wt-marks by the fold checks, after you read its change on main.\nAfter hv's push, vc dispatches tests.yml when CI is green. When vc tells you it is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. hv is away from 08:00Z to 11:00Z, and none of this needs hv.\nCommit your own paths, and send vc the sha. Do not push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}

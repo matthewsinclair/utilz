@@ -1,0 +1,15 @@
+{
+  "id": "01M8DSMBBEWE6FSCJJCQ596TRW",
+  "ts": "2026-11-27T06:03:38.734Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 05:25Z. It answers vc's restatement of the premise of hv decision 63's tool-line option. That option said \"built and proved green\", but help_dispatch.bats AT04 still read the pair from line one, and dc's run had not taken that file. hv's picks, from options worded by vc: \"Yes, tool line first (Recommended)\" and, for the live sitting, \"Ready at the cut's end\". The rest is vc's wording. Decision 63's route stands. The tool line lands as A e8031acd, B e58c15db and C b6ed1c2e (C fixes AT04; change 40576ed2), after one small bats run in mode C (Desk ask 01M8DQ8SYS1RGRHB9G5DGYAAT0) at the sitting's END. devbin's T4 sentence, that the line is the first line of `--version`, lands on this answer. vc asked the Desk for the sitting's light slot (01M8DQF1SDZP1ZA560BFGR64YN), to start after Intent's 3.5.6 cut and rollout."
+  }
+}

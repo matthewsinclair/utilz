@@ -1,0 +1,17 @@
+{
+  "id": "01M8DSJPEW4WQ5J9M79YKF7FYQ",
+  "ts": "2026-11-27T06:02:44.572Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "LANDED: cc/save1126's 18 commits are on main as 253d969b to da86ff7b, each by its change, with a net of 0 against 651a8ed2. hv's sitting PASSED: \"Yep, all marks and all sounds. And it looks like it all worked ok.\"\nhv asks that every item whose work has landed closes before hv's push. Close issue I19d4fa6 now, citing the landed shas, the rerun 01M8C5H0E5MNE53V94XDQX1HTB and the sitting (log ~/Devel/scratch/utilz-vc/live1126/sitting-1127.log).\nThen remove wt-save by the fold checks: cc/save1126 is landed by change, and not by ancestry.\nCommit your own paths, and send vc the sha. Do not push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

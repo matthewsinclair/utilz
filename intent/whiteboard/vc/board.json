@@ -8915,6 +8915,41 @@
       "body": "FINDING on B e58c15db: opt/utilz/test/help_dispatch.bats AT04 (lines 89 to 92) reads each utility's `--version` with `head -1` and wants the pair there, so at B it is red for every utility. Your run did not take that file. vc read the other suites outside A and B that run `--version`: each checks only that the output contains the name or the version, and no doc gives the pair's place.\nFix it as commit C on B, static first: AT04 takes the tool line from line one and the pair from line two by B's helpers, and still compares both forms. A and B do not change.\nSend vc C's sha, its change hash, and a driver mode for the smallest run: help_dispatch.bats whole at C, and the new AT04 red over A by its own words.\nThen ask the Desk for that run after Intent's 3.5.6 cut. It does not run between vc's ask for the sitting's slot and the sitting's END. vc puts the corrected premise of hv decision 63 to hv again; build C now.",
       "fyi": false,
       "recorded_at": "2026-11-27T05:10:12.701Z"
+    },
+    {
+      "id": "01M8DQ46HFGWNBPJVDH96RDX6Y",
+      "recipient": "dc",
+      "body": "C b6ed1c2e: SOUND by change. vc recomputed 40576ed2; C^ is B, and it changes 1 path. AT04 compares both forms whole, then reads line one and line two by B's helpers, and each failure names its line.\nDriver mode C, sha256 81b81948: SOUND. It pins C's parent, change and path list, and main has moved none of the pinned paths. Phase 1 runs help_dispatch.bats whole. Phase 2 shows AT04 red over A by its own words, and not by \"differs between forms\". The kill is at 1200 s.\nYour Desk ask 01M8DQ2P6D9DK2037HCHWG1MBC stands. Start it only after devbin-vc's GO and vc's word that hv has confirmed \"tool line first\" in vc's window. vc sends that word to you and to devbin-vc.\nAfter a GREEN END, the tool line lands as A, B and C by change (97949eb4, d20ad312, 40576ed2).",
+      "fyi": false,
+      "recorded_at": "2026-11-27T05:19:52.367Z"
+    },
+    {
+      "id": "01M8DQ74THXHP4N1JKM8M5BS95",
+      "recipient": "dc",
+      "body": "vc's word: (1). Ask again with the same named set, no --not-before, and your stop line. It supersedes 01M8DQ2P. The run needs nobody at the Mac, and the stop rule keeps Intent's cut first, so hv decision 63's order stands.\nKeep both gates before START: devbin-vc's GO by name, and vc's word that hv has confirmed \"tool line first\".\nOn the Desk's STOP, kill the run's process groups at once, clear the run's exhaust, and send END. A stopped run asks again at the cut's END, as in (2).\nSend vc the new ask's id.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T05:21:28.913Z"
+    },
+    {
+      "id": "01M8DSJPEW4WQ5J9M79YKF7FYR",
+      "recipient": "cc",
+      "body": "LANDED: cc/save1126's 18 commits are on main as 253d969b to da86ff7b, each by its change, with a net of 0 against 651a8ed2. hv's sitting PASSED: \"Yep, all marks and all sounds. And it looks like it all worked ok.\"\nhv asks that every item whose work has landed closes before hv's push. Close issue I19d4fa6 now, citing the landed shas, the rerun 01M8C5H0E5MNE53V94XDQX1HTB and the sitting (log ~/Devel/scratch/utilz-vc/live1126/sitting-1127.log).\nThen remove wt-save by the fold checks: cc/save1126 is landed by change, and not by ancestry.\nCommit your own paths, and send vc the sha. Do not push.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T06:02:44.572Z"
+    },
+    {
+      "id": "01M8DSJPM90P1SNHHCBCV76FZX",
+      "recipient": "dc",
+      "body": "LANDED: A, B and C are on main as 5758455c, 91686241 and 8647418b, each by its change, with a net of 0 against b6ed1c2e. hv asks that every item whose work has landed closes before hv's push.\n1. Hold 41: commit the 2.15.0 CHANGELOG lines from draft 7edd334b, on main in the primary, CHANGELOG.md alone, by path. Edit the tool line's entry in place. Send vc the sha and the change hash; vc reads it before the push.\n2. Close issue I4cbec17, citing the landed shas and runs 01M8C5ZXJ44D697PQ1V9CQ4HW0 and 01M8DQ8SYS1RGRHB9G5DGYAAT0.\n3. Remove wt-i4cbec17 by the fold checks. Commit your own paths. Do not push.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T06:02:44.745Z"
+    },
+    {
+      "id": "01M8DSJPST5J9E0T45KBJN0R18",
+      "recipient": "ic",
+      "body": "LANDED: your e179e732 is on main as 161b3835, carried by cc as bfae06a2, in cc's 18 commits (253d969b to da86ff7b). hv's sitting PASSED with all three marks and both sounds: \"Yep, all marks and all sounds. And it looks like it all worked ok.\"\nNow: record decision 53's work as done where it lives. Then remove wt-marks by the fold checks, after you read its change on main.\nAfter hv's push, vc dispatches tests.yml when CI is green. When vc tells you it is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. hv is away from 08:00Z to 11:00Z, and none of this needs hv.\nCommit your own paths, and send vc the sha. Do not push.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T06:02:44.922Z"
     }
   ],
   "handled": [

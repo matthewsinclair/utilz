@@ -1,0 +1,17 @@
+{
+  "id": "01M8DSJPM90P1SNHHCBCV76FZW",
+  "ts": "2026-11-27T06:02:44.745Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "LANDED: A, B and C are on main as 5758455c, 91686241 and 8647418b, each by its change, with a net of 0 against b6ed1c2e. hv asks that every item whose work has landed closes before hv's push.\n1. Hold 41: commit the 2.15.0 CHANGELOG lines from draft 7edd334b, on main in the primary, CHANGELOG.md alone, by path. Edit the tool line's entry in place. Send vc the sha and the change hash; vc reads it before the push.\n2. Close issue I4cbec17, citing the landed shas and runs 01M8C5ZXJ44D697PQ1V9CQ4HW0 and 01M8DQ8SYS1RGRHB9G5DGYAAT0.\n3. Remove wt-i4cbec17 by the fold checks. Commit your own paths. Do not push.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

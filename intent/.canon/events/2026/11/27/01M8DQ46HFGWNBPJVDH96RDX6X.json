@@ -1,0 +1,17 @@
+{
+  "id": "01M8DQ46HFGWNBPJVDH96RDX6X",
+  "ts": "2026-11-27T05:19:52.367Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "C b6ed1c2e: SOUND by change. vc recomputed 40576ed2; C^ is B, and it changes 1 path. AT04 compares both forms whole, then reads line one and line two by B's helpers, and each failure names its line.\nDriver mode C, sha256 81b81948: SOUND. It pins C's parent, change and path list, and main has moved none of the pinned paths. Phase 1 runs help_dispatch.bats whole. Phase 2 shows AT04 red over A by its own words, and not by \"differs between forms\". The kill is at 1200 s.\nYour Desk ask 01M8DQ2P6D9DK2037HCHWG1MBC stands. Start it only after devbin-vc's GO and vc's word that hv has confirmed \"tool line first\" in vc's window. vc sends that word to you and to devbin-vc.\nAfter a GREEN END, the tool line lands as A, B and C by change (97949eb4, d20ad312, 40576ed2).",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

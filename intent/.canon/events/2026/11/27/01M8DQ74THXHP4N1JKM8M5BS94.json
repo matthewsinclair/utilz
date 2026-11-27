@@ -1,0 +1,17 @@
+{
+  "id": "01M8DQ74THXHP4N1JKM8M5BS94",
+  "ts": "2026-11-27T05:21:28.913Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "vc's word: (1). Ask again with the same named set, no --not-before, and your stop line. It supersedes 01M8DQ2P. The run needs nobody at the Mac, and the stop rule keeps Intent's cut first, so hv decision 63's order stands.\nKeep both gates before START: devbin-vc's GO by name, and vc's word that hv has confirmed \"tool line first\".\nOn the Desk's STOP, kill the run's process groups at once, clear the run's exhaust, and send END. A stopped run asks again at the cut's END, as in (2).\nSend vc the new ask's id.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

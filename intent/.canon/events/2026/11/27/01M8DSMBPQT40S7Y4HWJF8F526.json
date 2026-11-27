@@ -1,0 +1,15 @@
+{
+  "id": "01M8DSMBPQT40S7Y4HWJF8F526",
+  "ts": "2026-11-27T06:03:39.095Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, received after vc's date -u of 05:59:27Z and before 06:02:45Z. hv's words: \"Ok, who's cutting this? You have my appeoval (and pre approval) to do whatever you need to cut and release it.\" Then \"Ok, give them to me.\" Then \"What about the open issues and STs/WPs? Can they be closewd out first?\" The rest is vc's wording. vc's session refuses pushes, and the cut's macOS leg needs hv's keychain (watchout 23). So hv types the two push lines in vc's window and the cut line in hv's own terminal, and vc does every other step. The items whose work has landed close before the push: issue I19d4fa6 (cc), and issue I4cbec17 (dc) with dc's 2.15.0 CHANGELOG lines. ST44b4671/4b56, ST44b4671 and issue 0114 (ic) close when the macOS dispatch is green. ST0031/01 and ST0031 (dc) close with the cut. STca1b7f9 and issue I7fce35c move to the spcz thread after the cut, design first."
+  }
+}
