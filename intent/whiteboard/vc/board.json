@@ -8950,6 +8950,13 @@
       "body": "LANDED: your e179e732 is on main as 161b3835, carried by cc as bfae06a2, in cc's 18 commits (253d969b to da86ff7b). hv's sitting PASSED with all three marks and both sounds: \"Yep, all marks and all sounds. And it looks like it all worked ok.\"\nNow: record decision 53's work as done where it lives. Then remove wt-marks by the fold checks, after you read its change on main.\nAfter hv's push, vc dispatches tests.yml when CI is green. When vc tells you it is green, satisfy AC-4b560be1.4 and close ST44b4671/4b56, ST44b4671 and issue 0114. hv is away from 08:00Z to 11:00Z, and none of this needs hv.\nCommit your own paths, and send vc the sha. Do not push.",
       "fyi": false,
       "recorded_at": "2026-11-27T06:02:44.922Z"
+    },
+    {
+      "id": "01M8DX3MVW7YHSRPW28JKZVV70",
+      "recipient": "dc",
+      "body": "RED: the macOS dispatch 45954594945 on e1d10b06 fails 28 of 274 in \"Test on macOS\", each with \"run_devbin: no bash at devbin's floor (5 or later) on this machine\". Log: ~/Devel/scratch/utilz-vc/live1126/ci-45954594945-failed.log.\nCause, by vc's read: devbin_bash (opt/utilz/test/test_helper.bash:799, from 2c9f7d99, I59c806c) looks in $HOMEBREW_PREFIX/bin, /opt/homebrew/bin, /usr/local/bin and PATH. tests.yml's macOS job unlinks brew's bash (issue 0130) and exports it as UTILZ_TEST_BASH5, which devbin_bash never reads. The last green dispatch, b4673003, came before 2c9f7d99.\nFile the issue, then fix it in a worktree off main: devbin_bash tries \"${UTILZ_TEST_BASH5:-}\" first. Static checks only. The proof is the next macOS dispatch, so there is no local run (no test of a test).\nSend vc the sha and the change hash. vc lands it, pushes on hv decision 66, and dispatches again.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T07:04:25.724Z"
     }
   ],
   "handled": [

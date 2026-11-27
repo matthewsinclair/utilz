@@ -1,0 +1,17 @@
+{
+  "id": "01M8DX3MVW7YHSRPW28JKZVV6Z",
+  "ts": "2026-11-27T07:04:25.724Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "RED: the macOS dispatch 45954594945 on e1d10b06 fails 28 of 274 in \"Test on macOS\", each with \"run_devbin: no bash at devbin's floor (5 or later) on this machine\". Log: ~/Devel/scratch/utilz-vc/live1126/ci-45954594945-failed.log.\nCause, by vc's read: devbin_bash (opt/utilz/test/test_helper.bash:799, from 2c9f7d99, I59c806c) looks in $HOMEBREW_PREFIX/bin, /opt/homebrew/bin, /usr/local/bin and PATH. tests.yml's macOS job unlinks brew's bash (issue 0130) and exports it as UTILZ_TEST_BASH5, which devbin_bash never reads. The last green dispatch, b4673003, came before 2c9f7d99.\nFile the issue, then fix it in a worktree off main: devbin_bash tries \"${UTILZ_TEST_BASH5:-}\" first. Static checks only. The proof is the next macOS dispatch, so there is no local run (no test of a test).\nSend vc the sha and the change hash. vc lands it, pushes on hv decision 66, and dispatches again.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
