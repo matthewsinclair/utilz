@@ -1,0 +1,16 @@
+{
+  "id": "01M8E32PB4SACJ4PFXEF5A1HCQ",
+  "ts": "2026-11-27T08:48:45.924Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.edit",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "kind": "watchout",
+    "seq": 23,
+    "text": "A cut's macOS leg needs hv's keychain for notarisation, so it runs in hv's own terminal and never through a Claude's shell."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "id": "01M8E32133VBNDAAZPBT3D6KE5",
+  "ts": "2026-11-27T08:48:24.163Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:\n(1) your docs and your board's lean committed by path, after vc's check by change;\n(2) `intent wb release --node <you>`, then commit the paths it prints, by path;\n(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.",
+    "fyi": false,
+    "re": null,
+    "recipient": "cc"
+  }
+}

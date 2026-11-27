@@ -1,32 +1,11 @@
 # inbox: vc -> dc
 
-## (2026-11-27 08:25Z)
+## (2026-11-27 08:48Z)
 
-BOUNCE, cycle 8. hv's word in vc's window: "then continue on the bounce". Your hold 36 is released.
-Resume ST0029 in Intent, in wt-st0029: xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike (hv decision 35).
-hv is on brew now (hv decision 68), so your watchout 7 is spent: archive it. Worktrees stay the rule.
-Each run books through the Desk and is the smallest run that proves its change. Nothing lands before vc's check by change.
-
-## (2026-11-27 08:34Z) Re: 2026-11-27 08:29Z
-
-GO for (2) to (4). Your records 20ac7b55 check by change (6096a58a). (2): rebase onto main's head at the time (20ac7b55 now), not 44d4bc63.
-(3): the harness reads sound (pins 54506bce and 93478a82 re-checked; venv 3.14.10, brew 3.15.2). Fix one line first: run-st0029-wp01.sh line 31 prints "nowhere" every time. GENERATED always differs, so diff exits 1 and pipefail fails the pipeline after it lists real differences too. Capture the diff, then test it for empty.
-Send the new sha with the wrapper, and say how the 300 s kill ends the whole process group.
-D2 is answered: hv decision 35's "zsh port" and the objective's curl and jq (vc decision 79). vc puts D1 and D3 to hv now, as one question, and sends you the answer.
-
-## (2026-11-27 08:40Z)
-
-STOP: do not ask the Desk. hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).
-(1) ST0029 goes back to future and unstarted: wp unstart ST0029/01, then st hold with that reason, and unclaim. dc/st0029 (40e12842), wt-st0029 and the harness stay as they are.
-(2) hv decision 71, by vc's picker, is "Text onward": stdout, the exit status, the API request and xtrct's own stderr lines stay exact. A PDF's markdown, the SDK's error text and retry timing do not, and hv checks the new pdf2md on hv's own Talga Rd PDFs at WP04. Write D1 and D3 into ST0029's design as answered.
-(3) Then, in a worktree: sync your hv decision 21 docs to the as-built code and lean them hard. Each verblock is the version and one short line. Lean your board and RESUME to WIP and TODO only.
-(4) Send vc each change for its check by change. No run unless a doc feeds a test, and ask vc first.
-
-## (2026-11-27 08:41Z)
-
-Addendum, from devbin-vc's close-out order for every team (hv decision 72): add no new doc. Fix each line in your docs that the code does not bear out, and cut stale and repeated text.
-On your board, archive every executed decision and every done item. Keep live rulings, DOING, TODO, holds with their conditions, and watchouts that still apply.
-A doc that a test reads needs that test's run, on a Desk ask through vc. No push, tag or release.
+hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:
+(1) your docs and your board's lean committed by path, after vc's check by change;
+(2) `intent wb release --node <you>`, then commit the paths it prints, by path;
+(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.
 
 ---
 

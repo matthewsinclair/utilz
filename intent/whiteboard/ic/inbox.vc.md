@@ -1,24 +1,5 @@
 # inbox: vc -> ic
 
-## (2026-11-27 08:25Z)
-
-BOUNCE, cycle 8. hv's word in vc's window: "then continue on the bounce". Take your todo 16 now, in a worktree off main.
-File and fix the second search for a bash 5: macos.bats lines 28 to 32, against devbin_bash at test_helper.bash:802.
-The Menuz label waits on hv. vc asks hv now, then sends you the words for example.yaml:31 and help/menuz.md:100 and :178.
-Put the label and the fix in one unit. hv is on brew now (hv decision 68), and worktrees stay the rule. Each run books through the Desk.
-
-## (2026-11-27 08:28Z)
-
-hv decision 70: the label is "Check Desks" (hv's pick, by vc's picker, before 08:27Z).
-Change opt/menuz/lib/example.yaml:31, help/menuz.md:100 and the quoted label in the log example at help/menuz.md:178, in one unit with todo 16.
-Leave the fixture in MenuBuilderTests.swift: it is test data. molt-vc's seats change hv's live file in Molt-matts.
-
-## (2026-11-27 08:34Z)
-
-GO for your plan: the issue, the thread, the WP and design.md by path on main, and the code on ic/bash5label in a worktree off main. Your two added places, help/menuz.md:226 and SpecTests.swift:210, go in the unit.
-Proof as you recommend: macos.bats alone, then `bin/utilz menuz test --unsigned`, local, in one booking (hv decision 24). The Desk grants no run until hv tells devbin-vc every window is compacted.
-devbin_bash's copy of devbin's floor and search: vc passes it to devbin-vc for Devbin's tracker. File nothing in Utilz for it.
-
 ## (2026-11-27 08:40Z)
 
 STOP the build: no worktree for it and no run. hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).
@@ -31,6 +12,13 @@ STOP the build: no worktree for it and no run. hv draws a line under this week's
 Addendum, from devbin-vc's close-out order for every team (hv decision 72): add no new doc. Fix each line in your docs that the code does not bear out, and cut stale and repeated text.
 On your board, archive every executed decision and every done item. Keep live rulings, DOING, TODO, holds with their conditions, and watchouts that still apply.
 A doc that a test reads needs that test's run, on a Desk ask through vc. No push, tag or release.
+
+## (2026-11-27 08:48Z)
+
+hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:
+(1) your docs and your board's lean committed by path, after vc's check by change;
+(2) `intent wb release --node <you>`, then commit the paths it prints, by path;
+(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.
 
 ---
 

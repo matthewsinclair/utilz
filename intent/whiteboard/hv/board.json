@@ -4,9 +4,10 @@
     "moniker": "hv",
     "name": "Hypervisor",
     "role": "hypervisor",
-    "heartbeat_at": "2026-09-14T17:34:58.009Z",
+    "session_id": "bbf0140c-70da-4570-8e04-c18e29c296ad",
+    "heartbeat_at": "2026-11-27T08:48:46.169Z",
     "status": "active",
-    "focus": "The next Utilz release, cut by hand once more (decision 1), with ST0020 in it.",
+    "focus": "Utilz is parked by hv decision 72. spcz (ST6ae5a79), ST0029 and STb234935 wait for hv's word.",
     "claims": [],
     "recorded_at": "2026-09-14T08:46:06.602Z",
     "authored_at": "2026-07-29T10:21Z",
@@ -171,7 +172,8 @@
       "kind": "decision",
       "seq": 9,
       "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"Go with your recommendations.\" This answers vc's triage of Utilz's open work, which hv asked for that morning: \"Close out any outstanding STs, WPs, and Issues; but let's review what is there first and triage them into close, fix, or hold.\" The rest is vc's wording of what hv accepted. FIX: (1) ST0031, dc. WP01 retires tools/ci-state, tools/post-cut and tools/formula into devbin's core, taking vc decision 91's six critic findings with them. WP02 lands its banked CI tuning. Both land after the arngz fixes and go out in the same release. That release's cut proves AC-01.4 and is the first cut done the new way. (5) and (6), dc, with the arngz work: arngz's five parsed yq captures that take yq's stderr with the value, and one cap on the 600 s ARNGZ_APPLY_TIMEOUT default that each failing scheduled arm in arngz.bats waits out. HOLD: (2) ST0029, Retire Python, which hv has parked. dc puts it on hold in Intent and unstarts WP01. It resumes on hv's word. (3) Issue 0114, under hv's P3 ruling, until arca_swift tags its 0003 fixes. ic watches for the tag. (4) Issue I59c806c, devbin#0326's install and use. It is devbin-cc's, in devbin-vc's order after Pplr, Cldr and Gtools, and starts only after ST0031/01 lands, because ST0031's AC-01.3 compares against the current formula. CLOSE: (7) intent/wip.md's line on Devbin's cancelled-run resume defect, which Devbin filed and closed as 0330. (8) ic's 6 Nov item (b), the read-only check of 2.14.9's Menuz leg, which the 2.14.9 and 2.14.10 cuts overtook. Also recorded here: cc passed on to vc on 23 Nov hv's 6 Nov word to cc, given first-hand in cc's session: \"Go with A, hold for the cut\". It never reached vc, and 2.14.9's cut on 10 Nov spent it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:56.223Z",
       "recorded_at": "2026-11-23T04:42:53.871Z"
     },
     {
@@ -179,7 +181,8 @@
       "kind": "decision",
       "seq": 10,
       "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's word: \"go\". It approves vc's scope for arngz, which answers hv's account of arngz; that account is verbatim in vc's asks to dc and ic of 05:16Z. The rest is vc's wording of what hv accepted. One new arngz thread, going out in the same release as ST0031 (decision 9). WP01, the run log (dc): every run appends to ~/.local/state/arngz/arngz.log. It records each display with its desktops, both as com.apple.spaces records them and as they are live, in order; the plan; each step and what it read back; the outcome and the timings; and the CLI's side (the hs start, the deadline, any kill). It also records each desktop's display at the start and end of a run, every desktop arngz creates, and the time since the last display change, so that cc's likely cause of the surplus desktops can be proved or ruled out: a display that has just attached is short while its own desktops still visit the built-in, so apply creates new ones, and macOS then sends the visitors home. The log adds nothing on screen and is capped in size, and `arngz log` prints the last run. WP02, the toasts (ic): Hammerspoon on-screen alerts. Starting names the desk. Running... shows the current phase. Finished shows the windows placed, already in place and not found, the desktops added or removed, and the time taken, or else the refusal and its reason, and stays up longer. WP03, the desk-change fix (dc, with cc as second reader), starts once the log shows what goes wrong. It covers P.order_spaces' reading of desktop order when desktops move between displays, the refusal's wrong \"wait, then run again\" advice, the surplus desktops, F3's stale hs client, F4's discover deadline, and decision 9's (5) and (6). hv's diagnosis run: hv switches to the dev tree with utilz use dev, runs zeopit, unplugs, runs rhad, plugs back in and runs zeopit, then switches back with utilz use brew. Each design comes to vc before any code, and every run goes through the Desk.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:56.390Z",
       "recorded_at": "2026-11-23T05:23:14.088Z"
     },
     {
@@ -187,7 +190,8 @@
       "kind": "decision",
       "seq": 11,
       "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"And yes, include all fixes.\" This answers vc's question on the two one-off failures from the morning's log read. dc had recommended leaving them out of ST589246c/93ea, and vc decision 108 (3) brought that to hv in dc's words, with dc's sizes. F3: arngz stops its hs helper the moment the answer lands, which once broke the next run (\"ipc port is no longer valid\"). The fix is to let hs exit on its own first, size S. F4: Save Desk once ran past the CLI's 60 s wait. The fix is to raise that wait, size XS; the alternative, running it in the background as apply does, is M. vc recommended both, the S fix and the XS raise. So both go into 93ea, in this release.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:56.554Z",
       "recorded_at": "2026-11-23T09:41:21.975Z"
     },
     {
@@ -195,7 +199,8 @@
       "kind": "decision",
       "seq": 12,
       "text": "hv, 23 Nov 2026, first-hand in vc's session. hv's words: \"Ok, context is high here on utilz-*, so lets find a sensible moment to bank the bankable, and then localfold+compact for all Claudes here. Then we continue on the bounce. I can run the next test run while everyone banks, folds, and holds.\" The rest is vc's wording of how it was carried out. vc named the moment at once (announce of 10:12Z). Every utilz-* seat banks what lives outside the tree, localfolds without a release, and holds: dc at 21bf2768, ic at 8e906dc1 and cc at fcc49ed8, each checked by vc by change, with vc folding last. hv runs 93ea's test by hand meanwhile: /bin/bash ~/Devel/scratch/utilz-dc/st5892/run-93ea-2.sh, pinned to a763184a. dc's own slot for it, granted before vc's STOP reached dc, was stopped at 61 of 180 with none failed, released, and its partial TAP set aside. Then hv compacts each session. On the bounce, each seat runs /in-session with its pickup and carries on from its RESUME.md on vc's word: dc reads hv's TAP and lands 93ea, then hv's live run follows. Open for hv on the bounce: whether ST0031 moves from dc to cc now, to run in parallel (decision 9 named dc).",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:56.711Z",
       "recorded_at": "2026-11-23T10:17:03.571Z"
     },
     {
@@ -203,7 +208,8 @@
       "kind": "decision",
       "seq": 13,
       "text": "hv, 23 Nov 2026, first-hand in vc's session, received by vc's date -u of 11:27Z, answering vc's three questions after ST589246c/93ea's live re-runs. hv's words: \"1: Yes 2: New thread, yes. Why not fix it now? I see no reason not to. 3: Remind me what A and B were before I pick one?\" The rest is vc's wording. (1) Screen Sharing: vc gave it two entries titled by window in hv's desks rhad and zeopit, gyges full size on desktop 6 with Parallels and All Connections on desktop 7 with Appgate and Console. Both desks pass arngz show, and the copies from before are banked in ~/Devel/scratch/utilz-vc/desks-before-20261123/. (2) A new arngz thread, in this release: apps with more than one window across desktops (arngz cannot always see every window, a title is a fragile way to pick one, and an entry with no title takes every window of its app), and a route for a carried window past a full-screen desktop. cc designs it, as vc recommended and hv's yes took, design before code. Until it lands, hv keeps the two apps out of full screen, the workaround hv chose and acted on the same day. (3) ST0031's (A) or (B) stays open; vc restates both. Also hv's word on the toasts, in the same session: \"The toasts work as expected.\" ic satisfied AC-eae7633d.1 on it at a47961d6.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:56.872Z",
       "recorded_at": "2026-11-23T11:27:37.965Z"
     },
     {
@@ -211,7 +217,8 @@
       "kind": "decision",
       "seq": 14,
       "text": "hv, 23 Nov 2026, first-hand in vc's session, received by vc's date -u of 11:33Z: \"ok, go\". It answers vc's restatement of ST0031's (A) and (B), which hv asked for in decision 13 (3). vc reads it as (A), the recommendation of dc and vc, and says so to hv. The rest is vc's wording. ST0031/01 retires tools/ci-state, install.sh's install_ci_state and install_ci_jobs, and tools/post-cut, as dc's re-plan of 23 Nov has it (~/Devel/scratch/utilz-dc/st0031-prep/wp01-replan.md, 1b222cf9). tools/formula stays until issue I59c806c, devbin-cc's, which takes AC-01.3's formula half, and the cut's one after: line becomes `tools/formula publish --pull`. This amends decision 9 (1), under which WP01 also retired tools/formula. The cut's gates stay `check all` alone, by hv's ruling of 28 Oct (ST0030), and AC-01.1 is reworded to match. Issue Ie8e55e8, menuz's hard-coded asset name, rides /01. /01 and /02 land together, in this release.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.030Z",
       "recorded_at": "2026-11-23T11:33:54.065Z"
     },
     {
@@ -219,7 +226,8 @@
       "kind": "decision",
       "seq": 15,
       "text": "hv, 23 Nov 2026, first-hand in vc's session, picking from vc's questions in the terminal (the TUI hv had asked for), received by vc's date -u of 13:03Z. hv's picks, from options worded by vc: (1) main's red CI, showreel's unused `qrcode` under Rust 1.100.0's new lint: \"(c) Build showreel qr now\", where dc and vc recommended (a). (2) STca1b7f9's WP5, Appgate's grab point: \"Leave it out\", cc's and vc's rec. (3) The cut's gates, now that a release dry run runs none: \"check all alone\", dc's and vc's rec. (4) STca1b7f9's spike: \"Now\". The rest is vc's wording. (1) `showreel qr <dir>`, the qr half of ST0017's WP-04 that hv deferred in ST0017, is built in this release as a new thread, sized S to M; `init` stays deferred. showreel's approved dependency budget, `qrcode` in it, and its pin in tests/manifest.rs (ST0017 AC-3.9) stand unchanged. Main's CI stays red on that one known warning until it lands, and must be green before the cut. vc's sequencing, not hv's word: ic builds it, design before code; cc reads the design for meaning, since cc built the stamp contract it keeps (payload.rs's QR_STAMP, ST0017 AC-4.2); dc reads the code second once ST0031 has landed. (2) WP5 and spike step M3 leave STca1b7f9: Appgate stays put when a switch would move it, and that run's toast says it was not moved. (3) Nothing changes: dc's ST0031/01 already corrects the release docs to say a dry run runs no gate. (4) cc books a fresh Desk slot and hv runs the spike in hv's own terminal; dc asks for ST0031's run only after the spike's END. Holds 28 and 29 on vc's board are released by this decision.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.186Z",
       "recorded_at": "2026-11-23T13:06:08.690Z"
     },
     {
@@ -227,7 +235,8 @@
       "kind": "decision",
       "seq": 16,
       "text": "hv, 23 Nov 2026, first-hand, after decision 15. To each seat in its own session, as each relayed it to vc, and in vc's session: \"Please finish booting, then hold for instructions from VC and then devbin-vc.\" (cc by its date -u of 13:01Z, ic 13:02Z, dc 13:03Z), repeated after further compacts as \"Please finish booting, then hold for instructions from VC and devbin-vc.\" (dc 13:05Z, ic 13:05Z, cc 13:06Z). Then in vc's session, during vc's turn, before vc's date -u of 13:49Z: \"However, I need to move. Now.\" and \"We can do this later.\" The rest is vc's wording. hv has left for now, and the spike waits for hv's return, in place of decision 15's (4) \"Now\". cc's ask for it, 01M848922YQPMVNF4T2WTM15WA, stays queued at the Desk, which devbin-vc has kept closed since 12:52Z until hv gives it a word. Meanwhile the seats work on vc's word, and the Desk's grants stay devbin-vc's. dc queues its heavy ask for ST0031/01's run, to go after the spike's END. cc codes STca1b7f9's WP3 and WP4's failure half in a worktree, with no run (vc decision 112). ic designs `showreel qr`.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.357Z",
       "recorded_at": "2026-11-23T13:50:35.798Z"
     },
     {
@@ -235,7 +244,8 @@
       "kind": "decision",
       "seq": 17,
       "text": "hv, 23 Nov 2026, first-hand in vc's session, read by vc's date -u of 16:18Z. hv's words: \"ready for the spike\" (16:05Z), and then \"yes\". The yes answers vc's question: \"may dc's ST0031 run and ic's showreel qr run go after the spike? devbin-vc needs your word for them.\" The rest is vc's wording. vc reads the yes as that and says so to hv. devbin-vc granted the spike's slot TM15WA at 16:05Z on hv's first words, relayed by vc, and holds every heavy grant until the spike's END. vc's relay of the yes to devbin-vc was refused by vc's session's safety check at 16:18Z. So hv gives that word in devbin-vc's own window, and until then utilz-dc's FF5TB4 (ST0031/01 with /02 at eec4b900) and utilz-ic's 1TDNX1 (showreel qr at 1ae82d9d) stay queued. Intent's 5DJWVA was granted by devbin-vc on hv's word in its own window at 16:17Z and runs alongside the spike. The spike runs under that load, so cc marks every timing with the load it read, and an M2 miss gets a quiet re-run before WP6's create design settles.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.523Z",
       "recorded_at": "2026-11-23T16:19:03.523Z",
       "edited_at": "2026-11-23T16:19:18.328Z"
     },
@@ -244,7 +254,8 @@
       "kind": "decision",
       "seq": 18,
       "text": "hv, 24 Nov 2026, first-hand in vc's session, read by vc's date -u of 04:39Z. hv's words: \"Why why why WHY are there still open issues?!?\" and, to vc's answer and recommendation, \"Yes. I want all of these fixed.\" The rest is vc's wording. vc's batching is withdrawn: STca1b7f9's code already written (cc/stca1b7f9 at 3efc3397: WP3, WP4's failure half, Ib12d894's fix, WP6 but its create) and ic's toasts (I4eacd29) land now in their own booked run, without waiting for the spike, which closes Ib12d894, I4eacd29 and as much of I7fce35c as needs no spike; the spike's parts (WP1, WP2, WP4's Mission Control leg, WP6's create) follow in a second run. Ie8e55e8 closes with ST0031/01's landing, I59c806c follows in devbin-cc's order, and 0114, parked on arca_swift's tag by hv's P3 ruling, is put back to hv, since it needs arca_swift's issue 0003 fixed and tagged first.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.688Z",
       "recorded_at": "2026-11-24T04:39:30.816Z"
     },
     {
@@ -252,7 +263,8 @@
       "kind": "decision",
       "seq": 19,
       "text": "rhadamanth stays on utilz dev while the Utilz seats work (hv, 24 Nov 2026, in vc's window: \"Stay on dev; Molt fix\", and in devbin-vc's window at 09:27Z: \"Keep dev; Molt warns\"). Molt's utilz liberator reports a dev or opt link set on a brew sleeve as a notice with its remedy, not a failure. The fix is Molt's (molt-vc's seats). rhadamanth's molt.toml keeps source = \"brew\".",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:57.850Z",
       "recorded_at": "2026-11-24T09:26:22.413Z"
     },
     {
@@ -268,7 +280,8 @@
       "kind": "decision",
       "seq": 21,
       "text": "hv, 24 Nov 2026, first-hand in vc's session, and also in the sessions of cc, dc and ic as each relayed it. vc's date -u read 19:16Z while vc recorded it. hv's words: \"Ok, we're done here for the day. Please sync all as-written docs to be in line with as-built code. Lean out all project docs. Then check in, commit, and push everything that can be checked in, committed, and pushed. Then lean out the PM docs, then bank, fold, and compact. Then hold on the bounce. We're done for tonight and will pick up again tomorrow.\" The rest is vc's wording. vc splits the docs by remit, with no shared paths. cc takes README.md, docs/architecture.md, docs/design-principles.md, docs/index.md, and the help and README files of arngz, cleanz, clipz, cryptz, gitz, lnrel, retry, stampz, syncz and todo. dc takes docs/releasing.md, docs/developer-guide.md, .github/workflows/README.md, opt/utilz/test/README.md, CHANGELOG's unreleased section, and help/utilz.md. ic takes the help and README files of menuz, prez, mdagg, macoz, expz, pdf2md and xtrct, and STb8e4fb6's records. Each seat works in a worktree. vc checks each change and lands it, and hv pushes once for all of them. Then vc leans intent/wip.md, each seat banks and localfolds with no release, hv compacts, and every seat holds for hv's word tomorrow. STca1b7f9 stays on its branch.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.022Z",
       "recorded_at": "2026-11-24T19:16:49.723Z"
     },
     {
@@ -276,7 +289,8 @@
       "kind": "decision",
       "seq": 22,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, read by vc's date -u of 07:34Z. hv's words: \"Please corall all of the utilz-* Claudes and then wait for kickoff from devbin-vc (who is still The Desk).\" The rest is vc's wording. vc tells utilz-cc, utilz-ic and utilz-dc to finish booting and hold, by socket and by vc's announce. utilz-ac has never started. No seat edits, runs, asks the Desk or commits until devbin-vc's kickoff. vc then passes the kickoff on, with each seat's next step. The estate's control line names devbin-vc as the Desk's holder.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.187Z",
       "recorded_at": "2026-11-25T07:36:12.943Z"
     },
     {
@@ -284,7 +298,8 @@
       "kind": "decision",
       "seq": 23,
       "text": "hv, 25 Nov 2026, first-hand in vc's session. Read by vc's date -u of 07:43Z, hv asked for an analysis of why arngz is not reliable across desks, with three ideas: the same number of desktops on each display in every desk, a re-save that drops an app no longer open, and a Hammerspoon reload at a monitor change. vc read the run log, the five desks and the code (~/Devel/scratch/utilz-vc/arngz-analysis-20261125.md) and put four questions to hv in the terminal, answered before vc's date -u of 08:17Z. hv's picks, from options worded by vc: (1) \"4th monitor desktop for browsers (Recommended)\". (2) On zeophq and hockenbury, hv's words: \"We can mnaully edit whatever we need to her, and arngz post-dates ever sitting at hockenbury as I wrote it here in Reunion and I haven't been back home since. So go for it. Nothing is sacred.\" (3) \"Remove extra desktops, Never launch apps, Recover from the filter crash\". (4) \"Yes, start them now (Recommended)\". hv gave the same start for Utilz and Gtools in devbin-vc's window (\"Both start (Recommended)\", relayed by devbin-vc at 08:13Z). The rest is vc's wording. (1) and (2): every desk shares one layout. The laptop's 6 desktops are the same in every desk. The first monitor's 3 desktops hold Mail/Notion/BusyCal/Emacs, ChatGPT/Claude and Xcode/Devices at every site. Chrome and Safari are on zeopit's second monitor, or on a 4th monitor desktop at a one-monitor site. rhad is the laptop's 6, then ChatGPT/Claude and Xcode/Devices, with Mail, Notion, BusyCal, Emacs, Chrome and Safari on laptop desktop 1. vc wrote rhad, homere, zeophq and hockenbury at 08:18Z, and zeopit already matched. The old files are in ~/Devel/scratch/utilz-vc/desks-before-20261125/. (3) cc designs all three, design to vc before code, with ic as second reader, then a worktree and one booked live run with hv at the keyboard, about M together. (4) cc, ic and dc start their work outside arngz through the Desk.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.346Z",
       "recorded_at": "2026-11-25T08:19:16.156Z"
     },
     {
@@ -301,7 +316,8 @@
       "kind": "decision",
       "seq": 25,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered after vc's date -u of 08:28Z. It answers vc's question on macoz setpicfor's --pattern, which has never worked (issue Iac62c37, found by ic in its fix for 2.15.0). hv picked \"Make --pattern work\", where ic and vc had recommended removing it. The rest is vc's wording. ic makes --pattern name the icon files that setpicfor looks for, in place of the built-in names, with its own tests, size S, in 2.15.0. ic edits Iac62c37's fix and proof before the code.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.506Z",
       "recorded_at": "2026-11-25T08:30:16.817Z"
     },
     {
@@ -309,7 +325,8 @@
       "kind": "decision",
       "seq": 26,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 08:48Z. It answers vc's two questions on the causes outside hv decision 23 (3). (1) When the pointer moves during an apply: hv picked \"Pause, then go on (Recommended)\". (2) Windows arngz cannot carry (ChatGPT and Screen Sharing; Teams' title bar once): hv's words: \"It's #1, but why is ChatGPT different to Claude? They should both be on the same monitor/space, if possible.\" Option #1 was \"The layout is enough\". The rest is vc's wording. (1) cc adds a fourth WP to the new arngz thread: apply waits until the pointer is still, then goes on with the move it was making. Size S, proved in the same live run. (2) No code. ChatGPT and Claude already share one desktop in every desk: the first monitor's desktop 2, and desktop 7 at rhad. They differ only in how their windows answer a held title bar. Claude's window follows the pointer. ChatGPT's does not, so when both must move, arngz moves Claude and names ChatGPT for a move by hand.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.671Z",
       "recorded_at": "2026-11-25T08:48:55.214Z"
     },
     {
@@ -317,7 +334,8 @@
       "kind": "decision",
       "seq": 27,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc and read by its date -u of 08:57Z: hv picked \"Push now (Recommended)\" for Utilz main, so that CI reads the new code and the prez.bats leg before the 2.15.0 cut. The rest is vc's wording. The push is a fast-forward of both remotes from 1e67d084. vc's own push was refused by its session's safety check, as in hv decision 17, so hv runs the push in vc's session. vc sends devbin-vc the pushed sha, CI's run id and then its verdict.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:58.834Z",
       "recorded_at": "2026-11-25T08:58:45.050Z"
     },
     {
@@ -325,7 +343,8 @@
       "kind": "decision",
       "seq": 28,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 09:11Z. It answers vc's question on when hv runs the arngz runs that need hv at the keyboard: STca1b7f9's spike v3 (spike.zsh 2692ed78, spike.lua e499c9c5) and ST6d8eed9's removeSpace probe (probe.zsh 185cbd7a, probe.lua 653aa999), all four read SOUND by vc. hv picked \"Ready now\". The rest is vc's wording. This releases vc's hold 31. cc's light ask 01M88ZBX07X0TX3XW4PDS2A3TH was granted by devbin-vc at 09:07Z. After cc's load-only checks, hv runs the spike, then the probe, each in hv's own terminal.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.004Z",
       "recorded_at": "2026-11-25T09:11:59.101Z",
       "edited_at": "2026-11-25T09:12:07.531Z"
     },
@@ -334,7 +353,8 @@
       "kind": "decision",
       "seq": 29,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 09:22Z. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I need to roll over to a different account, too.\" The rest is the wording of devbin-vc and vc. Nothing new starts, and the Desk grants nothing until devbin-vc's word after the cycle. cc's slot 01M88ZBX07X0TX3XW4PDS2A3TH, with hv at the keyboard for spike v3 and the probe, runs to its END, then cc folds. Each Utilz seat localfolds without a release: it archives what is finished, clears what is handled, commits its own board and records by path, banks what lives outside the tree, keeps its RESUME current, and sets a one-line focus that says where it resumes. Then it goes quiet. vc sends devbin-vc one message with each seat's resume line and whether hv's push of main is done. After hv's compact, each seat runs /in-session, then holds for devbin-vc's word before any run.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.167Z",
       "recorded_at": "2026-11-25T09:24:15.065Z"
     },
     {
@@ -342,7 +362,8 @@
       "kind": "decision",
       "seq": 30,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 09:32Z. It answers vc's question after hv decision 29: cc's slot 01M88ZBX07X0TX3XW4PDS2A3TH was granted, but spike v3 and the probe had not started by cc's date -u of 09:25Z, and a Gtools suite waited on the slot. hv picked \"After the compact (Recommended)\". The rest is vc's wording. cc releases the slot as not run, sends END and folds. This amends hv decision 28: spike v3 and the probe wait for hv's next \"ready\" after the compact and the account change, and vc's hold 32 carries them.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.355Z",
       "recorded_at": "2026-11-25T09:32:05.360Z",
       "edited_at": "2026-11-25T09:32:12.487Z"
     },
@@ -351,7 +372,8 @@
       "kind": "decision",
       "seq": 31,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 304) and received before vc's date -u of 09:48Z: hv chose 'Resume all'. The rest is the wording of devbin-vc and vc. The hold of hv decision 29 ends, and the Utilz seats go on with work that needs no run. cc codes ST6d8eed9's WP C, then WP D, in its worktree. ic writes the desks toasts. dc writes the CHANGELOG lines. Spike v3 and the removeSpace probe (light, S) still wait for hv's 'ready' at vc's window (vc hold 32), and cc then asks the Desk. vc puts issue 0114 to hv at vc's window.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.581Z",
       "recorded_at": "2026-11-25T09:52:01.117Z"
     },
     {
@@ -359,7 +381,8 @@
       "kind": "decision",
       "seq": 32,
       "text": "hv, 25 Nov 2026, first-hand in vc's session, answered before vc's date -u of 10:01Z, picking from vc's two questions in the terminal. (1) Spike v3 and the removeSpace probe: hv picked \"Ready now (Recommended)\". (2) Issue 0114, menuz's copies of what arca_swift's issue 0003 asks arca_swift to carry for every estate menu bar app: hv picked \"Fix now, in 2.15.0 (Recommended)\", where hv's P3 ruling had parked it on arca_swift's tag. The rest is vc's wording. (1) releases vc's hold 32 and cc's holds 53 and 54: cc asks the Desk for one light slot naming the four hashes, runs the two load-only checks, and vc gives hv the two commands. (2) ic does arca_swift's issue 0003 (size S) after its desks toasts, design first, read by vc before any code. arca_swift then needs a new tag and a push, on hv's go through devbin-vc. Then ic moves menuz to that tag and deletes its copies (0114, S to M). Its proof is one heavy Desk run of menuz's suites, a CI menuz-app dispatch, and hv's hands once on the masthead row on macOS 27. It runs beside the arngz work, and the 2.15.0 cut carries it.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.778Z",
       "recorded_at": "2026-11-25T10:01:39.953Z"
     },
     {
@@ -367,7 +390,8 @@
       "kind": "decision",
       "seq": 33,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its vc decision 305) and received before vc's date -u of 11:29Z: an estate-wide localfold and compact, the second today. hv compacts each Claude once it is folded and quiet, then the estate goes on. The rest is the wording of devbin-vc and vc. Each Utilz seat localfolds with no release, banks what lives outside the tree, commits its records by path, sets a one-line resume focus, and goes quiet. utilz-cc releases its idle light slot 01M892ET35S55KFTBZ1PR1DGY4 as not run, and asks again at hv's next 'ready' for spike v3 and the removeSpace probe. arca_swift's push of main alone, with no tag, still waits for hv's go through devbin-vc. vc reports each seat's fold to devbin-vc in one message. vc's wording: after the compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:47:59.967Z",
       "recorded_at": "2026-11-25T11:30:00.115Z"
     },
     {
@@ -375,7 +399,8 @@
       "kind": "decision",
       "seq": 34,
       "text": "hv, 25 Nov 2026, by two channels. (1) In devbin-vc's window, relayed by devbin-vc (its vc decision 307, 11:57Z by its date -u): hv's go for both pushes. hv types each as a ! line in vc's window, fast-forward only, to both remotes: arca_swift main 9bb8543f alone, with no tag, and Utilz main 1cdad894 (33 commits). (2) First-hand in vc's session, received after vc's date -u of 11:51Z and before its 11:57Z. hv's words: 'devbin-vc is about to ask for your \"plan-as-a-set-of-1-line-steps\" plan. Please respond accordingly. We will sync and synthesise at devbin-vc and then coordinate work accordingly therefafter. Ok?' The rest is vc's wording. vc said yes, and sent devbin-vc Utilz's plan as three chain lines (menuz, arngz and release) for its merge into ~/Devel/scratch/estate-plan/PLAN.md. The seats take their next steps from vc after that merge. Also, as utilz-cc relayed it, hv ran /in-finish in cc's session before cc's date -u of 11:50Z. cc read it as a localfold with no release. Its records-only commit 13cc72f8, which vc checked by change, puts Utilz main 34 commits ahead. vc's push line for hv names 13cc72f8, so a later commit by another seat does not go out with the push.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:00.138Z",
       "recorded_at": "2026-11-25T12:32:58.978Z"
     },
     {
@@ -391,7 +416,8 @@
       "kind": "decision",
       "seq": 36,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc (its decision 309) and received before vc's date -u of 12:55Z. hv's words: \"bring everyone in to a safe point to close and shut down as I need to reboot. So this is a full close out with Claudes doing aggressive localfolds, and VCs doing aggressive globalfolds. Once banked and folded, everyone should stay quiet until we reboot.\" and \"that involves closing out any running shells and processes, too.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing, and no seat pushes anything new. Each Utilz seat banks what is in flight, runs an aggressive localfold, closes every shell and process it started, and runs intent wb release as its last board act, since the reboot ends the session. vc runs an aggressive globalfold and sends devbin-vc one report: the fold commits, the unpushed work, that nothing runs, and the resume line. Then every seat stays quiet until the reboot. arca_swift's line (reset --keep 940f91b5, then the push of main alone) stays in front of hv, and if hv has not run it before the reboot, it waits. Utilz main's push run 45616905861 on 13cc72f8 completed green before the fold (attempt 1; its macOS jobs skip on a push, by design). devbin 0.1.33's sweep of Utilz, which vc answered SWEEP, waits for after the reboot.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:00.330Z",
       "recorded_at": "2026-11-25T12:56:03.607Z"
     },
     {
@@ -399,7 +425,8 @@
       "kind": "decision",
       "seq": 37,
       "text": "hv, 25 Nov 2026, after rhadamanth's reboot, first-hand in vc's session, received after vc's date -u of 14:52Z and before its 14:57Z, and in the sessions of cc, dc and ic, as each relayed it to vc (dc between its date -u of 14:54Z and 14:55Z, cc by its 14:55Z). hv's words: \"devbin-vc is the pen and the desk. And we're working from the unified plan. Please sync in and follow instructions.\" The rest is vc's wording. devbin-vc wears the pen for Utilz and holds the Desk. A ruling under the pen is recorded as devbin-vc's, and hv may reverse it. The pen does not reach what hv keeps, as the terms define it. Utilz works from the unified estate plan, ~/Devel/scratch/estate-plan/PLAN.md, which devbin-vc alone writes. vc syncs Utilz to it and follows devbin-vc's instructions, and each seat takes its step from vc. hv decision 20 stands: a go from devbin-vc is hv's approval for Utilz's commits, pushes, cuts and brew updates.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:00.504Z",
       "recorded_at": "2026-11-25T14:57:32.079Z"
     },
     {
@@ -407,7 +434,8 @@
       "kind": "decision",
       "seq": 38,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 15:00Z. hv's words: \"Please sync with all VCs and let me know the plan. I will approve it when ready.\" The rest is the wording of devbin-vc and vc. Utilz's plan is in the estate plan as vc sent it, with three steps that need no run, as vc recommended: (a) cc writes WP A's at-risk code from b04b86ea in its worktree; (b) ic drafts R2's red-leg list and driver in its scratch, for vc's read; (c) dc drafts 0114's CHANGELOG line from ic/menuz0114 (003512f6) in a worktree. Until devbin-vc sends hv's approval of the plan, every Utilz seat holds (a), (b), (c) and every run, and reads go on. Utilz main stays as it is until then, so no seat commits, and devbin 0.1.33's sweep reaches Utilz after the approval. arca_swift's line (reset --keep 940f91b5, then the push of main alone) is hv's own hands, and vc has put it to hv in vc's window.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:00.669Z",
       "recorded_at": "2026-11-25T15:00:27.061Z"
     },
     {
@@ -415,7 +443,8 @@
       "kind": "decision",
       "seq": 39,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 15:05Z. devbin-vc's wording: \"hv approved the plan as written.\" The rest is the wording of devbin-vc and vc. The estate plan is approved with Utilz's line and vc's amendment, so devbin-vc's ruling of arngz 2.0.0 (vc decision 119) stands. Utilz goes on now with the steps that need no run: (a) cc's WP A at-risk code from b04b86ea; (b) ic's R2 red-leg list and driver, for vc's read; (c) dc's 0114 CHANGELOG line, with menuz's step from 0.4.10 to 0.4.11; then the amendment's (1), dc's version steps, and (3), cc's fix of README.md:147. Each lands in the plan's order. devbin 0.1.33's sweep reaches Utilz now, and no seat commits on Utilz main until devbin-vc says Utilz's sweep commit is in. Runs ask the Desk as usual.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:00.837Z",
       "recorded_at": "2026-11-25T15:05:43.814Z"
     },
     {
@@ -423,7 +452,8 @@
       "kind": "decision",
       "seq": 40,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc and received before vc's date -u of 16:36Z. devbin-vc's wording: \"hv's word: an estate-wide localfold and compact cycle.\" The rest is the wording of devbin-vc and vc. The Desk grants nothing new until devbin-vc's word after the cycle. Each Utilz seat banks its prep in its worktree or scratch, localfolds by committing its own board files by path, sets a one-line resume focus and goes quiet, with no release. vc sends devbin-vc one report when Utilz is folded: what is unpushed, and the resume step, which is hv's arca_swift line first. Then hv runs /compact in each session.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.003Z",
       "recorded_at": "2026-11-25T16:36:30.148Z"
     },
     {
@@ -431,7 +461,8 @@
       "kind": "decision",
       "seq": 41,
       "text": "hv, 25 Nov 2026, in devbin-vc's window, read by devbin-vc by its date -u of 17:20Z and relayed to utilz-vc at 17:22Z. hv's words: \"Ok, I'm afk. Push on. You have approval to do what's needed to nget everything out.\" The rest is the wording of devbin-vc and vc. devbin-vc read it for Utilz tonight as hv's arca_swift line (reset --keep 940f91b5 on arca_swift's main, then the push of main to both remotes), vc's CI read on 940f91b5 and, on a green CI, the 0.3.0 tag and its push, each run by vc. It does not cover the spike and the probe (hv's \"ready\"), the 2.15.0 cut, Utilz main's push or `utilz use brew`. Before it, devbin-vc's GO for Utilz's plan, at 16:50Z by its date -u, ended hv decision 40's hold. vc read arca_swift again at its date -u of 17:24Z: main at 9bb8543f and clean, both remotes at c005f282, and 940f91b5 a fast-forward with the change vc read. vc's session's safety check refused the line (\"Unsanctioned Communication\"), as it refused vc's pushes in hv decisions 27 and 34. Nothing changed. vc does not reword the line or route it through another session. It waits for hv's own hands in vc's window, and the CI read and the 0.3.0 tag follow it. Until then the menuz chain waits for the tag and the arngz chain waits for hv's \"ready\", so Utilz asks the Desk for nothing tonight.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.166Z",
       "recorded_at": "2026-11-25T17:26:24.769Z"
     },
     {
@@ -439,7 +470,8 @@
       "kind": "decision",
       "seq": 42,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 05:25Z. hv's words: \"I need you to take stock of where we are up to, bank anything that can be banked, and close out anything that can be closed out from yesterday. Then I want you to sync/synth with devbin-vc (who has The Desk today). devbin-vc will sync/synth with me and then come back to everyone with a ratified plan. As always I DO NOT WANT TO WASTE TIME AND BURN TOKENS WITH BITTY RELEASES. I want all outstanding work done in this session and built and tested locally before we worry about pushing stuff up for a release.\" The rest is vc's wording. vc's stock-take: nothing changed overnight. Every bank is committed and clean, and nothing from yesterday is left to close, because each open item waits on hv's hands or word. vc sent devbin-vc Utilz's state and a plan for one release, 2.15.0, with everything built and tested locally first. The plan has four steps. (1) hv's arca_swift line, the 0.3.0 tag and \"ready\" for the spike and the probe. (2) R2 and 0114, WP A's run and STca1b7f9's spike parts, on the Desk. (3) hv's live session, the QR scan and the menuz check. (4) One push, CI and the 2.15.0 cut. cc, ic and dc hold until vc passes on devbin-vc's ratified plan.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.344Z",
       "recorded_at": "2026-11-26T05:26:28.511Z"
     },
     {
@@ -447,7 +479,8 @@
       "kind": "decision",
       "seq": 43,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, across vc's date -u of 06:20Z to 06:36Z. (1) hv's words: \"ok, build the finder, I'll do the diagnostic\", after cc found that every hs.spaces call that needs Mission Control fails on macOS 27.2.1. (2) hv proposed a new thread. hv's words: \"Why don't we build into Utilz a Rust util that can do all of the window/space manipulation directly from the command line, and then arngz just usees that when it needs to manip the spaces?\" and \"there are two orthogonal concerns here: 1. Manipulate the macOS spaces, desktops, and windows programmatically [spcz, as a working title] 2. Manage a set of desktop/space/app arrangements [arngz]\". vc recommended it. (3) On releases, hv answered vc's \"ship 2.15.0 now and spcz after it (two releases, my recommendation)\" with \"Yes.\" (4) On landing cc's Mission Control finder in 2.15.0 as a stopgap, hv's words: \"Ok, if we can get that work, then it's worth a try.\" (5) hv ran cc's diagnostic twice and saw Mission Control open at A (hs.spaces' notification) and not at B (Ctrl+Up, whose key codes went to the terminal). In both runs the Dock's AX tree and its on-screen windows did not change. The rest is vc's wording. 2.15.0 ships what is finished. spcz is a new thread, design first, in the release after 2.15.0, and arngz is rebuilt on it. ST6d8eed9's WP A and STca1b7f9's create parts stop where they are. The stopgap gets one more diagnostic of where macOS 27 shows Mission Control. If no process shows it, the stopgap ends and cc/mc1126 stays unlanded as input to spcz.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.508Z",
       "recorded_at": "2026-11-26T06:35:35.230Z"
     },
     {
@@ -455,7 +488,8 @@
       "kind": "decision",
       "seq": 44,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, answered before vc's date -u of 06:43Z, picking from vc's question after cc's second diagnostic. The diagnostic, which hv ran, found that on macOS 27 Mission Control's AX tree lives in WindowManager, with tiles, an add button and a remove action, so cc's finder can drive it. hv picked \"Desktop-count only (Recommended)\". The rest is vc's wording. This amends hv decision 43. In 2.15.0: arngz's own Mission Control finder with STca1b7f9's WP6 create, and ST6d8eed9's WP A rebased onto it, with the removeSpace probe re-pointed to the finder and run once with hv. STca1b7f9's WP1, WP2 and its Mission Control leg stay unwritten and move to the spcz thread, after 2.15.0.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.669Z",
       "recorded_at": "2026-11-26T06:43:49.840Z"
     },
     {
@@ -463,7 +497,8 @@
       "kind": "decision",
       "seq": 45,
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 06:52Z. hv's words: \"Ok, we should call in a localfold+compact here in the currently working CLaude Teams while we wait.\" The rest is the wording of devbin-vc and vc. Every Utilz seat localfolds with no release, commits its own files by path and pushes nothing. cc folds at the END of its bats run 01M8B9X6SMHY67F13BAJ6Q638X. No seat asks the Desk until devbin-vc's word after the cycle. vc sends devbin-vc one report. After hv's compact, each seat runs /in-session and holds for vc's word, which follows devbin-vc's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.832Z",
       "recorded_at": "2026-11-26T06:52:47.230Z"
     },
     {
@@ -496,7 +531,8 @@
       "kind": "decision",
       "seq": 49,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 08:10Z. hv's words, on the fix for the engine's window lookup: \"ok, call me when the design is ready. and yes, that fix needs to go into this release. it's useless otherwise.\" The rest is vc's wording. Two fixes are in 2.15.0, both cc's, both found in hv's sitting of 26 Nov. (1) WP A's empty rule: the live dry run planned no remove of a new empty desktop, because the rule counts the windows macOS itself puts on each desktop. cc designs a rule that excludes those by what they are and counts every other window, named or not. (2) The engine's window lookup: hs.window.get once per op re-reads every app's windows through Accessibility, and one app that never answers hangs an apply. The engine looks a window up in the index it built at observe. cc sends vc and ic the design for both before any code, and vc calls hv when it is ready. Also from the sitting: probe r2 is green for P1 to P3 on all three displays (run 20261126T075840Z) and P4 is void; hv's apply (run 20261126T080529Z-88063) passes WP B's and WP D's live ACs by cc's read of the log.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:01.996Z",
       "recorded_at": "2026-11-26T08:10:47.192Z"
     },
     {
@@ -504,7 +540,8 @@
       "kind": "decision",
       "seq": 50,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 09:54Z. vc asked: \"When an arngz apply ends, should each screen go back to the desktop it was showing when the run began?\" hv chose: \"Yes, go back (Recommended)\". The rest is vc's wording. At the end of apply, arngz shows each display its start desktop again, if that desktop still exists and is not the one shown. It is in 2.15.0, size S, cc's, with one test. Also in 2.15.0 from the same sitting, each put to hv in vc's window with no objection: the CLI no longer stops its hs helper while Hammerspoon may still reply, which crashed Hammerspoon (issue I7085193, landed 9ce62335); and apply's visit step, which shows a desktop that holds a window arngz cannot yet name, before and after the desktop edits (cc/visit1126). Ruled out by proof runs: an app hidden with Cmd-H is named and placed as usual, and the 2 s Accessibility timeout does not make apps unseen. Not established: what made 5 to 8 apps unseen on the morning of 26 Nov. A run 12 s after a Hammerspoon restart had 1 unseen. vc's candidate is a Mission Control act that changes the desktops.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.160Z",
       "recorded_at": "2026-11-26T09:54:08.318Z"
     },
     {
@@ -512,7 +549,8 @@
       "kind": "decision",
       "seq": 51,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:00Z. hv's words, on the zeopit desk, after hv closed the built-in's two empty desktops by hand: \"That config isn't right. I have set things up now as I want them at zeopit now. The only difference is that at homere, the top-right screen isn't there and I want the Chrome+Safari windows to go onto a new space on the right-hand monito, at slot 2.\" The rest is vc's wording. vc edited hv's two desk files in ~/.config/arngz/desks on that word, with the files as they were kept in ~/Devel/scratch/utilz-vc/desks-before-20261126-hv-edit. zeopit: main loses its 7th desktop (Music's) and its empty 9th, so it names 7 desktops there, and Music has no entry. homere: main's desktops are now the same as zeopit's; its monitor's three desktops are unchanged, and Chrome and Safari were already on its 2nd. `arngz list` and `arngz show` take both files. Neither is proved against the screens yet: zeopit by the next dry run, homere by hv at that place.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.315Z",
       "recorded_at": "2026-11-26T10:00:46.703Z"
     },
     {
@@ -520,7 +558,8 @@
       "kind": "decision",
       "seq": 52,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:34Z. hv's words, on the zeopit desk: \"I have Music on the last space, where it is now. I just re-ran the Save for zeopit with it in the right spot. Did that work?\" vc then asked what 2.15.0 should do about Save, and hv chose: \"Fix Save fully now (Recommended)\". The rest is vc's wording. hv's Save (menuz, run 20261126T102944Z-84214, exit 0) wrote Music on main's 8th desktop, but it left out Console (window 281, on the 6th) and Screen Sharing's session window (1909, on the 7th), and it wrote Screen Sharing's small window on the 1st with no pattern, so an apply would have taken the session window there. arngz could not name those two windows on desktops that were not shown: the fault of issue I426f2a7, in discover, which has no visit step. Its report counts macOS's own windows among those it could not name, so the loss cannot be read from it. vc put zeopit right by hand: the edit of decision 51 with Music's desktop added as main's 8th; hv's saved file is kept as zeopit.hv-saved-1029Z.yaml beside the other backups. In 2.15.0, cc's: discover shows each desktop that holds a window it cannot name, as apply does, records, and shows each display its start desktop again; its report names any running app's window it still could not record. Design first, then ic's read, one bats run, and one live Save by hv. The push and the cut wait for it. Also: devbin-vc swept Utilz to devbin 0.1.34 (86448b67); check all is green there, and macos doctor reads the notary profile PRESENT, so hv needs no store-creds before the cut.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.474Z",
       "recorded_at": "2026-11-26T10:34:09.840Z"
     },
     {
@@ -528,7 +567,8 @@
       "kind": "decision",
       "seq": 53,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 10:39Z. hv's words: \"If we are going to make this change, I also suggest that we do something to show that argnz has started (as the very first thing it does) and that it has finished (as the very last thing it does). It's hard to know when to take back control with mouse/keyb without some idea of knowing when it is and isn't running. I suggest we play a \\\"tada\\\" sound (something going up) at the begginign and a \\\"tading\\\" sound (something going done) at the end, and I'd also suggest we have an \\\"argnz: starting\\\" at the very beginning (with the up tone) and a dedicated \\\"arngz: done\\\" (with the down tone) at the end. These toats should be independent of any of the toats doing actual work so that it is clear when arngz is running and when it isn't. We might as well do this now given we have that other fix to do.\" The rest is vc's wording. In 2.15.0, with the Save fix (hv decision 52): a verb that takes the desktops, the pointer or the keyboard (apply, auto, and discover with its new step) marks its start and its end. The first thing it does is show \"arngz: starting\" and play a rising sound. The last thing it does, on every way out, is show \"arngz: done\" and play a falling sound. These two marks are apart from the toasts that say what the run is doing. ic designs the marks (the toast and the sounds), cc gives the points where a run truly starts and ends, design first. One bats run and one live check by hv cover both changes.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.642Z",
       "recorded_at": "2026-11-26T10:39:58.156Z"
     },
     {
@@ -536,7 +576,8 @@
       "kind": "decision",
       "seq": 54,
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 10:43Z and read by vc at 10:44Z. As devbin-vc gives it: hv calls an estate-wide localfold and compact, cycle 5, now; hv compacts each seat when it is folded and quiet, devbin-vc last. The rest is the wording of devbin-vc and vc. For Utilz: no run starts. cc stops the Save fix at a safe point and banks its branch as it stands, with a note of what is done and what is left; ic does the same for the start and end marks. Each seat localfolds without a release: it archives what is finished, clears what is handled, commits its own board files and records by path, keeps its RESUME current, and sets a one-line focus that says where it resumes. No push. main stays at the seats' fold commits on top of the sweep 86448b67. vc sends devbin-vc one message with each seat's fold sha, main's tip, the banks, what waits on hv (the live Save with the marks, the push, the cut) and each resume line, then tells hv the seats are safe to compact. After the compact each seat runs /in-session and goes on from its resume line; the Desk reads every ask again.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.801Z",
       "recorded_at": "2026-11-26T10:44:28.507Z"
     },
     {
@@ -544,7 +585,8 @@
       "kind": "decision",
       "seq": 55,
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc to utilz-vc in two messages, read by vc's date -u of 11:40Z. First, relayed at devbin-vc's date -u of 11:15Z, hv called a sync of every vc. hv's words: \"before anyone continues, can we just sync-n-synth with all of the VCs and see where we're up to and what's left to do\". vc held cc, ic and dc and sent Utilz's reply to devbin-vc at vc's date -u of 11:18Z. Second, relayed after devbin-vc's clock read of 11:39Z: hv read devbin-vc's synthesis, where item 2 was Utilz 2.15.0 with vc's seven steps, and said: \"2: Also seems ok to me. Let's crack on with it.\" The rest is the wording of devbin-vc and vc. The seven steps are vc's: (1) ic finishes the start and done marks on cc's branch, and cc adds one CLI step; (2) one bats run over the Save fix and the marks, on cc's driver, after vc's read; (3) hv's one live check, a Save Desk into a scratch desk name and one apply; (4) vc lands the branch by change, and dc writes the CHANGELOG lines; (5) hv's push of Utilz main and arca_swift main, in vc's window; (6) CI and the macOS test dispatch; (7) the 2.15.0 cut in hv's own terminal. devbin-vc's wording for the Desk: the bats run can go beside Intent's gate run, hv's live check is placed between Intent's runs, and Utilz's cut waits for Intent's cut to end. vc lifted the hold for cc, ic and dc on this word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:02.966Z",
       "recorded_at": "2026-11-26T11:40:58.768Z"
     },
     {
@@ -552,7 +594,8 @@
       "kind": "decision",
       "seq": 56,
       "text": "hv, 26 Nov 2026, in devbin-vc's window by AskUserQuestion, relayed by devbin-vc to utilz-vc and read by vc's date -u of 12:21Z. hv's answer: \"Wait for Save (Recommended)\". The rest is the wording of devbin-vc and vc. The option read, in devbin-vc's wording: 2.15.0 waits for the redesigned Save fix, as hv decision 52 (\"Fix Save fully now\") says, and the machines' rollout batches wait too; Utilz and the batches finish later on 26 Nov, or move to the next day if the redesign runs long. What led to the question: hv's live check of the Save fix on cc/save1126 at de5b138b, run 20261126T121725Z-12892 under light slot 01M8BWFM90H8VS9FKKN0SX8C91, refused with 8 gaps and wrote nothing. vc read two faults from its run log. F1: the read after the visit lost Ivory and Console, which the first read had named. F2: the gap rule counted window-server windows that no person uses, for iTerm2, Teams, Screen Sharing, Safari, Chrome and Mail, whose real windows were named. ic added three faults in the refusal's words. The order now, in vc's wording: cc's redesign note, read by ic and vc; code; ONE bats run; ONE live Save by hv against vc's written criteria (~/Devel/scratch/utilz-vc/live1126/next-live-save-criteria.md); then the landing, hv's push, CI and the dispatch, and the cut. Nothing of the Save fix or the marks is landed.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.132Z",
       "recorded_at": "2026-11-26T12:21:43.761Z"
     },
     {
@@ -560,7 +603,8 @@
       "kind": "decision",
       "seq": 57,
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc to every vc at its date -u of 12:39Z and read by vc's date -u of 12:44Z. hv's words: \"Of the Claudes still open, please tell them to finish what they are doing now, and bank, fold, and hold. Then LMK when everyone has quiesced, I will comapct them all and close, then we can pick up when I get home.\" The rest is the wording of devbin-vc and vc. Each seat finishes its step, starts no run, no unit, no push, no tag and no cut, banks its work locally, runs a localfold without releasing its seat, and holds for vc's word after hv's compact. For Utilz at this fold: nothing of the Save fix or the marks is landed or pushed; the bank is cc/save1126 at 9af5e8f3.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.299Z",
       "recorded_at": "2026-11-26T12:44:32.769Z"
     },
     {
@@ -568,7 +612,8 @@
       "kind": "decision",
       "seq": 58,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, with a screenshot of the toast \"arngz: starting\", read by vc's date -u of 12:44Z. hv's words: \"this is stuck. It should probably also say \"arngz: running\" and then \"arngz: done\" (when finished).\" and \"It is currently hung on the last step.\" The rest is vc's wording. hv had run the live sitting from cc/save1126 at 9af5e8f3: the Save into check1126 (run 20261126T123949Z-74886), its delete, and the apply of zeopit (run 20261126T124113Z-95413). The Save passed vc's written criteria: no window lost between the reads by id, 0 gaps, exit 0, and the saved desk held every app of zeopit.yaml on the same display and desktop. The apply's engine did its work (2 placed, 21 in place, 0 failed, 0 unseen) and then could not write its response, because the redesign put a table keyed by window id into the world that apply's answer carries, and Hammerspoon's JSON writer refuses number keys. So the CLI waited and the start mark stayed. vc reads hv's words as a change to hv decision 53's marks: the mark says \"arngz: running\" while arngz works, between \"arngz: starting\" and \"arngz: done\". The \"probably\" is hv's. It goes to ic with the fix round. The fix round, after hv's return: cc's fix for the response and a test writer that refuses what the real one refuses, ic's mark changes, ONE bats run, and one live apply by hv.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.458Z",
       "recorded_at": "2026-11-26T12:44:32.923Z"
     },
     {
@@ -576,7 +621,8 @@
       "kind": "decision",
       "seq": 59,
       "text": "hv, 26 Nov 2026, first-hand in ic's window, stamped 12:48:56Z in ic's transcript, which vc read by its date -u of 12:49Z; ic relayed it to vc at ic's date -u of 12:48Z. hv's words: \"Approved. Document that approval, then bank, fold, and hold, and then I will compact\". The rest is the wording of ic and vc. By ic's account it approves ic's design note ~/Devel/scratch/utilz-ic/marks1126/running-note.md for hv decision 58: the mark says \"arngz: starting\" until the CLI's first ask of the marked verb; just before that ask the CLI draws \"arngz: running\" itself, once a run, with no sound; then the end words as now. With it go M1's close (a run whose answer never arrives ends with the falling sound and \"arngz: ended with no answer: see arngz log\") and W4 (discover's space line says named, recorded and not recorded, and the window-list totals go to the run log). vc had not read the note when hv approved it; vc reads it before ic codes, and brings to hv only a fault that changes what hv approved. ic codes it on cc's tip after hv's compact, on vc's word; no run before vc's read.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.617Z",
       "recorded_at": "2026-11-26T12:49:45.002Z"
     },
     {
@@ -584,7 +630,8 @@
       "kind": "decision",
       "seq": 60,
       "text": "hv, 26 Nov 2026, first-hand in cc's window, stamped 12:49:30Z in cc's transcript, which vc read by its date -u of 12:50Z; cc relayed it to vc. hv's words: \"Ok, approved. Bank, fold, and hold. Then we can pick it up at home.\" The rest is the wording of cc and vc. By cc's account it approves cc's plan for the fault hv's live apply showed on cc/save1126 at 9af5e8f3 (the engine could not write its response): the world's unseen window ids go in a form Hammerspoon's JSON writer takes, the test's writer refuses what the real one refuses, with arms red over 9af5e8f3, size S, and a design note first. cc folded again at dd3553b4 and codes nothing until vc's word after hv's compact. The fix round then runs as hv decisions 58 and 59 and this one say: cc's fix, ic's marks, vc's read, ONE bats run, hv's one live sitting.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.777Z",
       "recorded_at": "2026-11-26T12:50:06.457Z"
     },
     {
@@ -592,7 +639,8 @@
       "kind": "decision",
       "seq": 61,
       "text": "hv, 26 Nov 2026, first-hand in vc's session, read by vc's date -u of 14:32Z. hv's words: \"Ok, sync your plan with devbin-vc and then get ready to go.\" and then \"I'm about to be AFK for 1hr while I got to the gym. I want you to close out as mucn as can be closed out now this evening. Ok? Go! devbin-vc has The Pen and The Desk.\" The rest is vc's wording. vc sent devbin-vc Utilz's plan at 14:28Z. While hv is away, devbin-vc wears the pen and holds the Desk. The pen does not reach hv's own rulings, so the D2 route for the tool line waits for hv. Utilz takes the fix round as far as it goes without hv: cc's ONE bats run (request 01M8C48X37NEK2V17X9FVVQF90) on devbin-vc's GO, and dc's tool-line XS built for both D2 routes, with ic's read. What closes needs hv's return: hv's live sitting at homere, then vc's landing, hv's pushes, CI and the dispatch, and hv's cut.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:03.936Z",
       "recorded_at": "2026-11-26T14:33:15.016Z"
     },
     {
@@ -600,7 +648,8 @@
       "kind": "decision",
       "seq": 62,
       "text": "hv, 26 Nov 2026, in devbin-vc's window, relayed by devbin-vc at its date -u of 18:11Z and read by vc at 18:13Z. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I can compact and then we can continue on the bounce.\" devbin-vc calls it cycle 7. The rest is the wording of devbin-vc and vc. For Utilz: no run, unit, push, tag or cut starts, and the Desk grants nothing new until devbin-vc's word after the cycle. Each seat banks its work on its branch or main, local only, and localfolds without a release: board, wip, and a resume line that says the next step and what waits on hv. Each seat commits its own files by path and sends vc its fold sha. vc sends devbin-vc one FOLDED message for the team, then every seat holds. After hv's compact, each seat runs /in-session, reads its resume line and holds for vc's word; devbin-vc gives each vc the word to go on, in the plan's order.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.097Z",
       "recorded_at": "2026-11-26T18:15:04.427Z"
     },
     {
@@ -608,7 +657,8 @@
       "kind": "decision",
       "seq": 63,
       "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 04:54Z. It follows devbin-vc's lift of fold cycle 7's hold for Utilz (its date -u of 18:25Z on 26 Nov), after which vc gave hv both bats results (GREEN) and put three questions. hv's picks, from options worded by vc: Music at homere, \"Add (Recommended)\"; the tool line, \"Tool line first (Recommended)\"; the order at the Mac, \"Intent's cut first\". The rest is vc's wording. (1) vc adds an 8th laptop desktop for Music to hv's homere.yaml, as at zeopit (com.apple.Music, layout 0,0 8x4), with the file as it was kept in ~/Devel/scratch/utilz-vc/live1126/homere.before.yaml, and checks it with `arngz show homere` and `arngz list`. (2) hv amends ST0015's D2 for 2.15.0: a utility's `--version` prints the tool line first, `<util> <utilz version> (<tree>, <sha12>[+dirty])`, then the pair `utilz:<framework>/<util>:<version>` on line two, then the description. devbin reads line one as it does now. dc's A e8031acd and B e58c15db on dc/i4cbec17 (issue I4cbec17; run 01M8C5ZXJ44D697PQ1V9CQ4HW0 GREEN) land by change with the fix round, after hv's verdict at the sitting. (3) Intent's 3.5.6 cut goes first on the Desk. vc asks the Desk for the sitting's light slot when hv says that cut is done.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.257Z",
       "recorded_at": "2026-11-27T04:55:38.738Z"
     },
     {
@@ -616,7 +666,8 @@
       "kind": "decision",
       "seq": 64,
       "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker, answered before vc's date -u of 05:25Z. It answers vc's restatement of the premise of hv decision 63's tool-line option. That option said \"built and proved green\", but help_dispatch.bats AT04 still read the pair from line one, and dc's run had not taken that file. hv's picks, from options worded by vc: \"Yes, tool line first (Recommended)\" and, for the live sitting, \"Ready at the cut's end\". The rest is vc's wording. Decision 63's route stands. The tool line lands as A e8031acd, B e58c15db and C b6ed1c2e (C fixes AT04; change 40576ed2), after one small bats run in mode C (Desk ask 01M8DQ8SYS1RGRHB9G5DGYAAT0) at the sitting's END. devbin's T4 sentence, that the line is the first line of `--version`, lands on this answer. vc asked the Desk for the sitting's light slot (01M8DQF1SDZP1ZA560BFGR64YN), to start after Intent's 3.5.6 cut and rollout.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.420Z",
       "recorded_at": "2026-11-27T06:03:38.734Z"
     },
     {
@@ -624,7 +675,8 @@
       "kind": "decision",
       "seq": 65,
       "text": "hv, 27 Nov 2026, first-hand in vc's session. hv ran the live sitting at homere in hv's own terminal, in the Desk's light slot 01M8DQF1SDZP1ZA560BFGR64YN (START 05:49:51Z, END 05:56:54Z by vc's date -u), and pasted the five outputs. hv's verdict: \"Yep, all marks and all sounds. And it looks like it all worked ok.\" Then, by vc's picker, answered before vc's date -u of 05:58:12Z, hv picked from options worded by vc: \"Land (Recommended)\" and, for the macOS tests while hv is away, \"Yes, when CI is green (Recommended)\". The rest is vc's wording. vc read the log (~/Devel/scratch/utilz-vc/live1126/sitting-1127.log) against live1126/next-live-sitting-homere.md, and it met the criteria. Two of vc's own criteria were wrong: diff's 2 rechecks of fixed-size windows and 1 unseen window are ST0034's design, and delete empties `arngz current` as main's forget_current does. vc landed cc/save1126's 18 commits (253d969b to da86ff7b) and dc's A, B and C (5758455c, 91686241, 8647418b) on main by change. vc runs `gh workflow run tests.yml --repo matthewsinclair/utilz --ref main` when CI on main is green after hv's push.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.589Z",
       "recorded_at": "2026-11-27T06:03:38.916Z"
     },
     {
@@ -632,7 +684,8 @@
       "kind": "decision",
       "seq": 66,
       "text": "hv, 27 Nov 2026, first-hand in vc's session, received after vc's date -u of 05:59:27Z and before 06:02:45Z. hv's words: \"Ok, who's cutting this? You have my appeoval (and pre approval) to do whatever you need to cut and release it.\" Then \"Ok, give them to me.\" Then \"What about the open issues and STs/WPs? Can they be closewd out first?\" The rest is vc's wording. vc's session refuses pushes, and the cut's macOS leg needs hv's keychain (watchout 23). So hv types the two push lines in vc's window and the cut line in hv's own terminal, and vc does every other step. The items whose work has landed close before the push: issue I19d4fa6 (cc), and issue I4cbec17 (dc) with dc's 2.15.0 CHANGELOG lines. ST44b4671/4b56, ST44b4671 and issue 0114 (ic) close when the macOS dispatch is green. ST0031/01 and ST0031 (dc) close with the cut. STca1b7f9 and issue I7fce35c move to the spcz thread after the cut, design first.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.748Z",
       "recorded_at": "2026-11-27T06:03:39.095Z"
     },
     {
@@ -640,7 +693,8 @@
       "kind": "decision",
       "seq": 67,
       "text": "hv, 27 Nov 2026, in devbin-vc's window, relayed by devbin-vc (hv's words read by its date -u of 07:55Z) and received by vc at 07:56Z by this session's log. hv's words: \"Ok, context is pretty high everywhere now for all Claudes VCs and their teams. Please corral an estate wide localfold+compact cycle for me. I'll run compact in each Claude when they are folded and quiesced. Once everyone is quiesced, I can compact and then we can continue on the bounce.\" devbin-vc calls it cycle 8. The rest is the wording of devbin-vc and vc. For Utilz: the 2.15.0 cut runs to its END, and the seats fold after it, because a fold writes to the board. The cut ended GREEN (devbin's end stamp 08:04:18Z), and vc released its slot at 08:04:46Z. No new run, unit, push, tag or cut starts, and the Desk grants nothing new until devbin-vc's word after the cycle. Each seat localfolds without a release, commits its own files by path and sends vc its fold sha. vc sends devbin-vc one FOLDED message for the team, then every seat holds. The brew lines wait for hv after the bounce, unless hv is at the Mac at the END. After hv's compact, each seat runs /in-session, reads its resume line and holds for vc's word.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:04.929Z",
       "recorded_at": "2026-11-27T08:08:47.967Z"
     },
     {
@@ -648,7 +702,8 @@
       "kind": "decision",
       "seq": 68,
       "text": "hv, 27 Nov 2026, first-hand in vc's session. hv's words: \"Can you give me the lines to use brew, please?\" vc gave one line, and hv ran it in vc's window, done before vc's date -u of 08:17Z: `cd ~/Devel/prj/Utilz && HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz && bin/devbin use brew`. The rest is vc's wording. brew's utilz went from 2.14.10 to 2.15.0, and `devbin use brew` removed all 18 links from ~/.local/bin, so each name answers \"2.15.0 (brew, 9fad28695cf1)\". brew's `utilz doctor` passes every check. rhadamanth is on brew from now on, which ends hv decision 19 (rhadamanth stays on utilz dev while the Utilz seats work). The seats work in worktrees and call their own tree's bin/, never PATH's. `bin/devbin use dev` puts rhadamanth back on dev, and that step is hv's.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:05.092Z",
       "recorded_at": "2026-11-27T08:17:59.399Z"
     },
     {
@@ -656,7 +711,8 @@
       "kind": "decision",
       "seq": 69,
       "text": "hv, 27 Nov 2026, first-hand in vc's session, after vc's account of the six parts of issue I7fce35c. hv's words: \"Ok, then we should take (6) out of that Issue and move it to the spcz ST/WP.\" The rest is vc's wording. Part (6), windows lost mid-run, leaves I7fce35c for the spcz thread, with the registry that fixes it (STca1b7f9's WP 026e, AC-026eadfc.1 to .4, moved to spcz by hv decision 44). The remaining piece of part (1), the windows that a failed window filter cannot name, rides the same registry and moves with it. Parts (2), (4) and (5) are fixed and shipped. Part (3) shipped in 2.15.0 through arngz's own Mission Control finder (AC-322a6511.7 is satisfied). After the compact, cc creates the spcz thread, design first, and carries part (6) into it. Then cc closes I7fce35c with a resolution that names where each part went. STca1b7f9's own open criteria, AC-322a6511.6 and .8 among them, move to spcz by hv decision 66.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:48:05.253Z",
       "recorded_at": "2026-11-27T08:18:54.757Z"
     },
     {
