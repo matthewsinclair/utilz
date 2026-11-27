@@ -1,0 +1,16 @@
+{
+  "id": "01M8E2NZ0WGS81V6002BPNQR6R",
+  "ts": "2026-11-27T08:41:48.841Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.hold",
+  "subject": {
+    "type": "thread",
+    "id": "STb23493523cd1b054"
+  },
+  "payload": {
+    "from": "wip",
+    "reason": "hv decision 72: hv draws a line under this week's Utilz work. The bash 5 half waits for Devbin's bash-floor verb, a future Devbin WP (devbin-cc). Both halves are banked on ic/bash5label at 089404ec, not landed and not run.",
+    "to": "hold"
+  }
+}

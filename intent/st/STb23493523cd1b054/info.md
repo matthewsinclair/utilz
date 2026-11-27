@@ -1,7 +1,8 @@
 ---
 st_id: STb234935
 title: menuz: one search for a bash 5 in macos.bats, and the Check Desks label (issue I669673a, hv decision 70)
-status: WIP
+status: On Hold
+status_reason: hv decision 72: hv draws a line under this week's Utilz work. The bash 5 half waits for Devbin's bash-floor verb, a future Devbin WP (devbin-cc). Both halves are banked on ic/bash5label at 089404ec, not landed and not run.
 created: 2026-11-27
 completed:
 ---

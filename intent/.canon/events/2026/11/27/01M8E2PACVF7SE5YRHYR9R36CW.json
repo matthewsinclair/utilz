@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2PACVF7SE5YRHYR9R36CW",
+  "ts": "2026-11-27T08:42:00.475Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "hold",
+    "text": "STb234935 (WP dda1de42), held by hv decision 72: the Check Desks label (hv decision 70) and one search for a bash 5 in macos.bats. Released on vc's word when hv takes up Utilz work again. The bash 5 half also waits for Devbin's bash-floor verb (devbin-cc's future Devbin WP). The code is banked on ic/bash5label at 089404ec, not landed and not run."
+  }
+}

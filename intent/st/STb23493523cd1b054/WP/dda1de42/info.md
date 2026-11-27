@@ -2,7 +2,7 @@
 wp_id: WP-dda1
 title: One search for a bash 5 in macos.bats, and the Check Desks label
 scope: S
-status: WIP
+status: Not Started
 ---
 
 # WP-dda1: One search for a bash 5 in macos.bats, and the Check Desks label

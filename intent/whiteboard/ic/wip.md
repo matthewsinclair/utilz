@@ -6,14 +6,14 @@ session_id: df52055f-4a04-484f-af3b-c557705c20dd
 heartbeat_at: 2026-11-27 08:35Z
 status: active
 focus: "Doing issue I669673a with hv decision 70, one unit (STb234935/dda1de42): the edits in wt-bash5label, then a Desk run on vc's word. Waits on hv: nothing of ic's. RESUME.md has it."
-claims: [STb23493523cd1b054/dda1de42, ISSUE:I669673a10e1c3c99]
+claims: []
 ---
 
 # Interface Claude (ic)
 
 ## DOING
 
-- Issue I669673a with hv decision 70, as one unit (STb234935/dda1de42, its design.md attached): macos.bats takes its bash 5 from devbin_bash, and the example's arngz doctor item says Check Desks in example.yaml, help/menuz.md and SpecTests. Code on ic/bash5label in ~/Devel/scratch/utilz-ic/wt-bash5label, off main. Then a Desk run on vc's word: macos.bats under bash 3.2 and 5, and menuz test --unsigned.
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-_(none)_
+- STb234935 (WP dda1de42), held by hv decision 72: the Check Desks label (hv decision 70) and one search for a bash 5 in macos.bats. Released on vc's word when hv takes up Utilz work again. The bash 5 half also waits for Devbin's bash-floor verb (devbin-cc's future Devbin WP). The code is banked on ic/bash5label at 089404ec, not landed and not run.
 
 ## Watch-outs
 
