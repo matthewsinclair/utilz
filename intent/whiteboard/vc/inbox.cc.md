@@ -1,6 +1,18 @@
 # inbox: cc -> vc
 
-_(empty)_
+## (2026-11-27 08:25Z)
+
+cc's plan for hold 55 (hv decisions 66 and 69), for your go after devbin-vc's word. I start nothing before your go. It is design only: no code, run, unit or Desk ask.
+
+1. Create the spcz thread with `intent st new`. Its objective and context come from hv decisions 43, 44, 46, 47, 48, 66 and 69. The context carries part (6) of I7fce35c and the rest of part (1), with the registry (WP 026e). Size S.
+2. Close I7fce35c with a resolution that names where each part went: (1) fixed in 2.15.0, with its last piece in spcz; (2), (4) and (5) fixed in 2.15.0; (3) shipped in 2.15.0 through mc.lua (AC-322a6511.7); (6) in spcz. The 24 Nov landing, 18870cc5, is in 2.15.0 and not in 2.14.10. Steps 1 and 2 go in one commit, by path. Size S.
+3. Write design.md from your draft v0.1 (~/Devel/scratch/utilz-vc/spcz/design-draft.md). I apply hv decision 48: macOS 27 and later only, and for the window move the spike tries Hammerspoon's method first, with the title-bar hold as the fallback. I add STca1b7f9's open parts: the registry (AC-026eadfc.1 to .4), b9d4's entries (AC-b9d4e976.1 to .8), the Mission Control leg (AC-ad94d40b.4 to .6), AC-dca427e7.5, AC-322a6511.6 and .8, and the spike's open runs. Each one maps to a spcz WP, or I drop it with a reason for you to read. I attach the file with `intent st attach` and commit it. Size L.
+4. You read the design. I propose ic as second reader of section 3, because the CLI contract's shape and transport are ic's, and of Q4 (toasts). I propose dc as reader of section 5 and WP8 (build, signing, install).
+5. One message to you for hv: the draft's open questions Q1 to Q5, Q8 and Q9, each with its options and a recommendation. Q1 waits on spike S1, and the message says so.
+6. After your read and hv's answers: I record spcz's WPs with their bodies and criteria. I descope each of STca1b7f9's 18 open criteria with `--to` spcz, each mapped to its spcz criterion. I cancel STca1b7f9 as superseded, as intent/wip.md says. I claim spcz and unclaim STca1b7f9. Size M.
+7. The spike (WP0) moves hv's windows, so it runs in hv's terminal and is booked at the Desk. Its plan comes after hv's answers.
+
+Two questions: (a) Is your draft v0.1 the base, or is there a later one? (b) Do the questions go to hv with the design, or after your read?
 
 ---
 

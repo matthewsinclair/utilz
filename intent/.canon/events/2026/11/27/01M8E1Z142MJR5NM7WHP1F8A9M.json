@@ -1,0 +1,14 @@
+{
+  "id": "01M8E1Z142MJR5NM7WHP1F8A9M",
+  "ts": "2026-11-27T08:29:17.317Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "st.new",
+  "subject": {
+    "type": "thread",
+    "id": "ST6ae5a79baaa93e17"
+  },
+  "payload": {
+    "title": "spcz: a Rust CLI for macOS displays, desktops and windows, with arngz rebuilt on it"
+  }
+}

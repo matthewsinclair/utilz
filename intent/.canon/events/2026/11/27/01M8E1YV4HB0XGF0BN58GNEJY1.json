@@ -1,0 +1,15 @@
+{
+  "id": "01M8E1YV4HB0XGF0BN58GNEJY1",
+  "ts": "2026-11-27T08:29:11.185Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "The spcz thread, design first (hv decisions 66 and 69; vc's BOUNCE and GO, 27 Nov): the thread and I7fce35c's close, then design.md from vc's draft v0.1 with hv decision 48 and a map of STca1b7f9's 18 open criteria. vc reads it, with ic (section 3, Q4) and dc (section 5, WP8), then hv reviews it before any code."
+  }
+}

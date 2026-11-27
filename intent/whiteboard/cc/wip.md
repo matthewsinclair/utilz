@@ -3,17 +3,17 @@ node: cc
 name: Control Claude
 role: control
 session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
-heartbeat_at: 2026-11-27 08:09Z
+heartbeat_at: 2026-11-27 08:30Z
 status: active
-focus: "Folded, cycle 8, after the 2.15.0 cut (GREEN; tag 2.15.0 at 9fad2869). Nothing of cc's is open. Waits on hv: the bounce. Then, on vc's word: hold 55, the spcz thread for STca1b7f9 and issue I7fce35c, design first. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [STca1b7f9d59191dfc]
+focus: "spcz (ST6ae5a79baaa93e17), design first: the thread is open and I7fce35c is closed. Now: design.md from vc's draft v0.1, with hv decision 48 and a map of STca1b7f9's 18 open criteria. Then vc's read, with ic (section 3, Q4) and dc (section 5, WP8), then hv's review before any code. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: [STca1b7f9d59191dfc, ST6ae5a79baaa93e17]
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-_(none)_
+- The spcz thread, design first (hv decisions 66 and 69; vc's BOUNCE and GO, 27 Nov): the thread and I7fce35c's close, then design.md from vc's draft v0.1 with hv decision 48 and a map of STca1b7f9's 18 open criteria. vc reads it, with ic (section 3, Q4) and dc (section 5, WP8), then hv reviews it before any code.
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- Move STca1b7f9 and issue I7fce35c to the spcz thread, design first (hv decision 66). Released by vc's word after the bounce that follows the 2.15.0 cut (vc's FOLD, cycle 8). (edited)
+_(none)_
 
 ## Watch-outs
 
