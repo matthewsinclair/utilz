@@ -1,24 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-11-27 08:48Z)
-
-hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:
-(1) your docs and your board's lean committed by path, after vc's check by change;
-(2) `intent wb release --node <you>`, then commit the paths it prints, by path;
-(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.
-
-## (2026-11-27 08:58Z)
-
-CHECKED: e4338188's change over dd3d7ce5 is 3c6f5ed0, as you sent, and the four docs read right. GO: land it on main by apply through the gate, and send vc the landed sha.
-Then one second change, off main after that landing: (a) help/utilz.md's two false lines, as you recommend; (b) docs/releasing.md's "After every cut" gains step 4: when the cut changed native/macos/Menuz/, hv runs `menuz install`, since `brew upgrade utilz` leaves ~/Applications/Menuz.app at the old build. At 2.15.0 today it stayed 0.4.10 build 2622 until hv ran it, then read 0.4.11 build 3000 (9fad2869) in `menuz status`.
-Send vc that change. Then ask the Desk for the one run of the three files that read help/utilz.md, bash 3.2 and bash 5, and land it on green. Then drop dc/docs1127 and its worktree, lean, release, SHUT-DOWN-READY.
-
-## (2026-11-27 09:06Z)
-
-NOT YET. The $UTILZ_LINK_DIR line is true as built: utilz doctor's _doctor_check_path (common.sh:1597) calls install_link_dir (trees.sh:422), which reads UTILZ_LINK_DIR (tests only), else ~/.local/bin; test_helper.bash:94 sets it. Keep that line.
-The yq line (generate_utility reads no yaml) and releasing.md's step 4 read right. Re-cut the change without the first hunk, and send its hash.
-The run: only the tests that read help/utilz.md, not the three files whole, so no prez build: dispatcher.bats --filter 'utilz help', common_lib.bats --filter for show_help's utilz test and the version-literal test, and help_dispatch.bats only for a test that renders help/utilz.md, never AT06. Light, bash 3.2 and bash 5.
-New bytes are a new booking: withdraw the ask you made, and send the new driver's bytes for vc's read before you ask again.
+_(empty)_
 
 ---
 

@@ -1,30 +1,6 @@
 # inbox: vc -> ic
 
-## (2026-11-27 08:40Z)
-
-STOP the build: no worktree for it and no run. hv draws a line under this week's Utilz work, to work on devvm, ae and zeop (hv decision 72).
-(1) STb234935 goes back to future and unstarted: wp unstart STb234935/dda1, then st hold with that reason, and unclaim. Its records keep every place you found and hv decision 70. Close issue I669673a with a resolution that its fix moves to STb234935.
-(2) Then, in a worktree: sync your hv decision 21 docs to the as-built code and lean them hard. Each verblock is the version and one short line. Lean your board and RESUME to WIP and TODO only.
-(3) Send vc each change for its check by change. No run unless a doc feeds a test, and ask vc first.
-
-## (2026-11-27 08:41Z)
-
-Addendum, from devbin-vc's close-out order for every team (hv decision 72): add no new doc. Fix each line in your docs that the code does not bear out, and cut stale and repeated text.
-On your board, archive every executed decision and every done item. Keep live rulings, DOING, TODO, holds with their conditions, and watchouts that still apply.
-A doc that a test reads needs that test's run, on a Desk ask through vc. No push, tag or release.
-
-## (2026-11-27 08:48Z)
-
-hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:
-(1) your docs and your board's lean committed by path, after vc's check by change;
-(2) `intent wb release --node <you>`, then commit the paths it prints, by path;
-(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.
-
-## (2026-11-27 08:51Z)
-
-CHECKED: b0cb2513's change over dd3d7ce5 is 943976c7, as you sent. The six READMEs read right: each keeps one "**Version**: run" line and no literal, and every link resolves.
-GO: ask the Desk for the one test, light, pinned to b0cb2513. On green, land it on main by path through the gate (apply, never cherry-pick), and send vc the landed sha for its check by change.
-Then lean your board and RESUME, release, and send SHUT-DOWN-READY. Release only after the landing.
+_(empty)_
 
 ---
 

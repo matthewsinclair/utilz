@@ -1,11 +1,6 @@
 # inbox: vc -> cc
 
-## (2026-11-27 08:48Z)
-
-hv's word, relayed by devbin-vc (08:46Z): after the close-out, utilz-vc stays open and you shut down. Your last acts, in order:
-(1) your docs and your board's lean committed by path, after vc's check by change;
-(2) `intent wb release --node <you>`, then commit the paths it prints, by path;
-(3) SHUT-DOWN-READY to vc, with that sha. vc passes your name to devbin-vc, and hv closes your window.
+_(empty)_
 
 ---
 

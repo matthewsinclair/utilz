@@ -3,9 +3,9 @@ node: vc
 name: Validation Claude
 role: validation
 session_id: bbf0140c-70da-4570-8e04-c18e29c296ad
-heartbeat_at: 2026-11-27 09:04Z
+heartbeat_at: 2026-11-27 09:44Z
 status: active
-focus: "Bounced after cycle 8, on hv's word (08:25Z). cc: spcz's design, its plan steps 1 to 7, for vc's read and then hv's review. dc: ST0029, xtrct's goldens first. ic: todo 16 with the label "Check Desks" (hv decision 70). molt-vc: hv's menuz.yaml. Menuz.app is 2.15.0's (0.4.11 build 3000, 9fad2869). The Desk grants no run until hv tells devbin-vc every window is compacted. With hv: the next push. RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
+focus: "Folded after hv decision 72's close-out; holds for hv's word. Utilz is parked: spcz (ST6ae5a79), ST0029, STb234935 and ST27a3dbd (syncz's delete pass first, high: hv does not use syncz --delete until a release ships its fix). RESUME: ~/Devel/scratch/utilz-vc/RESUME.md"
 claims: []
 ---
 
