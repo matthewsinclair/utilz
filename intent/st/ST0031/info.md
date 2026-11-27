@@ -1,9 +1,9 @@
 ---
 st_id: ST0031
 title: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10
-status: WIP
+status: Completed
 created: 2026-10-31
-completed:
+completed: 2026-11-27
 ---
 
 # ST0031: Release through devbin's reshaped core: Utilz's side of Devbin ST0011/10

@@ -3,6 +3,7 @@
   "text": "Utilz's first cut in this shape fires every leg on its candidate's run, and its RELEASE seal names each one; the core's object step attaches Menuz.app.zip before the formula step runs; and the core's formula step, `bin/devbin formula publish --pull` under release.formula, moves homebrew-utilz to the new tag and pulls this machine's clone of it, rendering the formula from packaging/homebrew/utilz.rb through the core's @@INSTALL@@ alone. tools/formula is retired. Reworded on hv decision 14 (23 Nov 2026), and reworded for I59c806c.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "satisfied",
+    "evidence": "The 2.15.0 cut, devbin run 69173484 (07:43:00Z to 08:04:18Z, 27 Nov 2026): tmp/release/20261127-0743.RELEASE.out, and RELEASE.errors is 0 bytes. Every leg fired on candidate 9fad2869 and went green: candidate (run 45960433009 on candidate/2.15.0, attempt 1, its 8 jobs success), local (release.gates: check all) and macos (the macOS stage). The seal's legs row names each one. The object step attached Menuz.app.zip (line 192; on release 2.15.0 at 08:03:28Z) before the formula step ran (line 194). The formula step, `bin/devbin formula publish --pull` under release.formula, moved homebrew-utilz's main to 1bfbd131 (\"utilz 2.15.0\") and pulled this machine's clone, which is clean at 1bfbd131. The tap's Formula/utilz.rb differs from packaging/homebrew/utilz.rb at 2.15.0 only by the render's header, tag 2.15.0, revision 9fad2869 and the core's generated blocks: the bash build dependency, the @@INSTALL@@ fill (bin/devbin install, then the 18 links of install.links) and post_install_steps. tools/formula has no entry at 2.15.0 or on main (removed in 2c9f7d99)."
   }
 }

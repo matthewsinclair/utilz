@@ -2,7 +2,7 @@
 wp_id: WP-01
 title: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests
 scope: M
-status: WIP
+status: Done
 ---
 
 # WP-01: Sweep: retire Utilz's release tools into devbin's core, and follow it in config, CI, docs and tests

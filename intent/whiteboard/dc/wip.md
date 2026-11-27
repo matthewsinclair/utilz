@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-27 07:30Z
+heartbeat_at: 2026-11-27 08:13Z
 status: active
-focus: "27 Nov: issues I4cbec17 and I7854aef closed, both landed; the macOS dispatch 45956474872 on 43454ef5 is green. Next: AC-01.4 at the 2.15.0 cut, then ST0031/01 done (doing 26); ST0029 after the cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST0031/01]
+focus: "27 Nov: the 2.15.0 cut is GREEN; AC-01.4 satisfied, and ST0031/01 and ST0031 closed. Holding for vc's word after the bounce, then ST0029 (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: []
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-- ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done. (edited)
+_(none)_
 
 ## TODO
 
@@ -21,7 +21,7 @@ _(none)_
 
 ## Holds
 
-- ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
+- ST0029, Retire Python, holds until vc's word after the bounce, hv's estate-wide fold and compact of 27 Nov 2026 (hv decision 35; vc's FOLD, cycle 8). Until then, nothing about ST0029 changes. At that word, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main, and wt-st0029 stays. (edited)
 
 ## Watch-outs
 
