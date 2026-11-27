@@ -3,9 +3,9 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-27 08:43Z
+heartbeat_at: 2026-11-27 09:17Z
 status: active
-focus: "27 Nov, hv decision 72's close-out: ST0029 is held as future, unstarted work. Doing: dc's hv decision 21 docs synced to the as-built code and leaned, in a worktree, each change to vc by change. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+focus: "27 Nov: dc shuts down on hv's word (hv decision 72). Open: ST0029, held as future, unstarted work until hv's word (hold 42). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
 claims: []
 ---
 
@@ -13,7 +13,7 @@ claims: []
 
 ## DOING
 
-- hv decision 72's close-out (vc's STOP of 2026-11-27): sync dc's hv decision 21 docs to the as-built code and lean them, in a worktree off main: docs/releasing.md, docs/developer-guide.md, .github/workflows/README.md, opt/utilz/test/README.md, CHANGELOG's unreleased section and help/utilz.md. No new doc; fix each line the code does not bear out, and cut stale and repeated text. Each change goes to vc for its check by change. No run unless a doc feeds a test, and then on a Desk ask through vc.
+_(none)_
 
 ## TODO
 
