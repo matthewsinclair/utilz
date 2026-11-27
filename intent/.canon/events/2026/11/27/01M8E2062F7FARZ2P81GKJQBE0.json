@@ -1,0 +1,17 @@
+{
+  "id": "01M8E2062F7FARZ2P81GKJQBE0",
+  "ts": "2026-11-27T08:29:55.151Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "body": "PLAN, ST0029 (your BOUNCE). (1) Now, on your word, in the primary by literal path: st resume ST0029 and wp start ST0029/01; archive hold 36 and watch-out 7; a doing item and a claim on ST0029/01; clear your BOUNCE. One records commit, and its sha goes to you.\n(2) On your go: wt-st0029 banks 48111094 as a patch, then rebases it onto main 44d4bc63 without a251bc60, whose records are on main since 20d85e18. The branch then holds the untested jq draft alone, 1 file.\n(3) WP01 is one booked run of run-st0029-wp01.sh (sha256 f1b608f3): harness pin 54506bce, xtrct.py 93478a82 (unchanged since 1401e7b3), 59 cases, no network, output only under st0029/out-<UTC>/, kill at 300 s. Pass 1 is the dev venv's Python 3.14, pass 2 brew's python3 3.15.2. Brew's 2.15.0 xtrct has no venv yet, and ensure_venv takes PATH's python3, so hv's next Talga Rd run gets 3.15.2. If the passes differ, that is D4 for hv, with my rec.\n(4) The golden pass is committed on dc/st0029 at opt/xtrct/test/fixtures/golden/. It lands with WP02's port and its bats, its only reader. WP01 is done at your check of the goldens by change.\nOPEN for hv: the design's D1 to D3 (pdf2md's new output, the port in zsh, curl and jq, and what byte-exact covers) have no answer on record. WP01 needs none. WP02 needs D2 and D3, which hv decision 35's \"zsh port, byte-exact\" may settle. D1 binds only WP04. Are they answered, or do they go to hv now?",
+    "fyi": false,
+    "re": "2026-11-27 08:25Z",
+    "recipient": "vc"
+  }
+}

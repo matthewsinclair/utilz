@@ -5,10 +5,12 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "0e2241fa-cca8-4f21-b02e-ea3f930ca65c",
-    "heartbeat_at": "2026-11-27T08:13:19.096Z",
+    "heartbeat_at": "2026-11-27T08:31:20.289Z",
     "status": "active",
-    "focus": "27 Nov: the 2.15.0 cut is GREEN; AC-01.4 satisfied, and ST0031/01 and ST0031 closed. Holding for vc's word after the bounce, then ST0029 (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
-    "claims": [],
+    "focus": "27 Nov: ST0029 is resumed (vc's BOUNCE, cycle 8). Doing ST0029/01, xtrct's goldens: the plan went to vc at 08:29Z, then one booked run. Next WP02, the zsh port, byte-exact, then WP03, the pdf2md spike. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
+    "claims": [
+      "ST0029/01"
+    ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
   },
@@ -938,7 +940,8 @@
       "kind": "watchout",
       "seq": 7,
       "text": "The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:31:10.679Z",
       "recorded_at": "2026-11-23T10:13:33.117Z"
     },
     {
@@ -1002,7 +1005,8 @@
       "kind": "hold",
       "seq": 36,
       "text": "ST0029, Retire Python, holds until vc's word after the bounce, hv's estate-wide fold and compact of 27 Nov 2026 (hv decision 35; vc's FOLD, cycle 8). Until then, nothing about ST0029 changes. At that word, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main, and wt-st0029 stays.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T08:31:10.530Z",
       "recorded_at": "2026-11-25T12:36:20.770Z",
       "edited_at": "2026-11-27T08:12:57.873Z"
     },
@@ -1083,6 +1087,14 @@
       "state": "archived",
       "archived_at": "2026-11-27T07:30:03.487Z",
       "recorded_at": "2026-11-27T07:05:56.929Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 32,
+      "text": "ST0029/01, xtrct's goldens (hv decision 35; vc's BOUNCE, cycle 8). One booked run of run-st0029-wp01.sh after vc reads its bytes, then the golden pass is committed on dc/st0029 in wt-st0029 at opt/xtrct/test/fixtures/golden/. Next: WP02, xtrct's zsh port, byte-exact (Talga Rd, vc decision 79 (2)), then WP03, the pdf2md spike. The plan is dc's ask to vc of 2026-11-27 08:29Z.",
+      "state": "live",
+      "recorded_at": "2026-11-27T08:31:10.823Z"
     }
   ],
   "sent": [
@@ -3073,6 +3085,14 @@
       "fyi": false,
       "recorded_at": "2026-11-26T14:49:55.301Z",
       "archived_at": "2026-11-26T18:18:18.259Z"
+    },
+    {
+      "id": "01M8E2062F7FARZ2P81GKJQBE1",
+      "recipient": "vc",
+      "body": "PLAN, ST0029 (your BOUNCE). (1) Now, on your word, in the primary by literal path: st resume ST0029 and wp start ST0029/01; archive hold 36 and watch-out 7; a doing item and a claim on ST0029/01; clear your BOUNCE. One records commit, and its sha goes to you.\n(2) On your go: wt-st0029 banks 48111094 as a patch, then rebases it onto main 44d4bc63 without a251bc60, whose records are on main since 20d85e18. The branch then holds the untested jq draft alone, 1 file.\n(3) WP01 is one booked run of run-st0029-wp01.sh (sha256 f1b608f3): harness pin 54506bce, xtrct.py 93478a82 (unchanged since 1401e7b3), 59 cases, no network, output only under st0029/out-<UTC>/, kill at 300 s. Pass 1 is the dev venv's Python 3.14, pass 2 brew's python3 3.15.2. Brew's 2.15.0 xtrct has no venv yet, and ensure_venv takes PATH's python3, so hv's next Talga Rd run gets 3.15.2. If the passes differ, that is D4 for hv, with my rec.\n(4) The golden pass is committed on dc/st0029 at opt/xtrct/test/fixtures/golden/. It lands with WP02's port and its bats, its only reader. WP01 is done at your check of the goldens by change.\nOPEN for hv: the design's D1 to D3 (pdf2md's new output, the port in zsh, curl and jq, and what byte-exact covers) have no answer on record. WP01 needs none. WP02 needs D2 and D3, which hv decision 35's \"zsh port, byte-exact\" may settle. D1 binds only WP04. Are they answered, or do they go to hv now?",
+      "re": "2026-11-27 08:25Z",
+      "fyi": false,
+      "recorded_at": "2026-11-27T08:29:55.151Z"
     }
   ],
   "handled": [
@@ -4285,6 +4305,11 @@
       "id": "01M8E0PPQFZ04FB44HVCTWHSTY",
       "sender": "vc",
       "handled_at": "2026-11-27T08:13:08.125Z"
+    },
+    {
+      "id": "01M8E1QW7EG9669F17QBN22TVQ",
+      "sender": "vc",
+      "handled_at": "2026-11-27T08:31:20.117Z"
     }
   ]
 }

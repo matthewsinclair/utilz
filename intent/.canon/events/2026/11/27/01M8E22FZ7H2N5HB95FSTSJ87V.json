@@ -1,0 +1,15 @@
+{
+  "id": "01M8E22FZ7H2N5HB95FSTSJ87V",
+  "ts": "2026-11-27T08:31:10.823Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "ST0029/01, xtrct's goldens (hv decision 35; vc's BOUNCE, cycle 8). One booked run of run-st0029-wp01.sh after vc reads its bytes, then the golden pass is committed on dc/st0029 in wt-st0029 at opt/xtrct/test/fixtures/golden/. Next: WP02, xtrct's zsh port, byte-exact (Talga Rd, vc decision 79 (2)), then WP03, the pdf2md spike. The plan is dc's ask to vc of 2026-11-27 08:29Z."
+  }
+}

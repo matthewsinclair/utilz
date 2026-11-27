@@ -3,17 +3,17 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-27 08:13Z
+heartbeat_at: 2026-11-27 08:31Z
 status: active
-focus: "27 Nov: the 2.15.0 cut is GREEN; AC-01.4 satisfied, and ST0031/01 and ST0031 closed. Holding for vc's word after the bounce, then ST0029 (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: []
+focus: "27 Nov: ST0029 is resumed (vc's BOUNCE, cycle 8). Doing ST0029/01, xtrct's goldens: the plan went to vc at 08:29Z, then one booked run. Next WP02, the zsh port, byte-exact, then WP03, the pdf2md spike. RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: [ST0029/01]
 ---
 
 # DevX Claude (dc)
 
 ## DOING
 
-_(none)_
+- ST0029/01, xtrct's goldens (hv decision 35; vc's BOUNCE, cycle 8). One booked run of run-st0029-wp01.sh after vc reads its bytes, then the golden pass is committed on dc/st0029 in wt-st0029 at opt/xtrct/test/fixtures/golden/. Next: WP02, xtrct's zsh port, byte-exact (Talga Rd, vc decision 79 (2)), then WP03, the pdf2md spike. The plan is dc's ask to vc of 2026-11-27 08:29Z.
 
 ## TODO
 
@@ -21,12 +21,11 @@ _(none)_
 
 ## Holds
 
-- ST0029, Retire Python, holds until vc's word after the bounce, hv's estate-wide fold and compact of 27 Nov 2026 (hv decision 35; vc's FOLD, cycle 8). Until then, nothing about ST0029 changes. At that word, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main, and wt-st0029 stays. (edited)
+_(none)_
 
 ## Watch-outs
 
 - No Hammerspoon, pointer, xcodebuild, hv's keychain or menuz file without a fresh go from hv. (edited)
-- The primary checkout is live for hv on the dev tree (vc's announce, 23 Nov 2026): no code edits in ~/Devel/prj/Utilz, worktrees only, and nothing lands on main but on vc's word, until vc says hv is back on brew.
 
 ## Decisions
 
