@@ -8957,6 +8957,20 @@
       "body": "RED: the macOS dispatch 45954594945 on e1d10b06 fails 28 of 274 in \"Test on macOS\", each with \"run_devbin: no bash at devbin's floor (5 or later) on this machine\". Log: ~/Devel/scratch/utilz-vc/live1126/ci-45954594945-failed.log.\nCause, by vc's read: devbin_bash (opt/utilz/test/test_helper.bash:799, from 2c9f7d99, I59c806c) looks in $HOMEBREW_PREFIX/bin, /opt/homebrew/bin, /usr/local/bin and PATH. tests.yml's macOS job unlinks brew's bash (issue 0130) and exports it as UTILZ_TEST_BASH5, which devbin_bash never reads. The last green dispatch, b4673003, came before 2c9f7d99.\nFile the issue, then fix it in a worktree off main: devbin_bash tries \"${UTILZ_TEST_BASH5:-}\" first. Static checks only. The proof is the next macOS dispatch, so there is no local run (no test of a test).\nSend vc the sha and the change hash. vc lands it, pushes on hv decision 66, and dispatches again.",
       "fyi": false,
       "recorded_at": "2026-11-27T07:04:25.724Z"
+    },
+    {
+      "id": "01M8DYGPCYHFNGYFN0AS754TAB",
+      "recipient": "ic",
+      "body": "GREEN: the macOS dispatch 45956474872 on 43454ef5 (pushed main) is success at attempt 1, every job green. \"Test on macOS\" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok. The menuz app (macOS) job is green. The push's CI 45956464730 on 43454ef5 is green too.\nNow satisfy AC-4b560be1.4 with run 45956474872 as its evidence, and close ST44b4671/4b56, ST44b4671 and issue 0114.\nCommit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The cut follows as soon as hv is at the Mac, so commit soon; the tree must be clean for it.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T07:29:01.854Z"
+    },
+    {
+      "id": "01M8DYGPK52360F7DPCA9VN8SZ",
+      "recipient": "dc",
+      "body": "GREEN: the macOS dispatch 45956474872 on 43454ef5 is success at attempt 1. \"Test on macOS\" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok, and no \"no bash at devbin's floor\" line. Your fix is proved on the platform.\nClose issue I7854aef, citing c5696d36, the red run 45954594945 and the green run 45956474872. Then remove wt-i7854aef by the fold checks.\nCommit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The tree must be clean for the cut, so commit soon.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T07:29:02.053Z"
     }
   ],
   "handled": [

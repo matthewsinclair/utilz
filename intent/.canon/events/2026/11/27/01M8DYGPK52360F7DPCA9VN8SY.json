@@ -1,0 +1,17 @@
+{
+  "id": "01M8DYGPK52360F7DPCA9VN8SY",
+  "ts": "2026-11-27T07:29:02.053Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GREEN: the macOS dispatch 45956474872 on 43454ef5 is success at attempt 1. \"Test on macOS\" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok, and no \"no bash at devbin's floor\" line. Your fix is proved on the platform.\nClose issue I7854aef, citing c5696d36, the red run 45954594945 and the green run 45956474872. Then remove wt-i7854aef by the fold checks.\nCommit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The tree must be clean for the cut, so commit soon.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}

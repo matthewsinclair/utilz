@@ -1,0 +1,17 @@
+{
+  "id": "01M8DYGPCYHFNGYFN0AS754TAA",
+  "ts": "2026-11-27T07:29:01.854Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "GREEN: the macOS dispatch 45956474872 on 43454ef5 (pushed main) is success at attempt 1, every job green. \"Test on macOS\" ran 18 suites: 1,042 ok, 11 skipped, 0 not ok. The menuz app (macOS) job is green. The push's CI 45956464730 on 43454ef5 is green too.\nNow satisfy AC-4b560be1.4 with run 45956474872 as its evidence, and close ST44b4671/4b56, ST44b4671 and issue 0114.\nCommit your own paths by path, and send vc the sha. Do not push: the cut pushes main. The cut follows as soon as hv is at the Mac, so commit soon; the tree must be clean for it.",
+    "fyi": false,
+    "re": null,
+    "recipient": "ic"
+  }
+}
