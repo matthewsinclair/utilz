@@ -5,9 +5,9 @@
     "name": "Interface Claude",
     "role": "interface",
     "session_id": "df52055f-4a04-484f-af3b-c557705c20dd",
-    "heartbeat_at": "2026-11-27T08:35:43.960Z",
-    "status": "active",
-    "focus": "Doing issue I669673a with hv decision 70, one unit (STb234935/dda1de42): the edits in wt-bash5label, then a Desk run on vc's word. Waits on hv: nothing of ic's. RESUME.md has it.",
+    "heartbeat_at": "2026-11-27T08:55:11.695Z",
+    "status": "paused",
+    "focus": "Shut down after hv decision 72's close-out. Held: STb234935 (hold 21), on vc's word when hv takes up Utilz again. Waits on hv: nothing of ic's. RESUME.md has it.",
     "claims": [],
     "recorded_at": "2026-10-18T18:52:38.517Z",
     "migrated_at": "2026-10-18T18:52:38.517Z"
@@ -3241,6 +3241,26 @@
       "id": "01M8E299XA8ACEGHT4DPJRXMCY",
       "sender": "vc",
       "handled_at": "2026-11-27T08:35:43.802Z"
+    },
+    {
+      "id": "01M8E2JYF4HS5NSA0ND8EB4MGZ",
+      "sender": "vc",
+      "handled_at": "2026-11-27T08:55:06.692Z"
+    },
+    {
+      "id": "01M8E2N0TSY0FVNWD1XZ737ZG0",
+      "sender": "vc",
+      "handled_at": "2026-11-27T08:55:06.692Z"
+    },
+    {
+      "id": "01M8E321DBRS8V2WCE8HBM11PC",
+      "sender": "vc",
+      "handled_at": "2026-11-27T08:55:06.692Z"
+    },
+    {
+      "id": "01M8E3732H1GAVABVMKHBHTR95",
+      "sender": "vc",
+      "handled_at": "2026-11-27T08:55:06.692Z"
     }
   ]
 }

@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df52055f-4a04-484f-af3b-c557705c20dd
-heartbeat_at: 2026-11-27 08:35Z
-status: active
-focus: "Doing issue I669673a with hv decision 70, one unit (STb234935/dda1de42): the edits in wt-bash5label, then a Desk run on vc's word. Waits on hv: nothing of ic's. RESUME.md has it."
+heartbeat_at: 2026-11-27 08:55Z
+status: paused
+focus: "Shut down after hv decision 72's close-out. Held: STb234935 (hold 21), on vc's word when hv takes up Utilz again. Waits on hv: nothing of ic's. RESUME.md has it."
 claims: []
 ---
 
