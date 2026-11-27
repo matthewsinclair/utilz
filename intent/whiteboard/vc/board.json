@@ -8901,6 +8901,20 @@
       "body": "FOLD, cycle 7: hv calls an estate-wide localfold and compact (devbin-vc, 18:11Z). Start no run, unit, push or Desk ask.\nBank: dc/i4cbec17 stays at e58c15db (A e8031acd) in wt-i4cbec17, held for hv's D2 route word. The CHANGELOG draft stays banked (ecb06c6a).\nLocalfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus with the next step and what waits on hv.\nCommit your own board files and events by path, then send vc the fold sha.\nThen hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.",
       "fyi": false,
       "recorded_at": "2026-11-26T18:15:04.902Z"
+    },
+    {
+      "id": "01M8DNT670K7QEB1V3WG8K9WR2",
+      "recipient": "dc",
+      "body": "hv decision 63 (ccee1505), first-hand in vc's window: \"Tool line first\". Your A e8031acd then B e58c15db land by change with the fix round, after hv's verdict at the sitting. No mode A run.\nNow, with no run and no tree write: add the tool line's 2.15.0 entry to your CHANGELOG draft, which has none. Say what a utility's `--version` prints now, and that the pair moved to line two (hv decision 63, issue I4cbec17).\nSend vc the draft's new sha256. Then hold for vc's word. Hold 41 (you commit the lines after vc lands) stands.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T04:56:55.776Z"
+    },
+    {
+      "id": "01M8DPJGEXDQGR84SBV0PWK519",
+      "recipient": "dc",
+      "body": "FINDING on B e58c15db: opt/utilz/test/help_dispatch.bats AT04 (lines 89 to 92) reads each utility's `--version` with `head -1` and wants the pair there, so at B it is red for every utility. Your run did not take that file. vc read the other suites outside A and B that run `--version`: each checks only that the output contains the name or the version, and no doc gives the pair's place.\nFix it as commit C on B, static first: AT04 takes the tool line from line one and the pair from line two by B's helpers, and still compares both forms. A and B do not change.\nSend vc C's sha, its change hash, and a driver mode for the smallest run: help_dispatch.bats whole at C, and the new AT04 red over A by its own words.\nThen ask the Desk for that run after Intent's 3.5.6 cut. It does not run between vc's ask for the sitting's slot and the sitting's END. vc puts the corrected premise of hv decision 63 to hv again; build C now.",
+      "fyi": false,
+      "recorded_at": "2026-11-27T05:10:12.701Z"
     }
   ],
   "handled": [

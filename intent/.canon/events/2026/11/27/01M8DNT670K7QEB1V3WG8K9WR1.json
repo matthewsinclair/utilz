@@ -1,0 +1,17 @@
+{
+  "id": "01M8DNT670K7QEB1V3WG8K9WR1",
+  "ts": "2026-11-27T04:56:55.776Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "hv decision 63 (ccee1505), first-hand in vc's window: \"Tool line first\". Your A e8031acd then B e58c15db land by change with the fix round, after hv's verdict at the sitting. No mode A run.\nNow, with no run and no tree write: add the tool line's 2.15.0 entry to your CHANGELOG draft, which has none. Say what a utility's `--version` prints now, and that the pair moved to line two (hv decision 63, issue I4cbec17).\nSend vc the draft's new sha256. Then hold for vc's word. Hold 41 (you commit the lines after vc lands) stands.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
