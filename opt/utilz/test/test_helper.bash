@@ -790,15 +790,18 @@ run_install_function() {
   bash -c "source '$UTILZ_HOME/opt/utilz/lib/common.sh'; source '$UTILZ_HOME/opt/utilz/lib/trees.sh'; $*"
 }
 
-# devbin_bash -- a bash at devbin's floor, 5 or later, found where devbin's own
-# floor search looks (HOMEBREW_PREFIX's, else Homebrew's two macOS places),
-# then the PATH's; rc 1 when there is none. devbin publishes and switches Utilz
-# now (devbin#0326, issue I59c806c), and devbin needs bash 5 where Utilz's
-# estate gate runs its suites under macOS's /bin/bash 3.2 (issue 0051), so an
-# arm runs devbin under this bash, never the PATH's (devbin I5a905ad's split).
+# devbin_bash -- a bash at devbin's floor, 5 or later: UTILZ_TEST_BASH5 first,
+# which CI's macOS job sets to Homebrew's bash 5, unlinked and so off PATH
+# (issue 0130), as menuz's macos.bats reads it (issue I7854aef); then where
+# devbin's own floor search looks (HOMEBREW_PREFIX's, else Homebrew's two macOS
+# places), then the PATH's; rc 1 when there is none. devbin publishes and
+# switches Utilz now (devbin#0326, issue I59c806c), and devbin needs bash 5
+# where Utilz's estate gate runs its suites under macOS's /bin/bash 3.2 (issue
+# 0051), so an arm runs devbin under this bash, never the PATH's (devbin
+# I5a905ad's split).
 devbin_bash() {
   local b v
-  for b in "${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/bash}" /opt/homebrew/bin/bash /usr/local/bin/bash "$(command -v bash)"; do
+  for b in "${UTILZ_TEST_BASH5:-}" "${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/bin/bash}" /opt/homebrew/bin/bash /usr/local/bin/bash "$(command -v bash)"; do
     [[ -n "$b" && -x "$b" ]] || continue
     # shellcheck disable=SC2016 # the child bash expands its own BASH_VERSINFO
     v=$("$b" -c 'printf %s "${BASH_VERSINFO[0]}"' 2>/dev/null) || continue
