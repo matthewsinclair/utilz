@@ -3,10 +3,10 @@ node: dc
 name: DevX Claude
 role: devx
 session_id: 0e2241fa-cca8-4f21-b02e-ea3f930ca65c
-heartbeat_at: 2026-11-26 18:18Z
+heartbeat_at: 2026-11-27 06:09Z
 status: active
-focus: "Fold 7, 26 Nov: hold for vc's word. Waits on hv: the route word for issue I4cbec17. "Tool line first" lands A then B (AB ran GREEN); "pair first" needs a mode A run, then A lands alone. Hold 41: the 2.15.0 CHANGELOG lines after vc lands the fix round. Then AC-01.4 at the cut; ST0029 after it (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
-claims: [ST0031/01, ISSUE:I4cbec172f937d058]
+focus: "27 Nov: issue I4cbec17 closed (vc landed A, B and C; runs AB and C GREEN), and the 2.15.0 CHANGELOG lines committed at 034f273a, which vc reads before hv's push. Next: AC-01.4 at the 2.15.0 cut, then ST0031/01 done (doing 26); ST0029 after the cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md"
+claims: [ST0031/01]
 ---
 
 # DevX Claude (dc)
@@ -14,7 +14,6 @@ claims: [ST0031/01, ISSUE:I4cbec172f937d058]
 ## DOING
 
 - ST0031 rests, landed and pushed, with /02 done. Open: AC-01.4 at the first cut, then /01 done. (edited)
-- Issue I4cbec17, a utility's --version tool line (vc's GO, from devbin's Icb1329b). A e8031acd: the line names the utility and stays last (route 1). B e58c15db on A: the line first, the pair second (route 2). vc checked both and the driver; ic read both SOUND. Run 01M8C5ZXJ44D697PQ1V9CQ4HW0 (mode AB): GREEN, so route 2 is proven; route 1 alone needs a mode A run. Waits for hv's route word, then a landing by change on vc's word and the close after vc's check. (edited)
 
 ## TODO
 
@@ -23,7 +22,6 @@ _(none)_
 ## Holds
 
 - ST0029, Retire Python, holds until the 2.15.0 cut (hv decision 35). vc tells dc at the cut. Until then, nothing about ST0029 changes. At the cut, dc resumes ST0029 in Intent. Then dc does xtrct's goldens, then xtrct's zsh port, byte-exact, then the pdf2md spike. The port is byte-exact because xtrct feeds the Talga Rd accounting (vc decision 79 (2)). ST0029/02's draft stays banked at 48111094 on dc/st0029 in wt-st0029, never main.
-- 2.15.0 CHANGELOG lines: cc's Save fix (issue I19d4fa68, hv decision 52) with W4's discover line, and ic's run marks (hv decisions 53 and 58: starting, running, the end; M1's close, hv decision 59). cc's apply-response fix (hv decision 60) gets no line, since that fault never shipped (vc, 14:05Z). Drafted in scratch, not committed: ~/Devel/scratch/utilz-dc/changelog1126/draft-2.15.0.md, from cc/save1126 at 9af5e8f3 and ic's notes that hv approved. Holds until the fix round's bats run and hv's live sitting pass and vc lands cc/save1126. Then dc reads the draft against the landed code, commits it in a worktree off main on vc's word, and sends vc the tip and the change hash. (edited)
 
 ## Watch-outs
 
