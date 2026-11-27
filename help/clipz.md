@@ -14,14 +14,12 @@
 ## Synopsis
 
 ```bash
-clipz <command> [options] [args]
+clipz <command> [file]
 ```
 
 ---
 
 ## Description
-
-Cross-platform clipboard copy and paste utility.
 
 Supports macOS (pbcopy/pbpaste), Linux X11 (xclip/xsel), and Linux Wayland (wl-clipboard). On other platforms, clipz refuses with an error.
 
@@ -83,7 +81,6 @@ clipz paste | grep "pattern"
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
 - `XDG_SESSION_TYPE` - On Linux, `wayland` selects wl-clipboard. Any other value selects xclip, or xsel when xclip is absent.
 
 ---

@@ -23,7 +23,7 @@ stampz <pack-dir> "<recipient>" [OPTIONS]
 
 Stamps a recipient watermark diagonally across every page of every PDF in a directory, so a document pack handed to a named person carries their name. One line of mono type is rotated -30 degrees through the page centre reading `CONFIDENTIAL <date> <recipient>`, in mid-grey at 30% opacity.
 
-stampz reads only the `*.pdf` files at the top level of `<pack-dir>`. It does not go into subdirectories. The recipient must be in the WinAnsi (CP1252) character set, because the mark uses a base-14 font. stampz refuses a name outside that set.
+stampz reads only the `*.pdf` files at the top level of `<pack-dir>`. The match is case-sensitive: stampz skips a file that ends in `.PDF`. It does not go into subdirectories. The recipient must be in the WinAnsi (CP1252) character set, because the mark uses a base-14 font. stampz refuses a name outside that set.
 
 A `STAMP-MANIFEST.txt` is written into the output directory. It records the recipient, the date in the mark, the time of the run, the source directory and the mode (`copy` or `in-place`). For each file, it records the page count and the first 16 hex digits of the sha256 before and after. That manifest is the audit trail: it makes a run attributable, and it makes an in-place run recoverable by re-copying rather than by trusting a backup nobody made.
 
@@ -43,7 +43,7 @@ The stamp is assembled directly as a PDF using base-14 Courier-Bold. There is no
 
 ### Two guards, each of which refuses rather than approximates
 
-- **A PDF whose pages differ in size is stamped page by page.** One stamp is rendered for each distinct page size and laid over the pages of that size, so every page carries a mark made for it, and the run says `3 pages, 2 sizes`. A file whose pages cannot all be measured is refused: a probe that reads nothing is a refusal, never a pass.
+- **A file whose pages cannot all be measured is refused.** A probe that reads nothing is a refusal, never a pass. A file of more than one page size is stamped, and the run says so, eg `3 pages, 2 sizes`.
 - **A change in page count aborts the run.** Cheap, and it catches a class of corruption that still leaves a file which opens.
 
 ---
@@ -65,7 +65,7 @@ The stamp is assembled directly as a PDF using base-14 Courier-Bold. There is no
 
 ### Why the defaults are what they are
 
-**Mid-grey at 30%, rather than a light grey screen.** A pack is not uniformly light or dark. A deck can put a near-black slide next to a light one inside a single file, and the failure is per page rather than per document: white vanishes on one, black vanishes on the other. Mid-grey at 30% is the value that stays legible on both, measured against a light and a near-black page rather than reasoned about. Move it if your pack is uniform; the defaults assume it is not.
+**Mid-grey at 30%, rather than a light grey screen.** A pack is not uniformly light or dark. A deck can put a near-black slide next to a light one inside a single file, and the failure is per page rather than per document: white vanishes on one, black vanishes on the other. Mid-grey at 30% is the value that stays legible on both. Move it if your pack is uniform; the defaults assume it is not.
 
 **Copies by default, in place on request.** `--in-place` rewrites the pack you point it at. That is the right default only when the originals regenerate from somewhere else, which is a property of your pack and not of this tool, so it is opt-in here.
 
@@ -95,7 +95,7 @@ stampz ~/packs/seriesA "Matthew Sinclair" --colour 0.4 --opacity 0.20
 cat ~/packs/seriesA.stamped/STAMP-MANIFEST.txt
 ```
 
-Every row carries the file, its page count, and the first 16 hex digits of its sha256 before and after. A row whose two hashes are equal would mean nothing was written to that file.
+A row whose two hashes are equal would mean nothing was written to that file.
 
 ---
 

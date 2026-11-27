@@ -59,9 +59,9 @@ counts when it directly follows the bullet. `[-]` for DOING is not a GFM marker
 and renders as literal text: the glyph is what `sync` and `toggle` reconcile
 against, and a DOING item under its own heading is clear enough without a box.
 
-Reading is tolerant of the pre-2026-09 shape (`01:[ ] text`, no dash), of a
+Reading is tolerant of the older shape (`01:[ ] text`, no dash), of a
 missing id, and of loose spacing, so an older file or a hand-pasted line parses.
-Writing is always the current shape. Every id a line carries is kept; a line with no id, or with an id an earlier line already carries, takes the next id the file has never used, and a duplicate is warned about by both its ids. `utilz todo sync` migrates a file in place, every id unchanged.
+Writing is always the current shape. A line with no id, or with an id an earlier line already carries, takes the next id the file has never used, and a duplicate is warned about by both its ids. `utilz todo sync` migrates a file in place.
 
 The frontmatter carries the `generator` ownership marker (see [Interop with intent todo](#interop-with-intent-todo)), the H1 `title`, a `history` pattern (where `todo done --prune` archives completed items, each with its id; `YYYYMMDD` expands to the purge date, resolved relative to the `todo.md` directory), and `next-id`, the next id the file has never used. **`next-id` is load-bearing**: it is the only record of the ids above the highest one still present, so deleting it by hand lets a pruned id be handed out again.
 
@@ -78,7 +78,7 @@ The frontmatter carries the `generator` ownership marker (see [Interop with inte
 generator: utilz todo
 ```
 
-`todo` refuses to overwrite a `todo.md` whose `generator:` names a different tool (eg `intent todo`). The refusal is **Intent-aware**: it fires only when Intent is actually installed _and_ the file sits inside an Intent project (a directory tree containing `intent/.config/config.json`, searched upward from the file). `todo` looks for Intent with `command -v intent`; `UTILZ_TODO_INTENT_PRESENT` overrides that check. Anywhere else (Intent not installed, or a plain `todo.md` outside any Intent project), `todo` works silently and takes ownership by stamping its own marker. A file with no frontmatter, or one already marked `generator: utilz todo`, is always safe to write.
+`todo` refuses to overwrite a `todo.md` whose `generator:` names a different tool (eg `intent todo`). The refusal is **Intent-aware**: it fires only when Intent is actually installed _and_ the file sits inside an Intent project (a directory tree containing `intent/.config/config.json`, searched upward from the file). `todo` looks for Intent with `command -v intent`. Anywhere else (Intent not installed, or a plain `todo.md` outside any Intent project), `todo` works silently and takes ownership by stamping its own marker. A file with no frontmatter, or one already marked `generator: utilz todo`, is always safe to write.
 
 For the same reason, `todo` will not **create** a fresh default `./todo.md` inside an Intent project: a bare `utilz todo` there refuses and points you to `intent todo` (or `--file`/`-g`), so it never plants a competing todo file in an Intent directory. Explicit `--file`/`-g`, an existing utilz `./todo.md`, and read-only queries are unaffected.
 
@@ -132,7 +132,7 @@ For the same reason, `todo` will not **create** a fresh default `./todo.md` insi
 }
 ```
 
-`num` is the item's id, as `list` shows it, and it stays the same through every write. Requires `jq`.
+`num` is the item's id, as `list` shows it. Requires `jq`.
 
 ---
 
@@ -183,7 +183,6 @@ todo --json | jq '.todo[].text'
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
 - `VISUAL`, `EDITOR` - Editor used by `todo edit` (VISUAL preferred, then EDITOR, then `vi`)
 - `XDG_CONFIG_HOME` - Base for the global file (defaults to `~/.config`)
 - `UTILZ_TODO_INTENT_PRESENT` - `1` or `0` overrides the check for an installed Intent (see [Interop with intent todo](#interop-with-intent-todo))
@@ -200,8 +199,7 @@ todo --json | jq '.todo[].text'
 ## See Also
 
 - `utilz help` - Utilz framework help
-- Intent's `intent todo` - the projection-based ancestor this forks from
-- `intent st show ST0008` - design and rationale
+- Intent's `intent todo` - it reads the same file format
 
 ---
 

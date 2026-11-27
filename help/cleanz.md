@@ -48,7 +48,7 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 - `--no-html` - Skip HTML attribute cleaning
 - `--no-whitespace` - Skip whitespace normalization
 - `--normalize-quotes` - Convert smart quotes to straight quotes
-- `--detrope` - Detect LLM writing tropes (word choice, structure, tone)
+- `--detrope` - After the output, also report LLM writing tropes (word choice, structure, tone)
 
 ### General Options
 
@@ -79,7 +79,7 @@ cleanz removes invisible Unicode characters, HTML attributes, and formatting art
 ### HTML Attributes
 
 - `data-start`, `data-end`, `data-sourcepos`
-- All `data-*` attributes from LLM UIs
+- Other `data-*` attributes whose names hold only lowercase letters and hyphens, with double-quoted values
 
 ### Whitespace
 
@@ -155,11 +155,8 @@ cleanz --normalize-quotes document.txt
 ### Trope Detection
 
 ```bash
-# Detect LLM writing tropes in a file
+# Clean a file, then report its LLM writing tropes
 cleanz --detrope document.md
-
-# Combine trope detection with cleaning
-cleanz --detrope --normalize-quotes document.md
 
 # Trope detection from stdin
 cat article.md | cleanz --detrope
@@ -194,7 +191,7 @@ cleanz --image --detect -v dalle-image.png
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
+`cleanz` reads no environment variables of its own.
 
 ---
 
@@ -207,7 +204,6 @@ cleanz --image --detect -v dalle-image.png
 
 ## Dependencies
 
-- `clipz` (optional) - Required for `--clipboard` operations
 - `exiftool` (optional) - Required for `--image` mode
 
 ---

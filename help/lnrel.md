@@ -83,10 +83,10 @@ lnrel ../future/file.txt placeholder.txt
 
 ## Platform Requirements
 
-| Platform | Requirement               | Install                  |
-| -------- | ------------------------- | ------------------------ |
-| macOS    | GNU coreutils             | `brew install coreutils` |
-| Linux    | coreutils (pre-installed) | Usually built-in         |
+| Platform | Requirement               | Install                      |
+| -------- | ------------------------- | ---------------------------- |
+| macOS    | GNU coreutils             | `brew install coreutils`     |
+| Linux    | coreutils (pre-installed) | `sudo apt install coreutils` |
 
 macOS ships BSD `realpath` which lacks the `-m` and `--relative-to` flags. `lnrel` automatically detects `grealpath` (installed by Homebrew coreutils) and falls back to `realpath` if it supports the required flags.
 
@@ -102,9 +102,7 @@ macOS ships BSD `realpath` which lacks the `-m` and `--relative-to` flags. `lnre
 
 ## Environment
 
-| Variable     | Description                       |
-| ------------ | --------------------------------- |
-| `UTILZ_HOME` | Root directory of Utilz framework |
+`lnrel` reads no environment variables of its own.
 
 ---
 

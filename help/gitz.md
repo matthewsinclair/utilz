@@ -21,8 +21,6 @@ gitz <command> [args]
 
 ## Description
 
-Git multi-repository operations - recursively find and check git repositories.
-
 gitz finds each `.git` directory under the path and runs `git status` in its repository. It skips a repository when a path component starts with `_`, or when the path contains `.work`. A `.git` file (eg a linked worktree or a submodule) is not a match. When it finds no repository, gitz warns and exits 0.
 
 ---
@@ -70,7 +68,7 @@ gitz status
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
+`gitz` reads no environment variables of its own.
 
 ---
 

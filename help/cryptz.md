@@ -30,10 +30,10 @@ It is not a key manager. It creates no keys, imports no keys, and changes no GPG
 
 ## Commands
 
-| Command                    | Description                                                       |
-| -------------------------- | ----------------------------------------------------------------- |
-| `encrypt <input> [output]` | Encrypt a file to a recipient. Output defaults to `<input>.gpg`   |
-| `decrypt <input> [output]` | Decrypt a file. Output defaults to `<input>` with `.gpg` stripped |
+| Command                    | Description                    |
+| -------------------------- | ------------------------------ |
+| `encrypt <input> [output]` | Encrypt a file to a recipient. |
+| `decrypt <input> [output]` | Decrypt a file.                |
 
 ## Options
 
@@ -79,7 +79,6 @@ cryptz decrypt file.txt.gpg
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
 - `CRYPTZ_EMAIL` - Default recipient for `encrypt`
 
 ---
@@ -87,7 +86,7 @@ cryptz decrypt file.txt.gpg
 ## Exit Status
 
 - `0` - Success
-- `1` - Error: no input, input not found, too many arguments, `gpg` not found, or `gpg` failed
+- `1` - Error: an unknown command, no input, input not found, too many arguments, `gpg` not found, or `gpg` failed
 
 ---
 

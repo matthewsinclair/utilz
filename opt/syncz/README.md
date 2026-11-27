@@ -13,12 +13,7 @@ Simple directory-to-directory syncer. It uses rsync for one-way sync, and unison
 
 ## Installation
 
-As part of the Utilz framework, `syncz` is automatically available once the symlink is created:
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz syncz
-```
+`syncz` comes with Utilz. Once Utilz is installed, as the [README](../../README.md#installation) says, `syncz` is on your PATH.
 
 ---
 
@@ -28,8 +23,6 @@ ln -s utilz syncz
 syncz [OPTIONS] <source-dir> <dest-dir>
 syncz --bidi [OPTIONS] <dir1> <dir2>
 ```
-
-For detailed help: `utilz help syncz`
 
 ---
 
@@ -64,7 +57,7 @@ syncz
 
 ### Dependencies
 
-`syncz.yaml` declares them: `rsync` (required) and `unison` (optional). The script runs under bash 3.2, the bash that macOS ships.
+`syncz.yaml` declares them, and `help/syncz.md` says what each one is for. The script runs under bash 3.2, the bash that macOS ships.
 
 ---
 
@@ -84,5 +77,4 @@ MIT. See [LICENSE](../../LICENSE).
 
 ## See Also
 
-- [Utilz Framework Documentation](../../README.md)
 - [syncz Help](../../help/syncz.md) - Run: `utilz help syncz`

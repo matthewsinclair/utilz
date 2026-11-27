@@ -13,12 +13,7 @@ Named window arrangements (desks) across displays and spaces. Hammerspoon is the
 
 ## Installation
 
-As part of the Utilz framework, `arngz` is automatically available once the symlink is created:
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz arngz
-```
+`arngz` comes with Utilz. Once Utilz is installed, as the [README](../../README.md#installation) says, `arngz` is on your PATH.
 
 ---
 
@@ -43,12 +38,13 @@ arngz
 ├── Dispatched by: $UTILZ_HOME/bin/utilz
 ├── Has access to: $UTILZ_HOME/opt/utilz/lib/common.sh
 ├── Engine: $UTILZ_HOME/opt/arngz/lib/*.lua, loaded by Hammerspoon
+├── Window list: $UTILZ_HOME/opt/arngz/lib/windows.js, run through osascript
 └── Help from: $UTILZ_HOME/help/arngz.md
 ```
 
 ### Dependencies
 
-`arngz.yaml` declares them, and `help/arngz.md` says what each one is for. The CLI runs under bash 3.2.
+`arngz.yaml` declares them, and `help/arngz.md` says what each one is for. The CLI runs under bash 3.2 and later.
 
 ---
 

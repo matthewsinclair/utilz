@@ -20,7 +20,7 @@ Utilz uses a **single dispatcher** pattern where all utilities are symlinks to a
 1. Detects which utility was called by examining `$0`
 2. Sources the common library (`opt/utilz/lib/common.sh`)
 3. Routes execution to the appropriate implementation in `opt/<utility>/<utility>`
-4. Uses `exec` to replace itself with the utility (zero overhead)
+4. Uses `exec` to replace itself with the utility, so no dispatcher process waits while it runs
 
 Each implementation is a bash script. A script can call code in another language, eg prez calls its Rust crate in `opt/prez/crate/`.
 
@@ -64,7 +64,7 @@ $ mdagg file.md → bin/mdagg → bin/utilz → $0 = "mdagg" → exec opt/mdagg/
    ```
 
    - Uses `exec` to replace the dispatcher process
-   - Zero overhead - no subprocess created
+   - No dispatcher process waits while the utility runs
    - Utility receives all original arguments
 
 ### Two Invocation Modes
@@ -109,7 +109,7 @@ if [[ "$INVOKED_AS" == "utilz" ]]; then
 fi
 ```
 
-`utilz help` gives the full list of verbs. Only `upgrade` sources the tree library, `opt/utilz/lib/trees.sh`. `utilz doctor` also sources it for its install checks.
+`utilz help` gives the full list of verbs. Only `upgrade` and `doctor` source the tree library, `opt/utilz/lib/trees.sh`.
 
 **Section 2: Utility Dispatch**
 
@@ -212,11 +212,7 @@ fi
 
 ### Why Check If Already Loaded?
 
-When invoked via the dispatcher, the common library is already sourced. The utility checks `type -t info` to avoid sourcing it twice. This allows utilities to also be:
-
-- Invoked directly: `./opt/mdagg/mdagg file.md`
-- Tested in isolation: `bats opt/mdagg/test/*.bats`
-- Run without dispatcher
+The dispatcher's `exec` runs the utility in a new bash, which has none of the dispatcher's shell functions. So each utility loads the library again on every run. The `type -t info` check skips that load only when a shell that already has the library sources the script, eg stampz's tests. The loader also lets a utility run without the dispatcher, eg `./opt/mdagg/mdagg file.md`.
 
 ### Common Library Functions
 
@@ -235,12 +231,12 @@ The library provides these categories of functions:
    - Provide helpful error messages
 
 4. **Metadata**: `get_util_metadata()`, `require_yq()`
-   - `yq` is the single YAML parser and a hard dependency; `require_yq()` is the one place that reports its absence
-   - Extracts version, description, dependencies; resolves a `version_file:` reference where present
+   - `yq` is the single YAML parser and a hard dependency; `require_yq()` is the gate that stops a caller when `yq` is missing
+   - Reads one key, eg `.version` or `.utilz_version`, and resolves a `version_file:` reference where present
    - Returns non-zero when the YAML file or `yq` is missing, rather than an empty string a caller would read as an absent key
 
 5. **Discovery**: `each_utility()`
-   - The single walker of `bin/`: emits the name of every symlink resolving to the dispatcher, one per line, from the running tree's `bin/` or from the tree it is given
+   - The single walker of `bin/`: emits the name of every symlink in `bin/` whose target is `utilz` or `./utilz`, one per line, from the running tree's `bin/` or from the tree it is given
    - Consume with process substitution (`< <(each_utility)`), never a pipe, so accumulator variables survive the loop
 
 6. **Framework commands**: `list_utilities()`, `run_tests()`, `run_doctor()`, `generate_utility()`
@@ -277,12 +273,11 @@ utilz_version=$(get_util_metadata "mdagg" ".utilz_version") || status=$?
 
 ### Integration Manifest
 
-Utilities that want to be auto-exposed to editor bridges (Emacs, and future VSCode / Zed / Vim) declare an `integration:` block in their YAML. The block has four fields:
+Utilities that want to be auto-exposed to editor bridges (Emacs, and future VSCode / Zed / Vim) declare an `integration:` block in their YAML. The block has three fields:
 
 - `input`: one of `stdin` (pipe region/buffer to the utility), `file` (pass the current buffer's file path), `path` (prompt for a directory), or `none` (run with no input).
 - `output`: one of `replace` (replace the region/buffer with stdout), `buffer` (dump stdout into a `*utilz-<name>*` side buffer), `message` (single-line echo), or `discard` (run and report exit status only).
-- `flags`: a list of always-pass flags (rarely used).
-- `prompts`: optional suggestions shown to the user when they hit `C-u` to add extra flags.
+- `flags`: a list of always-pass flags.
 
 The manifest is exposed as TSV via `utilz integration commands`: one row per utility that has an `integration:` block. Format: `name<TAB>description<TAB>input<TAB>output<TAB>flags`. The walker is `emit_integration_tsv` in `opt/utilz/lib/common.sh`, and the integration block's rules live in one function beside it, `integration_fields`, which `emacs_doctor` asks too (Highlander: no editor parses YAML itself; the TSV is the only cross-boundary contract).
 

@@ -13,12 +13,7 @@ cleanz removes hidden characters and formatting artifacts from text copied from 
 
 ## Installation
 
-As part of the Utilz framework, `cleanz` is automatically available once the symlink is created:
-
-```bash
-cd $UTILZ_HOME/bin
-ln -s utilz cleanz
-```
+`cleanz` comes with Utilz. Once Utilz is installed, as the [README](../../README.md#installation) says, `cleanz` is on your PATH.
 
 ---
 
@@ -27,8 +22,6 @@ ln -s utilz cleanz
 ```bash
 cleanz [OPTIONS] [FILE]
 ```
-
-For detailed help: `utilz help cleanz`
 
 ---
 
@@ -64,9 +57,7 @@ utilz test cleanz
 ### Making Changes
 
 1. Edit `opt/cleanz/cleanz`
-2. Test changes: `cleanz --help`
-3. Run tests: `utilz test cleanz`
-4. Update help if needed: `help/cleanz.md`
+2. Update help if needed: `help/cleanz.md`
 
 ---
 
@@ -78,5 +69,4 @@ MIT. See [LICENSE](../../LICENSE).
 
 ## See Also
 
-- [Utilz Framework Documentation](../../README.md)
 - [cleanz Help](../../help/cleanz.md) - Run: `utilz help cleanz`

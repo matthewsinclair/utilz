@@ -21,11 +21,9 @@ retry [OPTIONS] <command>
 
 ## Description
 
-Retry command until success with configurable wait time.
-
 Executes a command repeatedly until it succeeds or max retries is reached.
 
-retry joins all its remaining arguments with spaces and runs the result with `eval` in a subshell. The command's stderr goes to stdout. The first run counts as one attempt.
+retry joins all its remaining arguments with spaces and runs the result with `eval` in a subshell. The command runs with `set -u` and `pipefail`. The command's stderr goes to stdout. The first run counts as one attempt.
 
 ---
 
@@ -68,7 +66,7 @@ retry -w 5 -r 10 "npm install"
 
 ## Environment
 
-- `UTILZ_HOME` - Root directory of Utilz framework
+`retry` reads no environment variables of its own.
 
 ---
 

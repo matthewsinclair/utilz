@@ -23,7 +23,7 @@ syncz [OPTIONS] <source-dir> <dest-dir>
 
 syncz provides user-friendly directory-to-directory synchronization with conflict resolution strategies, confirmation prompts, and dry-run support.
 
-For **unidirectional** sync, syncz uses rsync with a "newer-wins" strategy by default. Two alternatives: `--source-wins` (always overwrite) and `--dest-wins` (never overwrite existing).
+For **unidirectional** sync, syncz uses rsync with a "newer-wins" strategy by default. Two alternatives, which cannot be used together: `--source-wins` (always overwrite) and `--dest-wins` (never overwrite existing).
 
 For **bidirectional** sync (`--bidi`), syncz uses [unison](https://www.cis.upenn.edu/~bcpierce/unison/) when available. unison keeps archive state, so it knows whether a file is new or was deleted since the last sync. When unison is not available, syncz falls back to rsync with a two-pass approach (no state tracking).
 
@@ -60,14 +60,14 @@ For **bidirectional** sync (`--bidi`), syncz uses [unison](https://www.cis.upenn
 
 ### Feature Options
 
-| Flag            | Short | Description                                    |
-| --------------- | ----- | ---------------------------------------------- |
-| `--exclude PAT` | `-x`  | Exclude files matching pattern (repeatable)    |
-| `--ignore FILE` |       | Read exclude patterns from file (one per line) |
-| `--delete`      |       | Remove dest files not in source                |
-| `--backup`      | `-b`  | Create .syncz-bak copies of overwritten files  |
-| `--verbose`     | `-v`  | Show detailed per-file output                  |
-| `--progress`    | `-p`  | Show per-file transfer progress                |
+| Flag            | Short | Description                                                                                 |
+| --------------- | ----- | ------------------------------------------------------------------------------------------- |
+| `--exclude PAT` | `-x`  | Exclude files matching pattern (repeatable)                                                 |
+| `--ignore FILE` |       | Read exclude patterns from file, one per line; `#` starts a comment, and spaces are removed |
+| `--delete`      |       | Remove dest files not in source                                                             |
+| `--backup`      | `-b`  | Create .syncz-bak copies of overwritten files                                               |
+| `--verbose`     | `-v`  | Show detailed per-file output                                                               |
+| `--progress`    | `-p`  | Show per-file transfer progress (rsync only)                                                |
 
 ### General Options
 
@@ -82,7 +82,7 @@ For **bidirectional** sync (`--bidi`), syncz uses [unison](https://www.cis.upenn
 
 ### No flags (default)
 
-Sync runs immediately with safe defaults. No deletions are performed.
+Sync runs immediately. A one-way sync deletes no files. A `--bidi` sync with unison also syncs deletions.
 
 ### --confirm
 
@@ -98,18 +98,18 @@ No prompts. The input checks still apply. `--force`, `--confirm` and `--just-do-
 
 ### --just-do-it
 
-Shows a complete summary of all planned actions, then asks a single Y/N confirmation. If Y, executes everything (including destructive ops) without further prompts.
+Shows the number of files to copy and to delete, then asks a single Y/N confirmation. If Y, executes everything (including destructive ops) without further prompts.
 
 ### --delete safety
 
-`--delete` requires one of `--confirm`, `--force`, or `--just-do-it`. Using `--delete` alone is an error to prevent accidental data loss.
+In one-way sync, `--delete` requires one of `--confirm`, `--force`, or `--just-do-it`. Using `--delete` alone is an error to prevent accidental data loss.
 
 ### --confirm optional argument
 
 `--confirm` accepts an optional `yes`, `no`, or `all` argument that auto-answers all prompts, making syncz fully scriptable:
 
 - `--confirm yes` or `--confirm all`: auto-answer yes to all prompts
-- `--confirm no`: auto-answer no to all prompts (skip destructive actions)
+- `--confirm no`: auto-answer no to all prompts. A one-way sync then copies nothing.
 - `--confirm` (no arg): interactive prompts
 
 This works in both unidirectional and bidirectional modes.
@@ -141,7 +141,6 @@ Unison maintains archive state between runs, so it can distinguish new files fro
 - `--no-metadata`: ignore extended attributes and resource forks (`-xattrs=false -rsrc=false`). Use it for cloud filesystems, where Dropbox, Google Drive and others stamp their own metadata onto files and cause false conflicts
 - `--delete`: no-op, with a warning (unison state-tracks deletions)
 - `--exclude PAT`: maps to unison `-ignore "Name PAT"`
-- `--ignore FILE`: read exclude patterns from a file, one per line. `#` starts a comment, and spaces are removed. Each pattern is added as if passed via `--exclude`
 - `--backup`: maps to unison `-backup "Name *" -backupsuffix .syncz-bak`
 - `--verbose`: drops unison's `-terse`
 - `--confirm` (bare): unison prompts per-file interactively
@@ -153,7 +152,7 @@ For full unison documentation, see `man unison` or <https://www.cis.upenn.edu/~b
 
 ### Path display
 
-In bidi mode, syncz displays paths using shortened labels to avoid repeating long common prefixes:
+With the unison backend, syncz displays paths using shortened labels to avoid repeating long common prefixes:
 
 ```
 Bidirectional sync (unison)
@@ -183,10 +182,6 @@ Bidirectional sync (unison) — DRY RUN
 ℹ Dry run - no changes made
 ```
 
-### SYNCZ_ROOTS_SHOWN environment variable
-
-When set (eg `export SYNCZ_ROOTS_SHOWN=1`), syncz suppresses the per-invocation `D1:/D2:` header. This is useful for wrapper scripts that print roots once at the top and then invoke syncz multiple times for subdirectories.
-
 ### rsync backend (fallback)
 
 The rsync backend uses a two-pass approach:
@@ -198,15 +193,15 @@ The rsync backend uses a two-pass approach:
 
 #### Orphan handling (rsync backend)
 
-| Flags                  | Behavior                                         |
-| ---------------------- | ------------------------------------------------ |
-| `--bidi`               | Lists orphans, keeps all (synced to both sides)  |
-| `--bidi --delete`      | Deletes all orphans with irreversibility warning |
-| `--bidi --confirm`     | Interactive per-file prompt (y/N/a, Enter=keep)  |
-| `--bidi --confirm yes` | Auto-answer yes = delete all orphans             |
-| `--bidi --confirm no`  | Auto-answer no = keep all (sync copies them)     |
-| `--bidi --confirm all` | Same as `--confirm yes`                          |
-| `--bidi --dry-run`     | List orphans + show what would sync              |
+| Flags                  | Behavior                                                                                |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| `--bidi`               | Lists orphans, keeps all (synced to both sides)                                         |
+| `--bidi --delete`      | Deletes all orphans with irreversibility warning, with no prompt, also with `--confirm` |
+| `--bidi --confirm`     | Interactive per-file prompt (y/N/a, Enter=keep)                                         |
+| `--bidi --confirm yes` | Auto-answer yes = delete all orphans                                                    |
+| `--bidi --confirm no`  | Auto-answer no = keep all (sync copies them)                                            |
+| `--bidi --confirm all` | Same as `--confirm yes`                                                                 |
+| `--bidi --dry-run`     | List orphans + show what would sync                                                     |
 
 ### Restrictions
 
@@ -343,7 +338,6 @@ syncz --bidi --exclude "*.webloc" ~/dir1 ~/dir2
 
 | Variable            | Description                                             |
 | ------------------- | ------------------------------------------------------- |
-| `UTILZ_HOME`        | Root directory of Utilz framework                       |
 | `SYNCZ_ROOTS_SHOWN` | When set, suppresses D1/D2 header (for wrapper scripts) |
 
 ---

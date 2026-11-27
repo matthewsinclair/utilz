@@ -6,7 +6,7 @@ verblock: "12 Nov 2025:v0.1: Matthew Sinclair - Initial version"
 
 [![Utilz Tests](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml/badge.svg)](https://github.com/matthewsinclair/utilz/actions/workflows/tests.yml)
 
-A bash/zsh framework for building and managing command-line utilities with a single dispatcher.
+A bash framework for building and managing command-line utilities with a single dispatcher.
 
 ## What is this?
 
@@ -42,9 +42,7 @@ Utilz/
 │   └── <utility>/            # Each utility has its own directory
 │       ├── <utility>         # Implementation
 │       ├── <utility>.yaml    # Utility metadata
-│       ├── VERSION           # Utility version
-│       ├── test/             # Utility tests
-│       └── README.md         # Utility docs
+│       └── test/             # Utility tests
 └── help/
     ├── utilz.md              # Framework help
     └── <utility>.md          # Utility help files
@@ -70,11 +68,9 @@ brew links the dispatcher and every utility into its own `bin` (`$(brew --prefix
 
 A clone of this repository is for working on Utilz itself: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
 
-**Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's apply, diff, discover, which and auto need macOS and Hammerspoon, while its list, show, delete and current work anywhere. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
+**Platforms.** Utilz runs on macOS and Linux. What needs macOS says so: macoz and menuz's app run on macOS alone, and arngz's engine needs macOS and Hammerspoon. Elsewhere each refuses by name, `utilz list` marks a utility `(macOS only)`, and `utilz doctor` names what this machine lacks rather than count it as missing.
 
-**Do NOT export `UTILZ_HOME`.** The dispatcher works out which tree it belongs
-to from its own location, following the symlink chain from `$0` and taking the
-parent of `bin/`. An exported `UTILZ_HOME` is ignored. If your shell config exports it, delete that line.
+**Do NOT export `UTILZ_HOME`.** An exported `UTILZ_HOME` is ignored. If your shell config exports it, delete that line.
 
 ## Usage
 
@@ -88,7 +84,7 @@ utilz version                 # Show framework version
 utilz doctor                  # Run diagnostics
 ```
 
-`utilz test`, `utilz generate` and the install verbs work in a clone of this repository: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
+`utilz test` and `utilz generate` work in a clone of this repository: see [Maintaining Utilz](#maintaining-utilz-dev-opt-brew).
 
 ### Calling Utilities
 
@@ -112,9 +108,9 @@ Both methods work identically.
 
 Named window arrangements across displays and spaces, on macOS. A desk is a YAML file in arngz's catalog that says, for each display and each space on it, which apps live there and where on a grid their windows sit. `arngz discover` records the arrangement on screen now as a desk, and `arngz <desk>` puts the windows back. Hammerspoon is the engine: `arngz init --yes` connects it, and `arngz doctor` checks every precondition.
 
-**Platform**: apply, diff, discover, which, auto and `init --yes` need macOS and Hammerspoon; list, show, delete and current work on Linux too.
+**Platform**: apply, diff, discover, which, auto and `init --yes` need macOS and Hammerspoon; list, show, delete, current and log work on Linux too.
 
-**`apply` takes the pointer.** macOS has no working call to move a window to another space, so apply moves each window the way a person does, by its title bar. Keep your hands off the mouse and keyboard while it runs; moving the pointer stops it.
+**`apply` takes the pointer.** Keep your hands off the mouse and keyboard while it runs. If you move the pointer, apply pauses until the pointer is still, then goes on.
 
 ```bash
 # Connect Hammerspoon, then check every precondition
@@ -299,7 +295,7 @@ See `utilz help mdagg` for details.
 
 ### menuz
 
-A menu of your own commands in the macOS menu bar, read from one YAML file, on macOS 26 or later. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run. An item that takes parameters asks for them in one form first, and every run's output goes to one log that `menuz log` tails. Labels are expanded by the login shell each time the menu opens, and the menu follows the file as it changes, with no restart. On a full menu bar a new item can sit behind the overflow: hold Command and drag menuz's mark where you want it. At its first launch, answer macOS's alert with Allow, so its notices can post.
+A menu of your own commands in the macOS menu bar, read from one YAML file, on macOS 26 or later. Each item runs a shell line: a script, a `utilz` verb, anything the login shell can run.
 
 **Platform**: macOS 26 or later; the menu bar app needs macOS.
 
@@ -520,7 +516,7 @@ Run `doom sync && doom doctor` and restart Emacs. Sanity-check with:
 utilz emacs doctor
 ```
 
-Every check should be green: `utilz` on PATH, all utilities carry an `integration:` block, canonical elisp present.
+Every check should be green: `utilz` on PATH, every `integration:` block valid, canonical elisp present.
 
 ### Everyday usage
 
@@ -547,11 +543,11 @@ Other common flows:
 
 ### Why most utilities are NOT in the menu
 
-A utility appears only if it declares an `integration:` block, and most deliberately do not. `utilz emacs doctor` reports an unbound utility without failing. The bridge builds `utilz <name> <flags> <path>`. A utility stays out of the menu when that form cannot work (`cryptz`, `gitz`, `retry` need a verb; `xtrct` needs a `--schema`), when it changes the filesystem on selection (`lnrel`, `syncz`), or when it is not buffer work (`clipz`, `macoz`).
+A utility appears only if it declares an `integration:` block, and most deliberately do not. `utilz emacs doctor` reports an unbound utility without failing. The bridge builds `utilz <name> <flags> <path>`. A utility stays out of the menu when that form cannot work (`retry` needs a command; `xtrct` needs a `--schema`), when it changes the filesystem on selection (`cryptz`, `lnrel`, `syncz`), or when it is not buffer work (`clipz`, `gitz`, `macoz`).
 
 `todo` declares `file -> buffer` with `flags: [--file]`, so visiting a `todo.md` and picking it shows that file's view. The default invocation is read-only.
 
-**`C-u` does not work with `todo`, and fails loudly rather than quietly.** The bridge inserts extra flags between the declared flags and the path, so `C-u ... done 2` builds `utilz todo --file "done 2" <path>` and exits 1. Declaring `flags: []` instead would put the path last and build `utilz todo done 2 <path>`, which exits 0 having modified `./todo.md` rather than the file you were looking at. Use the shell for `todo` verbs.
+`C-u` works with `todo`: the bridge puts the extra flags after the path, so `C-u ... done 2` builds `utilz todo --file <path> done 2`.
 
 `stampz` declares no block either: `path -> message` is the right shape, but it needs a recipient, which only reaches it through the `C-u` extra-flags prompt.
 
@@ -577,13 +573,9 @@ The bridge binds `C-c u` to `utilz`. Override in your Doom config if you want a 
 
 ### How it works
 
-The bridge is a thin coordinator. It reads a TSV manifest from `utilz integration commands` at load time (cached in `utilz--commands-alist`) and never parses YAML directly. The TSV is the single cross-boundary contract. On failure (non-zero exit from the underlying utility), the bridge pops a stderr buffer and leaves your region/buffer untouched.
+The bridge is a thin coordinator. It reads a TSV manifest from `utilz integration commands` at the first `M-x utilz` (cached in `utilz--commands-alist`) and never parses YAML directly. The TSV is the single cross-boundary contract. On failure (non-zero exit from the underlying utility), the bridge pops a stderr buffer and leaves your region/buffer untouched.
 
 The bridge source is `static/emacs/utilz.el`.
-
-## Version Management
-
-The framework version is in `/VERSION`. Each utility keeps its own version in `opt/<utility>/VERSION`, and its yaml points at it with `version_file: VERSION`. `utilz_version` in the yaml names the framework versions it works with, eg `"^2.0.0"`. The [Developer Guide](docs/developer-guide.md) has the metadata fields and the common library functions.
 
 ## Maintaining Utilz: dev, opt, brew
 
@@ -605,20 +597,9 @@ utilz <version> (opt, 0123456789ab)
 utilz <version> (brew, 0123456789ab)
 ```
 
-The commit is HEAD in dev, with `+dirty` while a file of the runtime set is uncommitted, and in opt and brew it is the commit the install was published from, read from its manifest, `<root>/manifest.sha256`, which devbin writes with the tree's line. The line names no path: where the running copy lives is the answer `command -v utilz` gives. `utilz doctor` prints the same line first, and checks the manifest: every file it names, and each dispatcher link's target.
-
 ### Switching the shell between trees
 
-devbin's `use`, run in this checkout, points the links in `~/.local/bin` (`utilz` and every utility) at one tree:
-
-```bash
-bin/devbin use dev     # point every link at the dev checkout
-bin/devbin use opt     # point every link at the opt install
-bin/devbin use brew    # remove them, so Homebrew's own links answer
-bin/devbin use         # report which tree they serve, and change nothing
-```
-
-**No link means brew**: a user who never runs `use` has Homebrew's links, and `use brew` returns a maintainer to them. For a dev or opt link to answer, `~/.local/bin` must come before Homebrew's bin on PATH, which the sleeve sets. `bin/devbin use` with no word, `bin/devbin doctor` and `utilz doctor` fail when a link is shadowed by an earlier entry on PATH, or when the links serve more than one tree, and name what shadows or splits them. After a switch, an open shell keeps the path it found: run `hash -r` in bash, or `rehash` in zsh, as `use` says.
+`bin/devbin use dev|opt|brew`, run in this checkout, points the links in `~/.local/bin` at one tree. `utilz help use` says more.
 
 ### Publishing and upgrading
 
@@ -628,12 +609,6 @@ bin/devbin install --prefix DIR    # publish somewhere else
 bin/devbin install --force         # republish over an existing install
 utilz upgrade                      # upgrade the tree this utilz runs from
 ```
-
-`bin/devbin install` runs `bin/devbin build` first, which builds prez and showreel, and refuses a dirty runtime set: what git names under `bin/`, `opt/`, `help/`, `static/` and `VERSION`, less each utility's tests. It refuses because the manifest records the commit the bytes came from. A doc or a board being edited beside it is not in the runtime set. `--force` is the one republish, and it replaces only a prefix whose manifest says Utilz.
-
-`upgrade` does the running tree's own upgrade. In dev it runs `git pull --ff-only`, then `bin/devbin build`. In opt it changes nothing and names `bin/devbin install --force` in the dev checkout, saying when dev is ahead. In brew it runs `brew update`, then `HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz` when brew names Utilz as outdated.
-
-`utilz test` refuses in an install: the suite rewrites `bin/`, which is exactly what the manifest checksums, so an install would report drift nobody caused. The refusal names the dev tree to run it in.
 
 ### Commands for a dev checkout
 
@@ -647,7 +622,7 @@ Tests use [BATS](https://github.com/bats-core/bats-core), in `opt/<utility>/test
 
 ## Requirements
 
-- Bash 3.2+ or Zsh (bash 3.2 is what macOS ships, and is the floor the framework targets)
+- Bash 3.2 or later (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - `yq` for YAML parsing. It is required: it is the single parser for all utility metadata. The formula installs it; a dev checkout needs `brew install yq`
 - `bats-core` for the suites, in a dev checkout (install: `brew install bats-core`)
 

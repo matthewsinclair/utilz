@@ -105,11 +105,11 @@ utilz test          # every suite, in a dev checkout
 utilz test mdagg    # one utility
 ```
 
-### 6. Zero Overhead
+### 6. One Process
 
 **Principle**: Use `exec` to replace dispatcher process with utility.
 
-**Why**: No performance penalty for using the framework.
+**Why**: No dispatcher process waits while the utility runs.
 
 **Example**:
 
@@ -121,7 +121,7 @@ exec "$UTIL_IMPL" "$@"  # Replace process, don't create subprocess
 
 **Principle**: Auto-detect installation directory, no environment setup required (except PATH).
 
-**Why**: Works immediately after clone, no configuration needed.
+**Why**: Works from any tree, with no configuration.
 
 **Example**:
 
@@ -203,7 +203,7 @@ show_help "myutil"          # Consistent help display
 
 **After**:
 
-- Install once per machine: `brew install matthewsinclair/utilz/utilz`
+- Install once per machine with Homebrew, as the README's Installation says
 - Every utility is on PATH, with no environment variable to set
 - Everything works
 
@@ -237,7 +237,7 @@ Use Utilz when:
 2. **Multi-machine use**: You work on multiple machines and want same tools
 3. **Team internal tools**: Team needs shared utilities (not public distribution)
 4. **Consistency matters**: You want all utilities to work the same way
-5. **Portability matters**: Need utilities to work on macOS, Linux, etc.
+5. **Portability matters**: Need utilities to work on macOS and Linux
 6. **Testing matters**: You want your utilities to be tested
 7. **Quick prototyping**: Need to create new utility quickly (`utilz generate` makes the scaffold)
 
@@ -262,7 +262,7 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Wrong**: Utility with 20 npm packages, Python venvs, etc.
 
-**Why Not**: Utilz checks that commands exist. Beyond that, it gives only `ensure_venv` for a utility that needs a Python venv.
+**Why Not**: Utilz checks that commands and macOS apps exist. Beyond that, it gives only `ensure_venv` for a utility that needs a Python venv.
 
 **Instead**: Use language-specific package managers (npm, pip, cargo, etc.)
 
@@ -320,7 +320,6 @@ brew install myutil  # one utility, carrying the whole framework with it
 
 **Why Symlinks**:
 
-- Zero overhead (no subprocess)
 - Simple routing via `$0` inspection
 - Standard Unix pattern
 - Easy to add/remove utilities
@@ -339,7 +338,6 @@ brew install myutil  # one utility, carrying the whole framework with it
 **Why Single Dispatcher**:
 
 - Single point of control
-- Common library loaded once
 - Consistent --help/--version handling
 - Easy to add framework commands
 
