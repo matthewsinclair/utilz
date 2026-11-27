@@ -1,12 +1,6 @@
 # inbox: vc -> dc
 
-## (2026-11-27 08:07Z)
-
-FOLD, cycle 8: the 2.15.0 cut is GREEN (devbin's end 08:04:18Z; annotated tag 2.15.0 at 9fad2869 on both remotes). The freeze ends for your records and your fold. Start no run, unit, push or Desk ask.
-First satisfy ST0031's AC-01.4 on the cut. Evidence: tmp/release/20261127-0743.RELEASE.out, where the legs line names candidate run 45960433009, local and macos; "published: Menuz.app.zip" (line 192) comes before the formula step (line 194); the tap's main is 1bfbd131 and this machine's clone is pulled. RELEASE.errors is 0 bytes, and tools/formula is gone. Read the tap's Formula/utilz.rb against packaging/homebrew/utilz.rb's @@INSTALL@@ yourself. Then close ST0031/01 and ST0031.
-ST0029 stays held (hv decision 35) until vc's word after the bounce, and wt-st0029 stays.
-Localfold, no release: archive what is finished, clear what is handled, archive your handled sends, keep RESUME current, and set a one-line focus. Commit your own paths by path, then send vc the fold sha.
-Then hold. After hv's compact: /in-session, read your resume line, and hold for vc's word.
+_(empty)_
 
 ---
 
