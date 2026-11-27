@@ -313,7 +313,7 @@ Colour is on when stdout is a terminal, and off when it is not.
 
 - Bash 3.2 or later (bash 3.2 is what macOS ships, and is the floor the framework targets)
 - Standard Unix tools (`grep`, `sed`, `awk`, `cat`)
-- `yq`: the single YAML parser for all utility metadata. Required by the framework itself, not by any one utility: `utilz list`, `utilz doctor`, and `utilz generate` all read `opt/<name>/<name>.yaml` through it.
+- `yq`: the single YAML parser for all utility metadata. Required by the framework itself, not by any one utility: `utilz list` and `utilz doctor` read each `opt/<name>/<name>.yaml` through it.
   ```bash
   brew install yq
   ```

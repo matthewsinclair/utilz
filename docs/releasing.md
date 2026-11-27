@@ -86,4 +86,6 @@ hv:
 
 3. Runs `bin/devbin use brew` in the checkout, as the cut's closing note says, and reads `utilz version` again.
 
+4. Runs `menuz install` when the cut changed `native/macos/Menuz/` (`git diff --quiet <previous tag> <tag> -- native/macos/Menuz/` exits 1). `brew upgrade utilz` leaves `~/Applications/Menuz.app` at the old build. In a Homebrew install, `menuz install` fetches the release's `Menuz.app.zip` and checks it before it replaces the app. `menuz status` then names the new build.
+
 On a machine that has tapped it, brew keeps the tap's clone at `$(brew --repository)/Library/Taps/matthewsinclair/homebrew-utilz`.
