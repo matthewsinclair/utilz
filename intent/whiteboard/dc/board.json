@@ -9,7 +9,8 @@
     "status": "active",
     "focus": "27 Nov: issue I4cbec17 closed (vc landed A, B and C; runs AB and C GREEN), and the 2.15.0 CHANGELOG lines committed at 034f273a, which vc reads before hv's push. Next: AC-01.4 at the 2.15.0 cut, then ST0031/01 done (doing 26); ST0029 after the cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
-      "ST0031/01"
+      "ST0031/01",
+      "ISSUE:I7854aef3acd22453"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -1074,6 +1075,14 @@
       "archived_at": "2026-11-27T06:09:16.987Z",
       "recorded_at": "2026-11-26T14:35:08.242Z",
       "edited_at": "2026-11-26T15:08:30.778Z"
+    },
+    {
+      "node": "dc",
+      "kind": "doing",
+      "seq": 31,
+      "text": "Issue I7854aef, the macOS job's devbin tests (vc's word, from dispatch 45954594945): devbin_bash tries UTILZ_TEST_BASH5 first. The fix is in wt-i7854aef off main, with static checks only. The proof is the next macOS dispatch after hv's push. vc lands it, then dc closes the issue.",
+      "state": "live",
+      "recorded_at": "2026-11-27T07:05:56.929Z"
     }
   ],
   "sent": [

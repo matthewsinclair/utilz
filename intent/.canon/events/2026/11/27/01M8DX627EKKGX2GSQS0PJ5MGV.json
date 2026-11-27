@@ -1,0 +1,15 @@
+{
+  "id": "01M8DX627EKKGX2GSQS0PJ5MGV",
+  "ts": "2026-11-27T07:05:44.945Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "issues.add",
+  "subject": {
+    "type": "issue",
+    "id": "I7854aef3acd22453"
+  },
+  "payload": {
+    "severity": "high",
+    "title": "The macOS CI job fails every devbin test: devbin_bash does not read UTILZ_TEST_BASH5"
+  }
+}

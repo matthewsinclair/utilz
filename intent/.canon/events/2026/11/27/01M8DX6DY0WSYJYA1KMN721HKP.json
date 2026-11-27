@@ -1,0 +1,15 @@
+{
+  "id": "01M8DX6DY0WSYJYA1KMN721HKP",
+  "ts": "2026-11-27T07:05:56.929Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "dc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Issue I7854aef, the macOS job's devbin tests (vc's word, from dispatch 45954594945): devbin_bash tries UTILZ_TEST_BASH5 first. The fix is in wt-i7854aef off main, with static checks only. The proof is the next macOS dispatch after hv's push. vc lands it, then dc closes the issue."
+  }
+}
