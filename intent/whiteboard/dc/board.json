@@ -5,12 +5,11 @@
     "name": "DevX Claude",
     "role": "devx",
     "session_id": "0e2241fa-cca8-4f21-b02e-ea3f930ca65c",
-    "heartbeat_at": "2026-11-27T06:09:35.022Z",
+    "heartbeat_at": "2026-11-27T07:30:03.908Z",
     "status": "active",
-    "focus": "27 Nov: issue I4cbec17 closed (vc landed A, B and C; runs AB and C GREEN), and the 2.15.0 CHANGELOG lines committed at 034f273a, which vc reads before hv's push. Next: AC-01.4 at the 2.15.0 cut, then ST0031/01 done (doing 26); ST0029 after the cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
+    "focus": "27 Nov: issues I4cbec17 and I7854aef closed, both landed; the macOS dispatch 45956474872 on 43454ef5 is green. Next: AC-01.4 at the 2.15.0 cut, then ST0031/01 done (doing 26); ST0029 after the cut (hold 36). RESUME: ~/Devel/scratch/utilz-dc/RESUME.md",
     "claims": [
-      "ST0031/01",
-      "ISSUE:I7854aef3acd22453"
+      "ST0031/01"
     ],
     "recorded_at": "2026-10-16T04:57:46.520Z",
     "migrated_at": "2026-10-16T04:57:46.520Z"
@@ -1081,7 +1080,8 @@
       "kind": "doing",
       "seq": 31,
       "text": "Issue I7854aef, the macOS job's devbin tests (vc's word, from dispatch 45954594945): devbin_bash tries UTILZ_TEST_BASH5 first. The fix is in wt-i7854aef off main, with static checks only. The proof is the next macOS dispatch after hv's push. vc lands it, then dc closes the issue.",
-      "state": "live",
+      "state": "archived",
+      "archived_at": "2026-11-27T07:30:03.487Z",
       "recorded_at": "2026-11-27T07:05:56.929Z"
     }
   ],
@@ -4270,6 +4270,16 @@
       "id": "01M8DSJPM90P1SNHHCBCV76FZX",
       "sender": "vc",
       "handled_at": "2026-11-27T06:09:25.048Z"
+    },
+    {
+      "id": "01M8DX3MVW7YHSRPW28JKZVV70",
+      "sender": "vc",
+      "handled_at": "2026-11-27T07:30:03.720Z"
+    },
+    {
+      "id": "01M8DYGPK52360F7DPCA9VN8SZ",
+      "sender": "vc",
+      "handled_at": "2026-11-27T07:30:03.720Z"
     }
   ]
 }
