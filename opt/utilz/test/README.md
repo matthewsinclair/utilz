@@ -25,7 +25,7 @@ bin/devbin test estate       # every suite under the bash 3.2 macOS ships
 
 To run one utility's suites, use `utilz test <name>`, from the tree's own `bin/`. To run one file, use `bats opt/utilz/test/<file>.bats`, and add `-f '<name pattern>'` for one test. Where `intent estate status` shows a controller, ask it for a slot first.
 
-The suites that publish a fake checkout (`make_fake_src`, `publish_checkout_copy`) run devbin under bash 5 or later, through `run_devbin`. `keg.bats` refuses a linked worktree, because its fixture commits inside a copy of `.git`. Run it from a primary checkout.
+The suites that publish a fake checkout (`make_fake_src`, `publish_checkout_copy`) run devbin under bash 5 or later, through `run_devbin`. `install_e2e.bats`, `install_guards.bats` and `keg.bats` refuse a linked worktree, because `publish_checkout_copy` commits inside a copy of `.git`. Run them from a primary checkout.
 
 ## Write them
 

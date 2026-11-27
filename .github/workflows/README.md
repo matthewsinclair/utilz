@@ -10,7 +10,7 @@ It runs on a push to `main` or to `candidate/**`, on a pull request to `main`, a
 | -------------- | --------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | `test-linux`   | Test on Ubuntu        | every run                                              | `tools/ci-suites` on Ubuntu, with bats-core 1.12.0                                                     |
 | `test-macos`   | Test on macOS         | candidate push, dispatch                               | `tools/ci-suites` on macOS, with Homebrew's bats-core                                                  |
-| `shellcheck`   | Shell Script Analysis | every run                                              | `shellcheck -x` on every shell file under `bin/` and `opt/`, sourced `*.sh` libraries included         |
+| `shellcheck`   | Shell Script Analysis | every run                                              | `shellcheck -x` on the shell files in `bin/`, `opt/` and `tools/`, except tests and the vendored core  |
 | `rust`         | Rust (os)             | Ubuntu every run, macOS on candidate push and dispatch | Each crate's build and tests, and prez's `crate/test/*.sh` suites, with a cargo cache, bound at 25 min |
 | `clippy`       | Rust Lint (clippy)    | every run                                              | `cargo fmt --check` and clippy with `-D warnings`, on every crate                                      |
 | `menuz-app`    | menuz app (macOS)     | candidate push, dispatch                               | Menuz.app built and tested by Xcode, unsigned                                                          |

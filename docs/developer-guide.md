@@ -1,6 +1,6 @@
 # Developer Guide
 
-This guide covers everything you need to know to create utilities with the Utilz framework.
+This guide says how to write a Utilz utility.
 
 ## Table of Contents
 
@@ -13,7 +13,6 @@ This guide covers everything you need to know to create utilities with the Utilz
 - [Writing Tests](#writing-tests)
 - [Multi-Language Utilities](#multi-language-utilities)
 - [Version Management](#version-management)
-- [Best Practices](#best-practices)
 
 ## Quick Start
 
@@ -25,33 +24,16 @@ git config core.hooksPath .githooks
 
 `.githooks/pre-commit` checks staged markdown with prettier and staged Rust with rustfmt, and refuses a commit that isn't formatted without rewriting anything. It chains to Intent's gate when `intent claude upgrade` has written `.githooks/pre-commit.intent`. git doesn't carry `core.hooksPath` in a clone, so without this line nothing runs at commit time and CI is the first check (issue 0064).
 
-Create a new utility in 30 seconds:
+Create a utility:
 
 ```bash
-# Generate scaffold
-$ utilz generate logtool "Process and analyze log files" "Your Name"
-
-✓ Created utility scaffold for 'logtool'
-  Implementation: opt/logtool/logtool
-  Metadata: opt/logtool/logtool.yaml
-  Help: help/logtool.md
-  README: opt/logtool/README.md
-  Tests: opt/logtool/test/logtool.bats
-  Symlink: bin/logtool -> utilz
-
-# Edit implementation
-$ vim opt/logtool/logtool
-
-# Test it
-$ utilz test logtool
-
-# Use it
-$ logtool --help
+utilz generate logtool "Process and analyze log files" "Your Name"   # names each file it writes
+vim opt/logtool/logtool
+utilz test logtool
+logtool --help
 ```
 
 ## Using the Generator
-
-The generator creates a complete utility scaffold with all necessary files.
 
 ### Command Syntax
 
@@ -61,60 +43,21 @@ utilz generate <name> [description] [author]
 
 **Arguments:**
 
-- `<name>` (required): Utility name (lowercase, alphanumeric + hyphens only)
-- `[description]` (optional): Short description of what the utility does
-- `[author]` (optional): Author name (defaults to git config user.name)
-
-### Examples
-
-```bash
-# Minimal (prompts for description and uses git config for author)
-$ utilz generate logtool
-
-# With description
-$ utilz generate logtool "Process log files"
-
-# Complete
-$ utilz generate logtool "Process log files" "Jane Developer"
-```
+- `<name>` (required): a lowercase letter, then lowercase letters, digits and hyphens
+- `[description]` (optional): one line on what the utility does, "A new utility" when left out
+- `[author]` (optional): git's `user.name` when left out
 
 ### What Gets Created
 
-The generator creates:
+1. `opt/<name>/<name>`: the implementation, a bash script that loads the common library and parses its arguments
+2. `opt/<name>/VERSION`: the utility's version, `1.0.0`
+3. `opt/<name>/<name>.yaml`: the metadata, which names `VERSION` and the framework version it needs
+4. `help/<name>.md`: the page `utilz help <name>` renders
+5. `opt/<name>/README.md`: the README
+6. `opt/<name>/test/<name>.bats`: a BATS suite that loads the test helper
+7. `bin/<name> -> utilz`: the link to the dispatcher
 
-1. **Implementation** (`opt/<name>/<name>`)
-   - Executable bash script with template code
-   - Common library integration boilerplate
-   - Argument parsing skeleton
-
-2. **Metadata** (`opt/<name>/<name>.yaml`)
-   - Version, description, author
-   - Framework version requirement
-   - Dependency declarations
-
-3. **Help Documentation** (`help/<name>.md`)
-   - Formatted help file for `utilz help <name>`
-   - Includes usage, options, examples sections
-
-4. **README** (`opt/<name>/README.md`)
-   - Developer-focused documentation
-   - Implementation notes template
-
-5. **Test File** (`opt/<name>/test/<name>.bats`)
-   - BATS test file with example tests
-   - Test helper integration
-
-6. **Symlink** (`bin/<name> -> utilz`)
-   - Links utility name to dispatcher
-
-### Generator Validation
-
-The generator validates:
-
-- Name format (lowercase, alphanumeric + hyphens)
-- No conflicts with existing utilities
-- No conflicts with framework commands
-- Valid author name (if provided)
+The generator refuses a name of any other form, and a name whose `opt/<name>/` or `bin/<name>` already exists.
 
 ## Project Structure
 
@@ -124,6 +67,7 @@ Each utility follows a consistent structure:
 opt/<utility>/
 ├── <utility>           # Main implementation (executable)
 ├── <utility>.yaml      # Metadata file
+├── VERSION             # The utility's version
 ├── README.md           # Developer documentation
 └── test/               # Test directory
     └── <utility>.bats  # Test file
@@ -188,7 +132,7 @@ fi
 
 ### Argument Parsing
 
-The template includes a basic argument parsing loop:
+The template includes a basic argument parsing loop. Write no `--version` arm: `bin/utilz` answers `--version` for every utility before the utility runs.
 
 ```bash
 while [[ $# -gt 0 ]]; do
@@ -538,57 +482,10 @@ $ bats logtool.bats
 $ bats logtool.bats -f "help shows usage"
 ```
 
-### Test Best Practices
+### Test Rules
 
-1. **Use test helpers**: Don't reinvent assertion functions
-2. **Isolate tests**: Each test runs in a temp directory
-3. **Test error cases**: Not just happy path
-4. **Use descriptive names**: Test names should explain what they test
-5. **Clean up**: Tests auto-clean temp directories
-6. **Skip when needed**: Use `skip "reason"` for conditional tests
-7. **Keep the user's state out**: A test writes nothing outside its own temp dirs (issue 0082). The helper's `setup()` points `UNISON` into the test's dir and `GNUPGHOME` at a path that cannot be made. A test that runs gpg calls `make_gpg_home`, and a test that drives `osascript` or a clipboard tool puts a stub first on `PATH` in its own dir. `HOME` stays put.
-8. **Test a missing tool's refusal everywhere**: Never skip it because the tool is installed, since every machine that runs the suite has it (issue 0084). `path_without <tool>` prints a dir of links to every command on `PATH` but that one; run only the verb under it, as `run env PATH="$(path_without jq)" ...`, so bats keeps its own `PATH`.
-
-### Example Test Suite
-
-```bash
-#!/usr/bin/env bats
-
-load "../../utilz/test/test_helper.bash"
-
-@test "help flag shows usage" {
-    run_utility logtool --help
-    assert_success
-    assert_output_contains "Usage"
-}
-
-@test "version flag shows version" {
-    run_utility logtool --version
-    assert_success
-    assert_output_matches "^logtool v[0-9]"
-}
-
-@test "processes single log file" {
-    echo "INFO: test" > test.log
-    run_utility logtool test.log
-    assert_success
-}
-
-@test "fails gracefully on missing file" {
-    run_utility logtool nonexistent.log
-    assert_failure
-    assert_output_contains "not found"
-}
-
-@test "requires jq dependency" {
-  local farm
-  farm=$(path_without jq)
-  echo "INFO: test" > test.log
-  run env PATH="$farm" "$UTILZ_BIN_DIR/logtool" --json test.log
-  assert_failure
-  assert_output_contains "jq is required"
-}
-```
+1. **Keep the user's state out**: A test writes nothing outside its own temp dirs (issue 0082). The helper's `setup()` points `UNISON` into the test's dir and `GNUPGHOME` at a path that cannot be made. A test that runs gpg calls `make_gpg_home`, and a test that drives `osascript` or a clipboard tool puts a stub first on `PATH` in its own dir. `HOME` stays put.
+2. **Test a missing tool's refusal everywhere**: Never skip it because the tool is installed, since every machine that runs the suite has it (issue 0084). `path_without <tool>` prints a dir of links to every command on `PATH` but that one; run only the verb under it, as `run env PATH="$(path_without jq)" ...`, so bats keeps its own `PATH`.
 
 ## Multi-Language Utilities
 
@@ -637,171 +534,3 @@ A utility ships in a Utilz release. It has no tag of its own.
 1. Bump `version:` in its YAML, or the file its `version_file:` names (eg `opt/arngz/VERSION`, prez's `crate/Cargo.toml`).
 2. Add a line to the CHANGELOG's open section, `## [X.Y.Z] - unreleased`, that names the change and the version step, eg "arngz goes from 1.2.0 to 1.2.1".
 3. Commit it. hv's cut tags the release, bare, with no `v` ([releasing.md](releasing.md)).
-
-## Best Practices
-
-### Naming
-
-- **Use lowercase**: `logtool`, not `LogTool`
-- **Use hyphens**: `log-analyzer`, not `log_analyzer`
-- **Be specific**: `git-backup`, not `backup`
-- **Avoid conflicts**: Don't use common command names (`test`, `time`, etc.)
-
-### Error Handling
-
-- **Use set -euo pipefail**: Catch errors early
-- **Check prerequisites**: Validate dependencies before starting work
-- **Provide helpful errors**: Tell users how to fix the problem
-- **Use exit codes**: 0 = success, 1 = user error, 2 = system error
-
-### Logging
-
-- **Use common library functions**: `info()`, `warn()`, `error()`
-- **Write to stderr**: Keep stdout clean for piping
-- **Provide context**: Include filenames, line numbers in errors
-- **Support verbose mode**: Add `-v/--verbose` flag
-
-### Documentation
-
-- **Write clear help**: Include examples, not just syntax
-- **Document dependencies**: List all required and optional dependencies
-- **Include README**: Developer-focused implementation notes
-- **Add comments**: Explain why, not what (code shows what)
-
-### Testing
-
-- **Test error cases**: Not just happy path
-- **Test with real data**: Create realistic test fixtures
-- **Test edge cases**: Empty input, missing files, etc.
-- **Keep tests fast**: Tests should run in seconds, not minutes
-
-### Performance
-
-- **Avoid unnecessary work**: Check if output exists before regenerating
-- **Stream when possible**: Don't load entire files into memory
-- **Use efficient tools**: `grep`, `awk`, `sed` faster than loops
-- **Profile if slow**: Use `time` to find bottlenecks
-
-### Compatibility
-
-- **Use portable bash**: Avoid bashisms if targeting zsh too
-- **Check tool availability**: Use `check_command()` for dependencies
-- **Handle missing dependencies gracefully**: Provide install instructions
-- **Test on target systems**: macOS and Linux have differences
-
-### Code Organization
-
-- **Keep utilities focused**: One utility, one purpose
-- **Extract functions**: Don't write 500-line monoliths
-- **Use constants**: Define paths, defaults at top
-- **Consistent style**: Follow existing utility patterns
-
-### Example: Complete Utility
-
-Here's a minimal but complete utility following best practices:
-
-```bash
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Source common library
-if [[ "$(type -t info 2>/dev/null)" != "function" ]]; then
-    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    UTILZ_HOME="${UTILZ_HOME:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
-    source "$UTILZ_HOME/opt/utilz/lib/common.sh"
-fi
-
-# Constants
-readonly PROG_NAME="$(basename "$0")"
-
-# Defaults
-VERBOSE=false
-OUTPUT_DIR="."
-
-# Functions
-usage() {
-    cat <<EOF
-Usage: $PROG_NAME [options] <file>
-
-Process log files and extract errors.
-
-Options:
-  -o, --output DIR   Output directory (default: current)
-  -v, --verbose      Verbose output
-  -h, --help         Show this help
-  --version          Show version
-
-Examples:
-  $PROG_NAME app.log
-  $PROG_NAME -o /tmp app.log
-EOF
-}
-
-process_file() {
-    local file="$1"
-
-    if [[ ! -f "$file" ]]; then
-        error "File not found: $file"
-        return 1
-    fi
-
-    $VERBOSE && info "Processing $file"
-
-    # Do the work
-    grep "ERROR" "$file" > "$OUTPUT_DIR/errors.log"
-
-    success "Processed $file"
-}
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-            usage
-            exit 0
-            ;;
-        # No --version arm: bin/utilz answers --version for every utility
-        # before the utility runs, from the version's one home.
-        -v|--verbose)
-            VERBOSE=true
-            shift
-            ;;
-        -o|--output)
-            OUTPUT_DIR="$2"
-            shift 2
-            ;;
-        -*)
-            error "Unknown option: $1"
-            usage
-            exit 1
-            ;;
-        *)
-            # Positional argument
-            INPUT_FILE="$1"
-            shift
-            ;;
-    esac
-done
-
-# Validate
-if [[ -z "${INPUT_FILE:-}" ]]; then
-    error "No input file specified"
-    usage
-    exit 1
-fi
-
-# Main execution
-process_file "$INPUT_FILE"
-```
-
-## Next Steps
-
-Now that you understand utility development:
-
-1. Generate your first utility: `utilz generate myutil`
-2. Read the [Architecture](architecture.md) to understand how it works
-3. Review existing utilities in `opt/` for examples
-4. Write tests for your utility
-5. Run `utilz doctor` to validate your setup
-
-For questions or issues, see the [main documentation](index.md).
