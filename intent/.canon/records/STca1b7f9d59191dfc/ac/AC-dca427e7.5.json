@@ -3,6 +3,9 @@
   "text": "In the live run, zeopit, plugged in, takes every move past a full-screen space round through another display, and each one whose window arngz can grab lands.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 6a565a4a, as AC-6a565a4a.1, in its present words."
   }
 }

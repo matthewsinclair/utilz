@@ -3,6 +3,9 @@
   "text": "help/arngz.md's run log section says that the windows records count the remembered windows and mark each one.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 0f190de7, as AC-0f190de7.4, in its present words."
   }
 }

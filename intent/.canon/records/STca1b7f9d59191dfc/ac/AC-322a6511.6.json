@@ -3,6 +3,9 @@
   "text": "Every hold's log notes the element under its grab point and whether a web area holds it, read in the bytes and in hv's live run's log.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP b4300e6f, as AC-b4300e6f.1, in its present words."
   }
 }

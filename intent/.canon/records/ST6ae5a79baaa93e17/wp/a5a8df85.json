@@ -1,0 +1,10 @@
+{
+  "id": "a5a8df85",
+  "origin": "01M8E2S18Q1X7GE6Z4Y9QKB74B",
+  "title": "On the laptop alone: Mission Control, or a refusal that names the way out (open criteria)",
+  "scope": "S",
+  "status": "not-started",
+  "objective": "",
+  "body": "# On the laptop alone: Mission Control, or a refusal that names the way out (open criteria)\n\nCarried from STca1b7f9's WP ad94 (ad94d40b), unstarted, by hv decision 72 on 27 Nov 2026. That work package is done, and its satisfied criteria shipped in 2.15.0. Its open criteria, AC-ad94d40b.4 to .6, move here in STca1b7f9's words as AC-a5a8df85.1 to .3. spcz's design rewords them, and vc's draft v0.1 (`~/Devel/scratch/utilz-vc/spcz/design-draft.md`) is that design's base. The change that they belong to is in the body of STca1b7f9's WP ad94, and the `mission` leg in it was never built.\n",
+  "preamble": ""
+}

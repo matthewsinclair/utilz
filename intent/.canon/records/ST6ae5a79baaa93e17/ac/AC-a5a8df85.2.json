@@ -1,0 +1,8 @@
+{
+  "id": "AC-a5a8df85.2",
+  "text": "help/arngz.md says that, with no route, a move past a full-screen window fails naming the way out (line 117), and that Finished shows the first failure's fix (line 143). (From STca1b7f9's AC-ad94d40b.5, in its words. spcz's design rewords it.)",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

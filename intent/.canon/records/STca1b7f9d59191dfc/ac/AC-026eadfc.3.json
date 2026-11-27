@@ -3,6 +3,9 @@
   "text": "The windows records say how many windows were remembered, and which.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 0f190de7, as AC-0f190de7.3, in its present words."
   }
 }

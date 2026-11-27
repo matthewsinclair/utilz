@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2Z4ANN8MGWZCZVW00H9N1",
+  "ts": "2026-11-27T08:46:49.173Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "doing",
+    "text": "Sync cc's docs to the as-built code and lean them, in a worktree (hv decisions 21 and 72): README.md, docs/architecture.md, docs/design-principles.md, docs/index.md, and the help and README files of arngz, cleanz, clipz, cryptz, gitz, lnrel, retry, stampz, syncz and todo. vc checks each change by change. No run unless a doc feeds a test, and then a Desk ask through vc."
+  }
+}

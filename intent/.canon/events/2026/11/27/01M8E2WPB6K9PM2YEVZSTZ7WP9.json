@@ -1,0 +1,16 @@
+{
+  "id": "01M8E2WPB6K9PM2YEVZSTZ7WP9",
+  "ts": "2026-11-27T08:45:29.320Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.cancel",
+  "subject": {
+    "type": "wp",
+    "id": "STca1b7f9d59191dfc/026eadfc"
+  },
+  "payload": {
+    "from": "not-started",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17) as its unstarted WP 0f190de7, with its criteria in their present words (hv decision 72).",
+    "to": "cancelled"
+  }
+}

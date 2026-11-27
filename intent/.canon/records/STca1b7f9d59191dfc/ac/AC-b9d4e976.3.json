@@ -3,6 +3,9 @@
   "text": "A bare entry with a `newest` takes its bound windows, and its app's unclaimed windows above `newest`, and never another (11:15Z's case, from the log's lists). A window it misses is left where it is.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.3, in its present words."
   }
 }

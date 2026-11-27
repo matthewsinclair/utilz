@@ -1,0 +1,8 @@
+{
+  "id": "AC-5c7ba397.4",
+  "text": "A bound window that a space lists and arngz cannot name makes its entry unseen, and no other window is taken in its place. (From STca1b7f9's AC-b9d4e976.4, in its words. spcz's design rewords it.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

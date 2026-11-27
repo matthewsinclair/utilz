@@ -3,6 +3,9 @@
   "text": "A window that arngz named earlier in this Hammerspoon session, whose id a space still lists, and whose reads answer with the same bundle, is named again, with `via = \"remembered\"`, when neither allWindows nor filter.default names it.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 0f190de7, as AC-0f190de7.1, in its present words."
   }
 }

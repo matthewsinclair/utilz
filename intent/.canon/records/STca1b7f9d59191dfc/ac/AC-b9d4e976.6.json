@@ -3,6 +3,9 @@
   "text": "discover --save while an apply runs is refused, naming the running apply, and writes neither the desk nor its record.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.6, in its present words."
   }
 }

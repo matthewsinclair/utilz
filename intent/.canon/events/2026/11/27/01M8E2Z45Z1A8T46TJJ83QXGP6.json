@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2Z45Z1A8T46TJJ83QXGP6",
+  "ts": "2026-11-27T08:46:49.023Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "spcz (ST6ae5a79baaa93e17) is unstarted, and its design waits for hv's word (hv decision 72). Its base is vc's draft v0.1. cc's partial v0.2, with hv decision 48 and a map of the carried criteria, is in ~/Devel/scratch/utilz-cc/spcz/design.md."
+  }
+}

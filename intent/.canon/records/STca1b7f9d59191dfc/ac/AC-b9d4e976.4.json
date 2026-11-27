@@ -3,6 +3,9 @@
   "text": "A bound window that a space lists and arngz cannot name makes its entry unseen, and no other window is taken in its place.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.4, in its present words."
   }
 }

@@ -3,6 +3,9 @@
   "text": "In the live run, each Screen Sharing window goes to its own entry's place in rhad and in zeopit, and no other window is carried or stretched.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.8, in its present words."
   }
 }

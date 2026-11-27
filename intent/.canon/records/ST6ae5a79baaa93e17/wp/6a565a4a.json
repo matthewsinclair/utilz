@@ -1,0 +1,10 @@
+{
+  "id": "6a565a4a",
+  "origin": "01M8E2S14G4Q1CBEBXW6MT0YXH",
+  "title": "Round a full-screen desktop through another display (open criterion)",
+  "scope": "XS",
+  "status": "not-started",
+  "objective": "",
+  "body": "# Round a full-screen desktop through another display (open criterion)\n\nCarried from STca1b7f9's WP dca4 (dca427e7), unstarted, by hv decision 72 on 27 Nov 2026. That work package is done, and its satisfied criteria shipped in 2.15.0. Its open criterion, AC-dca427e7.5, moves here in STca1b7f9's words as AC-6a565a4a.1. spcz's design rewords it, and vc's draft v0.1 (`~/Devel/scratch/utilz-vc/spcz/design-draft.md`) is that design's base. The change that it belongs to is in the body of STca1b7f9's WP dca4.\n",
+  "preamble": ""
+}

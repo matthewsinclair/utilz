@@ -3,6 +3,9 @@
   "text": "Each entry takes its bound windows first, whatever their titles are now.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.2, in its present words."
   }
 }

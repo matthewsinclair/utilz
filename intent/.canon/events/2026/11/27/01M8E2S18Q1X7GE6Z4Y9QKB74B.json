@@ -1,0 +1,15 @@
+{
+  "id": "01M8E2S18Q1X7GE6Z4Y9QKB74B",
+  "ts": "2026-11-27T08:43:29.434Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wp.new",
+  "subject": {
+    "type": "wp",
+    "id": "ST6ae5a79baaa93e17/a5a8df85"
+  },
+  "payload": {
+    "scope": "S",
+    "title": "On the laptop alone: Mission Control, or a refusal that names the way out (open criteria)"
+  }
+}

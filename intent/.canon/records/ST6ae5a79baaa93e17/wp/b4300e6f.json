@@ -1,0 +1,10 @@
+{
+  "id": "b4300e6f",
+  "origin": "01M8E2S1D1XGNPGJXEYWY31ZH2",
+  "title": "Windows lost mid-run, and creates that fail at the Dock (I7fce35c, open criteria)",
+  "scope": "XS",
+  "status": "not-started",
+  "objective": "",
+  "body": "# Windows lost mid-run, and creates that fail at the Dock (I7fce35c, open criteria)\n\nCarried from STca1b7f9's WP 322a (322a6511), unstarted, by hv decision 72 on 27 Nov 2026. That work package is done, and its satisfied criteria shipped in 2.15.0. Its open criteria, AC-322a6511.6 and .8, move here in STca1b7f9's words as AC-b4300e6f.1 and .2. spcz's design rewords them, and vc's draft v0.1 (`~/Devel/scratch/utilz-vc/spcz/design-draft.md`) is that design's base. The change that they belong to is in the body of STca1b7f9's WP 322a. Issue I7fce35c's resolution says where each of its parts went.\n",
+  "preamble": ""
+}

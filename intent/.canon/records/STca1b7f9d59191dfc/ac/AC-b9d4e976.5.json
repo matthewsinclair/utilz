@@ -3,6 +3,9 @@
   "text": "A record from another session, or for a desk whose file has changed, is void, plan's rules are today's, and the log says why.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 5c7ba397, as AC-5c7ba397.5, in its present words."
   }
 }

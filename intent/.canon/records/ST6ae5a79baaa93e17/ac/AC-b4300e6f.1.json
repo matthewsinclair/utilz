@@ -1,0 +1,8 @@
+{
+  "id": "AC-b4300e6f.1",
+  "text": "Every hold's log notes the element under its grab point and whether a web area holds it, read in the bytes and in hv's live run's log. (From STca1b7f9's AC-322a6511.6, in its words. spcz's design rewords it.)",
+  "kind": "non-test",
+  "state": {
+    "is": "unsatisfied"
+  }
+}

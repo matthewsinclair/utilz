@@ -3,6 +3,9 @@
   "text": "A remembered window whose id no space lists, whose reads fail, or whose bundle has changed, is dropped and not named. Nothing is pruned in a read where a space's list could not be read.",
   "kind": "test",
   "state": {
-    "is": "computed"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP 0f190de7, as AC-0f190de7.2, in its present words."
   }
 }

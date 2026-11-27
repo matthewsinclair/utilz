@@ -3,6 +3,9 @@
   "text": "help/arngz.md says that, with no route, a move past a full-screen window fails naming the way out (line 117), and that Finished shows the first failure's fix (line 143).",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP a5a8df85, as AC-a5a8df85.2, in its present words."
   }
 }

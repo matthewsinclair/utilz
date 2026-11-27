@@ -1,0 +1,8 @@
+{
+  "id": "AC-0f190de7.2",
+  "text": "A remembered window whose id no space lists, whose reads fail, or whose bundle has changed, is dropped and not named. Nothing is pruned in a read where a space's list could not be read. (From STca1b7f9's AC-026eadfc.2, in its words. spcz's design rewords it.)",
+  "kind": "test",
+  "state": {
+    "is": "computed"
+  }
+}

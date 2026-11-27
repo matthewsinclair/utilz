@@ -3,6 +3,9 @@
   "text": "help/arngz.md says what a failed window filter means and its way out, and what a create that fails at the Dock asks of the person.",
   "kind": "non-test",
   "state": {
-    "is": "unsatisfied"
+    "is": "descoped",
+    "to": "ST6ae5a79baaa93e17",
+    "by": "hv decision 72",
+    "reason": "Moved to spcz (ST6ae5a79baaa93e17), WP b4300e6f, as AC-b4300e6f.2, in its present words."
   }
 }

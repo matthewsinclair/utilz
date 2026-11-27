@@ -3,21 +3,21 @@ node: cc
 name: Control Claude
 role: control
 session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
-heartbeat_at: 2026-11-27 08:30Z
+heartbeat_at: 2026-11-27 08:46Z
 status: active
-focus: "spcz (ST6ae5a79baaa93e17), design first: the thread is open and I7fce35c is closed. Now: design.md from vc's draft v0.1, with hv decision 48 and a map of STca1b7f9's 18 open criteria. Then vc's read, with ic (section 3, Q4) and dc (section 5, WP8), then hv's review before any code. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
-claims: [STca1b7f9d59191dfc, ST6ae5a79baaa93e17]
+focus: "Prune done: STca1b7f9 is done, and its open work is in spcz's five unstarted WPs (hv decision 72). Now: doing 79, cc's docs synced to the as-built code and leaned in a worktree, each change to vc for its check. Waits on hv: spcz's design (todo 56). RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+claims: []
 ---
 
 # Control Claude (cc)
 
 ## DOING
 
-- The spcz thread, design first (hv decisions 66 and 69; vc's BOUNCE and GO, 27 Nov): the thread and I7fce35c's close, then design.md from vc's draft v0.1 with hv decision 48 and a map of STca1b7f9's 18 open criteria. vc reads it, with ic (section 3, Q4) and dc (section 5, WP8), then hv reviews it before any code.
+- Sync cc's docs to the as-built code and lean them, in a worktree (hv decisions 21 and 72): README.md, docs/architecture.md, docs/design-principles.md, docs/index.md, and the help and README files of arngz, cleanz, clipz, cryptz, gitz, lnrel, retry, stampz, syncz and todo. vc checks each change by change. No run unless a doc feeds a test, and then a Desk ask through vc.
 
 ## TODO
 
-_(none)_
+- spcz (ST6ae5a79baaa93e17) is unstarted, and its design waits for hv's word (hv decision 72). Its base is vc's draft v0.1. cc's partial v0.2, with hv decision 48 and a map of the carried criteria, is in ~/Devel/scratch/utilz-cc/spcz/design.md.
 
 ## Holds
 
