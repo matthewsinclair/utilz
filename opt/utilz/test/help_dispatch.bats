@@ -82,14 +82,19 @@ load "population_helper.bash"
 @test "AT04 / AC04: --version is unregressed by sharing the intercept" {
   # The help half was added to the function that already answered --version.
   # A row proving the forms agree on --help says nothing about whether the
-  # older claim survived the edit.
-  local u a b n=0 bad=0
+  # older claim survived the edit. A line is read by its place only through
+  # version_tool_line and version_pair_line (issue I4cbec17): the tool's line
+  # under the utility's own name first, then the pair.
+  local u a b tool pair n=0 bad=0
   for u in $(_utilities); do
     n=$((n + 1))
-    a=$("$UTILZ_BIN_DIR/$u" --version 2>&1 | head -1)
-    b=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1 | head -1)
+    a=$("$UTILZ_BIN_DIR/$u" --version 2>&1)
+    b=$("$UTILZ_BIN_DIR/utilz" "$u" --version 2>&1)
     [ "$a" = "$b" ] || { echo "  $u: --version differs between forms"; bad=$((bad + 1)); }
-    [[ "$a" =~ ^utilz:[0-9]+\.[0-9]+\.[0-9]+/${u}:[0-9]+\.[0-9]+\.[0-9]+$ ]] || bad=$((bad + 1))
+    tool=$(version_tool_line "$a")
+    pair=$(version_pair_line "$a")
+    [[ "$tool" =~ ^${u}\ [0-9]+\.[0-9]+\.[0-9]+\ \(.+\)$ ]] || { echo "  $u: line one is '$tool', not the tool's line under its own name"; bad=$((bad + 1)); }
+    [[ "$pair" =~ ^utilz:[0-9]+\.[0-9]+\.[0-9]+/${u}:[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "  $u: line two is '$pair', not the pair"; bad=$((bad + 1)); }
   done
   assert_swept_all "$n"
   [ "$bad" -eq 0 ] || fail "$bad --version regressions"
