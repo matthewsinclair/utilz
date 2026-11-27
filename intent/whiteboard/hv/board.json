@@ -650,6 +650,14 @@
       "text": "hv, 27 Nov 2026, first-hand in vc's session. hv's words: \"Can you give me the lines to use brew, please?\" vc gave one line, and hv ran it in vc's window, done before vc's date -u of 08:17Z: `cd ~/Devel/prj/Utilz && HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade utilz && bin/devbin use brew`. The rest is vc's wording. brew's utilz went from 2.14.10 to 2.15.0, and `devbin use brew` removed all 18 links from ~/.local/bin, so each name answers \"2.15.0 (brew, 9fad28695cf1)\". brew's `utilz doctor` passes every check. rhadamanth is on brew from now on, which ends hv decision 19 (rhadamanth stays on utilz dev while the Utilz seats work). The seats work in worktrees and call their own tree's bin/, never PATH's. `bin/devbin use dev` puts rhadamanth back on dev, and that step is hv's.",
       "state": "live",
       "recorded_at": "2026-11-27T08:17:59.399Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 69,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, after vc's account of the six parts of issue I7fce35c. hv's words: \"Ok, then we should take (6) out of that Issue and move it to the spcz ST/WP.\" The rest is vc's wording. Part (6), windows lost mid-run, leaves I7fce35c for the spcz thread, with the registry that fixes it (STca1b7f9's WP 026e, AC-026eadfc.1 to .4, moved to spcz by hv decision 44). The remaining piece of part (1), the windows that a failed window filter cannot name, rides the same registry and moves with it. Parts (2), (4) and (5) are fixed and shipped. Part (3) shipped in 2.15.0 through arngz's own Mission Control finder (AC-322a6511.7 is satisfied). After the compact, cc creates the spcz thread, design first, and carries part (6) into it. Then cc closes I7fce35c with a resolution that names where each part went. STca1b7f9's own open criteria, AC-322a6511.6 and .8 among them, move to spcz by hv decision 66.",
+      "state": "live",
+      "recorded_at": "2026-11-27T08:18:54.757Z"
     }
   ],
   "sent": [],
