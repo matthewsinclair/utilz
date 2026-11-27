@@ -3,9 +3,9 @@ node: cc
 name: Control Claude
 role: control
 session_id: 2f4d5cca-0d17-4ed7-9cbf-4fec3ed5941b
-heartbeat_at: 2026-11-27 08:46Z
-status: active
-focus: "Prune done: STca1b7f9 is done, and its open work is in spcz's five unstarted WPs (hv decision 72). Now: doing 79, cc's docs synced to the as-built code and leaned in a worktree, each change to vc for its check. Waits on hv: spcz's design (todo 56). RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
+heartbeat_at: 2026-11-27 09:43Z
+status: paused
+focus: "Shut down on hv's word (hv decisions 72 and 73). Nothing of cc's is WIP. TODO: spcz's design on hv's word (todo 56), and the code faults of ST27a3dbd, syncz's delete pass first. RESUME: ~/Devel/scratch/utilz-cc/RESUME.md"
 claims: []
 ---
 
@@ -13,11 +13,12 @@ claims: []
 
 ## DOING
 
-- Sync cc's docs to the as-built code and lean them, in a worktree (hv decisions 21 and 72): README.md, docs/architecture.md, docs/design-principles.md, docs/index.md, and the help and README files of arngz, cleanz, clipz, cryptz, gitz, lnrel, retry, stampz, syncz and todo. vc checks each change by change. No run unless a doc feeds a test, and then a Desk ask through vc.
+_(none)_
 
 ## TODO
 
 - spcz (ST6ae5a79baaa93e17) is unstarted, and its design waits for hv's word (hv decision 72). Its base is vc's draft v0.1. cc's partial v0.2, with hv decision 48 and a map of the carried criteria, is in ~/Devel/scratch/utilz-cc/spcz/design.md.
+- ST27a3dbd072f31f92 (the code faults that the 27 Nov 2026 docs audit found) is unstarted and unclaimed. Its first item is syncz's --confirm --delete pass: high, and parked with a warning (hv decision 73). Its context holds the list.
 
 ## Holds
 

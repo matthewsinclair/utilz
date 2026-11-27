@@ -1,0 +1,15 @@
+{
+  "id": "01M8E66TF3RM2WE89J63NB08C3",
+  "ts": "2026-11-27T09:43:26.947Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "cc"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "ST27a3dbd072f31f92 (the code faults that the 27 Nov 2026 docs audit found) is unstarted and unclaimed. Its first item is syncz's --confirm --delete pass: high, and parked with a warning (hv decision 73). Its context holds the list."
+  }
+}
