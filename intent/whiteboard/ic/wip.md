@@ -3,9 +3,9 @@ node: ic
 name: Interface Claude
 role: interface
 session_id: df52055f-4a04-484f-af3b-c557705c20dd
-heartbeat_at: 2026-11-27 07:32Z
+heartbeat_at: 2026-11-27 08:09Z
 status: active
-focus: "Nothing open for ic. 0114 is closed: AC-4b560be1.4 on dispatch 45956474872, then ST44b4671/4b56, ST44b4671 and issue 0114. Hold for vc's word; the cut is hv's. RESUME.md has it."
+focus: "Folded for cycle 8, after the 2.15.0 cut; hold for vc's word. Next, after the bounce on vc's word: todo 16, file and fix the second search for a bash 5 in macos.bats. Waits on hv: nothing of ic's. RESUME.md has it."
 claims: []
 ---
 
@@ -17,7 +17,7 @@ _(none)_
 
 ## TODO
 
-_(none)_
+- After the bounce, on vc's word: file and fix a second search for a bash 5 (Highlander). setup_file in opt/menuz/test/macos.bats, lines 28 to 32, searches UTILZ_TEST_BASH5 and each bash on the PATH. devbin_bash in opt/utilz/test/test_helper.bash:802 also searches for one, and macos.bats loads that file at line 24. From vc's FOLD, cycle 8 (cb704023).
 
 ## Holds
 

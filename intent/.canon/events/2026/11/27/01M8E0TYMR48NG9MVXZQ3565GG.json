@@ -1,0 +1,15 @@
+{
+  "id": "01M8E0TYMR48NG9MVXZQ3565GG",
+  "ts": "2026-11-27T08:09:35.128Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.add",
+  "subject": {
+    "type": "node",
+    "id": "ic"
+  },
+  "payload": {
+    "kind": "todo",
+    "text": "After the bounce, on vc's word: file and fix a second search for a bash 5 (Highlander). setup_file in opt/menuz/test/macos.bats, lines 28 to 32, searches UTILZ_TEST_BASH5 and each bash on the PATH. devbin_bash in opt/utilz/test/test_helper.bash:802 also searches for one, and macos.bats loads that file at line 24. From vc's FOLD, cycle 8 (cb704023)."
+  }
+}
