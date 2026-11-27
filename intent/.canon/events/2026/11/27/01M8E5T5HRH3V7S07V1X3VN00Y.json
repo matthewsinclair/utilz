@@ -1,0 +1,15 @@
+{
+  "id": "01M8E5T5HRH3V7S07V1X3VN00Y",
+  "ts": "2026-11-27T09:36:32.313Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.decide",
+  "subject": {
+    "type": "node",
+    "id": "hv"
+  },
+  "payload": {
+    "kind": "decision",
+    "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker. hv picked vc's recommended option in each of two questions. (1) cc's docs lean, 17 files on cc/docs1127 at 42d15bad (change 099e6e05, checked by vc): \"Land, then close (Recommended)\". (2) cc's audit finding, read in the code and not run: `syncz --confirm --delete` runs execute_delete, `rsync -rlptD --delete` with no `--update` or `--backup`, so it can overwrite newer destination files with older ones and keeps no .syncz-bak copy, which help/syncz.md promises: \"Park it, with a warning (Recommended)\". The rest is vc's wording. (1) cc makes one light Desk run of only the tests that read these docs: each utility's --help test, arngz's AT-02.1, help_dispatch.bats without AT06, and the version-literal test, with no build. cc lands the change on green, then releases. (2) The syncz fault goes, marked high, into one new unstarted thread with cc's 17 other findings (~/Devel/scratch/utilz-cc/docs1127-code-faults.md). A fix on main reaches hv's brew install only at the next cut, so until a release ships the fix, hv does not use `syncz --delete` on a destination that may hold newer files."
+  }
+}

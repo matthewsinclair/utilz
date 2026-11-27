@@ -4,8 +4,8 @@
     "moniker": "hv",
     "name": "Hypervisor",
     "role": "hypervisor",
-    "session_id": "bbf0140c-70da-4570-8e04-c18e29c296ad",
-    "heartbeat_at": "2026-11-27T08:48:46.169Z",
+    "session_id": "none",
+    "heartbeat_at": "2026-11-27T09:36:18.583Z",
     "status": "active",
     "focus": "Utilz is parked by hv decision 72. spcz (ST6ae5a79), ST0029 and STb234935 wait for hv's word.",
     "claims": [],
@@ -738,6 +738,14 @@
       "text": "hv, 27 Nov 2026, first-hand in vc's session, received after vc's date -u of 08:37Z. hv's words: \"Ok, I want to know if I can close out, and what. If we can, let me know. And before you close, I want you to sync as-written docs to as-built code, close out any STs, WPs, and Issues. In particular, if there are parts of a WP or an Issue that have been deferred to another ST, then we should move it out of the almost done ST/WP/Issue and either put it in a new unstarted ST or WP, or make a new ST and put it in that. Either way, I want anything that is partially done to be pruned and then closed and all unfinished work moved into a future, unstarted ST or WP. Make sense? Once that is done, I want you to do an aggressive lean out of all project docs. I'm espescially interested in ensuring that we are not writing tomes in the verblocks, WIPs, or restart files, and that they ONLY have WIP or TODO items, never DONE stuff. I want to draw a line under this weeks work so I can put all done work to bed and then concentrate on devvm, ae, and the zeop/* projects. Ok?\" The rest is vc's wording. Every seat stops new work: no new run, unit or Desk ask. cc prunes STca1b7f9 into spcz (ST6ae5a79baaa93e17) and closes it, and spcz stays unstarted. dc puts ST0029 back to unstarted. ic puts STb234935 back to unstarted and closes issue I669673a into it. Each seat syncs its remit's docs to the as-built code and leans them, by hv decision 21's split, and leans its board and RESUME to WIP and TODO only. vc leans intent/wip.md, intent/restart.md and hv's board, checks each change by change and lands it. hv pushes once. Then vc tells hv which sessions can close.",
       "state": "live",
       "recorded_at": "2026-11-27T08:39:56.298Z"
+    },
+    {
+      "node": "hv",
+      "kind": "decision",
+      "seq": 73,
+      "text": "hv, 27 Nov 2026, first-hand in vc's session, by vc's picker. hv picked vc's recommended option in each of two questions. (1) cc's docs lean, 17 files on cc/docs1127 at 42d15bad (change 099e6e05, checked by vc): \"Land, then close (Recommended)\". (2) cc's audit finding, read in the code and not run: `syncz --confirm --delete` runs execute_delete, `rsync -rlptD --delete` with no `--update` or `--backup`, so it can overwrite newer destination files with older ones and keeps no .syncz-bak copy, which help/syncz.md promises: \"Park it, with a warning (Recommended)\". The rest is vc's wording. (1) cc makes one light Desk run of only the tests that read these docs: each utility's --help test, arngz's AT-02.1, help_dispatch.bats without AT06, and the version-literal test, with no build. cc lands the change on green, then releases. (2) The syncz fault goes, marked high, into one new unstarted thread with cc's 17 other findings (~/Devel/scratch/utilz-cc/docs1127-code-faults.md). A fix on main reaches hv's brew install only at the next cut, so until a release ships the fix, hv does not use `syncz --delete` on a destination that may hold newer files.",
+      "state": "live",
+      "recorded_at": "2026-11-27T09:36:32.313Z"
     }
   ],
   "sent": [],

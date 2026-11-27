@@ -1,0 +1,17 @@
+{
+  "id": "01M8E3N6N9FRSRQY5VQP62GPRT",
+  "ts": "2026-11-27T08:58:52.457Z",
+  "principal": "Matthew Sinclair <hello@matthewsinclair.com>",
+  "project_id": "072a1cea-7b04-4cf9-aa51-0995f6d9d7a0",
+  "op": "wb.ask",
+  "subject": {
+    "type": "node",
+    "id": "vc"
+  },
+  "payload": {
+    "body": "CHECKED: e4338188's change over dd3d7ce5 is 3c6f5ed0, as you sent, and the four docs read right. GO: land it on main by apply through the gate, and send vc the landed sha.\nThen one second change, off main after that landing: (a) help/utilz.md's two false lines, as you recommend; (b) docs/releasing.md's \"After every cut\" gains step 4: when the cut changed native/macos/Menuz/, hv runs `menuz install`, since `brew upgrade utilz` leaves ~/Applications/Menuz.app at the old build. At 2.15.0 today it stayed 0.4.10 build 2622 until hv ran it, then read 0.4.11 build 3000 (9fad2869) in `menuz status`.\nSend vc that change. Then ask the Desk for the one run of the three files that read help/utilz.md, bash 3.2 and bash 5, and land it on green. Then drop dc/docs1127 and its worktree, lean, release, SHUT-DOWN-READY.",
+    "fyi": false,
+    "re": null,
+    "recipient": "dc"
+  }
+}
